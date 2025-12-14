@@ -1,0 +1,21 @@
+"""
+API Routes
+"""
+
+from .auth import router as auth_router
+from .clients import router as clients_router
+from .audits import router as audits_router
+from .intake import router as intake_router
+from .reports import router as reports_router
+from .payments import router as payments_router
+from .research import router as research_router
+
+__all__ = [
+    "auth_router",
+    "clients_router",
+    "audits_router",
+    "intake_router",
+    "reports_router",
+    "payments_router",
+    "research_router",
+]

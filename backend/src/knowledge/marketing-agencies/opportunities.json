@@ -1,0 +1,275 @@
+{
+  "industry": "marketing-agencies",
+  "ai_opportunities": [
+    {
+      "id": "automated-reporting",
+      "name": "AI-Powered Client Reporting",
+      "description": "Automatically generate client reports with AI-written insights",
+      "category": "efficiency",
+      "impact": {
+        "value_saved": {
+          "time_hours_per_week": 10,
+          "description": "Eliminates manual data pulling and report writing"
+        },
+        "value_created": {
+          "description": "Higher quality insights, more strategic conversations with clients",
+          "potential_revenue_impact": "Reduce client churn by improving perceived value"
+        }
+      },
+      "customer_value_score": 8,
+      "business_health_score": 9,
+      "implementation": {
+        "complexity": "medium",
+        "timeline_weeks": 4,
+        "required_data": ["Analytics access", "Ad platform access", "CRM data"]
+      },
+      "options": {
+        "off_the_shelf": {
+          "tools": ["Databox", "AgencyAnalytics", "Whatagraph"],
+          "cost_range": "€50-300/month",
+          "pros": ["Quick setup", "Pre-built integrations", "Templates"],
+          "cons": ["Limited customization", "Insights are basic"]
+        },
+        "best_in_class": {
+          "tools": ["Supermetrics + Looker Studio + GPT", "Klipfolio"],
+          "cost_range": "€200-800/month",
+          "pros": ["Full customization", "Advanced analytics", "AI narratives"],
+          "cons": ["More setup time", "Requires some technical skill"]
+        },
+        "custom_solution": {
+          "approach": "Custom dashboard with AI insight generation",
+          "cost_range": "€3,000-8,000 one-time + €100-200/month",
+          "pros": ["Exactly what you need", "Competitive differentiator", "Full control"],
+          "cons": ["Higher upfront investment", "Needs maintenance"]
+        }
+      },
+      "roi_example": {
+        "scenario": "Agency with 10 clients, 8 hours/week on reporting",
+        "cost": "€200/month (best-in-class)",
+        "savings": "6 hours/week × €50/hour × 52 = €15,600/year",
+        "roi_percentage": 550,
+        "payback_months": 2
+      }
+    },
+    {
+      "id": "ai-content-creation",
+      "name": "AI-Assisted Content Creation",
+      "description": "Use AI to generate first drafts of copy, social posts, and ad variants",
+      "category": "efficiency",
+      "impact": {
+        "value_saved": {
+          "time_hours_per_week": 15,
+          "description": "Faster first drafts, more variants to test"
+        },
+        "value_created": {
+          "description": "Scale content production without adding headcount",
+          "potential_revenue_impact": "Take on more clients or offer content packages"
+        }
+      },
+      "customer_value_score": 7,
+      "business_health_score": 8,
+      "implementation": {
+        "complexity": "low",
+        "timeline_weeks": 1,
+        "required_data": ["Brand guidelines", "Past content examples", "Tone of voice docs"]
+      },
+      "options": {
+        "off_the_shelf": {
+          "tools": ["Jasper", "Copy.ai", "Writesonic"],
+          "cost_range": "€50-500/month",
+          "pros": ["Ready to use", "Good for social/ads", "Templates"],
+          "cons": ["Generic without training", "May need heavy editing"]
+        },
+        "best_in_class": {
+          "tools": ["Jasper Business", "Writer.com", "Claude API"],
+          "cost_range": "€200-1,000/month",
+          "pros": ["Brand voice training", "Team collaboration", "Better quality"],
+          "cons": ["Higher cost", "Learning curve"]
+        },
+        "custom_solution": {
+          "approach": "Fine-tuned model on client brand guidelines",
+          "cost_range": "€2,000-5,000 one-time + API costs",
+          "pros": ["Perfect brand match", "Competitive moat", "Scales infinitely"],
+          "cons": ["Requires AI expertise", "Ongoing refinement"]
+        }
+      },
+      "roi_example": {
+        "scenario": "Agency producing 50 pieces of content/week",
+        "cost": "€300/month (best-in-class)",
+        "savings": "10 hours/week × €50/hour × 52 = €26,000/year",
+        "roi_percentage": 620,
+        "payback_months": 1
+      }
+    },
+    {
+      "id": "proposal-automation",
+      "name": "AI Proposal Generation",
+      "description": "Generate customized proposals and pitch decks using AI",
+      "category": "growth",
+      "impact": {
+        "value_saved": {
+          "time_hours_per_week": 5,
+          "description": "Faster proposal turnaround"
+        },
+        "value_created": {
+          "description": "Respond to more RFPs, higher win rate with personalization",
+          "potential_revenue_impact": "Win 2-3 more clients per year"
+        }
+      },
+      "customer_value_score": 6,
+      "business_health_score": 9,
+      "implementation": {
+        "complexity": "medium",
+        "timeline_weeks": 2,
+        "required_data": ["Past proposals", "Case studies", "Pricing structure"]
+      },
+      "options": {
+        "off_the_shelf": {
+          "tools": ["Qwilr", "PandaDoc", "Proposify"],
+          "cost_range": "€30-150/month",
+          "pros": ["Templates", "E-signatures", "Analytics"],
+          "cons": ["Limited AI", "Still mostly manual"]
+        },
+        "best_in_class": {
+          "tools": ["Qwilr + Claude/GPT integration", "Custom GPT"],
+          "cost_range": "€100-300/month + setup",
+          "pros": ["AI-generated content", "Personalization at scale"],
+          "cons": ["Some setup required"]
+        },
+        "custom_solution": {
+          "approach": "AI system trained on your winning proposals",
+          "cost_range": "€3,000-6,000 one-time",
+          "pros": ["Your voice, your wins", "Major differentiator"],
+          "cons": ["Needs enough historical data"]
+        }
+      },
+      "roi_example": {
+        "scenario": "Agency pitching 5 new clients/month",
+        "cost": "€200/month",
+        "value_created": "Win 1 extra client/quarter @ €2,000/month = €24,000/year",
+        "roi_percentage": 900,
+        "payback_months": 1
+      }
+    },
+    {
+      "id": "client-communication-ai",
+      "name": "AI Email & Communication Assistant",
+      "description": "Draft emails, meeting summaries, and status updates automatically",
+      "category": "efficiency",
+      "impact": {
+        "value_saved": {
+          "time_hours_per_week": 5,
+          "description": "Faster email responses, auto-generated updates"
+        },
+        "value_created": {
+          "description": "More consistent communication, better client relationships",
+          "potential_revenue_impact": "Improved retention through responsiveness"
+        }
+      },
+      "customer_value_score": 7,
+      "business_health_score": 7,
+      "implementation": {
+        "complexity": "low",
+        "timeline_weeks": 1,
+        "required_data": ["Email access", "Calendar access"]
+      },
+      "options": {
+        "off_the_shelf": {
+          "tools": ["Superhuman", "Grammarly", "Otter.ai"],
+          "cost_range": "€20-100/month per user",
+          "pros": ["Immediate value", "Easy adoption"],
+          "cons": ["Per-user pricing adds up"]
+        },
+        "best_in_class": {
+          "tools": ["Front + AI", "Missive", "Claude/GPT API integration"],
+          "cost_range": "€50-200/month per user",
+          "pros": ["Team collaboration", "Better AI integration"],
+          "cons": ["Higher cost"]
+        },
+        "custom_solution": {
+          "approach": "AI assistant trained on your communication style",
+          "cost_range": "€2,000-4,000 one-time",
+          "pros": ["Your tone", "Integrated with your tools"],
+          "cons": ["Needs development"]
+        }
+      },
+      "roi_example": {
+        "scenario": "5 team members saving 1 hour/day each",
+        "cost": "€400/month",
+        "savings": "5 hours/day × €40/hour × 20 days = €4,000/month",
+        "roi_percentage": 900,
+        "payback_months": 0.5
+      }
+    },
+    {
+      "id": "campaign-optimization-ai",
+      "name": "AI Campaign Optimization",
+      "description": "Use AI to optimize ad spend, targeting, and creative performance",
+      "category": "growth",
+      "impact": {
+        "value_saved": {
+          "time_hours_per_week": 8,
+          "description": "Less manual bid adjustments and analysis"
+        },
+        "value_created": {
+          "description": "Better ROAS for clients, justify higher fees",
+          "potential_revenue_impact": "15-30% improvement in client campaign performance"
+        }
+      },
+      "customer_value_score": 9,
+      "business_health_score": 8,
+      "implementation": {
+        "complexity": "medium",
+        "timeline_weeks": 4,
+        "required_data": ["Ad platform access", "Conversion data", "Historical performance"]
+      },
+      "options": {
+        "off_the_shelf": {
+          "tools": ["Madgicx", "Revealbot", "AdEspresso"],
+          "cost_range": "€50-500/month",
+          "pros": ["Built for agencies", "Quick setup"],
+          "cons": ["Platform-specific", "Limited customization"]
+        },
+        "best_in_class": {
+          "tools": ["Smartly.io", "Marin Software"],
+          "cost_range": "€500-2,000/month",
+          "pros": ["Cross-platform", "Advanced AI", "Enterprise features"],
+          "cons": ["Expensive", "Complex setup"]
+        },
+        "custom_solution": {
+          "approach": "Custom optimization algorithms for specific client needs",
+          "cost_range": "€5,000-15,000 one-time",
+          "pros": ["Tailored to your strategy", "Major differentiator"],
+          "cons": ["Significant investment", "Needs data science skills"]
+        }
+      },
+      "roi_example": {
+        "scenario": "Managing €50K/month in ad spend across clients",
+        "cost": "€300/month",
+        "value_created": "20% ROAS improvement = €10K more value for clients",
+        "client_impact": "Justify higher retainer or reduce churn",
+        "roi_percentage": "Variable but high"
+      }
+    }
+  ],
+  "quick_wins": [
+    {
+      "name": "Set up AI writing assistant",
+      "time_to_implement": "1 day",
+      "cost": "€0-100/month",
+      "impact": "Save 5+ hours/week immediately"
+    },
+    {
+      "name": "Automate meeting notes",
+      "time_to_implement": "1 hour",
+      "cost": "€20/month",
+      "impact": "Never miss action items"
+    },
+    {
+      "name": "Connect analytics to automated dashboard",
+      "time_to_implement": "1 week",
+      "cost": "€50-200/month",
+      "impact": "Eliminate manual reporting"
+    }
+  ]
+}

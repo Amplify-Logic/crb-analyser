@@ -1,0 +1,206 @@
+{
+  "industry": "music-studios",
+  "ai_opportunities": [
+    {
+      "id": "booking-automation",
+      "name": "Automated Booking & Scheduling",
+      "description": "Online booking system with availability sync",
+      "category": "efficiency",
+      "impact": {
+        "value_saved": {
+          "description": "Save 5-10 hours/week on scheduling admin"
+        },
+        "value_created": {
+          "description": "24/7 booking capability, fewer no-shows, professional image"
+        }
+      },
+      "customer_value_score": 8,
+      "business_health_score": 9,
+      "options": {
+        "off_the_shelf": {
+          "tools": ["Calendly", "Acuity", "Studio Ninja"],
+          "cost_range": "€15-50/month",
+          "pros": ["Quick setup", "Calendar sync", "Payment integration"],
+          "cons": ["Generic for studios", "Limited resource management"]
+        },
+        "best_in_class": {
+          "tools": ["Studio Ninja", "StudioBinder", "Session"],
+          "cost_range": "€30-100/month",
+          "pros": ["Built for studios", "Room/equipment booking", "Contract integration"],
+          "cons": ["More setup", "Learning curve"]
+        },
+        "custom_solution": {
+          "approach": "Custom booking portal integrated with your workflow",
+          "cost_range": "€3,000-8,000 one-time",
+          "pros": ["Exact fit for your operations", "Unique client experience"],
+          "cons": ["Overkill for most studios"]
+        }
+      },
+      "roi_example": {
+        "scenario": "Studio doing 30 sessions/month, 2 hours admin per booking",
+        "savings": "1.5 hours saved per booking × 30 × €40/hour = €1,800/month",
+        "cost": "€50/month",
+        "roi_percentage": 3500
+      },
+      "honest_assessment": "This is a no-brainer for any studio doing 10+ sessions/month. Massive ROI."
+    },
+    {
+      "id": "ai-audio-cleanup",
+      "name": "AI Audio Cleanup & Restoration",
+      "description": "Use AI tools for noise reduction, dialogue cleanup, restoration",
+      "category": "efficiency",
+      "impact": {
+        "value_saved": {
+          "description": "Reduce tedious cleanup work by 50-70%"
+        },
+        "value_created": {
+          "description": "Take on more restoration work, faster turnarounds"
+        }
+      },
+      "customer_value_score": 7,
+      "business_health_score": 8,
+      "options": {
+        "off_the_shelf": {
+          "tools": ["iZotope RX Elements", "Adobe Podcast (free)", "Descript"],
+          "cost_range": "€0-200 one-time or €15-30/month",
+          "pros": ["Proven results", "Easy to use", "Good enough for most work"],
+          "cons": ["Not transparent - 'magic' processing"]
+        },
+        "best_in_class": {
+          "tools": ["iZotope RX Advanced", "Cedar", "Acon Digital"],
+          "cost_range": "€500-2,000 one-time",
+          "pros": ["Professional grade", "Transparent processing", "More control"],
+          "cons": ["Learning curve", "Upfront cost"]
+        },
+        "custom_solution": {
+          "approach": "Custom AI models for your specific workflows",
+          "cost_range": "€10,000+ for development",
+          "pros": ["Tailored to your content type"],
+          "cons": ["Rarely necessary - existing tools are excellent"]
+        }
+      },
+      "roi_example": {
+        "scenario": "5 hours/week on cleanup work @ €50/hour",
+        "savings": "3 hours saved × €50 × 52 = €7,800/year",
+        "cost": "€400 one-time for RX",
+        "roi_percentage": 1850
+      },
+      "honest_assessment": "If you don't have iZotope RX yet, get it. Industry standard for a reason."
+    },
+    {
+      "id": "file-management-system",
+      "name": "Automated File & Backup Management",
+      "description": "Systematic file organization, automated backups, archiving",
+      "category": "efficiency",
+      "impact": {
+        "value_saved": {
+          "description": "Save 3-5 hours/week on file management"
+        },
+        "value_created": {
+          "description": "Peace of mind, faster project recall, professional delivery"
+        }
+      },
+      "customer_value_score": 6,
+      "business_health_score": 9,
+      "options": {
+        "off_the_shelf": {
+          "tools": ["Backblaze + Dropbox", "Google Drive", "pCloud"],
+          "cost_range": "€10-50/month",
+          "pros": ["Simple", "Automatic", "Accessible anywhere"],
+          "cons": ["Manual organization", "Storage costs scale"]
+        },
+        "best_in_class": {
+          "tools": ["Hedge", "Archiware", "iconik"],
+          "cost_range": "€50-200/month",
+          "pros": ["Professional media workflows", "Checksums", "Metadata"],
+          "cons": ["More complex", "Aimed at larger operations"]
+        },
+        "custom_solution": {
+          "approach": "Custom automation scripts for your naming conventions",
+          "cost_range": "€500-2,000 one-time",
+          "pros": ["Fits your exact workflow"],
+          "cons": ["Needs maintenance"]
+        }
+      },
+      "roi_example": {
+        "scenario": "3 hours/week on file management",
+        "savings": "2 hours saved × €40 × 52 = €4,160/year",
+        "cost": "€30/month = €360/year",
+        "roi_percentage": 1055
+      },
+      "honest_assessment": "Start with basics (cloud backup + consistent naming). Only upgrade if you're drowning."
+    },
+    {
+      "id": "stem-separation",
+      "name": "AI Stem Separation",
+      "description": "Separate vocals, drums, bass, etc. from mixed tracks",
+      "category": "capability",
+      "impact": {
+        "value_saved": {
+          "description": "Work from references without original stems"
+        },
+        "value_created": {
+          "description": "New service offerings: remixes, covers, sample creation"
+        }
+      },
+      "customer_value_score": 7,
+      "business_health_score": 7,
+      "options": {
+        "off_the_shelf": {
+          "tools": ["LALAL.AI", "Moises.ai", "PhonicMind"],
+          "cost_range": "€10-30/month",
+          "pros": ["Quick results", "Easy to use", "Good quality"],
+          "cons": ["Artifacts on complex material", "Per-track limits"]
+        },
+        "best_in_class": {
+          "tools": ["iZotope RX Music Rebalance", "Audionamix", "Hit'n'Mix"],
+          "cost_range": "€200-500 one-time or subscription",
+          "pros": ["Better quality", "More control", "Professional grade"],
+          "cons": ["Still not perfect", "Complex material challenging"]
+        },
+        "custom_solution": {
+          "approach": "Train custom model for your specific use case",
+          "cost_range": "€5,000-15,000",
+          "pros": ["Optimized for your content type"],
+          "cons": ["Rarely needed - existing tools are good"]
+        }
+      },
+      "honest_assessment": "Quality is 'good enough' for many applications now. Try LALAL.AI first (cheap) before investing more."
+    }
+  ],
+  "not_recommended": [
+    {
+      "name": "AI mixing/mastering as primary service",
+      "reason": "Your human expertise IS the value. AI-assisted is fine, AI-replacement kills your differentiation."
+    },
+    {
+      "name": "Full automation of client communication",
+      "reason": "Music is personal. Clients expect a human relationship."
+    },
+    {
+      "name": "AI composition tools as client-facing service",
+      "reason": "Ethical and legal grey area. Use for sketching only."
+    }
+  ],
+  "quick_wins": [
+    {
+      "name": "Set up online booking",
+      "time_to_implement": "2 hours",
+      "cost": "€15-30/month",
+      "impact": "Stop playing email tag"
+    },
+    {
+      "name": "Automated cloud backup",
+      "time_to_implement": "1 hour",
+      "cost": "€10/month",
+      "impact": "Never lose a session again"
+    },
+    {
+      "name": "Get iZotope RX Elements",
+      "time_to_implement": "30 minutes",
+      "cost": "€129 one-time (sales often)",
+      "impact": "Cut cleanup time in half"
+    }
+  ],
+  "industry_specific_advice": "Music studios: Your ears and creative judgment are irreplaceable. Use AI for the tedious stuff (cleanup, scheduling, admin) so you can spend more time on the creative work that clients actually pay for."
+}
