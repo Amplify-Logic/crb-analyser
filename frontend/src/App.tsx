@@ -12,6 +12,7 @@ import NewAuditV2 from './pages/NewAuditV2'
 import Intake from './pages/Intake'
 import AuditProgress from './pages/AuditProgress'
 import Report from './pages/Report'
+import ReportViewer from './pages/ReportViewer'
 
 // 404 page
 const NotFound = () => (
@@ -38,6 +39,9 @@ function App() {
       <Route path="/quiz" element={<Quiz />} />
       <Route path="/checkout" element={<Checkout />} />
       <Route path="/checkout/success" element={<CheckoutSuccess />} />
+
+      {/* Public report viewer (for quiz-based reports) */}
+      <Route path="/report/:id" element={<ReportViewer />} />
 
       {/* Protected routes */}
       <Route

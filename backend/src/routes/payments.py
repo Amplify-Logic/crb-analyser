@@ -4,17 +4,20 @@ Payment Routes
 Stripe integration for CRB Analyser payments.
 """
 
+import asyncio
 import logging
 import stripe
 from typing import Optional
 from datetime import datetime
 
-from fastapi import APIRouter, Depends, HTTPException, status, Request, Header
+from fastapi import APIRouter, Depends, HTTPException, status, Request, Header, BackgroundTasks
 from pydantic import BaseModel
 
 from src.config.settings import settings
 from src.config.supabase_client import get_async_supabase
 from src.middleware.auth import require_workspace, CurrentUser
+from src.services.report_service import generate_report_for_quiz, get_report
+from src.services.email import send_report_ready_email, send_payment_confirmation_email
 
 logger = logging.getLogger(__name__)
 
@@ -344,6 +347,7 @@ async def handle_guest_checkout_completed(session: dict):
     supabase = await get_async_supabase()
     metadata = session.get("metadata", {})
     quiz_session_id = metadata.get("quiz_session_id")
+    tier = metadata.get("tier", "quick")
 
     if not quiz_session_id:
         logger.error("No quiz_session_id in session metadata")
@@ -360,11 +364,40 @@ async def handle_guest_checkout_completed(session: dict):
 
         logger.info(f"Guest checkout completed for quiz session {quiz_session_id}")
 
-        # TODO: Send email with report access link
-        # TODO: Trigger report generation
+        # Get email from quiz session
+        quiz_result = await supabase.table("quiz_sessions").select("email").eq(
+            "id", quiz_session_id
+        ).single().execute()
+
+        email = quiz_result.data.get("email") if quiz_result.data else None
+        amount = session.get("amount_total", 0) / 100
+
+        # Send payment confirmation email
+        if email:
+            await send_payment_confirmation_email(email, tier, amount)
+
+        # Generate report (runs async in background)
+        logger.info(f"Starting report generation for quiz session {quiz_session_id}")
+        report_id = await generate_report_for_quiz(quiz_session_id, tier)
+
+        if report_id:
+            logger.info(f"Report generated: {report_id}")
+
+            # Get report summary for email
+            report = await get_report(report_id)
+            if report and email:
+                executive_summary = report.get("executive_summary", {})
+                await send_report_ready_email(
+                    to_email=email,
+                    report_id=report_id,
+                    ai_readiness_score=executive_summary.get("ai_readiness_score", 0),
+                    top_opportunities=executive_summary.get("top_opportunities", []),
+                )
+        else:
+            logger.error(f"Failed to generate report for quiz session {quiz_session_id}")
 
     except Exception as e:
-        logger.error(f"Handle guest checkout error: {e}")
+        logger.error(f"Handle guest checkout error: {e}", exc_info=True)
 
 
 async def handle_payment_failed(payment_intent: dict):

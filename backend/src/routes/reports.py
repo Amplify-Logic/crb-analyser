@@ -12,12 +12,146 @@ from fastapi import APIRouter, Depends, HTTPException, status
 from fastapi.responses import StreamingResponse
 
 from src.config.supabase_client import get_async_supabase
-from src.middleware.auth import require_workspace, CurrentUser
+from src.middleware.auth import require_workspace, CurrentUser, get_optional_user
 from src.services.pdf_generator import generate_pdf_report
+from src.services.report_service import (
+    get_report as get_report_by_id,
+    get_report_by_quiz_session,
+    generate_report_streaming,
+)
 
 logger = logging.getLogger(__name__)
 
 router = APIRouter()
+
+
+# ============================================================================
+# PUBLIC ROUTES (for guest/quiz-based reports)
+# ============================================================================
+
+@router.get("/public/{report_id}")
+async def get_public_report(report_id: str):
+    """
+    Get a report by ID (public access for quiz-based reports).
+    """
+    try:
+        report = await get_report_by_id(report_id)
+
+        if not report:
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail="Report not found"
+            )
+
+        # Only return completed reports
+        if report.get("status") != "completed":
+            return {
+                "status": report.get("status"),
+                "message": "Report is being generated. Please check back shortly.",
+            }
+
+        return {
+            "id": report["id"],
+            "tier": report.get("tier"),
+            "status": report.get("status"),
+            "executive_summary": report.get("executive_summary"),
+            "value_summary": report.get("value_summary"),
+            "findings": report.get("findings", []),
+            "recommendations": report.get("recommendations", []),
+            "roadmap": report.get("roadmap"),
+            "methodology_notes": report.get("methodology_notes"),
+            "created_at": report.get("created_at"),
+        }
+
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"Get public report error: {e}")
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail="Failed to get report"
+        )
+
+
+@router.get("/by-quiz/{quiz_session_id}")
+async def get_report_by_quiz(quiz_session_id: str):
+    """
+    Get a report by quiz session ID.
+    """
+    try:
+        report = await get_report_by_quiz_session(quiz_session_id)
+
+        if not report:
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail="Report not found for this quiz session"
+            )
+
+        return {
+            "id": report["id"],
+            "status": report.get("status"),
+            "tier": report.get("tier"),
+            "executive_summary": report.get("executive_summary") if report.get("status") == "completed" else None,
+        }
+
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"Get report by quiz error: {e}")
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail="Failed to get report"
+        )
+
+
+@router.get("/public/{report_id}/pdf")
+async def download_public_pdf(report_id: str):
+    """
+    Download PDF for a public report.
+    """
+    try:
+        from src.services.pdf_generator import generate_pdf_from_report_data
+
+        report = await get_report_by_id(report_id)
+
+        if not report:
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail="Report not found"
+            )
+
+        if report.get("status") != "completed":
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail="Report is not ready yet"
+            )
+
+        # Generate PDF from report data
+        pdf_buffer = await generate_pdf_from_report_data(report)
+
+        filename = f"CRB_Report_{datetime.now().strftime('%Y%m%d')}.pdf"
+
+        return StreamingResponse(
+            pdf_buffer,
+            media_type="application/pdf",
+            headers={
+                "Content-Disposition": f'attachment; filename="{filename}"'
+            },
+        )
+
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"Public PDF generation error: {e}")
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail="Failed to generate PDF"
+        )
+
+
+# ============================================================================
+# AUTHENTICATED ROUTES (for workspace-based reports)
+# ============================================================================
 
 
 @router.get("/{audit_id}")
