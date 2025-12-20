@@ -156,7 +156,10 @@ export default function ReportViewer() {
 
     try {
       let response
-      if (reportId) {
+      if (reportId === 'sample') {
+        // Load sample demo report
+        response = await apiClient.get<Report>(`/api/reports/sample`)
+      } else if (reportId) {
         response = await apiClient.get<Report>(`/api/reports/public/${reportId}`)
       } else if (quizSessionId) {
         response = await apiClient.get<{ id: string }>(`/api/reports/by-quiz/${quizSessionId}`)
