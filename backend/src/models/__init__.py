@@ -40,6 +40,74 @@ from .intake import (
     QuestionnaireResponse,
     IntakeValidationResult,
 )
+from .recommendation import (
+    # Core types
+    OptionType,
+    ConfidenceLevel,
+    TimeHorizon,
+    RiskProbability,
+    FindingCategory,
+    # Cost/Benefit models
+    CostBreakdown,
+    CostAnalysis,
+    BenefitBreakdown,
+    BenefitAnalysis,
+    RiskItem,
+    CRBAnalysis,
+    # Three Options pattern
+    OptionDetail,
+    CustomSolutionDetail,
+    RecommendationOptions,
+    # Findings and Recommendations
+    WhyItMatters,
+    ValueSaved,
+    ValueCreated,
+    Finding,
+    Recommendation,
+    # Report structure
+    Verdict,
+    RoadmapItem,
+    Roadmap,
+    ValueSummary,
+    ExecutiveSummary,
+    MethodologyNotes,
+    Report,
+)
+from .playbook import (
+    TaskCRB,
+    PlaybookTask,
+    Week,
+    PhaseCRBSummary,
+    Phase,
+    PersonalizationContext,
+    Playbook,
+    PlaybookProgress,
+)
+from .system_architecture import (
+    NodeCRB,
+    Position,
+    ToolNode,
+    Connection,
+    AutomationNode,
+    CostItem,
+    CostBreakdown as ArchCostBreakdown,  # Renamed to avoid conflict
+    CostComparison,
+    SystemArchitecture,
+)
+from .industry_insights import (
+    InsightCRB,
+    AdoptionStat,
+    OpportunityMap,
+    SocialProof,
+    IndustryInsights,
+)
+from .roi_calculator import (
+    ROIInputs,
+    CalculatorCRB,
+    ROIResults,
+    SavedScenario,
+    ROICalculator,
+)
 
 __all__ = [
     # Auth
@@ -76,4 +144,62 @@ __all__ = [
     "IntakeWithAudit",
     "QuestionnaireResponse",
     "IntakeValidationResult",
+    # Recommendation (Three Options pattern)
+    "OptionType",
+    "ConfidenceLevel",
+    "TimeHorizon",
+    "RiskProbability",
+    "FindingCategory",
+    "CostBreakdown",
+    "CostAnalysis",
+    "BenefitBreakdown",
+    "BenefitAnalysis",
+    "RiskItem",
+    "CRBAnalysis",
+    "OptionDetail",
+    "CustomSolutionDetail",
+    "RecommendationOptions",
+    "WhyItMatters",
+    "ValueSaved",
+    "ValueCreated",
+    "Finding",
+    "Recommendation",
+    "Verdict",
+    "RoadmapItem",
+    "Roadmap",
+    "ValueSummary",
+    "ExecutiveSummary",
+    "MethodologyNotes",
+    "Report",
+    # Playbook
+    "TaskCRB",
+    "PlaybookTask",
+    "Week",
+    "PhaseCRBSummary",
+    "Phase",
+    "PersonalizationContext",
+    "Playbook",
+    "PlaybookProgress",
+    # System Architecture
+    "NodeCRB",
+    "Position",
+    "ToolNode",
+    "Connection",
+    "AutomationNode",
+    "CostItem",
+    "ArchCostBreakdown",
+    "CostComparison",
+    "SystemArchitecture",
+    # Industry Insights
+    "InsightCRB",
+    "AdoptionStat",
+    "OpportunityMap",
+    "SocialProof",
+    "IndustryInsights",
+    # ROI Calculator
+    "ROIInputs",
+    "CalculatorCRB",
+    "ROIResults",
+    "SavedScenario",
+    "ROICalculator",
 ]
