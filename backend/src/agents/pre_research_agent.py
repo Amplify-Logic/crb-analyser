@@ -86,29 +86,31 @@ After research, you'll output a structured company profile."""
         }
 
         try:
-            # Phase 1: Gather data from multiple sources
-            yield {
-                "status": "researching",
-                "step": "Searching for company information...",
-                "progress": 10,
-            }
-
-            # Run research with Claude
-            profile_data = await self._run_research_phase()
+            # Phase 1: Gather data from multiple sources (with granular progress)
+            profile_data = None
+            async for update in self._run_research_phase_with_progress():
+                if update.get("type") == "progress":
+                    yield {
+                        "status": "researching",
+                        "step": update["step"],
+                        "progress": update["progress"],
+                    }
+                elif update.get("type") == "result":
+                    profile_data = update["data"]
 
             yield {
                 "status": "researching",
                 "step": "Processing research findings...",
-                "progress": 60,
+                "progress": 65,
             }
 
             # Phase 2: Build structured profile
-            company_profile = self._build_company_profile(profile_data)
+            company_profile = self._build_company_profile(profile_data or {})
 
             yield {
                 "status": "generating_questions",
                 "step": "Generating tailored questions...",
-                "progress": 70,
+                "progress": 75,
             }
 
             # Phase 3: Generate tailored questionnaire
@@ -133,8 +135,18 @@ After research, you'll output a structured company profile."""
                 "error": str(e),
             }
 
-    async def _run_research_phase(self) -> Dict[str, Any]:
-        """Run the research phase using Claude with tools."""
+    async def _run_research_phase_with_progress(self) -> AsyncGenerator[Dict[str, Any], None]:
+        """Run the research phase using Claude with tools, yielding progress updates."""
+
+        # Tool name to user-friendly step mapping
+        TOOL_STEP_NAMES = {
+            "scrape_website": "Scanning website...",
+            "web_search": "Searching the web...",
+            "search_linkedin": "Searching LinkedIn...",
+            "search_crunchbase": "Looking up company data...",
+            "search_news": "Finding recent news...",
+            "search_jobs": "Analyzing job postings...",
+        }
 
         prompt = f"""Research the company: {self.company_name}
 {f"Website: {self.website_url}" if self.website_url else ""}
@@ -160,12 +172,17 @@ For each field, also note your confidence level (high/medium/low) and source."""
 
         messages = [{"role": "user", "content": prompt}]
 
-        # Run agent loop
+        # Run agent loop - progress from 10% to 60%
         max_iterations = 15
         iteration = 0
+        base_progress = 10
+        progress_per_iteration = 50 / max_iterations  # ~3.3% per iteration
+
+        yield {"type": "progress", "step": "Starting company research...", "progress": base_progress}
 
         while iteration < max_iterations:
             iteration += 1
+            current_progress = int(base_progress + (iteration * progress_per_iteration))
 
             try:
                 response = self.client.messages.create(
@@ -199,21 +216,28 @@ For each field, also note your confidence level (high/medium/low) and source."""
                     # Parse JSON from response
                     for block in response.content:
                         if block.type == "text":
-                            return self._extract_json_from_text(block.text)
+                            result = self._extract_json_from_text(block.text)
+                            yield {"type": "result", "data": result}
+                            return
                     break
 
                 # Execute tool calls
                 tool_results = []
                 for tool_call in tool_calls:
-                    logger.info(f"Executing research tool: {tool_call.name}")
+                    tool_name = tool_call.name
+                    step_name = TOOL_STEP_NAMES.get(tool_name, f"Researching {tool_name}...")
+
+                    yield {"type": "progress", "step": step_name, "progress": current_progress}
+
+                    logger.info(f"Executing research tool: {tool_name}")
 
                     result = await execute_research_tool(
-                        tool_call.name,
+                        tool_name,
                         tool_call.input,
                     )
 
                     # Store gathered data
-                    self.gathered_data[tool_call.name] = result
+                    self.gathered_data[tool_name] = result
 
                     tool_results.append({
                         "type": "tool_result",
@@ -230,7 +254,15 @@ For each field, also note your confidence level (high/medium/low) and source."""
                 logger.error(f"Research iteration error: {e}")
                 break
 
-        return self.gathered_data
+        yield {"type": "result", "data": self.gathered_data}
+
+    async def _run_research_phase(self) -> Dict[str, Any]:
+        """Run the research phase using Claude with tools (non-streaming, for backwards compat)."""
+        result = {}
+        async for update in self._run_research_phase_with_progress():
+            if update.get("type") == "result":
+                result = update.get("data", {})
+        return result
 
     def _extract_json_from_text(self, text: str) -> Dict[str, Any]:
         """Extract JSON from Claude's response."""
@@ -370,16 +402,24 @@ For each field, also note your confidence level (high/medium/low) and source."""
         # Build context for question generation
         profile_summary = self._summarize_profile(profile)
 
-        prompt = f"""Based on this company research, generate a tailored questionnaire.
+        prompt = f"""Based on this company research, generate a SHORT qualifying questionnaire (3-5 questions MAX).
 
 COMPANY PROFILE:
 {profile_summary}
 
-Generate questions that:
-1. SKIP questions we already know (e.g., if we know industry, don't ask)
-2. CONFIRM uncertain findings (e.g., "We found you have ~50 employees, is this correct?")
-3. ASK about things we couldn't find publicly (internal processes, pain points)
-4. DEEP DIVE on industry-specific challenges
+IMPORTANT: This is a FREE pre-qualification quiz. Generate only 3-5 essential questions that:
+1. CONFIRM the most uncertain/important finding (1 question max)
+2. DISCOVER their biggest pain point or challenge (1-2 questions)
+3. UNDERSTAND their goals/timeline (1 question)
+4. GAUGE their readiness/budget (1 question)
+
+DO NOT ask about things we already know with high confidence.
+DO NOT ask detailed operational questions - save those for the paid interview.
+
+The goal is to:
+- Qualify them as a good fit
+- Understand their core need
+- Give them a taste of personalized analysis
 
 Output a JSON array of questions with this structure:
 {{
