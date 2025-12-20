@@ -87,13 +87,16 @@ const APPROACH_RISK = {
 }
 
 export default function ROICalculator({
-  recommendations,
+  recommendations: _recommendations,
   valueSummary,
   onSaveScenario,
 }: ROICalculatorProps) {
   // Default values from recommendations or sensible defaults
-  const defaultMonthly = valueSummary?.total_monthly_savings || 2500
+  // _recommendations can be used for suggested values in future
+  const _defaultMonthly = valueSummary?.total_monthly_savings || 2500
   const defaultImplementation = valueSummary?.total_implementation_cost || 2400
+  void _recommendations
+  void _defaultMonthly
 
   const [inputs, setInputs] = useState<ROIInputs>({
     hoursWeekly: 15,
