@@ -15,10 +15,23 @@ from anthropic import Anthropic
 
 from src.config.settings import settings
 from src.config.supabase_client import get_async_supabase
+from src.config.model_routing import get_model_for_task, TokenTracker, MODELS
+from src.config.system_prompt import get_full_system_prompt
 from src.tools.tool_registry import TOOL_DEFINITIONS, execute_tool
 from src.knowledge import get_industry_context, get_quick_wins, get_not_recommended
+from src.expertise import get_expertise_store, get_self_improve_service
 
 logger = logging.getLogger(__name__)
+
+
+# Phase to model task mapping
+PHASE_TASKS = {
+    "discovery": "extract_pain_points",  # Fast extraction - use Haiku
+    "research": "search_vendors",  # Fast search - use Haiku
+    "analysis": "generate_findings",  # Main generation - use Sonnet
+    "modeling": "generate_recommendations",  # Main generation - use Sonnet
+    "report": "synthesize_report",  # Complex synthesis - use tier-based
+}
 
 
 class CRBAgent:
@@ -35,161 +48,32 @@ class CRBAgent:
 
     PHASES = ["discovery", "research", "analysis", "modeling", "report"]
 
-    SYSTEM_PROMPT = """You are the CRB Analyser, an AI expert in business process optimization and AI implementation consulting.
+    # Use the centralized system prompt from config module
+    SYSTEM_PROMPT = get_full_system_prompt()
 
-Your mission is to analyze a company's operations and provide actionable Cost/Risk/Benefit analysis for AI implementation opportunities.
+    # Additional context for tool-based agent
+    AGENT_CONTEXT = """
+You have access to tools for each phase. Work methodically through discovery,
+research, analysis, modeling, and report generation.
 
-═══════════════════════════════════════════════════════════════════════════════
-CORE PHILOSOPHY: TWO PILLARS (BOTH REQUIRED FOR EVERY RECOMMENDATION)
-═══════════════════════════════════════════════════════════════════════════════
+Remember: You are in STAGE 1 (ANALYSIS) until explicitly moved to STAGE 2 (RECOMMENDATION).
+Complete analysis before making any recommendations.
+"""
 
-1. CUSTOMER VALUE: "Does this make THEIR customers' lives better?"
-   - Better customer experience
-   - More value delivered to customers
-   - Increased trust and loyalty
-
-2. BUSINESS HEALTH: "Does this help the business survive and thrive sustainably?"
-   - Sustainable margins
-   - Build capability (not just cut costs)
-   - Reduce existential risk
-
-REJECTION CRITERIA:
-- High customer value + hurts business → DON'T RECOMMEND (unsustainable)
-- High business value + hurts customers → DON'T RECOMMEND (short-sighted)
-- Only recommend when BOTH benefit
-
-═══════════════════════════════════════════════════════════════════════════════
-VALUE CALCULATION: TWO TYPES
-═══════════════════════════════════════════════════════════════════════════════
-
-1. VALUE SAVED (Efficiency):
-   Time saved × Hourly cost = € saved annually
-   Example: 10 hrs/week × €50/hr × 52 weeks = €26,000/year
-
-2. VALUE CREATED (Growth):
-   - New revenue opportunities enabled
-   - Increased conversion rates
-   - Higher customer lifetime value
-   - New service offerings possible
-
-Always calculate and show BOTH types of value.
-
-═══════════════════════════════════════════════════════════════════════════════
-CRB ANALYSIS FRAMEWORK
-═══════════════════════════════════════════════════════════════════════════════
-
-For each recommendation, analyze across THREE TIME HORIZONS:
-
-           │ Short Term  │ Mid Term    │ Long Term   │
-           │ (0-6 months)│ (6-18 mo)   │ (18+ mo)    │
-───────────┼─────────────┼─────────────┼─────────────┤
-COST       │ Setup cost  │ Maintenance │ Total TCO   │
-RISK       │ Integration │ Adoption    │ Obsolescence│
-BENEFIT    │ Quick wins  │ Compounding │ Strategic   │
-
-═══════════════════════════════════════════════════════════════════════════════
-THREE OPTIONS PATTERN (ALWAYS INCLUDE ALL THREE)
-═══════════════════════════════════════════════════════════════════════════════
-
-Option A: OFF-THE-SHELF
-- Existing SaaS, plug and play
-- Fastest, lowest risk
-- Best for: Standard use cases, tight timelines
-
-Option B: BEST-IN-CLASS
-- Premium vendor, full implementation
-- Higher cost, better capabilities
-- Best for: Serious investment, need full features
-
-Option C: CUSTOM AI SOLUTION
-- Built specifically for them
-- Competitive moat potential
-- Best for: Unique needs, differentiation
-
-Always include custom option - AI development costs are dropping rapidly.
-
-═══════════════════════════════════════════════════════════════════════════════
-EVIDENCE & QUALITY STANDARDS
-═══════════════════════════════════════════════════════════════════════════════
-
-1. COSTS: Must cite vendor pricing (with date verified)
-2. RISKS: Must reference peer-reviewed studies or case studies
-3. BENEFITS: Must show calculation with assumptions
-4. CONFIDENCE: Mark each claim as High/Medium/Low confidence
-
-NEVER:
-- Use vague terms like "significant savings"
-- Recommend replacing teams with AI (augment, don't replace)
-- Suggest cheapest option without justification
-- Ignore implementation risks
-
-ALWAYS:
-- Show ranges, not single numbers
-- List all assumptions
-- Cite sources
-- Consider what could go wrong
-
-═══════════════════════════════════════════════════════════════════════════════
-SCORING
-═══════════════════════════════════════════════════════════════════════════════
-
-Customer Value Score (0-10):
-9-10: Transforms customer experience
-7-8:  Significantly improves value
-5-6:  Moderate benefit
-3-4:  Minimal impact
-1-2:  Potentially negative
-
-Business Health Score (0-10):
-9-10: Major sustainable advantage
-7-8:  Strong improvement
-5-6:  Moderate benefit
-3-4:  Marginal impact
-1-2:  Potentially harmful
-
-Only recommend items scoring 6+ on BOTH dimensions.
-
-═══════════════════════════════════════════════════════════════════════════════
-IMPARTIALITY & HONESTY
-═══════════════════════════════════════════════════════════════════════════════
-
-You are a TRUSTED ADVISOR, not a salesperson. Your job is to give the BEST answer for this specific business, even if that answer is uncomfortable.
-
-BE WILLING TO SAY:
-- "You're not ready for AI yet - fix these fundamentals first"
-- "This process doesn't need automation - it's working fine"
-- "The ROI doesn't justify the investment right now"
-- "Your team size is too small to benefit from this"
-- "Wait 6-12 months - the tools aren't mature enough yet"
-- "The cheaper option is genuinely better for your situation"
-- "Don't automate this - the human touch is your competitive advantage"
-
-VENDOR IMPARTIALITY:
-- Never favor a vendor without clear justification
-- If a free/cheap option works, recommend it over expensive alternatives
-- Disclose if a vendor is known for aggressive sales tactics
-- Consider long-term vendor lock-in risks
-- Sometimes "build vs buy" answer is "neither - don't do it"
-
-HONEST ASSESSMENTS:
-- If data is insufficient, say so - don't fabricate confidence
-- If the business has bigger problems than AI can solve, name them
-- If competitors are ahead and catching up is unrealistic, be honest
-- If the solopreneur/small team will be overwhelmed, warn them
-
-YOUR VALUE IS TRUST:
-A report that saves someone from a bad €10K investment is more valuable than a report that sounds impressive but leads them astray.
-
-The best outcome is a business that thrives - sometimes that means NOT implementing AI.
-
-You have access to tools for each phase. Work methodically through discovery, research, analysis, modeling, and report generation."""
-
-    def __init__(self, audit_id: str):
+    def __init__(self, audit_id: str, tier: str = "quick"):
         self.audit_id = audit_id
+        self.tier = tier  # "quick" or "full" - affects model selection
         self.client = Anthropic(api_key=settings.ANTHROPIC_API_KEY)
+        self.token_tracker = TokenTracker()  # Track token usage and costs
         self.current_phase = "discovery"
         self.progress = 0
         self.context: Dict[str, Any] = {}
+
+        # Expertise system - self-improving agent
+        self.expertise_store = get_expertise_store()
+        self.tools_used: Dict[str, int] = {}  # Track tool usage for learning
+        self.errors_encountered: List[str] = []  # Track errors for learning
+        self.phases_completed: List[str] = []  # Track phase completion
 
     async def run_analysis(self) -> AsyncGenerator[Dict[str, Any], None]:
         """
@@ -247,6 +131,16 @@ You have access to tools for each phase. Work methodically through discovery, re
             else:
                 logger.warning(f"No specific knowledge for industry: {industry}")
 
+            # Load agent expertise (self-improving mental model)
+            yield {"phase": "init", "step": "Loading agent expertise...", "progress": 4}
+            expertise = self.expertise_store.get_industry_expertise(industry)
+            self.context["agent_expertise"] = expertise.model_dump()
+            if expertise.total_analyses > 0:
+                logger.info(
+                    f"Loaded expertise for {industry}: {expertise.total_analyses} prior analyses, "
+                    f"confidence: {expertise.confidence}"
+                )
+
             yield {"phase": "init", "step": "Loaded audit data and industry knowledge", "progress": 5}
 
             # Run each phase
@@ -285,6 +179,9 @@ You have access to tools for each phase. Work methodically through discovery, re
                         update["progress"] = scaled_progress
                     yield update
 
+                # Track phase completion for learning
+                self.phases_completed.append(phase)
+
                 yield {
                     "phase": phase,
                     "step": f"Completed {phase} phase",
@@ -311,6 +208,39 @@ You have access to tools for each phase. Work methodically through discovery, re
                 "total_potential_savings": total_savings,
             }).eq("id", self.audit_id).execute()
 
+            # Get token usage summary
+            token_summary = self.token_tracker.get_summary()
+            logger.info(
+                f"Analysis complete. Token usage: {token_summary['total_tokens']} "
+                f"(estimated cost: ${token_summary['estimated_cost_usd']:.4f})"
+            )
+
+            # Self-improve: Learn from this analysis
+            yield {"phase": "learning", "step": "Updating agent expertise...", "progress": 99}
+            try:
+                self_improve_service = get_self_improve_service()
+                learning_result = await self_improve_service.learn_from_analysis(
+                    audit_id=self.audit_id,
+                    industry=industry,
+                    company_size=self.context.get("company_size", "unknown"),
+                    context={
+                        "findings": self.context.get("findings", []),
+                        "recommendations": self.context.get("recommendations", []),
+                        "ai_readiness_score": ai_readiness_score,
+                        "total_potential_savings": total_savings,
+                    },
+                    execution_metrics={
+                        "tools_used": self.tools_used,
+                        "token_usage": token_summary,
+                        "phases_completed": self.phases_completed,
+                        "errors": self.errors_encountered,
+                    },
+                )
+                logger.info(f"Self-improvement complete: {learning_result.get('learned', {})}")
+            except Exception as e:
+                # Self-improvement is non-critical - don't fail the analysis
+                logger.warning(f"Self-improvement failed (non-critical): {e}")
+
             yield {
                 "phase": "complete",
                 "step": "Analysis complete!",
@@ -319,6 +249,7 @@ You have access to tools for each phase. Work methodically through discovery, re
                     "ai_readiness_score": ai_readiness_score,
                     "total_findings": len(self.context["findings"]),
                     "total_potential_savings": total_savings,
+                    "token_usage": token_summary,
                 },
             }
 
@@ -369,12 +300,24 @@ You have access to tools for each phase. Work methodically through discovery, re
             }
 
             try:
+                # Get appropriate model for this phase and tier
+                task = PHASE_TASKS.get(phase, "generate_findings")
+                model = get_model_for_task(task, self.tier)
+
                 response = self.client.messages.create(
-                    model=settings.DEFAULT_MODEL,
+                    model=model,
                     max_tokens=4096,
                     system=self.SYSTEM_PROMPT,
                     tools=phase_tools,
                     messages=messages,
+                )
+
+                # Track token usage
+                self.token_tracker.add_usage(
+                    task=f"{phase}_{iteration}",
+                    model=model,
+                    input_tokens=response.usage.input_tokens,
+                    output_tokens=response.usage.output_tokens,
                 )
 
                 # Process response
@@ -409,6 +352,9 @@ You have access to tools for each phase. Work methodically through discovery, re
                         "progress": (iteration / max_iterations) * 100,
                     }
 
+                    # Track tool usage for learning
+                    self.tools_used[tool_call.name] = self.tools_used.get(tool_call.name, 0) + 1
+
                     result = await execute_tool(
                         tool_call.name,
                         tool_call.input,
@@ -430,6 +376,8 @@ You have access to tools for each phase. Work methodically through discovery, re
 
             except Exception as e:
                 logger.error(f"Phase {phase} error: {e}")
+                # Track errors for learning
+                self.errors_encountered.append(f"{phase}: {str(e)}")
                 yield {
                     "phase": phase,
                     "step": f"Error: {str(e)}",
@@ -478,6 +426,7 @@ You have access to tools for each phase. Work methodically through discovery, re
         industry_knowledge = self.context.get("industry_knowledge", {})
         quick_wins = self.context.get("quick_wins", [])
         not_recommended = self.context.get("not_recommended", [])
+        agent_expertise = self.context.get("agent_expertise", {})
 
         # Build industry context section
         industry_context = ""
@@ -506,10 +455,52 @@ THINGS NOT RECOMMENDED for this industry (be willing to say no):
 {json.dumps(not_recommended, indent=2)}
 """
 
+        # Build expertise context (learned from previous analyses)
+        expertise_context = ""
+        if agent_expertise.get("total_analyses", 0) > 0:
+            expertise_context = f"""
+═══════════════════════════════════════════════════════════════════════════════
+AGENT EXPERTISE (learned from {agent_expertise['total_analyses']} prior analyses)
+Confidence level: {agent_expertise.get('confidence', 'low')}
+═══════════════════════════════════════════════════════════════════════════════
+"""
+            # Top pain points we've seen in this industry
+            pain_points = agent_expertise.get("pain_points", {})
+            if pain_points:
+                top_pains = sorted(
+                    [(k, v.get("frequency", 0)) for k, v in pain_points.items()],
+                    key=lambda x: x[1],
+                    reverse=True
+                )[:5]
+                if top_pains:
+                    expertise_context += f"""
+COMMON PAIN POINTS in {self.context['industry']} (from prior analyses):
+{json.dumps([{'pain_point': p[0], 'seen_in': f'{p[1]} analyses'} for p in top_pains], indent=2)}
+"""
+
+            # Company size specific insights
+            size_data = agent_expertise.get("size_specific", {}).get(client.get("company_size", ""), {})
+            if size_data:
+                expertise_context += f"""
+INSIGHTS for {client.get('company_size', '')} companies in this industry:
+- Analyzed: {size_data.get('count', 0)} similar companies
+- Average AI readiness: {size_data.get('avg_readiness', 50):.0f}
+- Common pain points: {', '.join(size_data.get('common_pain_points', [])[:3])}
+"""
+
+            # Effective patterns we've learned
+            patterns = agent_expertise.get("effective_patterns", [])
+            if patterns:
+                top_patterns = sorted(patterns, key=lambda p: p.get("frequency", 0), reverse=True)[:3]
+                expertise_context += f"""
+EFFECTIVE RECOMMENDATIONS we've made for similar companies:
+{json.dumps([{'pattern': p.get('pattern', ''), 'recommendation': p.get('recommendation', '')} for p in top_patterns], indent=2)}
+"""
+
         return f"""Phase 1: Discovery
 
 Analyze the following intake responses from {client.get('name', 'the client')}, a {client.get('company_size', '')} company in the {client.get('industry', '')} industry.
-{industry_context}
+{industry_context}{expertise_context}
 INTAKE RESPONSES:
 {intake}
 

@@ -1,0 +1,55 @@
+# Development docker-compose with hot reload
+# Usage: docker-compose -f docker-compose.dev.yml up
+
+version: '3.8'
+
+services:
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile.dev
+    ports:
+      - "8383:8383"
+    volumes:
+      # Mount source for hot reload
+      - ./backend/src:/app/src:delegated
+    environment:
+      - PORT=8383
+      - REDIS_URL=redis://redis:6379
+      - APP_ENV=development
+      - DEBUG=true
+    env_file:
+      - ./backend/.env
+    depends_on:
+      - redis
+    networks:
+      - crb-network
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile.dev
+    ports:
+      - "5174:5174"
+    volumes:
+      # Mount source for hot reload
+      - ./frontend/src:/app/src:delegated
+      - ./frontend/public:/app/public:delegated
+      - ./frontend/index.html:/app/index.html:delegated
+    environment:
+      - VITE_API_BASE_URL=http://localhost:8383
+    depends_on:
+      - backend
+    networks:
+      - crb-network
+
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+    networks:
+      - crb-network
+
+networks:
+  crb-network:
+    driver: bridge

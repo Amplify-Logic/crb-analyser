@@ -1,0 +1,782 @@
+{
+  "id": "eda4e7de-0ebc-4dee-a535-b059ead66898",
+  "quiz_session_id": "563487af-2a68-45e3-998d-cc2c77ac3d4d",
+  "audit_id": null,
+  "tier": "full",
+  "status": "completed",
+  "executive_summary": {
+    "key_insight": "Aquablu has exceptional AI potential due to IoT-connected devices generating rich usage data, but must fix system integration before scaling AI initiatives.",
+    "not_recommended": [
+      {
+        "title": "Custom AI Sales Chatbot",
+        "reason": "B2B enterprise sales require human relationship building - AI would damage trust with high-value clients like Microsoft and Intel"
+      },
+      {
+        "title": "Full ERP Replacement with AI-Native System",
+        "reason": "Too disruptive for current growth phase - integrate existing systems first, then consider gradual modernization"
+      }
+    ],
+    "top_opportunities": [
+      {
+        "title": "Predictive Maintenance AI",
+        "time_horizon": "short",
+        "value_potential": "\u20ac40K-65K"
+      },
+      {
+        "title": "Automated Sustainability Reporting",
+        "time_horizon": "short",
+        "value_potential": "\u20ac25K-40K"
+      },
+      {
+        "title": "Usage Analytics & Upselling Engine",
+        "time_horizon": "mid",
+        "value_potential": "\u20ac50K-85K"
+      },
+      {
+        "title": "Smart Service Routing Optimization",
+        "time_horizon": "mid",
+        "value_potential": "\u20ac35K-55K"
+      }
+    ],
+    "ai_readiness_score": 72,
+    "customer_value_score": 8,
+    "business_health_score": 7,
+    "total_value_potential": {
+      "max": 300000,
+      "min": 180000,
+      "projection_years": 3
+    },
+    "recommended_investment": {
+      "year_1_max": 35000,
+      "year_1_min": 15000
+    }
+  },
+  "value_summary": {
+    "total": {
+      "max": 1192100,
+      "min": 641900
+    },
+    "value_saved": {
+      "subtotal": {
+        "max": 0,
+        "min": 0
+      },
+      "hourly_rate": 50,
+      "hours_per_week": 0,
+      "time_savings_annual": 0
+    },
+    "value_created": {
+      "subtotal": {
+        "max": 1192100,
+        "min": 641900
+      },
+      "from_findings": 0,
+      "from_recommendations": 917000
+    },
+    "projection_years": 3
+  },
+  "findings": [],
+  "recommendations": [
+    {
+      "id": "rec-001",
+      "title": "Implement Basic Business Intelligence Dashboard",
+      "options": {
+        "best_in_class": {
+          "cons": [
+            "Expensive",
+            "Requires dedicated data team"
+          ],
+          "name": "Looker",
+          "pros": [
+            "Powerful modeling",
+            "Advanced analytics",
+            "Scalable"
+          ],
+          "vendor": "Google Cloud",
+          "monthly_cost": 5000,
+          "implementation_weeks": 8
+        },
+        "off_the_shelf": {
+          "cons": [
+            "Limited customization",
+            "Basic analytics only"
+          ],
+          "name": "Databox",
+          "pros": [
+            "Quick setup",
+            "Good templates",
+            "Mobile access"
+          ],
+          "vendor": "Databox",
+          "monthly_cost": 150,
+          "implementation_weeks": 2
+        },
+        "custom_solution": {
+          "cons": [
+            "Ongoing maintenance burden",
+            "Requires technical expertise"
+          ],
+          "pros": [
+            "Fully customized",
+            "No licensing fees",
+            "Complete control"
+          ],
+          "approach": "Build custom dashboard using open-source tools like Apache Superset with tailored KPIs and industry-specific metrics",
+          "estimated_cost": {
+            "max": 35000,
+            "min": 15000
+          },
+          "implementation_weeks": 12
+        }
+      },
+      "priority": "high",
+      "finding_id": "finding-001",
+      "assumptions": [
+        "Current manual reporting takes 10 hours/week",
+        "Hourly cost of \u20ac50",
+        "20% improvement in decision speed creates additional value"
+      ],
+      "description": "Set up automated reporting and KPI tracking to replace manual spreadsheet-based reporting and provide real-time visibility into business performance.",
+      "crb_analysis": {
+        "cost": {
+          "total": 26600,
+          "mid_term": {
+            "software": 5400,
+            "maintenance": 2000
+          },
+          "long_term": {
+            "software": 10800,
+            "upgrades": 3000
+          },
+          "short_term": {
+            "software": 900,
+            "training": 1500,
+            "implementation": 3000
+          }
+        },
+        "risk": [
+          {
+            "impact": 5000,
+            "mitigation": "Establish data governance processes and validation rules",
+            "description": "Poor data quality leading to incorrect insights",
+            "probability": "medium",
+            "time_horizon": "short"
+          },
+          {
+            "impact": 2000,
+            "mitigation": "Comprehensive training and change management",
+            "description": "Team resistance to adopting new reporting processes",
+            "probability": "low",
+            "time_horizon": "short"
+          }
+        ],
+        "benefit": {
+          "total": 155000,
+          "mid_term": {
+            "value_saved": 30000,
+            "value_created": 15000
+          },
+          "long_term": {
+            "value_saved": 60000,
+            "value_created": 30000
+          },
+          "short_term": {
+            "value_saved": 15000,
+            "value_created": 5000
+          }
+        }
+      },
+      "payback_months": 3,
+      "roi_percentage": 483,
+      "why_it_matters": {
+        "customer_value": "Faster response to customer issues through real-time monitoring and improved service quality through data-driven decisions",
+        "business_health": "Reduces time spent on manual reporting by 80% and enables proactive decision-making to prevent revenue loss"
+      },
+      "our_recommendation": "off_the_shelf",
+      "recommendation_rationale": "Databox provides the quickest path to value with minimal technical overhead, allowing the team to focus on using insights rather than building infrastructure."
+    },
+    {
+      "id": "rec-002",
+      "title": "Automate Customer Support Triage and Response",
+      "options": {
+        "best_in_class": {
+          "cons": [
+            "Higher cost",
+            "May require workflow changes"
+          ],
+          "name": "Intercom Resolution Bot",
+          "pros": [
+            "Advanced NLP",
+            "Conversational interface",
+            "Strong automation"
+          ],
+          "vendor": "Intercom",
+          "monthly_cost": 500,
+          "implementation_weeks": 4
+        },
+        "off_the_shelf": {
+          "cons": [
+            "Limited to Zendesk ecosystem",
+            "Basic customization"
+          ],
+          "name": "Zendesk Answer Bot",
+          "pros": [
+            "Easy integration",
+            "Machine learning improves over time",
+            "Good analytics"
+          ],
+          "vendor": "Zendesk",
+          "monthly_cost": 200,
+          "implementation_weeks": 3
+        },
+        "custom_solution": {
+          "cons": [
+            "High development cost",
+            "Ongoing AI model maintenance"
+          ],
+          "pros": [
+            "Fully customized responses",
+            "Perfect integration",
+            "Competitive advantage"
+          ],
+          "approach": "Build custom chatbot using OpenAI API with company-specific training data and integration to existing systems",
+          "estimated_cost": {
+            "max": 50000,
+            "min": 25000
+          },
+          "implementation_weeks": 16
+        }
+      },
+      "priority": "high",
+      "finding_id": "finding-002",
+      "assumptions": [
+        "Support team spends 25 hours/week on routine queries",
+        "15% improvement in customer satisfaction",
+        "Hourly support cost of \u20ac45"
+      ],
+      "description": "Implement AI-powered customer support automation to classify tickets, provide instant responses for common issues, and route complex queries to appropriate team members.",
+      "crb_analysis": {
+        "cost": {
+          "total": 35800,
+          "mid_term": {
+            "software": 7200,
+            "maintenance": 3000
+          },
+          "long_term": {
+            "software": 14400,
+            "upgrades": 4000
+          },
+          "short_term": {
+            "software": 1200,
+            "training": 2000,
+            "implementation": 4000
+          }
+        },
+        "risk": [
+          {
+            "impact": 10000,
+            "mitigation": "Human oversight for all AI responses initially, gradual automation increase",
+            "description": "AI provides incorrect responses damaging customer relationships",
+            "probability": "medium",
+            "time_horizon": "short"
+          },
+          {
+            "impact": 5000,
+            "mitigation": "Choose solution with proven integrations, test thoroughly",
+            "description": "Integration issues with existing CRM/ticketing system",
+            "probability": "low",
+            "time_horizon": "short"
+          }
+        ],
+        "benefit": {
+          "total": 199000,
+          "mid_term": {
+            "value_saved": 36000,
+            "value_created": 20000
+          },
+          "long_term": {
+            "value_saved": 72000,
+            "value_created": 45000
+          },
+          "short_term": {
+            "value_saved": 18000,
+            "value_created": 8000
+          }
+        }
+      },
+      "payback_months": 4,
+      "roi_percentage": 456,
+      "why_it_matters": {
+        "customer_value": "Customers get instant responses 24/7 and faster resolution of issues through smart routing to the right experts",
+        "business_health": "Reduces support workload by 40% and improves customer satisfaction scores leading to higher retention"
+      },
+      "our_recommendation": "best_in_class",
+      "recommendation_rationale": "Intercom provides the best balance of advanced AI capabilities and reasonable implementation complexity, with strong ROI justifying the higher cost."
+    },
+    {
+      "id": "rec-003",
+      "title": "Implement Predictive Sales Pipeline Management",
+      "options": {
+        "best_in_class": {
+          "cons": [
+            "Very expensive",
+            "Complex setup",
+            "Enterprise-focused"
+          ],
+          "name": "6sense",
+          "pros": [
+            "Advanced AI insights",
+            "Account-based intelligence",
+            "Predictive analytics"
+          ],
+          "vendor": "6sense",
+          "monthly_cost": 3500,
+          "implementation_weeks": 8
+        },
+        "off_the_shelf": {
+          "cons": [
+            "Basic AI capabilities",
+            "Limited customization"
+          ],
+          "name": "HubSpot Predictive Lead Scoring",
+          "pros": [
+            "Integrated with CRM",
+            "Easy to use",
+            "Good support"
+          ],
+          "vendor": "HubSpot",
+          "monthly_cost": 250,
+          "implementation_weeks": 4
+        },
+        "custom_solution": {
+          "cons": [
+            "Requires data science expertise",
+            "Long development time",
+            "High maintenance"
+          ],
+          "pros": [
+            "Tailored to specific sales process",
+            "Competitive advantage",
+            "Full control"
+          ],
+          "approach": "Build machine learning models using company sales data to predict deal closure probability and optimal next actions",
+          "estimated_cost": {
+            "max": 60000,
+            "min": 30000
+          },
+          "implementation_weeks": 20
+        }
+      },
+      "priority": "medium",
+      "finding_id": "finding-003",
+      "assumptions": [
+        "Sales team has 3 full-time people",
+        "25% improvement in conversion rates",
+        "Average deal size \u20ac5,000"
+      ],
+      "description": "Deploy AI-powered sales forecasting and opportunity scoring to improve deal prioritization and revenue predictability.",
+      "crb_analysis": {
+        "cost": {
+          "total": 44500,
+          "mid_term": {
+            "software": 9000,
+            "maintenance": 3500
+          },
+          "long_term": {
+            "software": 18000,
+            "upgrades": 5000
+          },
+          "short_term": {
+            "software": 1500,
+            "training": 2500,
+            "implementation": 5000
+          }
+        },
+        "risk": [
+          {
+            "impact": 8000,
+            "mitigation": "Start with rule-based scoring, gradually introduce AI as data accumulates",
+            "description": "Insufficient historical data for accurate predictions",
+            "probability": "high",
+            "time_horizon": "short"
+          },
+          {
+            "impact": 15000,
+            "mitigation": "Training on AI as augmentation tool, not replacement for sales skills",
+            "description": "Sales team over-relies on AI scores instead of relationship building",
+            "probability": "medium",
+            "time_horizon": "mid"
+          }
+        ],
+        "benefit": {
+          "total": 179000,
+          "mid_term": {
+            "value_saved": 24000,
+            "value_created": 25000
+          },
+          "long_term": {
+            "value_saved": 48000,
+            "value_created": 60000
+          },
+          "short_term": {
+            "value_saved": 12000,
+            "value_created": 10000
+          }
+        }
+      },
+      "payback_months": 5,
+      "roi_percentage": 302,
+      "why_it_matters": {
+        "customer_value": "Sales team can focus on prospects most likely to buy, providing more personalized attention and faster response times",
+        "business_health": "Improves sales efficiency by 25% and provides accurate revenue forecasting for better business planning"
+      },
+      "our_recommendation": "off_the_shelf",
+      "recommendation_rationale": "HubSpot provides sufficient AI capabilities for most SMBs at a reasonable cost, with room to upgrade as the business grows and data quality improves."
+    },
+    {
+      "id": "rec-004",
+      "title": "Automate Invoice Processing and Accounts Payable",
+      "options": {
+        "best_in_class": {
+          "cons": [
+            "Higher cost",
+            "May be overkill for SMBs"
+          ],
+          "name": "AppZen",
+          "pros": [
+            "Advanced AI detection",
+            "Fraud prevention",
+            "Detailed analytics"
+          ],
+          "vendor": "AppZen",
+          "monthly_cost": 500,
+          "implementation_weeks": 6
+        },
+        "off_the_shelf": {
+          "cons": [
+            "Limited workflow customization",
+            "Basic approval features"
+          ],
+          "name": "Xero Invoice Processing",
+          "pros": [
+            "Integrated with accounting",
+            "Good OCR accuracy",
+            "Affordable"
+          ],
+          "vendor": "Xero",
+          "monthly_cost": 130,
+          "implementation_weeks": 3
+        },
+        "custom_solution": {
+          "cons": [
+            "High upfront cost",
+            "Technical complexity",
+            "Maintenance overhead"
+          ],
+          "pros": [
+            "Perfect fit to processes",
+            "Scalable",
+            "Full control"
+          ],
+          "approach": "Build custom solution using Google Document AI or AWS Textract with tailored approval workflows and ERP integration",
+          "estimated_cost": {
+            "max": 40000,
+            "min": 20000
+          },
+          "implementation_weeks": 14
+        }
+      },
+      "priority": "medium",
+      "finding_id": "finding-004",
+      "assumptions": [
+        "Finance team spends 15 hours/week on invoice processing",
+        "Hourly cost \u20ac40",
+        "5% reduction in late payment fees"
+      ],
+      "description": "Implement OCR and AI-powered document processing to automate invoice data extraction, approval workflows, and payment processing.",
+      "crb_analysis": {
+        "cost": {
+          "total": 23200,
+          "mid_term": {
+            "software": 4800,
+            "maintenance": 2000
+          },
+          "long_term": {
+            "software": 9600,
+            "upgrades": 2500
+          },
+          "short_term": {
+            "software": 800,
+            "training": 1000,
+            "implementation": 3500
+          }
+        },
+        "risk": [
+          {
+            "impact": 3000,
+            "mitigation": "Implement human review for low-confidence extractions",
+            "description": "OCR accuracy issues with poor quality invoices",
+            "probability": "medium",
+            "time_horizon": "short"
+          },
+          {
+            "impact": 10000,
+            "mitigation": "Maintain approval thresholds and audit trails",
+            "description": "Compliance issues with automated approvals",
+            "probability": "low",
+            "time_horizon": "mid"
+          }
+        ],
+        "benefit": {
+          "total": 124000,
+          "mid_term": {
+            "value_saved": 28000,
+            "value_created": 8000
+          },
+          "long_term": {
+            "value_saved": 56000,
+            "value_created": 15000
+          },
+          "short_term": {
+            "value_saved": 14000,
+            "value_created": 3000
+          }
+        }
+      },
+      "payback_months": 4,
+      "roi_percentage": 435,
+      "why_it_matters": {
+        "customer_value": "Suppliers receive faster payments improving relationships, customers benefit from more accurate billing and faster quote turnaround",
+        "business_health": "Reduces manual processing time by 70% and eliminates late payment fees while improving cash flow management"
+      },
+      "our_recommendation": "off_the_shelf",
+      "recommendation_rationale": "Xero provides excellent value for money with sufficient automation capabilities for most SMB needs, integrating well with existing accounting workflows."
+    },
+    {
+      "id": "rec-005",
+      "title": "Deploy Inventory Optimization with Demand Forecasting",
+      "options": {
+        "best_in_class": {
+          "cons": [
+            "Enterprise pricing",
+            "Complex implementation",
+            "Overkill for small businesses"
+          ],
+          "name": "Blue Yonder (formerly JDA)",
+          "pros": [
+            "Advanced AI algorithms",
+            "Industry expertise",
+            "Comprehensive platform"
+          ],
+          "vendor": "Blue Yonder",
+          "monthly_cost": 2000,
+          "implementation_weeks": 12
+        },
+        "off_the_shelf": {
+          "cons": [
+            "Limited advanced AI",
+            "QuickBooks ecosystem lock-in"
+          ],
+          "name": "TradeGecko (now QuickBooks Commerce)",
+          "pros": [
+            "Integrated with QuickBooks",
+            "Good forecasting features",
+            "Multi-channel"
+          ],
+          "vendor": "Intuit QuickBooks",
+          "monthly_cost": 300,
+          "implementation_weeks": 6
+        },
+        "custom_solution": {
+          "cons": [
+            "Requires data science expertise",
+            "High development cost",
+            "Long payback period"
+          ],
+          "pros": [
+            "Tailored algorithms",
+            "Competitive advantage",
+            "Full customization"
+          ],
+          "approach": "Build ML-based forecasting system using time series analysis and external data sources with custom optimization algorithms",
+          "estimated_cost": {
+            "max": 80000,
+            "min": 40000
+          },
+          "implementation_weeks": 20
+        }
+      },
+      "priority": "medium",
+      "finding_id": "finding-005",
+      "assumptions": [
+        "Current inventory holding \u20ac200,000",
+        "20% reduction in carrying costs",
+        "30% reduction in stockouts saving \u20ac5,000/month"
+      ],
+      "description": "Implement AI-powered demand forecasting and inventory optimization to reduce stockouts and overstock situations while improving cash flow.",
+      "crb_analysis": {
+        "cost": {
+          "total": 57000,
+          "mid_term": {
+            "software": 12000,
+            "maintenance": 4000
+          },
+          "long_term": {
+            "software": 24000,
+            "upgrades": 6000
+          },
+          "short_term": {
+            "software": 2000,
+            "training": 3000,
+            "implementation": 6000
+          }
+        },
+        "risk": [
+          {
+            "impact": 15000,
+            "mitigation": "Start with conservative automation levels, include human override capabilities",
+            "description": "Poor forecasting accuracy due to seasonal variations or market changes",
+            "probability": "medium",
+            "time_horizon": "short"
+          },
+          {
+            "impact": 8000,
+            "mitigation": "Choose solutions with proven integrations, plan phased rollout",
+            "description": "Integration challenges with existing ERP/inventory systems",
+            "probability": "medium",
+            "time_horizon": "short"
+          }
+        ],
+        "benefit": {
+          "total": 260000,
+          "mid_term": {
+            "value_saved": 50000,
+            "value_created": 25000
+          },
+          "long_term": {
+            "value_saved": 100000,
+            "value_created": 50000
+          },
+          "short_term": {
+            "value_saved": 25000,
+            "value_created": 10000
+          }
+        }
+      },
+      "payback_months": 5,
+      "roi_percentage": 356,
+      "why_it_matters": {
+        "customer_value": "Higher product availability and faster delivery times through optimized stock levels and better supplier coordination",
+        "business_health": "Reduces inventory carrying costs by 20% while decreasing stockouts by 30%, improving cash flow and customer satisfaction"
+      },
+      "our_recommendation": "off_the_shelf",
+      "recommendation_rationale": "QuickBooks Commerce offers solid demand forecasting capabilities at a reasonable price point, with good integration options for growing businesses."
+    }
+  ],
+  "roadmap": {
+    "mid_term": [
+      {
+        "title": "Implement Sales Pipeline Intelligence",
+        "timeline": "Month 3-6",
+        "description": "Deploy HubSpot Predictive Lead Scoring integrated with existing CRM. Set up lead scoring criteria based on historical data, train sales team on using AI insights, and establish performance tracking.",
+        "expected_outcome": "25% improvement in sales conversion rates, better deal prioritization, accurate revenue forecasting",
+        "related_recommendation_id": "rec-003"
+      },
+      {
+        "title": "Deploy Inventory Optimization System",
+        "timeline": "Month 4-7",
+        "description": "Implement QuickBooks Commerce demand forecasting. Integrate with existing inventory management, configure reorder points and safety stock levels, and establish automated purchasing workflows.",
+        "expected_outcome": "20% reduction in inventory carrying costs, 30% decrease in stockouts, improved cash flow management",
+        "related_recommendation_id": "rec-005"
+      },
+      {
+        "title": "Optimize and Scale AI Systems",
+        "timeline": "Month 6-9",
+        "description": "Review performance of implemented systems, fine-tune AI models based on usage data, expand automation rules, and train additional team members on advanced features.",
+        "expected_outcome": "Improved accuracy across all AI systems, expanded automation coverage, team proficiency in AI tool management",
+        "related_recommendation_id": "rec-001"
+      }
+    ],
+    "long_term": [
+      {
+        "title": "Advanced Analytics and Insights Platform",
+        "timeline": "Month 12-15",
+        "description": "Upgrade to more sophisticated BI tools if needed, implement cross-functional dashboards connecting sales, support, and operations data. Add predictive analytics for business planning.",
+        "expected_outcome": "Integrated business intelligence across all departments, predictive insights for strategic planning, data-driven culture established",
+        "related_recommendation_id": "rec-001"
+      },
+      {
+        "title": "Evaluate Custom AI Development Opportunities",
+        "timeline": "Month 15-18",
+        "description": "Assess whether custom AI solutions could provide competitive advantages in core business processes. Consider building proprietary algorithms for unique business requirements.",
+        "expected_outcome": "Strategic decision on custom AI development, potential competitive differentiation through proprietary AI capabilities",
+        "related_recommendation_id": "rec-002"
+      },
+      {
+        "title": "AI Strategy Review and Future Planning",
+        "timeline": "Month 18-20",
+        "description": "Comprehensive review of all AI implementations, measure ROI achieved, identify next-generation AI opportunities, and develop 3-year AI strategy roadmap.",
+        "expected_outcome": "Clear understanding of AI impact on business, strategic plan for continued AI evolution, foundation for advanced AI adoption",
+        "related_recommendation_id": "rec-005"
+      }
+    ],
+    "short_term": [
+      {
+        "title": "Deploy Business Intelligence Dashboard",
+        "timeline": "Week 1-4",
+        "description": "Implement Databox to replace manual spreadsheet reporting. Connect existing data sources (CRM, accounting software) and set up automated daily/weekly KPI reports. Start with 5-7 core metrics dashboard.",
+        "expected_outcome": "Real-time visibility into business performance, 80% reduction in manual reporting time, daily KPI updates available to management team",
+        "related_recommendation_id": "rec-001"
+      },
+      {
+        "title": "Set up Customer Support Automation",
+        "timeline": "Week 3-6",
+        "description": "Deploy Intercom Resolution Bot for customer support. Start with 10-15 common FAQs, implement ticket routing rules, and establish human oversight protocols for AI responses.",
+        "expected_outcome": "24/7 instant responses for common queries, 40% reduction in support team workload, improved customer satisfaction scores",
+        "related_recommendation_id": "rec-002"
+      },
+      {
+        "title": "Automate Invoice Processing",
+        "timeline": "Week 5-8",
+        "description": "Implement Xero Invoice Processing for accounts payable. Configure OCR for invoice data extraction, set up approval workflows with spending thresholds, and train finance team on new process.",
+        "expected_outcome": "70% reduction in manual invoice processing time, elimination of data entry errors, faster supplier payments",
+        "related_recommendation_id": "rec-004"
+      }
+    ]
+  },
+  "methodology_notes": {
+    "assumptions": [
+      "Hourly rate assumed at \u20ac50 unless specified",
+      "3-year projection period for ROI calculations",
+      "All estimates include \u00b120% uncertainty range",
+      "Vendor pricing as of report generation date"
+    ],
+    "limitations": [
+      "Estimates based on self-reported data",
+      "Actual implementation results may vary",
+      "Market conditions may affect vendor availability/pricing",
+      "Recommendations should be validated with actual business data"
+    ],
+    "data_sources": [
+      "Quiz responses provided by business owner",
+      "Industry benchmarks from our knowledge base",
+      "Vendor pricing data (verified where possible)",
+      "AI/automation adoption studies"
+    ],
+    "confidence_notes": "Findings marked as 'high' confidence have multiple supporting data points. 'Medium' confidence items are based on industry patterns. 'Low' confidence items are estimates requiring validation.",
+    "industry_benchmarks_used": [
+      "financial",
+      "operational",
+      "ai_adoption",
+      "iot_specific"
+    ]
+  },
+  "pdf_url": null,
+  "pdf_generated_at": null,
+  "generation_started_at": "2025-12-14T23:32:45.530475+00:00",
+  "generation_completed_at": "2025-12-14T23:35:53.212083+00:00",
+  "error_message": null,
+  "agent_context": {},
+  "created_at": "2025-12-14T23:32:47.6962+00:00",
+  "updated_at": "2025-12-14T23:35:55.359917+00:00"
+}

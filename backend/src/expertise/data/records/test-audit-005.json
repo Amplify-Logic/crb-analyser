@@ -1,0 +1,24 @@
+{
+  "audit_id": "test-audit-005",
+  "timestamp": "2025-12-20T15:18:16.202003",
+  "industry": "marketing-agencies",
+  "company_size": "11-50",
+  "pain_points_found": [
+    "Manual client reporting",
+    "Proposal creation too slow"
+  ],
+  "processes_analyzed": [],
+  "recommendations_made": [],
+  "vendors_recommended": [],
+  "ai_readiness_score": 52,
+  "total_potential_savings": 20000.0,
+  "findings_count": 2,
+  "tools_used": {
+    "analyze_findings": 1
+  },
+  "token_usage": {},
+  "phases_completed": [
+    "analysis"
+  ],
+  "errors_encountered": []
+}

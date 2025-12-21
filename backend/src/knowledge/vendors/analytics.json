@@ -1,0 +1,1178 @@
+{
+  "category": "analytics",
+  "description": "Product analytics and behavior analytics platforms for tracking user engagement, analyzing product usage, and optimizing digital experiences",
+  "vendors": [
+    {
+      "slug": "mixpanel",
+      "name": "Mixpanel",
+      "category": "analytics",
+      "subcategory": "product_analytics_leader",
+      "website": "https://www.mixpanel.com",
+      "pricing_url": "https://mixpanel.com/pricing",
+      "description": "Decision analytics platform built for fast-moving teams. Industry leader in event-based product analytics with intuitive self-serve reporting, enterprise-ready scale, and seamless integrations. Features AI Copilot, Metric Trees, and advanced behavioral cohort analysis for deep user insights. Trusted by Uber, McDonald's, and thousands of modern product teams.",
+      "tagline": "Powerful, self-serve product analytics to help you convert, engage, and retain more users",
+      "pricing": {
+        "model": "usage_based_events",
+        "currency": "USD",
+        "billing_options": ["monthly", "annual"],
+        "annual_discount_percent": 30,
+        "tiers": [
+          {
+            "name": "Free",
+            "price": 0,
+            "per": "month",
+            "billing": "monthly",
+            "features": [
+              "Up to 1M total events",
+              "Up to 5 saved reports per user",
+              "Unlimited user seats",
+              "Basic dashboards",
+              "Event tracking",
+              "No credit card required"
+            ],
+            "limits": {
+              "events": "1M total",
+              "saved_reports": 5,
+              "users": "unlimited",
+              "features": "Limited - no cohorts, lookup tables, custom properties, or permissions"
+            }
+          },
+          {
+            "name": "Growth",
+            "price": 24,
+            "per": "month (for 10K events)",
+            "billing": "annual",
+            "features": [
+              "First 1M events free (plans after Feb 2025)",
+              "Unlimited saved reports",
+              "Cohort analysis",
+              "Custom properties",
+              "Lookup tables",
+              "Permissions & access controls",
+              "Advanced segmentation",
+              "Email support",
+              "30% discount on annual billing"
+            ],
+            "limits": {
+              "events": "10K-20M/month",
+              "pricing_range": "$24-$2,289/month",
+              "users": "unlimited"
+            }
+          },
+          {
+            "name": "Enterprise",
+            "price": null,
+            "per": "custom",
+            "billing": "annual",
+            "features": [
+              "All Growth features",
+              "SSO (SAML)",
+              "Data governance features",
+              "Access controls & permissions",
+              "Signal, Experiments, Impact reports",
+              "Data Views",
+              "Sensitive data classification",
+              "Dedicated onboarding support",
+              "Account management",
+              "Priority support"
+            ],
+            "limits": {
+              "events": "Up to 1T events",
+              "users": "unlimited"
+            }
+          }
+        ],
+        "starting_price": 0,
+        "custom_pricing": true,
+        "free_trial_days": null,
+        "free_tier": true,
+        "startup_discount": "$50,000 credit for companies <5 years old, raised <$8M, not currently on paid Mixpanel. Applies to plans up to 150M events/month (Startup Program)"
+      },
+      "best_for": [
+        "Product-led growth companies",
+        "Fast-moving product teams needing self-serve analytics",
+        "Startups and scale-ups tracking user behavior",
+        "SaaS companies optimizing funnels and retention",
+        "Teams wanting event-based tracking without SQL",
+        "Organizations needing AI-powered insights"
+      ],
+      "industries": [
+        "SaaS",
+        "Mobile Apps",
+        "E-commerce",
+        "Fintech",
+        "Media & Entertainment",
+        "Technology"
+      ],
+      "company_sizes": [
+        "startup",
+        "smb",
+        "mid_market",
+        "enterprise"
+      ],
+      "avoid_if": [
+        "Need web-only analytics (Google Analytics may suffice)",
+        "Require traditional BI capabilities beyond product analytics",
+        "Limited technical resources for implementation",
+        "Very high event volumes without budget (gets expensive)",
+        "Prefer session-based over event-based tracking"
+      ],
+      "implementation": {
+        "avg_weeks": 2,
+        "complexity": "medium",
+        "requires_developer": true,
+        "cost_range": {
+          "diy": {
+            "min": 0,
+            "max": 1000
+          },
+          "with_help": {
+            "min": 1000,
+            "max": 5000
+          },
+          "full_service": {
+            "min": 5000,
+            "max": 20000
+          }
+        }
+      },
+      "ratings": {
+        "g2": {
+          "score": 4.6,
+          "reviews": 1224,
+          "last_updated": "2025-12"
+        },
+        "capterra": {
+          "score": 4.5,
+          "reviews": 120,
+          "last_updated": "2025-12"
+        },
+        "our_rating": 4.5,
+        "our_notes": "Industry leader with excellent event tracking and intuitive UI. Powerful for product teams who need deep behavioral insights. Learning curve for non-technical users. Pricing can escalate quickly with high event volumes. Startup program makes it accessible for early-stage companies. AI features are innovative and valuable."
+      },
+      "integrations": [
+        "Segment",
+        "mParticle",
+        "Salesforce",
+        "HubSpot",
+        "Braze",
+        "Slack",
+        "Google Analytics",
+        "Amplitude",
+        "Zapier",
+        "API available"
+      ],
+      "api": {
+        "available": true,
+        "type": "REST",
+        "documentation": "https://developer.mixpanel.com"
+      },
+      "competitors": [
+        "Amplitude",
+        "Heap",
+        "PostHog",
+        "Pendo",
+        "Google Analytics 4"
+      ],
+      "verified_at": "2025-12-17T00:00:00Z",
+      "verified_by": "manual",
+      "source_url": "https://mixpanel.com/pricing",
+      "notes": "MTU (Monthly Tracked User) pricing available as alternative to event-based pricing. Add-ons: Session Replay (~$4,320/year), Data Pipelines (~$19,486/year), Metric Tree (custom pricing). Growth tier scales from $24/month (10K events) to $2,289/month (20M events). Contact sales for >20M events or Enterprise features."
+    },
+    {
+      "slug": "amplitude",
+      "name": "Amplitude",
+      "category": "analytics",
+      "subcategory": "enterprise_product_analytics",
+      "website": "https://amplitude.com",
+      "pricing_url": "https://amplitude.com/pricing",
+      "description": "Enterprise-grade digital analytics platform for understanding and personalizing digital products. Industry leader for large-scale behavioral analysis with advanced segmentation, predictive analytics, and experimentation. Features causal insights, real-time streaming, and AI-powered recommendations. Trusted by Atlassian, Zoom, Dropbox, Ford, and Walmart.",
+      "tagline": "Fast, intelligent customer behavior insights for data-driven product decisions",
+      "pricing": {
+        "model": "usage_based_mtu_events",
+        "currency": "USD",
+        "billing_options": ["monthly", "annual"],
+        "annual_discount_percent": null,
+        "tiers": [
+          {
+            "name": "Starter (Free)",
+            "price": 0,
+            "per": "month",
+            "billing": "monthly",
+            "features": [
+              "0-10M monthly events",
+              "Unlimited chart saves",
+              "Custom events",
+              "Basic behavioral analysis",
+              "Basic reporting dashboards",
+              "Online support",
+              "Free forever"
+            ],
+            "limits": {
+              "events": "10M/month",
+              "users": "unlimited"
+            }
+          },
+          {
+            "name": "Plus",
+            "price": null,
+            "per": "custom",
+            "billing": "annual",
+            "features": [
+              "All Starter features",
+              "Unlimited chart saves",
+              "Custom events",
+              "Cohort analysis",
+              "Advanced behavioral analysis",
+              "Pre-built analytics dashboards",
+              "Online support",
+              "Email support"
+            ],
+            "limits": {
+              "pricing_note": "Contact sales for pricing"
+            }
+          },
+          {
+            "name": "Growth",
+            "price": null,
+            "per": "custom",
+            "billing": "annual",
+            "features": [
+              "All Plus features",
+              "Advanced behavioral analysis",
+              "Causal insights and monitoring",
+              "Feature experimentation",
+              "Code editor for web experimentation",
+              "Real-time streaming and syncs",
+              "Predictive audiences",
+              "Customer support"
+            ],
+            "limits": {
+              "estimated_pricing": "$22,400-$254,100/year based on usage"
+            }
+          },
+          {
+            "name": "Enterprise",
+            "price": null,
+            "per": "custom",
+            "billing": "annual",
+            "features": [
+              "All Growth features",
+              "Custom usage limits",
+              "Dedicated account manager",
+              "Customer success support",
+              "Advanced security features",
+              "SAML SSO",
+              "Custom integrations",
+              "SLA guarantees",
+              "White-glove onboarding"
+            ],
+            "limits": {
+              "best_for": "Companies with 1M+ active users"
+            }
+          }
+        ],
+        "starting_price": 0,
+        "custom_pricing": true,
+        "free_trial_days": null,
+        "free_tier": true,
+        "startup_discount": "One year of Growth plan features free via Amplitude Startup Scholarship"
+      },
+      "best_for": [
+        "Enterprise companies with complex analytics needs",
+        "Organizations with 1M+ active users",
+        "Product teams needing predictive analytics",
+        "Companies wanting experimentation + analytics in one platform",
+        "Businesses requiring real-time data streaming",
+        "Teams focused on cross-platform tracking"
+      ],
+      "industries": [
+        "Enterprise SaaS",
+        "Fintech",
+        "E-commerce",
+        "Media & Entertainment",
+        "Healthcare Tech",
+        "Retail"
+      ],
+      "company_sizes": [
+        "mid_market",
+        "enterprise"
+      ],
+      "avoid_if": [
+        "Small startup with limited budget (minimum $22k+/year for Growth)",
+        "Simple analytics needs (over-engineered)",
+        "Want transparent upfront pricing (requires sales contact)",
+        "Need quick self-serve onboarding",
+        "Prefer per-seat pricing model"
+      ],
+      "implementation": {
+        "avg_weeks": 4,
+        "complexity": "high",
+        "requires_developer": true,
+        "cost_range": {
+          "diy": {
+            "min": 2000,
+            "max": 10000
+          },
+          "with_help": {
+            "min": 10000,
+            "max": 30000
+          },
+          "full_service": {
+            "min": 30000,
+            "max": 100000
+          }
+        }
+      },
+      "ratings": {
+        "g2": {
+          "score": 4.5,
+          "reviews": 2541,
+          "last_updated": "2025-12"
+        },
+        "capterra": {
+          "score": 4.6,
+          "reviews": 67,
+          "last_updated": "2025-12"
+        },
+        "our_rating": 4.4,
+        "our_notes": "Best-in-class for enterprise analytics with powerful behavioral insights and predictive capabilities. Trusted by major enterprises undergoing digital transformation. Steep learning curve and high cost. Lacks transparent pricing. Strong for teams with dedicated data analysts. Negotiation can yield 25-40% discounts."
+      },
+      "integrations": [
+        "Segment",
+        "mParticle",
+        "Salesforce",
+        "HubSpot",
+        "Braze",
+        "Iterable",
+        "Looker",
+        "Snowflake",
+        "BigQuery",
+        "API available"
+      ],
+      "api": {
+        "available": true,
+        "type": "REST",
+        "documentation": "https://developers.amplitude.com"
+      },
+      "competitors": [
+        "Mixpanel",
+        "Heap",
+        "Pendo",
+        "Google Analytics 4",
+        "Adobe Analytics"
+      ],
+      "verified_at": "2025-12-17T00:00:00Z",
+      "verified_by": "manual",
+      "source_url": "https://amplitude.com/pricing",
+      "notes": "Pricing based on MTUs (Monthly Tracked Users) and event volume. Typical Growth plan ranges $22,400-$254,100/year. Enterprise pricing requires custom quote. Strong negotiation potential (25-40% discounts reported). Multi-year contracts can lock in pricing without standard 5-20% annual increases. Startup Scholarship provides 1 year free Growth plan."
+    },
+    {
+      "slug": "posthog",
+      "name": "PostHog",
+      "category": "analytics",
+      "subcategory": "open_source_analytics",
+      "website": "https://posthog.com",
+      "pricing_url": "https://posthog.com/pricing",
+      "description": "Open-source, all-in-one developer platform for building successful products. Combines product analytics, web analytics, session replay, error tracking, feature flags, experimentation, surveys, data warehouse, and CDP in a single stack. MIT licensed for self-hosting. Extremely transparent pricing with generous free tiers. Popular with engineering-led teams and privacy-conscious organizations.",
+      "tagline": "All the tools you need to build better products, all in one platform",
+      "pricing": {
+        "model": "usage_based_per_product",
+        "currency": "USD",
+        "billing_options": ["monthly", "annual"],
+        "annual_discount_percent": null,
+        "tiers": [
+          {
+            "name": "Free",
+            "price": 0,
+            "per": "month",
+            "billing": "monthly",
+            "features": [
+              "1M events/month free",
+              "5K session recordings/month free",
+              "1M feature flag requests/month free",
+              "100K error tracking events/month free",
+              "1,500 survey responses/month free",
+              "Unlimited users",
+              "Nearly all core features included",
+              "No credit card required",
+              "Free forever"
+            ],
+            "limits": {
+              "events": "1M/month",
+              "recordings": "5K/month",
+              "feature_flags": "1M requests/month",
+              "errors": "100K/month",
+              "surveys": "1,500 responses/month"
+            }
+          },
+          {
+            "name": "Usage-Based",
+            "price": 0.000031,
+            "per": "event (beyond 1M/month)",
+            "billing": "monthly",
+            "features": [
+              "Pay only for what you use",
+              "Tiered pricing - decreases at higher volumes",
+              "Product analytics: $0.000031/event (1-10M), $0.000007/event (>10M)",
+              "Session replay: tiered pricing",
+              "Feature flags: tiered pricing",
+              "A/B testing: tiered pricing",
+              "Surveys: tiered pricing",
+              "All features included"
+            ],
+            "limits": {
+              "note": "98% of customers use PostHog for free"
+            }
+          },
+          {
+            "name": "Enterprise",
+            "price": 2000,
+            "per": "month minimum",
+            "billing": "annual",
+            "features": [
+              "All usage-based features",
+              "Custom contracts",
+              "SAML SSO",
+              "Advanced permissions",
+              "Dedicated support",
+              "SLA guarantees",
+              "Advanced security controls",
+              "Audit logs",
+              "Priority feature requests",
+              "Training & onboarding"
+            ],
+            "limits": {
+              "minimum": "$2,000/month commitment"
+            }
+          },
+          {
+            "name": "Self-Hosted (Open Source)",
+            "price": 0,
+            "per": "forever",
+            "billing": "one-time",
+            "features": [
+              "MIT licensed",
+              "Host on your infrastructure",
+              "Docker, Kubernetes, or bare-metal",
+              "Complete data privacy",
+              "No vendor lock-in",
+              "Contribute to open-source",
+              "Community support"
+            ],
+            "limits": {
+              "recommended": "~100K events/month, then migrate to Cloud"
+            }
+          }
+        ],
+        "starting_price": 0,
+        "custom_pricing": false,
+        "free_trial_days": null,
+        "free_tier": true,
+        "startup_discount": null
+      },
+      "best_for": [
+        "Engineering-led startups and product teams",
+        "Developer tools and B2B SaaS companies",
+        "Privacy-conscious organizations wanting self-hosting",
+        "Teams wanting all-in-one analytics + experimentation",
+        "Companies avoiding vendor lock-in",
+        "Open-source friendly organizations",
+        "Budget-conscious teams (98% use free tier)"
+      ],
+      "industries": [
+        "Developer Tools",
+        "Open Source",
+        "SaaS",
+        "Startups",
+        "Technology",
+        "Privacy-focused industries"
+      ],
+      "company_sizes": [
+        "startup",
+        "smb",
+        "mid_market"
+      ],
+      "avoid_if": [
+        "Need enterprise-grade UI/UX polish",
+        "Want deep integrations with legacy enterprise tools",
+        "Require extensive hand-holding and managed services",
+        "Non-technical team without developer resources",
+        "Need 24/7 phone support on lower tiers",
+        "Prefer single-purpose specialized tools"
+      ],
+      "implementation": {
+        "avg_weeks": 1,
+        "complexity": "low",
+        "requires_developer": true,
+        "cost_range": {
+          "diy": {
+            "min": 0,
+            "max": 500
+          },
+          "with_help": {
+            "min": 500,
+            "max": 2000
+          },
+          "full_service": {
+            "min": 2000,
+            "max": 10000
+          }
+        }
+      },
+      "ratings": {
+        "g2": {
+          "score": 4.5,
+          "reviews": 926,
+          "last_updated": "2025-12"
+        },
+        "capterra": {
+          "score": null,
+          "reviews": null,
+          "last_updated": null
+        },
+        "our_rating": 4.6,
+        "our_notes": "Exceptional value with transparent pricing and generous free tier. Best all-in-one platform for engineering teams. Open-source option is a game-changer for data privacy and cost control. Less polished UI than Amplitude/Mixpanel but improving rapidly. Strong developer community. Self-hosting requires infrastructure expertise."
+      },
+      "integrations": [
+        "Segment",
+        "Zapier",
+        "Slack",
+        "Stripe",
+        "Intercom",
+        "Sentry",
+        "Snowflake",
+        "BigQuery",
+        "Postgres",
+        "API available"
+      ],
+      "api": {
+        "available": true,
+        "type": "REST",
+        "documentation": "https://posthog.com/docs/api"
+      },
+      "competitors": [
+        "Mixpanel",
+        "Amplitude",
+        "Heap",
+        "LaunchDarkly (feature flags)",
+        "FullStory"
+      ],
+      "verified_at": "2025-12-17T00:00:00Z",
+      "verified_by": "manual",
+      "source_url": "https://posthog.com/pricing",
+      "notes": "Unique all-in-one platform combining 8+ products. MIT open-source license allows free self-hosting. Cloud version has extremely generous free tier (1M events, 5K recordings, etc.). Tiered usage pricing means costs decrease at scale. 98% of customers stay on free tier. Enterprise starts at $2K/month for compliance-heavy industries. AI product assistant included."
+    },
+    {
+      "slug": "heap",
+      "name": "Heap",
+      "category": "analytics",
+      "subcategory": "auto_capture_analytics",
+      "website": "https://www.heap.io",
+      "pricing_url": "https://www.heap.io/pricing",
+      "description": "Auto-capture analytics platform that tracks every user interaction automatically without manual event tagging. Retroactively analyze any action without requiring engineering resources to instrument new events. Part of Contentsquare. Features AI-powered assistant (Sense) and engagement matrix. Best for teams wanting complete data capture from day one without predefined tracking plans.",
+      "tagline": "Automatically capture every user action, retroactively analyze everything",
+      "pricing": {
+        "model": "session_based",
+        "currency": "USD",
+        "billing_options": ["monthly", "annual"],
+        "annual_discount_percent": null,
+        "tiers": [
+          {
+            "name": "Free",
+            "price": 0,
+            "per": "month",
+            "billing": "monthly",
+            "features": [
+              "Up to 10K monthly sessions",
+              "Core analytics charts",
+              "Unlimited enrichment sources",
+              "Guides integrations",
+              "6 months data history",
+              "SSO",
+              "Email support"
+            ],
+            "limits": {
+              "sessions": "10K/month",
+              "data_retention": "6 months"
+            }
+          },
+          {
+            "name": "Growth",
+            "price": 2500,
+            "per": "month (500K sessions)",
+            "billing": "annual",
+            "features": [
+              "All Free features",
+              "Contentsquare AI assistant (Sense)",
+              "Unlimited users & reports",
+              "Chart customization",
+              "CSV exports",
+              "12 months data history",
+              "Email support"
+            ],
+            "limits": {
+              "sessions": "Up to 500K/month typical",
+              "data_retention": "12 months"
+            }
+          },
+          {
+            "name": "Pro",
+            "price": 100000,
+            "per": "year (5M sessions)",
+            "billing": "annual",
+            "features": [
+              "All Growth features",
+              "Account analytics",
+              "Engagement matrix",
+              "Report alerts",
+              "Session Replay add-on available",
+              "Standard support",
+              "2 environments (option to add more)",
+              "Custom session pricing"
+            ],
+            "limits": {
+              "sessions": "5M/month typical",
+              "environments": 2
+            }
+          },
+          {
+            "name": "Premier",
+            "price": 187500,
+            "per": "year (15M sessions)",
+            "billing": "annual",
+            "features": [
+              "All Pro features",
+              "Unlimited environments",
+              "Priority support",
+              "Advanced data governance",
+              "Custom integrations",
+              "Dedicated account manager",
+              "Extended data retention (bundled at 40-60% off)"
+            ],
+            "limits": {
+              "sessions": "15M/month typical",
+              "environments": "unlimited"
+            }
+          }
+        ],
+        "starting_price": 0,
+        "custom_pricing": true,
+        "free_trial_days": null,
+        "free_tier": true,
+        "startup_discount": null
+      },
+      "best_for": [
+        "Teams wanting comprehensive auto-capture without manual tagging",
+        "Companies needing retroactive analysis of user actions",
+        "Product teams without dedicated analytics engineering",
+        "Organizations wanting to avoid instrumentation overhead",
+        "B2B SaaS companies tracking account-level analytics",
+        "Mid-market to enterprise companies with budget"
+      ],
+      "industries": [
+        "B2B SaaS",
+        "E-commerce",
+        "Fintech",
+        "Healthcare Tech",
+        "Enterprise Software"
+      ],
+      "company_sizes": [
+        "mid_market",
+        "enterprise"
+      ],
+      "avoid_if": [
+        "Small startup with tight budget (<$2K/month)",
+        "Low session volume (free tier caps at 10K sessions)",
+        "Need transparent pricing without sales calls",
+        "Prefer event-based over session-based tracking",
+        "Want simple, intuitive reporting interface",
+        "Require strong mobile app analytics"
+      ],
+      "implementation": {
+        "avg_weeks": 2,
+        "complexity": "low",
+        "requires_developer": false,
+        "cost_range": {
+          "diy": {
+            "min": 500,
+            "max": 2000
+          },
+          "with_help": {
+            "min": 2000,
+            "max": 8000
+          },
+          "full_service": {
+            "min": 8000,
+            "max": 25000
+          }
+        }
+      },
+      "ratings": {
+        "g2": {
+          "score": 4.3,
+          "reviews": 1094,
+          "last_updated": "2025-12"
+        },
+        "capterra": {
+          "score": 4.2,
+          "reviews": 45,
+          "last_updated": "2025-12"
+        },
+        "our_rating": 4.1,
+        "our_notes": "Auto-capture is powerful but can lead to data chaos without proper organization. Expensive at scale - Pro plan is $100K/year for 5M sessions. Session-based pricing penalizes high-engagement products. Reporting interface less intuitive than competitors. Best for teams who want comprehensive data capture and can afford premium pricing. Tier 1 support and implementation teams."
+      },
+      "integrations": [
+        "Segment",
+        "Salesforce",
+        "HubSpot",
+        "Marketo",
+        "Slack",
+        "Zapier",
+        "Google Analytics",
+        "Optimizely",
+        "API available"
+      ],
+      "api": {
+        "available": true,
+        "type": "REST",
+        "documentation": "https://developers.heap.io"
+      },
+      "competitors": [
+        "Mixpanel",
+        "Amplitude",
+        "PostHog",
+        "FullStory",
+        "Hotjar"
+      ],
+      "verified_at": "2025-12-17T00:00:00Z",
+      "verified_by": "manual",
+      "source_url": "https://www.heap.io/pricing",
+      "notes": "Session-based pricing (session = period of activity from single user). Add-ons: Session Replay ($5K/year for 1M sessions on Pro), Data History extension ($8-12K/year on Pro, 40-60% off on Premier), Activate add-on ($5K/year flat fee). Free tier limited to 10K sessions/month for 6 months. Growth tier ~$2.5K/month for 500K sessions."
+    },
+    {
+      "slug": "pendo",
+      "name": "Pendo",
+      "category": "analytics",
+      "subcategory": "product_experience_platform",
+      "website": "https://www.pendo.io",
+      "pricing_url": "https://www.pendo.io/pricing",
+      "description": "Comprehensive product experience platform combining usage analytics, in-app guidance, user feedback, and roadmaps. Goes beyond analytics to help teams understand software behavior and improve adoption with contextual walkthroughs and tooltips. Includes product roadmaps and NPS surveys. Best for product teams wanting analytics + engagement + feedback in one platform. Popular for SaaS onboarding optimization.",
+      "tagline": "Make software more valuable with product analytics, in-app guidance, and user feedback",
+      "pricing": {
+        "model": "mau_based_tiered",
+        "currency": "USD",
+        "billing_options": ["quarterly", "annual"],
+        "annual_discount_percent": null,
+        "tiers": [
+          {
+            "name": "Free",
+            "price": 0,
+            "per": "forever",
+            "billing": "monthly",
+            "features": [
+              "Up to 500 monthly active users (MAUs)",
+              "Product analytics",
+              "In-app guides",
+              "Pendo-branded roadmaps",
+              "Pendo-branded NPS surveys",
+              "Unlimited web and mobile app keys",
+              "Basic dashboards"
+            ],
+            "limits": {
+              "mau": 500,
+              "users": "unlimited"
+            }
+          },
+          {
+            "name": "Base",
+            "price": 2000,
+            "per": "quarter (2K MAUs)",
+            "billing": "quarterly",
+            "features": [
+              "All Free features",
+              "Increased MAU limit",
+              "Unbranded roadmaps and surveys",
+              "Email support",
+              "Basic integrations"
+            ],
+            "limits": {
+              "mau": "2K minimum",
+              "estimated_cost": "$8K/year minimum"
+            }
+          },
+          {
+            "name": "Core",
+            "price": null,
+            "per": "custom",
+            "billing": "annual",
+            "features": [
+              "All Base features",
+              "Advanced product analytics",
+              "Enhanced in-app guides",
+              "Multi-channel feedback",
+              "Integrations with 85+ tools",
+              "Standard support",
+              "Custom reporting"
+            ],
+            "limits": {
+              "note": "Most popular plan. Contact sales for pricing."
+            }
+          },
+          {
+            "name": "Pulse",
+            "price": null,
+            "per": "custom",
+            "billing": "annual",
+            "features": [
+              "All Core features",
+              "Advanced R&D optimization",
+              "Feature prioritization tools",
+              "Advanced roadmapping",
+              "Product analytics insights",
+              "Priority support"
+            ],
+            "limits": {
+              "note": "Contact sales for pricing"
+            }
+          },
+          {
+            "name": "Ultimate",
+            "price": null,
+            "per": "custom",
+            "billing": "annual",
+            "features": [
+              "All Pulse features",
+              "Everything for advanced organizations",
+              "Enterprise-grade controls",
+              "Advanced security",
+              "SAML SSO",
+              "Dedicated account manager",
+              "Custom SLAs",
+              "White-glove onboarding"
+            ],
+            "limits": {
+              "estimated_cost": "$100,000+/year for enterprise"
+            }
+          }
+        ],
+        "starting_price": 0,
+        "custom_pricing": true,
+        "free_trial_days": 30,
+        "free_tier": true,
+        "startup_discount": null
+      },
+      "best_for": [
+        "Product teams wanting analytics + user onboarding combined",
+        "SaaS companies optimizing in-app adoption",
+        "Organizations needing product roadmaps + feedback loops",
+        "Teams running NPS/CSAT surveys inside products",
+        "Companies with budget for comprehensive product platform",
+        "B2B software teams improving feature discovery"
+      ],
+      "industries": [
+        "Enterprise SaaS",
+        "B2B Software",
+        "Fintech",
+        "Healthcare Tech",
+        "EdTech",
+        "HR Tech"
+      ],
+      "company_sizes": [
+        "smb",
+        "mid_market",
+        "enterprise"
+      ],
+      "avoid_if": [
+        "Small startup with limited budget (starts ~$8K/year, often $30K+)",
+        "Only need analytics (paying for unused guidance/feedback features)",
+        "Want transparent upfront pricing (all gated behind sales)",
+        "Prefer self-serve purchasing",
+        "Need deep technical analytics (analytics weaker than Amplitude/Mixpanel)",
+        "Mobile-first product (better options exist)"
+      ],
+      "implementation": {
+        "avg_weeks": 3,
+        "complexity": "medium",
+        "requires_developer": true,
+        "cost_range": {
+          "diy": {
+            "min": 1000,
+            "max": 5000
+          },
+          "with_help": {
+            "min": 5000,
+            "max": 15000
+          },
+          "full_service": {
+            "min": 15000,
+            "max": 50000
+          }
+        }
+      },
+      "ratings": {
+        "g2": {
+          "score": 4.4,
+          "reviews": 1549,
+          "last_updated": "2025-12"
+        },
+        "capterra": {
+          "score": 4.6,
+          "reviews": 32,
+          "last_updated": "2025-12"
+        },
+        "our_rating": 4.2,
+        "our_notes": "Strong all-in-one platform for product experience management. In-app guides are excellent for onboarding. Analytics capabilities lag behind Mixpanel/Amplitude. Pricing is notoriously high and opaque ($30K+ typical). Annual price increases 5-20% unless locked into multi-year contracts. Best for teams needing both analytics and user engagement features who can afford premium pricing."
+      },
+      "integrations": [
+        "Salesforce",
+        "HubSpot",
+        "Slack",
+        "Jira",
+        "Zendesk",
+        "Intercom",
+        "Segment",
+        "Google Analytics",
+        "85+ total integrations",
+        "API available"
+      ],
+      "api": {
+        "available": true,
+        "type": "REST",
+        "documentation": "https://developers.pendo.io"
+      },
+      "competitors": [
+        "Appcues",
+        "WalkMe",
+        "Chameleon",
+        "UserGuiding",
+        "Mixpanel",
+        "Amplitude"
+      ],
+      "verified_at": "2025-12-17T00:00:00Z",
+      "verified_by": "manual",
+      "source_url": "https://www.pendo.io/pricing",
+      "notes": "Pricing based on Monthly Active Users (MAUs) + feature tier. Base plan minimum $2K/quarter ($8K/year) for 2K MAUs. Typical annual costs $7K-$100K+ depending on MAUs and tier. Free plan limited to 500 MAUs. Add-on: Pendo Listen (surveys, rebranded Pendo Feedback) gets up to 50% discount when added at renewal. 30-day free trial of full platform. Connects with 85+ tools."
+    },
+    {
+      "slug": "hotjar",
+      "name": "Hotjar",
+      "category": "analytics",
+      "subcategory": "behavior_analytics_heatmaps",
+      "website": "https://www.hotjar.com",
+      "pricing_url": "https://www.hotjar.com/pricing",
+      "description": "Comprehensive behavior analytics platform providing visual insights into user behavior through heatmaps, session recordings, surveys, and feedback widgets. Focuses on qualitative 'why' behind user actions rather than just quantitative 'what'. Easy to implement and understand. Excellent for conversion optimization, UX research, and identifying friction points. Popular with marketers and UX designers.",
+      "tagline": "See how users really experience your site, through heatmaps, recordings, and feedback",
+      "pricing": {
+        "model": "modular_session_based",
+        "currency": "USD",
+        "billing_options": ["monthly", "annual"],
+        "annual_discount_percent": 18,
+        "tiers": [
+          {
+            "name": "Free",
+            "price": 0,
+            "per": "forever",
+            "billing": "monthly",
+            "features": [
+              "Up to 35 daily sessions (Observe)",
+              "Up to 20 monthly survey responses (Ask)",
+              "Unlimited heatmaps",
+              "Basic session recordings",
+              "1 month data retention",
+              "AI-powered help widget",
+              "Forever free"
+            ],
+            "limits": {
+              "sessions": "35/day",
+              "survey_responses": "20/month",
+              "data_retention": "1 month"
+            }
+          },
+          {
+            "name": "Observe Plus",
+            "price": 32,
+            "per": "month (100 sessions/day)",
+            "billing": "annual",
+            "features": [
+              "100 sessions/day",
+              "Unlimited heatmaps",
+              "Session recordings",
+              "Funnels",
+              "API access",
+              "Rage clicks & error tracking",
+              "12 months data retention"
+            ],
+            "limits": {
+              "sessions": "100/day",
+              "monthly_price": "$39 (billed monthly)"
+            }
+          },
+          {
+            "name": "Observe Business",
+            "price": 80,
+            "per": "month (500 sessions/day)",
+            "billing": "annual",
+            "features": [
+              "All Plus features",
+              "500 sessions/day",
+              "Funnels & trends",
+              "Advanced filters",
+              "Integrations",
+              "Priority support"
+            ],
+            "limits": {
+              "sessions": "500/day",
+              "monthly_price": "$99 (billed monthly)"
+            }
+          },
+          {
+            "name": "Observe Scale",
+            "price": 213,
+            "per": "month (500+ sessions/day)",
+            "billing": "annual",
+            "features": [
+              "All Business features",
+              "500+ sessions/day (custom limits)",
+              "Advanced funnels",
+              "API access",
+              "Custom integrations",
+              "Dedicated support"
+            ],
+            "limits": {
+              "sessions": "500+ custom"
+            }
+          },
+          {
+            "name": "Ask Plus",
+            "price": 48,
+            "per": "month (250 responses)",
+            "billing": "annual",
+            "features": [
+              "250 survey responses/month",
+              "Unlimited surveys",
+              "Unlimited feedback widgets",
+              "Events API",
+              "AI survey summaries (OpenAI)"
+            ],
+            "limits": {
+              "responses": "250/month",
+              "monthly_price": "$59 (billed monthly)"
+            }
+          },
+          {
+            "name": "Engage (User Interviews)",
+            "price": null,
+            "per": "custom",
+            "billing": "monthly",
+            "features": [
+              "Recruit users for interviews",
+              "Schedule and conduct interviews",
+              "Record sessions",
+              "Incentive management"
+            ],
+            "limits": {
+              "note": "~$7,000+/year for 30 monthly interviews"
+            }
+          }
+        ],
+        "starting_price": 0,
+        "custom_pricing": false,
+        "free_trial_days": 15,
+        "free_tier": true,
+        "startup_discount": null
+      },
+      "best_for": [
+        "UX designers and researchers understanding user behavior",
+        "Marketers optimizing conversion funnels",
+        "E-commerce teams reducing cart abandonment",
+        "Product teams identifying usability issues",
+        "Small to medium businesses wanting qualitative insights",
+        "Teams wanting visual, non-technical analytics"
+      ],
+      "industries": [
+        "E-commerce",
+        "SaaS",
+        "Marketing Agencies",
+        "Media & Publishing",
+        "Education",
+        "SMBs"
+      ],
+      "company_sizes": [
+        "startup",
+        "smb",
+        "mid_market"
+      ],
+      "avoid_if": [
+        "Need deep quantitative product analytics (use Mixpanel/Amplitude)",
+        "Want event-based tracking and cohort analysis",
+        "High-volume sites (pricing escalates quickly with sessions)",
+        "Need mobile app analytics (web-focused)",
+        "Single-page applications with Vue/React (tracking issues reported)",
+        "Limited budget for premium tiers (features gated)"
+      ],
+      "implementation": {
+        "avg_weeks": 1,
+        "complexity": "low",
+        "requires_developer": false,
+        "cost_range": {
+          "diy": {
+            "min": 0,
+            "max": 200
+          },
+          "with_help": {
+            "min": 200,
+            "max": 1000
+          },
+          "full_service": {
+            "min": 1000,
+            "max": 5000
+          }
+        }
+      },
+      "ratings": {
+        "g2": {
+          "score": 4.3,
+          "reviews": 290,
+          "last_updated": "2025-12"
+        },
+        "capterra": {
+          "score": 4.6,
+          "reviews": 539,
+          "last_updated": "2025-12"
+        },
+        "our_rating": 4.4,
+        "our_notes": "Excellent for qualitative behavioral insights and UX optimization. Heatmaps and recordings are intuitive and immediately valuable. Easy setup takes minutes. Weaker on quantitative analytics compared to Mixpanel/Amplitude. Pricing can get expensive at scale. 20% bundle discount when combining Observe, Ask, and Engage. Best for non-technical teams wanting visual insights."
+      },
+      "integrations": [
+        "Google Analytics",
+        "Segment",
+        "HubSpot",
+        "Slack",
+        "Zapier",
+        "Shopify",
+        "WordPress",
+        "Optimizely",
+        "API available"
+      ],
+      "api": {
+        "available": true,
+        "type": "REST",
+        "documentation": "https://help.hotjar.com/hc/en-us/categories/115001323967-Hotjar-API"
+      },
+      "competitors": [
+        "FullStory",
+        "Crazy Egg",
+        "Mouseflow",
+        "Lucky Orange",
+        "Smartlook",
+        "Microsoft Clarity"
+      ],
+      "verified_at": "2025-12-17T00:00:00Z",
+      "verified_by": "manual",
+      "source_url": "https://www.hotjar.com/pricing",
+      "notes": "Modular pricing across 3 products: Observe (heatmaps/recordings), Ask (surveys/feedback), Engage (user interviews). 20% discount when bundling all paid plans. Pricing scales by sessions/responses. Observe Plus starts $32/month (annual) or $39/month (monthly). Ask Plus starts $48/month (annual) or $59/month (monthly). Engage costs ~$7K+/year for 30 monthly interviews. Free tier: 35 sessions/day + 20 survey responses/month."
+    }
+  ],
+  "last_updated": "2025-12-17T00:00:00Z"
+}

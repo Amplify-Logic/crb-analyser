@@ -2,14 +2,63 @@
 Report Tools
 
 Tools for the report generation phase of CRB analysis.
+Includes idempotency checks to prevent duplicate entries on retries.
 """
 
+import hashlib
 import logging
-from typing import Dict, Any
+from typing import Dict, Any, Optional
 
 from src.config.supabase_client import get_async_supabase
 
 logger = logging.getLogger(__name__)
+
+
+def generate_idempotency_key(audit_id: str, title: str, category: str = "") -> str:
+    """Generate a unique key for deduplication based on content."""
+    content = f"{audit_id}:{title.lower().strip()}:{category.lower().strip()}"
+    return hashlib.sha256(content.encode()).hexdigest()[:16]
+
+
+async def check_finding_exists(supabase, audit_id: str, title: str) -> Optional[dict]:
+    """Check if a finding with similar title already exists for this audit."""
+    try:
+        # Normalize title for comparison
+        normalized_title = title.lower().strip()
+
+        result = await supabase.table("findings").select("id, title").eq(
+            "audit_id", audit_id
+        ).execute()
+
+        if result.data:
+            for finding in result.data:
+                if finding.get("title", "").lower().strip() == normalized_title:
+                    return finding
+        return None
+    except Exception as e:
+        logger.warning(f"Error checking for existing finding: {e}")
+        return None
+
+
+async def check_recommendation_exists(
+    supabase, audit_id: str, title: str
+) -> Optional[dict]:
+    """Check if a recommendation with similar title already exists."""
+    try:
+        normalized_title = title.lower().strip()
+
+        result = await supabase.table("recommendations").select("id, title").eq(
+            "audit_id", audit_id
+        ).execute()
+
+        if result.data:
+            for rec in result.data:
+                if rec.get("title", "").lower().strip() == normalized_title:
+                    return rec
+        return None
+    except Exception as e:
+        logger.warning(f"Error checking for existing recommendation: {e}")
+        return None
 
 
 async def create_finding(
@@ -17,8 +66,31 @@ async def create_finding(
     context: Dict[str, Any],
     audit_id: str,
 ) -> Dict[str, Any]:
-    """Create and save a finding to the database."""
+    """
+    Create and save a finding to the database.
+
+    Includes idempotency check - if a finding with the same title already
+    exists for this audit, returns the existing finding instead of creating
+    a duplicate.
+    """
     supabase = await get_async_supabase()
+    title = inputs.get("title", "Untitled Finding")
+
+    # Idempotency check - prevent duplicates on retry
+    existing = await check_finding_exists(supabase, audit_id, title)
+    if existing:
+        logger.info(f"Finding already exists, skipping duplicate: {title}")
+        # Still add to context if not already there
+        findings_list = context.setdefault("findings", [])
+        if not any(f.get("id") == existing["id"] for f in findings_list):
+            findings_list.append(existing)
+        return {
+            "success": True,
+            "finding_id": existing["id"],
+            "title": existing["title"],
+            "message": f"Finding already exists: {existing['title']} (skipped duplicate)",
+            "deduplicated": True,
+        }
 
     # Map severity from priority if not provided
     priority = inputs.get("priority", 3)
@@ -32,7 +104,7 @@ async def create_finding(
 
     finding_data = {
         "audit_id": audit_id,
-        "title": inputs.get("title", "Untitled Finding"),
+        "title": title,
         "category": inputs.get("category", "opportunity"),
         "severity": severity,
         "description": inputs.get("description", ""),
@@ -75,8 +147,31 @@ async def create_recommendation(
     context: Dict[str, Any],
     audit_id: str,
 ) -> Dict[str, Any]:
-    """Create and save a recommendation to the database."""
+    """
+    Create and save a recommendation to the database.
+
+    Includes idempotency check - if a recommendation with the same title
+    already exists for this audit, returns the existing one instead of
+    creating a duplicate.
+    """
     supabase = await get_async_supabase()
+    title = inputs.get("title", "Untitled Recommendation")
+
+    # Idempotency check - prevent duplicates on retry
+    existing = await check_recommendation_exists(supabase, audit_id, title)
+    if existing:
+        logger.info(f"Recommendation already exists, skipping duplicate: {title}")
+        # Still add to context if not already there
+        recs_list = context.setdefault("recommendations", [])
+        if not any(r.get("id") == existing["id"] for r in recs_list):
+            recs_list.append(existing)
+        return {
+            "success": True,
+            "recommendation_id": existing["id"],
+            "title": existing["title"],
+            "message": f"Recommendation already exists: {existing['title']} (skipped duplicate)",
+            "deduplicated": True,
+        }
 
     # Find related finding ID if provided
     finding_id = None
@@ -99,7 +194,7 @@ async def create_recommendation(
     recommendation_data = {
         "audit_id": audit_id,
         "finding_id": finding_id,
-        "title": inputs.get("title", "Untitled Recommendation"),
+        "title": title,
         "description": inputs.get("description", ""),
         "implementation_steps": inputs.get("implementation_steps", []),
         "vendor_options": vendor_options,

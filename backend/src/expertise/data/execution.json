@@ -1,0 +1,11 @@
+{
+  "last_updated": "2025-12-20T15:18:16.203554",
+  "total_executions": 5,
+  "tool_success_rates": {
+    "analyze_findings": 1.0,
+    "generate_summary": 1.0
+  },
+  "phase_insights": {},
+  "failure_patterns": [],
+  "prompt_effectiveness": {}
+}

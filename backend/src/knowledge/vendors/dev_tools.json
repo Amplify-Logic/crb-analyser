@@ -1,0 +1,1166 @@
+{
+  "category": "dev_tools",
+  "description": "Developer tools and platforms for code hosting, collaboration, deployment, and backend infrastructure",
+  "vendors": [
+    {
+      "slug": "github",
+      "name": "GitHub",
+      "category": "dev_tools",
+      "subcategory": "code_hosting_collaboration",
+      "website": "https://github.com",
+      "pricing_url": "https://github.com/pricing",
+      "description": "Leading platform for version control, code hosting, and developer collaboration. Offers unlimited private repositories, advanced CI/CD with GitHub Actions, code review tools, project management, and security features. Industry standard for open source and enterprise software development with 100M+ developers.",
+      "tagline": "Where the world builds software",
+      "pricing": {
+        "model": "per_seat",
+        "currency": "USD",
+        "billing_options": ["monthly", "annual"],
+        "annual_discount_percent": null,
+        "tiers": [
+          {
+            "name": "Free",
+            "price": 0,
+            "per": "month",
+            "billing": "monthly",
+            "features": [
+              "Unlimited public/private repositories",
+              "2,000 CI/CD minutes/month",
+              "500MB Packages storage",
+              "Community support",
+              "GitHub Copilot (2,000 completions + 50 chat requests/month)",
+              "Code review tools",
+              "Issues and project boards",
+              "GitHub Actions"
+            ],
+            "limits": {
+              "ci_minutes": 2000,
+              "storage_gb": 0.5
+            }
+          },
+          {
+            "name": "Pro",
+            "price": 4,
+            "per": "user/month",
+            "billing": "monthly",
+            "features": [
+              "All Free features",
+              "3,000 CI/CD minutes/month",
+              "2GB Packages storage",
+              "Protected branches",
+              "Multiple reviewers in pull requests",
+              "Code owners",
+              "Pages and Wikis",
+              "Email support"
+            ],
+            "limits": {
+              "ci_minutes": 3000,
+              "storage_gb": 2
+            }
+          },
+          {
+            "name": "Team",
+            "price": 4,
+            "per": "user/month",
+            "billing": "annual",
+            "features": [
+              "All Pro features",
+              "3,000 CI/CD minutes/month",
+              "2GB Packages storage",
+              "Draft pull requests",
+              "Team discussions",
+              "Required reviewers",
+              "Multiple pull request assignees",
+              "Scheduled reminders"
+            ],
+            "limits": {
+              "ci_minutes": 3000,
+              "storage_gb": 2
+            }
+          },
+          {
+            "name": "Enterprise",
+            "price": 21,
+            "per": "user/month",
+            "billing": "annual",
+            "features": [
+              "All Team features",
+              "50,000 CI/CD minutes/month",
+              "50GB Packages storage",
+              "SAML single sign-on",
+              "Advanced auditing",
+              "GitHub Connect",
+              "Self-hosted runners",
+              "99.95% uptime SLA",
+              "Premium support",
+              "Advanced security features",
+              "IP allow lists"
+            ],
+            "limits": {
+              "ci_minutes": 50000,
+              "storage_gb": 50
+            }
+          }
+        ],
+        "starting_price": 0,
+        "custom_pricing": true,
+        "free_trial_days": null,
+        "free_tier": true,
+        "startup_discount": "GitHub for Startups offers credits and benefits for eligible startups"
+      },
+      "best_for": [
+        "Open source projects",
+        "Teams of all sizes needing version control",
+        "Organizations wanting integrated CI/CD",
+        "Companies prioritizing code security and compliance",
+        "Developers using GitHub Copilot AI",
+        "Enterprise teams needing SSO and advanced security"
+      ],
+      "industries": [
+        "Technology",
+        "Software Development",
+        "SaaS",
+        "Enterprise",
+        "Startups",
+        "Education"
+      ],
+      "company_sizes": [
+        "startup",
+        "smb",
+        "mid_market",
+        "enterprise"
+      ],
+      "avoid_if": [
+        "Need built-in deployment to production (just CI/CD)",
+        "Want all-in-one DevOps platform (consider GitLab)",
+        "Require unlimited CI/CD minutes on free tier",
+        "Need offline/self-hosted without Enterprise plan"
+      ],
+      "implementation": {
+        "avg_weeks": 1,
+        "complexity": "low",
+        "requires_developer": true,
+        "cost_range": {
+          "diy": {
+            "min": 0,
+            "max": 500
+          },
+          "with_help": {
+            "min": 500,
+            "max": 2000
+          },
+          "full_service": {
+            "min": 2000,
+            "max": 10000
+          }
+        }
+      },
+      "ratings": {
+        "g2": {
+          "score": 4.7,
+          "reviews": 2200,
+          "last_updated": "2025-12"
+        },
+        "capterra": {
+          "score": 4.8,
+          "reviews": 6000,
+          "last_updated": "2025-12"
+        },
+        "our_rating": 4.8,
+        "our_notes": "Industry standard for code hosting and collaboration. Generous free tier for individuals and small teams. GitHub Actions pricing changes in 2026 will reduce costs by up to 39% but add $0.002/min cloud platform fee. GitHub Copilot is game-changing for AI-assisted development."
+      },
+      "integrations": [
+        "VS Code",
+        "Slack",
+        "Jira",
+        "Azure",
+        "AWS",
+        "Google Cloud",
+        "Vercel",
+        "Railway",
+        "1000+ marketplace apps",
+        "REST API",
+        "GraphQL API"
+      ],
+      "api": {
+        "available": true,
+        "type": "REST + GraphQL",
+        "documentation": "https://docs.github.com/en/rest"
+      },
+      "competitors": [
+        "GitLab",
+        "Bitbucket",
+        "Azure DevOps",
+        "AWS CodeCommit",
+        "SourceForge"
+      ],
+      "verified_at": "2025-12-17T00:00:00Z",
+      "verified_by": "manual",
+      "source_url": "https://github.com/pricing",
+      "notes": "GitHub Actions pricing changing Jan 1, 2026: runner costs drop up to 39%, new $0.002/min cloud platform fee added. Public repos remain free. GitHub Copilot has 5 tiers: Free ($0), Pro ($10/mo), Pro+ ($39/mo), Business ($19/user/mo), Enterprise ($39/user/mo). Students and open source maintainers get free Copilot Pro."
+    },
+    {
+      "slug": "gitlab",
+      "name": "GitLab",
+      "category": "dev_tools",
+      "subcategory": "devops_platform",
+      "website": "https://gitlab.com",
+      "pricing_url": "https://about.gitlab.com/pricing",
+      "description": "Complete DevOps platform combining source code management, CI/CD, security scanning, and project management in one application. Offers both SaaS and self-hosted deployment options. Known for comprehensive built-in features eliminating need for multiple tools. Strong focus on security and compliance with SAST, DAST, and dependency scanning.",
+      "tagline": "The most comprehensive AI-powered DevSecOps platform",
+      "pricing": {
+        "model": "per_seat",
+        "currency": "USD",
+        "billing_options": ["monthly", "annual"],
+        "annual_discount_percent": 20,
+        "tiers": [
+          {
+            "name": "Free",
+            "price": 0,
+            "per": "month",
+            "billing": "monthly",
+            "features": [
+              "5GB storage per user",
+              "10GB transfer per month",
+              "400 compute minutes per month",
+              "5 users per top-level group",
+              "Unlimited private/public repos",
+              "Issue tracking",
+              "Wiki and snippets",
+              "Basic CI/CD pipelines",
+              "Community support"
+            ],
+            "limits": {
+              "users_per_namespace": 5,
+              "storage_gb": 5,
+              "transfer_gb": 10,
+              "compute_minutes": 400
+            }
+          },
+          {
+            "name": "Premium",
+            "price": 29,
+            "per": "user/month",
+            "billing": "annual",
+            "features": [
+              "All Free features",
+              "50GB storage per user",
+              "Unlimited transfer",
+              "10,000 compute minutes per month",
+              "Code owners",
+              "Advanced CI/CD",
+              "Merge request approvals",
+              "Multi-project pipelines",
+              "Priority support",
+              "Repository mirroring",
+              "Advanced issue tracking"
+            ],
+            "limits": {
+              "storage_gb": 50,
+              "transfer_gb": "unlimited",
+              "compute_minutes": 10000
+            }
+          },
+          {
+            "name": "Ultimate",
+            "price": 99,
+            "per": "user/month",
+            "billing": "annual",
+            "features": [
+              "All Premium features",
+              "250GB storage per user",
+              "Unlimited transfer",
+              "50,000 compute minutes per month",
+              "Security scanning (SAST, DAST, dependency)",
+              "Vulnerability management",
+              "Compliance dashboard",
+              "Portfolio management",
+              "Value stream analytics",
+              "Free guest users",
+              "24/7 support",
+              "99.95% uptime SLA"
+            ],
+            "limits": {
+              "storage_gb": 250,
+              "transfer_gb": "unlimited",
+              "compute_minutes": 50000
+            }
+          }
+        ],
+        "starting_price": 0,
+        "custom_pricing": true,
+        "free_trial_days": 30,
+        "free_tier": true,
+        "startup_discount": "GitLab for Startups program offers discounts for early-stage companies"
+      },
+      "best_for": [
+        "Teams wanting all-in-one DevOps platform",
+        "Organizations prioritizing security and compliance",
+        "Companies needing self-hosted options",
+        "Mid-market and enterprise development teams",
+        "Teams wanting to consolidate tool stack",
+        "Organizations with strict data residency requirements"
+      ],
+      "industries": [
+        "Enterprise SaaS",
+        "Financial Services",
+        "Government",
+        "Healthcare",
+        "Technology",
+        "Regulated Industries"
+      ],
+      "company_sizes": [
+        "smb",
+        "mid_market",
+        "enterprise"
+      ],
+      "avoid_if": [
+        "Small team with simple needs (overkill)",
+        "Limited budget (Premium/Ultimate expensive)",
+        "Don't need built-in security scanning on lower tiers",
+        "Prefer best-of-breed tools over all-in-one",
+        "Just need basic version control"
+      ],
+      "implementation": {
+        "avg_weeks": 2,
+        "complexity": "medium",
+        "requires_developer": true,
+        "cost_range": {
+          "diy": {
+            "min": 0,
+            "max": 1000
+          },
+          "with_help": {
+            "min": 1000,
+            "max": 5000
+          },
+          "full_service": {
+            "min": 5000,
+            "max": 20000
+          }
+        }
+      },
+      "ratings": {
+        "g2": {
+          "score": 4.5,
+          "reviews": 856,
+          "last_updated": "2025-12"
+        },
+        "capterra": {
+          "score": 4.6,
+          "reviews": 1205,
+          "last_updated": "2025-12"
+        },
+        "our_rating": 4.5,
+        "our_notes": "Best all-in-one DevOps platform with comprehensive features. Self-hosted option great for compliance needs. Premium/Ultimate pricing can be expensive for large teams. Learning curve for advanced features. Ultimate plan provides exceptional security scanning and compliance tools."
+      },
+      "integrations": [
+        "Jira",
+        "Jenkins",
+        "Slack",
+        "Microsoft Teams",
+        "Kubernetes",
+        "AWS",
+        "Google Cloud",
+        "Azure",
+        "Terraform",
+        "REST API",
+        "GraphQL API"
+      ],
+      "api": {
+        "available": true,
+        "type": "REST + GraphQL",
+        "documentation": "https://docs.gitlab.com/ee/api"
+      },
+      "competitors": [
+        "GitHub",
+        "Bitbucket",
+        "Azure DevOps",
+        "CircleCI",
+        "Jenkins"
+      ],
+      "verified_at": "2025-12-17T00:00:00Z",
+      "verified_by": "manual",
+      "source_url": "https://about.gitlab.com/pricing",
+      "notes": "Add-ons available: Compute minutes ($10/1,000 min), Storage ($5/mo per 10GB), Enterprise Agile Planning ($15/user/mo, Ultimate only). Self-managed pricing: Premium $348/user/yr, Ultimate $1,188/user/yr. 2-year contracts offer 13-24% discount, 3-year 15-26% discount. Monthly billing ~20% more expensive than annual."
+    },
+    {
+      "slug": "vercel",
+      "name": "Vercel",
+      "category": "dev_tools",
+      "subcategory": "frontend_deployment",
+      "website": "https://vercel.com",
+      "pricing_url": "https://vercel.com/pricing",
+      "description": "Frontend deployment platform optimized for Next.js and React applications. Provides zero-configuration deployments, automatic preview deployments for every git push, edge network CDN, serverless functions, and built-in performance monitoring. Known for exceptional developer experience and lightning-fast global content delivery.",
+      "tagline": "Build and deploy the best web experiences",
+      "pricing": {
+        "model": "per_seat",
+        "currency": "USD",
+        "billing_options": ["monthly"],
+        "annual_discount_percent": null,
+        "tiers": [
+          {
+            "name": "Hobby",
+            "price": 0,
+            "per": "month",
+            "billing": "monthly",
+            "features": [
+              "Unlimited deployments",
+              "Automatic HTTPS",
+              "100GB bandwidth",
+              "Serverless functions",
+              "Edge functions",
+              "Preview deployments",
+              "DDoS mitigation",
+              "Community support",
+              "No credit card required"
+            ],
+            "limits": {
+              "bandwidth_gb": 100,
+              "team_members": 1,
+              "commercial_use": false
+            }
+          },
+          {
+            "name": "Pro",
+            "price": 20,
+            "per": "user/month",
+            "billing": "monthly",
+            "features": [
+              "All Hobby features",
+              "1TB bandwidth",
+              "Commercial use allowed",
+              "Team collaboration",
+              "Password protection",
+              "Frontend observability",
+              "Advanced caching",
+              "Web analytics",
+              "Edge middleware",
+              "Spend management",
+              "Email support"
+            ],
+            "limits": {
+              "bandwidth_gb": 1000,
+              "team_members": "unlimited",
+              "edge_functions": "unlimited"
+            }
+          },
+          {
+            "name": "Enterprise",
+            "price": null,
+            "per": "custom",
+            "billing": "annual",
+            "features": [
+              "All Pro features",
+              "Custom bandwidth",
+              "99.99% uptime SLA",
+              "SAML SSO",
+              "Advanced security",
+              "SOC 2, ISO 27001, HIPAA",
+              "Dedicated support",
+              "Private networking",
+              "Multi-region compute",
+              "Managed WAF",
+              "Custom contracts",
+              "Premium onboarding"
+            ],
+            "limits": null
+          }
+        ],
+        "starting_price": 0,
+        "custom_pricing": true,
+        "free_trial_days": 14,
+        "free_tier": true,
+        "startup_discount": "Available through Vercel for Startups program"
+      },
+      "best_for": [
+        "Next.js and React applications",
+        "Frontend-focused development teams",
+        "Teams wanting instant preview deployments",
+        "Developers prioritizing performance and DX",
+        "Businesses needing global edge network",
+        "Companies building jamstack applications"
+      ],
+      "industries": [
+        "SaaS",
+        "E-commerce",
+        "Media",
+        "Technology",
+        "Startups",
+        "Agencies"
+      ],
+      "company_sizes": [
+        "startup",
+        "smb",
+        "mid_market",
+        "enterprise"
+      ],
+      "avoid_if": [
+        "Need full-stack backend hosting (frontend only)",
+        "Budget-conscious with high traffic (costs scale)",
+        "Don't use React/Next.js ecosystem",
+        "Need database hosting (use with Supabase/Railway)",
+        "Want self-hosted option"
+      ],
+      "implementation": {
+        "avg_weeks": 1,
+        "complexity": "low",
+        "requires_developer": true,
+        "cost_range": {
+          "diy": {
+            "min": 0,
+            "max": 500
+          },
+          "with_help": {
+            "min": 500,
+            "max": 2000
+          },
+          "full_service": {
+            "min": 2000,
+            "max": 5000
+          }
+        }
+      },
+      "ratings": {
+        "g2": {
+          "score": 4.6,
+          "reviews": 180,
+          "last_updated": "2025-12"
+        },
+        "capterra": {
+          "score": 4.4,
+          "reviews": 47,
+          "last_updated": "2025-12"
+        },
+        "our_rating": 4.7,
+        "our_notes": "Best-in-class developer experience for frontend deployment. Exceptional performance and reliability. Pro plan provides excellent value at $20/mo with 1TB bandwidth. Enterprise pricing can be steep ($3,500-$25k/yr minimum). Costs can escalate with high traffic. Perfect for Next.js projects."
+      },
+      "integrations": [
+        "GitHub",
+        "GitLab",
+        "Bitbucket",
+        "Next.js",
+        "React",
+        "Vue",
+        "Svelte",
+        "Contentful",
+        "Sanity",
+        "Supabase",
+        "REST API"
+      ],
+      "api": {
+        "available": true,
+        "type": "REST",
+        "documentation": "https://vercel.com/docs/rest-api"
+      },
+      "competitors": [
+        "Netlify",
+        "Cloudflare Pages",
+        "AWS Amplify",
+        "Railway",
+        "Render"
+      ],
+      "verified_at": "2025-12-17T00:00:00Z",
+      "verified_by": "manual",
+      "source_url": "https://vercel.com/pricing",
+      "notes": "Usage-based pricing beyond included limits. Pro plan includes spend caps to prevent runaway costs. Enterprise minimum typically $20-25k/year. Recursion protection and Attack Challenge Mode added in 2025 to control costs. Free tier great for personal projects but not commercial use. Optimized for Next.js (created by Vercel)."
+    },
+    {
+      "slug": "railway",
+      "name": "Railway",
+      "category": "dev_tools",
+      "subcategory": "app_deployment",
+      "website": "https://railway.com",
+      "pricing_url": "https://railway.com/pricing",
+      "description": "Modern cloud platform for deploying full-stack applications, databases, and services with zero DevOps overhead. Pay-per-use pricing model based on actual resource consumption. Supports PostgreSQL, MySQL, MongoDB, Redis out of the box. Loved for simplicity, transparent pricing, and instant deployment from GitHub.",
+      "tagline": "Build, deploy, and scale applications without the complexity",
+      "pricing": {
+        "model": "usage_based",
+        "currency": "USD",
+        "billing_options": ["monthly"],
+        "annual_discount_percent": null,
+        "tiers": [
+          {
+            "name": "Trial",
+            "price": 0,
+            "per": "month",
+            "billing": "monthly",
+            "features": [
+              "$5 one-time credit",
+              "Valid for 30 days",
+              "All platform features",
+              "Deploy apps and databases",
+              "Community support",
+              "No credit card required"
+            ],
+            "limits": {
+              "credit_usd": 5,
+              "duration_days": 30
+            }
+          },
+          {
+            "name": "Pro",
+            "price": 5,
+            "per": "month (base fee)",
+            "billing": "monthly",
+            "features": [
+              "$20 included usage/month",
+              "Pay for actual CPU/memory consumption",
+              "Unlimited projects and services",
+              "PostgreSQL, MySQL, MongoDB, Redis",
+              "Automatic SSL",
+              "Custom domains",
+              "GitHub integration",
+              "Environment variables",
+              "Build and deploy logs",
+              "Email support"
+            ],
+            "limits": {
+              "included_usage_usd": 20,
+              "projects": "unlimited",
+              "services": "unlimited"
+            }
+          },
+          {
+            "name": "Enterprise",
+            "price": null,
+            "per": "custom",
+            "billing": "annual",
+            "features": [
+              "All Pro features",
+              "Dedicated hosts ($10k/mo minimum spend)",
+              "Custom SLAs",
+              "SOC 2 compliance",
+              "Priority support",
+              "Business Class Support add-on",
+              "Custom contracts",
+              "Volume discounts",
+              "Dedicated account manager"
+            ],
+            "limits": null
+          }
+        ],
+        "starting_price": 0,
+        "custom_pricing": true,
+        "free_trial_days": 30,
+        "free_tier": true,
+        "startup_discount": null
+      },
+      "best_for": [
+        "Startups and indie developers",
+        "Teams migrating from Heroku",
+        "Full-stack applications with databases",
+        "Developers wanting simple deployment",
+        "Budget-conscious teams (pay for actual usage)",
+        "Projects needing quick database provisioning"
+      ],
+      "industries": [
+        "Startups",
+        "SaaS",
+        "Web Apps",
+        "Technology",
+        "Indie Developers",
+        "SMBs"
+      ],
+      "company_sizes": [
+        "startup",
+        "smb",
+        "mid_market"
+      ],
+      "avoid_if": [
+        "Need enterprise compliance on budget tier",
+        "Require extensive managed services",
+        "Want traditional fixed-price contracts",
+        "Need advanced DevOps customization",
+        "Require phone support"
+      ],
+      "implementation": {
+        "avg_weeks": 1,
+        "complexity": "low",
+        "requires_developer": true,
+        "cost_range": {
+          "diy": {
+            "min": 0,
+            "max": 500
+          },
+          "with_help": {
+            "min": 500,
+            "max": 1500
+          },
+          "full_service": {
+            "min": 1500,
+            "max": 5000
+          }
+        }
+      },
+      "ratings": {
+        "g2": {
+          "score": 4.5,
+          "reviews": 45,
+          "last_updated": "2025-12"
+        },
+        "capterra": {
+          "score": null,
+          "reviews": null,
+          "last_updated": null
+        },
+        "our_rating": 4.6,
+        "our_notes": "Exceptional value with usage-based pricing - customers report saving ~40% vs AWS/Heroku. Simple, transparent pricing based on actual resource consumption. Great for full-stack apps with databases. Limited to fewer reviews due to newer platform. Best Heroku alternative in 2025."
+      },
+      "integrations": [
+        "GitHub",
+        "PostgreSQL",
+        "MySQL",
+        "MongoDB",
+        "Redis",
+        "Node.js",
+        "Python",
+        "Go",
+        "Ruby",
+        "Docker",
+        "Nixpacks",
+        "REST API"
+      ],
+      "api": {
+        "available": true,
+        "type": "GraphQL",
+        "documentation": "https://docs.railway.com/reference/public-api"
+      },
+      "competitors": [
+        "Heroku",
+        "Render",
+        "Fly.io",
+        "DigitalOcean App Platform",
+        "AWS Elastic Beanstalk"
+      ],
+      "verified_at": "2025-12-17T00:00:00Z",
+      "verified_by": "manual",
+      "source_url": "https://railway.com/pricing",
+      "notes": "Pro plan: $5/month base + usage charges. If usage stays under $20, you only pay $5. Usage charged for actual CPU/memory consumption, often much lower than fixed-tier pricing. Customer testimonial: moved $5.5k/mo from AWS+Heroku, Railway bill only $300/mo. Enterprise requires $10k/mo minimum spend. Business Class Support available as add-on."
+    },
+    {
+      "slug": "render",
+      "name": "Render",
+      "category": "dev_tools",
+      "subcategory": "cloud_hosting",
+      "website": "https://render.com",
+      "pricing_url": "https://render.com/pricing",
+      "description": "Cloud platform for building and running all your apps and websites with free SSL, global CDN, private networks, and automatic deploys from Git. Offers managed PostgreSQL, Redis, and static site hosting. Known for generous free tier and straightforward pricing. Great Heroku alternative with better developer experience.",
+      "tagline": "Build, deploy, and scale your apps with unparalleled ease",
+      "pricing": {
+        "model": "tiered",
+        "currency": "USD",
+        "billing_options": ["monthly"],
+        "annual_discount_percent": null,
+        "tiers": [
+          {
+            "name": "Hobby (Free)",
+            "price": 0,
+            "per": "month",
+            "billing": "monthly",
+            "features": [
+              "Static sites (free forever)",
+              "Web services (free but spin down on idle)",
+              "1GB PostgreSQL database",
+              "100GB bandwidth",
+              "750 build minutes/month",
+              "Automatic SSL",
+              "Custom domains",
+              "GitHub/GitLab integration",
+              "Community support"
+            ],
+            "limits": {
+              "bandwidth_gb": 100,
+              "build_minutes": 750,
+              "database_storage_gb": 1,
+              "idle_spindown": true
+            }
+          },
+          {
+            "name": "Professional",
+            "price": 19,
+            "per": "month (per user)",
+            "billing": "monthly",
+            "features": [
+              "All Hobby features",
+              "No idle spindown",
+              "Unlimited bandwidth",
+              "Unlimited build minutes",
+              "Team collaboration",
+              "Persistent services",
+              "Priority email support",
+              "Advanced metrics",
+              "Rollback deployments"
+            ],
+            "limits": {
+              "bandwidth_gb": "unlimited",
+              "build_minutes": "unlimited",
+              "idle_spindown": false
+            }
+          },
+          {
+            "name": "Standard",
+            "price": 25,
+            "per": "service/month",
+            "billing": "monthly",
+            "features": [
+              "2GB RAM",
+              "1 CPU",
+              "Persistent disk",
+              "Zero-downtime deploys",
+              "Auto-scaling available",
+              "Health checks",
+              "Manual deploys",
+              "Preview environments"
+            ],
+            "limits": {
+              "ram_gb": 2,
+              "cpu": 1
+            }
+          },
+          {
+            "name": "Pro",
+            "price": 80,
+            "per": "service/month",
+            "billing": "monthly",
+            "features": [
+              "4GB RAM",
+              "2 CPUs",
+              "Enhanced performance",
+              "All Standard features",
+              "Faster builds",
+              "Dedicated resources"
+            ],
+            "limits": {
+              "ram_gb": 4,
+              "cpu": 2
+            }
+          },
+          {
+            "name": "Pro Ultra",
+            "price": 450,
+            "per": "service/month",
+            "billing": "monthly",
+            "features": [
+              "32GB RAM",
+              "8 CPUs",
+              "High-performance tier",
+              "All Pro features",
+              "Maximum compute power",
+              "Enterprise-grade resources"
+            ],
+            "limits": {
+              "ram_gb": 32,
+              "cpu": 8
+            }
+          }
+        ],
+        "starting_price": 0,
+        "custom_pricing": false,
+        "free_trial_days": null,
+        "free_tier": true,
+        "startup_discount": null
+      },
+      "best_for": [
+        "Developers wanting generous free tier",
+        "Static sites and JAMstack applications",
+        "Teams migrating from Heroku",
+        "Projects with predictable resource needs",
+        "Developers prioritizing simplicity",
+        "Apps needing managed PostgreSQL/Redis"
+      ],
+      "industries": [
+        "Startups",
+        "Web Development",
+        "SaaS",
+        "Agencies",
+        "Education",
+        "Indie Developers"
+      ],
+      "company_sizes": [
+        "startup",
+        "smb",
+        "mid_market"
+      ],
+      "avoid_if": [
+        "Need always-on free tier (services spin down)",
+        "Require complex networking configurations",
+        "Want usage-based pricing (Railway better)",
+        "Need enterprise compliance features",
+        "Prefer all-in-one DevOps platform (GitLab better)"
+      ],
+      "implementation": {
+        "avg_weeks": 1,
+        "complexity": "low",
+        "requires_developer": true,
+        "cost_range": {
+          "diy": {
+            "min": 0,
+            "max": 500
+          },
+          "with_help": {
+            "min": 500,
+            "max": 1500
+          },
+          "full_service": {
+            "min": 1500,
+            "max": 5000
+          }
+        }
+      },
+      "ratings": {
+        "g2": {
+          "score": 4.5,
+          "reviews": 95,
+          "last_updated": "2025-12"
+        },
+        "capterra": {
+          "score": 4.4,
+          "reviews": 28,
+          "last_updated": "2025-12"
+        },
+        "our_rating": 4.5,
+        "our_notes": "Excellent free tier for experimentation and small projects. Transparent, predictable pricing with no surprise charges. Static sites free forever. Free tier services spin down after inactivity. Professional plan ($19/user/mo) required for persistent services. Great Heroku alternative."
+      },
+      "integrations": [
+        "GitHub",
+        "GitLab",
+        "PostgreSQL",
+        "Redis",
+        "Docker",
+        "Node.js",
+        "Python",
+        "Go",
+        "Ruby",
+        "Rust",
+        "Infrastructure as Code",
+        "REST API"
+      ],
+      "api": {
+        "available": true,
+        "type": "REST",
+        "documentation": "https://render.com/docs/api"
+      },
+      "competitors": [
+        "Heroku",
+        "Railway",
+        "Fly.io",
+        "Netlify",
+        "Vercel"
+      ],
+      "verified_at": "2025-12-17T00:00:00Z",
+      "verified_by": "manual",
+      "source_url": "https://render.com/pricing",
+      "notes": "Free tier limitations: web services spin down after 15 min inactivity, 750 build minutes/month, 100GB bandwidth, 1GB PostgreSQL. Professional plan ($19/user/mo) removes spindown and limits. Service pricing: Standard $25/mo (2GB RAM, 1 CPU), Pro $80/mo (4GB, 2 CPU), Pro Ultra $450/mo (32GB, 8 CPU). Static sites always free."
+    },
+    {
+      "slug": "supabase",
+      "name": "Supabase",
+      "category": "dev_tools",
+      "subcategory": "backend_as_a_service",
+      "website": "https://supabase.com",
+      "pricing_url": "https://supabase.com/pricing",
+      "description": "Open source Firebase alternative providing PostgreSQL database, authentication, instant APIs, edge functions, realtime subscriptions, and storage. Built on proven open source tools like PostgreSQL, PostgREST, and GoTrue. Self-hosting option available. Loved for developer experience, SQL access, and avoiding vendor lock-in.",
+      "tagline": "The open source Firebase alternative",
+      "pricing": {
+        "model": "usage_based",
+        "currency": "USD",
+        "billing_options": ["monthly"],
+        "annual_discount_percent": null,
+        "tiers": [
+          {
+            "name": "Free",
+            "price": 0,
+            "per": "month",
+            "billing": "monthly",
+            "features": [
+              "Up to 2 projects",
+              "500MB database storage",
+              "1GB file storage",
+              "50,000 monthly active users",
+              "2GB database egress",
+              "Unlimited API requests",
+              "Social OAuth providers",
+              "7-day log retention",
+              "Community support",
+              "Pauses after 7 days inactivity"
+            ],
+            "limits": {
+              "projects": 2,
+              "database_storage_gb": 0.5,
+              "file_storage_gb": 1,
+              "mau": 50000,
+              "egress_gb": 2,
+              "inactive_pause_days": 7
+            }
+          },
+          {
+            "name": "Pro",
+            "price": 25,
+            "per": "project/month",
+            "billing": "monthly",
+            "features": [
+              "Unlimited projects",
+              "8GB database storage",
+              "100GB file storage",
+              "100,000 MAUs ($0.00325/additional MAU)",
+              "250GB database egress",
+              "2M Edge Function invocations",
+              "Daily backups (7-day retention)",
+              "7-day log retention",
+              "$10/month compute credits",
+              "Email support",
+              "No inactivity pausing"
+            ],
+            "limits": {
+              "projects": "unlimited",
+              "database_storage_gb": 8,
+              "file_storage_gb": 100,
+              "mau": 100000,
+              "egress_gb": 250,
+              "edge_function_invocations": 2000000
+            }
+          },
+          {
+            "name": "Team",
+            "price": 599,
+            "per": "month",
+            "billing": "monthly",
+            "features": [
+              "All Pro features",
+              "Autoscaling",
+              "Team collaboration",
+              "Priority email support",
+              "Custom domains",
+              "Enhanced security",
+              "Spend caps",
+              "Usage dashboards",
+              "SOC 2 Type 2 compliance"
+            ],
+            "limits": null
+          },
+          {
+            "name": "Enterprise",
+            "price": null,
+            "per": "custom",
+            "billing": "annual",
+            "features": [
+              "All Team features",
+              "HIPAA compliance (paid add-on)",
+              "Custom contracts",
+              "99.9% uptime SLA",
+              "Dedicated support",
+              "Private cloud options",
+              "Advanced security",
+              "Custom pricing for scale",
+              "Technical account manager"
+            ],
+            "limits": null
+          }
+        ],
+        "starting_price": 0,
+        "custom_pricing": true,
+        "free_trial_days": null,
+        "free_tier": true,
+        "startup_discount": null
+      },
+      "best_for": [
+        "Developers wanting Firebase alternative",
+        "Projects needing PostgreSQL with instant APIs",
+        "Teams prioritizing open source and no lock-in",
+        "Applications requiring realtime features",
+        "Startups and MVPs (generous free tier)",
+        "Apps needing authentication and storage"
+      ],
+      "industries": [
+        "SaaS",
+        "Startups",
+        "Web Apps",
+        "Mobile Apps",
+        "Technology",
+        "Agencies"
+      ],
+      "company_sizes": [
+        "startup",
+        "smb",
+        "mid_market",
+        "enterprise"
+      ],
+      "avoid_if": [
+        "Don't need relational database (prefer NoSQL)",
+        "Require always-free production app (inactive projects pause)",
+        "Need extensive hand-holding (community support on free tier)",
+        "Want HIPAA compliance without Enterprise plan",
+        "Prefer managed services without SQL access"
+      ],
+      "implementation": {
+        "avg_weeks": 1,
+        "complexity": "low",
+        "requires_developer": true,
+        "cost_range": {
+          "diy": {
+            "min": 0,
+            "max": 500
+          },
+          "with_help": {
+            "min": 500,
+            "max": 2000
+          },
+          "full_service": {
+            "min": 2000,
+            "max": 10000
+          }
+        }
+      },
+      "ratings": {
+        "g2": {
+          "score": 4.6,
+          "reviews": 27,
+          "last_updated": "2025-12"
+        },
+        "capterra": {
+          "score": null,
+          "reviews": null,
+          "last_updated": null
+        },
+        "trustpilot": {
+          "score": 4.7,
+          "reviews": 120,
+          "last_updated": "2025-12"
+        },
+        "our_rating": 4.7,
+        "our_notes": "Best open source Firebase alternative with excellent developer experience. PostgreSQL access provides flexibility Firebase lacks. Free tier very generous for prototyping. Usage-based pricing model with spend caps prevents surprises. Strong community. Self-hosting option avoids vendor lock-in. Pro plan at $25/project is excellent value."
+      },
+      "integrations": [
+        "PostgreSQL",
+        "Next.js",
+        "React",
+        "Vue",
+        "Flutter",
+        "React Native",
+        "Vercel",
+        "Netlify",
+        "GitHub Actions",
+        "Zapier",
+        "REST API",
+        "GraphQL (via pg_graphql)"
+      ],
+      "api": {
+        "available": true,
+        "type": "REST + Realtime",
+        "documentation": "https://supabase.com/docs/guides/api"
+      },
+      "competitors": [
+        "Firebase",
+        "AWS Amplify",
+        "PlanetScale",
+        "Nhost",
+        "Appwrite"
+      ],
+      "verified_at": "2025-12-17T00:00:00Z",
+      "verified_by": "manual",
+      "source_url": "https://supabase.com/pricing",
+      "notes": "Hybrid pricing: base fee + usage overages. Free tier limited to 2 projects, pauses after 7 days inactivity. Pro plan ($25/project/mo) includes $10 compute credits. Additional MAUs cost $0.00325 each above 100k. Team plan ($599/mo) for collaboration features. HIPAA compliance requires Enterprise plan. Spend caps available to control costs. Open source - can self-host for free."
+    }
+  ],
+  "last_updated": "2025-12-17T00:00:00Z"
+}

@@ -1,0 +1,1240 @@
+{
+  "category": "automation",
+  "description": "Automation and integration platforms for workflow automation, API integration, and business process automation",
+  "vendors": [
+    {
+      "slug": "zapier",
+      "name": "Zapier",
+      "category": "automation",
+      "subcategory": "workflow_automation",
+      "website": "https://zapier.com",
+      "pricing_url": "https://zapier.com/pricing",
+      "description": "The most popular no-code automation platform connecting 8,000+ apps with simple trigger-action workflows. Best known for ease of use and extensive app integrations.",
+      "tagline": "Automate without code",
+      "pricing": {
+        "model": "freemium",
+        "currency": "USD",
+        "billing_options": ["monthly", "annual"],
+        "annual_discount_percent": 33,
+        "tiers": [
+          {
+            "name": "Free",
+            "price": 0,
+            "per": "month",
+            "billing": "monthly",
+            "features": [
+              "100 tasks per month",
+              "Unlimited Zaps",
+              "2-step Zaps only",
+              "15-minute update interval",
+              "AI features included",
+              "Tables and Interfaces included",
+              "Email support"
+            ],
+            "limits": {
+              "tasks_per_month": 100,
+              "max_steps_per_zap": 2,
+              "polling_interval_minutes": 15,
+              "users": 1
+            }
+          },
+          {
+            "name": "Professional",
+            "price": 19.99,
+            "per": "month",
+            "billing": "annual",
+            "features": [
+              "750 tasks per month (starting tier)",
+              "Unlimited multi-step Zaps",
+              "Premium app access",
+              "2-minute update interval",
+              "Webhooks",
+              "Filters and Paths (logic tools)",
+              "Email and live chat support",
+              "Pay-per-task overflow (2x task limit)"
+            ],
+            "limits": {
+              "tasks_per_month": 750,
+              "max_steps_per_zap": null,
+              "polling_interval_minutes": 2,
+              "users": 1,
+              "pay_per_task_overflow": 1500
+            }
+          },
+          {
+            "name": "Professional (Monthly)",
+            "price": 29.99,
+            "per": "month",
+            "billing": "monthly",
+            "features": [
+              "750 tasks per month",
+              "Same features as annual Professional plan"
+            ],
+            "limits": {
+              "tasks_per_month": 750,
+              "users": 1
+            }
+          },
+          {
+            "name": "Team",
+            "price": 69,
+            "per": "month",
+            "billing": "annual",
+            "features": [
+              "2,000 tasks per month (starting tier)",
+              "Unlimited Zaps",
+              "Up to 25 users",
+              "Shared workspaces",
+              "Shared app connections",
+              "Folder permissions",
+              "1-minute update interval",
+              "Audit logs",
+              "6-month version history",
+              "Advanced admin controls",
+              "Priority support",
+              "Scales to 2 million tasks/month"
+            ],
+            "limits": {
+              "tasks_per_month": 2000,
+              "max_tasks_per_month": 2000000,
+              "polling_interval_minutes": 1,
+              "users": 25
+            }
+          },
+          {
+            "name": "Team (Monthly)",
+            "price": 103.50,
+            "per": "month",
+            "billing": "monthly",
+            "features": [
+              "2,000 tasks per month",
+              "Same features as annual Team plan"
+            ],
+            "limits": {
+              "tasks_per_month": 2000,
+              "users": 25
+            }
+          },
+          {
+            "name": "Enterprise",
+            "price": null,
+            "per": "custom",
+            "billing": "annual",
+            "features": [
+              "Custom task volumes",
+              "Unlimited users",
+              "SSO (Single Sign-On)",
+              "Advanced security features",
+              "Custom data retention",
+              "Premier support",
+              "Dedicated account manager",
+              "Custom SLA"
+            ],
+            "limits": {
+              "tasks_per_month": null,
+              "users": null
+            }
+          }
+        ],
+        "starting_price": 0,
+        "custom_pricing": true,
+        "free_trial_days": 14,
+        "free_tier": true,
+        "startup_discount": "Available through partnership programs"
+      },
+      "best_for": [
+        "Non-technical users needing simple automations",
+        "Teams wanting quick setup with popular apps",
+        "Businesses with straightforward workflow needs",
+        "Marketing and sales automation",
+        "Small to medium-sized businesses"
+      ],
+      "industries": [
+        "Marketing",
+        "Sales",
+        "E-commerce",
+        "SaaS",
+        "Professional Services",
+        "Education"
+      ],
+      "company_sizes": ["startup", "smb", "mid-market"],
+      "avoid_if": [
+        "Need complex multi-branch logic",
+        "Require high-volume processing (expensive at scale)",
+        "Need advanced error handling",
+        "Want full control over hosting",
+        "Budget-conscious with >10k tasks/month"
+      ],
+      "implementation": {
+        "avg_weeks": 1,
+        "complexity": "low",
+        "requires_developer": false,
+        "cost_range": {
+          "DIY": {
+            "min": 0,
+            "max": 100
+          },
+          "with_help": {
+            "min": 500,
+            "max": 2000
+          },
+          "full_service": {
+            "min": 2000,
+            "max": 10000
+          }
+        }
+      },
+      "ratings": {
+        "g2": {
+          "score": 4.5,
+          "reviews": 1200,
+          "url": "https://www.g2.com/products/zapier"
+        },
+        "capterra": {
+          "score": 4.7,
+          "reviews": 2700
+        },
+        "our_rating": 4.3,
+        "our_notes": "Best for simplicity and app coverage, but expensive at scale. Task-based pricing can become costly for high-volume workflows."
+      },
+      "integrations": [
+        "8,000+ app integrations",
+        "Gmail",
+        "Slack",
+        "Google Sheets",
+        "Salesforce",
+        "HubSpot",
+        "Shopify",
+        "Airtable",
+        "Notion",
+        "Webhooks",
+        "API connections"
+      ],
+      "api": {
+        "available": true,
+        "documentation": "https://platform.zapier.com/",
+        "features": ["REST API", "Webhooks", "CLI for custom apps"]
+      },
+      "competitors": [
+        "Make (Integromat)",
+        "n8n",
+        "Workato",
+        "Tray.io",
+        "Activepieces",
+        "Power Automate"
+      ],
+      "verified_at": "2025-12-17T00:00:00Z",
+      "verified_by": "manual",
+      "source_url": "https://zapier.com/pricing",
+      "notes": "Pricing verified December 2025. Zapier removed active Zap limits in 2024, now offering unlimited Zaps across all tiers. Notable that certain built-in steps (Filters, Formatter, Paths, Delay) don't count toward task limits. Pay-per-task overflow allows 2x your plan's task limit before hard cutoff."
+    },
+    {
+      "slug": "make",
+      "name": "Make",
+      "category": "automation",
+      "subcategory": "workflow_automation",
+      "website": "https://www.make.com",
+      "pricing_url": "https://www.make.com/en/pricing",
+      "description": "Visual workflow automation platform (formerly Integromat) known for its powerful visual builder and operations-based pricing model. Better for complex workflows than task-based competitors.",
+      "tagline": "Make work flow",
+      "pricing": {
+        "model": "freemium",
+        "currency": "USD",
+        "billing_options": ["monthly", "annual"],
+        "annual_discount_percent": 15,
+        "tiers": [
+          {
+            "name": "Free",
+            "price": 0,
+            "per": "month",
+            "billing": "monthly",
+            "features": [
+              "1,000 operations per month",
+              "Unlimited users",
+              "2 active scenarios",
+              "15-minute interval",
+              "Two-factor authentication",
+              "300+ Make API endpoints",
+              "Custom apps",
+              "Real-time execution monitoring"
+            ],
+            "limits": {
+              "operations_per_month": 1000,
+              "active_scenarios": 2,
+              "interval_minutes": 15,
+              "data_transfer_mb": 100,
+              "log_retention_days": 7
+            }
+          },
+          {
+            "name": "Core",
+            "price": 9,
+            "per": "month",
+            "billing": "annual",
+            "features": [
+              "10,000 operations per month",
+              "Unlimited active scenarios",
+              "1-minute interval",
+              "300+ Make API endpoints",
+              "Full app access (2,000+ apps)",
+              "Operations usage flexibility (annual)",
+              "Increased data transfer"
+            ],
+            "limits": {
+              "operations_per_month": 10000,
+              "active_scenarios": null,
+              "interval_minutes": 1,
+              "data_transfer_mb": 1000,
+              "log_retention_days": 30
+            }
+          },
+          {
+            "name": "Core (Monthly)",
+            "price": 10.59,
+            "per": "month",
+            "billing": "monthly",
+            "features": [
+              "10,000 operations per month",
+              "Same features as annual Core plan"
+            ],
+            "limits": {
+              "operations_per_month": 10000
+            }
+          },
+          {
+            "name": "Pro",
+            "price": 16,
+            "per": "month",
+            "billing": "annual",
+            "features": [
+              "10,000 operations per month (starting tier)",
+              "Priority scenario execution",
+              "Custom variables",
+              "Full-text execution log search",
+              "Operations usage flexibility",
+              "Scenario inputs",
+              "Everything in Core"
+            ],
+            "limits": {
+              "operations_per_month": 10000,
+              "active_scenarios": null,
+              "interval_minutes": 1
+            }
+          },
+          {
+            "name": "Pro (Monthly)",
+            "price": 18.82,
+            "per": "month",
+            "billing": "monthly",
+            "features": [
+              "10,000 operations per month",
+              "Same features as annual Pro plan"
+            ],
+            "limits": {
+              "operations_per_month": 10000
+            }
+          },
+          {
+            "name": "Teams",
+            "price": 29,
+            "per": "month",
+            "billing": "annual",
+            "features": [
+              "10,000 operations per month (starting tier)",
+              "High priority execution",
+              "Team roles and permissions",
+              "Shared scenario templates",
+              "Multiple teams support",
+              "Private templates",
+              "Everything in Pro"
+            ],
+            "limits": {
+              "operations_per_month": 10000,
+              "active_scenarios": null,
+              "interval_minutes": 1
+            }
+          },
+          {
+            "name": "Teams (Monthly)",
+            "price": 34.12,
+            "per": "month",
+            "billing": "monthly",
+            "features": [
+              "10,000 operations per month",
+              "Same features as annual Teams plan"
+            ],
+            "limits": {
+              "operations_per_month": 10000
+            }
+          },
+          {
+            "name": "Enterprise",
+            "price": null,
+            "per": "custom",
+            "billing": "annual",
+            "features": [
+              "Custom operations volume",
+              "SSO (Single Sign-On)",
+              "Auto-provisioning",
+              "Information security compliance",
+              "24/7 customer support",
+              "Dedicated account manager",
+              "Custom SLA"
+            ],
+            "limits": {
+              "operations_per_month": null
+            }
+          }
+        ],
+        "starting_price": 0,
+        "custom_pricing": true,
+        "free_trial_days": 14,
+        "free_tier": true,
+        "startup_discount": null
+      },
+      "best_for": [
+        "Users needing complex visual workflows",
+        "Teams wanting better value than Zapier",
+        "Workflows with many steps (operations-based pricing advantage)",
+        "Technical users comfortable with visual programming",
+        "Data transformation and manipulation"
+      ],
+      "industries": [
+        "E-commerce",
+        "Marketing Agencies",
+        "SaaS",
+        "Data Analytics",
+        "Operations"
+      ],
+      "company_sizes": ["startup", "smb", "mid-market"],
+      "avoid_if": [
+        "Need absolute simplest interface",
+        "Want extensive documentation and tutorials",
+        "Require enterprise-grade security on lower tiers",
+        "Need extensive customer support on lower tiers"
+      ],
+      "implementation": {
+        "avg_weeks": 2,
+        "complexity": "medium",
+        "requires_developer": false,
+        "cost_range": {
+          "DIY": {
+            "min": 0,
+            "max": 200
+          },
+          "with_help": {
+            "min": 1000,
+            "max": 3000
+          },
+          "full_service": {
+            "min": 3000,
+            "max": 15000
+          }
+        }
+      },
+      "ratings": {
+        "g2": {
+          "score": 4.7,
+          "reviews": 230,
+          "url": "https://www.g2.com/products/make"
+        },
+        "capterra": {
+          "score": 4.8,
+          "reviews": 430
+        },
+        "our_rating": 4.5,
+        "our_notes": "Excellent visual builder and better pricing model for complex workflows. Operations-based pricing can be 44-100x more efficient than task-based for multi-step workflows. Steeper learning curve than Zapier."
+      },
+      "integrations": [
+        "2,000+ app integrations",
+        "Google Workspace",
+        "Microsoft 365",
+        "Salesforce",
+        "HubSpot",
+        "Slack",
+        "Shopify",
+        "Database connections",
+        "HTTP/REST API",
+        "Webhooks"
+      ],
+      "api": {
+        "available": true,
+        "documentation": "https://www.make.com/en/api-documentation",
+        "features": ["REST API", "300+ API endpoints", "Custom app development"]
+      },
+      "competitors": [
+        "Zapier",
+        "n8n",
+        "Workato",
+        "Tray.io",
+        "Power Automate"
+      ],
+      "verified_at": "2025-12-17T00:00:00Z",
+      "verified_by": "manual",
+      "source_url": "https://www.make.com/en/pricing",
+      "notes": "Pricing verified December 2025. Operations-based model means each module action counts as one operation, not per-task like Zapier. Annual plans provide operations flexibility - can use all 120,000 operations in any month. $10 per 10,000 operations overage fee. Custom apps feature now available on Free tier."
+    },
+    {
+      "slug": "n8n",
+      "name": "n8n",
+      "category": "automation",
+      "subcategory": "workflow_automation",
+      "website": "https://n8n.io",
+      "pricing_url": "https://n8n.io/pricing",
+      "description": "Open-source workflow automation platform with fair-code licensing. Offers self-hosted (free) and cloud options with execution-based pricing. Best for technical teams wanting flexibility and control.",
+      "tagline": "Workflow automation for technical people",
+      "pricing": {
+        "model": "freemium",
+        "currency": "EUR",
+        "billing_options": ["monthly", "annual"],
+        "annual_discount_percent": null,
+        "tiers": [
+          {
+            "name": "Community Edition (Self-Hosted)",
+            "price": 0,
+            "per": "forever",
+            "billing": "usage_based",
+            "features": [
+              "Unlimited executions",
+              "Unlimited workflows",
+              "Unlimited users",
+              "400+ integrations",
+              "Self-hosted on your infrastructure",
+              "MIT-licensed source code",
+              "Community support",
+              "Custom code (JavaScript/Python)"
+            ],
+            "limits": {
+              "executions_per_month": null,
+              "workflows": null,
+              "users": null
+            }
+          },
+          {
+            "name": "Cloud Starter",
+            "price": 20,
+            "per": "month",
+            "billing": "monthly",
+            "features": [
+              "2,500 workflow executions per month",
+              "Unlimited steps per execution",
+              "5 active workflows",
+              "1 shared project",
+              "Unlimited users",
+              "5 concurrent executions",
+              "320MiB RAM",
+              "10 millicore burstable CPU",
+              "Forum support"
+            ],
+            "limits": {
+              "executions_per_month": 2500,
+              "active_workflows": 5,
+              "concurrent_executions": 5,
+              "ram_mb": 320,
+              "projects": 1
+            }
+          },
+          {
+            "name": "Cloud Pro",
+            "price": 50,
+            "per": "month",
+            "billing": "monthly",
+            "features": [
+              "10,000 workflow executions per month",
+              "Unlimited steps per execution",
+              "15 active workflows",
+              "3 shared projects",
+              "Unlimited users",
+              "Admin roles",
+              "Global variables",
+              "Workflow history",
+              "Execution search",
+              "Debug in editor",
+              "Environment variables",
+              "Webhook authentication",
+              "Priority support"
+            ],
+            "limits": {
+              "executions_per_month": 10000,
+              "active_workflows": 15,
+              "projects": 3
+            }
+          },
+          {
+            "name": "Self-Hosted Business",
+            "price": null,
+            "per": "custom",
+            "billing": "annual",
+            "features": [
+              "Custom execution volumes",
+              "Unlimited workflows",
+              "Git version control",
+              "Multiple environments",
+              "SSO authentication",
+              "Queue-mode scaling",
+              "Advanced compliance",
+              "Self-hosted on your infrastructure",
+              "Priority support"
+            ],
+            "limits": {
+              "executions_per_month": null,
+              "workflows": null
+            }
+          },
+          {
+            "name": "Enterprise",
+            "price": null,
+            "per": "custom",
+            "billing": "annual",
+            "features": [
+              "Unlimited executions",
+              "Unlimited workflows",
+              "Unlimited projects",
+              "Self-hosted or n8n-hosted",
+              "SSO, SAML, LDAP",
+              "Multiple environments",
+              "External secret store integration",
+              "Log streaming",
+              "Advanced security controls",
+              "Custom SLA",
+              "Dedicated support"
+            ],
+            "limits": {
+              "executions_per_month": null,
+              "workflows": null,
+              "users": null
+            }
+          }
+        ],
+        "starting_price": 0,
+        "custom_pricing": true,
+        "free_trial_days": 14,
+        "free_tier": true,
+        "startup_discount": null
+      },
+      "best_for": [
+        "Technical teams comfortable with code",
+        "Companies wanting data sovereignty (self-hosted)",
+        "Developers needing custom integrations",
+        "Budget-conscious teams with high execution volumes",
+        "Teams needing version control and Git workflows",
+        "Organizations with compliance requirements"
+      ],
+      "industries": [
+        "Technology",
+        "SaaS",
+        "Fintech",
+        "Healthcare",
+        "Data Analytics",
+        "DevOps"
+      ],
+      "company_sizes": ["startup", "smb", "mid-market", "enterprise"],
+      "avoid_if": [
+        "Non-technical team with no developer resources",
+        "Need extensive pre-built templates",
+        "Want comprehensive support on free tier",
+        "Prefer managed cloud without infrastructure management",
+        "Need drag-and-drop simplicity like Zapier"
+      ],
+      "implementation": {
+        "avg_weeks": 3,
+        "complexity": "medium",
+        "requires_developer": true,
+        "cost_range": {
+          "DIY": {
+            "min": 0,
+            "max": 500
+          },
+          "with_help": {
+            "min": 2000,
+            "max": 8000
+          },
+          "full_service": {
+            "min": 10000,
+            "max": 30000
+          }
+        }
+      },
+      "ratings": {
+        "g2": {
+          "score": 4.7,
+          "reviews": 120,
+          "url": "https://www.g2.com/products/n8n"
+        },
+        "capterra": {
+          "score": 4.8,
+          "reviews": 85
+        },
+        "trustpilot": {
+          "score": 4.5,
+          "reviews": 40
+        },
+        "our_rating": 4.6,
+        "our_notes": "Best value for technical teams. Self-hosted option provides unlimited executions for infrastructure cost only. Execution-based pricing is more predictable than operations/tasks. Requires technical expertise to maximize value."
+      },
+      "integrations": [
+        "400+ integrations",
+        "HTTP Request node (connect anything with API)",
+        "Database connectors (PostgreSQL, MySQL, MongoDB)",
+        "Cloud services (AWS, Google Cloud, Azure)",
+        "CRM systems",
+        "Marketing tools",
+        "Custom JavaScript/Python code",
+        "Webhooks",
+        "SSH connections"
+      ],
+      "api": {
+        "available": true,
+        "documentation": "https://docs.n8n.io/api/",
+        "features": ["REST API", "CLI", "Custom nodes", "Community nodes"]
+      },
+      "competitors": [
+        "Zapier",
+        "Make",
+        "Activepieces",
+        "Windmill",
+        "Temporal"
+      ],
+      "verified_at": "2025-12-17T00:00:00Z",
+      "verified_by": "manual",
+      "source_url": "https://n8n.io/pricing",
+      "notes": "Pricing verified December 2025. Major 2025 update removed active workflow limits across all plans. Execution = one complete workflow run regardless of steps (more cost-effective than per-task/operation models). Self-hosted Community Edition is truly free with MIT license. Real infrastructure costs for self-hosting: $40-80/month for production-ready setup (4GB RAM, 2 CPU). GitHub: ~20,000 stars."
+    },
+    {
+      "slug": "workato",
+      "name": "Workato",
+      "category": "automation",
+      "subcategory": "enterprise_automation",
+      "website": "https://www.workato.com",
+      "pricing_url": "https://www.workato.com/pricing",
+      "description": "Enterprise-grade integration and automation platform designed for large organizations with complex workflows. Known for robust security, governance, and scalability.",
+      "tagline": "The leader in enterprise automation",
+      "pricing": {
+        "model": "custom",
+        "currency": "USD",
+        "billing_options": ["annual"],
+        "annual_discount_percent": null,
+        "tiers": [
+          {
+            "name": "Business",
+            "price": 120000,
+            "per": "year",
+            "billing": "annual",
+            "features": [
+              "~5 million tasks per year",
+              "Standard recipes",
+              "Pre-built connectors",
+              "Basic orchestration",
+              "Email support",
+              "Community access"
+            ],
+            "limits": {
+              "tasks_per_year": 5000000,
+              "recipes": null
+            }
+          },
+          {
+            "name": "Enterprise",
+            "price": 180000,
+            "per": "year",
+            "billing": "annual",
+            "features": [
+              "~5 million tasks per year",
+              "Advanced orchestration",
+              "Enterprise security and governance",
+              "Role-based access control",
+              "Detailed audit logs",
+              "Premium connectors (SAP, Oracle)",
+              "API Platform",
+              "High-Volume Recipes (HVR)",
+              "On-Premise Agent (OPA)",
+              "Priority support"
+            ],
+            "limits": {
+              "tasks_per_year": 5000000
+            }
+          },
+          {
+            "name": "Workato One",
+            "price": null,
+            "per": "custom",
+            "billing": "annual",
+            "features": [
+              "Custom task volumes",
+              "Agentic capabilities",
+              "Adaptive automations",
+              "Everything in Enterprise",
+              "Advanced AI features",
+              "Custom SLA",
+              "Dedicated support",
+              "Professional services"
+            ],
+            "limits": {
+              "tasks_per_year": null
+            }
+          }
+        ],
+        "starting_price": 80000,
+        "custom_pricing": true,
+        "free_trial_days": 14,
+        "free_tier": false,
+        "startup_discount": null
+      },
+      "best_for": [
+        "Large enterprises with complex integration needs",
+        "Organizations requiring strict compliance and governance",
+        "Companies integrating enterprise systems (SAP, Oracle, Workday)",
+        "Teams needing advanced orchestration",
+        "Multi-department automation at scale",
+        "Organizations with security and audit requirements"
+      ],
+      "industries": [
+        "Financial Services",
+        "Healthcare",
+        "Manufacturing",
+        "Retail",
+        "Technology",
+        "Professional Services"
+      ],
+      "company_sizes": ["mid-market", "enterprise"],
+      "avoid_if": [
+        "Small business or startup with limited budget",
+        "Simple automation needs",
+        "Less than 1 million tasks per year",
+        "Need quick setup without sales process",
+        "Team size under 50 employees",
+        "Budget under $50k/year for automation"
+      ],
+      "implementation": {
+        "avg_weeks": 12,
+        "complexity": "high",
+        "requires_developer": true,
+        "cost_range": {
+          "DIY": {
+            "min": 10000,
+            "max": 30000
+          },
+          "with_help": {
+            "min": 30000,
+            "max": 80000
+          },
+          "full_service": {
+            "min": 80000,
+            "max": 200000
+          }
+        }
+      },
+      "ratings": {
+        "g2": {
+          "score": 4.7,
+          "reviews": 580,
+          "url": "https://www.g2.com/products/workato"
+        },
+        "capterra": {
+          "score": 4.6,
+          "reviews": 250
+        },
+        "our_rating": 4.5,
+        "our_notes": "Excellent for enterprise use cases but expensive. Strong security, governance, and scalability. High-Volume Recipes (HVR) provide predictable pricing for high-throughput workflows. Typically negotiable discounts of 50-65% off list price."
+      },
+      "integrations": [
+        "1,200+ pre-built connectors",
+        "Enterprise apps (SAP, Oracle, Workday, ServiceNow)",
+        "CRM (Salesforce, Microsoft Dynamics)",
+        "HR systems",
+        "Finance systems",
+        "Marketing automation",
+        "Cloud platforms",
+        "Databases",
+        "Custom API connections"
+      ],
+      "api": {
+        "available": true,
+        "documentation": "https://docs.workato.com/",
+        "features": ["REST API", "API Platform add-on", "Custom connectors", "Embedded integration"]
+      },
+      "competitors": [
+        "MuleSoft",
+        "Boomi",
+        "Tray.io",
+        "Zapier (enterprise tier)",
+        "Power Automate"
+      ],
+      "verified_at": "2025-12-17T00:00:00Z",
+      "verified_by": "manual",
+      "source_url": "https://www.workato.com/pricing",
+      "notes": "Pricing verified December 2025. No public pricing - all quotes are custom. Typical starting point: $80-120k/year. Task = 1 action in a recipe. For high-volume workflows, HVR (High-Volume Recipe) converts to flat-rate unlimited runs. AWS Marketplace pricing: $143,750 for 1M tasks. Significant add-on ecosystem can increase TCO. Negotiated discounts typically 50-65%."
+    },
+    {
+      "slug": "tray-io",
+      "name": "Tray.io",
+      "category": "automation",
+      "subcategory": "enterprise_automation",
+      "website": "https://tray.ai",
+      "pricing_url": "https://tray.ai/pricing",
+      "description": "AI-ready integration and automation platform focused on mid-market and enterprise. Known for its Universal Automation Cloud and embedded integration capabilities.",
+      "tagline": "Universal Automation Cloud",
+      "pricing": {
+        "model": "custom",
+        "currency": "USD",
+        "billing_options": ["annual"],
+        "annual_discount_percent": null,
+        "tiers": [
+          {
+            "name": "Pro",
+            "price": 500,
+            "per": "month",
+            "billing": "annual",
+            "features": [
+              "250,000 starter task credits",
+              "3 workspaces",
+              "7-day log retention",
+              "Standard connectors",
+              "Basic automation workflows",
+              "Email support"
+            ],
+            "limits": {
+              "task_credits": 250000,
+              "workspaces": 3,
+              "log_retention_days": 7
+            }
+          },
+          {
+            "name": "Team",
+            "price": null,
+            "per": "custom",
+            "billing": "annual",
+            "features": [
+              "500,000 starter task credits",
+              "20 workspaces",
+              "Unlimited workflows",
+              "Advanced connectors",
+              "Priority support",
+              "Advanced features"
+            ],
+            "limits": {
+              "task_credits": 500000,
+              "workspaces": 20,
+              "workflows": null
+            }
+          },
+          {
+            "name": "Enterprise",
+            "price": null,
+            "per": "custom",
+            "billing": "annual",
+            "features": [
+              "750,000 starter tasks",
+              "Unlimited workspaces",
+              "600+ connectors",
+              "AI-augmented automation",
+              "Advanced security and compliance",
+              "Custom integrations",
+              "Dedicated support",
+              "SLA guarantees"
+            ],
+            "limits": {
+              "task_credits": 750000,
+              "workspaces": null
+            }
+          },
+          {
+            "name": "Embedded Bundle",
+            "price": null,
+            "per": "custom",
+            "billing": "annual",
+            "features": [
+              "Configuration Wizard",
+              "Solution instances",
+              "Custom JavaScript",
+              "API Suite",
+              "White-label capabilities",
+              "End-user integrations",
+              "Partner ecosystem integrations",
+              "Requires Enterprise plan"
+            ],
+            "limits": {}
+          }
+        ],
+        "starting_price": 500,
+        "custom_pricing": true,
+        "free_trial_days": null,
+        "free_tier": false,
+        "startup_discount": null
+      },
+      "best_for": [
+        "Mid-market to enterprise companies",
+        "Ops teams needing departmental automation",
+        "Companies building embedded integrations for customers",
+        "Organizations wanting AI-augmented workflows",
+        "Teams needing advanced data transformation",
+        "SaaS companies offering native integrations"
+      ],
+      "industries": [
+        "Technology",
+        "SaaS",
+        "Financial Services",
+        "Healthcare",
+        "E-commerce",
+        "Manufacturing"
+      ],
+      "company_sizes": ["mid-market", "enterprise"],
+      "avoid_if": [
+        "Small business with limited budget",
+        "Need simple point-and-click automations only",
+        "Less than 100,000 tasks per year",
+        "Want transparent public pricing",
+        "Prefer self-service onboarding",
+        "Budget under $5k/year"
+      ],
+      "implementation": {
+        "avg_weeks": 8,
+        "complexity": "high",
+        "requires_developer": true,
+        "cost_range": {
+          "DIY": {
+            "min": 5000,
+            "max": 15000
+          },
+          "with_help": {
+            "min": 15000,
+            "max": 50000
+          },
+          "full_service": {
+            "min": 50000,
+            "max": 150000
+          }
+        }
+      },
+      "ratings": {
+        "g2": {
+          "score": 4.5,
+          "reviews": 320,
+          "url": "https://www.g2.com/products/tray-io"
+        },
+        "capterra": {
+          "score": 4.4,
+          "reviews": 110
+        },
+        "our_rating": 4.3,
+        "our_notes": "Strong embedded integration capabilities and AI features. Good for mid-market to enterprise. Task-based pricing can become expensive. Better for companies building integrations for customers vs pure internal automation."
+      },
+      "integrations": [
+        "600+ connectors",
+        "CRM systems",
+        "Marketing automation",
+        "Data warehouses",
+        "Finance systems",
+        "HR platforms",
+        "Custom API connections",
+        "Database connectors",
+        "Cloud platforms"
+      ],
+      "api": {
+        "available": true,
+        "documentation": "https://tray.io/documentation/platform/",
+        "features": ["REST API", "API Suite", "Embedded SDK", "Custom connectors"]
+      },
+      "competitors": [
+        "Workato",
+        "MuleSoft",
+        "Zapier",
+        "Make",
+        "Celigo"
+      ],
+      "verified_at": "2025-12-17T00:00:00Z",
+      "verified_by": "manual",
+      "source_url": "https://tray.ai/pricing",
+      "notes": "Pricing verified December 2025. No fully public pricing beyond Pro tier starting at $500/month. Task = one step in a workflow. Customer reports suggest $5-10k/year typical spend. On-demand task rate charged for overages. Strong focus on embedded integration use cases. Universal Automation Cloud includes AI-augmented iPaaS."
+    },
+    {
+      "slug": "activepieces",
+      "name": "Activepieces",
+      "category": "automation",
+      "subcategory": "workflow_automation",
+      "website": "https://www.activepieces.com",
+      "pricing_url": "https://www.activepieces.com/pricing",
+      "description": "Open-source automation platform with MIT license offering unlimited tasks on paid plans. Best Zapier alternative for budget-conscious teams wanting modern features without per-task pricing.",
+      "tagline": "The open source business automation software",
+      "pricing": {
+        "model": "freemium",
+        "currency": "USD",
+        "billing_options": ["monthly"],
+        "annual_discount_percent": null,
+        "tiers": [
+          {
+            "name": "Free",
+            "price": 0,
+            "per": "month",
+            "billing": "monthly",
+            "features": [
+              "1,000 tasks per month",
+              "2 active flows",
+              "200 AI credits",
+              "Single user",
+              "525+ integrations",
+              "Community support",
+              "Self-hostable"
+            ],
+            "limits": {
+              "tasks_per_month": 1000,
+              "active_flows": 2,
+              "ai_credits": 200,
+              "users": 1
+            }
+          },
+          {
+            "name": "Plus",
+            "price": 25,
+            "per": "month",
+            "billing": "monthly",
+            "features": [
+              "Unlimited tasks",
+              "10 active flows",
+              "AI agents",
+              "500 AI credits",
+              "Unlimited MCP servers",
+              "Unlimited Tables (database)",
+              "Email support",
+              "Self-hostable"
+            ],
+            "limits": {
+              "tasks_per_month": null,
+              "active_flows": 10,
+              "ai_credits": 500,
+              "users": null
+            }
+          },
+          {
+            "name": "Business",
+            "price": 150,
+            "per": "month",
+            "billing": "monthly",
+            "features": [
+              "Unlimited tasks",
+              "50 active flows",
+              "1,000 AI credits",
+              "5+ users",
+              "10 projects",
+              "API access",
+              "Everything in Plus",
+              "Priority support"
+            ],
+            "limits": {
+              "tasks_per_month": null,
+              "active_flows": 50,
+              "ai_credits": 1000,
+              "users": 5,
+              "projects": 10
+            }
+          },
+          {
+            "name": "Enterprise",
+            "price": null,
+            "per": "custom",
+            "billing": "annual",
+            "features": [
+              "Unlimited tasks",
+              "Unlimited flows",
+              "Cloud or self-hosted",
+              "SSO (Single Sign-On)",
+              "Audit logs",
+              "Private pieces (custom integrations)",
+              "Custom roles",
+              "Dedicated support",
+              "Custom SLA"
+            ],
+            "limits": {
+              "tasks_per_month": null,
+              "active_flows": null
+            }
+          }
+        ],
+        "starting_price": 0,
+        "custom_pricing": true,
+        "free_trial_days": null,
+        "free_tier": true,
+        "startup_discount": null
+      },
+      "best_for": [
+        "Budget-conscious teams needing unlimited tasks",
+        "Startups and SMBs wanting modern automation",
+        "Teams wanting AI agent capabilities",
+        "Users seeking Zapier alternative at lower cost",
+        "Companies wanting open-source flexibility",
+        "Teams needing embedded database (Tables)"
+      ],
+      "industries": [
+        "Startups",
+        "SaaS",
+        "E-commerce",
+        "Marketing Agencies",
+        "Professional Services",
+        "SMBs"
+      ],
+      "company_sizes": ["startup", "smb"],
+      "avoid_if": [
+        "Need enterprise-grade security features on lower tiers",
+        "Require extensive integrations (only 525+ vs competitors' thousands)",
+        "Want mature ecosystem with extensive documentation",
+        "Need 24/7 support",
+        "Require proven enterprise track record"
+      ],
+      "implementation": {
+        "avg_weeks": 1,
+        "complexity": "low",
+        "requires_developer": false,
+        "cost_range": {
+          "DIY": {
+            "min": 0,
+            "max": 100
+          },
+          "with_help": {
+            "min": 500,
+            "max": 2000
+          },
+          "full_service": {
+            "min": 2000,
+            "max": 8000
+          }
+        }
+      },
+      "ratings": {
+        "g2": {
+          "score": 4.8,
+          "reviews": 45,
+          "url": "https://www.g2.com/products/activepieces"
+        },
+        "our_rating": 4.4,
+        "our_notes": "Excellent value proposition with unlimited tasks at $25/month. Strong AI features and modern interface. Still growing ecosystem with fewer integrations than mature competitors. Great for cost-conscious teams. 20k GitHub stars, 100k+ installations."
+      },
+      "integrations": [
+        "525+ pre-built integration pieces",
+        "Popular SaaS apps",
+        "CRM systems",
+        "Marketing tools",
+        "E-commerce platforms",
+        "Databases",
+        "Webhooks",
+        "HTTP requests",
+        "Custom pieces (TypeScript)"
+      ],
+      "api": {
+        "available": true,
+        "documentation": "https://www.activepieces.com/docs",
+        "features": ["REST API", "Custom pieces", "MCP servers", "Self-hosted"]
+      },
+      "competitors": [
+        "Zapier",
+        "Make",
+        "n8n",
+        "Power Automate"
+      ],
+      "verified_at": "2025-12-17T00:00:00Z",
+      "verified_by": "manual",
+      "source_url": "https://www.activepieces.com/pricing",
+      "notes": "Pricing verified December 2025. Only platform offering unlimited tasks in standard paid plans (Plus at $25/month). MIT licensed open-source. Notable AI Agent capabilities and Tables (embedded database) - features not typically found in competitors at this price point. ~20,000 GitHub stars, 100,000+ active installations. Self-hostable via Docker."
+    }
+  ],
+  "last_updated": "2025-12-17T00:00:00Z"
+}

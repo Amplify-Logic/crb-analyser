@@ -44,3 +44,60 @@ body {
     @apply block text-sm font-medium text-gray-700 mb-2;
   }
 }
+
+/* Print styles for reports */
+@media print {
+  /* Reset backgrounds for printing */
+  body {
+    background: white !important;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  /* Hide non-essential elements */
+  nav,
+  .no-print,
+  button:not(.print-show),
+  .sticky {
+    display: none !important;
+  }
+
+  /* Page breaks */
+  .page-break {
+    page-break-before: always;
+  }
+
+  .avoid-break {
+    page-break-inside: avoid;
+  }
+
+  /* Card styling for print */
+  .card,
+  [class*="rounded-2xl"] {
+    box-shadow: none !important;
+    border: 1px solid #e5e7eb !important;
+  }
+
+  /* Ensure charts are visible */
+  svg {
+    max-width: 100% !important;
+  }
+
+  /* Typography adjustments */
+  h1, h2, h3 {
+    page-break-after: avoid;
+  }
+
+  /* Report specific */
+  .report-section {
+    page-break-inside: avoid;
+  }
+
+  /* Footer on each page */
+  @page {
+    margin: 1in;
+    @bottom-center {
+      content: "CRB Analyser Report";
+    }
+  }
+}

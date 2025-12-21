@@ -1,0 +1,680 @@
+[
+  {
+    "slug": "anthropic",
+    "name": "Anthropic",
+    "provider": "Anthropic",
+    "category": "ai_development",
+    "subcategory": "llm_api",
+    "website": "https://www.anthropic.com",
+    "pricing_url": "https://platform.claude.com/docs/en/about-claude/pricing",
+    "docs_url": "https://docs.anthropic.com",
+    "models": [
+      {
+        "name": "Claude Opus 4.5",
+        "model_id": "claude-opus-4-5-20251101",
+        "description": "Most capable model with maximum intelligence for complex reasoning and analysis",
+        "best_for": [
+          "Complex reasoning",
+          "Strategic planning",
+          "Multi-step analysis",
+          "Research synthesis",
+          "High-stakes decision making"
+        ],
+        "context_window": 200000,
+        "max_output_tokens": 64000,
+        "pricing": {
+          "input_per_1m": 5.0,
+          "output_per_1m": 25.0,
+          "cached_input_per_1m": 0.5,
+          "batch_input_per_1m": 2.5,
+          "batch_output_per_1m": 12.5
+        },
+        "speed": "slower",
+        "quality": "highest",
+        "supports_vision": true,
+        "supports_tools": true
+      },
+      {
+        "name": "Claude Sonnet 4.5",
+        "model_id": "claude-sonnet-4-5-20250929",
+        "description": "Best for coding with balanced performance and cost, ideal for production applications",
+        "best_for": [
+          "Code generation",
+          "Software development",
+          "Technical documentation",
+          "Data analysis",
+          "API integrations"
+        ],
+        "context_window": 200000,
+        "max_output_tokens": 64000,
+        "pricing": {
+          "input_per_1m": 3.0,
+          "output_per_1m": 15.0,
+          "cached_input_per_1m": 0.3,
+          "batch_input_per_1m": 1.5,
+          "batch_output_per_1m": 7.5
+        },
+        "speed": "fast",
+        "quality": "very_high",
+        "supports_vision": true,
+        "supports_tools": true
+      },
+      {
+        "name": "Claude Sonnet 4",
+        "model_id": "claude-sonnet-4-20250514",
+        "description": "Balanced model for general-purpose tasks with excellent performance",
+        "best_for": [
+          "General-purpose tasks",
+          "Content creation",
+          "Analysis",
+          "Automation",
+          "Customer support"
+        ],
+        "context_window": 200000,
+        "max_output_tokens": 64000,
+        "pricing": {
+          "input_per_1m": 3.0,
+          "output_per_1m": 15.0,
+          "cached_input_per_1m": 0.3,
+          "batch_input_per_1m": 1.5,
+          "batch_output_per_1m": 7.5
+        },
+        "speed": "fast",
+        "quality": "very_high",
+        "supports_vision": true,
+        "supports_tools": true
+      },
+      {
+        "name": "Claude Haiku 4.5",
+        "model_id": "claude-haiku-4-5-20251022",
+        "description": "Near-frontier performance at high speed and low cost",
+        "best_for": [
+          "High-volume operations",
+          "Real-time responses",
+          "Chatbots",
+          "Content moderation",
+          "Simple classifications"
+        ],
+        "context_window": 200000,
+        "max_output_tokens": 64000,
+        "pricing": {
+          "input_per_1m": 1.0,
+          "output_per_1m": 5.0,
+          "cached_input_per_1m": 0.1,
+          "batch_input_per_1m": 0.5,
+          "batch_output_per_1m": 2.5
+        },
+        "speed": "fastest",
+        "quality": "high",
+        "supports_vision": true,
+        "supports_tools": true
+      },
+      {
+        "name": "Claude Haiku 3.5",
+        "model_id": "claude-haiku-3-5-20241022",
+        "description": "Efficient and fast model for high-throughput tasks",
+        "best_for": [
+          "Batch processing",
+          "Simple queries",
+          "Data extraction",
+          "Basic automation",
+          "Cost-sensitive applications"
+        ],
+        "context_window": 200000,
+        "max_output_tokens": 8192,
+        "pricing": {
+          "input_per_1m": 0.8,
+          "output_per_1m": 4.0,
+          "cached_input_per_1m": 0.08,
+          "batch_input_per_1m": 0.4,
+          "batch_output_per_1m": 2.0
+        },
+        "speed": "fastest",
+        "quality": "good",
+        "supports_vision": false,
+        "supports_tools": true
+      }
+    ],
+    "use_cases": {
+      "customer_support": {
+        "recommended_model": "Claude Haiku 4.5",
+        "monthly_cost_estimate": {
+          "low_volume": 50.0,
+          "medium_volume": 250.0,
+          "high_volume": 1000.0
+        },
+        "implementation_hours": "40-80",
+        "note": "Fast responses with good quality, perfect for chatbots"
+      },
+      "code_generation": {
+        "recommended_model": "Claude Sonnet 4.5",
+        "monthly_cost_estimate": {
+          "low_volume": 150.0,
+          "medium_volume": 500.0,
+          "high_volume": 2000.0
+        },
+        "implementation_hours": "20-40",
+        "note": "Best-in-class coding performance"
+      },
+      "strategic_analysis": {
+        "recommended_model": "Claude Opus 4.5",
+        "monthly_cost_estimate": {
+          "low_volume": 250.0,
+          "medium_volume": 1000.0,
+          "high_volume": 5000.0
+        },
+        "implementation_hours": "60-120",
+        "note": "Maximum reasoning capability for complex decisions"
+      }
+    },
+    "compared_to": {
+      "openai": "Claude excels at long-form content, nuanced reasoning, and following complex instructions. More ethical and safer outputs.",
+      "google": "Better instruction following and less verbose. Claude's caching is more cost-effective for repeated prompts.",
+      "mistral": "Higher quality outputs but more expensive. Claude has better safety features and enterprise support."
+    },
+    "verified_at": "2025-12-17T00:00:00Z",
+    "notes": "Claude offers prompt caching (5-min TTL) with 90% cost reduction on cache hits, and batch API with 50% discount. Long-context pricing (>200K tokens) applies 2x multiplier for Sonnet models."
+  },
+  {
+    "slug": "openai",
+    "name": "OpenAI",
+    "provider": "OpenAI",
+    "category": "ai_development",
+    "subcategory": "llm_api",
+    "website": "https://openai.com",
+    "pricing_url": "https://openai.com/api/pricing/",
+    "docs_url": "https://platform.openai.com/docs",
+    "models": [
+      {
+        "name": "GPT-4o",
+        "model_id": "gpt-4o",
+        "description": "Flagship multimodal model with excellent vision and general capabilities",
+        "best_for": [
+          "Multimodal tasks",
+          "Vision analysis",
+          "General-purpose AI",
+          "Production applications",
+          "Complex reasoning"
+        ],
+        "context_window": 128000,
+        "max_output_tokens": 16384,
+        "pricing": {
+          "input_per_1m": 5.0,
+          "output_per_1m": 15.0,
+          "cached_input_per_1m": 2.5,
+          "batch_input_per_1m": 2.5,
+          "batch_output_per_1m": 7.5
+        },
+        "speed": "fast",
+        "quality": "very_high",
+        "supports_vision": true,
+        "supports_tools": true
+      },
+      {
+        "name": "GPT-4o mini",
+        "model_id": "gpt-4o-mini",
+        "description": "Cost-efficient model for high-volume applications",
+        "best_for": [
+          "High-volume tasks",
+          "Cost-sensitive applications",
+          "Chatbots",
+          "Content generation",
+          "Data processing"
+        ],
+        "context_window": 128000,
+        "max_output_tokens": 16384,
+        "pricing": {
+          "input_per_1m": 0.15,
+          "output_per_1m": 0.6,
+          "cached_input_per_1m": 0.075,
+          "batch_input_per_1m": 0.075,
+          "batch_output_per_1m": 0.3
+        },
+        "speed": "fastest",
+        "quality": "high",
+        "supports_vision": true,
+        "supports_tools": true
+      },
+      {
+        "name": "o1",
+        "model_id": "o1",
+        "description": "Advanced reasoning model with extended thinking capabilities",
+        "best_for": [
+          "Complex problem solving",
+          "Mathematical reasoning",
+          "Scientific analysis",
+          "Strategic planning",
+          "Multi-step reasoning"
+        ],
+        "context_window": 200000,
+        "max_output_tokens": 100000,
+        "pricing": {
+          "input_per_1m": 15.0,
+          "output_per_1m": 60.0
+        },
+        "speed": "slower",
+        "quality": "highest",
+        "supports_vision": false,
+        "supports_tools": false
+      },
+      {
+        "name": "o1-mini",
+        "model_id": "o1-mini",
+        "description": "Efficient reasoning model for coding and STEM tasks",
+        "best_for": [
+          "Code debugging",
+          "STEM problems",
+          "Data analysis",
+          "Algorithm design",
+          "Technical reasoning"
+        ],
+        "context_window": 128000,
+        "max_output_tokens": 65536,
+        "pricing": {
+          "input_per_1m": 3.0,
+          "output_per_1m": 12.0
+        },
+        "speed": "medium",
+        "quality": "very_high",
+        "supports_vision": false,
+        "supports_tools": false
+      }
+    ],
+    "use_cases": {
+      "customer_support": {
+        "recommended_model": "GPT-4o mini",
+        "monthly_cost_estimate": {
+          "low_volume": 20.0,
+          "medium_volume": 100.0,
+          "high_volume": 400.0
+        },
+        "implementation_hours": "20-40",
+        "note": "Most cost-effective for high-volume chatbots"
+      },
+      "code_generation": {
+        "recommended_model": "GPT-4o",
+        "monthly_cost_estimate": {
+          "low_volume": 150.0,
+          "medium_volume": 500.0,
+          "high_volume": 2000.0
+        },
+        "implementation_hours": "20-40",
+        "note": "Strong coding capabilities with vision support"
+      },
+      "complex_reasoning": {
+        "recommended_model": "o1",
+        "monthly_cost_estimate": {
+          "low_volume": 500.0,
+          "medium_volume": 2000.0,
+          "high_volume": 8000.0
+        },
+        "implementation_hours": "40-80",
+        "note": "Best for problems requiring deep reasoning"
+      }
+    },
+    "compared_to": {
+      "anthropic": "OpenAI models are faster for simple tasks and have stronger vision capabilities. Claude is better for complex instructions.",
+      "google": "GPT-4o has better tool use and function calling. Gemini is more cost-effective for long-context applications.",
+      "cohere": "OpenAI has better general capabilities but Cohere excels at RAG and enterprise search applications."
+    },
+    "verified_at": "2025-12-17T00:00:00Z",
+    "notes": "o-series models use reasoning tokens for internal thinking (billed as output but not visible). Prompt caching offers 50% discount on GPT-4o/o-series. Batch API provides 50% discount for async processing."
+  },
+  {
+    "slug": "google",
+    "name": "Google",
+    "provider": "Google DeepMind",
+    "category": "ai_development",
+    "subcategory": "llm_api",
+    "website": "https://deepmind.google",
+    "pricing_url": "https://ai.google.dev/gemini-api/docs/pricing",
+    "docs_url": "https://ai.google.dev/docs",
+    "models": [
+      {
+        "name": "Gemini 2.5 Pro",
+        "model_id": "gemini-2.5-pro",
+        "description": "Most capable model with 1M token context and advanced reasoning",
+        "best_for": [
+          "Long-context analysis",
+          "Document processing",
+          "Complex reasoning",
+          "Multimodal tasks",
+          "Enterprise applications"
+        ],
+        "context_window": 1000000,
+        "max_output_tokens": 64000,
+        "pricing": {
+          "input_per_1m": 1.25,
+          "output_per_1m": 10.0,
+          "batch_input_per_1m": 0.625,
+          "batch_output_per_1m": 5.0
+        },
+        "speed": "medium",
+        "quality": "highest",
+        "supports_vision": true,
+        "supports_tools": true
+      },
+      {
+        "name": "Gemini 2.5 Flash",
+        "model_id": "gemini-2.5-flash",
+        "description": "Balanced model with thinking capabilities and strong performance",
+        "best_for": [
+          "General-purpose tasks",
+          "Code generation",
+          "Reasoning tasks",
+          "Multimodal analysis",
+          "Cost-effective production"
+        ],
+        "context_window": 1000000,
+        "max_output_tokens": 64000,
+        "pricing": {
+          "input_per_1m": 0.3,
+          "output_per_1m": 2.5,
+          "batch_input_per_1m": 0.15,
+          "batch_output_per_1m": 1.25
+        },
+        "speed": "fast",
+        "quality": "very_high",
+        "supports_vision": true,
+        "supports_tools": true
+      },
+      {
+        "name": "Gemini 2.0 Flash",
+        "model_id": "gemini-2.0-flash",
+        "description": "Optimized for cost efficiency and low latency",
+        "best_for": [
+          "High-volume applications",
+          "Real-time responses",
+          "Cost-sensitive tasks",
+          "Chatbots",
+          "Quick processing"
+        ],
+        "context_window": 1000000,
+        "max_output_tokens": 64000,
+        "pricing": {
+          "input_per_1m": 0.1,
+          "output_per_1m": 0.4,
+          "batch_input_per_1m": 0.05,
+          "batch_output_per_1m": 0.2
+        },
+        "speed": "fastest",
+        "quality": "high",
+        "supports_vision": true,
+        "supports_tools": true
+      }
+    ],
+    "use_cases": {
+      "document_analysis": {
+        "recommended_model": "Gemini 2.5 Pro",
+        "monthly_cost_estimate": {
+          "low_volume": 100.0,
+          "medium_volume": 500.0,
+          "high_volume": 2000.0
+        },
+        "implementation_hours": "40-80",
+        "note": "Excellent for processing large documents with 1M context window"
+      },
+      "customer_support": {
+        "recommended_model": "Gemini 2.0 Flash",
+        "monthly_cost_estimate": {
+          "low_volume": 15.0,
+          "medium_volume": 75.0,
+          "high_volume": 300.0
+        },
+        "implementation_hours": "20-40",
+        "note": "Most cost-effective option for high-volume chatbots"
+      },
+      "code_generation": {
+        "recommended_model": "Gemini 2.5 Flash",
+        "monthly_cost_estimate": {
+          "low_volume": 50.0,
+          "medium_volume": 200.0,
+          "high_volume": 800.0
+        },
+        "implementation_hours": "20-40",
+        "note": "Great balance of cost and coding performance"
+      }
+    },
+    "compared_to": {
+      "openai": "Gemini offers much larger context windows (1M vs 128K) at lower cost. GPT-4o has better tool use and ecosystem.",
+      "anthropic": "Gemini is more cost-effective for long documents. Claude has better instruction following and reasoning.",
+      "mistral": "Gemini has larger context windows and better multimodal capabilities. Similar pricing for smaller context tasks."
+    },
+    "verified_at": "2025-12-17T00:00:00Z",
+    "notes": "Gemini 2.5 Pro removed from free tier. Free tier for Flash models significantly reduced. Batch API offers 50% discount. Long context (>200K tokens) has 2x pricing for Pro model."
+  },
+  {
+    "slug": "mistral",
+    "name": "Mistral AI",
+    "provider": "Mistral AI",
+    "category": "ai_development",
+    "subcategory": "llm_api",
+    "website": "https://mistral.ai",
+    "pricing_url": "https://mistral.ai/pricing",
+    "docs_url": "https://docs.mistral.ai",
+    "models": [
+      {
+        "name": "Mistral Large 2",
+        "model_id": "mistral-large-2407",
+        "description": "Flagship model for complex reasoning with multilingual support",
+        "best_for": [
+          "Complex reasoning",
+          "Multilingual tasks",
+          "Function calling",
+          "Code generation",
+          "Long-context applications"
+        ],
+        "context_window": 128000,
+        "max_output_tokens": 4096,
+        "pricing": {
+          "input_per_1m": 2.0,
+          "output_per_1m": 6.0
+        },
+        "speed": "medium",
+        "quality": "very_high",
+        "supports_vision": false,
+        "supports_tools": true
+      },
+      {
+        "name": "Mistral Medium 3",
+        "model_id": "mistral-medium-3",
+        "description": "Balanced performance at competitive pricing",
+        "best_for": [
+          "General-purpose tasks",
+          "Q&A systems",
+          "SQL generation",
+          "Data analysis",
+          "Production applications"
+        ],
+        "context_window": 128000,
+        "max_output_tokens": 4096,
+        "pricing": {
+          "input_per_1m": 0.4,
+          "output_per_1m": 2.0
+        },
+        "speed": "fast",
+        "quality": "high",
+        "supports_vision": false,
+        "supports_tools": true
+      },
+      {
+        "name": "Mistral Small",
+        "model_id": "mistral-small-latest",
+        "description": "Cost-effective model for high-volume applications",
+        "best_for": [
+          "High-volume tasks",
+          "Simple queries",
+          "Classification",
+          "Data extraction",
+          "Cost-sensitive applications"
+        ],
+        "context_window": 128000,
+        "max_output_tokens": 4096,
+        "pricing": {
+          "input_per_1m": 0.1,
+          "output_per_1m": 0.3
+        },
+        "speed": "fastest",
+        "quality": "good",
+        "supports_vision": false,
+        "supports_tools": true
+      }
+    ],
+    "use_cases": {
+      "sql_generation": {
+        "recommended_model": "Mistral Medium 3",
+        "monthly_cost_estimate": {
+          "low_volume": 30.0,
+          "medium_volume": 150.0,
+          "high_volume": 600.0
+        },
+        "implementation_hours": "20-40",
+        "note": "90% of GPT-4 reasoning at 20% of the cost"
+      },
+      "multilingual_support": {
+        "recommended_model": "Mistral Large 2",
+        "monthly_cost_estimate": {
+          "low_volume": 100.0,
+          "medium_volume": 400.0,
+          "high_volume": 1600.0
+        },
+        "implementation_hours": "40-60",
+        "note": "Best-in-class multilingual capabilities"
+      },
+      "high_volume_processing": {
+        "recommended_model": "Mistral Small",
+        "monthly_cost_estimate": {
+          "low_volume": 10.0,
+          "medium_volume": 50.0,
+          "high_volume": 200.0
+        },
+        "implementation_hours": "20-30",
+        "note": "Most cost-effective for simple tasks at scale"
+      }
+    },
+    "compared_to": {
+      "openai": "Mistral is significantly cheaper (up to 80% less) with comparable performance for many tasks. Better multilingual support.",
+      "anthropic": "More cost-effective but Claude has superior reasoning and instruction following. Mistral better for European data sovereignty.",
+      "google": "Similar pricing for comparable context. Mistral has better enterprise focus and GDPR compliance."
+    },
+    "verified_at": "2025-12-17T00:00:00Z",
+    "notes": "Mistral offers excellent value for European companies needing GDPR compliance. Open-source options available. Generous free tier for experimentation. Medium 3 is particularly cost-effective for high-volume Q&A."
+  },
+  {
+    "slug": "cohere",
+    "name": "Cohere",
+    "provider": "Cohere",
+    "category": "ai_development",
+    "subcategory": "llm_api",
+    "website": "https://cohere.com",
+    "pricing_url": "https://cohere.com/pricing",
+    "docs_url": "https://docs.cohere.com",
+    "models": [
+      {
+        "name": "Command R+ 08-2024",
+        "model_id": "command-r-plus-08-2024",
+        "description": "Most capable RAG-optimized model for enterprise applications",
+        "best_for": [
+          "RAG applications",
+          "Enterprise search",
+          "Document retrieval",
+          "Multi-step reasoning",
+          "Tool use"
+        ],
+        "context_window": 128000,
+        "max_output_tokens": 4096,
+        "pricing": {
+          "input_per_1m": 2.5,
+          "output_per_1m": 10.0
+        },
+        "speed": "medium",
+        "quality": "very_high",
+        "supports_vision": false,
+        "supports_tools": true
+      },
+      {
+        "name": "Command R",
+        "model_id": "command-r",
+        "description": "Balanced model optimized for RAG with multilingual support",
+        "best_for": [
+          "RAG pipelines",
+          "Conversational AI",
+          "Multilingual tasks",
+          "Information retrieval",
+          "Production chatbots"
+        ],
+        "context_window": 128000,
+        "max_output_tokens": 4096,
+        "pricing": {
+          "input_per_1m": 0.3,
+          "output_per_1m": 1.2
+        },
+        "speed": "fast",
+        "quality": "high",
+        "supports_vision": false,
+        "supports_tools": true
+      },
+      {
+        "name": "Command R7B",
+        "model_id": "command-r7b",
+        "description": "Smallest and most cost-effective model for simple tasks",
+        "best_for": [
+          "Simple queries",
+          "High-volume processing",
+          "Cost-sensitive applications",
+          "Basic chatbots",
+          "Classification"
+        ],
+        "context_window": 128000,
+        "max_output_tokens": 4096,
+        "pricing": {
+          "input_per_1m": 0.0375,
+          "output_per_1m": 0.15
+        },
+        "speed": "fastest",
+        "quality": "good",
+        "supports_vision": false,
+        "supports_tools": true
+      }
+    ],
+    "use_cases": {
+      "enterprise_search": {
+        "recommended_model": "Command R+",
+        "monthly_cost_estimate": {
+          "low_volume": 150.0,
+          "medium_volume": 600.0,
+          "high_volume": 2500.0
+        },
+        "implementation_hours": "60-120",
+        "note": "Best-in-class for RAG and document retrieval"
+      },
+      "customer_support_rag": {
+        "recommended_model": "Command R",
+        "monthly_cost_estimate": {
+          "low_volume": 40.0,
+          "medium_volume": 200.0,
+          "high_volume": 800.0
+        },
+        "implementation_hours": "40-80",
+        "note": "Optimized for conversational RAG with great accuracy"
+      },
+      "high_volume_classification": {
+        "recommended_model": "Command R7B",
+        "monthly_cost_estimate": {
+          "low_volume": 5.0,
+          "medium_volume": 25.0,
+          "high_volume": 100.0
+        },
+        "implementation_hours": "20-40",
+        "note": "Most cost-effective for simple classification tasks"
+      }
+    },
+    "compared_to": {
+      "openai": "Cohere excels at RAG and retrieval tasks. OpenAI has better general-purpose capabilities and vision support.",
+      "anthropic": "Cohere specialized for enterprise search and RAG. Claude better for complex reasoning and instruction following.",
+      "google": "Cohere has superior RAG optimization. Gemini offers larger context windows and multimodal capabilities."
+    },
+    "verified_at": "2025-12-17T00:00:00Z",
+    "notes": "Cohere specializes in RAG-optimized models with excellent retrieval capabilities. Command A (newer model, 256K context) offers 150% higher throughput. Free trial API key available. Billed monthly or at $250 threshold."
+  }
+]

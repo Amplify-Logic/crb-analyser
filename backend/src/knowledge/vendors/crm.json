@@ -1,0 +1,1228 @@
+{
+  "category": "crm",
+  "description": "Customer Relationship Management platforms for managing sales pipelines, contacts, deals, and customer interactions",
+  "vendors": [
+    {
+      "slug": "hubspot-crm",
+      "name": "HubSpot CRM",
+      "category": "crm",
+      "subcategory": "all_in_one_platform",
+      "website": "https://www.hubspot.com",
+      "pricing_url": "https://www.hubspot.com/pricing/crm",
+      "description": "All-in-one customer platform combining Marketing Hub, Sales Hub, Service Hub, Content Hub, and Smart CRM. Free tier includes full CRM with up to 1,000,000 contacts. Known for ease of use, quick setup, and unified data across sales and marketing teams. Part of HubSpot's broader ecosystem for inbound marketing and sales.",
+      "tagline": "Free CRM with unlimited contacts and powerful paid hubs",
+      "pricing": {
+        "model": "per_seat",
+        "currency": "USD",
+        "billing_options": ["monthly", "annual"],
+        "annual_discount_percent": null,
+        "tiers": [
+          {
+            "name": "Free",
+            "price": 0,
+            "per": "month",
+            "billing": "monthly",
+            "features": [
+              "Up to 1,000,000 contacts",
+              "Unlimited deals and tasks",
+              "Basic website visitor tracking",
+              "Contact management",
+              "Deal pipeline",
+              "Email tracking",
+              "Meeting scheduler",
+              "Live chat",
+              "2 user seats",
+              "HubSpot branding included"
+            ],
+            "limits": {
+              "users": 2,
+              "contacts": 1000000
+            }
+          },
+          {
+            "name": "Starter Customer Platform",
+            "price": 15,
+            "per": "seat/month",
+            "billing": "monthly",
+            "features": [
+              "All Free features",
+              "Access to all five hubs (Marketing, Sales, Service, CMS, Operations, Commerce) at Starter level",
+              "Email automation",
+              "Forms and landing pages",
+              "Lead tracking",
+              "Paid ads management (Google, social)",
+              "Simple analytics",
+              "Remove HubSpot branding",
+              "1,000 marketing contacts"
+            ],
+            "limits": {
+              "marketing_contacts": 1000
+            }
+          },
+          {
+            "name": "Professional",
+            "price": 500,
+            "per": "month (3 seats included)",
+            "billing": "monthly",
+            "features": [
+              "All Starter features",
+              "Advanced automation",
+              "Advanced reporting",
+              "Enhanced workflows",
+              "A/B testing",
+              "Custom reporting dashboards",
+              "Omnichannel marketing automation",
+              "Additional seats: $50/month each",
+              "One-time onboarding fee: $3,000 (Marketing Hub), $1,500 (Sales/Service Hub)"
+            ],
+            "limits": {
+              "seats_included": 3
+            }
+          },
+          {
+            "name": "Enterprise",
+            "price": null,
+            "per": "custom",
+            "billing": "annual",
+            "features": [
+              "All Professional features",
+              "Extensive customization",
+              "Advanced analytics",
+              "Enterprise-level security",
+              "Custom objects",
+              "Predictive lead scoring",
+              "Custom event automation",
+              "Hierarchical teams",
+              "Advanced permissions",
+              "Dedicated account manager"
+            ],
+            "limits": null
+          }
+        ],
+        "starting_price": 0,
+        "custom_pricing": true,
+        "free_trial_days": null,
+        "free_tier": true,
+        "startup_discount": "30-90% off in first year via HubSpot for Startups (eligibility required)"
+      },
+      "best_for": [
+        "Startups wanting free CRM to start",
+        "Small to mid-market businesses",
+        "Companies needing unified sales and marketing",
+        "Teams prioritizing ease of use and quick onboarding",
+        "Product-led growth companies",
+        "Businesses wanting all-in-one platform"
+      ],
+      "industries": [
+        "SaaS",
+        "Professional Services",
+        "E-commerce",
+        "Technology",
+        "Marketing Agencies",
+        "Healthcare"
+      ],
+      "company_sizes": [
+        "startup",
+        "smb",
+        "mid_market",
+        "enterprise"
+      ],
+      "avoid_if": [
+        "Need deep sales-specific features on free tier",
+        "Require enterprise features on tight budget (expensive at scale)",
+        "Want simple CRM without marketing bloat",
+        "Need advanced forecasting for complex sales (better options exist)",
+        "Limited budget for paid tiers (Professional+ gets expensive fast)"
+      ],
+      "implementation": {
+        "avg_weeks": 2,
+        "complexity": "low",
+        "requires_developer": false,
+        "cost_range": {
+          "diy": {
+            "min": 0,
+            "max": 1000
+          },
+          "with_help": {
+            "min": 1000,
+            "max": 5000
+          },
+          "full_service": {
+            "min": 5000,
+            "max": 25000
+          }
+        }
+      },
+      "ratings": {
+        "g2": {
+          "score": 4.4,
+          "reviews": 34365,
+          "last_updated": "2025-12"
+        },
+        "capterra": {
+          "score": 4.5,
+          "reviews": 4000,
+          "last_updated": "2025-12"
+        },
+        "our_rating": 4.4,
+        "our_notes": "Best-in-class for ease of use (70%+ users mention this). Free tier is genuinely useful. 88% would recommend. Gets expensive at Professional+ tiers. Excellent for teams that value quick setup and unified sales/marketing data. Can feel complex for simple CRM needs."
+      },
+      "integrations": [
+        "Gmail",
+        "Outlook",
+        "Salesforce",
+        "Slack",
+        "Zoom",
+        "Shopify",
+        "WordPress",
+        "Stripe",
+        "QuickBooks",
+        "Zapier",
+        "1000+ via App Marketplace",
+        "API available"
+      ],
+      "api": {
+        "available": true,
+        "type": "REST",
+        "documentation": "https://developers.hubspot.com"
+      },
+      "competitors": [
+        "Salesforce",
+        "Pipedrive",
+        "Zoho CRM",
+        "Monday CRM",
+        "Freshsales"
+      ],
+      "verified_at": "2025-12-17T00:00:00Z",
+      "verified_by": "manual",
+      "source_url": "https://www.hubspot.com/pricing/crm",
+      "notes": "February 2025 pricing change: per core seat model with unlimited view-only seats (except Marketing Hub Pro/Enterprise which have base prices). Data Hub launched at INBOUND 2025. Seat-based pricing represents biggest license change in HubSpot history. Annual billing recommended for savings."
+    },
+    {
+      "slug": "salesforce-sales-cloud",
+      "name": "Salesforce Sales Cloud",
+      "category": "crm",
+      "subcategory": "enterprise_leader",
+      "website": "https://www.salesforce.com",
+      "pricing_url": "https://www.salesforce.com/sales/pricing/",
+      "description": "Enterprise-grade CRM and market leader with the most comprehensive feature set. Highly customizable platform with advanced automation, forecasting, and AI capabilities. Ideal for complex sales operations requiring deep customization, integrations, and robust reporting. Part of the broader Salesforce ecosystem with extensive third-party apps via AppExchange.",
+      "tagline": "World's #1 CRM platform for sales teams of all sizes",
+      "pricing": {
+        "model": "per_seat",
+        "currency": "USD",
+        "billing_options": ["monthly", "annual"],
+        "annual_discount_percent": null,
+        "tiers": [
+          {
+            "name": "Starter Suite",
+            "price": 25,
+            "per": "seat/month",
+            "billing": "annual",
+            "features": [
+              "Basic CRM features",
+              "Lead and contact management",
+              "Email integration",
+              "Reporting tools",
+              "Mobile app",
+              "Opportunity tracking",
+              "Account and contact management",
+              "Salesforce mobile app",
+              "Basic sales and marketing features"
+            ],
+            "limits": {
+              "users": "up to 10"
+            }
+          },
+          {
+            "name": "Pro Suite",
+            "price": 100,
+            "per": "seat/month",
+            "billing": "annual",
+            "features": [
+              "All Starter features",
+              "Advanced sales automation",
+              "Forecasting",
+              "Customizable dashboards",
+              "Lead scoring",
+              "Sales campaigns",
+              "Opportunity management",
+              "Additional flexibility for growing teams"
+            ],
+            "limits": {
+              "users": "unlimited"
+            }
+          },
+          {
+            "name": "Enterprise",
+            "price": 165,
+            "per": "seat/month",
+            "billing": "annual",
+            "features": [
+              "All Pro features",
+              "Advanced pipeline management",
+              "Custom reporting",
+              "Workflow automation",
+              "Advanced integrations",
+              "API access",
+              "Advanced analytics",
+              "Complex sales operations support",
+              "Agentforce add-ons available ($125/user/month)"
+            ],
+            "limits": {
+              "users": "unlimited"
+            }
+          },
+          {
+            "name": "Unlimited",
+            "price": 330,
+            "per": "seat/month",
+            "billing": "annual",
+            "features": [
+              "All Enterprise features",
+              "24/7 support",
+              "Unlimited online training",
+              "Configuration services",
+              "Premier Success Plan",
+              "Advanced AI features",
+              "Agentforce add-ons included"
+            ],
+            "limits": {
+              "users": "unlimited"
+            }
+          },
+          {
+            "name": "Einstein 1 Sales",
+            "price": 500,
+            "per": "seat/month",
+            "billing": "annual",
+            "features": [
+              "All Unlimited features",
+              "Einstein AI across all clouds",
+              "Unified Data Cloud",
+              "Advanced AI automation",
+              "Predictive intelligence",
+              "Conversation insights",
+              "Deal insights"
+            ],
+            "limits": {
+              "users": "unlimited"
+            }
+          }
+        ],
+        "starting_price": 25,
+        "custom_pricing": true,
+        "free_trial_days": 30,
+        "free_tier": false,
+        "startup_discount": null
+      },
+      "best_for": [
+        "Enterprise companies with complex sales processes",
+        "Large sales teams (50+ reps)",
+        "Organizations requiring deep customization",
+        "Companies needing robust reporting and analytics",
+        "Businesses with compliance requirements",
+        "Teams wanting extensive third-party integrations"
+      ],
+      "industries": [
+        "Enterprise SaaS",
+        "Financial Services",
+        "Healthcare",
+        "Manufacturing",
+        "Retail",
+        "Telecommunications",
+        "Government"
+      ],
+      "company_sizes": [
+        "mid_market",
+        "enterprise"
+      ],
+      "avoid_if": [
+        "Small team with simple CRM needs (overkill and expensive)",
+        "Limited budget (starts at $25 but real value is Enterprise+ at $165+)",
+        "Want out-of-box simplicity (steep learning curve)",
+        "No technical resources for customization",
+        "Startups (better value elsewhere unless complex needs)",
+        "Need quick, easy onboarding (requires training)"
+      ],
+      "implementation": {
+        "avg_weeks": 8,
+        "complexity": "high",
+        "requires_developer": true,
+        "cost_range": {
+          "diy": {
+            "min": 5000,
+            "max": 15000
+          },
+          "with_help": {
+            "min": 15000,
+            "max": 50000
+          },
+          "full_service": {
+            "min": 25000,
+            "max": 100000
+          }
+        }
+      },
+      "ratings": {
+        "g2": {
+          "score": 4.3,
+          "reviews": 24787,
+          "last_updated": "2025-12"
+        },
+        "capterra": {
+          "score": 4.4,
+          "reviews": 18000,
+          "last_updated": "2025-12"
+        },
+        "our_rating": 4.2,
+        "our_notes": "Industry standard for enterprise CRM. Most comprehensive feature set. Highly customizable but complex and expensive. Requires technical training and dedicated admin. Better for large organizations with budget and resources. Pricing increased 6% in August 2025."
+      },
+      "integrations": [
+        "Gmail",
+        "Outlook",
+        "Slack",
+        "Microsoft Teams",
+        "DocuSign",
+        "Mailchimp",
+        "LinkedIn",
+        "Zoom",
+        "QuickBooks",
+        "5000+ apps via AppExchange",
+        "API available"
+      ],
+      "api": {
+        "available": true,
+        "type": "REST",
+        "documentation": "https://developer.salesforce.com"
+      },
+      "competitors": [
+        "HubSpot",
+        "Microsoft Dynamics 365",
+        "Oracle CRM",
+        "SAP CRM",
+        "Zoho CRM"
+      ],
+      "verified_at": "2025-12-17T00:00:00Z",
+      "verified_by": "manual",
+      "source_url": "https://www.salesforce.com/sales/pricing/",
+      "notes": "August 1, 2025: List prices increased 6% on average for Enterprise and Unlimited editions. No changes to Starter or Pro editions. Agentforce add-ons replace Einstein add-ons at $125/user/month. Annual contracts are standard. Average customer spends $5k-$35k/year on subscriptions, plus $25k+ implementation costs. 30-day free trial available for all editions."
+    },
+    {
+      "slug": "pipedrive",
+      "name": "Pipedrive",
+      "category": "crm",
+      "subcategory": "sales_focused",
+      "website": "https://www.pipedrive.com",
+      "pricing_url": "https://www.pipedrive.com/en/pricing",
+      "description": "Sales-focused CRM built by salespeople for salespeople. Visual pipeline management with drag-and-drop interface. Designed specifically for managing sales processes and driving deals forward. Intuitive and easy to use with minimal learning curve. Great for teams that want a CRM focused purely on sales without marketing bloat.",
+      "tagline": "Sales CRM and pipeline management built for action",
+      "pricing": {
+        "model": "per_seat",
+        "currency": "USD",
+        "billing_options": ["monthly", "annual"],
+        "annual_discount_percent": 42,
+        "tiers": [
+          {
+            "name": "Lite",
+            "price": 14,
+            "per": "seat/month",
+            "billing": "annual",
+            "features": [
+              "1 pipeline",
+              "Contact and deal management",
+              "Lead management",
+              "Mobile app",
+              "Activity tracking",
+              "Calendar sync",
+              "Basic reporting",
+              "Email support",
+              "No automation",
+              "No email sync",
+              "No team features"
+            ],
+            "limits": {
+              "pipelines": 1
+            }
+          },
+          {
+            "name": "Growth",
+            "price": 39,
+            "per": "seat/month",
+            "billing": "annual",
+            "features": [
+              "All Lite features",
+              "3 pipelines",
+              "Full email integration and sync (Gmail, Outlook)",
+              "Email templates",
+              "Automation builder",
+              "Products catalog",
+              "Email open and click tracking",
+              "Automate sales tasks",
+              "Revenue forecasting"
+            ],
+            "limits": {
+              "pipelines": 3,
+              "seats": "3-20 recommended"
+            }
+          },
+          {
+            "name": "Premium",
+            "price": 69,
+            "per": "seat/month",
+            "billing": "annual",
+            "features": [
+              "All Growth features",
+              "10 pipelines",
+              "AI features",
+              "Smart Docs (Google Drive, OneDrive, SharePoint sync)",
+              "Projects feature (post-sales management)",
+              "Advanced reporting",
+              "Custom fields and workflows",
+              "Team collaboration tools"
+            ],
+            "limits": {
+              "pipelines": 10
+            }
+          },
+          {
+            "name": "Ultimate",
+            "price": 79,
+            "per": "seat/month",
+            "billing": "annual",
+            "features": [
+              "All Premium features",
+              "25 pipelines",
+              "More custom fields",
+              "More workflow automations",
+              "24/7 phone support",
+              "Advanced security",
+              "Multiple territories",
+              "High-volume deals support",
+              "Compliance features",
+              "Minimum 10 users required"
+            ],
+            "limits": {
+              "pipelines": 25,
+              "min_users": 10
+            }
+          }
+        ],
+        "starting_price": 14,
+        "custom_pricing": false,
+        "free_trial_days": 14,
+        "free_tier": false,
+        "startup_discount": null
+      },
+      "best_for": [
+        "Small to medium sales teams (3-50 reps)",
+        "Teams focused purely on sales pipeline management",
+        "Companies wanting visual, intuitive interface",
+        "Businesses needing quick setup and adoption",
+        "Sales teams conducting high-volume outreach",
+        "Organizations wanting affordable, straightforward CRM"
+      ],
+      "industries": [
+        "SaaS",
+        "Agencies",
+        "Real Estate",
+        "Consulting",
+        "B2B Services",
+        "SMB Software"
+      ],
+      "company_sizes": [
+        "startup",
+        "smb",
+        "mid_market"
+      ],
+      "avoid_if": [
+        "Need extensive marketing automation (use HubSpot instead)",
+        "Require deep customer service features",
+        "Want free tier to test (only 14-day trial)",
+        "Need advanced reporting on lower tiers (limited on Lite/Growth)",
+        "Require extensive customization (better options for complex needs)",
+        "Small solo operation (Lite plan very limited, Growth is minimum for real use)"
+      ],
+      "implementation": {
+        "avg_weeks": 1,
+        "complexity": "low",
+        "requires_developer": false,
+        "cost_range": {
+          "diy": {
+            "min": 0,
+            "max": 500
+          },
+          "with_help": {
+            "min": 500,
+            "max": 2000
+          },
+          "full_service": {
+            "min": 2000,
+            "max": 5000
+          }
+        }
+      },
+      "ratings": {
+        "g2": {
+          "score": 4.5,
+          "reviews": 1700,
+          "last_updated": "2025-12"
+        },
+        "capterra": {
+          "score": 4.5,
+          "reviews": 3039,
+          "last_updated": "2025-12"
+        },
+        "our_rating": 4.5,
+        "our_notes": "Excellent for sales-focused teams. Users love the clean interface and pipeline view (85% rate ease of use as excellent). 'Almost no learning curve' per reviews. Value for money rated 4.2-4.4. Reporting lacks customization. Not ideal for companies needing marketing or service features. Best CRM for pure sales pipeline management."
+      },
+      "integrations": [
+        "Gmail",
+        "Outlook",
+        "Slack",
+        "Zoom",
+        "Trello",
+        "Asana",
+        "Zapier",
+        "Mailchimp",
+        "QuickBooks",
+        "400+ apps via Marketplace",
+        "API available"
+      ],
+      "api": {
+        "available": true,
+        "type": "REST",
+        "documentation": "https://developers.pipedrive.com"
+      },
+      "competitors": [
+        "HubSpot CRM",
+        "Close",
+        "Copper",
+        "Freshsales",
+        "Capsule CRM"
+      ],
+      "verified_at": "2025-12-17T00:00:00Z",
+      "verified_by": "manual",
+      "source_url": "https://www.pipedrive.com/en/pricing",
+      "notes": "New pricing structure introduced in 2025 across all plans. Monthly billing available at higher cost ($24, $49, $109, $149 respectively). Add-ons: Campaigns (email marketing) from $16/month for 1,000 subscribers. Projects add-on $6-$41/user/month. Annual billing saves up to 42%. 14-day free trial of Premium plan features available."
+    },
+    {
+      "slug": "close",
+      "name": "Close",
+      "category": "crm",
+      "subcategory": "inside_sales_specialist",
+      "website": "https://www.close.com",
+      "pricing_url": "https://www.close.com/pricing",
+      "description": "Sales engagement CRM built specifically for inside sales teams and high-volume outreach. Built-in calling, SMS, and email capabilities included. No need for third-party integrations to contact leads. Designed for SMBs and startups doing outbound sales. Emphasizes sales productivity with streamlined workflows and automation. Great for teams that live on the phone and email.",
+      "tagline": "All-in-one CRM built for inside sales teams",
+      "pricing": {
+        "model": "per_seat",
+        "currency": "USD",
+        "billing_options": ["monthly", "annual"],
+        "annual_discount_percent": 52,
+        "tiers": [
+          {
+            "name": "Solo",
+            "price": 9,
+            "per": "seat/month",
+            "billing": "annual",
+            "features": [
+              "1 user only",
+              "Unlimited contacts",
+              "One pipeline",
+              "Built-in calling and emailing",
+              "Lead and opportunity management",
+              "Basic reporting",
+              "Mobile apps",
+              "Call recording"
+            ],
+            "limits": {
+              "users": 1,
+              "pipelines": 1
+            }
+          },
+          {
+            "name": "Essentials",
+            "price": 39,
+            "per": "seat/month",
+            "billing": "annual",
+            "features": [
+              "All Solo features",
+              "Unlimited users",
+              "Built-in calling, email, SMS",
+              "Email templates",
+              "Basic automation",
+              "Shared team inbox",
+              "Power Dialer",
+              "Pipeline management",
+              "Email/phone/chat support"
+            ],
+            "limits": {
+              "users": "unlimited"
+            }
+          },
+          {
+            "name": "Growth",
+            "price": 99,
+            "per": "seat/month",
+            "billing": "annual",
+            "features": [
+              "All Essentials features",
+              "Multiple pipelines (up to 3)",
+              "Workflow automation",
+              "Email sequences and follow-up automation",
+              "Enhanced reporting",
+              "Role-based permissions",
+              "Customizable fields and workflows",
+              "Advanced filters"
+            ],
+            "limits": {
+              "pipelines": 3
+            }
+          },
+          {
+            "name": "Scale",
+            "price": 139,
+            "per": "seat/month",
+            "billing": "annual",
+            "features": [
+              "All Growth features",
+              "Up to 25 pipelines",
+              "Advanced reporting and analytics",
+              "Higher usage allowances",
+              "Priority support",
+              "Dedicated success manager",
+              "Advanced security (SSO, 2FA)",
+              "Advanced permissions",
+              "Custom dashboards"
+            ],
+            "limits": {
+              "pipelines": 25
+            }
+          }
+        ],
+        "starting_price": 9,
+        "custom_pricing": false,
+        "free_trial_days": 14,
+        "free_tier": false,
+        "startup_discount": "20% one-time discount for new customers via G2 (code: G2Close20, expires Dec 31, 2025)"
+      },
+      "best_for": [
+        "Startups and small businesses",
+        "Inside sales teams (5-50 reps)",
+        "Teams doing high-volume outbound calling",
+        "Sales teams conducting email/phone outreach",
+        "Companies wanting built-in communication tools",
+        "Scaling sales teams with fast growth"
+      ],
+      "industries": [
+        "SaaS",
+        "B2B Services",
+        "Agencies",
+        "Startups",
+        "Technology",
+        "Consulting"
+      ],
+      "company_sizes": [
+        "startup",
+        "smb",
+        "mid_market"
+      ],
+      "avoid_if": [
+        "Need extensive customer retention/support features (sales-focused only)",
+        "Require marketing automation",
+        "Want free tier to test (only 14-day trial)",
+        "Need deep CRM customization (limited compared to Salesforce)",
+        "Primarily field sales team (built for inside sales)",
+        "International teams (pricing can be expensive with currency exchange)"
+      ],
+      "implementation": {
+        "avg_weeks": 1,
+        "complexity": "low",
+        "requires_developer": false,
+        "cost_range": {
+          "diy": {
+            "min": 0,
+            "max": 500
+          },
+          "with_help": {
+            "min": 500,
+            "max": 2000
+          },
+          "full_service": {
+            "min": 2000,
+            "max": 5000
+          }
+        }
+      },
+      "ratings": {
+        "g2": {
+          "score": 4.6,
+          "reviews": 1500,
+          "last_updated": "2025-12",
+          "ease_of_use": 9.2,
+          "quality_of_support": 9.3,
+          "lead_management": 9.2,
+          "performance": 9.1
+        },
+        "capterra": {
+          "score": 4.7,
+          "reviews": 163,
+          "last_updated": "2025-12"
+        },
+        "our_rating": 4.6,
+        "our_notes": "Top-rated for inside sales teams. Incredibly intuitive (9.2/10 ease of use). Built-in communication tools eliminate need for integrations. Users report no training needed - teams productive from day one. Excellent for high-volume outreach. Limited post-sales/retention features. Quality of support rated 9.3/10."
+      },
+      "integrations": [
+        "Gmail",
+        "Outlook",
+        "Slack",
+        "Zapier",
+        "Zoom",
+        "Calendly",
+        "Stripe",
+        "QuickBooks",
+        "Intercom",
+        "API available"
+      ],
+      "api": {
+        "available": true,
+        "type": "REST",
+        "documentation": "https://developer.close.com"
+      },
+      "competitors": [
+        "Pipedrive",
+        "Copper",
+        "Outreach",
+        "SalesLoft",
+        "HubSpot Sales Hub"
+      ],
+      "verified_at": "2025-12-17T00:00:00Z",
+      "verified_by": "manual",
+      "source_url": "https://www.close.com/pricing",
+      "notes": "Monthly billing available at higher rates ($19, $49, $109, $149). Annual saves up to 52%. Built-in calling, email, and SMS included in all plans (no separate integrations needed). Call recording included on all plans. Call Assistant add-on: $50/month + $0.02/minute for sentiment analysis and transcription. 14-day free trial available. No seat minimums except Solo (1 user only). Lower than average SMB CRM cost ($74/user/month)."
+    },
+    {
+      "slug": "zoho-crm",
+      "name": "Zoho CRM",
+      "category": "crm",
+      "subcategory": "budget_friendly",
+      "website": "https://www.zoho.com/crm",
+      "pricing_url": "https://www.zoho.com/crm/zohocrm-pricing.html",
+      "description": "Budget-friendly CRM with comprehensive feature set at affordable pricing. Part of the broader Zoho ecosystem with 45+ integrated business apps. Offers multichannel communication, sales and marketing automation, and AI-powered tools (Zia). Free tier supports up to 3 users. Good value for SMBs wanting full-featured CRM without breaking the bank. Strong in India and emerging markets.",
+      "tagline": "Affordable, full-featured CRM for businesses of all sizes",
+      "pricing": {
+        "model": "per_seat",
+        "currency": "USD",
+        "billing_options": ["monthly", "annual"],
+        "annual_discount_percent": 30,
+        "tiers": [
+          {
+            "name": "Free",
+            "price": 0,
+            "per": "seat/month",
+            "billing": "monthly",
+            "features": [
+              "Up to 3 users",
+              "Lead, contact, and opportunity management",
+              "Mobile app access",
+              "Basic reporting",
+              "Social media integration",
+              "Deal tracking",
+              "Tasks and events",
+              "Documents (1GB total storage)",
+              "No workflow automation",
+              "No mass emails"
+            ],
+            "limits": {
+              "users": 3,
+              "storage_gb": 1
+            }
+          },
+          {
+            "name": "Standard",
+            "price": 14,
+            "per": "seat/month",
+            "billing": "annual",
+            "features": [
+              "All Free features",
+              "Unlimited users",
+              "Sales forecasting",
+              "Scoring rules",
+              "Custom reporting",
+              "Workflow automation (5 rules)",
+              "Email integration",
+              "Mass email (500/day)",
+              "Mobile app advanced features",
+              "5GB storage/user"
+            ],
+            "limits": {
+              "users": "unlimited",
+              "workflow_rules": 5,
+              "mass_email_daily": 500
+            }
+          },
+          {
+            "name": "Professional",
+            "price": 23,
+            "per": "seat/month",
+            "billing": "annual",
+            "features": [
+              "All Standard features",
+              "Blueprint process management",
+              "Inventory management",
+              "Web-to-case forms",
+              "Territory management",
+              "Mass emails (1,000/day)",
+              "Workflow automation (10 rules)",
+              "Validation rules",
+              "Custom modules (10)",
+              "Review process"
+            ],
+            "limits": {
+              "workflow_rules": 10,
+              "mass_email_daily": 1000,
+              "custom_modules": 10
+            }
+          },
+          {
+            "name": "Enterprise",
+            "price": 40,
+            "per": "seat/month",
+            "billing": "annual",
+            "features": [
+              "All Professional features",
+              "Zia AI assistant",
+              "Advanced customization",
+              "Multi-user portals",
+              "Workflow automation (15 rules)",
+              "Custom modules (100)",
+              "Advanced analytics",
+              "CommandCenter (admin console)",
+              "Feature-level permissions"
+            ],
+            "limits": {
+              "workflow_rules": 15,
+              "custom_modules": 100
+            }
+          },
+          {
+            "name": "Ultimate",
+            "price": 52,
+            "per": "seat/month",
+            "billing": "annual",
+            "features": [
+              "All Enterprise features",
+              "Enhanced storage (200GB/user)",
+              "Advanced customization",
+              "Automation suggestions",
+              "Dedicated customer success manager",
+              "Sandbox environment",
+              "Enhanced security protocols",
+              "Advanced analytics",
+              "Workflow automation (20 rules)"
+            ],
+            "limits": {
+              "workflow_rules": 20,
+              "storage_per_user_gb": 200
+            }
+          }
+        ],
+        "starting_price": 0,
+        "custom_pricing": false,
+        "free_trial_days": 15,
+        "free_tier": true,
+        "startup_discount": null
+      },
+      "best_for": [
+        "Budget-conscious small businesses",
+        "Startups testing CRM (free tier for 3 users)",
+        "Teams wanting unified Zoho ecosystem",
+        "Companies in emerging markets",
+        "SMBs needing comprehensive features at low cost",
+        "Teams wanting AI features without enterprise pricing"
+      ],
+      "industries": [
+        "SMB SaaS",
+        "Professional Services",
+        "E-commerce",
+        "Education",
+        "Real Estate",
+        "Healthcare"
+      ],
+      "company_sizes": [
+        "startup",
+        "smb",
+        "mid_market"
+      ],
+      "avoid_if": [
+        "Need enterprise-grade support (support quality inconsistent)",
+        "Want best-in-class UI/UX (interface can be clunky)",
+        "Require seamless third-party integrations (integration challenges noted)",
+        "Need centralized contact history view (data spread across modules)",
+        "Want intuitive setup without learning curve",
+        "Primarily US-based team preferring US-centric tools"
+      ],
+      "implementation": {
+        "avg_weeks": 2,
+        "complexity": "medium",
+        "requires_developer": false,
+        "cost_range": {
+          "diy": {
+            "min": 0,
+            "max": 1000
+          },
+          "with_help": {
+            "min": 1000,
+            "max": 5000
+          },
+          "full_service": {
+            "min": 5000,
+            "max": 15000
+          }
+        }
+      },
+      "ratings": {
+        "g2": {
+          "score": 4.0,
+          "reviews": 2808,
+          "last_updated": "2025-12"
+        },
+        "capterra": {
+          "score": 4.3,
+          "reviews": 6500,
+          "last_updated": "2025-12",
+          "value_for_money": 4.4
+        },
+        "our_rating": 3.9,
+        "our_notes": "Best value for money (4.4/5 on Capterra) among full-featured CRMs. Excellent pricing for comprehensive features. Support quality varies (slow response times noted). Interface less polished than competitors. Mobile app praised. Good for budget-conscious SMBs willing to trade some UX polish for affordability. Free tier genuinely useful for tiny teams."
+      },
+      "integrations": [
+        "Gmail",
+        "Outlook",
+        "Slack",
+        "Mailchimp",
+        "QuickBooks",
+        "Zapier",
+        "Google Workspace",
+        "Office 365",
+        "45+ Zoho apps",
+        "API available"
+      ],
+      "api": {
+        "available": true,
+        "type": "REST",
+        "documentation": "https://www.zoho.com/crm/developer/"
+      },
+      "competitors": [
+        "HubSpot CRM",
+        "Freshsales",
+        "Pipedrive",
+        "Monday CRM",
+        "Capsule CRM"
+      ],
+      "verified_at": "2025-12-17T00:00:00Z",
+      "verified_by": "manual",
+      "source_url": "https://www.zoho.com/crm/zohocrm-pricing.html",
+      "notes": "Forever-free plan for up to 3 users (no time limit). 15-day free trial on paid plans. Monthly billing available at higher rates ($20, $35, $50, $65 for Standard through Ultimate). Annual billing recommended for 30% savings. Lite User option available at $5/user/month for limited access. Add-on services: integration pack, advanced analytics, premium support at extra cost. Zia AI assistant starts at Enterprise tier."
+    },
+    {
+      "slug": "attio",
+      "name": "Attio",
+      "category": "crm",
+      "subcategory": "modern_data_driven",
+      "website": "https://attio.com",
+      "pricing_url": "https://attio.com/pricing",
+      "description": "Modern, data-driven CRM with Notion-like interface and flexibility. Object-based structure allows total freedom to model data for any use case. Built for the next generation of CRM users with clean UI, powerful automation, and AI agents. Real-time contact syncing and automatic data enrichment. Call intelligence with meeting recording and insights. Excellent for startups and modern teams that want flexibility and polish.",
+      "tagline": "The next generation of CRM - flexible, powerful, and beautiful",
+      "pricing": {
+        "model": "per_seat",
+        "currency": "USD",
+        "billing_options": ["monthly", "annual"],
+        "annual_discount_percent": 20,
+        "tiers": [
+          {
+            "name": "Free",
+            "price": 0,
+            "per": "month",
+            "billing": "monthly",
+            "features": [
+              "Up to 3 users",
+              "Up to 50,000 records",
+              "Real-time contact syncing",
+              "Automatic data enrichment",
+              "Custom objects",
+              "Mobile app",
+              "Email integration",
+              "250 credits/month (increased from 100 in July 2025)"
+            ],
+            "limits": {
+              "users": 3,
+              "records": 50000,
+              "credits_monthly": 250
+            }
+          },
+          {
+            "name": "Plus",
+            "price": 29,
+            "per": "seat/month",
+            "billing": "annual",
+            "features": [
+              "All Free features",
+              "Unlimited users",
+              "Private lists",
+              "Enhanced email sending",
+              "Advanced filters",
+              "Custom views",
+              "Collaboration features",
+              "1,500 credits/month (increased from 1,000)"
+            ],
+            "limits": {
+              "users": "unlimited",
+              "credits_monthly": 1500
+            }
+          },
+          {
+            "name": "Pro",
+            "price": 59,
+            "per": "seat/month",
+            "billing": "annual",
+            "features": [
+              "All Plus features",
+              "Email sequences",
+              "Historical reporting",
+              "Call intelligence (record meetings, insights)",
+              "Advanced automation",
+              "Advanced permissions",
+              "Priority support",
+              "10,000 credits/month (increased from 2,500)"
+            ],
+            "limits": {
+              "credits_monthly": 10000
+            }
+          },
+          {
+            "name": "Enterprise",
+            "price": 119,
+            "per": "seat/month",
+            "billing": "annual",
+            "features": [
+              "All Pro features",
+              "Unlimited reporting",
+              "SAML/SSO support",
+              "Advanced admin tools",
+              "Advanced permission access",
+              "Multiple business units support",
+              "Dedicated account manager",
+              "Custom onboarding",
+              "Advanced security"
+            ],
+            "limits": {
+              "users": "unlimited"
+            }
+          }
+        ],
+        "starting_price": 0,
+        "custom_pricing": false,
+        "free_trial_days": 14,
+        "free_tier": true,
+        "startup_discount": "Additional 10% off monthly or annual plans (various promo codes available)"
+      },
+      "best_for": [
+        "Startups and scale-ups wanting modern CRM",
+        "Teams prioritizing clean UI/UX",
+        "Companies needing flexible data modeling",
+        "Venture-backed startups",
+        "Product-led growth companies",
+        "Teams migrating from spreadsheets or Notion",
+        "Organizations wanting call intelligence built-in"
+      ],
+      "industries": [
+        "SaaS",
+        "Startups",
+        "Venture Capital",
+        "Technology",
+        "Agencies",
+        "Professional Services"
+      ],
+      "company_sizes": [
+        "startup",
+        "smb",
+        "mid_market"
+      ],
+      "avoid_if": [
+        "Need extensive third-party integrations (limited pre-built integrations)",
+        "Require advanced sales features (no lead scoring or territory management)",
+        "Want mature, battle-tested platform (still evolving)",
+        "Need robust email functionality (email features lacking per reviews)",
+        "Limited budget at scale (gets pricey beyond small teams)",
+        "Require traditional CRM with established workflows"
+      ],
+      "implementation": {
+        "avg_weeks": 1,
+        "complexity": "low",
+        "requires_developer": false,
+        "cost_range": {
+          "diy": {
+            "min": 0,
+            "max": 500
+          },
+          "with_help": {
+            "min": 500,
+            "max": 2000
+          },
+          "full_service": {
+            "min": 2000,
+            "max": 5000
+          }
+        }
+      },
+      "ratings": {
+        "g2": {
+          "score": 4.7,
+          "reviews": 450,
+          "last_updated": "2025-12",
+          "opportunity_management": 96,
+          "contact_management": 95,
+          "user_management": 94,
+          "automation": 91
+        },
+        "capterra": {
+          "score": 4.6,
+          "reviews": 85,
+          "last_updated": "2025-12"
+        },
+        "our_rating": 4.6,
+        "our_notes": "Highest-rated modern CRM (4.7/5 on G2). Users love Notion-like flexibility and beautiful interface. 96% satisfaction for pipeline management, 95% for contact management. Easy migration from other CRMs. Integration ecosystem still maturing. Rapid feature development - shipped major features in recent months. Best for teams that value modern UX and flexibility over maturity and integrations."
+      },
+      "integrations": [
+        "Gmail",
+        "Outlook",
+        "Slack",
+        "Zapier",
+        "Calendly",
+        "Intercom",
+        "Segment",
+        "Webhooks",
+        "API available",
+        "Limited pre-built integrations (use Zapier for most)"
+      ],
+      "api": {
+        "available": true,
+        "type": "REST",
+        "documentation": "https://developers.attio.com"
+      },
+      "competitors": [
+        "HubSpot CRM",
+        "Pipedrive",
+        "Copper",
+        "Folk",
+        "Affinity"
+      ],
+      "verified_at": "2025-12-17T00:00:00Z",
+      "verified_by": "manual",
+      "source_url": "https://attio.com/pricing",
+      "notes": "July 2025 pricing update: Increased credit allocations across all tiers (Free: 250, Plus: 1,500, Pro: 10,000 credits/month). Additional credit packages available: 5,000 ($85), 10,000 ($150), or 25,000 ($225) credits/month. Annual billing saves ~20% vs monthly. 14-day free trial available. Free tier generous (3 users, 50,000 records). Founded by former Palantir engineers. Rapid feature development with automation, custom objects, AI agents, and call intelligence recently launched."
+    }
+  ],
+  "last_updated": "2025-12-17T00:00:00Z"
+}

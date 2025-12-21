@@ -1,0 +1,106 @@
+{
+  "industry": "tech-companies",
+  "benchmarks": {
+    "financial": {
+      "gross_margin": {
+        "low": 50,
+        "median": 65,
+        "high": 80,
+        "unit": "percent",
+        "source": "SaaS Capital benchmarks 2024"
+      },
+      "net_revenue_retention": {
+        "low": 90,
+        "median": 105,
+        "high": 130,
+        "unit": "percent",
+        "source": "OpenView SaaS Benchmarks"
+      },
+      "customer_acquisition_cost_payback": {
+        "low": 24,
+        "median": 15,
+        "high": 8,
+        "unit": "months",
+        "source": "Bessemer State of Cloud"
+      },
+      "ltv_to_cac_ratio": {
+        "low": 2,
+        "median": 3.5,
+        "high": 5,
+        "unit": "ratio",
+        "source": "Industry standard"
+      }
+    },
+    "operational": {
+      "time_on_admin_tasks": {
+        "low": 20,
+        "median": 35,
+        "high": 50,
+        "unit": "percent",
+        "source": "McKinsey operations study"
+      },
+      "customer_churn_rate": {
+        "low": 3,
+        "median": 7,
+        "high": 15,
+        "unit": "percent_annual",
+        "source": "ChurnZero benchmarks"
+      },
+      "support_ticket_resolution_time": {
+        "low": 2,
+        "median": 8,
+        "high": 24,
+        "unit": "hours",
+        "source": "Zendesk benchmark report"
+      },
+      "sales_cycle_length": {
+        "low": 30,
+        "median": 60,
+        "high": 120,
+        "unit": "days",
+        "source": "Gartner B2B sales"
+      }
+    },
+    "ai_adoption": {
+      "using_ai_in_operations": {
+        "value": 45,
+        "unit": "percent",
+        "source": "Deloitte AI adoption survey 2024"
+      },
+      "ai_budget_allocation": {
+        "low": 2,
+        "median": 5,
+        "high": 15,
+        "unit": "percent_of_it",
+        "source": "Gartner IT spending forecast"
+      },
+      "expected_ai_roi": {
+        "value": 3.5,
+        "unit": "x_return",
+        "timeframe": "3_years",
+        "source": "Accenture AI investment study"
+      }
+    },
+    "iot_specific": {
+      "average_uptime": {
+        "low": 95,
+        "median": 98,
+        "high": 99.5,
+        "unit": "percent",
+        "source": "IoT Analytics"
+      },
+      "predictive_maintenance_adoption": {
+        "value": 35,
+        "unit": "percent",
+        "source": "McKinsey IoT study"
+      },
+      "service_cost_reduction_with_predictive": {
+        "low": 15,
+        "median": 25,
+        "high": 40,
+        "unit": "percent",
+        "source": "Deloitte manufacturing study"
+      }
+    }
+  }
+}

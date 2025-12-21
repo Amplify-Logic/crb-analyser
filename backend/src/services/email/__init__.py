@@ -16,9 +16,17 @@ async def send_report_ready_email(
     report_id: str,
     ai_readiness_score: int,
     top_opportunities: list = None,
+    pdf_bytes: bytes = None,
 ) -> bool:
     """
     Send email notifying user their report is ready.
+
+    Args:
+        to_email: Recipient email address
+        report_id: Report ID for generating view link
+        ai_readiness_score: The AI readiness score to display
+        top_opportunities: List of top opportunities to highlight
+        pdf_bytes: Optional PDF content to attach
 
     Returns True if sent successfully.
     """
@@ -27,8 +35,9 @@ async def send_report_ready_email(
         return False
 
     try:
+        import base64
         from sendgrid import SendGridAPIClient
-        from sendgrid.helpers.mail import Mail, Email, To, Content
+        from sendgrid.helpers.mail import Mail, Email, To, Content, Attachment, FileContent, FileName, FileType, Disposition
 
         # Build report URL
         base_url = settings.CORS_ORIGINS.split(",")[0]
@@ -90,6 +99,22 @@ async def send_report_ready_email(
             subject=f"Your CRB Report is Ready - AI Readiness Score: {ai_readiness_score}",
             html_content=Content("text/html", html_content),
         )
+
+        # Attach PDF if provided
+        if pdf_bytes:
+            try:
+                encoded_pdf = base64.b64encode(pdf_bytes).decode("utf-8")
+                attachment = Attachment(
+                    FileContent(encoded_pdf),
+                    FileName(f"CRB-Report-{report_id[:8]}.pdf"),
+                    FileType("application/pdf"),
+                    Disposition("attachment"),
+                )
+                message.attachment = attachment
+                logger.info(f"PDF attached to email for report {report_id}")
+            except Exception as attach_err:
+                logger.warning(f"Failed to attach PDF: {attach_err}")
+                # Continue without attachment
 
         sg = SendGridAPIClient(settings.SENDGRID_API_KEY)
         response = sg.send(message)
@@ -170,4 +195,191 @@ async def send_payment_confirmation_email(
 
     except Exception as e:
         logger.error(f"Failed to send payment confirmation: {e}")
+        return False
+
+
+async def send_report_failed_email(
+    to_email: str,
+    error_message: str = None,
+) -> bool:
+    """
+    Send email notifying user that report generation failed.
+
+    Returns True if sent successfully.
+    """
+    if not settings.SENDGRID_API_KEY:
+        logger.warning("SendGrid not configured, skipping email")
+        return False
+
+    try:
+        from sendgrid import SendGridAPIClient
+        from sendgrid.helpers.mail import Mail, Email, To, Content
+
+        html_content = f"""
+        <html>
+        <body style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px;">
+            <div style="text-align: center; margin-bottom: 30px;">
+                <h1 style="color: #6366f1; margin: 0;">CRB Analyser</h1>
+                <p style="color: #666;">Report Generation Issue</p>
+            </div>
+
+            <div style="background: #fef2f2; border: 1px solid #fecaca; border-radius: 8px; padding: 20px; margin: 20px 0;">
+                <h2 style="color: #dc2626; margin: 0 0 10px 0;">We encountered an issue</h2>
+                <p style="color: #7f1d1d; margin: 0;">
+                    Unfortunately, we weren't able to generate your CRB analysis report.
+                    Our team has been notified and is looking into this.
+                </p>
+            </div>
+
+            <div style="background: #f8fafc; padding: 20px; border-radius: 8px; margin: 20px 0;">
+                <h3 style="margin: 0 0 10px 0; color: #334155;">What happens next?</h3>
+                <ul style="color: #64748b; margin: 0; padding-left: 20px;">
+                    <li>Our team will investigate the issue</li>
+                    <li>We'll regenerate your report within 24 hours</li>
+                    <li>You'll receive an email when it's ready</li>
+                    <li>If we can't resolve it, we'll issue a full refund</li>
+                </ul>
+            </div>
+
+            <div style="text-align: center; margin: 30px 0;">
+                <p style="color: #64748b;">
+                    Questions? Reply to this email and we'll help you right away.
+                </p>
+            </div>
+
+            <div style="text-align: center; padding: 20px; color: #999; font-size: 12px;">
+                <p>CRB Analyser - AI Implementation Insights for SMBs</p>
+            </div>
+        </body>
+        </html>
+        """
+
+        message = Mail(
+            from_email=Email(settings.SENDGRID_FROM_EMAIL, settings.SENDGRID_FROM_NAME),
+            to_emails=To(to_email),
+            subject="Issue with Your CRB Report - We're On It",
+            html_content=Content("text/html", html_content),
+        )
+
+        sg = SendGridAPIClient(settings.SENDGRID_API_KEY)
+        response = sg.send(message)
+
+        logger.info(f"Report failed email sent to {to_email}, status: {response.status_code}")
+        return response.status_code in [200, 201, 202]
+
+    except Exception as e:
+        logger.error(f"Failed to send report failed email: {e}")
+        return False
+
+
+async def send_follow_up_email(
+    to_email: str,
+    report_id: str,
+    days_since: int = 7,
+    top_opportunity: dict = None,
+) -> bool:
+    """
+    Send follow-up email X days after report delivery.
+
+    Args:
+        to_email: Recipient email address
+        report_id: Report ID for generating view link
+        days_since: Number of days since report delivery
+        top_opportunity: The top opportunity from the report
+
+    Returns True if sent successfully.
+    """
+    if not settings.SENDGRID_API_KEY:
+        logger.warning("SendGrid not configured, skipping email")
+        return False
+
+    try:
+        from sendgrid import SendGridAPIClient
+        from sendgrid.helpers.mail import Mail, Email, To, Content
+
+        # Build URLs
+        base_url = settings.CORS_ORIGINS.split(",")[0]
+        report_url = f"{base_url}/report/{report_id}"
+        booking_url = "https://calendly.com/crb-analyser/implementation-call"
+
+        # Build opportunity section
+        opportunity_html = ""
+        if top_opportunity:
+            opportunity_html = f"""
+            <div style="background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 8px; padding: 20px; margin: 20px 0;">
+                <h3 style="color: #166534; margin: 0 0 10px 0;">Your Top Opportunity</h3>
+                <p style="margin: 0; color: #166534;">
+                    <strong>{top_opportunity.get('title', 'See your report')}</strong><br>
+                    Potential value: {top_opportunity.get('value_potential', 'See report for details')}
+                </p>
+            </div>
+            """
+
+        html_content = f"""
+        <html>
+        <body style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px;">
+            <div style="text-align: center; margin-bottom: 30px;">
+                <h1 style="color: #6366f1; margin: 0;">CRB Analyser</h1>
+                <p style="color: #666;">How's Your AI Implementation Going?</p>
+            </div>
+
+            <div style="background: #f8fafc; padding: 20px; border-radius: 8px; margin: 20px 0;">
+                <p style="margin: 0; color: #334155;">
+                    Hi there,
+                </p>
+                <p style="color: #64748b;">
+                    It's been {days_since} days since you received your CRB Analysis Report.
+                    We wanted to check in and see how things are going with your AI implementation journey.
+                </p>
+            </div>
+
+            {opportunity_html}
+
+            <div style="background: #eff6ff; border: 1px solid #bfdbfe; border-radius: 8px; padding: 20px; margin: 20px 0;">
+                <h3 style="color: #1e40af; margin: 0 0 10px 0;">Need Help Getting Started?</h3>
+                <p style="color: #1e40af; margin: 0 0 15px 0;">
+                    Many businesses find it helpful to discuss their report with an expert.
+                    Book a free 30-minute implementation call to:
+                </p>
+                <ul style="color: #1e40af; margin: 0 0 15px 0;">
+                    <li>Review your top opportunities</li>
+                    <li>Get vendor recommendations</li>
+                    <li>Plan your implementation roadmap</li>
+                </ul>
+                <div style="text-align: center;">
+                    <a href="{booking_url}" style="background: #3b82f6; color: white; padding: 12px 24px; text-decoration: none; border-radius: 8px; font-weight: bold; display: inline-block;">
+                        Book Implementation Call
+                    </a>
+                </div>
+            </div>
+
+            <div style="text-align: center; margin: 20px 0;">
+                <a href="{report_url}" style="color: #6366f1; text-decoration: underline;">
+                    View Your Report Again
+                </a>
+            </div>
+
+            <div style="text-align: center; padding: 20px; color: #999; font-size: 12px;">
+                <p>CRB Analyser - AI Implementation Insights for SMBs</p>
+                <p>Questions? Reply to this email.</p>
+            </div>
+        </body>
+        </html>
+        """
+
+        message = Mail(
+            from_email=Email(settings.SENDGRID_FROM_EMAIL, settings.SENDGRID_FROM_NAME),
+            to_emails=To(to_email),
+            subject="How's Your AI Implementation Going?",
+            html_content=Content("text/html", html_content),
+        )
+
+        sg = SendGridAPIClient(settings.SENDGRID_API_KEY)
+        response = sg.send(message)
+
+        logger.info(f"Follow-up email sent to {to_email}, status: {response.status_code}")
+        return response.status_code in [200, 201, 202]
+
+    except Exception as e:
+        logger.error(f"Failed to send follow-up email: {e}")
         return False

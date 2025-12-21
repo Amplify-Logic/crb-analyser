@@ -67,6 +67,7 @@ from src.config.settings import settings
 from src.config.supabase_client import get_async_supabase
 from src.config.ai_tools import get_ai_tools_prompt_context, get_build_it_yourself_context
 from src.config.model_routing import get_model_for_task, TokenTracker
+from src.config.system_prompt import get_full_system_prompt, get_analysis_system_prompt, get_recommendation_system_prompt
 from src.knowledge import (
     get_industry_context,
     get_relevant_opportunities,
@@ -74,6 +75,7 @@ from src.knowledge import (
     get_benchmarks_for_metrics,
     normalize_industry,
 )
+from src.expertise import get_self_improve_service
 from src.services.playbook_generator import PlaybookGenerator
 from src.services.architecture_generator import ArchitectureGenerator
 from src.services.insights_generator import InsightsGenerator
@@ -90,82 +92,8 @@ class ReportGenerator:
     - full: 25-50 findings, comprehensive analysis with roadmap
     """
 
-    SYSTEM_PROMPT = """You are the CRB Analyser, an expert in business process optimization and AI implementation consulting for SMBs.
-
-Your mission is to analyze quiz responses and generate actionable Cost/Risk/Benefit analysis for AI implementation opportunities.
-
-═══════════════════════════════════════════════════════════════════════════════
-CORE METHODOLOGY: TWO PILLARS (BOTH REQUIRED)
-═══════════════════════════════════════════════════════════════════════════════
-
-Every recommendation must pass BOTH tests:
-
-1. CUSTOMER VALUE SCORE (1-10): "Does this make THEIR customers' lives better?"
-   - Better customer experience
-   - More value delivered to customers
-   - Increased trust and loyalty
-
-2. BUSINESS HEALTH SCORE (1-10): "Does this help the business survive and thrive?"
-   - Sustainable margins
-   - Build capability (not just cut costs)
-   - Reduce existential risk
-
-ONLY recommend items that score 6+ on BOTH dimensions.
-
-═══════════════════════════════════════════════════════════════════════════════
-VALUE CALCULATION
-═══════════════════════════════════════════════════════════════════════════════
-
-Always calculate TWO types of value:
-
-1. VALUE SAVED (Efficiency):
-   Time saved × Hourly cost = € saved annually
-   Example: 10 hrs/week × €50/hr × 52 weeks = €26,000/year
-
-2. VALUE CREATED (Growth):
-   - New revenue opportunities enabled
-   - Increased conversion rates
-   - Higher customer lifetime value
-
-═══════════════════════════════════════════════════════════════════════════════
-THREE OPTIONS PATTERN (REQUIRED FOR EACH RECOMMENDATION)
-═══════════════════════════════════════════════════════════════════════════════
-
-Option A: OFF-THE-SHELF - Existing SaaS, plug and play, fastest
-Option B: BEST-IN-CLASS - Premium vendor, full implementation
-Option C: CUSTOM AI SOLUTION - Built specifically for them, competitive moat
-
-Always include all three options with specific vendor names and pricing.
-
-═══════════════════════════════════════════════════════════════════════════════
-THREE TIME HORIZONS (REQUIRED)
-═══════════════════════════════════════════════════════════════════════════════
-
-Short Term (0-6 months): Quick wins, immediate impact
-Mid Term (6-18 months): Foundation building, scaling
-Long Term (18+ months): Strategic transformation
-
-═══════════════════════════════════════════════════════════════════════════════
-IMPARTIALITY & HONESTY
-═══════════════════════════════════════════════════════════════════════════════
-
-You are a TRUSTED ADVISOR. Be willing to say:
-- "You're not ready for AI yet - fix these fundamentals first"
-- "This process doesn't need automation"
-- "The ROI doesn't justify the investment"
-- "Wait 6-12 months - tools aren't mature enough"
-
-Include a "NOT RECOMMENDED" section with honest reasons.
-
-═══════════════════════════════════════════════════════════════════════════════
-QUALITY STANDARDS
-═══════════════════════════════════════════════════════════════════════════════
-
-- Show ranges (min-max), never single numbers
-- List all assumptions
-- Rate confidence: High/Medium/Low
-- Cite sources when possible
-- Never recommend replacing teams - augment instead"""
+    # Use the centralized system prompt from config module
+    SYSTEM_PROMPT = get_full_system_prompt()
 
     # Retry configuration
     MAX_RETRIES = 3
@@ -344,6 +272,28 @@ QUALITY STANDARDS
             self.context["answers"] = quiz_data.get("answers", {})
             self.context["results"] = quiz_data.get("results", {})
 
+            # Load validated assumptions if validation session was completed
+            validated_assumptions = quiz_data.get("validated_assumptions", [])
+            corrected_values = quiz_data.get("corrected_values", {})
+
+            if corrected_values:
+                yield {"phase": "loading", "step": "Applying validated assumptions...", "progress": 7}
+                # Apply corrections to answers
+                self.context["answers"] = self._apply_validated_corrections(
+                    self.context["answers"],
+                    corrected_values
+                )
+                logger.info(f"Applied {len(corrected_values)} validated corrections to report")
+
+            # Store assumption tracking info
+            self.context["validated_assumptions"] = validated_assumptions
+            self.context["corrected_values"] = corrected_values
+            self.context["assumption_log"] = {
+                "validated_count": len(validated_assumptions),
+                "corrections_applied": list(corrected_values.keys()),
+                "validation_completed": bool(validated_assumptions or corrected_values)
+            }
+
             # Create report record
             yield {"phase": "loading", "step": "Creating report...", "progress": 10}
 
@@ -507,6 +457,7 @@ QUALITY STANDARDS
                 "status": "completed",
                 "generation_completed_at": datetime.utcnow().isoformat(),
                 "token_usage": self.token_tracker.to_dict(),
+                "assumption_log": self.context.get("assumption_log", {}),
             }).eq("id", self.report_id).execute()
 
             # Update quiz session
@@ -514,6 +465,32 @@ QUALITY STANDARDS
                 "status": "completed",
                 "report_generated_at": datetime.utcnow().isoformat(),
             }).eq("id", self.quiz_session_id).execute()
+
+            # Learn from this analysis to improve future reports
+            try:
+                expertise_service = get_self_improve_service()
+                learning_context = {
+                    "findings": findings,
+                    "recommendations": [],  # Extracted from findings
+                    "ai_readiness_score": executive_summary.get("ai_readiness_score", 50),
+                    "total_potential_savings": executive_summary.get("total_value_potential", {}).get("max", 0),
+                }
+                execution_metrics = {
+                    "tools_used": {},
+                    "token_usage": self.token_tracker.to_dict(),
+                    "phases_completed": ["executive_summary", "findings", "playbook", "architecture", "insights"],
+                    "errors": [],
+                }
+                await expertise_service.learn_from_analysis(
+                    audit_id=self.report_id,
+                    industry=self.context.get("industry", "general"),
+                    company_size=self.context.get("answers", {}).get("employee_count", "unknown"),
+                    context=learning_context,
+                    execution_metrics=execution_metrics,
+                )
+                logger.info(f"Expertise updated from report {self.report_id}")
+            except Exception as learn_err:
+                logger.warning(f"Expertise learning failed (non-critical): {learn_err}")
 
             yield {
                 "phase": "complete",
@@ -551,6 +528,41 @@ QUALITY STANDARDS
                 "has_partial_data": bool(self._partial_data),
                 "report_id": self.report_id,  # Include report_id for potential retry
             }
+
+    def _apply_validated_corrections(
+        self,
+        answers: Dict[str, Any],
+        corrections: Dict[str, Any]
+    ) -> Dict[str, Any]:
+        """
+        Apply validated corrections from assumption validation session.
+
+        Maps assumption IDs to answer fields and updates values.
+        """
+        updated_answers = dict(answers)
+
+        # Mapping of assumption IDs to answer fields
+        assumption_to_field = {
+            "assum-hourly-rate": "hourly_rate",
+            "assum-team-size": "employee_count",
+            "assum-manual-hours": "manual_hours",
+            "assum-tech-budget": "monthly_tech_spend",
+            "assum-revenue": "annual_revenue",
+            "assum-timeline": "timeline",
+        }
+
+        for assumption_id, corrected_value in corrections.items():
+            field = assumption_to_field.get(assumption_id)
+            if field:
+                updated_answers[field] = corrected_value
+                logger.info(f"Applied correction: {field} = {corrected_value}")
+            else:
+                # Store unknown corrections in a special field
+                if "validated_data" not in updated_answers:
+                    updated_answers["validated_data"] = {}
+                updated_answers["validated_data"][assumption_id] = corrected_value
+
+        return updated_answers
 
     def _extract_industry(self) -> str:
         """Extract and normalize industry from quiz answers."""
@@ -1432,7 +1444,7 @@ Return ONLY the JSON."""
                     quiz_answers=self.context.get("answers", {}),
                     industry_context=self.context.get("industry_knowledge", {}),
                 )
-                playbooks.append(playbook.model_dump())
+                playbooks.append(playbook.model_dump(mode='json'))
             except Exception as e:
                 logger.warning(f"Failed to generate playbook for {rec.get('id')}: {e}")
 

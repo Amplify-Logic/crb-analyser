@@ -112,6 +112,8 @@ from src.routes import (
     admin_router,
     interview_router,
     playbook_router,
+    expertise_router,
+    validation_router,
 )
 
 # Health routes (no prefix - routes define their own paths)
@@ -129,6 +131,8 @@ app.include_router(vendors_router, prefix="/api/vendors", tags=["Vendors"])
 app.include_router(admin_router, prefix="/api/admin", tags=["Admin"])
 app.include_router(interview_router, prefix="/api/interview", tags=["Interview"])
 app.include_router(playbook_router, prefix="/api/playbook", tags=["Playbook"])
+app.include_router(expertise_router, tags=["Expertise"])  # Agent self-improvement
+app.include_router(validation_router, prefix="/api/validation", tags=["Validation"])  # Assumption validation before report
 
 
 # ============================================================================

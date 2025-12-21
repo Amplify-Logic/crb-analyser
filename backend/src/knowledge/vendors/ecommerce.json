@@ -1,0 +1,1229 @@
+{
+  "category": "ecommerce",
+  "description": "E-commerce platforms for building, managing, and scaling online stores with payment processing, inventory management, and multi-channel sales capabilities",
+  "vendors": [
+    {
+      "slug": "shopify",
+      "name": "Shopify",
+      "category": "ecommerce",
+      "subcategory": "hosted_saas",
+      "website": "https://www.shopify.com",
+      "pricing_url": "https://www.shopify.com/pricing",
+      "description": "Market-leading hosted e-commerce platform with comprehensive features for online stores of all sizes. Known for ease of use, extensive app ecosystem, and reliable payment processing. Powers over 4 million stores worldwide. Offers built-in hosting, PCI compliance, and integrated payments through Shopify Payments with competitive transaction fees.",
+      "tagline": "The all-in-one commerce platform to start, run, and grow a business",
+      "pricing": {
+        "model": "tiered",
+        "currency": "USD",
+        "billing_options": ["monthly", "annual"],
+        "annual_discount_percent": 25,
+        "tiers": [
+          {
+            "name": "Starter",
+            "price": 5,
+            "per": "month",
+            "billing": "monthly",
+            "features": [
+              "Sell through social media and messaging",
+              "Link in bio",
+              "Accept payments instantly",
+              "Chat support",
+              "Basic analytics"
+            ],
+            "limits": {
+              "products": "unlimited",
+              "online_store": false
+            }
+          },
+          {
+            "name": "Basic",
+            "price": 39,
+            "per": "month",
+            "billing": "monthly",
+            "features": [
+              "Full online store",
+              "Unlimited products",
+              "24/7 support",
+              "Abandoned cart recovery",
+              "Gift cards",
+              "Manual order creation",
+              "Discount codes",
+              "Basic reports",
+              "2 staff accounts"
+            ],
+            "limits": {
+              "staff_accounts": 2,
+              "locations": 4,
+              "transaction_fee": "2.9% + 30¢ (Shopify Payments)"
+            }
+          },
+          {
+            "name": "Grow",
+            "price": 105,
+            "per": "month",
+            "billing": "monthly",
+            "features": [
+              "All Basic features",
+              "5 staff accounts",
+              "Professional reports",
+              "Lower transaction fees (2.6% + 30¢)",
+              "USPS Priority Mail Cubic pricing",
+              "International domains"
+            ],
+            "limits": {
+              "staff_accounts": 5,
+              "locations": 5,
+              "transaction_fee": "2.6% + 30¢ (Shopify Payments)"
+            }
+          },
+          {
+            "name": "Advanced",
+            "price": 399,
+            "per": "month",
+            "billing": "monthly",
+            "features": [
+              "All Grow features",
+              "15 staff accounts",
+              "Advanced report builder",
+              "Third-party calculated shipping rates",
+              "Lowest transaction fees (2.5% + 30¢)",
+              "1,000 inventory locations"
+            ],
+            "limits": {
+              "staff_accounts": 15,
+              "locations": 1000,
+              "transaction_fee": "2.5% + 30¢ (Shopify Payments)"
+            }
+          },
+          {
+            "name": "Plus",
+            "price": 2300,
+            "per": "month",
+            "billing": "annual",
+            "features": [
+              "All Advanced features",
+              "Unlimited staff accounts",
+              "Dedicated account manager",
+              "Advanced automation (Shopify Flow)",
+              "Wholesale channel",
+              "Exclusive apps and integrations",
+              "Custom checkout",
+              "99.99% uptime SLA",
+              "Headless commerce support"
+            ],
+            "limits": {
+              "staff_accounts": "unlimited",
+              "transaction_fee": "custom"
+            }
+          }
+        ],
+        "starting_price": 5,
+        "custom_pricing": true,
+        "free_trial_days": 3,
+        "free_tier": false,
+        "startup_discount": "$1 for first month after free trial"
+      },
+      "best_for": [
+        "Beginners wanting quick setup without technical knowledge",
+        "SMBs needing reliable, all-in-one solution",
+        "Dropshipping businesses",
+        "Multi-channel sellers (social, marketplace, POS)",
+        "Brands prioritizing design and user experience",
+        "High-volume enterprises (Plus tier)"
+      ],
+      "industries": [
+        "Retail",
+        "Fashion & Apparel",
+        "Beauty & Cosmetics",
+        "Consumer Electronics",
+        "Food & Beverage",
+        "Home & Garden",
+        "B2C Commerce"
+      ],
+      "company_sizes": [
+        "startup",
+        "smb",
+        "mid_market",
+        "enterprise"
+      ],
+      "avoid_if": [
+        "Need deep customization (limited theme editing)",
+        "Want to avoid transaction fees (unless using Shopify Payments)",
+        "Require complex B2B features on lower tiers",
+        "Need full control over hosting and backend",
+        "High-volume with tight margins (fees add up quickly)"
+      ],
+      "implementation": {
+        "avg_weeks": 2,
+        "complexity": "low",
+        "requires_developer": false,
+        "cost_range": {
+          "diy": {
+            "min": 0,
+            "max": 1000
+          },
+          "with_help": {
+            "min": 1000,
+            "max": 5000
+          },
+          "full_service": {
+            "min": 5000,
+            "max": 50000
+          }
+        }
+      },
+      "ratings": {
+        "g2": {
+          "score": 4.4,
+          "reviews": 4500,
+          "last_updated": "2025-12"
+        },
+        "capterra": {
+          "score": 4.5,
+          "reviews": 6500,
+          "last_updated": "2025-12"
+        },
+        "our_rating": 4.5,
+        "our_notes": "Best all-around e-commerce platform for most businesses. Exceptional ease of use and reliability. App ecosystem is both a strength (extensibility) and weakness (costs add up). Transaction fees and monthly pricing can get expensive at scale. Shopify Plus is excellent for enterprises but pricey."
+      },
+      "integrations": [
+        "Facebook & Instagram",
+        "Google Shopping",
+        "Amazon",
+        "eBay",
+        "TikTok",
+        "Mailchimp",
+        "Klaviyo",
+        "QuickBooks",
+        "Xero",
+        "ShipStation",
+        "6,000+ apps in App Store",
+        "API available"
+      ],
+      "api": {
+        "available": true,
+        "type": "REST & GraphQL",
+        "documentation": "https://shopify.dev"
+      },
+      "competitors": [
+        "WooCommerce",
+        "BigCommerce",
+        "Wix",
+        "Squarespace",
+        "Adobe Commerce"
+      ],
+      "verified_at": "2025-12-17T00:00:00Z",
+      "verified_by": "manual",
+      "source_url": "https://www.shopify.com/pricing",
+      "notes": "Annual billing saves 25% on Basic ($29/mo), Grow ($79/mo), and Advanced ($299/mo) plans. Transaction fees only apply if not using Shopify Payments - otherwise standard credit card processing rates apply. Third-party payment gateway usage incurs additional 0.5-2% fee. Renamed 'Shopify' plan to 'Grow' in April 2025."
+    },
+    {
+      "slug": "woocommerce",
+      "name": "WooCommerce",
+      "category": "ecommerce",
+      "subcategory": "wordpress_plugin",
+      "website": "https://woocommerce.com",
+      "pricing_url": "https://woocommerce.com/pricing",
+      "description": "Free, open-source WordPress plugin that transforms any WordPress site into a fully functional online store. Most popular e-commerce solution worldwide, powering 38% of all online stores. Offers unlimited customization through WordPress ecosystem but requires separate hosting, domain, and potentially premium plugins for advanced features.",
+      "tagline": "The most customizable e-commerce platform for building your online business",
+      "pricing": {
+        "model": "free_plus_infrastructure",
+        "currency": "USD",
+        "billing_options": ["varies"],
+        "annual_discount_percent": null,
+        "tiers": [
+          {
+            "name": "Core Plugin",
+            "price": 0,
+            "per": "one-time",
+            "billing": "free",
+            "features": [
+              "Unlimited products",
+              "Unlimited transactions (no revenue cap)",
+              "Core e-commerce functionality",
+              "Payment gateway integrations",
+              "Inventory management",
+              "Tax calculations",
+              "Shipping options",
+              "Coupon codes",
+              "Product reviews",
+              "Community support"
+            ],
+            "limits": {
+              "products": "unlimited",
+              "transactions": "unlimited"
+            }
+          },
+          {
+            "name": "Essential Costs",
+            "price": 150,
+            "per": "year",
+            "billing": "annual",
+            "features": [
+              "Domain name ($10-20/year)",
+              "Shared hosting ($100-120/year)",
+              "Free SSL certificate (included with most hosts)",
+              "Free Storefront theme (WooCommerce official)",
+              "Core WooCommerce plugin (free)"
+            ],
+            "limits": {
+              "estimated_annual_cost": "150-200"
+            }
+          },
+          {
+            "name": "Small Business",
+            "price": 500,
+            "per": "year",
+            "billing": "annual",
+            "features": [
+              "Domain name ($10-20/year)",
+              "VPS or WooCommerce hosting ($200-480/year)",
+              "SSL certificate (usually free)",
+              "Premium theme ($50-150 one-time)",
+              "5-10 essential plugins ($50-300/year)",
+              "Payment processing fees (2.9% + 30¢)"
+            ],
+            "limits": {
+              "estimated_annual_cost": "500-1000"
+            }
+          },
+          {
+            "name": "Growing Business",
+            "price": 2000,
+            "per": "year",
+            "billing": "annual",
+            "features": [
+              "Domain ($10-20/year)",
+              "Managed WooCommerce hosting ($600-1200/year)",
+              "Premium theme ($100-200)",
+              "15-30 premium plugins ($500-2000/year)",
+              "Developer customization ($500-5000)",
+              "Email marketing tools ($200-600/year)",
+              "Payment processing fees"
+            ],
+            "limits": {
+              "estimated_annual_cost": "2000-10000"
+            }
+          }
+        ],
+        "starting_price": 0,
+        "custom_pricing": false,
+        "free_trial_days": null,
+        "free_tier": true,
+        "startup_discount": null
+      },
+      "best_for": [
+        "WordPress users wanting e-commerce functionality",
+        "Developers and agencies building custom solutions",
+        "Businesses wanting full code ownership and control",
+        "Content-heavy stores needing WordPress CMS",
+        "Budget-conscious startups (DIY approach)",
+        "Stores needing extensive customization"
+      ],
+      "industries": [
+        "All industries",
+        "Content publishers selling products",
+        "Small retailers",
+        "Digital product sellers",
+        "Subscription businesses",
+        "Local businesses"
+      ],
+      "company_sizes": [
+        "startup",
+        "smb",
+        "mid_market"
+      ],
+      "avoid_if": [
+        "No technical knowledge or developer access",
+        "Want hosted, managed solution",
+        "Need enterprise-grade security out of box",
+        "Require guaranteed uptime and support",
+        "Don't want to manage hosting, updates, backups",
+        "Very high traffic (requires expensive hosting and optimization)"
+      ],
+      "implementation": {
+        "avg_weeks": 4,
+        "complexity": "medium",
+        "requires_developer": false,
+        "cost_range": {
+          "diy": {
+            "min": 150,
+            "max": 1000
+          },
+          "with_help": {
+            "min": 1000,
+            "max": 5000
+          },
+          "full_service": {
+            "min": 5000,
+            "max": 30000
+          }
+        }
+      },
+      "ratings": {
+        "g2": {
+          "score": 4.3,
+          "reviews": 660,
+          "last_updated": "2025-12"
+        },
+        "capterra": {
+          "score": 4.6,
+          "reviews": 1700,
+          "last_updated": "2025-12"
+        },
+        "our_rating": 4.2,
+        "our_notes": "Best value for businesses with WordPress expertise or developer access. Incredible flexibility and customization. Free core is powerful but true costs come from hosting, themes, plugins, and development. Performance issues at scale without proper optimization. Not beginner-friendly despite 'free' marketing."
+      },
+      "integrations": [
+        "WordPress ecosystem (60,000+ plugins)",
+        "PayPal",
+        "Stripe",
+        "Square",
+        "Amazon Pay",
+        "Facebook & Instagram",
+        "Google Shopping",
+        "Mailchimp",
+        "Zapier",
+        "QuickBooks",
+        "API available"
+      ],
+      "api": {
+        "available": true,
+        "type": "REST",
+        "documentation": "https://woocommerce.github.io/woocommerce-rest-api-docs/"
+      },
+      "competitors": [
+        "Shopify",
+        "BigCommerce",
+        "PrestaShop",
+        "OpenCart",
+        "Magento Open Source"
+      ],
+      "verified_at": "2025-12-17T00:00:00Z",
+      "verified_by": "manual",
+      "source_url": "https://woocommerce.com",
+      "notes": "WooCommerce is free but total cost of ownership includes hosting ($100-2000+/year), domain ($10-20/year), premium theme ($50-150), plugins ($0-2000+/year), and developer costs ($50-150/hour). Payment processing fees apply through chosen gateway. New AI tools and extensions in 2025 add $50-500/month for advanced features. HPOS (High-Performance Order Storage) update addresses historical database performance issues."
+    },
+    {
+      "slug": "bigcommerce",
+      "name": "BigCommerce",
+      "category": "ecommerce",
+      "subcategory": "enterprise_saas",
+      "website": "https://www.bigcommerce.com",
+      "pricing_url": "https://www.bigcommerce.com/essentials/pricing/",
+      "description": "Enterprise-focused SaaS e-commerce platform offering built-in features that competitors charge extra for. Known for no transaction fees, robust B2B capabilities, and multi-channel selling. Designed for high-growth businesses needing scalability without platform migration. Offers both hosted and headless commerce options with superior SEO and site performance.",
+      "tagline": "Open SaaS, headless, and composable e-commerce for global brands",
+      "pricing": {
+        "model": "revenue_tiered",
+        "currency": "USD",
+        "billing_options": ["monthly", "annual"],
+        "annual_discount_percent": 25,
+        "tiers": [
+          {
+            "name": "Standard",
+            "price": 39,
+            "per": "month",
+            "billing": "monthly",
+            "features": [
+              "Up to $50k annual online sales",
+              "Unlimited products",
+              "Unlimited staff accounts",
+              "Unlimited bandwidth",
+              "No transaction fees",
+              "Multi-channel selling",
+              "Professional reporting",
+              "Abandoned cart saver",
+              "Discount codes",
+              "Gift cards",
+              "Real-time shipping quotes"
+            ],
+            "limits": {
+              "annual_sales": 50000,
+              "staff_accounts": "unlimited",
+              "products": "unlimited"
+            }
+          },
+          {
+            "name": "Plus",
+            "price": 105,
+            "per": "month",
+            "billing": "monthly",
+            "features": [
+              "Up to $180k annual online sales",
+              "All Standard features",
+              "Customer segmentation & groups",
+              "Abandoned cart saver (enhanced)",
+              "Stored credit cards",
+              "Persistent cart",
+              "Advanced product filtering"
+            ],
+            "limits": {
+              "annual_sales": 180000,
+              "staff_accounts": "unlimited",
+              "products": "unlimited"
+            }
+          },
+          {
+            "name": "Pro",
+            "price": 399,
+            "per": "month",
+            "billing": "monthly",
+            "features": [
+              "Up to $400k annual online sales",
+              "All Plus features",
+              "Google customer reviews",
+              "Product filtering by custom fields",
+              "Custom product filtering",
+              "Price lists (customer groups)",
+              "$150/month per $200k over limit"
+            ],
+            "limits": {
+              "annual_sales": 400000,
+              "staff_accounts": "unlimited",
+              "products": "unlimited"
+            }
+          },
+          {
+            "name": "Enterprise",
+            "price": 1000,
+            "per": "month",
+            "billing": "custom",
+            "features": [
+              "$1M+ annual online sales",
+              "All Pro features",
+              "Unlimited API calls",
+              "Priority support",
+              "Custom SSL",
+              "Faceted search",
+              "Custom facets & filtering",
+              "SAML SSO",
+              "Dedicated account manager",
+              "Custom pricing based on GMV"
+            ],
+            "limits": {
+              "annual_sales": "1000000+",
+              "staff_accounts": "unlimited",
+              "products": "unlimited"
+            }
+          }
+        ],
+        "starting_price": 39,
+        "custom_pricing": true,
+        "free_trial_days": 15,
+        "free_tier": false,
+        "startup_discount": null
+      },
+      "best_for": [
+        "Growing businesses expecting to scale rapidly",
+        "Multi-channel sellers (online, Amazon, eBay, social)",
+        "B2B sellers needing wholesale features",
+        "Businesses wanting to avoid transaction fees",
+        "SEO-focused companies (superior built-in SEO)",
+        "Enterprises needing headless commerce",
+        "High-volume stores with complex catalogs"
+      ],
+      "industries": [
+        "Wholesale & Distribution",
+        "Manufacturing",
+        "B2B Commerce",
+        "Consumer Goods",
+        "Fashion & Apparel",
+        "Health & Beauty",
+        "Automotive"
+      ],
+      "company_sizes": [
+        "smb",
+        "mid_market",
+        "enterprise"
+      ],
+      "avoid_if": [
+        "Very small startup (overkill for simple needs)",
+        "Need extensive app ecosystem (smaller than Shopify)",
+        "Want drag-and-drop simplicity (steeper learning curve)",
+        "Revenue exceeds plan limits frequently (upgrade costs jump)",
+        "Need highly customized themes (limited free options)"
+      ],
+      "implementation": {
+        "avg_weeks": 4,
+        "complexity": "medium",
+        "requires_developer": false,
+        "cost_range": {
+          "diy": {
+            "min": 500,
+            "max": 2000
+          },
+          "with_help": {
+            "min": 2000,
+            "max": 10000
+          },
+          "full_service": {
+            "min": 10000,
+            "max": 100000
+          }
+        }
+      },
+      "ratings": {
+        "g2": {
+          "score": 4.2,
+          "reviews": 1500,
+          "last_updated": "2025-12"
+        },
+        "capterra": {
+          "score": 4.4,
+          "reviews": 700,
+          "last_updated": "2025-12"
+        },
+        "our_rating": 4.3,
+        "our_notes": "Strong choice for scaling businesses. No transaction fees is major advantage over Shopify. Built-in features reduce need for paid apps. Revenue caps can be limiting but encourage platform growth alongside business. Superior B2B features and headless commerce capabilities. Named one of G2's Best Commerce Software Products of 2025. Support team consistently praised."
+      },
+      "integrations": [
+        "Amazon",
+        "eBay",
+        "Walmart",
+        "Facebook & Instagram",
+        "Google Shopping",
+        "Square POS",
+        "PayPal",
+        "Stripe",
+        "Avalara",
+        "QuickBooks",
+        "NetSuite",
+        "1,000+ apps in marketplace",
+        "API available"
+      ],
+      "api": {
+        "available": true,
+        "type": "REST & GraphQL",
+        "documentation": "https://developer.bigcommerce.com"
+      },
+      "competitors": [
+        "Shopify",
+        "Adobe Commerce",
+        "Salesforce Commerce Cloud",
+        "WooCommerce",
+        "commercetools"
+      ],
+      "verified_at": "2025-12-17T00:00:00Z",
+      "verified_by": "manual",
+      "source_url": "https://www.bigcommerce.com/essentials/pricing/",
+      "notes": "Annual billing saves 25%: Standard $29/mo, Plus $79/mo, Pro $299/mo. Auto-upgrade when TTM (Trailing Twelve Month) sales exceed tier limit. Pro plan charges $150/month per $200k over $400k limit. At $1M+ GMV, automatically moves to Enterprise with custom pricing. Zero transaction fees regardless of payment processor. Standard payment processing fees still apply (2.2-2.9% + 30¢). 15-day free trial, no credit card required."
+    },
+    {
+      "slug": "medusa",
+      "name": "Medusa",
+      "category": "ecommerce",
+      "subcategory": "open_source_headless",
+      "website": "https://medusajs.com",
+      "pricing_url": "https://medusajs.com/pricing/",
+      "description": "100% open-source, developer-first headless e-commerce platform built on Node.js. Composable commerce framework offering complete control over code and infrastructure. Designed for technical teams wanting to build custom, scalable e-commerce experiences without vendor lock-in. Features modular architecture, multi-region support, and advanced B2B capabilities out of the box.",
+      "tagline": "The world's most flexible commerce platform",
+      "pricing": {
+        "model": "open_source_plus_cloud",
+        "currency": "USD",
+        "billing_options": ["monthly", "annual"],
+        "annual_discount_percent": null,
+        "tiers": [
+          {
+            "name": "Open Source (Self-Hosted)",
+            "price": 0,
+            "per": "forever",
+            "billing": "free",
+            "features": [
+              "100% free under MIT license",
+              "Full source code access",
+              "All commerce modules on npm",
+              "Unlimited transactions (no GMV cap)",
+              "No transaction fees",
+              "Multi-region support",
+              "Advanced product management",
+              "Order management",
+              "Customer management",
+              "Multi-currency support",
+              "Promotions engine",
+              "Community support"
+            ],
+            "limits": {
+              "requires_developer": true,
+              "self_hosting_required": true
+            }
+          },
+          {
+            "name": "Medusa Cloud",
+            "price": 29,
+            "per": "month",
+            "billing": "monthly",
+            "features": [
+              "All open-source features",
+              "Pre-configured infrastructure",
+              "Auto-scaling based on traffic",
+              "Unlimited admin dashboard users",
+              "Development platform access (per seat)",
+              "Managed hosting and updates",
+              "Database management",
+              "Security patches",
+              "Email support",
+              "Own and control source code"
+            ],
+            "limits": {
+              "dev_seats": "billed separately",
+              "gmv_cap": "none"
+            }
+          },
+          {
+            "name": "Enterprise",
+            "price": null,
+            "per": "custom",
+            "billing": "annual",
+            "features": [
+              "All Cloud features",
+              "Custom cloud configuration",
+              "Platform SLAs",
+              "Dedicated support team",
+              "Architecture consulting",
+              "Priority feature requests",
+              "Custom integrations",
+              "White-glove onboarding",
+              "Success planning"
+            ],
+            "limits": {
+              "custom_requirements": true
+            }
+          }
+        ],
+        "starting_price": 0,
+        "custom_pricing": true,
+        "free_trial_days": null,
+        "free_tier": true,
+        "startup_discount": null
+      },
+      "best_for": [
+        "Technical teams with JavaScript/Node.js expertise",
+        "Businesses wanting full code ownership",
+        "Companies avoiding vendor lock-in",
+        "Multi-region, international commerce",
+        "Headless commerce architectures",
+        "Developers building custom storefronts",
+        "Startups with technical founders"
+      ],
+      "industries": [
+        "Technology",
+        "B2B Commerce",
+        "Digital Products",
+        "Multi-brand Retailers",
+        "Global Commerce",
+        "Developer Tools"
+      ],
+      "company_sizes": [
+        "startup",
+        "smb",
+        "mid_market"
+      ],
+      "avoid_if": [
+        "No in-house developers",
+        "Need turnkey solution with zero technical setup",
+        "Want extensive no-code/low-code tools",
+        "Require large plugin marketplace",
+        "Need phone support on lower tiers",
+        "Want pre-built storefront themes"
+      ],
+      "implementation": {
+        "avg_weeks": 8,
+        "complexity": "high",
+        "requires_developer": true,
+        "cost_range": {
+          "diy": {
+            "min": 0,
+            "max": 500
+          },
+          "with_help": {
+            "min": 5000,
+            "max": 30000
+          },
+          "full_service": {
+            "min": 30000,
+            "max": 150000
+          }
+        }
+      },
+      "ratings": {
+        "g2": {
+          "score": null,
+          "reviews": null,
+          "last_updated": "2025-12"
+        },
+        "capterra": {
+          "score": null,
+          "reviews": null,
+          "last_updated": "2025-12"
+        },
+        "producthunt": {
+          "score": 4.8,
+          "reviews": 150,
+          "last_updated": "2025-12"
+        },
+        "our_rating": 4.4,
+        "our_notes": "Best open-source headless commerce platform for technical teams. True flexibility and ownership without licensing costs. Strong developer community and modern tech stack. Requires significant development expertise. Great alternative to Shopify/BigCommerce for teams wanting control. Not rated on G2/Capterra yet due to developer-focused nature, but highly rated on Product Hunt."
+      },
+      "integrations": [
+        "Stripe",
+        "PayPal",
+        "Klaviyo",
+        "Segment",
+        "Algolia",
+        "SendGrid",
+        "Contentful",
+        "Sanity",
+        "Next.js",
+        "Gatsby",
+        "Custom via API"
+      ],
+      "api": {
+        "available": true,
+        "type": "REST",
+        "documentation": "https://docs.medusajs.com"
+      },
+      "competitors": [
+        "Saleor",
+        "commercetools",
+        "Shopware",
+        "Reaction Commerce",
+        "Vendure"
+      ],
+      "verified_at": "2025-12-17T00:00:00Z",
+      "verified_by": "manual",
+      "source_url": "https://medusajs.com/pricing/",
+      "notes": "Open source version is completely free (MIT license) but requires self-hosting costs (infrastructure, DevOps). Medusa Cloud at $29/month handles infrastructure. No GMV caps, no transaction fees, no revenue sharing. Development platform access billed per seat for teams. Can export data anytime and self-host. Cancel anytime, no lock-in. Built on Node.js, works with modern frontend frameworks. 21.8k+ GitHub stars."
+    },
+    {
+      "slug": "saleor",
+      "name": "Saleor",
+      "category": "ecommerce",
+      "subcategory": "open_source_headless",
+      "website": "https://saleor.io",
+      "pricing_url": "https://saleor.io/pricing",
+      "description": "AI-ready, composable, open-source headless e-commerce platform built on Python, Django, React, and GraphQL. Offers single version without feature fragmentation or commercial limitations. Designed for multi-language, multi-currency global brands. GraphQL-only API design enables fast, flexible development. Popular choice for businesses wanting enterprise features in open-source package.",
+      "tagline": "Composable, open source, headless e-commerce built for modern commerce",
+      "pricing": {
+        "model": "cloud_tiered",
+        "currency": "USD",
+        "billing_options": ["monthly", "annual"],
+        "annual_discount_percent": null,
+        "tiers": [
+          {
+            "name": "Open Source (Self-Hosted)",
+            "price": 0,
+            "per": "forever",
+            "billing": "free",
+            "features": [
+              "Full access to codebase",
+              "No licensing fees",
+              "GraphQL API",
+              "Multi-channel support",
+              "Multi-language & multi-currency",
+              "Advanced product catalog",
+              "Channel-based inventory",
+              "Webhook system",
+              "Custom attributes",
+              "PWA storefront included",
+              "Community support"
+            ],
+            "limits": {
+              "requires_developer": true,
+              "self_hosting_costs": true
+            }
+          },
+          {
+            "name": "Saleor Cloud",
+            "price": 695,
+            "per": "month",
+            "billing": "monthly",
+            "features": [
+              "All open-source features",
+              "Fully managed hosting",
+              "Automatic scaling",
+              "Security updates",
+              "Database management",
+              "99.9% uptime SLA",
+              "Email support",
+              "Dashboard access",
+              "Monitoring & logging",
+              "Backup & recovery"
+            ],
+            "limits": {
+              "starting_price": true
+            }
+          },
+          {
+            "name": "Standard",
+            "price": 950,
+            "per": "month",
+            "billing": "monthly",
+            "features": [
+              "All Saleor Cloud features",
+              "Enhanced support",
+              "Additional environments",
+              "Advanced monitoring",
+              "Performance optimization",
+              "Custom configurations",
+              "Integration support"
+            ],
+            "limits": {
+              "custom_configurations": true
+            }
+          },
+          {
+            "name": "Enterprise",
+            "price": 1500,
+            "per": "month",
+            "billing": "custom",
+            "features": [
+              "All Standard features",
+              "Dedicated account manager",
+              "Custom SLAs",
+              "Priority support (24/7)",
+              "Architecture consulting",
+              "Custom development support",
+              "SAML SSO",
+              "Advanced security features",
+              "Training sessions",
+              "Strategic planning"
+            ],
+            "limits": {
+              "custom_requirements": true
+            }
+          }
+        ],
+        "starting_price": 0,
+        "custom_pricing": true,
+        "free_trial_days": 14,
+        "free_tier": true,
+        "startup_discount": null
+      },
+      "best_for": [
+        "Multi-language, multi-currency global brands",
+        "Technical teams with Python/Django expertise",
+        "Businesses needing GraphQL API architecture",
+        "Enterprises wanting open-source with support",
+        "Companies building headless commerce",
+        "B2B and B2C hybrid models",
+        "Organizations avoiding vendor lock-in"
+      ],
+      "industries": [
+        "Global E-commerce",
+        "Multi-brand Retail",
+        "B2B Commerce",
+        "Fashion & Apparel",
+        "Consumer Goods",
+        "Technology",
+        "Manufacturing"
+      ],
+      "company_sizes": [
+        "startup",
+        "smb",
+        "mid_market",
+        "enterprise"
+      ],
+      "avoid_if": [
+        "No technical team or Python developers",
+        "Need turnkey, no-code solution",
+        "Want extensive plugin marketplace",
+        "Small budget (cloud plans expensive)",
+        "Need pre-built storefronts",
+        "Require phone support on lower tiers"
+      ],
+      "implementation": {
+        "avg_weeks": 12,
+        "complexity": "high",
+        "requires_developer": true,
+        "cost_range": {
+          "diy": {
+            "min": 0,
+            "max": 1000
+          },
+          "with_help": {
+            "min": 10000,
+            "max": 50000
+          },
+          "full_service": {
+            "min": 50000,
+            "max": 250000
+          }
+        }
+      },
+      "ratings": {
+        "g2": {
+          "score": 4.5,
+          "reviews": 45,
+          "last_updated": "2025-12"
+        },
+        "capterra": {
+          "score": 4.6,
+          "reviews": 25,
+          "last_updated": "2025-12"
+        },
+        "github": {
+          "stars": 21800,
+          "last_updated": "2025-12"
+        },
+        "our_rating": 4.3,
+        "our_notes": "Leading open-source MACH (Microservices, API-first, Cloud-native, Headless) e-commerce platform. Over 21.8k GitHub stars demonstrate strong developer community. GraphQL-only API is powerful but requires learning. Cloud pricing is steep compared to competitors. Single version without feature gating is major advantage. Best for technical teams wanting enterprise features without enterprise licensing costs."
+      },
+      "integrations": [
+        "Stripe",
+        "PayPal",
+        "Adyen",
+        "Braintree",
+        "Contentful",
+        "Algolia",
+        "SendGrid",
+        "Mailchimp",
+        "Google Analytics",
+        "Facebook Pixel",
+        "Custom via GraphQL API"
+      ],
+      "api": {
+        "available": true,
+        "type": "GraphQL",
+        "documentation": "https://docs.saleor.io"
+      },
+      "competitors": [
+        "Medusa",
+        "commercetools",
+        "Shopware",
+        "Adobe Commerce",
+        "BigCommerce"
+      ],
+      "verified_at": "2025-12-17T00:00:00Z",
+      "verified_by": "manual",
+      "source_url": "https://saleor.io/pricing",
+      "notes": "Open-source version completely free but requires hosting infrastructure costs. Saleor Cloud pricing reported as $695-$795/month base (sources vary). Built on Python/Django/React/GraphQL stack. Native multichannel with per-channel control of pricing, currencies, stock, and products. No transaction fees or GMV caps. Data traffic costs may apply with cloud deployment. Sustainability focused - cloud revenue supports open-source development."
+    },
+    {
+      "slug": "adobe-commerce",
+      "name": "Adobe Commerce (Magento)",
+      "category": "ecommerce",
+      "subcategory": "enterprise_platform",
+      "website": "https://business.adobe.com/products/magento/magento-commerce.html",
+      "pricing_url": "https://business.adobe.com/products/commerce/pricing.html",
+      "description": "Enterprise e-commerce platform (formerly Magento Commerce) offering powerful features for large-scale, complex online stores. Known for extensive customization capabilities, B2B and B2C flexibility, and Adobe Experience Cloud integration. Offers both on-premises and cloud deployment. Designed for mid-market to enterprise businesses with substantial budgets and technical resources.",
+      "tagline": "Build unique commerce experiences for B2B and B2C customers",
+      "pricing": {
+        "model": "custom_gmv_based",
+        "currency": "USD",
+        "billing_options": ["annual"],
+        "annual_discount_percent": null,
+        "tiers": [
+          {
+            "name": "Magento Open Source",
+            "price": 0,
+            "per": "forever",
+            "billing": "free",
+            "features": [
+              "Free to download and use",
+              "Core e-commerce functionality",
+              "Product catalog management",
+              "Order management",
+              "Payment integrations",
+              "Open-source community",
+              "Requires self-hosting",
+              "Self-managed updates",
+              "Community support only"
+            ],
+            "limits": {
+              "requires_developer": true,
+              "hosting_costs": true,
+              "no_support": true
+            }
+          },
+          {
+            "name": "Adobe Commerce (On-Premise)",
+            "price": 22000,
+            "per": "year",
+            "billing": "annual",
+            "features": [
+              "All Open Source features",
+              "B2B functionality",
+              "Advanced personalization",
+              "Page Builder",
+              "Business intelligence",
+              "Elasticsearch",
+              "Product recommendations",
+              "Email support",
+              "Self-hosted on your infrastructure"
+            ],
+            "limits": {
+              "starting_price": true,
+              "based_on_gmv": true,
+              "self_hosting_required": true
+            }
+          },
+          {
+            "name": "Adobe Commerce on Cloud (PaaS)",
+            "price": 40000,
+            "per": "year",
+            "billing": "annual",
+            "features": [
+              "All Commerce features",
+              "Cloud hosting (AWS/Azure)",
+              "Auto-scaling infrastructure",
+              "Global CDN",
+              "24/7 monitoring",
+              "Staging environments",
+              "Automated backups",
+              "Security patches",
+              "Priority support",
+              "99.99% uptime SLA"
+            ],
+            "limits": {
+              "starting_price": true,
+              "based_on_gmv": true,
+              "aov_considerations": true
+            }
+          },
+          {
+            "name": "Adobe Commerce as a Cloud Service (SaaS)",
+            "price": null,
+            "per": "custom",
+            "billing": "annual",
+            "features": [
+              "Multi-tenant SaaS solution",
+              "Fully managed infrastructure",
+              "Rapid deployment",
+              "Automatic updates",
+              "All Cloud features",
+              "Adobe Experience Cloud integration",
+              "Advanced analytics",
+              "AI-powered personalization",
+              "Launching June 2025"
+            ],
+            "limits": {
+              "custom_pricing": true,
+              "enterprise_only": true
+            }
+          },
+          {
+            "name": "Adobe Commerce Optimizer",
+            "price": null,
+            "per": "custom",
+            "billing": "annual",
+            "features": [
+              "Headless storefront solution",
+              "Modernize without replatforming",
+              "Edge delivery services",
+              "Composable architecture",
+              "Adobe Experience Cloud integration",
+              "Custom pricing based on needs"
+            ],
+            "limits": {
+              "custom_pricing": true
+            }
+          }
+        ],
+        "starting_price": 0,
+        "custom_pricing": true,
+        "free_trial_days": null,
+        "free_tier": true,
+        "startup_discount": null
+      },
+      "best_for": [
+        "Large enterprises with complex requirements",
+        "B2B businesses needing advanced features",
+        "Companies with substantial e-commerce budgets ($100k+/year)",
+        "Organizations already using Adobe Experience Cloud",
+        "Multi-brand, multi-store operations",
+        "Businesses needing extensive customization",
+        "High-volume stores with large catalogs"
+      ],
+      "industries": [
+        "Enterprise Retail",
+        "Manufacturing",
+        "B2B Wholesale",
+        "Fashion & Apparel",
+        "Consumer Electronics",
+        "Automotive",
+        "Health & Beauty"
+      ],
+      "company_sizes": [
+        "mid_market",
+        "enterprise"
+      ],
+      "avoid_if": [
+        "Small to medium business with limited budget",
+        "No dedicated development team",
+        "Need quick time-to-market (complex setup)",
+        "Looking for out-of-box simplicity",
+        "Limited technical resources",
+        "Budget under $50k/year for platform costs",
+        "Want managed SaaS without technical overhead"
+      ],
+      "implementation": {
+        "avg_weeks": 26,
+        "complexity": "very_high",
+        "requires_developer": true,
+        "cost_range": {
+          "diy": {
+            "min": 10000,
+            "max": 50000
+          },
+          "with_help": {
+            "min": 50000,
+            "max": 200000
+          },
+          "full_service": {
+            "min": 200000,
+            "max": 1000000
+          }
+        }
+      },
+      "ratings": {
+        "g2": {
+          "score": 3.9,
+          "reviews": 465,
+          "last_updated": "2025-12"
+        },
+        "capterra": {
+          "score": 4.3,
+          "reviews": 600,
+          "last_updated": "2025-12"
+        },
+        "trustpilot": {
+          "score": 2.8,
+          "reviews": 120,
+          "last_updated": "2025-12"
+        },
+        "our_rating": 3.8,
+        "our_notes": "Powerful but complex enterprise platform. Exceptional flexibility and features for large organizations but steep learning curve and high costs. Mixed reviews highlight licensing fees, implementation challenges, and support issues. Best for established enterprises with dedicated teams. Adobe's 2025 cloud-first strategy (ACCS, Optimizer) modernizing the platform. Not recommended for SMBs."
+      },
+      "integrations": [
+        "Adobe Experience Cloud",
+        "Adobe Analytics",
+        "Adobe Target",
+        "Salesforce",
+        "SAP",
+        "Oracle",
+        "Microsoft Dynamics",
+        "PayPal",
+        "Stripe",
+        "Avalara",
+        "4,000+ marketplace extensions",
+        "API available"
+      ],
+      "api": {
+        "available": true,
+        "type": "REST & GraphQL",
+        "documentation": "https://developer.adobe.com/commerce"
+      },
+      "competitors": [
+        "Salesforce Commerce Cloud",
+        "SAP Commerce Cloud",
+        "BigCommerce Enterprise",
+        "commercetools",
+        "Shopify Plus"
+      ],
+      "verified_at": "2025-12-17T00:00:00Z",
+      "verified_by": "manual",
+      "source_url": "https://business.adobe.com/products/commerce/pricing.html",
+      "notes": "Pricing highly variable based on GMV (Gross Merchandise Value), AOV (Average Order Value), and deployment model. On-premise starts ~$22k/year, Cloud starts ~$40k/year but typical enterprise deals are $100k-500k+/year. Additional costs: hosting ($10-80/month for Open Source, included in Cloud), themes ($25-499), extensions ($25-100k+), development (substantial ongoing costs). Adobe shifted strategy in 2025 toward cloud-first with ACCS (SaaS, June 2025), Cloud (PaaS), and Optimizer (headless). On-premise deployments being phased out."
+    }
+  ],
+  "last_updated": "2025-12-17T00:00:00Z"
+}

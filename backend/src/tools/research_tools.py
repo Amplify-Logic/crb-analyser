@@ -2,76 +2,83 @@
 Research Tools
 
 Tools for the research phase of CRB analysis.
+Uses the JSON-based knowledge base for vendor and benchmark data.
 """
 
-from typing import Dict, Any
+from typing import Dict, Any, List
+
+# Import knowledge base functions
+from src.knowledge import (
+    get_benchmarks_for_metrics,
+    normalize_industry,
+    search_vendors,
+    get_all_vendors,
+    load_vendor_category,
+    list_vendor_categories,
+    get_llm_providers,
+)
 
 
-# Industry benchmark data (in production, this would come from a database)
-INDUSTRY_BENCHMARKS = {
-    "marketing_agency": {
-        "automation_rate": {"average": 35, "top_quartile": 55, "unit": "%"},
-        "admin_time_ratio": {"average": 25, "top_quartile": 15, "unit": "%"},
-        "client_retention": {"average": 75, "top_quartile": 90, "unit": "%"},
-        "revenue_per_employee": {"average": 120000, "top_quartile": 180000, "unit": "EUR"},
-        "project_margin": {"average": 35, "top_quartile": 50, "unit": "%"},
-    },
-    "ecommerce": {
-        "automation_rate": {"average": 45, "top_quartile": 70, "unit": "%"},
-        "fulfillment_cost_ratio": {"average": 12, "top_quartile": 8, "unit": "%"},
-        "customer_service_automation": {"average": 30, "top_quartile": 60, "unit": "%"},
-        "inventory_accuracy": {"average": 85, "top_quartile": 98, "unit": "%"},
-    },
-    "retail": {
-        "inventory_turnover": {"average": 8, "top_quartile": 12, "unit": "times/year"},
-        "labor_cost_ratio": {"average": 20, "top_quartile": 15, "unit": "%"},
-        "shrinkage_rate": {"average": 1.5, "top_quartile": 0.5, "unit": "%"},
-    },
-    "tech_company": {
-        "automation_rate": {"average": 55, "top_quartile": 80, "unit": "%"},
-        "deployment_frequency": {"average": "weekly", "top_quartile": "daily", "unit": ""},
-        "dev_productivity": {"average": 60, "top_quartile": 80, "unit": "story_points/sprint"},
-    },
-    "music_company": {
-        "catalog_management_time": {"average": 15, "top_quartile": 5, "unit": "hours/week"},
-        "royalty_processing_time": {"average": 40, "top_quartile": 10, "unit": "hours/month"},
-        "content_distribution_automation": {"average": 40, "top_quartile": 85, "unit": "%"},
-    },
-    "general": {
-        "automation_rate": {"average": 30, "top_quartile": 50, "unit": "%"},
-        "admin_time_ratio": {"average": 30, "top_quartile": 15, "unit": "%"},
-        "employee_productivity": {"average": 65, "top_quartile": 85, "unit": "%"},
-    },
+# Category mapping from tool input to knowledge base categories
+CATEGORY_MAP = {
+    "crm": "crm",
+    "automation": "automation",
+    "ai": "ai_assistants",
+    "ai_development": "ai_assistants",
+    "project_management": "project_management",
+    "project management": "project_management",
+    "customer_service": "customer_support",
+    "customer service": "customer_support",
+    "support": "customer_support",
+    "analytics": "analytics",
+    "marketing": "marketing",
+    "email": "marketing",
+    "ecommerce": "ecommerce",
+    "finance": "finance",
+    "accounting": "finance",
+    "hr": "hr_payroll",
+    "payroll": "hr_payroll",
+    "dev_tools": "dev_tools",
+    "development": "dev_tools",
 }
 
-# Vendor database (in production, this would be a full database)
-VENDOR_DATABASE = {
-    "CRM": [
-        {"name": "HubSpot", "pricing": "Free-$1200/mo", "best_for": "SMB", "features": ["Marketing", "Sales", "Service"]},
-        {"name": "Salesforce", "pricing": "$25-$300/user/mo", "best_for": "Enterprise", "features": ["Full suite", "Customizable"]},
-        {"name": "Pipedrive", "pricing": "$15-$99/user/mo", "best_for": "Sales teams", "features": ["Pipeline", "Automation"]},
-    ],
-    "automation": [
-        {"name": "Zapier", "pricing": "Free-$599/mo", "best_for": "No-code", "features": ["5000+ integrations", "Easy setup"]},
-        {"name": "Make", "pricing": "Free-$299/mo", "best_for": "Complex workflows", "features": ["Visual builder", "Advanced logic"]},
-        {"name": "n8n", "pricing": "Free-$50/mo", "best_for": "Technical teams", "features": ["Self-hosted", "Open source"]},
-    ],
-    "AI": [
-        {"name": "Claude/Anthropic", "pricing": "API usage", "best_for": "Content & analysis", "features": ["Long context", "Safe"]},
-        {"name": "OpenAI", "pricing": "API usage", "best_for": "General AI", "features": ["GPT-4", "DALL-E", "Whisper"]},
-        {"name": "Jasper", "pricing": "$49-$125/mo", "best_for": "Marketing", "features": ["Templates", "Brand voice"]},
-    ],
-    "project_management": [
-        {"name": "Monday.com", "pricing": "$8-$16/user/mo", "best_for": "Visual teams", "features": ["Automations", "Dashboards"]},
-        {"name": "Asana", "pricing": "Free-$25/user/mo", "best_for": "Task management", "features": ["Goals", "Portfolios"]},
-        {"name": "ClickUp", "pricing": "Free-$12/user/mo", "best_for": "All-in-one", "features": ["Docs", "Whiteboards"]},
-    ],
-    "customer_service": [
-        {"name": "Intercom", "pricing": "$74-$395/mo", "best_for": "SaaS", "features": ["Chat", "Bots", "Help desk"]},
-        {"name": "Zendesk", "pricing": "$19-$115/agent/mo", "best_for": "Enterprise", "features": ["Tickets", "Chat", "Phone"]},
-        {"name": "Freshdesk", "pricing": "Free-$79/agent/mo", "best_for": "SMB", "features": ["Tickets", "Automation"]},
-    ],
-}
+
+def _format_vendor_for_tool(vendor: Dict) -> Dict:
+    """Format a vendor from knowledge base for tool output."""
+    pricing = vendor.get("pricing", {})
+    tiers = pricing.get("tiers", [])
+
+    # Build pricing string
+    if pricing.get("free_tier"):
+        price_str = "Free"
+        if tiers:
+            paid_tiers = [t for t in tiers if (t.get("price") or 0) > 0]
+            if paid_tiers:
+                max_price = max((t.get("price") or 0) for t in paid_tiers)
+                price_str += f"-${int(max_price)}/mo"
+    elif tiers:
+        prices = [(t.get("price") or 0) for t in tiers if t.get("price")]
+        if prices:
+            price_str = f"${int(min(prices))}-${int(max(prices))}/mo"
+        else:
+            price_str = "Contact for pricing"
+    else:
+        starting = pricing.get("starting_price")
+        if starting:
+            price_str = f"From ${int(starting)}/mo"
+        else:
+            price_str = "Contact for pricing"
+
+    return {
+        "name": vendor.get("name"),
+        "slug": vendor.get("slug"),
+        "pricing": price_str,
+        "best_for": ", ".join(vendor.get("best_for", [])[:3]),
+        "features": vendor.get("best_for", [])[:5],
+        "website": vendor.get("website"),
+        "free_tier": pricing.get("free_tier", False),
+        "verified_at": vendor.get("verified_at"),
+    }
 
 
 async def search_industry_benchmarks(
@@ -79,38 +86,40 @@ async def search_industry_benchmarks(
     context: Dict[str, Any],
     audit_id: str,
 ) -> Dict[str, Any]:
-    """Search for industry-specific benchmarks."""
+    """Search for industry-specific benchmarks from knowledge base."""
     industry = inputs.get("industry", context.get("industry", "general"))
     metric_type = inputs.get("metric_type")
 
-    # Normalize industry name
-    industry_key = industry.lower().replace(" ", "_").replace("/", "_")
+    # Normalize and get benchmarks from knowledge base
+    normalized = normalize_industry(industry)
+    benchmarks = get_benchmarks_for_metrics(industry, metric_type)
 
-    # Get benchmarks
-    benchmarks = INDUSTRY_BENCHMARKS.get(industry_key, INDUSTRY_BENCHMARKS["general"])
-
-    if metric_type:
-        # Filter to specific metric
-        metric_key = metric_type.lower().replace(" ", "_")
-        if metric_key in benchmarks:
-            return {
-                "industry": industry,
-                "metric": metric_type,
-                "data": benchmarks[metric_key],
-                "source": "CRB Industry Database 2024",
-            }
+    if not benchmarks:
+        # Fall back to general benchmarks if industry not found
         return {
             "industry": industry,
-            "metric": metric_type,
-            "data": None,
-            "message": f"No benchmark found for {metric_type} in {industry}",
+            "normalized_industry": normalized,
+            "benchmarks": {},
+            "source": "CRB Industry Knowledge Base",
+            "note": f"No specific benchmarks found for {industry}. Consider using general industry metrics.",
+        }
+
+    if metric_type:
+        # Return specific metric category
+        return {
+            "industry": industry,
+            "normalized_industry": normalized,
+            "metric_category": metric_type,
+            "data": benchmarks,
+            "source": "CRB Industry Knowledge Base (verified sources)",
         }
 
     return {
         "industry": industry,
+        "normalized_industry": normalized,
         "benchmarks": benchmarks,
-        "source": "CRB Industry Database 2024",
-        "note": "Benchmarks based on industry surveys and published reports",
+        "source": "CRB Industry Knowledge Base",
+        "note": "Benchmarks sourced from McKinsey, Gartner, Deloitte, and industry reports",
     }
 
 
@@ -119,51 +128,62 @@ async def search_vendor_solutions(
     context: Dict[str, Any],
     audit_id: str,
 ) -> Dict[str, Any]:
-    """Search for vendor solutions matching requirements."""
-    category = inputs.get("category", "").upper()
+    """Search for vendor solutions from knowledge base matching requirements."""
+    category = inputs.get("category", "")
     company_size = inputs.get("company_size", context.get("company_size", ""))
     budget_range = inputs.get("budget_range", "")
+    query = inputs.get("query", "")
 
-    # Normalize category
-    category_map = {
-        "CRM": "CRM",
-        "AUTOMATION": "automation",
-        "AI": "AI",
-        "PROJECT MANAGEMENT": "project_management",
-        "PROJECT_MANAGEMENT": "project_management",
-        "CUSTOMER SERVICE": "customer_service",
-        "CUSTOMER_SERVICE": "customer_service",
+    # Normalize category to knowledge base category
+    normalized_category = CATEGORY_MAP.get(category.lower(), category.lower())
+
+    # Map company size to knowledge base format
+    size_map = {
+        "solo": "startup",
+        "1": "startup",
+        "2-10": "startup",
+        "11-50": "smb",
+        "51-200": "mid-market",
+        "200+": "enterprise",
+        "201+": "enterprise",
     }
+    kb_company_size = size_map.get(company_size, company_size.lower() if company_size else None)
 
-    normalized_category = category_map.get(category.upper(), category.lower())
-    vendors = VENDOR_DATABASE.get(normalized_category, [])
+    # Parse budget if provided (e.g., "$0-100", "100-500")
+    max_price = None
+    if budget_range:
+        try:
+            # Extract max number from budget range
+            import re
+            numbers = re.findall(r'\d+', budget_range)
+            if numbers:
+                max_price = float(max(int(n) for n in numbers))
+        except (ValueError, TypeError):
+            pass
 
-    # Filter by company size if provided
-    size_preferences = {
-        "solo": ["SMB", "No-code", "Free"],
-        "2-10": ["SMB", "No-code", "Sales teams"],
-        "11-50": ["SMB", "All-in-one", "SaaS"],
-        "51-200": ["Enterprise", "SaaS", "Technical teams"],
-        "200+": ["Enterprise"],
-    }
+    # Search vendors from knowledge base
+    vendors = search_vendors(
+        query=query or None,
+        category=normalized_category if normalized_category in list_vendor_categories() else None,
+        company_size=kb_company_size,
+        max_price=max_price,
+    )
 
-    if company_size and company_size in size_preferences:
-        preferred = size_preferences[company_size]
-        # Sort vendors by preference match
-        vendors = sorted(
-            vendors,
-            key=lambda v: any(p in v.get("best_for", "") for p in preferred),
-            reverse=True,
-        )
+    # Format vendors for tool output
+    formatted_vendors = [_format_vendor_for_tool(v) for v in vendors[:5]]
 
     return {
         "category": category,
-        "vendors": vendors[:5],  # Top 5 matches
+        "normalized_category": normalized_category,
+        "vendors": formatted_vendors,
         "total_found": len(vendors),
+        "available_categories": list_vendor_categories(),
         "filters_applied": {
             "company_size": company_size,
             "budget_range": budget_range,
+            "query": query,
         },
+        "source": "CRB Vendor Knowledge Base (verified December 2025)",
     }
 
 

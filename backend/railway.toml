@@ -1,10 +1,40 @@
 [build]
-builder = "DOCKERFILE"
+builder = "dockerfile"
 dockerfilePath = "Dockerfile"
 
 [deploy]
-startCommand = "uvicorn src.main:app --host 0.0.0.0 --port $PORT"
+# Auto-scaling configuration
+numReplicas = 2
+minReplicas = 2
+maxReplicas = 5
+
+# Health check configuration
 healthcheckPath = "/health"
-healthcheckTimeout = 100
+healthcheckTimeout = 30
+startCommand = ""
+
+# Restart policy
 restartPolicyType = "ON_FAILURE"
-restartPolicyMaxRetries = 10
+restartPolicyMaxRetries = 5
+
+# Rolling deployment
+deploymentStrategy = "rolling"
+
+[deploy.resources]
+# Increased memory for report generation and AI processing
+memory = "2GB"
+cpu = 1
+
+[deploy.env]
+# Runtime environment variables
+WORKERS = "1"
+LOG_LEVEL = "warning"
+
+[[services]]
+name = "crb-backend"
+port = 8383
+protocol = "http"
+
+# Auto-scaling triggers (if supported by Railway)
+# Scale up when CPU > 70% or memory > 80%
+# Scale down when CPU < 30% and memory < 40%

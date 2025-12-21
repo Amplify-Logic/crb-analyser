@@ -3,16 +3,18 @@ PDF Report Generator
 
 Generates professional PDF reports using WeasyPrint.
 Supports both audit-based and quiz-based reports with the two pillars methodology.
+Includes matplotlib charts for visual data representation.
 """
 
 import io
 import logging
 from datetime import datetime
-from typing import Dict, Any
+from typing import Dict, Any, Optional
 
 from jinja2 import Template
 
 from src.config.supabase_client import get_async_supabase
+from src.services.chart_service import generate_all_charts
 
 logger = logging.getLogger(__name__)
 
@@ -389,11 +391,22 @@ REPORT_TEMPLATE = """
         </div>
     </div>
 
+    {% if charts and charts.readiness_gauge %}
+    <div style="text-align: center; margin: 20px 0;">
+        <img src="data:image/png;base64,{{ charts.readiness_gauge }}" alt="AI Readiness Score" style="max-width: 300px;">
+    </div>
+    {% else %}
     <div class="score-card">
         <div class="score">{{ ai_readiness_score }}</div>
         <div class="score-label">AI Readiness Score (out of 100)</div>
     </div>
+    {% endif %}
 
+    {% if charts and charts.two_pillars %}
+    <div style="text-align: center; margin: 20px 0;">
+        <img src="data:image/png;base64,{{ charts.two_pillars }}" alt="Two Pillars Scores" style="max-width: 500px;">
+    </div>
+    {% else %}
     <div class="two-pillars">
         <div class="pillar">
             <div class="pillar-score">{{ customer_value_score }}/10</div>
@@ -404,6 +417,7 @@ REPORT_TEMPLATE = """
             <div class="pillar-label">Business Health Score</div>
         </div>
     </div>
+    {% endif %}
 
     <div class="metrics-grid">
         <div class="metric-box">
@@ -428,6 +442,11 @@ REPORT_TEMPLATE = """
 
     <div class="value-summary">
         <h3>Value Summary (3-Year Projection)</h3>
+        {% if charts and charts.value_timeline %}
+        <div style="text-align: center; margin: 15px 0;">
+            <img src="data:image/png;base64,{{ charts.value_timeline }}" alt="Value Timeline" style="max-width: 100%;">
+        </div>
+        {% endif %}
         <div class="value-row">
             <span>Value SAVED (Efficiency)</span>
             <span>€{{ "{:,.0f}".format(value_saved_min) }} - €{{ "{:,.0f}".format(value_saved_max) }}</span>
@@ -443,6 +462,11 @@ REPORT_TEMPLATE = """
     </div>
 
     <h2>Key Findings</h2>
+    {% if charts and charts.findings_breakdown %}
+    <div style="text-align: center; margin: 15px 0;">
+        <img src="data:image/png;base64,{{ charts.findings_breakdown }}" alt="Findings by Priority" style="max-width: 300px;">
+    </div>
+    {% endif %}
     {% for finding in findings %}
     <div class="finding">
         <div class="finding-header">
@@ -480,6 +504,11 @@ REPORT_TEMPLATE = """
     {% endfor %}
 
     <h2>Recommendations</h2>
+    {% if charts and charts.roi_comparison %}
+    <div style="text-align: center; margin: 15px 0;">
+        <img src="data:image/png;base64,{{ charts.roi_comparison }}" alt="ROI Comparison" style="max-width: 100%;">
+    </div>
+    {% endif %}
     {% for rec in recommendations %}
     <div class="recommendation">
         <div class="recommendation-title">{{ rec.title }}</div>
@@ -696,12 +725,13 @@ async def generate_pdf_report(audit_id: str) -> io.BytesIO:
     return await _render_pdf(template_data)
 
 
-async def generate_pdf_from_report_data(report: Dict[str, Any]) -> io.BytesIO:
+async def generate_pdf_from_report_data(report: Dict[str, Any], include_charts: bool = True) -> io.BytesIO:
     """
     Generate a PDF from report data (new quiz-based format).
 
     Args:
         report: Full report data dict from reports table
+        include_charts: Whether to generate and include matplotlib charts
 
     Returns a BytesIO buffer containing the PDF.
     """
@@ -711,6 +741,16 @@ async def generate_pdf_from_report_data(report: Dict[str, Any]) -> io.BytesIO:
     recommendations = report.get("recommendations", [])
     roadmap = report.get("roadmap", {})
     methodology_notes = report.get("methodology_notes", {})
+
+    # Generate charts if requested
+    charts = {}
+    if include_charts:
+        try:
+            charts = await generate_all_charts(report)
+            logger.info(f"Generated {len(charts)} charts for PDF")
+        except Exception as e:
+            logger.warning(f"Failed to generate charts: {e}")
+            charts = {}
 
     # Calculate totals
     value_saved = value_summary.get("value_saved", {}).get("subtotal", {})
@@ -745,6 +785,7 @@ async def generate_pdf_from_report_data(report: Dict[str, Any]) -> io.BytesIO:
         "not_recommended": executive_summary.get("not_recommended", []),
         "roadmap": roadmap,
         "methodology_notes": methodology_notes,
+        "charts": charts,  # Include generated charts
     }
 
     return await _render_pdf(template_data)

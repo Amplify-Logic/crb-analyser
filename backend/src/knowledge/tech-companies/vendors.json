@@ -1,0 +1,157 @@
+{
+  "industry": "tech-companies",
+  "vendor_categories": [
+    {
+      "category": "predictive-maintenance",
+      "description": "IoT analytics and predictive maintenance platforms",
+      "vendors": [
+        {
+          "name": "AWS IoT Analytics",
+          "tier": "off_the_shelf",
+          "pricing": "Pay-as-you-go, ~€0.002/message",
+          "best_for": "Companies already on AWS",
+          "pros": ["Scalable", "Good ML integration", "Pay-per-use"],
+          "cons": ["Generic models", "AWS lock-in"]
+        },
+        {
+          "name": "Azure IoT Hub",
+          "tier": "off_the_shelf",
+          "pricing": "€25-250/month depending on scale",
+          "best_for": "Microsoft ecosystem users",
+          "pros": ["Enterprise support", "Power BI integration"],
+          "cons": ["Complex pricing", "Microsoft lock-in"]
+        },
+        {
+          "name": "PTC ThingWorx",
+          "tier": "best_in_class",
+          "pricing": "€2,000-10,000/month",
+          "best_for": "Industrial IoT at scale",
+          "pros": ["Industry-specific", "AR capabilities", "Full platform"],
+          "cons": ["Expensive", "Enterprise sales process"]
+        },
+        {
+          "name": "Uptake",
+          "tier": "best_in_class",
+          "pricing": "Custom pricing",
+          "best_for": "Heavy equipment and industrial",
+          "pros": ["Pre-built models", "Industry expertise"],
+          "cons": ["Enterprise focus", "Long implementation"]
+        }
+      ]
+    },
+    {
+      "category": "customer-analytics",
+      "description": "Customer success and analytics platforms",
+      "vendors": [
+        {
+          "name": "Gainsight",
+          "tier": "best_in_class",
+          "pricing": "€1,500-5,000/month",
+          "best_for": "B2B SaaS with 50+ customers",
+          "pros": ["Purpose-built for CS", "Health scores", "Playbooks"],
+          "cons": ["Expensive", "Complex setup"]
+        },
+        {
+          "name": "ChurnZero",
+          "tier": "off_the_shelf",
+          "pricing": "€500-2,000/month",
+          "best_for": "Mid-market SaaS",
+          "pros": ["Good UX", "Automated journeys", "Integrations"],
+          "cons": ["Less advanced AI", "Limited reporting"]
+        },
+        {
+          "name": "Pendo",
+          "tier": "off_the_shelf",
+          "pricing": "€500-2,000/month",
+          "best_for": "Product-led companies",
+          "pros": ["Product analytics", "In-app guides", "NPS"],
+          "cons": ["CS features less mature"]
+        },
+        {
+          "name": "Amplitude",
+          "tier": "best_in_class",
+          "pricing": "€0-2,500/month",
+          "best_for": "Product analytics focus",
+          "pros": ["Powerful analytics", "Free tier", "Cohorts"],
+          "cons": ["Not CS-focused", "Learning curve"]
+        }
+      ]
+    },
+    {
+      "category": "sales-intelligence",
+      "description": "Sales automation and intelligence tools",
+      "vendors": [
+        {
+          "name": "Apollo.io",
+          "tier": "off_the_shelf",
+          "pricing": "€50-100/user/month",
+          "best_for": "Outbound-focused teams",
+          "pros": ["Large database", "Sequences", "Good value"],
+          "cons": ["Data quality varies", "Email deliverability"]
+        },
+        {
+          "name": "ZoomInfo",
+          "tier": "best_in_class",
+          "pricing": "€500-1,500/user/month",
+          "best_for": "Enterprise sales teams",
+          "pros": ["Best data quality", "Intent data", "Integrations"],
+          "cons": ["Very expensive", "Long contracts"]
+        },
+        {
+          "name": "6sense",
+          "tier": "best_in_class",
+          "pricing": "€2,000-5,000/month",
+          "best_for": "Account-based marketing",
+          "pros": ["AI-driven insights", "Predictive analytics"],
+          "cons": ["Complex", "Enterprise pricing"]
+        },
+        {
+          "name": "Clearbit",
+          "tier": "off_the_shelf",
+          "pricing": "€100-500/month",
+          "best_for": "Data enrichment",
+          "pros": ["Clean API", "Good enrichment", "Reveal"],
+          "cons": ["Limited outbound features"]
+        }
+      ]
+    },
+    {
+      "category": "reporting-dashboards",
+      "description": "Business intelligence and reporting tools",
+      "vendors": [
+        {
+          "name": "Databox",
+          "tier": "off_the_shelf",
+          "pricing": "€75-250/month",
+          "best_for": "Quick dashboards",
+          "pros": ["Easy setup", "Good templates", "Mobile app"],
+          "cons": ["Limited customization", "Basic analytics"]
+        },
+        {
+          "name": "Looker",
+          "tier": "best_in_class",
+          "pricing": "€3,000-10,000/month",
+          "best_for": "Data-driven organizations",
+          "pros": ["Powerful modeling", "Embedded analytics", "LookML"],
+          "cons": ["Expensive", "Needs data team"]
+        },
+        {
+          "name": "Metabase",
+          "tier": "off_the_shelf",
+          "pricing": "€0-500/month",
+          "best_for": "Technical teams",
+          "pros": ["Open source option", "SQL-friendly", "Self-host"],
+          "cons": ["Less polished", "Limited embedding"]
+        },
+        {
+          "name": "Tableau",
+          "tier": "best_in_class",
+          "pricing": "€70-150/user/month",
+          "best_for": "Visual analytics",
+          "pros": ["Best visualizations", "Wide adoption"],
+          "cons": ["Per-user pricing", "Complex for embedding"]
+        }
+      ]
+    }
+  ]
+}

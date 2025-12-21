@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { Link, useSearchParams, useNavigate } from 'react-router-dom'
-import { api } from '../services/apiClient'
+import apiClient from '../services/apiClient'
 
 interface QuizResults {
   score: number
@@ -14,25 +14,24 @@ interface QuizAnswer {
 }
 
 const TIER_INFO = {
-  quick: {
-    name: 'Quick Report',
-    price: 47,
+  ai: {
+    name: 'CRB Analysis Report',
+    price: 147,
     features: [
-      '10-15 detailed findings',
-      'ROI calculations for each opportunity',
-      'Top 3 vendor recommendations',
-      'PDF download',
+      '15-20 AI opportunities analyzed',
+      'Honest verdicts: Go / Caution / Wait / No',
+      'Real vendor pricing & ROI',
+      'Implementation roadmap',
+      '"Don\'t do this" section',
     ],
   },
-  full: {
-    name: 'Full Analysis',
-    price: 297,
+  human: {
+    name: 'Human Audit',
+    price: 497,
     features: [
-      'Everything in Quick Report',
-      'Detailed vendor comparisons',
-      'Implementation roadmap',
-      '30-min expert consultation',
-      '90-day email support',
+      'Everything in AI Report',
+      'In-person audit by human expert',
+      '60-min strategy call',
     ],
   },
 }
@@ -40,7 +39,7 @@ const TIER_INFO = {
 export default function Checkout() {
   const [searchParams] = useSearchParams()
   const navigate = useNavigate()
-  const tier = (searchParams.get('tier') as 'quick' | 'full') || 'quick'
+  const tier = (searchParams.get('tier') as 'ai' | 'human') || 'ai'
 
   const [email, setEmail] = useState('')
   const [isLoading, setIsLoading] = useState(false)
@@ -49,9 +48,20 @@ export default function Checkout() {
   const [quizResults, setQuizResults] = useState<QuizResults | null>(null)
 
   useEffect(() => {
+    // DEV BYPASS: Skip payment in development
+    const devBypass = searchParams.get('dev') === 'bypass'
+    if (devBypass) {
+      console.log('🔓 Dev bypass: Skipping payment, redirecting to workshop')
+      // Get session ID from storage
+      const sessionId = sessionStorage.getItem('quizSessionId')
+      navigate(`/interview${sessionId ? `?session_id=${sessionId}` : ''}`)
+      return
+    }
+
     // Load quiz data from session storage
     const answersStr = sessionStorage.getItem('quizAnswers')
     const resultsStr = sessionStorage.getItem('quizResults')
+    const quizCompleted = sessionStorage.getItem('quizCompleted')
 
     if (answersStr) {
       setQuizAnswers(JSON.parse(answersStr))
@@ -60,11 +70,12 @@ export default function Checkout() {
       setQuizResults(JSON.parse(resultsStr))
     }
 
-    // If no quiz data, redirect to quiz
-    if (!answersStr || !resultsStr) {
+    // If no quiz data at all, redirect to quiz
+    // Allow through if they have quizResults OR quizCompleted flag
+    if (!answersStr && !resultsStr && !quizCompleted) {
       navigate('/quiz')
     }
-  }, [navigate])
+  }, [navigate, searchParams])
 
   const tierInfo = TIER_INFO[tier]
 
@@ -83,7 +94,7 @@ export default function Checkout() {
     setError(null)
 
     try {
-      const response = await api.post('/payments/guest-checkout', {
+      const response = await apiClient.post<{ checkout_url: string }>('/payments/guest-checkout', {
         tier,
         email,
         quiz_answers: quizAnswers.reduce((acc, a) => ({ ...acc, [a.questionId]: a.answer }), {}),
@@ -91,7 +102,7 @@ export default function Checkout() {
       })
 
       // Redirect to Stripe checkout
-      window.location.href = response.checkout_url
+      window.location.href = response.data.checkout_url
     } catch (err: any) {
       console.error('Checkout error:', err)
       setError(err.message || 'Failed to start checkout. Please try again.')
@@ -166,19 +177,19 @@ export default function Checkout() {
 
                 {/* Switch tier */}
                 <div className="mt-4 text-center">
-                  {tier === 'quick' ? (
+                  {tier === 'ai' ? (
                     <Link
-                      to="/checkout?tier=full"
+                      to="/checkout?tier=human"
                       className="text-sm text-primary-600 hover:text-primary-700"
                     >
-                      Upgrade to Full Analysis (€297)
+                      Upgrade to Human Audit (€497)
                     </Link>
                   ) : (
                     <Link
-                      to="/checkout?tier=quick"
+                      to="/checkout?tier=ai"
                       className="text-sm text-gray-500 hover:text-gray-700"
                     >
-                      Switch to Quick Report (€47)
+                      Switch to AI Report (€147)
                     </Link>
                   )}
                 </div>
@@ -266,6 +277,21 @@ export default function Checkout() {
                     <Link to="/privacy" className="text-primary-600 hover:underline">Privacy Policy</Link>
                   </p>
                 </div>
+
+                {/* Dev bypass - only in development */}
+                {import.meta.env.DEV && (
+                  <div className="mt-4 pt-4 border-t border-dashed border-gray-200">
+                    <button
+                      onClick={() => {
+                        const sessionId = sessionStorage.getItem('quizSessionId')
+                        navigate(`/interview${sessionId ? `?session_id=${sessionId}` : ''}`)
+                      }}
+                      className="w-full py-2 text-sm text-gray-500 hover:text-gray-700 bg-gray-100 rounded-lg"
+                    >
+                      🔓 Dev: Skip to Workshop
+                    </button>
+                  </div>
+                )}
               </div>
 
               {/* What happens next */}
@@ -284,10 +310,10 @@ export default function Checkout() {
                     <span className="font-semibold">3.</span>
                     Receive your personalized report via email
                   </li>
-                  {tier === 'full' && (
+                  {tier === 'human' && (
                     <li className="flex gap-2">
                       <span className="font-semibold">4.</span>
-                      Book your 30-min consultation call
+                      Book your 60-min strategy call
                     </li>
                   )}
                 </ol>

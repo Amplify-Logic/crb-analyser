@@ -1,0 +1,1099 @@
+{
+  "category": "finance",
+  "description": "Accounting and finance software for managing bookkeeping, invoicing, expenses, financial reporting, and tax compliance",
+  "vendors": [
+    {
+      "slug": "quickbooks-online",
+      "name": "QuickBooks Online",
+      "category": "finance",
+      "subcategory": "full_featured_accounting",
+      "website": "https://quickbooks.intuit.com",
+      "pricing_url": "https://quickbooks.intuit.com/pricing/",
+      "description": "Industry-leading cloud accounting platform for small to medium businesses. Comprehensive features including invoicing, expense tracking, payroll, inventory management, and advanced reporting. Intuit Assist AI automates bookkeeping tasks and provides financial insights. Most widely adopted accounting software with extensive ecosystem of integrations and accountant partnerships.",
+      "tagline": "Small business accounting software trusted by millions",
+      "pricing": {
+        "model": "per_organization",
+        "currency": "USD",
+        "billing_options": ["monthly", "annual"],
+        "annual_discount_percent": 10,
+        "tiers": [
+          {
+            "name": "Solopreneur",
+            "price": 20,
+            "per": "month",
+            "billing": "monthly",
+            "features": [
+              "Single user",
+              "Income and expense tracking",
+              "Mileage tracking",
+              "Tax categorization",
+              "Schedule C tax reporting",
+              "Receipt capture",
+              "Quarterly tax estimates",
+              "Core Intuit Assist AI"
+            ],
+            "limits": {
+              "users": 1
+            }
+          },
+          {
+            "name": "Simple Start",
+            "price": 38,
+            "per": "month",
+            "billing": "monthly",
+            "features": [
+              "All Solopreneur features",
+              "Invoice and estimate creation",
+              "Sales tax tracking",
+              "Income statements",
+              "Bank transaction sync",
+              "Receipt capture",
+              "Cash flow tracking",
+              "Basic reporting",
+              "Core Intuit Assist AI"
+            ],
+            "limits": {
+              "users": 1,
+              "collaborators": "accountant"
+            }
+          },
+          {
+            "name": "Essentials",
+            "price": 65,
+            "per": "month",
+            "billing": "monthly",
+            "features": [
+              "All Simple Start features",
+              "Bill management",
+              "Time tracking",
+              "Multi-currency support",
+              "3 users included",
+              "Enhanced Intuit Assist AI",
+              "Payment follow-up automation",
+              "Customer reminders"
+            ],
+            "limits": {
+              "users": 3
+            }
+          },
+          {
+            "name": "Plus",
+            "price": 99,
+            "per": "month",
+            "billing": "monthly",
+            "features": [
+              "All Essentials features",
+              "Inventory tracking",
+              "Project profitability",
+              "Budgeting tools",
+              "5 users included",
+              "Enhanced Intuit Assist AI",
+              "Class and location tracking",
+              "Purchase orders"
+            ],
+            "limits": {
+              "users": 5
+            }
+          },
+          {
+            "name": "Advanced",
+            "price": 275,
+            "per": "month",
+            "billing": "monthly",
+            "features": [
+              "All Plus features",
+              "Custom user roles",
+              "Workflow automation",
+              "API access",
+              "25 users included",
+              "Advanced Intuit Assist AI",
+              "Finance & Project AI agents",
+              "Batch invoicing",
+              "Custom reporting",
+              "Dedicated account manager"
+            ],
+            "limits": {
+              "users": 25
+            }
+          }
+        ],
+        "starting_price": 20,
+        "custom_pricing": false,
+        "free_trial_days": 30,
+        "free_tier": false,
+        "startup_discount": "50% off for first 3 months (promotional)"
+      },
+      "best_for": [
+        "Small businesses needing comprehensive accounting",
+        "Companies requiring strong accountant collaboration",
+        "Businesses with inventory management needs",
+        "Organizations wanting AI-powered automation",
+        "Companies needing extensive integrations"
+      ],
+      "industries": [
+        "Retail",
+        "Professional Services",
+        "Construction",
+        "Real Estate",
+        "Healthcare",
+        "E-commerce",
+        "Manufacturing"
+      ],
+      "company_sizes": [
+        "startup",
+        "smb",
+        "mid_market"
+      ],
+      "avoid_if": [
+        "Very tight budget (pricing increases frequently)",
+        "Need only basic invoicing (overkill for simple needs)",
+        "Poor customer support experiences are dealbreaker",
+        "Want offline/desktop-only solution",
+        "Prefer modern, streamlined interface (interface can be clunky)"
+      ],
+      "implementation": {
+        "avg_weeks": 2,
+        "complexity": "low",
+        "requires_developer": false,
+        "cost_range": {
+          "diy": {
+            "min": 0,
+            "max": 500
+          },
+          "with_help": {
+            "min": 500,
+            "max": 2000
+          },
+          "full_service": {
+            "min": 2000,
+            "max": 10000
+          }
+        }
+      },
+      "ratings": {
+        "g2": {
+          "score": 4.0,
+          "reviews": 3200,
+          "last_updated": "2025-12"
+        },
+        "capterra": {
+          "score": 4.3,
+          "reviews": 6800,
+          "last_updated": "2025-12"
+        },
+        "our_rating": 4.2,
+        "our_notes": "Industry standard with massive market share. Excellent features and integrations, but customer support is consistently criticized. Frequent price increases (10-17% annually) concern users. Best choice for businesses that value ubiquity and accountant familiarity. AI features (Intuit Assist) improving but tier-locked."
+      },
+      "integrations": [
+        "Stripe",
+        "PayPal",
+        "Square",
+        "Shopify",
+        "Amazon",
+        "Bill.com",
+        "Gusto",
+        "TSheets",
+        "Salesforce",
+        "HubSpot",
+        "Zapier",
+        "1000+ apps via marketplace",
+        "API available"
+      ],
+      "api": {
+        "available": true,
+        "type": "REST",
+        "documentation": "https://developer.intuit.com"
+      },
+      "competitors": [
+        "Xero",
+        "FreshBooks",
+        "Zoho Books",
+        "Wave",
+        "Sage"
+      ],
+      "verified_at": "2025-12-17T00:00:00Z",
+      "verified_by": "manual",
+      "source_url": "https://quickbooks.intuit.com/pricing/",
+      "notes": "Pricing increased 10-17% in 2025. Promotional 50% off applies to first 3 months only. Payroll is separate add-on starting at $45/month + $6/employee. Advanced plan includes QuickBooks Enterprise features. Monthly prices shown; annual billing saves ~10%. 86% of Canadian users give 4.5+ stars across review platforms."
+    },
+    {
+      "slug": "xero",
+      "name": "Xero",
+      "category": "finance",
+      "subcategory": "cloud_accounting",
+      "website": "https://www.xero.com",
+      "pricing_url": "https://www.xero.com/us/pricing-plans/",
+      "description": "Cloud-first accounting platform designed for small to medium businesses and their advisors. Known for elegant, intuitive interface and strong bank reconciliation capabilities. Unlimited users across all plans make it ideal for collaborative teams. Excellent multi-currency support and international features. Popular with modern, tech-forward accounting firms.",
+      "tagline": "Beautiful online accounting software for small business",
+      "pricing": {
+        "model": "per_organization",
+        "currency": "USD",
+        "billing_options": ["monthly", "annual"],
+        "annual_discount_percent": null,
+        "tiers": [
+          {
+            "name": "Early",
+            "price": 20,
+            "per": "month",
+            "billing": "annual",
+            "features": [
+              "Unlimited users",
+              "Send quotes and invoices (up to 20/month)",
+              "Enter bills (up to 5/month)",
+              "Bank reconciliation",
+              "Receipt capture",
+              "Basic reporting",
+              "Hubdoc included",
+              "Mobile app"
+            ],
+            "limits": {
+              "invoices": 20,
+              "bills": 5,
+              "users": "unlimited"
+            }
+          },
+          {
+            "name": "Growing",
+            "price": 55,
+            "per": "month",
+            "billing": "annual",
+            "features": [
+              "All Early features",
+              "Unlimited invoices",
+              "Unlimited bills",
+              "Unlimited bank transactions",
+              "Bulk reconciliation",
+              "Project tracking",
+              "Short-term cash flow forecasts",
+              "Claim expenses"
+            ],
+            "limits": {
+              "invoices": "unlimited",
+              "bills": "unlimited",
+              "users": "unlimited"
+            }
+          },
+          {
+            "name": "Established",
+            "price": 90,
+            "per": "month",
+            "billing": "annual",
+            "features": [
+              "All Growing features",
+              "Multi-currency support",
+              "Expenses tracking",
+              "Project management",
+              "Advanced analytics",
+              "Batch payments",
+              "Employee expenses"
+            ],
+            "limits": {
+              "users": "unlimited"
+            }
+          }
+        ],
+        "starting_price": 20,
+        "custom_pricing": false,
+        "free_trial_days": 30,
+        "free_tier": false,
+        "startup_discount": "90% off for first 6 months (code DC129046AU, ends Jan 30, 2026)"
+      },
+      "best_for": [
+        "Growing businesses with collaborative teams",
+        "Companies with international transactions",
+        "Businesses wanting unlimited users",
+        "Modern, tech-savvy organizations",
+        "Teams prioritizing clean UI/UX",
+        "Companies working closely with accountants"
+      ],
+      "industries": [
+        "Professional Services",
+        "E-commerce",
+        "SaaS",
+        "Agencies",
+        "Retail",
+        "Wholesale"
+      ],
+      "company_sizes": [
+        "startup",
+        "smb",
+        "mid_market"
+      ],
+      "avoid_if": [
+        "Need advanced payroll features (varies by location)",
+        "Require project tracking on lower tiers",
+        "Want extensive phone support",
+        "Need advanced inventory management",
+        "Budget-conscious (more expensive than Wave/Zoho)"
+      ],
+      "implementation": {
+        "avg_weeks": 2,
+        "complexity": "low",
+        "requires_developer": false,
+        "cost_range": {
+          "diy": {
+            "min": 0,
+            "max": 500
+          },
+          "with_help": {
+            "min": 500,
+            "max": 2000
+          },
+          "full_service": {
+            "min": 2000,
+            "max": 8000
+          }
+        }
+      },
+      "ratings": {
+        "g2": {
+          "score": 4.3,
+          "reviews": 650,
+          "last_updated": "2025-12"
+        },
+        "capterra": {
+          "score": 4.4,
+          "reviews": 850,
+          "last_updated": "2025-12"
+        },
+        "trustradius": {
+          "score": 8.2,
+          "reviews": 400,
+          "last_updated": "2025-12"
+        },
+        "our_rating": 4.4,
+        "our_notes": "Beautiful interface with 93% recommend rate on Capterra. Unlimited users is huge advantage over competitors. Bank reconciliation praised as best-in-class. Customer support criticized during busy periods. Pricing increases frustrate users. Missing some advanced features compared to QuickBooks. Excellent for collaborative teams and international businesses."
+      },
+      "integrations": [
+        "Stripe",
+        "PayPal",
+        "Square",
+        "Shopify",
+        "WooCommerce",
+        "Hubdoc",
+        "Gusto",
+        "Bill.com",
+        "Salesforce",
+        "HubSpot",
+        "Zapier",
+        "1000+ apps via marketplace",
+        "API available"
+      ],
+      "api": {
+        "available": true,
+        "type": "REST",
+        "documentation": "https://developer.xero.com"
+      },
+      "competitors": [
+        "QuickBooks Online",
+        "FreshBooks",
+        "Zoho Books",
+        "Sage",
+        "Wave"
+      ],
+      "verified_at": "2025-12-17T00:00:00Z",
+      "verified_by": "manual",
+      "source_url": "https://www.xero.com/us/pricing-plans/",
+      "notes": "4.4 million subscribers globally. 90% promotional discount available until Jan 30, 2026 using code DC129046AU. Pricing varies by country. Unlimited users across all plans is unique advantage. Payroll separate add-on with pricing varying by location. Auto-renews monthly until cancelled. Bank syncing can be clunky according to some users."
+    },
+    {
+      "slug": "freshbooks",
+      "name": "FreshBooks",
+      "category": "finance",
+      "subcategory": "invoicing_first",
+      "website": "https://www.freshbooks.com",
+      "pricing_url": "https://www.freshbooks.com/pricing",
+      "description": "Invoicing-first accounting platform designed for service-based businesses and freelancers. Exceptional user experience with beautiful invoice templates and client portal. Strong time tracking and project management features. Focuses on getting paid faster with automated payment reminders and online payment acceptance. Less comprehensive than QuickBooks but much easier to use.",
+      "tagline": "Simple, easy accounting software for small business owners",
+      "pricing": {
+        "model": "tiered",
+        "currency": "USD",
+        "billing_options": ["monthly", "annual"],
+        "annual_discount_percent": 10,
+        "tiers": [
+          {
+            "name": "Lite",
+            "price": 21,
+            "per": "month",
+            "billing": "annual",
+            "features": [
+              "Unlimited invoices (up to 5 clients)",
+              "Unlimited expense tracking",
+              "Accept credit cards and bank transfers",
+              "Send estimates",
+              "Track time",
+              "Generate tax-ready reports",
+              "Mobile apps",
+              "Email support"
+            ],
+            "limits": {
+              "clients": 5
+            }
+          },
+          {
+            "name": "Plus",
+            "price": 30,
+            "per": "month",
+            "billing": "annual",
+            "features": [
+              "All Lite features",
+              "Unlimited clients (up to 50)",
+              "Recurring invoices",
+              "Automatic receipt capture",
+              "Accounting and financial reports",
+              "Customizable invoices",
+              "Client retainers",
+              "Proposal templates"
+            ],
+            "limits": {
+              "clients": 50
+            }
+          },
+          {
+            "name": "Premium",
+            "price": 60,
+            "per": "month",
+            "billing": "annual",
+            "features": [
+              "All Plus features",
+              "Unlimited clients",
+              "Project profitability tracking",
+              "Custom email templates",
+              "Advanced reporting",
+              "Priority support",
+              "Accounting automation",
+              "Double-entry accounting"
+            ],
+            "limits": {
+              "clients": "unlimited"
+            }
+          },
+          {
+            "name": "Select",
+            "price": null,
+            "per": "custom",
+            "billing": "annual",
+            "features": [
+              "All Premium features",
+              "Unlimited clients and invoices",
+              "Easy data migration",
+              "Lower credit card transaction fees",
+              "Dedicated support team",
+              "Remove FreshBooks branding",
+              "2 team member accounts included",
+              "Custom pricing based on needs"
+            ],
+            "limits": null
+          }
+        ],
+        "starting_price": 21,
+        "custom_pricing": true,
+        "free_trial_days": 30,
+        "free_tier": false,
+        "startup_discount": "60% off for 3 months (promotional, ends Jan 2026)"
+      },
+      "best_for": [
+        "Freelancers and solo entrepreneurs",
+        "Service-based businesses",
+        "Agencies and consultants",
+        "Businesses prioritizing invoicing and getting paid",
+        "Teams needing excellent time tracking",
+        "Users wanting simple, beautiful interface"
+      ],
+      "industries": [
+        "Professional Services",
+        "Agencies",
+        "Consulting",
+        "Creative Services",
+        "Legal",
+        "IT Services"
+      ],
+      "company_sizes": [
+        "freelancer",
+        "startup",
+        "smb"
+      ],
+      "avoid_if": [
+        "Need advanced accounting features (inventory, manufacturing)",
+        "Require extensive financial reporting",
+        "Want multi-currency support on lower tiers",
+        "Budget-conscious with many clients (tier limits expensive)",
+        "Need comprehensive payroll features"
+      ],
+      "implementation": {
+        "avg_weeks": 1,
+        "complexity": "low",
+        "requires_developer": false,
+        "cost_range": {
+          "diy": {
+            "min": 0,
+            "max": 500
+          },
+          "with_help": {
+            "min": 500,
+            "max": 1500
+          },
+          "full_service": {
+            "min": 1500,
+            "max": 5000
+          }
+        }
+      },
+      "ratings": {
+        "g2": {
+          "score": 4.5,
+          "reviews": 700,
+          "last_updated": "2025-12"
+        },
+        "capterra": {
+          "score": 4.5,
+          "reviews": 4300,
+          "last_updated": "2025-12"
+        },
+        "our_rating": 4.5,
+        "our_notes": "Recognized in 2025 Capterra Shortlist. Extremely easy to use even without accounting background. Excellent for service businesses needing time tracking and beautiful invoices. Customer support praised. Reporting features less advanced than competitors. Price can feel high for very small businesses. Best value for service-based businesses that bill clients regularly."
+      },
+      "integrations": [
+        "Stripe",
+        "PayPal",
+        "WePay",
+        "Gusto",
+        "G Suite",
+        "Zapier",
+        "Bench",
+        "Salesforce",
+        "Shopify",
+        "API available"
+      ],
+      "api": {
+        "available": true,
+        "type": "REST",
+        "documentation": "https://www.freshbooks.com/api"
+      },
+      "competitors": [
+        "QuickBooks Online",
+        "Xero",
+        "Wave",
+        "Zoho Invoice",
+        "Harvest"
+      ],
+      "verified_at": "2025-12-17T00:00:00Z",
+      "verified_by": "manual",
+      "source_url": "https://www.freshbooks.com/pricing",
+      "notes": "60% off promotional pricing for first 3 months (regularly $21/$33/$60). Annual billing saves 10%. Add-ons: Team Members ($11/mo), Advanced Payments ($20/mo), Payroll ($40/mo + $6/employee). 30-day money-back guarantee. Limited inventory management. Select plan custom pricing based on business size and needs."
+    },
+    {
+      "slug": "wave",
+      "name": "Wave",
+      "category": "finance",
+      "subcategory": "free_accounting",
+      "website": "https://www.waveapps.com",
+      "pricing_url": "https://www.waveapps.com/pricing",
+      "description": "Free, cloud-based accounting software for small businesses, freelancers, and startups with less than 10 employees. Core accounting features including invoicing, expense tracking, receipt scanning, and basic reporting are completely free. Revenue generated through optional payment processing and payroll add-ons. Best free accounting option on market, though support limited for free users.",
+      "tagline": "Totally free accounting software for entrepreneurs",
+      "pricing": {
+        "model": "freemium",
+        "currency": "USD",
+        "billing_options": ["monthly", "annual"],
+        "annual_discount_percent": null,
+        "tiers": [
+          {
+            "name": "Starter",
+            "price": 0,
+            "per": "month",
+            "billing": "free",
+            "features": [
+              "Unlimited invoices",
+              "Unlimited bills",
+              "Unlimited bookkeeping records",
+              "Bank account connections (manual entry)",
+              "Receipt scanning",
+              "Income and expense tracking",
+              "Basic financial reporting",
+              "Cash flow management",
+              "Mobile apps"
+            ],
+            "limits": {
+              "users": 1,
+              "bank_connections": "manual only"
+            }
+          },
+          {
+            "name": "Pro",
+            "price": 16,
+            "per": "month",
+            "billing": "monthly",
+            "features": [
+              "All Starter features",
+              "Automatic bank transaction imports (Plaid integration)",
+              "Multiple user access",
+              "Advanced receipt capture",
+              "Priority email support",
+              "Auto-categorization",
+              "Streamlined bookkeeping",
+              "Advanced payroll features"
+            ],
+            "limits": {
+              "users": "multiple",
+              "bank_connections": "automatic"
+            }
+          }
+        ],
+        "starting_price": 0,
+        "custom_pricing": false,
+        "free_trial_days": null,
+        "free_tier": true,
+        "startup_discount": "Discount available Dec 2-Jan 6, 2026 on Pro plan"
+      },
+      "best_for": [
+        "Freelancers and solopreneurs on tight budget",
+        "Startups with less than 10 employees",
+        "Businesses needing basic accounting only",
+        "Service businesses with simple finances",
+        "Companies willing to trade features for free pricing"
+      ],
+      "industries": [
+        "Freelance",
+        "Professional Services",
+        "Consulting",
+        "Small Retail",
+        "Creative Services"
+      ],
+      "company_sizes": [
+        "freelancer",
+        "startup",
+        "micro_business"
+      ],
+      "avoid_if": [
+        "Growing business needing advanced features",
+        "Require phone or live chat support (free plan)",
+        "Need advanced inventory management",
+        "Want multi-currency support",
+        "Require extensive integrations",
+        "Need project tracking or time billing",
+        "Available in certain states only (check availability)"
+      ],
+      "implementation": {
+        "avg_weeks": 1,
+        "complexity": "low",
+        "requires_developer": false,
+        "cost_range": {
+          "diy": {
+            "min": 0,
+            "max": 0
+          },
+          "with_help": {
+            "min": 0,
+            "max": 500
+          },
+          "full_service": {
+            "min": 500,
+            "max": 2000
+          }
+        }
+      },
+      "ratings": {
+        "g2": {
+          "score": 4.4,
+          "reviews": 280,
+          "last_updated": "2025-12"
+        },
+        "capterra": {
+          "score": 4.5,
+          "reviews": 2100,
+          "last_updated": "2025-12"
+        },
+        "our_rating": 4.3,
+        "our_notes": "Best free accounting software available. 93% of reviewers recommend (4.5/5 stars). Genuinely free core features, not limited trial. Easy setup and use. Customer support severely limited on free plan (email only, no human contact). Missing advanced features like purchase orders. Bank syncing works but can be inconsistent. Perfect for micro-businesses, but outgrow it as you scale."
+      },
+      "integrations": [
+        "Plaid (bank connections on Pro)",
+        "PayPal",
+        "Stripe",
+        "Etsy",
+        "Shoeboxed",
+        "Zapier (limited)",
+        "Limited integrations vs competitors"
+      ],
+      "api": {
+        "available": false,
+        "type": null,
+        "documentation": null
+      },
+      "competitors": [
+        "QuickBooks Online",
+        "FreshBooks",
+        "Xero",
+        "Zoho Books",
+        "GoDaddy Bookkeeping"
+      ],
+      "verified_at": "2025-12-17T00:00:00Z",
+      "verified_by": "manual",
+      "source_url": "https://www.waveapps.com/pricing",
+      "notes": "Starter plan truly free forever. Pro plan $16/month or $170/year. Revenue from payment processing fees (2.9% + $0.60 for credit cards, 1% for bank payments) and Payroll add-on. 256-bit encryption and PCI Level-1 certified. Read-only bank connections. No purchase order functionality. 72% of users from companies with 1-10 employees. Limited state availability - check before adopting."
+    },
+    {
+      "slug": "zoho-books",
+      "name": "Zoho Books",
+      "category": "finance",
+      "subcategory": "budget_friendly",
+      "website": "https://www.zoho.com/books",
+      "pricing_url": "https://www.zoho.com/us/books/pricing/pricing-comparison.html",
+      "description": "Affordable, feature-rich accounting software from Zoho ecosystem. Excellent value with free plan for businesses under $50K revenue and budget-friendly paid tiers. Strong automation, inventory management, and project billing. Seamless integration with other Zoho products (CRM, Expense, Inventory). Best for growing businesses wanting comprehensive features without QuickBooks pricing.",
+      "tagline": "Online accounting software to manage your finances",
+      "pricing": {
+        "model": "per_organization",
+        "currency": "USD",
+        "billing_options": ["monthly", "annual"],
+        "annual_discount_percent": 25,
+        "tiers": [
+          {
+            "name": "Free",
+            "price": 0,
+            "per": "month",
+            "billing": "free",
+            "features": [
+              "1 user + 1 accountant",
+              "Up to 1,000 invoices/year",
+              "Track expenses",
+              "Bank reconciliation",
+              "Basic financial reports",
+              "Customer portal",
+              "Multi-lingual invoicing",
+              "Mobile apps"
+            ],
+            "limits": {
+              "users": 1,
+              "accountants": 1,
+              "invoices_annual": 1000,
+              "revenue_annual": 50000
+            }
+          },
+          {
+            "name": "Standard",
+            "price": 15,
+            "per": "organization/month",
+            "billing": "annual",
+            "features": [
+              "All Free features",
+              "3 users",
+              "Up to 5,000 invoices/year",
+              "Recurring expenses",
+              "Pre-defined user roles",
+              "Automated workflows",
+              "Multi-currency (basic)",
+              "Custom fields"
+            ],
+            "limits": {
+              "users": 3,
+              "invoices_annual": 5000
+            }
+          },
+          {
+            "name": "Professional",
+            "price": 40,
+            "per": "organization/month",
+            "billing": "annual",
+            "features": [
+              "All Standard features",
+              "5 users",
+              "Inventory management",
+              "Project billing",
+              "Sales orders",
+              "Purchase orders",
+              "Time tracking",
+              "Custom reports"
+            ],
+            "limits": {
+              "users": 5
+            }
+          },
+          {
+            "name": "Premium",
+            "price": 60,
+            "per": "organization/month",
+            "billing": "annual",
+            "features": [
+              "All Professional features",
+              "10 users",
+              "Workflow automation",
+              "Custom roles",
+              "Budgeting tools",
+              "Custom domain",
+              "Multi-transaction numbers",
+              "Advanced reporting"
+            ],
+            "limits": {
+              "users": 10
+            }
+          },
+          {
+            "name": "Elite",
+            "price": 120,
+            "per": "organization/month",
+            "billing": "annual",
+            "features": [
+              "All Premium features",
+              "15 users",
+              "Warehouse management",
+              "Serial number tracking",
+              "Advanced inventory control",
+              "Batch tracking",
+              "Custom modules"
+            ],
+            "limits": {
+              "users": 15
+            }
+          },
+          {
+            "name": "Ultimate",
+            "price": 240,
+            "per": "organization/month",
+            "billing": "annual",
+            "features": [
+              "All Elite features",
+              "Unlimited users (based on tier)",
+              "Vendor portals",
+              "Fixed asset management",
+              "Advanced analytics",
+              "Revenue recognition",
+              "Enterprise features",
+              "Dedicated support"
+            ],
+            "limits": {
+              "users": "varies"
+            }
+          }
+        ],
+        "starting_price": 0,
+        "custom_pricing": false,
+        "free_trial_days": 14,
+        "free_tier": true,
+        "startup_discount": null
+      },
+      "best_for": [
+        "Budget-conscious small businesses",
+        "Companies already using Zoho ecosystem",
+        "Growing businesses under $50K revenue (free tier)",
+        "Businesses needing inventory management",
+        "Multi-currency and international businesses",
+        "Companies wanting automation without premium pricing"
+      ],
+      "industries": [
+        "Legal",
+        "Real Estate",
+        "Retail",
+        "Wholesale",
+        "Education",
+        "Healthcare",
+        "Manufacturing",
+        "Professional Services"
+      ],
+      "company_sizes": [
+        "startup",
+        "smb",
+        "mid_market"
+      ],
+      "avoid_if": [
+        "Need extensive third-party integrations",
+        "Require best-in-class customer support",
+        "Want industry-standard (QuickBooks more common)",
+        "Mobile app must be as functional as desktop",
+        "Need same-day bank transaction imports",
+        "Require immediate support responses"
+      ],
+      "implementation": {
+        "avg_weeks": 2,
+        "complexity": "low",
+        "requires_developer": false,
+        "cost_range": {
+          "diy": {
+            "min": 0,
+            "max": 500
+          },
+          "with_help": {
+            "min": 500,
+            "max": 2000
+          },
+          "full_service": {
+            "min": 2000,
+            "max": 8000
+          }
+        }
+      },
+      "ratings": {
+        "g2": {
+          "score": 4.4,
+          "reviews": 3800,
+          "last_updated": "2025-12"
+        },
+        "capterra": {
+          "score": 4.5,
+          "reviews": 6200,
+          "last_updated": "2025-12"
+        },
+        "our_rating": 4.4,
+        "our_notes": "Featured on 2025 Capterra Shortlist. Best value for growing businesses. Excellent free tier for businesses under $50K revenue. Strong automation and inventory features at lower price points than QuickBooks. Customer support inconsistent (some report 7+ months for issue resolution). Mobile app less functional than desktop. Integrates seamlessly with Zoho Expense and other Zoho products. Save 20-25% with annual billing."
+      },
+      "integrations": [
+        "Zoho CRM",
+        "Zoho Expense",
+        "Zoho Inventory",
+        "Zoho Projects",
+        "Google Workspace",
+        "Microsoft 365",
+        "Stripe",
+        "PayPal",
+        "Shopify",
+        "WooCommerce",
+        "Zapier",
+        "API available"
+      ],
+      "api": {
+        "available": true,
+        "type": "REST",
+        "documentation": "https://www.zoho.com/books/api"
+      },
+      "competitors": [
+        "QuickBooks Online",
+        "Xero",
+        "FreshBooks",
+        "Wave",
+        "Sage"
+      ],
+      "verified_at": "2025-12-17T00:00:00Z",
+      "verified_by": "manual",
+      "source_url": "https://www.zoho.com/us/books/pricing/pricing-comparison.html",
+      "notes": "Free plan for businesses with annual revenue under $50K. Annual billing saves 20-25% vs monthly. Works seamlessly with Zoho Expense. 14-day free trial on all paid plans. Mobile app criticized as less functional than desktop version. Bank transactions import day after transaction occurs (not real-time). Customer support quality varies widely by user experience."
+    },
+    {
+      "slug": "sage-business-cloud",
+      "name": "Sage Business Cloud Accounting",
+      "category": "finance",
+      "subcategory": "traditional_accounting",
+      "website": "https://www.sage.com/en-us/sage-business-cloud/accounting/",
+      "pricing_url": "https://www.sage.com/en-us/sage-business-cloud/accounting/pricing",
+      "description": "Cloud accounting software from established accounting software provider Sage. Affordable pay-per-user model with inventory tracking included at base tier. Strong for businesses transitioning from desktop accounting. Part of broader Sage ecosystem including Sage 50 and Sage Intacct. Note: Discontinued in U.S. market as of Dec 24, 2024, but still available internationally.",
+      "tagline": "Simple online accounting for small business",
+      "pricing": {
+        "model": "per_user",
+        "currency": "USD",
+        "billing_options": ["monthly", "annual"],
+        "annual_discount_percent": null,
+        "tiers": [
+          {
+            "name": "Accounting",
+            "price": 25,
+            "per": "user/month",
+            "billing": "annual",
+            "features": [
+              "Unlimited users (pay per user)",
+              "Invoicing and estimates",
+              "Expense management",
+              "Bank reconciliation",
+              "Cash flow management",
+              "Inventory tracking (included)",
+              "Mobile access",
+              "Real-time reporting",
+              "Multi-currency support"
+            ],
+            "limits": {
+              "users": "unlimited",
+              "pricing_per_user": true
+            }
+          }
+        ],
+        "starting_price": 25,
+        "custom_pricing": false,
+        "free_trial_days": 30,
+        "free_tier": false,
+        "startup_discount": null
+      },
+      "best_for": [
+        "International businesses (outside U.S.)",
+        "Small businesses needing inventory tracking",
+        "Companies familiar with Sage ecosystem",
+        "Businesses wanting simple, affordable accounting",
+        "Teams needing cloud access with desktop-like features"
+      ],
+      "industries": [
+        "Retail",
+        "Wholesale",
+        "Professional Services",
+        "Small Manufacturing",
+        "Distribution"
+      ],
+      "company_sizes": [
+        "smb",
+        "mid_market"
+      ],
+      "avoid_if": [
+        "Based in United States (discontinued Dec 24, 2024)",
+        "Need extensive integrations",
+        "Want modern, cutting-edge interface",
+        "Require best-in-class support",
+        "Need advanced reporting and analytics",
+        "Sensitive to frequent price increases (users report 9-15% annual increases)"
+      ],
+      "implementation": {
+        "avg_weeks": 2,
+        "complexity": "medium",
+        "requires_developer": false,
+        "cost_range": {
+          "diy": {
+            "min": 0,
+            "max": 500
+          },
+          "with_help": {
+            "min": 500,
+            "max": 2000
+          },
+          "full_service": {
+            "min": 2000,
+            "max": 5000
+          }
+        }
+      },
+      "ratings": {
+        "g2": {
+          "score": 4.0,
+          "reviews": 44,
+          "last_updated": "2025-12"
+        },
+        "capterra": {
+          "score": 4.2,
+          "reviews": 850,
+          "last_updated": "2025-12"
+        },
+        "our_rating": 3.8,
+        "our_notes": "Important: Discontinued in U.S. as of Dec 24, 2024. U.S. customers should consider Sage 50 instead. For international markets: Affordable with inventory included. Integration with payroll is praised. Price increases significant concern (9-15% annually reported). Cloud version less intuitive than desktop. Support limited on weekends. Training required for complexity. Better alternatives exist for most use cases."
+      },
+      "integrations": [
+        "Sage Payroll",
+        "Microsoft 365",
+        "PayPal",
+        "Stripe",
+        "AutoEntry",
+        "Limited third-party integrations",
+        "API available"
+      ],
+      "api": {
+        "available": true,
+        "type": "REST",
+        "documentation": "https://developer.sage.com"
+      },
+      "competitors": [
+        "QuickBooks Online",
+        "Xero",
+        "Zoho Books",
+        "Wave",
+        "Sage 50"
+      ],
+      "verified_at": "2025-12-17T00:00:00Z",
+      "verified_by": "manual",
+      "source_url": "https://www.sage.com/en-us/sage-business-cloud/accounting/pricing",
+      "notes": "IMPORTANT: Sage Business Cloud Accounting retired in U.S. as of December 24, 2024. Sage 50 Accounting is now flagship U.S. small business product. International availability varies by country. Per-user pricing ($25/user/month). Annual cost ~$300/year for unlimited users vs Sage 50cloud starting at $567/user/year. No contracts or commitments. Upgrade/cancel anytime. Volume discounts may apply for larger user counts. Customer support not available weekends."
+    }
+  ],
+  "last_updated": "2025-12-17T00:00:00Z"
+}

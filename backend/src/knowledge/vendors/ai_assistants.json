@@ -1,0 +1,799 @@
+{
+  "category": "ai_assistants",
+  "description": "Consumer AI assistant subscriptions for productivity, research, coding, and general knowledge tasks powered by large language models",
+  "vendors": [
+    {
+      "slug": "chatgpt-plus",
+      "name": "ChatGPT Plus",
+      "category": "ai_assistants",
+      "subcategory": "general_ai_assistant",
+      "website": "https://chatgpt.com",
+      "pricing_url": "https://chatgpt.com/pricing",
+      "description": "OpenAI's premium consumer AI assistant subscription providing access to GPT-5 (released August 2025), which adapts behavior based on request complexity. Plus tier offers 5x usage over free tier with priority access during peak times and early access to new features.",
+      "tagline": "Premium AI assistant with access to GPT-5 and advanced capabilities",
+      "pricing": {
+        "model": "subscription",
+        "currency": "USD",
+        "billing_options": ["monthly"],
+        "annual_discount_percent": null,
+        "tiers": [
+          {
+            "name": "Free",
+            "price": 0,
+            "per": "month",
+            "billing": "monthly",
+            "features": [
+              "Access to GPT-4o mini",
+              "Limited usage",
+              "Standard response time",
+              "Basic web browsing",
+              "Basic image generation (DALL-E)"
+            ],
+            "limits": {
+              "messages": "limited",
+              "priority_access": false
+            }
+          },
+          {
+            "name": "Plus",
+            "price": 20,
+            "per": "month",
+            "billing": "monthly",
+            "features": [
+              "Access to GPT-5 (default model as of August 2025)",
+              "Access to GPT-4o and GPT-4",
+              "5x usage limits vs Free",
+              "Priority access during peak times",
+              "Faster response times",
+              "Advanced data analysis",
+              "File uploads and analysis",
+              "DALL-E image generation",
+              "Web browsing with real-time data",
+              "Custom GPTs",
+              "Early access to new features"
+            ],
+            "limits": {
+              "messages": "40 messages/3 hours for GPT-5",
+              "priority_access": true,
+              "image_generation": "50 images/day"
+            }
+          },
+          {
+            "name": "Pro",
+            "price": 200,
+            "per": "month",
+            "billing": "monthly",
+            "features": [
+              "All Plus features",
+              "Access to o1 pro mode (enhanced reasoning)",
+              "Unlimited compute for complex problems",
+              "Maximum model performance",
+              "Research-grade capabilities",
+              "Extended context windows",
+              "Priority access to all new models"
+            ],
+            "limits": {
+              "messages": "unlimited o1 pro mode access",
+              "priority_access": true,
+              "compute": "unlimited"
+            }
+          }
+        ],
+        "starting_price": 0,
+        "custom_pricing": false,
+        "free_trial_days": null,
+        "free_tier": true,
+        "startup_discount": null
+      },
+      "best_for": [
+        "General-purpose AI assistance",
+        "Content creation and writing",
+        "Coding assistance and debugging",
+        "Research and analysis",
+        "Users wanting access to latest GPT models",
+        "Professionals needing reliable AI tool (Plus)",
+        "Researchers and engineers needing maximum compute (Pro)"
+      ],
+      "industries": [
+        "Technology",
+        "Education",
+        "Content Creation",
+        "Research",
+        "Professional Services",
+        "Software Development"
+      ],
+      "company_sizes": [
+        "individual",
+        "freelancer",
+        "startup"
+      ],
+      "avoid_if": [
+        "Need guaranteed uptime for business-critical work",
+        "Require strong source citations (hallucination risk)",
+        "Want specialized domain expertise without prompting",
+        "Need API access (separate product/pricing)",
+        "Budget-conscious ($200/month Pro is expensive for individuals)"
+      ],
+      "implementation": {
+        "avg_weeks": 0,
+        "complexity": "none",
+        "requires_developer": false,
+        "cost_range": {
+          "diy": {
+            "min": 0,
+            "max": 0
+          },
+          "with_help": {
+            "min": 0,
+            "max": 0
+          },
+          "full_service": {
+            "min": 0,
+            "max": 0
+          }
+        }
+      },
+      "ratings": {
+        "our_rating": 4.6,
+        "our_notes": "Industry-leading general-purpose AI. GPT-5 release solidified OpenAI's position. Plus tier is best value at $20/month. Pro tier at $200 is expensive but offers unmatched compute for complex reasoning tasks. Can experience slowdowns during peak usage even for Plus users."
+      },
+      "integrations": [
+        "Standalone web application",
+        "iOS app",
+        "Android app",
+        "Custom GPTs marketplace",
+        "API (separate product)"
+      ],
+      "api": {
+        "available": false,
+        "type": "N/A",
+        "documentation": "https://platform.openai.com/docs (separate API product)"
+      },
+      "competitors": [
+        "Claude Pro",
+        "Gemini Advanced",
+        "Perplexity Pro",
+        "Poe"
+      ],
+      "verified_at": "2025-12-17T00:00:00Z",
+      "verified_by": "web_search",
+      "source_url": "https://chatgpt.com/pricing",
+      "notes": "Regional pricing varies: EU ~€22-24/month, UK ~£18-20/month due to VAT. Team plan available at $30/user/month (or $25 annual). Enterprise plan has custom pricing. GPT-5 was released in August 2025 and is now the default model for Plus and Pro users."
+    },
+    {
+      "slug": "claude-pro",
+      "name": "Claude Pro",
+      "category": "ai_assistants",
+      "subcategory": "general_ai_assistant",
+      "website": "https://claude.ai",
+      "pricing_url": "https://claude.ai/pricing",
+      "description": "Anthropic's premium AI assistant subscription providing access to Claude Opus 4.x and advanced Sonnet variants with at least 5x usage compared to Free tier. Includes enhanced file handling, Projects feature, Claude Code capabilities, and priority access during high-traffic periods. Strong for coding, research, and document-heavy workflows.",
+      "tagline": "AI assistant with expanded capabilities and priority access",
+      "pricing": {
+        "model": "subscription",
+        "currency": "USD",
+        "billing_options": ["monthly", "annual"],
+        "annual_discount_percent": 10,
+        "tiers": [
+          {
+            "name": "Free",
+            "price": 0,
+            "per": "month",
+            "billing": "monthly",
+            "features": [
+              "Access to Claude 3.5 Sonnet",
+              "Limited usage",
+              "Standard features",
+              "Basic conversation length"
+            ],
+            "limits": {
+              "usage": "limited",
+              "priority_access": false
+            }
+          },
+          {
+            "name": "Pro",
+            "price": 20,
+            "per": "month",
+            "billing": "monthly",
+            "features": [
+              "Access to Claude Opus 4.x",
+              "Access to advanced Sonnet variants",
+              "At least 5x usage vs Free",
+              "Priority access during peak times",
+              "Enhanced file handling",
+              "Projects feature",
+              "Claude Code capabilities",
+              "Early access to new features",
+              "Longer conversation context"
+            ],
+            "limits": {
+              "usage": "5x free tier",
+              "priority_access": true,
+              "context": "extended"
+            }
+          },
+          {
+            "name": "Max",
+            "price": 100,
+            "per": "month",
+            "billing": "monthly",
+            "features": [
+              "All Pro features",
+              "5x Pro usage limits",
+              "Maximum performance",
+              "Extended context processing"
+            ],
+            "limits": {
+              "usage": "5x Pro tier",
+              "priority_access": true
+            }
+          }
+        ],
+        "starting_price": 0,
+        "custom_pricing": false,
+        "free_trial_days": null,
+        "free_tier": true,
+        "startup_discount": null
+      },
+      "best_for": [
+        "Complex coding tasks and software development",
+        "Long research sessions with extensive context",
+        "Document analysis and processing",
+        "Users prioritizing helpful, harmless, honest AI",
+        "Teams wanting strong reasoning capabilities",
+        "Power users needing high usage limits (Max tier)"
+      ],
+      "industries": [
+        "Software Development",
+        "Research",
+        "Education",
+        "Content Creation",
+        "Professional Services",
+        "Legal (document analysis)"
+      ],
+      "company_sizes": [
+        "individual",
+        "freelancer",
+        "startup"
+      ],
+      "avoid_if": [
+        "Need image generation capabilities (Claude doesn't generate images)",
+        "Want web browsing/search integration (limited compared to competitors)",
+        "Require plugin/extension ecosystem (more limited than ChatGPT)",
+        "Budget-conscious and need high usage (Max tier at $100-200/month is expensive)"
+      ],
+      "implementation": {
+        "avg_weeks": 0,
+        "complexity": "none",
+        "requires_developer": false,
+        "cost_range": {
+          "diy": {
+            "min": 0,
+            "max": 0
+          },
+          "with_help": {
+            "min": 0,
+            "max": 0
+          },
+          "full_service": {
+            "min": 0,
+            "max": 0
+          }
+        }
+      },
+      "ratings": {
+        "our_rating": 4.7,
+        "our_notes": "Excellent for technical users, developers, and researchers. Strong reasoning capabilities and long context handling. Claude Code feature is powerful for software development. More 'thoughtful' responses than ChatGPT but can be slower. Max tier pricing ($100-200) offers best value for power users vs ChatGPT Pro at $200."
+      },
+      "integrations": [
+        "Standalone web application",
+        "iOS app",
+        "Android app",
+        "Claude Code (IDE integration)",
+        "Projects (workspace organization)",
+        "API (separate product)"
+      ],
+      "api": {
+        "available": false,
+        "type": "N/A",
+        "documentation": "https://docs.anthropic.com (separate API product)"
+      },
+      "competitors": [
+        "ChatGPT Plus/Pro",
+        "Gemini Advanced",
+        "Perplexity Pro",
+        "Poe"
+      ],
+      "verified_at": "2025-12-17T00:00:00Z",
+      "verified_by": "web_search",
+      "source_url": "https://claude.ai/pricing",
+      "notes": "Annual subscription available at $18/month ($216 upfront). Regional pricing: UK £18/month, EU €18/month plus taxes. Team plan at $30/month (or $25/month annual) with 5-member minimum. Max tier has two options: $100/month (5x Pro) or $200/month (20x Pro). Enterprise plan available with custom pricing."
+    },
+    {
+      "slug": "gemini-advanced",
+      "name": "Gemini Advanced",
+      "category": "ai_assistants",
+      "subcategory": "google_ai_assistant",
+      "website": "https://gemini.google.com",
+      "pricing_url": "https://gemini.google.com/subscriptions/",
+      "description": "Google's premium AI assistant subscription (branded as Google AI Pro) providing access to Gemini 2.5 Pro model. Includes 2TB Google One storage, Workspace integration (Gmail, Docs, Sheets), and NotebookLM access. Strong for users already in Google ecosystem wanting AI capabilities integrated across Google products.",
+      "tagline": "Premium AI with Google Workspace integration and cloud storage",
+      "pricing": {
+        "model": "subscription",
+        "currency": "USD",
+        "billing_options": ["monthly"],
+        "annual_discount_percent": null,
+        "tiers": [
+          {
+            "name": "Free",
+            "price": 0,
+            "per": "month",
+            "billing": "monthly",
+            "features": [
+              "Access to Gemini (standard model)",
+              "Limited usage",
+              "Basic features",
+              "Google Search integration"
+            ],
+            "limits": {
+              "usage": "limited",
+              "storage": "15GB Google One"
+            }
+          },
+          {
+            "name": "AI Pro (Gemini Advanced)",
+            "price": 19.99,
+            "per": "month",
+            "billing": "monthly",
+            "features": [
+              "Access to Gemini 2.5 Pro model",
+              "2TB Google One storage",
+              "Workspace integration (Gmail, Docs, Sheets, etc.)",
+              "NotebookLM access",
+              "Priority support",
+              "Extended context processing",
+              "Advanced multimodal capabilities",
+              "Early access to new features"
+            ],
+            "limits": {
+              "storage": "2TB",
+              "workspace_integration": true
+            }
+          },
+          {
+            "name": "AI Ultra",
+            "price": 249.99,
+            "per": "month",
+            "billing": "monthly",
+            "features": [
+              "All AI Pro features",
+              "Access to highest-capability Gemini models",
+              "30TB cloud storage",
+              "Highest usage limits",
+              "Professional-grade video generation",
+              "Professional-grade code generation",
+              "Extended multimodal capabilities",
+              "Priority access and support"
+            ],
+            "limits": {
+              "storage": "30TB",
+              "usage": "highest tier"
+            }
+          }
+        ],
+        "starting_price": 0,
+        "custom_pricing": false,
+        "free_trial_days": 30,
+        "free_tier": true,
+        "startup_discount": "Students get up to 12 months free AI Pro in selected countries"
+      },
+      "best_for": [
+        "Google Workspace users wanting AI integration",
+        "Users already paying for Google One storage",
+        "Researchers using NotebookLM",
+        "Teams deep in Google ecosystem",
+        "Multimodal tasks (text, image, video, code)",
+        "Students (free tier available)",
+        "Pixel phone users (6-12 months free with Pixel 10)"
+      ],
+      "industries": [
+        "Education",
+        "Research",
+        "Content Creation",
+        "Professional Services",
+        "Technology",
+        "Media Production"
+      ],
+      "company_sizes": [
+        "individual",
+        "freelancer",
+        "startup",
+        "smb"
+      ],
+      "avoid_if": [
+        "Not invested in Google ecosystem (less value)",
+        "Don't need cloud storage (paying for unused feature)",
+        "Want specialized AI assistant (Gemini is generalist)",
+        "Need strong privacy guarantees (Google data practices)",
+        "Budget-conscious and don't use Google Workspace (paying for integration you won't use)"
+      ],
+      "implementation": {
+        "avg_weeks": 0,
+        "complexity": "none",
+        "requires_developer": false,
+        "cost_range": {
+          "diy": {
+            "min": 0,
+            "max": 0
+          },
+          "with_help": {
+            "min": 0,
+            "max": 0
+          },
+          "full_service": {
+            "min": 0,
+            "max": 0
+          }
+        }
+      },
+      "ratings": {
+        "our_rating": 4.3,
+        "our_notes": "Best value for Google ecosystem users who also need cloud storage. Workspace integration is genuinely useful for productivity. Gemini model capabilities are strong but sometimes lag ChatGPT and Claude for pure reasoning tasks. NotebookLM is excellent for research. 1-month free trial is generous. Student discounts make it accessible for education."
+      },
+      "integrations": [
+        "Gmail",
+        "Google Docs",
+        "Google Sheets",
+        "Google Slides",
+        "Google Drive",
+        "Google Search",
+        "NotebookLM",
+        "YouTube",
+        "Google Photos",
+        "Google Maps",
+        "Android ecosystem"
+      ],
+      "api": {
+        "available": false,
+        "type": "N/A",
+        "documentation": "https://ai.google.dev (separate API product)"
+      },
+      "competitors": [
+        "ChatGPT Plus",
+        "Claude Pro",
+        "Perplexity Pro",
+        "Microsoft Copilot"
+      ],
+      "verified_at": "2025-12-17T00:00:00Z",
+      "verified_by": "web_search",
+      "source_url": "https://gemini.google.com/subscriptions/",
+      "notes": "Regional pricing varies: EU €21.99/month (~$23), UK £18.99/month (~$24). Pixel 10 series phones include 6-12 months free AI Pro. Student verification required for education discount. Storage and Workspace features make this compelling for existing Google users even without AI interest. AI Ultra launched in 2025 as premium tier for extreme users."
+    },
+    {
+      "slug": "perplexity-pro",
+      "name": "Perplexity Pro",
+      "category": "ai_assistants",
+      "subcategory": "ai_search_engine",
+      "website": "https://www.perplexity.ai",
+      "pricing_url": "https://www.perplexity.ai/pro",
+      "description": "AI-powered search engine with premium subscription offering unlimited Pro searches, access to multiple AI models (GPT-4, Claude 3.7 Sonnet), file uploads, and enhanced research capabilities. Focuses on providing cited, source-backed answers rather than general chatbot interactions. $5/month API credit included for developers.",
+      "tagline": "AI search engine with unlimited Pro searches and premium models",
+      "pricing": {
+        "model": "subscription",
+        "currency": "USD",
+        "billing_options": ["monthly", "annual"],
+        "annual_discount_percent": 17,
+        "tiers": [
+          {
+            "name": "Free",
+            "price": 0,
+            "per": "month",
+            "billing": "monthly",
+            "features": [
+              "Limited Pro searches (5/day)",
+              "Standard search",
+              "Basic AI model access",
+              "Source citations",
+              "Mobile app access"
+            ],
+            "limits": {
+              "pro_searches": "5 per day",
+              "file_uploads": false
+            }
+          },
+          {
+            "name": "Pro",
+            "price": 20,
+            "per": "month",
+            "billing": "monthly",
+            "features": [
+              "Unlimited Pro searches",
+              "Access to GPT-4, Claude 3.7 Sonnet, and other premium models",
+              "Unlimited file uploads",
+              "Advanced document analysis",
+              "Enhanced research features",
+              "$5/month API credit for developers",
+              "Faster response times",
+              "Priority support",
+              "Early access to new features"
+            ],
+            "limits": {
+              "pro_searches": "unlimited",
+              "file_uploads": "unlimited",
+              "api_credit": "$5/month"
+            }
+          },
+          {
+            "name": "Max",
+            "price": 200,
+            "per": "month",
+            "billing": "monthly",
+            "features": [
+              "All Pro features",
+              "Unlimited access to Labs features",
+              "Enhanced research capabilities",
+              "Maximum usage limits",
+              "Premium support"
+            ],
+            "limits": {
+              "usage": "unlimited",
+              "labs_access": true
+            }
+          }
+        ],
+        "starting_price": 0,
+        "custom_pricing": false,
+        "free_trial_days": null,
+        "free_tier": true,
+        "startup_discount": "Students and faculty: $4.99/month for Education Pro"
+      },
+      "best_for": [
+        "Research-focused users needing cited sources",
+        "Professionals requiring fact-checking and verification",
+        "Users who want search + AI combined",
+        "Developers wanting API access (included $5 credit)",
+        "Students and academics (education discount)",
+        "Users who prioritize source transparency over conversational AI"
+      ],
+      "industries": [
+        "Research",
+        "Journalism",
+        "Education",
+        "Legal",
+        "Consulting",
+        "Academic",
+        "Fact-checking"
+      ],
+      "company_sizes": [
+        "individual",
+        "freelancer",
+        "startup",
+        "smb"
+      ],
+      "avoid_if": [
+        "Need general conversational AI (Perplexity is search-focused)",
+        "Want creative writing or coding assistance (other tools better)",
+        "Don't value source citations (not paying for core feature)",
+        "Need offline access",
+        "Want deep contextual memory across sessions"
+      ],
+      "implementation": {
+        "avg_weeks": 0,
+        "complexity": "none",
+        "requires_developer": false,
+        "cost_range": {
+          "diy": {
+            "min": 0,
+            "max": 0
+          },
+          "with_help": {
+            "min": 0,
+            "max": 0
+          },
+          "full_service": {
+            "min": 0,
+            "max": 0
+          }
+        }
+      },
+      "ratings": {
+        "our_rating": 4.4,
+        "our_notes": "Excellent for research and fact-finding with proper source citations. Annual plan ($200/year) saves 17% vs monthly. Pro tier is well-priced at $20/month with unlimited searches and multi-model access. Max tier at $200/month is for extreme power users. Education discount ($4.99) is exceptional value for students. Not ideal for creative tasks or general chatbot use."
+      },
+      "integrations": [
+        "Web browser extension",
+        "iOS app",
+        "Android app",
+        "API access (with Pro)",
+        "Standalone web application"
+      ],
+      "api": {
+        "available": true,
+        "type": "REST",
+        "documentation": "https://docs.perplexity.ai"
+      },
+      "competitors": [
+        "ChatGPT Plus (with browsing)",
+        "Claude Pro",
+        "You.com",
+        "Bing Chat",
+        "Google Search (with AI)"
+      ],
+      "verified_at": "2025-12-17T00:00:00Z",
+      "verified_by": "web_search",
+      "source_url": "https://www.perplexity.ai/pro",
+      "notes": "Annual billing: $200/year ($16.67/month equivalent), saving 17% vs monthly. Enterprise Pro available at $40/user/month or $400/year. Education Pro for verified students/faculty: $4.99/month. Referral program offers free months. Free tier includes 5 Pro searches per day. Pro includes $5/month API credit for developers."
+    },
+    {
+      "slug": "poe",
+      "name": "Poe",
+      "category": "ai_assistants",
+      "subcategory": "multi_model_aggregator",
+      "website": "https://poe.com",
+      "pricing_url": "https://poe.com/subscribe",
+      "description": "Multi-model AI platform from Quora providing access to multiple AI models (GPT-4.5, Claude 3.7 Sonnet, etc.) through a single subscription. Includes enhanced media generation (video, image, audio), custom bot-building capabilities, and unrestricted data export. Offers multiple subscription tiers including budget-friendly $5 and $10 options.",
+      "tagline": "One subscription for access to multiple premium AI models",
+      "pricing": {
+        "model": "subscription",
+        "currency": "USD",
+        "billing_options": ["monthly", "annual"],
+        "annual_discount_percent": 16,
+        "tiers": [
+          {
+            "name": "Free",
+            "price": 0,
+            "per": "month",
+            "billing": "monthly",
+            "features": [
+              "300 points daily",
+              "Access to basic models",
+              "Limited bot creation",
+              "Mobile app access",
+              "Web access"
+            ],
+            "limits": {
+              "points": "300 per day",
+              "premium_bots": false
+            }
+          },
+          {
+            "name": "Budget",
+            "price": 5,
+            "per": "month",
+            "billing": "monthly",
+            "features": [
+              "Increased daily points",
+              "Access to more models",
+              "Enhanced features",
+              "No ads"
+            ],
+            "limits": {
+              "points": "increased",
+              "premium_bots": "limited"
+            }
+          },
+          {
+            "name": "Standard (Tier 2)",
+            "price": 10,
+            "per": "month",
+            "billing": "monthly",
+            "features": [
+              "Higher daily points allocation",
+              "Access to premium models",
+              "Enhanced bot building",
+              "No ads",
+              "Priority support"
+            ],
+            "limits": {
+              "points": "higher allocation",
+              "premium_bots": "more access"
+            }
+          },
+          {
+            "name": "Premium",
+            "price": 19.99,
+            "per": "month",
+            "billing": "monthly",
+            "features": [
+              "Access to all premium AI models",
+              "GPT-4.5, Claude 3.7 Sonnet, o1, o3-mini-high",
+              "Enhanced media generation (video, image, audio)",
+              "Advanced bot-building capabilities",
+              "Unrestricted data export",
+              "Ad-free experience",
+              "Priority response speed",
+              "Faster response times",
+              "More daily messages"
+            ],
+            "limits": {
+              "models": "all premium models",
+              "bot_creation": "unlimited",
+              "data_export": "unrestricted"
+            }
+          }
+        ],
+        "starting_price": 0,
+        "custom_pricing": false,
+        "free_trial_days": null,
+        "free_tier": true,
+        "startup_discount": null
+      },
+      "best_for": [
+        "Users wanting access to multiple AI models without separate subscriptions",
+        "Bot builders and AI experimenters",
+        "Budget-conscious users ($5-10 tiers)",
+        "Users wanting model flexibility and comparison",
+        "People in supported regions (not available everywhere)",
+        "Developers testing different models"
+      ],
+      "industries": [
+        "Technology",
+        "Content Creation",
+        "Education",
+        "Research",
+        "Software Development",
+        "AI Experimentation"
+      ],
+      "company_sizes": [
+        "individual",
+        "freelancer",
+        "startup"
+      ],
+      "avoid_if": [
+        "Outside supported regions (limited availability)",
+        "Want single, focused AI experience (too many model choices)",
+        "Need official vendor support (third-party aggregator)",
+        "Prefer direct relationship with AI provider",
+        "Want guaranteed access to latest models (depends on Poe's deals)"
+      ],
+      "implementation": {
+        "avg_weeks": 0,
+        "complexity": "none",
+        "requires_developer": false,
+        "cost_range": {
+          "diy": {
+            "min": 0,
+            "max": 0
+          },
+          "with_help": {
+            "min": 0,
+            "max": 0
+          },
+          "full_service": {
+            "min": 0,
+            "max": 0
+          }
+        }
+      },
+      "ratings": {
+        "our_rating": 4.1,
+        "our_notes": "Excellent value proposition for users wanting access to multiple AI models. Budget-friendly $5 and $10 tiers launched in March 2025 make it accessible. Annual plan ($199.99/year) saves 16% ($16.67/month equivalent). Bot-building features are unique. However, limited regional availability and being a third-party aggregator (not direct from AI vendors) are drawbacks. Premium tier competes well at $19.99 vs ChatGPT Plus ($20)."
+      },
+      "integrations": [
+        "Web application",
+        "iOS app",
+        "Android app",
+        "Custom bot creation",
+        "Multiple AI model access",
+        "Data export tools"
+      ],
+      "api": {
+        "available": false,
+        "type": "N/A",
+        "documentation": null
+      },
+      "competitors": [
+        "ChatGPT Plus",
+        "Claude Pro",
+        "Gemini Advanced",
+        "Perplexity Pro"
+      ],
+      "verified_at": "2025-12-17T00:00:00Z",
+      "verified_by": "web_search",
+      "source_url": "https://poe.com/subscribe",
+      "notes": "Owned by Quora. $5 and $10 subscription tiers launched March 2025 in response to user demand. Annual subscription: $199.99/year ($16.67/month equivalent), saving 16%. Not available in all countries - check regional availability before subscribing. Free tier includes 300 daily points for basic usage. Premium models (o1, o3-mini-high) require paid subscription."
+    }
+  ],
+  "last_updated": "2025-12-17T00:00:00Z"
+}

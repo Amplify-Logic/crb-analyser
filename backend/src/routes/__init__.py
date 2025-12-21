@@ -15,6 +15,8 @@ from .vendors import router as vendors_router
 from .admin import router as admin_router
 from .interview import router as interview_router
 from .playbook import router as playbook_router
+from .expertise import router as expertise_router
+from .validation import router as validation_router
 
 __all__ = [
     "auth_router",
@@ -30,4 +32,6 @@ __all__ = [
     "admin_router",
     "interview_router",
     "playbook_router",
+    "expertise_router",
+    "validation_router",
 ]

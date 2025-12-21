@@ -1,0 +1,20 @@
+[build]
+builder = "dockerfile"
+dockerfilePath = "Dockerfile"
+
+[build.args]
+VITE_API_BASE_URL = "${{VITE_API_BASE_URL}}"
+VITE_SUPABASE_URL = "${{VITE_SUPABASE_URL}}"
+VITE_SUPABASE_ANON_KEY = "${{VITE_SUPABASE_ANON_KEY}}"
+VITE_STRIPE_PUBLISHABLE_KEY = "${{VITE_STRIPE_PUBLISHABLE_KEY}}"
+
+[deploy]
+numReplicas = 1
+healthcheckPath = "/health"
+healthcheckTimeout = 10
+restartPolicyType = "ON_FAILURE"
+restartPolicyMaxRetries = 3
+
+[[services]]
+name = "crb-frontend"
+port = 80

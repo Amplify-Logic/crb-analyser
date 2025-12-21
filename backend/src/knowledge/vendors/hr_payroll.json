@@ -1,0 +1,1208 @@
+{
+  "category": "hr_payroll",
+  "description": "HR and payroll platforms for managing employee data, compensation, benefits, compliance, and global workforce operations",
+  "vendors": [
+    {
+      "slug": "gusto",
+      "name": "Gusto",
+      "category": "hr_payroll",
+      "subcategory": "smb_payroll_leader",
+      "website": "https://www.gusto.com",
+      "pricing_url": "https://gusto.com/product/pricing",
+      "description": "Full-service payroll and HR platform designed for small to medium businesses. Handles payroll, benefits, HR compliance, and time tracking with an intuitive interface. Known for ease of use and comprehensive features including health insurance administration, 401(k) integration, and automated tax filings. Ranked #1 on G2 for payroll in Fall 2025.",
+      "tagline": "Modern payroll, benefits, and HR for small businesses",
+      "pricing": {
+        "model": "base_plus_per_employee",
+        "currency": "USD",
+        "billing_options": ["monthly"],
+        "annual_discount_percent": null,
+        "tiers": [
+          {
+            "name": "Contractor Only",
+            "price": 0,
+            "per": "month (first 6 months)",
+            "billing": "monthly",
+            "features": [
+              "Free for first 6 months, then $35/month",
+              "Unlimited 1099 contractors",
+              "$6 per contractor/month",
+              "Automated tax forms (1099s)",
+              "Contractor self-service",
+              "Payroll reporting",
+              "Basic integrations"
+            ],
+            "limits": {
+              "w2_employees": 0,
+              "contractors": "unlimited"
+            }
+          },
+          {
+            "name": "Simple",
+            "price": 49,
+            "per": "month base + $6/employee",
+            "billing": "monthly",
+            "features": [
+              "Full-service single-state payroll",
+              "W-2s and 1099s",
+              "Automatic tax filings",
+              "Unlimited payroll runs",
+              "Employee self-service portal",
+              "Health insurance administration",
+              "Basic PTO and holiday pay",
+              "Time-off reporting",
+              "Accounting integrations",
+              "Mobile apps"
+            ],
+            "limits": {
+              "states": 1,
+              "employees": "unlimited"
+            }
+          },
+          {
+            "name": "Plus",
+            "price": 80,
+            "per": "month base + $12/employee",
+            "billing": "monthly",
+            "features": [
+              "All Simple features",
+              "Multi-state payroll",
+              "Time tracking & attendance",
+              "PTO management",
+              "Onboarding workflows",
+              "Team management tools",
+              "Employee directory",
+              "Org chart builder",
+              "Advanced integrations",
+              "Email support"
+            ],
+            "limits": {
+              "states": "unlimited",
+              "employees": "unlimited"
+            }
+          },
+          {
+            "name": "Premium",
+            "price": 180,
+            "per": "month base + $22/employee",
+            "billing": "monthly",
+            "features": [
+              "All Plus features",
+              "Dedicated customer success manager",
+              "Certified HR experts access",
+              "Live phone & messaging support",
+              "Compliance alerts",
+              "Custom permissions",
+              "Priority support",
+              "R&D tax credits (15% fee)",
+              "Migration assistance",
+              "Proactive HR guidance"
+            ],
+            "limits": {
+              "states": "unlimited",
+              "employees": "unlimited"
+            }
+          }
+        ],
+        "starting_price": 49,
+        "custom_pricing": false,
+        "free_trial_days": null,
+        "free_tier": true,
+        "startup_discount": "Contractor Only plan free for 6 months for contractor-only businesses"
+      },
+      "best_for": [
+        "Small to medium businesses (1-100 employees)",
+        "Startups needing simple payroll setup",
+        "Companies wanting integrated benefits administration",
+        "Teams prioritizing ease of use",
+        "Businesses primarily operating in single or few states",
+        "Companies with mix of W-2 and 1099 workers"
+      ],
+      "industries": [
+        "Technology",
+        "Professional Services",
+        "Retail",
+        "Healthcare",
+        "Hospitality",
+        "Non-profits"
+      ],
+      "company_sizes": [
+        "startup",
+        "smb",
+        "mid_market"
+      ],
+      "avoid_if": [
+        "Need global payroll (limited international capabilities)",
+        "Require deep customization and complex workflows",
+        "Large enterprise with 500+ employees",
+        "Need advanced workforce management features",
+        "Require extensive reporting and analytics",
+        "Budget-sensitive with many add-ons needed (costs add up)"
+      ],
+      "implementation": {
+        "avg_weeks": 2,
+        "complexity": "low",
+        "requires_developer": false,
+        "cost_range": {
+          "diy": {
+            "min": 0,
+            "max": 500
+          },
+          "with_help": {
+            "min": 500,
+            "max": 2000
+          },
+          "full_service": {
+            "min": 2000,
+            "max": 5000
+          }
+        }
+      },
+      "ratings": {
+        "g2": {
+          "score": 4.6,
+          "reviews": 7000,
+          "last_updated": "2025-12"
+        },
+        "capterra": {
+          "score": 4.6,
+          "reviews": 3800,
+          "last_updated": "2025-12"
+        },
+        "our_rating": 4.5,
+        "our_notes": "Best-in-class for SMB payroll. Ranked #1 on G2 Fall 2025. Exceptional ease of use (9.2/10). Strong for companies under 100 employees. Costs increase with add-ons. Limited international capabilities compared to Rippling/Deel."
+      },
+      "integrations": [
+        "QuickBooks",
+        "Xero",
+        "FreshBooks",
+        "Slack",
+        "Google Workspace",
+        "Microsoft 365",
+        "Carta",
+        "Expensify",
+        "TSheets",
+        "Deputy",
+        "API available"
+      ],
+      "api": {
+        "available": true,
+        "type": "REST",
+        "documentation": "https://docs.gusto.com"
+      },
+      "competitors": [
+        "Rippling",
+        "ADP",
+        "Paychex",
+        "OnPay",
+        "Square Payroll"
+      ],
+      "verified_at": "2025-12-17T00:00:00Z",
+      "verified_by": "manual",
+      "source_url": "https://gusto.com/product/pricing",
+      "notes": "Base price increased from $40 to $49/month on March 1, 2025. Add-ons: Time & Attendance Plus ($6/person/month), Priority Support ($6/person/month), Next-Day Direct Deposit ($15/month + $3/person), Health Insurance Broker ($6/eligible employee/month). State tax registration fees vary by state. Global EOR available at $599/employee/month (promotional pricing through Dec 31, 2025)."
+    },
+    {
+      "slug": "rippling",
+      "name": "Rippling",
+      "category": "hr_payroll",
+      "subcategory": "all_in_one_workforce",
+      "website": "https://www.rippling.com",
+      "pricing_url": "https://www.rippling.com/pricing",
+      "description": "Unified workforce platform combining HR, IT, payroll, and spend management. Manages entire employee lifecycle from hiring to offboarding including device provisioning, app access, benefits, and compliance. Modular pricing allows companies to select only needed features. Strong automation and integration capabilities make it powerful for tech-forward companies.",
+      "tagline": "One platform to manage your workforce, from hire to retire",
+      "pricing": {
+        "model": "modular_per_employee",
+        "currency": "USD",
+        "billing_options": ["monthly", "annual"],
+        "annual_discount_percent": null,
+        "tiers": [
+          {
+            "name": "Core HRIS",
+            "price": 8,
+            "per": "employee/month",
+            "billing": "monthly",
+            "features": [
+              "$35/month base fee",
+              "Employee database",
+              "Org chart management",
+              "Employee self-service",
+              "Document management",
+              "Basic reporting",
+              "Mobile app",
+              "Onboarding workflows",
+              "Time-off tracking",
+              "E-signatures"
+            ],
+            "limits": {
+              "employees": "unlimited"
+            }
+          },
+          {
+            "name": "Payroll",
+            "price": 35,
+            "per": "month base + variable per employee",
+            "billing": "monthly",
+            "features": [
+              "Full-service payroll",
+              "Automated tax filings",
+              "Multi-state payroll",
+              "Contractor payments",
+              "W-2s and 1099s",
+              "Direct deposit",
+              "Payroll reporting",
+              "Wage garnishments",
+              "Workers' compensation",
+              "Unlimited payroll runs"
+            ],
+            "limits": {
+              "employees": "unlimited"
+            }
+          },
+          {
+            "name": "Benefits Administration",
+            "price": null,
+            "per": "employee/month (pricing varies)",
+            "billing": "monthly",
+            "features": [
+              "Benefits enrollment",
+              "Carrier connections",
+              "COBRA administration",
+              "FSA/HSA management",
+              "Commuter benefits",
+              "401(k) integration",
+              "Benefits reconciliation",
+              "Compliance tracking",
+              "Employee communications"
+            ],
+            "limits": null
+          },
+          {
+            "name": "Talent Management",
+            "price": null,
+            "per": "employee/month (pricing varies)",
+            "billing": "monthly",
+            "features": [
+              "Performance reviews",
+              "Goal tracking",
+              "360-degree feedback",
+              "Compensation planning",
+              "Succession planning",
+              "Learning management",
+              "Career pathing",
+              "Analytics & insights"
+            ],
+            "limits": null
+          },
+          {
+            "name": "IT Management",
+            "price": null,
+            "per": "employee/month (pricing varies)",
+            "billing": "monthly",
+            "features": [
+              "Device management (Mac, PC, Linux)",
+              "App provisioning/deprovisioning",
+              "SSO and access control",
+              "Software license management",
+              "Inventory tracking",
+              "Security policies",
+              "Automated workflows",
+              "Remote wipe capabilities"
+            ],
+            "limits": null
+          }
+        ],
+        "starting_price": 8,
+        "custom_pricing": true,
+        "free_trial_days": null,
+        "free_tier": false,
+        "startup_discount": null
+      },
+      "best_for": [
+        "Tech-forward companies wanting unified platform",
+        "Mid-market to enterprise (50-1000+ employees)",
+        "Companies needing IT + HR integration",
+        "Businesses with remote/distributed teams",
+        "Organizations wanting deep automation",
+        "Companies with complex workflows and integrations",
+        "Teams needing device and app management"
+      ],
+      "industries": [
+        "Technology",
+        "SaaS",
+        "Financial Services",
+        "Professional Services",
+        "Healthcare",
+        "E-commerce"
+      ],
+      "company_sizes": [
+        "smb",
+        "mid_market",
+        "enterprise"
+      ],
+      "avoid_if": [
+        "Very small team (under 20 employees) - may be overkill",
+        "Limited budget - costs scale with modules",
+        "Simple payroll-only needs (Gusto more affordable)",
+        "Need transparent upfront pricing (requires quote)",
+        "Want turnkey simplicity (learning curve for full platform)",
+        "Primarily non-technical workforce"
+      ],
+      "implementation": {
+        "avg_weeks": 4,
+        "complexity": "medium",
+        "requires_developer": false,
+        "cost_range": {
+          "diy": {
+            "min": 1000,
+            "max": 3000
+          },
+          "with_help": {
+            "min": 3000,
+            "max": 10000
+          },
+          "full_service": {
+            "min": 10000,
+            "max": 30000
+          }
+        }
+      },
+      "ratings": {
+        "g2": {
+          "score": 4.8,
+          "reviews": 10177,
+          "last_updated": "2025-12"
+        },
+        "capterra": {
+          "score": 4.9,
+          "reviews": 3200,
+          "last_updated": "2025-12"
+        },
+        "our_rating": 4.7,
+        "our_notes": "Industry-leading all-in-one platform. Exceptional for companies wanting unified HR+IT. Highest G2 rating (4.8/5) with 10k+ reviews. Powerful automation but complexity can overwhelm small teams. Pricing not transparent - requires custom quote. Best value for mid-market+ companies needing multiple modules."
+      },
+      "integrations": [
+        "1000+ pre-built integrations",
+        "Slack",
+        "Google Workspace",
+        "Microsoft 365",
+        "Okta",
+        "QuickBooks",
+        "NetSuite",
+        "Salesforce",
+        "Greenhouse",
+        "Lever",
+        "Jamf",
+        "API available"
+      ],
+      "api": {
+        "available": true,
+        "type": "REST",
+        "documentation": "https://developer.rippling.com"
+      },
+      "competitors": [
+        "Gusto",
+        "BambooHR",
+        "Namely",
+        "Zenefits",
+        "ADP Workforce Now"
+      ],
+      "verified_at": "2025-12-17T00:00:00Z",
+      "verified_by": "manual",
+      "source_url": "https://www.rippling.com/pricing",
+      "notes": "Modular pricing means you only pay for what you use, but total costs typically range $25-50/employee/month with multiple modules. Setup fees may apply for initial configuration. Enterprise pricing (201-1000 employees) reported at ~$80/user/year for Core + $80/user/year for Payroll. No free trial - demo required. Watch for potential additional costs during implementation."
+    },
+    {
+      "slug": "bamboohr",
+      "name": "BambooHR",
+      "category": "hr_payroll",
+      "subcategory": "hr_focused_platform",
+      "website": "https://www.bamboohr.com",
+      "pricing_url": "https://www.bamboohr.com/pricing",
+      "description": "HR-focused platform designed for small to mid-sized businesses. Strong employee database, hiring, onboarding, time-off tracking, and performance management capabilities. Known for intuitive interface and excellent user experience. Better suited for companies prioritizing HR processes over payroll complexity. Offers optional add-on for payroll and benefits.",
+      "tagline": "HR software that makes work better for humans",
+      "pricing": {
+        "model": "tiered_per_employee",
+        "currency": "USD",
+        "billing_options": ["monthly"],
+        "annual_discount_percent": null,
+        "tiers": [
+          {
+            "name": "Core",
+            "price": 250,
+            "per": "month (flat rate for ≤25 employees)",
+            "billing": "monthly",
+            "features": [
+              "$10/employee/month for 25+ employees",
+              "Employee database & records",
+              "Hiring & applicant tracking",
+              "Onboarding workflows",
+              "E-signatures",
+              "Time-off tracking & requests",
+              "Benefits enrollment",
+              "Employee self-service",
+              "Mobile app",
+              "Basic reporting",
+              "Document storage"
+            ],
+            "limits": {
+              "flat_rate_up_to": 25
+            }
+          },
+          {
+            "name": "Pro",
+            "price": null,
+            "per": "employee/month (typically $12-20)",
+            "billing": "monthly",
+            "features": [
+              "All Core features",
+              "Performance management",
+              "Goal tracking & OKRs",
+              "360-degree feedback",
+              "1-on-1 meeting tools",
+              "Employee satisfaction surveys (eNPS)",
+              "Custom reporting & analytics",
+              "Advanced workflows",
+              "Customizable dashboards",
+              "AI-powered insights"
+            ],
+            "limits": null
+          },
+          {
+            "name": "Elite",
+            "price": null,
+            "per": "employee/month (custom pricing)",
+            "billing": "monthly",
+            "features": [
+              "All Pro features",
+              "Compensation management",
+              "HR benchmarks",
+              "Advanced analytics",
+              "Data warehouse access",
+              "Custom integrations",
+              "Premium support",
+              "Dedicated account manager",
+              "Advanced security controls"
+            ],
+            "limits": null
+          }
+        ],
+        "starting_price": 250,
+        "custom_pricing": true,
+        "free_trial_days": 7,
+        "free_tier": false,
+        "startup_discount": "15% discount for registered non-profit organizations"
+      },
+      "best_for": [
+        "Small to mid-sized businesses (10-500 employees)",
+        "Companies prioritizing HR over complex payroll",
+        "Teams wanting excellent user experience",
+        "Organizations needing strong performance management",
+        "Businesses focused on employee experience",
+        "Companies with straightforward HR needs",
+        "Teams wanting quick implementation"
+      ],
+      "industries": [
+        "Professional Services",
+        "Technology",
+        "Healthcare",
+        "Education",
+        "Non-profits",
+        "Retail",
+        "Manufacturing"
+      ],
+      "company_sizes": [
+        "smb",
+        "mid_market"
+      ],
+      "avoid_if": [
+        "Need advanced payroll as core feature (add-on only)",
+        "Require global payroll capabilities",
+        "Very small team under 10 (may be expensive)",
+        "Large enterprise 500+ employees",
+        "Need deep IT management integration",
+        "Require extensive customization",
+        "Budget-constrained startups (premium pricing)"
+      ],
+      "implementation": {
+        "avg_weeks": 2,
+        "complexity": "low",
+        "requires_developer": false,
+        "cost_range": {
+          "diy": {
+            "min": 500,
+            "max": 1500
+          },
+          "with_help": {
+            "min": 1500,
+            "max": 5000
+          },
+          "full_service": {
+            "min": 5000,
+            "max": 15000
+          }
+        }
+      },
+      "ratings": {
+        "g2": {
+          "score": 4.4,
+          "reviews": 2654,
+          "last_updated": "2025-12",
+          "ease_of_use": 9.2,
+          "quality_of_support": 8.8
+        },
+        "capterra": {
+          "score": 4.6,
+          "reviews": 3081,
+          "last_updated": "2025-12",
+          "value_for_money": 4.5
+        },
+        "our_rating": 4.5,
+        "our_notes": "Top choice for HR-focused SMBs. Exceptional ease of use (9.2/10 on G2). Strong performance management and employee experience features. Payroll is add-on, not core strength. Pricing on higher end for SMBs. 5-15% implementation fee on top of annual software cost. Great balance of functionality and usability."
+      },
+      "integrations": [
+        "15+ payroll providers",
+        "ADP",
+        "Gusto",
+        "Slack",
+        "Microsoft Teams",
+        "Google Workspace",
+        "Greenhouse",
+        "Lever",
+        "JazzHR",
+        "QuickBooks",
+        "NetSuite",
+        "Workday",
+        "API available"
+      ],
+      "api": {
+        "available": true,
+        "type": "REST",
+        "documentation": "https://documentation.bamboohr.com"
+      },
+      "competitors": [
+        "Rippling",
+        "Gusto",
+        "Namely",
+        "Bob",
+        "Personio"
+      ],
+      "verified_at": "2025-12-17T00:00:00Z",
+      "verified_by": "manual",
+      "source_url": "https://www.bamboohr.com/pricing",
+      "notes": "Flat $250/month for companies ≤25 employees, then per-employee pricing kicks in. Most businesses pay $12-22 PEPM with volume discounts. Implementation fee typically 5-15% of annual software cost. 15% discount for combining Payroll + Benefits. 7-day free trial available. Pricing not listed on website - requires custom quote based on company size and features."
+    },
+    {
+      "slug": "deel",
+      "name": "Deel",
+      "category": "hr_payroll",
+      "subcategory": "global_payroll_specialist",
+      "website": "https://www.deel.com",
+      "pricing_url": "https://www.deel.com/pricing",
+      "description": "Global payroll and compliance platform specializing in international hiring. Provides EOR (Employer of Record), contractor management, and global payroll across 130+ countries. Handles complex international tax filings, compliance, and benefits. Best for companies building distributed global teams without legal entities abroad.",
+      "tagline": "Global payroll and compliant hiring in 150 countries",
+      "pricing": {
+        "model": "tiered_per_worker",
+        "currency": "USD",
+        "billing_options": ["monthly"],
+        "annual_discount_percent": null,
+        "tiers": [
+          {
+            "name": "Contractors",
+            "price": 49,
+            "per": "contractor/month",
+            "billing": "monthly",
+            "features": [
+              "Unlimited contractors",
+              "Compliant contracts in 150+ countries",
+              "Automated invoicing",
+              "Multi-currency payments",
+              "Tax form generation (1099, etc.)",
+              "Contractor self-service portal",
+              "Payment tracking",
+              "Withdrawal options",
+              "Integration with accounting tools"
+            ],
+            "limits": {
+              "contractors": "unlimited",
+              "countries": "150+"
+            }
+          },
+          {
+            "name": "Global Payroll",
+            "price": 29,
+            "per": "employee/month",
+            "billing": "monthly",
+            "features": [
+              "$1,000 one-time setup per entity",
+              "Payroll processing in 53+ countries",
+              "Local tax filings & compliance",
+              "Benefits management",
+              "Real-time gross-to-net calculations",
+              "Multi-country consolidated payroll",
+              "Social contributions handling",
+              "Payroll reporting & analytics",
+              "Integration with HRIS systems"
+            ],
+            "limits": {
+              "setup_fee": 1000,
+              "countries": "53+",
+              "implementation_days": "10-90"
+            }
+          },
+          {
+            "name": "US PEO",
+            "price": 89,
+            "per": "employee/month",
+            "billing": "monthly",
+            "features": [
+              "US-based PEO services",
+              "Full-service payroll",
+              "Benefits administration",
+              "Workers' compensation",
+              "Unemployment insurance",
+              "HR compliance support",
+              "Employee support",
+              "50-state coverage",
+              "Tax filings & reporting"
+            ],
+            "limits": {
+              "countries": "US only"
+            }
+          },
+          {
+            "name": "EOR (Employer of Record)",
+            "price": 599,
+            "per": "employee/month",
+            "billing": "monthly",
+            "features": [
+              "Hire in 150+ countries without entity",
+              "Full legal compliance & risk mitigation",
+              "Localized employment contracts",
+              "Benefits packages per country",
+              "Payroll in local currency",
+              "Tax compliance & reporting",
+              "IP protection",
+              "Visa & immigration support",
+              "Equipment provisioning",
+              "24/7 support"
+            ],
+            "limits": {
+              "countries": "150+",
+              "onboarding_days": "1-14"
+            }
+          }
+        ],
+        "starting_price": 29,
+        "custom_pricing": false,
+        "free_trial_days": null,
+        "free_tier": false,
+        "startup_discount": null
+      },
+      "best_for": [
+        "Companies hiring international contractors or employees",
+        "Startups going global without foreign entities",
+        "Remote-first companies with distributed teams",
+        "Businesses needing EOR services",
+        "Organizations consolidating multi-country payroll",
+        "Companies with existing entities wanting global payroll",
+        "Teams scaling internationally quickly"
+      ],
+      "industries": [
+        "Technology",
+        "SaaS",
+        "E-commerce",
+        "Agencies",
+        "Consulting",
+        "Startups",
+        "Professional Services"
+      ],
+      "company_sizes": [
+        "startup",
+        "smb",
+        "mid_market",
+        "enterprise"
+      ],
+      "avoid_if": [
+        "Only hiring domestically (US/single country)",
+        "Very tight budget (EOR services expensive)",
+        "Need deep US payroll features (focus is global)",
+        "Require extensive performance management",
+        "Want unified HR+IT platform (Rippling better)",
+        "Concerned about FX fees (can be higher than competitors)",
+        "Need extensive reporting and analytics"
+      ],
+      "implementation": {
+        "avg_weeks": 2,
+        "complexity": "medium",
+        "requires_developer": false,
+        "cost_range": {
+          "diy": {
+            "min": 1000,
+            "max": 3000
+          },
+          "with_help": {
+            "min": 3000,
+            "max": 8000
+          },
+          "full_service": {
+            "min": 8000,
+            "max": 20000
+          }
+        }
+      },
+      "ratings": {
+        "g2": {
+          "score": 4.5,
+          "reviews": 2800,
+          "last_updated": "2025-12"
+        },
+        "capterra": {
+          "score": 4.5,
+          "reviews": 1200,
+          "last_updated": "2025-12"
+        },
+        "our_rating": 4.3,
+        "our_notes": "Best-in-class for global contractor and EOR services. Covers 150+ countries with strong compliance. Users praise ease of use and payment reliability. Common complaints about FX fees being higher than dedicated money transfer services and occasional payment delays. Great for scaling globally but expensive at $599/employee/month for EOR."
+      },
+      "integrations": [
+        "QuickBooks",
+        "Xero",
+        "NetSuite",
+        "Slack",
+        "Greenhouse",
+        "Ashby",
+        "BambooHR",
+        "Workday",
+        "Okta",
+        "Google Workspace",
+        "Microsoft 365",
+        "API available"
+      ],
+      "api": {
+        "available": true,
+        "type": "REST",
+        "documentation": "https://developer.deel.com"
+      },
+      "competitors": [
+        "Remote.com",
+        "Oyster",
+        "Papaya Global",
+        "Velocity Global",
+        "Globalization Partners"
+      ],
+      "verified_at": "2025-12-17T00:00:00Z",
+      "verified_by": "manual",
+      "source_url": "https://www.deel.com/pricing",
+      "notes": "Global Payroll requires $1,000 setup fee per entity. SMBs can setup in 10 days, enterprises in 1-3 months. Currently supports 53 countries with native payroll engine (real-time calculations). EOR pricing is competitive but FX fees can add costs. Common praise: ease of onboarding, contract clarity, localized compliance. Common criticisms: pricing structure, FX fees, occasional payment delays."
+    },
+    {
+      "slug": "remote",
+      "name": "Remote",
+      "category": "hr_payroll",
+      "subcategory": "international_employment",
+      "website": "https://remote.com",
+      "pricing_url": "https://remote.com/pricing",
+      "description": "International employment platform providing EOR, contractor management, and global payroll services. Operates own legal entities in 80+ countries for compliant hiring without entity setup. Flat-rate pricing with no hidden fees. Strong focus on compliance, security, and protecting companies from misclassification risk. Premium positioning with emphasis on safety and reliability.",
+      "tagline": "Hire, manage, and pay global teams compliantly",
+      "pricing": {
+        "model": "flat_per_worker",
+        "currency": "USD",
+        "billing_options": ["monthly", "annual"],
+        "annual_discount_percent": 17,
+        "tiers": [
+          {
+            "name": "Contractor Management",
+            "price": 29,
+            "per": "contractor/month",
+            "billing": "monthly",
+            "features": [
+              "Manage contractors in 200+ countries",
+              "Compliant contracts",
+              "Automated invoicing",
+              "Multi-currency payments",
+              "Tax form generation",
+              "Payment tracking",
+              "Contractor portal",
+              "No onboarding fees",
+              "No platform fees"
+            ],
+            "limits": {
+              "contractors": "unlimited",
+              "countries": "200+"
+            }
+          },
+          {
+            "name": "Contractor of Record",
+            "price": 325,
+            "per": "contractor/month",
+            "billing": "monthly",
+            "features": [
+              "Remote hires contractors on your behalf",
+              "Full misclassification protection",
+              "IP protection & indemnification",
+              "Legal risk mitigation",
+              "Compliant contractor agreements",
+              "Payment processing",
+              "Dedicated support",
+              "Peace of mind for sensitive roles"
+            ],
+            "limits": {
+              "contractors": "unlimited"
+            }
+          },
+          {
+            "name": "Global Payroll",
+            "price": 29,
+            "per": "employee/month",
+            "billing": "monthly",
+            "features": [
+              "For companies with existing entities",
+              "Payroll processing",
+              "Tax compliance",
+              "Benefits administration",
+              "Multi-country payroll consolidation",
+              "Local currency payments",
+              "Payroll delivery fee applies",
+              "Implementation fee for setup"
+            ],
+            "limits": {
+              "setup_fee": "varies by entity"
+            }
+          },
+          {
+            "name": "Employer of Record",
+            "price": 599,
+            "per": "employee/month (billed annually)",
+            "billing": "annual",
+            "features": [
+              "$699/month if billed monthly",
+              "Hire in 80+ countries without entity",
+              "Own legal entities (not resellers)",
+              "Localized employment contracts",
+              "Competitive benefits packages",
+              "Full compliance & legal protection",
+              "Visa & immigration support",
+              "Equipment provisioning",
+              "No setup or offboarding fees",
+              "No minimum contract length"
+            ],
+            "limits": {
+              "countries": "80+",
+              "setup_fee": 0,
+              "offboarding_fee": 0
+            }
+          }
+        ],
+        "starting_price": 29,
+        "custom_pricing": false,
+        "free_trial_days": null,
+        "free_tier": false,
+        "startup_discount": "Startups: 50% off first employee for 1 year, or 12 months for price of 10 on all employees, plus free contractor onboarding"
+      },
+      "best_for": [
+        "Companies hiring globally without entities",
+        "Remote-first organizations prioritizing compliance",
+        "Businesses needing misclassification protection",
+        "Companies wanting transparent flat-rate pricing",
+        "Organizations with international contractors",
+        "Teams requiring IP protection globally",
+        "Businesses expanding to new countries"
+      ],
+      "industries": [
+        "Technology",
+        "SaaS",
+        "Startups",
+        "E-commerce",
+        "Professional Services",
+        "Agencies",
+        "Consulting"
+      ],
+      "company_sizes": [
+        "startup",
+        "smb",
+        "mid_market",
+        "enterprise"
+      ],
+      "avoid_if": [
+        "Only hiring domestically",
+        "Budget-sensitive with many employees (premium pricing)",
+        "Small team (1-2 employees) - $599/month is significant",
+        "Need deep US-focused payroll features",
+        "Require extensive performance management tools",
+        "Want unified HR+IT platform",
+        "Need extensive customization"
+      ],
+      "implementation": {
+        "avg_weeks": 2,
+        "complexity": "medium",
+        "requires_developer": false,
+        "cost_range": {
+          "diy": {
+            "min": 0,
+            "max": 2000
+          },
+          "with_help": {
+            "min": 2000,
+            "max": 5000
+          },
+          "full_service": {
+            "min": 5000,
+            "max": 15000
+          }
+        }
+      },
+      "ratings": {
+        "g2": {
+          "score": 4.5,
+          "reviews": 1100,
+          "last_updated": "2025-12"
+        },
+        "capterra": {
+          "score": 4.4,
+          "reviews": 380,
+          "last_updated": "2025-12"
+        },
+        "our_rating": 4.4,
+        "our_notes": "Premium global employment platform with strong compliance focus. Users praise reliability, timely payments, and responsive support. Owns legal entities (not reseller) in 80+ countries for better control. Premium pricing at $599/employee/month - on higher end of market. No hidden fees is major plus. Best for companies prioritizing compliance and safety over cost."
+      },
+      "integrations": [
+        "Greenhouse",
+        "Ashby",
+        "Lever",
+        "BambooHR",
+        "Workday",
+        "Slack",
+        "Microsoft Teams",
+        "QuickBooks",
+        "Xero",
+        "NetSuite",
+        "Okta",
+        "API available"
+      ],
+      "api": {
+        "available": true,
+        "type": "REST",
+        "documentation": "https://gateway.remote.com/v1/docs"
+      },
+      "competitors": [
+        "Deel",
+        "Oyster",
+        "Velocity Global",
+        "Globalization Partners",
+        "Papaya Global"
+      ],
+      "verified_at": "2025-12-17T00:00:00Z",
+      "verified_by": "manual",
+      "source_url": "https://remote.com/pricing",
+      "notes": "EOR: $599/month (annual) or $699/month (monthly billing). No platform, onboarding, or offboarding fees for EOR and Contractor Management. Global Payroll has implementation fee and payroll delivery fee. ESOP administration available for $999/year (85 countries). Talent pool access $199/month. Startup discount: 50% off first employee Year 1, or 12 months for price of 10. Users report reliable payments, fair FX rates, intuitive portal."
+    },
+    {
+      "slug": "oyster",
+      "name": "Oyster",
+      "category": "hr_payroll",
+      "subcategory": "global_hr_platform",
+      "website": "https://www.oysterhr.com",
+      "pricing_url": "https://www.oysterhr.com/pricing",
+      "description": "Global HR platform for hiring, onboarding, and paying international talent across 180+ countries. Provides EOR services, global payroll, and contractor management with focus on remote-first company culture. Features cultural integration tools, employee development resources (Oyster Academy), and compliance management. Competitive pricing with volume discounts for larger teams.",
+      "tagline": "Hire global talent anywhere with confidence",
+      "pricing": {
+        "model": "tiered_per_worker",
+        "currency": "USD",
+        "billing_options": ["monthly", "annual"],
+        "annual_discount_percent": 17,
+        "tiers": [
+          {
+            "name": "Contractor",
+            "price": 29,
+            "per": "contractor/month",
+            "billing": "monthly",
+            "features": [
+              "Free for 30 days",
+              "Manage contractors globally",
+              "Compliant contracts",
+              "Automated payments",
+              "Multi-currency support",
+              "Tax compliance",
+              "Contractor portal",
+              "Payment tracking",
+              "Document management"
+            ],
+            "limits": {
+              "free_trial_days": 30,
+              "contractors": "unlimited"
+            }
+          },
+          {
+            "name": "Global Payroll",
+            "price": 50,
+            "per": "employee/month",
+            "billing": "monthly",
+            "features": [
+              "For companies with existing entities",
+              "Payroll processing globally",
+              "Local tax filings",
+              "Benefits management",
+              "Compliance tracking",
+              "Multi-country consolidation",
+              "Payroll reports & analytics",
+              "Employee self-service",
+              "Mobile app"
+            ],
+            "limits": {
+              "employees": "unlimited"
+            }
+          },
+          {
+            "name": "Employer of Record",
+            "price": 499,
+            "per": "employee/month (billed annually)",
+            "billing": "annual",
+            "features": [
+              "$599/month if billed monthly",
+              "$699/month on monthly billing",
+              "Hire in 180+ countries without entity",
+              "Localized employment contracts",
+              "Benefits packages (customizable)",
+              "Onboarding automation",
+              "Compliance management",
+              "Payroll in local currency",
+              "Employee support",
+              "Cultural integration tools",
+              "Oyster Academy access"
+            ],
+            "limits": {
+              "countries": "180+",
+              "annual_savings": "$1,200 per employee vs monthly"
+            }
+          },
+          {
+            "name": "Scale",
+            "price": null,
+            "per": "custom pricing",
+            "billing": "annual",
+            "features": [
+              "For teams hiring 3+ employees via EOR",
+              "Volume discounts",
+              "Lower effective cost per hire",
+              "Enhanced support",
+              "Dedicated account manager",
+              "Operational efficiencies",
+              "Custom SLAs",
+              "Priority onboarding",
+              "Strategic planning sessions"
+            ],
+            "limits": {
+              "minimum_employees": 3
+            }
+          }
+        ],
+        "starting_price": 29,
+        "custom_pricing": true,
+        "free_trial_days": 30,
+        "free_tier": false,
+        "startup_discount": null
+      },
+      "best_for": [
+        "Remote-first companies hiring globally",
+        "Startups expanding internationally",
+        "Companies wanting employee development focus",
+        "Teams needing cultural integration support",
+        "Organizations with 3+ international employees (Scale plan)",
+        "Businesses prioritizing employee experience",
+        "Companies hiring across many countries"
+      ],
+      "industries": [
+        "Technology",
+        "SaaS",
+        "Startups",
+        "E-commerce",
+        "Agencies",
+        "Professional Services",
+        "Non-profits"
+      ],
+      "company_sizes": [
+        "startup",
+        "smb",
+        "mid_market"
+      ],
+      "avoid_if": [
+        "Only hiring domestically",
+        "Very small budget (EOR at $499-699/month)",
+        "Need extensive US payroll features",
+        "Require deep IT management integration",
+        "Want all-in-one HR+IT platform (Rippling better)",
+        "Asia-Pacific focus (some third-party partner issues reported)",
+        "Need extensive reporting and analytics"
+      ],
+      "implementation": {
+        "avg_weeks": 2,
+        "complexity": "medium",
+        "requires_developer": false,
+        "cost_range": {
+          "diy": {
+            "min": 0,
+            "max": 2000
+          },
+          "with_help": {
+            "min": 2000,
+            "max": 5000
+          },
+          "full_service": {
+            "min": 5000,
+            "max": 12000
+          }
+        }
+      },
+      "ratings": {
+        "g2": {
+          "score": 4.4,
+          "reviews": 1254,
+          "last_updated": "2025-12"
+        },
+        "capterra": {
+          "score": 4.6,
+          "reviews": 91,
+          "last_updated": "2025-12"
+        },
+        "trustpilot": {
+          "score": 4.5,
+          "reviews": 249,
+          "last_updated": "2025-12"
+        },
+        "our_rating": 4.4,
+        "our_notes": "Strong global HR platform with employee development focus. Competitive pricing with annual savings ($1,200/employee). Users praise fast onboarding, responsive support, clean interface, and transparent pricing. Some third-party partner issues in APAC region. Oyster Academy and cultural tools differentiate from competitors. Scale plan offers good value for teams with 3+ employees."
+      },
+      "integrations": [
+        "Greenhouse",
+        "Lever",
+        "Ashby",
+        "BambooHR",
+        "Slack",
+        "Microsoft Teams",
+        "Google Workspace",
+        "QuickBooks",
+        "Xero",
+        "Okta",
+        "Workday",
+        "API available"
+      ],
+      "api": {
+        "available": true,
+        "type": "REST",
+        "documentation": "https://docs.oysterhr.com"
+      },
+      "competitors": [
+        "Deel",
+        "Remote.com",
+        "Velocity Global",
+        "Papaya Global",
+        "Globalization Partners"
+      ],
+      "verified_at": "2025-12-17T00:00:00Z",
+      "verified_by": "manual",
+      "source_url": "https://www.oysterhr.com/pricing",
+      "notes": "EOR pricing: $499/employee/month (annual), $599/month (monthly), or $699/month on some plans. Save $1,200/year per employee with annual billing. 30-day free trial for Contractor plan. May require refundable security deposit (1 month service cost) for new hires. Add-on costs for salary bands, visa sponsorship, premium benefits. Companies save $50k-200k per country vs entity setup. Scale plan (3+ employees) offers custom pricing and volume discounts."
+    }
+  ],
+  "last_updated": "2025-12-17T00:00:00Z"
+}

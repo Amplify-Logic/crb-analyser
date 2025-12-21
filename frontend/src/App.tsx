@@ -13,6 +13,13 @@ import Intake from './pages/Intake'
 import AuditProgress from './pages/AuditProgress'
 import Report from './pages/Report'
 import ReportViewer from './pages/ReportViewer'
+import ReportProgress from './pages/ReportProgress'
+import Interview from './pages/Interview'
+import VoiceQuizInterview from './pages/VoiceQuizInterview'
+import PreviewReport from './pages/PreviewReport'
+import Workshop from './pages/Workshop'
+import Terms from './pages/Terms'
+import Privacy from './pages/Privacy'
 
 // 404 page
 const NotFound = () => (
@@ -35,13 +42,27 @@ function App() {
       <Route path="/login" element={<Login />} />
       <Route path="/signup" element={<Signup />} />
 
+      {/* Legal pages */}
+      <Route path="/terms" element={<Terms />} />
+      <Route path="/privacy" element={<Privacy />} />
+
       {/* Free quiz and checkout */}
       <Route path="/quiz" element={<Quiz />} />
+      <Route path="/quiz/interview" element={<VoiceQuizInterview />} />
+      <Route path="/quiz/preview" element={<PreviewReport />} />
       <Route path="/checkout" element={<Checkout />} />
       <Route path="/checkout/success" element={<CheckoutSuccess />} />
 
+      {/* Post-payment workshop (90-min deep interview) */}
+      <Route path="/interview" element={<Workshop />} />
+      <Route path="/workshop" element={<Workshop />} />
+
+      {/* Legacy interview route */}
+      <Route path="/interview-legacy" element={<Interview />} />
+
       {/* Public report viewer (for quiz-based reports) */}
       <Route path="/report/:id" element={<ReportViewer />} />
+      <Route path="/report/:id/progress" element={<ReportProgress />} />
 
       {/* Protected routes */}
       <Route

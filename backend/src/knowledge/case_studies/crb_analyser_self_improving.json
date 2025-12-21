@@ -1,0 +1,124 @@
+{
+  "meta": {
+    "INTERNAL_REFERENCE": true,
+    "note": "Documents how CRB Analyser works internally - can mention capabilities to clients but not architecture details",
+    "project": "CRB Analyser - Self-Improving Agent Expert",
+    "purpose": "Demonstrates eating our own dog food - we built an AI system the same way we recommend",
+    "date_documented": "2025-12-20",
+    "status": "Active, learning from each analysis"
+  },
+
+  "what_it_is": {
+    "description": "The CRB agent isn't generic - it learns from every analysis and gets smarter over time.",
+    "key_insight": "This is what makes it an 'agent expert' rather than a generic agent that forgets after each run."
+  },
+
+  "the_learning_loop": {
+    "step_1_before_analysis": {
+      "action": "Read expertise files (mental model)",
+      "data_loaded": [
+        "Industry expertise (pain points, patterns)",
+        "Vendor expertise (what works for whom)",
+        "Execution expertise (tool reliability)"
+      ]
+    },
+    "step_2_during_analysis": {
+      "action": "Inject expertise into prompts",
+      "example": "We've analyzed 12 similar companies... Common pain points we've seen... Recommendations that worked..."
+    },
+    "step_3_track_execution": {
+      "action": "Track everything",
+      "data_captured": [
+        "Tools used (with counts)",
+        "Phases completed",
+        "Errors encountered",
+        "Findings & recommendations generated"
+      ]
+    },
+    "step_4_after_analysis": {
+      "action": "Self-improve step",
+      "updates": [
+        "New pain points → add to industry expertise",
+        "Vendors recommended → update vendor expertise",
+        "Tool success/failure → update execution expertise",
+        "LLM reflection → extract key insights"
+      ]
+    }
+  },
+
+  "what_gets_learned": {
+    "industry_expertise": {
+      "location": "data/industries/{industry}.json",
+      "data": [
+        "Pain points frequency (which problems come up most)",
+        "Process insights (automation potential scores)",
+        "Effective recommendation patterns",
+        "Company size specific data",
+        "Average AI readiness scores"
+      ]
+    },
+    "vendor_expertise": {
+      "location": "data/vendors.json",
+      "data": [
+        "Which vendors get recommended",
+        "What company sizes they fit",
+        "What use cases they're good/bad for"
+      ]
+    },
+    "execution_expertise": {
+      "location": "data/execution.json",
+      "data": [
+        "Tool success rates",
+        "Common failure patterns"
+      ]
+    }
+  },
+
+  "example_prompt_injection": {
+    "description": "On the 2nd+ analysis for an industry, the discovery prompt includes:",
+    "example": {
+      "header": "AGENT EXPERTISE (learned from 12 prior analyses)",
+      "confidence_level": "medium",
+      "pain_points": [{"pain_point": "Manual client reporting", "seen_in": "8 analyses"}],
+      "insights": {
+        "analyzed": "5 similar companies",
+        "average_ai_readiness": 62,
+        "common_pain_points": ["client communication", "project tracking"]
+      },
+      "effective_recommendations": [{"pattern": "For small marketing-agencies", "recommendation": "Automated reporting"}]
+    }
+  },
+
+  "technical_implementation": {
+    "files": [
+      {"path": "src/expertise/schemas.py", "purpose": "Pydantic models for expertise data"},
+      {"path": "src/expertise/store.py", "purpose": "Atomic read/write with file locking"},
+      {"path": "src/expertise/self_improve.py", "purpose": "Learning engine that updates expertise"},
+      {"path": "src/routes/expertise.py", "purpose": "API to view expertise (debugging)"}
+    ],
+    "reliability": [
+      "Atomic writes - Uses temp file + rename (can't corrupt)",
+      "File locking - Prevents race conditions with concurrent analyses",
+      "Pydantic validation - Ensures data integrity",
+      "Non-blocking learning - If self-improve fails, analysis still completes"
+    ]
+  },
+
+  "why_this_matters": {
+    "differentiation": "Most AI tools are stateless - they forget everything after each interaction",
+    "value_proposition": "CRB Analyser gets MORE accurate with each analysis",
+    "credibility": "We built our tool the same way we recommend clients build theirs",
+    "proof_point": "Eating our own dog food - if we recommend AI augmentation, we should use it ourselves"
+  },
+
+  "relation_to_atlas": {
+    "pattern": "Both Atlas and CRB Analyser follow the same principles",
+    "shared_approach": [
+      "Multi-agent architecture with intelligent routing",
+      "Tool use, not just retrieval",
+      "Learning from each interaction",
+      "Guardrails and validation",
+      "Integration with real business data"
+    ]
+  }
+}

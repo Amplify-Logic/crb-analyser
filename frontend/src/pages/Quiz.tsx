@@ -93,7 +93,7 @@ export default function Quiz() {
 
   // Extracted findings for display
   const [findings, setFindings] = useState<ResearchFinding[]>([])
-  const [gaps, setGaps] = useState<string[]>([])
+  const [_gaps, setGaps] = useState<string[]>([])
 
   // Questions state
   const [questions, setQuestions] = useState<DynamicQuestion[]>([])
@@ -794,82 +794,184 @@ export default function Quiz() {
                 </div>
               )}
 
-              {/* Initial AI Insights - Real Value */}
-              <div className="bg-gradient-to-br from-purple-50 to-primary-50 rounded-2xl p-6 border border-purple-200 mb-6">
-                <div className="flex items-center gap-2 mb-4">
-                  <svg className="w-5 h-5 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
-                  </svg>
-                  <h3 className="font-semibold text-purple-900">Initial AI Analysis</h3>
-                </div>
-                <p className="text-purple-800 text-sm mb-4">
-                  Based on what we found, here are some initial observations for {companyName}:
-                </p>
-                <ul className="space-y-2 text-sm text-purple-900">
-                  {findings.slice(0, 3).map((f, i) => (
-                    <li key={i} className="flex items-start gap-2">
-                      <span className="text-purple-500 mt-1">→</span>
-                      <span>
-                        {f.field === 'Business Model' && `Your ${f.value} model has specific automation opportunities`}
-                        {f.field === 'Industry' && `Companies in ${f.value} typically see 20-40% efficiency gains with AI`}
-                        {f.field === 'Team Size' && `With ${f.value}, you're at a sweet spot for AI implementation`}
-                        {f.field === 'Products/Services' && `Your offerings could benefit from AI-powered optimization`}
-                        {f.field === 'Technology Stack' && `Your tech stack has good AI integration potential`}
-                        {!['Business Model', 'Industry', 'Team Size', 'Products/Services', 'Technology Stack'].includes(f.field) && `${f.field}: ${f.value}`}
-                      </span>
-                    </li>
-                  ))}
-                </ul>
-              </div>
+              {/* AI Opportunity Preview - Q4 2025 Research */}
+              {(() => {
+                // Extract findings for context
+                const teamSizeFinding = findings.find(f => f.field === 'Team Size' || f.field === 'Employee Count')
 
-              {/* What full report reveals - Genuine teasers */}
+                // Q4 2025 research-backed insights (from peer-reviewed studies and industry data)
+                const researchInsights = [
+                  {
+                    title: 'Customer Support Automation',
+                    stat: '60%+',
+                    description: 'resolution rate with AI agents, 20-40% cost reduction',
+                    source: 'HubSpot Q3 2025 Earnings / Industry data',
+                    color: 'text-green-600'
+                  },
+                  {
+                    title: 'Content & Writing Tasks',
+                    stat: '70%',
+                    description: 'time savings on first drafts with AI assistance',
+                    source: 'Industry benchmarks, December 2025',
+                    color: 'text-green-600'
+                  }
+                ]
+
+                // The opportunity - honest but forward-looking
+                const opportunityCheck = {
+                  title: 'The 2026 Opportunity',
+                  insight: 'Tools like Claude Code and Cursor are enabling non-developers to build custom business apps that connect to HubSpot, Slack, Shopify, and more.',
+                  example: 'Companies are building internal support hubs, sales tools, and operations dashboards - without traditional dev teams.',
+                  key: 'The difference? Focused scope, real integrations, and built by people who understand the problem.'
+                }
+
+                // Where it actually works
+                const provenUseCases = [
+                  { name: 'Customer support automation', outcome: '60%+ resolution, 20-40% cost reduction' },
+                  { name: 'Document processing', outcome: '50-70% time reduction' },
+                  { name: 'Content creation', outcome: '70%+ time savings on drafts' },
+                  { name: 'Meeting transcription', outcome: '4+ hours/week saved per user' }
+                ]
+
+                return (
+                  <div className="bg-gradient-to-br from-purple-50 via-primary-50 to-blue-50 rounded-2xl p-6 border border-purple-200 mb-6">
+                    <div className="flex items-center gap-2 mb-4">
+                      <svg className="w-5 h-5 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+                      </svg>
+                      <h3 className="font-semibold text-purple-900">What Q4 2025 Research Shows</h3>
+                    </div>
+
+                    {/* Proven outcomes */}
+                    <div className="grid md:grid-cols-2 gap-4 mb-5">
+                      {researchInsights.map((insight, i) => (
+                        <div key={i} className="bg-white/70 rounded-xl p-4">
+                          <div className={`text-3xl font-bold ${insight.color} mb-1`}>{insight.stat}</div>
+                          <div className="text-sm font-medium text-gray-900">{insight.title}</div>
+                          <div className="text-sm text-gray-600 mt-1">{insight.description}</div>
+                          <div className="text-xs text-gray-400 mt-2 italic">{insight.source}</div>
+                        </div>
+                      ))}
+                    </div>
+
+                    {/* The opportunity - forward-looking */}
+                    <div className="bg-gradient-to-r from-amber-50 to-orange-50 rounded-xl p-4 border border-amber-200 mb-5">
+                      <div className="flex items-center gap-2 mb-3">
+                        <span className="text-xl">{'⚡'}</span>
+                        <span className="font-medium text-amber-900">{opportunityCheck.title}</span>
+                      </div>
+                      <p className="text-sm text-amber-800 mb-2">{opportunityCheck.insight}</p>
+                      <p className="text-sm text-amber-700 mb-2">{opportunityCheck.example}</p>
+                      <p className="text-xs text-amber-600 font-medium">{opportunityCheck.key}</p>
+                    </div>
+
+                    {/* Where it works */}
+                    <div className="mb-4">
+                      <div className="text-sm font-medium text-purple-900 mb-3">Where AI automation is delivering real ROI:</div>
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
+                        {provenUseCases.map((uc, i) => (
+                          <div key={i} className="flex items-start gap-2 bg-white/60 rounded-lg p-2">
+                            <svg className="w-4 h-4 text-green-500 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                            </svg>
+                            <div>
+                              <div className="text-sm font-medium text-gray-900">{uc.name}</div>
+                              <div className="text-xs text-gray-500">{uc.outcome}</div>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+
+                    {/* What your report will do */}
+                    <div className="bg-white/80 rounded-xl p-4 border border-purple-100">
+                      <div className="flex items-center gap-2 mb-2">
+                        <svg className="w-4 h-4 text-primary-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z" />
+                        </svg>
+                        <span className="font-medium text-gray-900">Your Report Will Identify</span>
+                      </div>
+                      <p className="text-sm text-gray-600">
+                        The specific, focused use cases where {teamSizeFinding ? `your team of ${teamSizeFinding.value}` : 'your business'} can
+                        achieve real ROI - not vague "AI transformation" promises. With transparent assumptions and realistic timelines.
+                      </p>
+                    </div>
+                  </div>
+                )
+              })()}
+
+              {/* What full report includes */}
               <div className="bg-white rounded-2xl p-6 border border-gray-200 mb-8">
-                <h3 className="font-semibold text-gray-900 mb-4">What we'll analyze in your full report</h3>
-                <div className="grid gap-3">
-                  <div className="flex items-start gap-3 p-3 bg-gray-50 rounded-xl">
-                    <span className="text-xl">🎯</span>
-                    <div>
-                      <div className="font-medium text-gray-900">Specific AI Opportunities</div>
-                      <div className="text-sm text-gray-500">Tailored to your {findings.find(f => f.field === 'Industry')?.value || 'industry'} and business model</div>
-                    </div>
+                <h3 className="font-semibold text-gray-900 mb-4">Your full report will include:</h3>
+                <div className="grid grid-cols-2 gap-3">
+                  <div className="flex items-center gap-2 p-2 text-sm text-gray-700">
+                    <svg className="w-5 h-5 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                    </svg>
+                    Detailed ROI calculations
                   </div>
-                  <div className="flex items-start gap-3 p-3 bg-gray-50 rounded-xl">
-                    <span className="text-xl">💰</span>
-                    <div>
-                      <div className="font-medium text-gray-900">ROI Projections</div>
-                      <div className="text-sm text-gray-500">Based on your team size and current operations</div>
-                    </div>
+                  <div className="flex items-center gap-2 p-2 text-sm text-gray-700">
+                    <svg className="w-5 h-5 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                    </svg>
+                    Vendor comparisons + pricing
                   </div>
-                  <div className="flex items-start gap-3 p-3 bg-gray-50 rounded-xl">
-                    <span className="text-xl">🛠️</span>
-                    <div>
-                      <div className="font-medium text-gray-900">Tool Recommendations</div>
-                      <div className="text-sm text-gray-500">Real vendors with pricing that fit your budget</div>
-                    </div>
+                  <div className="flex items-center gap-2 p-2 text-sm text-gray-700">
+                    <svg className="w-5 h-5 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                    </svg>
+                    Implementation roadmap
                   </div>
-                  <div className="flex items-start gap-3 p-3 bg-gray-50 rounded-xl">
-                    <span className="text-xl">⚠️</span>
-                    <div>
-                      <div className="font-medium text-gray-900">"Don't Do This" Section</div>
-                      <div className="text-sm text-gray-500">AI pitfalls specific to your situation</div>
-                    </div>
+                  <div className="flex items-center gap-2 p-2 text-sm text-gray-700">
+                    <svg className="w-5 h-5 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                    </svg>
+                    Risk assessment
+                  </div>
+                  <div className="flex items-center gap-2 p-2 text-sm text-gray-700">
+                    <svg className="w-5 h-5 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                    </svg>
+                    90-min AI workshop
+                  </div>
+                  <div className="flex items-center gap-2 p-2 text-sm text-gray-700">
+                    <svg className="w-5 h-5 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                    </svg>
+                    "Don't do this" warnings
                   </div>
                 </div>
               </div>
 
-              {/* Natural CTA */}
+              {/* Natural CTA - Voice Interview */}
               <div className="text-center">
                 <p className="text-gray-600 mb-2">
-                  To create your personalized report, we need a few more details.
+                  Let's have a quick conversation to understand your specific situation.
                 </p>
                 <p className="text-sm text-gray-500 mb-6">
-                  {questions.length} quick questions • Takes about {Math.max(2, Math.ceil(questions.length * 0.5))} minutes
+                  ~5 minute voice interview • You can also type if you prefer
                 </p>
                 <button
-                  onClick={() => setPhase('questions')}
-                  className="px-8 py-4 bg-primary-600 text-white font-semibold rounded-xl hover:bg-primary-700 transition shadow-lg shadow-primary-600/25 text-lg"
+                  onClick={() => {
+                    // Save company profile for voice interview
+                    sessionStorage.setItem('companyProfile', JSON.stringify(researchResult?.company_profile || {}))
+                    sessionStorage.setItem('quizSessionId', sessionId || '')
+                    sessionStorage.setItem('companyName', companyName)
+                    // Navigate to voice interview
+                    navigate(`/quiz/interview${sessionId ? `?session_id=${sessionId}` : ''}`)
+                  }}
+                  className="px-8 py-4 bg-primary-600 text-white font-semibold rounded-xl hover:bg-primary-700 transition shadow-lg shadow-primary-600/25 text-lg flex items-center gap-3 mx-auto"
                 >
-                  Continue →
+                  <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z" />
+                  </svg>
+                  Start Voice Interview
+                </button>
+                <button
+                  onClick={() => setPhase('questions')}
+                  className="mt-4 text-sm text-gray-500 hover:text-gray-700"
+                >
+                  prefer the old form instead?
                 </button>
               </div>
             </motion.div>

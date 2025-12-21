@@ -1,0 +1,1233 @@
+{
+  "category": "project_management",
+  "description": "Project management and work tracking platforms for managing tasks, projects, team collaboration, and workflows across various team sizes and industries",
+  "vendors": [
+    {
+      "slug": "asana",
+      "name": "Asana",
+      "category": "project_management",
+      "subcategory": "enterprise_work_management",
+      "website": "https://www.asana.com",
+      "pricing_url": "https://asana.com/pricing",
+      "description": "Enterprise-grade work management platform for teams of all sizes. Offers comprehensive project tracking with timeline views, Gantt charts, workload management, and AI-powered features. Trusted by over 170,000 customers including Accenture, Amazon, and Anthropic for managing projects, goals, and workflows.",
+      "tagline": "Work management platform for human + AI collaboration",
+      "pricing": {
+        "model": "per_seat",
+        "currency": "USD",
+        "billing_options": ["monthly", "annual"],
+        "annual_discount_percent": 18,
+        "tiers": [
+          {
+            "name": "Personal",
+            "price": 0,
+            "per": "month",
+            "billing": "monthly",
+            "features": [
+              "Up to 2 users (individual or small team)",
+              "Unlimited tasks, projects, and messages",
+              "List and board views",
+              "Unlimited file storage (100MB per file)",
+              "Basic integrations (Slack, Gmail, Microsoft Teams)",
+              "iOS and Android mobile apps",
+              "Community support"
+            ],
+            "limits": {
+              "users": 2,
+              "file_size_mb": 100
+            }
+          },
+          {
+            "name": "Starter",
+            "price": 10.99,
+            "per": "seat/month",
+            "billing": "annual",
+            "features": [
+              "All Personal features",
+              "Unlimited users",
+              "Timeline and calendar views",
+              "Workflow builder with automation",
+              "Custom fields and forms",
+              "Advanced search and reporting",
+              "250+ integrations",
+              "Asana AI features (with rate limits)",
+              "Email support"
+            ],
+            "limits": {
+              "users": "unlimited",
+              "min_seats": 2
+            }
+          },
+          {
+            "name": "Advanced",
+            "price": 24.99,
+            "per": "seat/month",
+            "billing": "annual",
+            "features": [
+              "All Starter features",
+              "Portfolios for project visibility",
+              "Goals and goal tracking",
+              "Workload management",
+              "Advanced reporting and analytics",
+              "Time tracking",
+              "Salesforce integration",
+              "AI Studio access",
+              "Priority support"
+            ],
+            "limits": {
+              "users": "unlimited",
+              "min_seats": 3
+            }
+          },
+          {
+            "name": "Enterprise",
+            "price": 35,
+            "per": "seat/month",
+            "billing": "annual",
+            "features": [
+              "All Advanced features",
+              "SAML SSO and SCIM provisioning",
+              "Advanced security controls",
+              "Unlimited automation rules",
+              "Custom branding",
+              "Advanced admin controls",
+              "Data export and API access",
+              "Dedicated account manager",
+              "99.9% uptime SLA"
+            ],
+            "limits": {
+              "users": "unlimited",
+              "min_seats": 4
+            }
+          },
+          {
+            "name": "Enterprise+",
+            "price": null,
+            "per": "seat/month",
+            "billing": "annual",
+            "features": [
+              "All Enterprise features",
+              "HIPAA compliance",
+              "Audit logs and compliance tools",
+              "Data residency controls",
+              "SIEM integration support",
+              "Key management",
+              "Trusted guest domain controls",
+              "Premium onboarding and training",
+              "Custom security reviews"
+            ],
+            "limits": {
+              "users": "unlimited",
+              "min_seats": 5
+            }
+          }
+        ],
+        "starting_price": 10.99,
+        "custom_pricing": true,
+        "free_trial_days": 30,
+        "free_tier": true,
+        "startup_discount": "50% discount on Starter and Advanced plans for eligible nonprofits"
+      },
+      "best_for": [
+        "Mid-market to enterprise teams needing robust project tracking",
+        "Cross-functional teams managing complex workflows",
+        "Organizations requiring timeline and Gantt chart views",
+        "Teams wanting comprehensive reporting and analytics",
+        "Companies needing strong integrations with other tools"
+      ],
+      "industries": [
+        "Technology",
+        "Professional Services",
+        "Marketing Agencies",
+        "Manufacturing",
+        "Healthcare",
+        "Financial Services"
+      ],
+      "company_sizes": [
+        "smb",
+        "mid_market",
+        "enterprise"
+      ],
+      "avoid_if": [
+        "Very small teams (2-3 people) - free plan is limited",
+        "Budget-conscious startups (pricing adds up quickly)",
+        "Need single-user subscription (minimum 2 seats required)",
+        "Want simple, minimal project tracking (can be overwhelming)",
+        "Require built-in time tracking on lower tiers (Advanced+ only)"
+      ],
+      "implementation": {
+        "avg_weeks": 2,
+        "complexity": "medium",
+        "requires_developer": false,
+        "cost_range": {
+          "diy": {
+            "min": 0,
+            "max": 1000
+          },
+          "with_help": {
+            "min": 1000,
+            "max": 5000
+          },
+          "full_service": {
+            "min": 5000,
+            "max": 20000
+          }
+        }
+      },
+      "ratings": {
+        "g2": {
+          "score": 4.4,
+          "reviews": 12761,
+          "last_updated": "2025-12",
+          "ease_of_use": 4.4
+        },
+        "capterra": {
+          "score": 4.5,
+          "reviews": 1714,
+          "last_updated": "2025-12",
+          "value_for_money": 4.4,
+          "ease_of_use": 4.4
+        },
+        "our_rating": 4.3,
+        "our_notes": "Strong enterprise-grade work management platform with excellent timeline and reporting features. Steep learning curve for advanced features. Pricing requires minimum seat counts (2-5 depending on tier) which can be costly for small teams. Featured on Capterra 2025 Shortlist for Project Management."
+      },
+      "integrations": [
+        "Slack",
+        "Microsoft Teams",
+        "Google Workspace",
+        "Salesforce",
+        "Jira",
+        "GitHub",
+        "Zoom",
+        "Adobe Creative Cloud",
+        "Tableau",
+        "250+ integrations via Zapier",
+        "API available"
+      ],
+      "api": {
+        "available": true,
+        "type": "REST",
+        "documentation": "https://developers.asana.com"
+      },
+      "competitors": [
+        "Monday.com",
+        "ClickUp",
+        "Notion",
+        "Wrike",
+        "Smartsheet"
+      ],
+      "verified_at": "2025-12-17T00:00:00Z",
+      "verified_by": "manual",
+      "source_url": "https://asana.com/pricing",
+      "notes": "Monthly billing costs ~18% more than annual. AI Studio available as add-on: Basic (included with rate limits), Plus (paid for individuals), Pro (paid for advanced workflows, annual only). Minimum seat requirements increase by tier (2/3/4/5 seats). 79% of users rate ease of use positively. Some users note inability to assign multiple people to single tasks."
+    },
+    {
+      "slug": "monday",
+      "name": "Monday.com",
+      "category": "project_management",
+      "subcategory": "visual_workflow_platform",
+      "website": "https://www.monday.com",
+      "pricing_url": "https://monday.com/pricing",
+      "description": "Visual work operating system that powers teams to run projects and workflows with confidence. Highly customizable platform with color-coded boards, automation, and 200+ integrations. Known for intuitive visual interface and strong collaboration features across departments.",
+      "tagline": "Work OS for teams to run projects and workflows",
+      "pricing": {
+        "model": "per_seat",
+        "currency": "USD",
+        "billing_options": ["monthly", "annual"],
+        "annual_discount_percent": 17,
+        "tiers": [
+          {
+            "name": "Free",
+            "price": 0,
+            "per": "month",
+            "billing": "monthly",
+            "features": [
+              "Up to 2 users",
+              "Up to 3 boards",
+              "Unlimited docs",
+              "200+ templates",
+              "iOS and Android mobile apps",
+              "Community support",
+              "7-day activity log"
+            ],
+            "limits": {
+              "users": 2,
+              "boards": 3,
+              "automations": 0,
+              "activity_log_days": 7
+            }
+          },
+          {
+            "name": "Basic",
+            "price": 9,
+            "per": "seat/month",
+            "billing": "annual",
+            "features": [
+              "Unlimited items and free viewers",
+              "5 GB file storage",
+              "Prioritized customer support",
+              "Dashboard based on 1 board",
+              "iOS and Android mobile apps",
+              "1 week activity log"
+            ],
+            "limits": {
+              "min_seats": 3,
+              "storage_gb": 5,
+              "dashboards_boards": 1,
+              "activity_log_days": 7
+            }
+          },
+          {
+            "name": "Standard",
+            "price": 12,
+            "per": "seat/month",
+            "billing": "annual",
+            "features": [
+              "All Basic features",
+              "Timeline, Gantt, and Calendar views",
+              "250 automation actions/month",
+              "250 integration actions/month",
+              "20 GB file storage",
+              "Dashboards combining 5 boards",
+              "6 months activity log",
+              "Guest access"
+            ],
+            "limits": {
+              "min_seats": 3,
+              "storage_gb": 20,
+              "automation_actions": 250,
+              "integration_actions": 250,
+              "dashboards_boards": 5,
+              "activity_log_months": 6
+            }
+          },
+          {
+            "name": "Pro",
+            "price": 19,
+            "per": "seat/month",
+            "billing": "annual",
+            "features": [
+              "All Standard features",
+              "Private boards and docs",
+              "Chart view",
+              "Time tracking",
+              "Formula column",
+              "25,000 automation/integration actions/month",
+              "100 GB file storage",
+              "Dashboards combining 20 boards",
+              "1 year activity log",
+              "Sales forecasting"
+            ],
+            "limits": {
+              "min_seats": 3,
+              "storage_gb": 100,
+              "automation_actions": 25000,
+              "integration_actions": 25000,
+              "dashboards_boards": 20,
+              "activity_log_months": 12
+            }
+          },
+          {
+            "name": "Enterprise",
+            "price": null,
+            "per": "seat/month",
+            "billing": "annual",
+            "features": [
+              "All Pro features",
+              "250,000 automation/integration actions/month",
+              "Enterprise-grade security and governance",
+              "SAML SSO",
+              "IP restrictions",
+              "Advanced analytics and reporting",
+              "Multi-level permissions",
+              "Tailored onboarding",
+              "Dedicated account manager",
+              "Premium support"
+            ],
+            "limits": {
+              "min_seats": 3,
+              "automation_actions": 250000,
+              "integration_actions": 250000
+            }
+          }
+        ],
+        "starting_price": 9,
+        "custom_pricing": true,
+        "free_trial_days": 14,
+        "free_tier": true,
+        "startup_discount": null
+      },
+      "best_for": [
+        "Teams wanting highly visual project tracking",
+        "Cross-departmental collaboration",
+        "Organizations needing extensive customization",
+        "Teams managing multiple workflows simultaneously",
+        "Companies wanting strong automation capabilities"
+      ],
+      "industries": [
+        "Marketing Agencies",
+        "Creative Services",
+        "Software Development",
+        "E-commerce",
+        "Construction",
+        "Events Management"
+      ],
+      "company_sizes": [
+        "startup",
+        "smb",
+        "mid_market",
+        "enterprise"
+      ],
+      "avoid_if": [
+        "Very small teams under 3 users (minimum seat requirement)",
+        "Limited budget (costs scale quickly with users)",
+        "Need advanced features on lower tiers (many features locked to Pro+)",
+        "Want simple, minimal interface (can be overwhelming)",
+        "User-tiered pricing concerns (adds in increments of 5 users)"
+      ],
+      "implementation": {
+        "avg_weeks": 2,
+        "complexity": "low",
+        "requires_developer": false,
+        "cost_range": {
+          "diy": {
+            "min": 0,
+            "max": 1000
+          },
+          "with_help": {
+            "min": 1000,
+            "max": 5000
+          },
+          "full_service": {
+            "min": 5000,
+            "max": 15000
+          }
+        }
+      },
+      "ratings": {
+        "g2": {
+          "score": 4.7,
+          "reviews": 14723,
+          "last_updated": "2025-12"
+        },
+        "capterra": {
+          "score": 4.6,
+          "reviews": 4500,
+          "last_updated": "2025-12"
+        },
+        "our_rating": 4.5,
+        "our_notes": "Top-rated visual work platform with excellent user satisfaction. Praised for intuitive interface and responsive support. Criticisms include steep learning curve for new users, expensive pricing at scale, and some features (reporting, time tracking) requiring higher-tier plans or add-ons. Mobile app performance occasionally issues."
+      },
+      "integrations": [
+        "Slack",
+        "Microsoft Teams",
+        "Google Workspace",
+        "Zoom",
+        "Salesforce",
+        "Jira",
+        "GitHub",
+        "Dropbox",
+        "HubSpot",
+        "200+ integrations",
+        "API available"
+      ],
+      "api": {
+        "available": true,
+        "type": "REST & GraphQL",
+        "documentation": "https://developer.monday.com"
+      },
+      "competitors": [
+        "Asana",
+        "ClickUp",
+        "Wrike",
+        "Smartsheet",
+        "Trello"
+      ],
+      "verified_at": "2025-12-17T00:00:00Z",
+      "verified_by": "manual",
+      "source_url": "https://monday.com/pricing",
+      "notes": "All paid plans require minimum 3 seats. Users added in increments of 5 (e.g., if you have 15 users and add 2, you pay for 20 total). Each paid plan includes 500 AI credits/month. Monthly billing ~17% more than annual. Praised by users for transforming task management and department collaboration. Some features overcomplicated per user feedback."
+    },
+    {
+      "slug": "clickup",
+      "name": "ClickUp",
+      "category": "project_management",
+      "subcategory": "all_in_one_productivity",
+      "website": "https://www.clickup.com",
+      "pricing_url": "https://clickup.com/pricing",
+      "description": "All-in-one productivity platform combining project management, docs, goals, chat, and more in a single app. Known for extensive customization options and generous free plan. Offers 15+ project views, unlimited tasks, and advanced features at competitive pricing that undercuts major competitors.",
+      "tagline": "One app to replace them all",
+      "pricing": {
+        "model": "per_seat",
+        "currency": "USD",
+        "billing_options": ["monthly", "annual"],
+        "annual_discount_percent": 30,
+        "tiers": [
+          {
+            "name": "Free Forever",
+            "price": 0,
+            "per": "month",
+            "billing": "monthly",
+            "features": [
+              "Unlimited users and tasks",
+              "100 MB storage",
+              "Collaborative docs",
+              "Whiteboards (60 max)",
+              "Dashboards (100 max)",
+              "List, board, and calendar views",
+              "Real-time chat",
+              "Two-factor authentication",
+              "Kanban boards",
+              "In-app video recording"
+            ],
+            "limits": {
+              "storage_mb": 100,
+              "whiteboards": 60,
+              "dashboards": 100
+            }
+          },
+          {
+            "name": "Unlimited",
+            "price": 7,
+            "per": "seat/month",
+            "billing": "annual",
+            "features": [
+              "All Free features",
+              "Unlimited storage",
+              "Unlimited integrations",
+              "Unlimited custom views",
+              "Unlimited guests",
+              "1,000 automations/month",
+              "Gantt charts and timelines",
+              "Advanced reporting",
+              "Timesheets",
+              "7-day activity log"
+            ],
+            "limits": {
+              "storage": "unlimited",
+              "automations": 1000,
+              "activity_log_days": 7
+            }
+          },
+          {
+            "name": "Business",
+            "price": 12,
+            "per": "seat/month",
+            "billing": "annual",
+            "features": [
+              "All Unlimited features",
+              "25,000 automations/month",
+              "Advanced time tracking",
+              "Workload management",
+              "Sprint management and reporting",
+              "Custom fields",
+              "Advanced permissions",
+              "Goal tracking",
+              "Timeline and mind maps",
+              "Google SSO"
+            ],
+            "limits": {
+              "automations": 25000
+            }
+          },
+          {
+            "name": "Enterprise",
+            "price": null,
+            "per": "seat/month",
+            "billing": "annual",
+            "features": [
+              "All Business features",
+              "Unlimited automations",
+              "White labeling",
+              "Advanced permissions and security",
+              "Enterprise API",
+              "SSO (Microsoft, Okta, custom SAML)",
+              "Dedicated customer success manager",
+              "US, EU & APAC data residency",
+              "Conditional logic for forms",
+              "Tableau web connector",
+              "MSA and custom contracts"
+            ],
+            "limits": {
+              "automations": "unlimited"
+            }
+          }
+        ],
+        "starting_price": 7,
+        "custom_pricing": true,
+        "free_trial_days": 14,
+        "free_tier": true,
+        "startup_discount": null
+      },
+      "best_for": [
+        "Teams wanting all-in-one platform to consolidate tools",
+        "Budget-conscious organizations (undercuts competitors)",
+        "Remote teams needing comprehensive collaboration features",
+        "Agile/sprint-focused development teams",
+        "Organizations needing extensive customization"
+      ],
+      "industries": [
+        "Software Development",
+        "Marketing Agencies",
+        "Startups",
+        "E-commerce",
+        "Professional Services",
+        "Product Management"
+      ],
+      "company_sizes": [
+        "startup",
+        "smb",
+        "mid_market",
+        "enterprise"
+      ],
+      "avoid_if": [
+        "Want simple, minimal interface (feature-heavy can overwhelm)",
+        "Need fast performance with large datasets (occasional lag)",
+        "Require gentle learning curve (steep setup complexity)",
+        "Want enterprise features on lower tiers",
+        "Prefer focused single-purpose tool over all-in-one"
+      ],
+      "implementation": {
+        "avg_weeks": 2,
+        "complexity": "medium",
+        "requires_developer": false,
+        "cost_range": {
+          "diy": {
+            "min": 0,
+            "max": 1000
+          },
+          "with_help": {
+            "min": 1000,
+            "max": 5000
+          },
+          "full_service": {
+            "min": 5000,
+            "max": 15000
+          }
+        }
+      },
+      "ratings": {
+        "g2": {
+          "score": 4.7,
+          "reviews": 10331,
+          "last_updated": "2025-12"
+        },
+        "capterra": {
+          "score": 4.6,
+          "reviews": 4517,
+          "last_updated": "2025-12",
+          "value_for_money": 4.4
+        },
+        "trustradius": {
+          "score": 8.5,
+          "reviews": null,
+          "last_updated": "2025-12"
+        },
+        "our_rating": 4.5,
+        "our_notes": "Best-in-class free plan with extensive features. Excellent value for money at competitive pricing that undercuts Asana, Wrike, and others. Users praise flexibility and collaboration features. Common criticisms: performance lag, steep learning curve, cluttered interface. Recent updates include AI image generation and workload management. Vendr data shows 70% of companies overpay by choosing Enterprise when Business suffices."
+      },
+      "integrations": [
+        "Slack",
+        "Google Drive",
+        "Dropbox",
+        "GitHub",
+        "GitLab",
+        "Figma",
+        "Zoom",
+        "Microsoft Teams",
+        "HubSpot",
+        "Salesforce",
+        "1000+ integrations via Zapier/Make",
+        "API available"
+      ],
+      "api": {
+        "available": true,
+        "type": "REST",
+        "documentation": "https://clickup.com/api"
+      },
+      "competitors": [
+        "Asana",
+        "Monday.com",
+        "Notion",
+        "Jira",
+        "Trello"
+      ],
+      "verified_at": "2025-12-17T00:00:00Z",
+      "verified_by": "manual",
+      "source_url": "https://clickup.com/pricing",
+      "notes": "ClickUp Brain (AI add-on) costs additional $5/user/month ($60/year per user). Monthly billing significantly more expensive than annual (~30% markup). Enterprise estimated at $420/user/year per Vendr pricing intelligence. Free plan is one of the most generous on market. Start from blank canvas which requires time investment for setup and organization."
+    },
+    {
+      "slug": "notion",
+      "name": "Notion",
+      "category": "project_management",
+      "subcategory": "all_in_one_workspace",
+      "website": "https://www.notion.com",
+      "pricing_url": "https://www.notion.com/pricing",
+      "description": "All-in-one workspace combining notes, docs, wikis, databases, and project management. Known for exceptional flexibility and powerful database features with multiple view options. AI features now built into Business and Enterprise plans. Popular for its aesthetic, customizable interface and ability to consolidate multiple tools.",
+      "tagline": "One workspace. Every team.",
+      "pricing": {
+        "model": "per_seat",
+        "currency": "USD",
+        "billing_options": ["monthly", "annual"],
+        "annual_discount_percent": 17,
+        "tiers": [
+          {
+            "name": "Free",
+            "price": 0,
+            "per": "month",
+            "billing": "monthly",
+            "features": [
+              "Unlimited pages and blocks (for individuals)",
+              "Up to 10 guests",
+              "7-day page history",
+              "Sync with Slack and GitHub",
+              "Basic page analytics",
+              "5 MB file upload limit",
+              "20 AI responses per workspace (trial)",
+              "Collaborative workspace"
+            ],
+            "limits": {
+              "guests": 10,
+              "file_upload_mb": 5,
+              "page_history_days": 7,
+              "ai_responses": 20
+            }
+          },
+          {
+            "name": "Plus",
+            "price": 10,
+            "per": "seat/month",
+            "billing": "annual",
+            "features": [
+              "All Free features",
+              "Unlimited blocks for teams",
+              "Unlimited file uploads",
+              "30-day page history",
+              "Up to 100 guests",
+              "Advanced export (HTML, Markdown, CSV, PDF)",
+              "Bulk PDF export",
+              "Priority support"
+            ],
+            "limits": {
+              "guests": 100,
+              "file_uploads": "unlimited",
+              "page_history_days": 30
+            }
+          },
+          {
+            "name": "Business",
+            "price": 20,
+            "per": "seat/month",
+            "billing": "annual",
+            "features": [
+              "All Plus features",
+              "Unlimited Notion AI (included)",
+              "Enterprise search across connected tools",
+              "AI Research mode",
+              "AI Meeting notes",
+              "90-day page history",
+              "Up to 250 guests",
+              "Advanced page analytics",
+              "SAML SSO",
+              "Private teamspaces",
+              "Bulk export"
+            ],
+            "limits": {
+              "guests": 250,
+              "page_history_days": 90,
+              "ai_usage": "unlimited"
+            }
+          },
+          {
+            "name": "Enterprise",
+            "price": null,
+            "per": "seat/month",
+            "billing": "annual",
+            "features": [
+              "All Business features",
+              "Unlimited page history",
+              "Up to 250 guests",
+              "Workspace analytics",
+              "User provisioning (SCIM)",
+              "Advanced security and controls",
+              "Audit log",
+              "Custom guest limits",
+              "Advanced content search",
+              "Dedicated account manager",
+              "Custom contract terms"
+            ],
+            "limits": {
+              "guests": 250,
+              "page_history": "unlimited"
+            }
+          }
+        ],
+        "starting_price": 10,
+        "custom_pricing": true,
+        "free_trial_days": null,
+        "free_tier": true,
+        "startup_discount": "Plus plan free for students and educators (1-member limit)"
+      },
+      "best_for": [
+        "Knowledge workers needing flexible documentation",
+        "Teams wanting to consolidate notes, wikis, and project management",
+        "Startups and small teams building custom workflows",
+        "Remote teams with async collaboration needs",
+        "Organizations prioritizing aesthetic, customizable workspace"
+      ],
+      "industries": [
+        "Technology",
+        "Startups",
+        "Creative Agencies",
+        "Consulting",
+        "Education",
+        "Media and Publishing"
+      ],
+      "company_sizes": [
+        "startup",
+        "smb",
+        "mid_market",
+        "enterprise"
+      ],
+      "avoid_if": [
+        "Need traditional project management with Gantt charts",
+        "Want pre-built workflows (requires custom setup)",
+        "Require fast performance with very large databases",
+        "Need robust offline capabilities",
+        "Want simple recurring tasks (complex database setup required)",
+        "Prefer real-time collaboration like Google Docs"
+      ],
+      "implementation": {
+        "avg_weeks": 2,
+        "complexity": "medium",
+        "requires_developer": false,
+        "cost_range": {
+          "diy": {
+            "min": 0,
+            "max": 500
+          },
+          "with_help": {
+            "min": 500,
+            "max": 3000
+          },
+          "full_service": {
+            "min": 3000,
+            "max": 10000
+          }
+        }
+      },
+      "ratings": {
+        "g2": {
+          "score": 4.7,
+          "reviews": 4000,
+          "last_updated": "2025-12"
+        },
+        "capterra": {
+          "score": 4.7,
+          "reviews": 2000,
+          "last_updated": "2025-12"
+        },
+        "our_rating": 4.6,
+        "our_notes": "Exceptional flexibility and customization praised by users. AI features now built into Business plan (not separate add-on). Major pricing changes in August 2025 increased Plus and Business prices but integrated AI. Criticisms include steep learning curve, performance issues with large databases, limited offline mode, and complexity for simple tasks. G2 users highlight AI improvements and workload management benefits."
+      },
+      "integrations": [
+        "Slack",
+        "Google Drive",
+        "GitHub",
+        "Jira",
+        "Microsoft Teams",
+        "SharePoint",
+        "OneDrive",
+        "Gmail",
+        "Linear",
+        "Figma",
+        "50+ integrations",
+        "API available"
+      ],
+      "api": {
+        "available": true,
+        "type": "REST",
+        "documentation": "https://developers.notion.com"
+      },
+      "competitors": [
+        "Confluence",
+        "Coda",
+        "ClickUp",
+        "Airtable",
+        "Obsidian"
+      ],
+      "verified_at": "2025-12-17T00:00:00Z",
+      "verified_by": "manual",
+      "source_url": "https://www.notion.com/pricing",
+      "notes": "Major pricing restructure August 2025: AI now built into Business/Enterprise (not separate $8-10/user add-on). Grandfathered AI add-on users keep previous pricing. Monthly billing ~17% more than annual ($12/seat Plus, $24/seat Business). Databases support up to 20,000 rows on Plus plan. Research mode analyzes workspace, connected tools, and web. Users with grandfathered AI still access features post-restructure."
+    },
+    {
+      "slug": "linear",
+      "name": "Linear",
+      "category": "project_management",
+      "subcategory": "developer_focused_issue_tracking",
+      "website": "https://linear.app",
+      "pricing_url": "https://linear.app/pricing",
+      "description": "Modern, purpose-built issue tracking and project management platform designed specifically for software development teams. Known for blazing-fast performance, clean minimalist interface, and keyboard-driven workflows. Powers over 10,000 high-impact product teams including OpenAI, Ramp, and CashApp.",
+      "tagline": "The issue tracking tool you'll enjoy using",
+      "pricing": {
+        "model": "per_seat",
+        "currency": "USD",
+        "billing_options": ["monthly", "annual"],
+        "annual_discount_percent": 20,
+        "tiers": [
+          {
+            "name": "Free",
+            "price": 0,
+            "per": "month",
+            "billing": "monthly",
+            "features": [
+              "Up to 2 teams",
+              "Up to 3 guests",
+              "Basic integrations",
+              "500 MB storage",
+              "Issue tracking",
+              "Roadmaps",
+              "List and board views",
+              "Keyboard shortcuts",
+              "API access"
+            ],
+            "limits": {
+              "teams": 2,
+              "guests": 3,
+              "storage_mb": 500
+            }
+          },
+          {
+            "name": "Basic",
+            "price": 8,
+            "per": "seat/month",
+            "billing": "monthly",
+            "features": [
+              "Unlimited issues",
+              "Unlimited file uploads",
+              "Unlimited teams",
+              "Advanced integrations",
+              "Custom views and filters",
+              "Project milestones",
+              "Triage management",
+              "Email support"
+            ],
+            "limits": {
+              "issues": "unlimited",
+              "file_uploads": "unlimited",
+              "teams": "unlimited"
+            }
+          },
+          {
+            "name": "Business",
+            "price": 12,
+            "per": "seat/month",
+            "billing": "monthly",
+            "features": [
+              "All Basic features",
+              "Linear Insights (analytics)",
+              "Triage responsibility assignment",
+              "Advanced permissions",
+              "SSO (Google)",
+              "Custom fields",
+              "Timeline and roadmap views",
+              "Sprint planning",
+              "Priority support"
+            ],
+            "limits": {
+              "teams": "unlimited"
+            }
+          },
+          {
+            "name": "Enterprise",
+            "price": null,
+            "per": "seat/month",
+            "billing": "annual",
+            "features": [
+              "All Business features",
+              "SAML SSO",
+              "Advanced security controls",
+              "Audit logs",
+              "Custom onboarding",
+              "Dedicated account manager",
+              "SLA guarantees",
+              "Custom contracts and MSA",
+              "Advanced compliance"
+            ],
+            "limits": null
+          }
+        ],
+        "starting_price": 8,
+        "custom_pricing": true,
+        "free_trial_days": 14,
+        "free_tier": true,
+        "startup_discount": "Discounted education rate available for eligible applicants on Basic and Business plans. 12 months free (Basic or Business, up to 2 people) for new teams via promotions"
+      },
+      "best_for": [
+        "Software development and engineering teams",
+        "Product management teams",
+        "Startups and high-growth tech companies",
+        "Teams wanting fast, keyboard-driven workflows",
+        "Organizations escaping complexity of Jira/legacy tools"
+      ],
+      "industries": [
+        "Software Development",
+        "SaaS",
+        "Technology Startups",
+        "Product Companies",
+        "AI/ML Companies"
+      ],
+      "company_sizes": [
+        "startup",
+        "smb",
+        "mid_market",
+        "enterprise"
+      ],
+      "avoid_if": [
+        "Need extensive project management features beyond dev workflows",
+        "Require traditional Gantt charts and resource planning",
+        "Want all-in-one platform with docs and wikis (focused tool)",
+        "Need complex custom fields on lower tiers",
+        "Prefer visual, colorful interfaces (minimalist design)"
+      ],
+      "implementation": {
+        "avg_weeks": 1,
+        "complexity": "low",
+        "requires_developer": false,
+        "cost_range": {
+          "diy": {
+            "min": 0,
+            "max": 500
+          },
+          "with_help": {
+            "min": 500,
+            "max": 2000
+          },
+          "full_service": {
+            "min": 2000,
+            "max": 8000
+          }
+        }
+      },
+      "ratings": {
+        "g2": {
+          "score": 4.6,
+          "reviews": 500,
+          "last_updated": "2025-12"
+        },
+        "capterra": {
+          "score": 4.8,
+          "reviews": 100,
+          "last_updated": "2025-12"
+        },
+        "our_rating": 4.6,
+        "our_notes": "Top-rated developer-focused issue tracker with exceptional performance and clean UX. Users praise simplicity, speed, and seamless integrations (Slack, Figma, GitHub). Praised as integral to team workflows, especially for non-technical users via Slack integration. Some users want more AI functionality for ticket/project cleanup. Not suitable for teams needing extensive PM features beyond software development."
+      },
+      "integrations": [
+        "GitHub",
+        "GitLab",
+        "Slack",
+        "Figma",
+        "Sentry",
+        "Zendesk",
+        "Intercom",
+        "Discord",
+        "PagerDuty",
+        "100+ integrations",
+        "API available"
+      ],
+      "api": {
+        "available": true,
+        "type": "GraphQL",
+        "documentation": "https://developers.linear.app"
+      },
+      "competitors": [
+        "Jira",
+        "GitHub Issues",
+        "Asana",
+        "ClickUp",
+        "Height"
+      ],
+      "verified_at": "2025-12-17T00:00:00Z",
+      "verified_by": "manual",
+      "source_url": "https://linear.app/pricing",
+      "notes": "Annual billing saves 20% vs monthly ($6.40/seat Basic annual vs $8 monthly, $9.60/seat Business annual vs $12 monthly). Enterprise exclusively yearly billing. Central hub for issue tracking, sprint planning, roadmaps, bug triage, and cross-functional collaboration. Initiatives feature coordinates strategic efforts and monitors progress. December 2025 promotion: 12 months free on Basic/Business for up to 2 people."
+    },
+    {
+      "slug": "basecamp",
+      "name": "Basecamp",
+      "category": "project_management",
+      "subcategory": "simple_team_collaboration",
+      "website": "https://basecamp.com",
+      "pricing_url": "https://basecamp.com/pricing",
+      "description": "Simple, straightforward project management and team collaboration platform. Known for flat-fee unlimited pricing model and minimalist approach. Features message boards, to-dos, schedules, docs, file sharing, and group chat (Campfire). Designed for teams prioritizing simplicity and clear communication over complex features.",
+      "tagline": "Project management and team communication software",
+      "pricing": {
+        "model": "tiered",
+        "currency": "USD",
+        "billing_options": ["monthly", "annual"],
+        "annual_discount_percent": 14,
+        "tiers": [
+          {
+            "name": "Free",
+            "price": 0,
+            "per": "month",
+            "billing": "monthly",
+            "features": [
+              "1 project",
+              "Up to 5 users",
+              "1 GB storage",
+              "To-do lists",
+              "Message boards",
+              "Schedules",
+              "Docs and file storage",
+              "Group chat (Campfire)",
+              "Hill Charts"
+            ],
+            "limits": {
+              "projects": 1,
+              "users": 5,
+              "storage_gb": 1
+            }
+          },
+          {
+            "name": "Basecamp Plus",
+            "price": 15,
+            "per": "seat/month",
+            "billing": "monthly",
+            "features": [
+              "Unlimited projects",
+              "Unlimited storage",
+              "To-do lists and schedules",
+              "Message boards",
+              "Docs and file sharing",
+              "Group chat (Campfire)",
+              "Check-ins",
+              "Hill Charts",
+              "Client access (free)"
+            ],
+            "limits": {
+              "projects": "unlimited",
+              "storage": "unlimited"
+            }
+          },
+          {
+            "name": "Basecamp Pro Unlimited",
+            "price": 299,
+            "per": "month (flat fee)",
+            "billing": "annual",
+            "features": [
+              "All Plus features",
+              "Unlimited users",
+              "Unlimited projects",
+              "Unlimited storage",
+              "Timesheets and time tracking",
+              "Admin pro pack (advanced permissions)",
+              "Priority onboarding",
+              "Free client and contractor access",
+              "No per-user charges"
+            ],
+            "limits": {
+              "users": "unlimited",
+              "projects": "unlimited",
+              "storage": "unlimited"
+            }
+          }
+        ],
+        "starting_price": 15,
+        "custom_pricing": false,
+        "free_trial_days": 30,
+        "free_tier": true,
+        "startup_discount": "10% off Pro Unlimited for verified non-profits (~$269/month)"
+      },
+      "best_for": [
+        "Small to medium teams (20-50+ people) wanting flat-fee pricing",
+        "Agencies managing client projects",
+        "Teams prioritizing simplicity over features",
+        "Organizations wanting predictable costs regardless of team size",
+        "Remote teams needing centralized communication"
+      ],
+      "industries": [
+        "Creative Agencies",
+        "Consulting",
+        "Professional Services",
+        "Small Business",
+        "Non-profits",
+        "Freelancers"
+      ],
+      "company_sizes": [
+        "startup",
+        "smb",
+        "mid_market"
+      ],
+      "avoid_if": [
+        "Need advanced features (Gantt charts, dependencies, automation)",
+        "Want extensive customization options",
+        "Require robust integrations (very limited vs competitors)",
+        "Teams under 20 users (per-seat pricing cheaper on Plus plan)",
+        "Need advanced reporting and analytics",
+        "Want time tracking on lower tiers (Pro Unlimited only)"
+      ],
+      "implementation": {
+        "avg_weeks": 1,
+        "complexity": "low",
+        "requires_developer": false,
+        "cost_range": {
+          "diy": {
+            "min": 0,
+            "max": 500
+          },
+          "with_help": {
+            "min": 500,
+            "max": 2000
+          },
+          "full_service": {
+            "min": 2000,
+            "max": 5000
+          }
+        }
+      },
+      "ratings": {
+        "g2": {
+          "score": 4.1,
+          "reviews": 5200,
+          "last_updated": "2025-12"
+        },
+        "capterra": {
+          "score": 4.3,
+          "reviews": 14391,
+          "last_updated": "2025-12",
+          "value_for_money": 4.4
+        },
+        "our_rating": 4.0,
+        "our_notes": "Top-rated for simplicity and value for money. Users praise straightforward interface with just what's needed for project management and communication. Featured on Capterra 2024 Shortlist. Criticisms include lack of advanced features (Gantt, dependencies, time tracking on lower tiers), limited customization, and few integrations compared to Monday/ClickUp. Best for teams crossing 20-25 members where flat fee becomes cost-efficient."
+      },
+      "integrations": [
+        "Zapier",
+        "Slack (limited)",
+        "Google Calendar",
+        "Email",
+        "Limited third-party integrations",
+        "API available"
+      ],
+      "api": {
+        "available": true,
+        "type": "REST",
+        "documentation": "https://github.com/basecamp/bc3-api"
+      },
+      "competitors": [
+        "Asana",
+        "Monday.com",
+        "Trello",
+        "Slack",
+        "Microsoft Teams"
+      ],
+      "verified_at": "2025-12-17T00:00:00Z",
+      "verified_by": "manual",
+      "source_url": "https://basecamp.com/pricing",
+      "notes": "Pro Unlimited at $299/month annual ($349/month monthly) becomes cost-efficient at ~20-25+ team members vs Plus plan. Unlike competitors, features not gated by tiers - differences are team size limits and billing model. Clients and contractors added free on all plans. 30-day free trial with full access, no credit card. Cancel anytime, no forms or person to contact. Non-profit discount brings annual to ~$269/month."
+    }
+  ],
+  "last_updated": "2025-12-17T00:00:00Z"
+}

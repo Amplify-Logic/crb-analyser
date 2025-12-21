@@ -1,0 +1,455 @@
+{
+  "ai_providers": {
+    "anthropic": {
+      "name": "Anthropic (Claude)",
+      "models": {
+        "opus": {
+          "id": "claude-opus-4-5-20250514",
+          "name": "Claude Opus 4.5",
+          "best_for": ["complex_analysis", "document_processing", "strategic_planning"],
+          "pricing": {"input_per_1m": 15.00, "output_per_1m": 75.00}
+        },
+        "sonnet": {
+          "id": "claude-sonnet-4-20250514",
+          "name": "Claude Sonnet 4",
+          "best_for": ["chatbots", "content_generation", "code_generation", "customer_support"],
+          "pricing": {"input_per_1m": 3.00, "output_per_1m": 15.00}
+        },
+        "haiku": {
+          "id": "claude-3-5-haiku-20241022",
+          "name": "Claude Haiku 3.5",
+          "best_for": ["automation", "email_assistant", "classification", "extraction"],
+          "pricing": {"input_per_1m": 0.80, "output_per_1m": 4.00}
+        }
+      },
+      "docs": "https://docs.anthropic.com",
+      "cookbook": "https://github.com/anthropics/anthropic-cookbook",
+      "pricing_page": "https://anthropic.com/pricing",
+      "sdk": {
+        "python": "https://github.com/anthropics/anthropic-sdk-python",
+        "typescript": "https://github.com/anthropics/anthropic-sdk-typescript"
+      }
+    },
+    "openai": {
+      "name": "OpenAI (GPT)",
+      "models": {
+        "gpt4o": {
+          "id": "gpt-4o",
+          "name": "GPT-4o",
+          "best_for": ["general_purpose", "multimodal", "vision"],
+          "pricing": {"input_per_1m": 2.50, "output_per_1m": 10.00}
+        },
+        "gpt4o_mini": {
+          "id": "gpt-4o-mini",
+          "name": "GPT-4o Mini",
+          "best_for": ["high_volume", "cost_sensitive", "simple_tasks"],
+          "pricing": {"input_per_1m": 0.15, "output_per_1m": 0.60}
+        }
+      },
+      "docs": "https://platform.openai.com/docs",
+      "cookbook": "https://cookbook.openai.com",
+      "pricing_page": "https://openai.com/pricing"
+    },
+    "google": {
+      "name": "Google (Gemini)",
+      "models": {
+        "gemini_pro": {
+          "id": "gemini-2.5-pro",
+          "name": "Gemini 2.5 Pro",
+          "best_for": ["data_analysis", "large_context", "multimodal"],
+          "pricing": {"input_per_1m": 1.25, "output_per_1m": 5.00},
+          "context_window": "2M tokens"
+        },
+        "gemini_flash": {
+          "id": "gemini-2.0-flash",
+          "name": "Gemini 2.0 Flash",
+          "best_for": ["real_time", "high_volume", "speed_critical"],
+          "pricing": {"input_per_1m": 0.075, "output_per_1m": 0.30}
+        }
+      },
+      "docs": "https://ai.google.dev/docs",
+      "pricing_page": "https://ai.google.dev/pricing"
+    }
+  },
+  "specialized_ai": {
+    "voice_transcription": {
+      "deepgram": {
+        "name": "Deepgram Nova-2",
+        "best_for": ["real_time_transcription", "speaker_diarization"],
+        "pricing": {"per_minute": 0.0043},
+        "docs": "https://developers.deepgram.com/docs"
+      },
+      "whisper": {
+        "name": "OpenAI Whisper API",
+        "best_for": ["high_accuracy", "batch_processing"],
+        "pricing": {"per_minute": 0.006},
+        "docs": "https://platform.openai.com/docs/guides/speech-to-text"
+      },
+      "assembly_ai": {
+        "name": "AssemblyAI",
+        "best_for": ["entity_detection", "sentiment_analysis"],
+        "pricing": {"per_minute": 0.006},
+        "docs": "https://www.assemblyai.com/docs"
+      }
+    },
+    "image_generation": {
+      "dalle": {
+        "name": "DALL-E 3",
+        "best_for": ["api_integration", "programmatic_generation"],
+        "pricing": {"per_image_standard": 0.04, "per_image_hd": 0.08},
+        "docs": "https://platform.openai.com/docs/guides/images"
+      },
+      "midjourney": {
+        "name": "Midjourney",
+        "best_for": ["creative_work", "highest_quality"],
+        "pricing": {"monthly_basic": 10, "monthly_pro": 30},
+        "docs": "https://docs.midjourney.com"
+      },
+      "stable_diffusion": {
+        "name": "Stable Diffusion XL",
+        "best_for": ["self_hosted", "no_per_image_cost", "customization"],
+        "docs": "https://stability.ai/stable-diffusion"
+      }
+    },
+    "embeddings": {
+      "openai": {
+        "name": "text-embedding-3-small",
+        "best_for": ["general_purpose", "cost_effective"],
+        "pricing": {"per_1m_tokens": 0.02},
+        "dimensions": 1536
+      },
+      "voyage": {
+        "name": "Voyage AI",
+        "best_for": ["code_search", "legal_documents"],
+        "pricing": {"per_1m_tokens": 0.06},
+        "docs": "https://docs.voyageai.com"
+      }
+    }
+  },
+  "development_tools": {
+    "ide": {
+      "cursor": {
+        "name": "Cursor",
+        "description": "AI-first IDE with native Claude/GPT integration",
+        "pricing": {"free": 0, "pro": 20},
+        "docs": "https://cursor.com/docs",
+        "getting_started": "https://cursor.com/docs/get-started",
+        "why": "Best AI-assisted coding experience, inline editing, tab completion"
+      },
+      "vscode_continue": {
+        "name": "VS Code + Continue",
+        "description": "Free alternative with open-source AI extension",
+        "pricing": {"free": 0},
+        "docs": "https://continue.dev/docs",
+        "why": "Free, open-source, works with any LLM provider"
+      },
+      "github_copilot": {
+        "name": "GitHub Copilot",
+        "description": "Microsoft's AI coding assistant",
+        "pricing": {"individual": 10, "business": 19},
+        "docs": "https://docs.github.com/en/copilot",
+        "why": "Tight GitHub integration, good for existing MS ecosystem"
+      }
+    },
+    "version_control": {
+      "github": {
+        "name": "GitHub",
+        "description": "Industry standard, best CI/CD integration",
+        "pricing": {"free": 0, "team": 4},
+        "docs": "https://docs.github.com"
+      }
+    }
+  },
+  "hosting": {
+    "frontend": {
+      "vercel": {
+        "name": "Vercel",
+        "description": "Zero-config deployments, excellent DX, global CDN",
+        "pricing": {"hobby": 0, "pro": 20},
+        "docs": "https://vercel.com/docs",
+        "templates": "https://vercel.com/templates",
+        "best_for": ["React", "Next.js", "static_sites"],
+        "why": "Fastest path to production for frontend apps"
+      },
+      "netlify": {
+        "name": "Netlify",
+        "description": "Similar to Vercel, good forms and functions",
+        "pricing": {"free": 0, "pro": 19},
+        "docs": "https://docs.netlify.com",
+        "best_for": ["JAMstack", "static_sites"]
+      },
+      "cloudflare_pages": {
+        "name": "Cloudflare Pages",
+        "description": "Fast, generous free tier, global network",
+        "pricing": {"free": 0, "pro": 20},
+        "docs": "https://developers.cloudflare.com/pages",
+        "best_for": ["static_sites", "edge_functions"]
+      }
+    },
+    "backend": {
+      "railway": {
+        "name": "Railway",
+        "description": "Simple deployments, good free tier, scales well",
+        "pricing": {"hobby": 5, "pro": 20},
+        "docs": "https://docs.railway.app",
+        "templates": "https://railway.app/templates",
+        "best_for": ["Python", "Node.js", "Docker"],
+        "why": "Easiest path for backend APIs, great DX"
+      },
+      "render": {
+        "name": "Render",
+        "description": "Full-stack platform, managed databases",
+        "pricing": {"free": 0, "starter": 7},
+        "docs": "https://render.com/docs",
+        "best_for": ["full_stack", "managed_services"]
+      },
+      "fly_io": {
+        "name": "Fly.io",
+        "description": "Edge deployments, great for low-latency apps",
+        "pricing": {"free_tier": true, "pay_as_you_go": true},
+        "docs": "https://fly.io/docs",
+        "best_for": ["edge_computing", "global_distribution"]
+      }
+    },
+    "database": {
+      "supabase": {
+        "name": "Supabase",
+        "description": "Postgres + Auth + Realtime + Storage. Great DX",
+        "pricing": {"free": 0, "pro": 25},
+        "docs": "https://supabase.com/docs",
+        "examples": "https://github.com/supabase/supabase/tree/master/examples",
+        "best_for": ["full_stack_apps", "real_time", "auth"],
+        "why": "Most complete backend-as-a-service, generous free tier"
+      },
+      "planetscale": {
+        "name": "PlanetScale",
+        "description": "Serverless MySQL with branching",
+        "pricing": {"hobby": 0, "scaler": 29},
+        "docs": "https://planetscale.com/docs",
+        "best_for": ["mysql", "schema_changes", "branching"]
+      },
+      "neon": {
+        "name": "Neon",
+        "description": "Serverless Postgres with branching",
+        "pricing": {"free": 0, "pro": 19},
+        "docs": "https://neon.tech/docs",
+        "best_for": ["postgres", "serverless", "branching"]
+      }
+    },
+    "vector_database": {
+      "pinecone": {
+        "name": "Pinecone",
+        "description": "Purpose-built for AI embeddings, serverless",
+        "pricing": {"free": 0, "standard": 70},
+        "docs": "https://docs.pinecone.io",
+        "best_for": ["rag_applications", "semantic_search"],
+        "why": "Most mature vector DB, excellent performance"
+      },
+      "supabase_pgvector": {
+        "name": "Supabase pgvector",
+        "description": "Vector search in existing Postgres",
+        "pricing": {"included_with_supabase": true},
+        "docs": "https://supabase.com/docs/guides/ai",
+        "best_for": ["small_to_medium_scale", "existing_supabase"],
+        "why": "No additional service, simpler architecture"
+      },
+      "weaviate": {
+        "name": "Weaviate",
+        "description": "Open-source, can self-host",
+        "pricing": {"cloud_free": 0, "cloud_pro": "usage_based"},
+        "docs": "https://weaviate.io/developers/weaviate",
+        "best_for": ["self_hosted", "multimodal"]
+      },
+      "qdrant": {
+        "name": "Qdrant",
+        "description": "Open-source, Rust-based, fast",
+        "pricing": {"cloud_free": 0, "cloud_pro": "usage_based"},
+        "docs": "https://qdrant.tech/documentation",
+        "best_for": ["performance_critical", "self_hosted"]
+      }
+    }
+  },
+  "monitoring": {
+    "ai_observability": {
+      "langfuse": {
+        "name": "Langfuse",
+        "description": "Open-source LLM observability",
+        "pricing": {"cloud_free": 0, "cloud_pro": 59},
+        "docs": "https://langfuse.com/docs",
+        "best_for": ["llm_tracing", "prompt_management", "evaluations"]
+      },
+      "logfire": {
+        "name": "Logfire",
+        "description": "Pydantic team's observability platform",
+        "pricing": {"free": 0, "pro": "usage_based"},
+        "docs": "https://logfire.pydantic.dev/docs",
+        "best_for": ["python_apps", "pydantic_integration"]
+      }
+    },
+    "general": {
+      "sentry": {
+        "name": "Sentry",
+        "description": "Error tracking and performance monitoring",
+        "pricing": {"developer": 0, "team": 26},
+        "docs": "https://docs.sentry.io"
+      }
+    }
+  },
+  "tutorials_by_use_case": {
+    "chatbot": [
+      {
+        "title": "Building a Chatbot with Claude",
+        "url": "https://docs.anthropic.com/en/docs/build-with-claude/prompt-caching",
+        "provider": "Anthropic",
+        "difficulty": "beginner"
+      },
+      {
+        "title": "Claude Cookbook - Chatbot Examples",
+        "url": "https://github.com/anthropics/anthropic-cookbook",
+        "provider": "Anthropic",
+        "difficulty": "intermediate"
+      },
+      {
+        "title": "Building AI Chatbots with Vercel AI SDK",
+        "url": "https://sdk.vercel.ai/docs/guides/frameworks",
+        "provider": "Vercel",
+        "difficulty": "intermediate"
+      }
+    ],
+    "document_processing": [
+      {
+        "title": "PDF Analysis with Claude Vision",
+        "url": "https://docs.anthropic.com/en/docs/build-with-claude/vision",
+        "provider": "Anthropic",
+        "difficulty": "beginner"
+      },
+      {
+        "title": "Document Q&A with RAG",
+        "url": "https://github.com/anthropics/anthropic-cookbook/tree/main/misc/retrieval_augmented_generation",
+        "provider": "Anthropic",
+        "difficulty": "intermediate"
+      }
+    ],
+    "automation": [
+      {
+        "title": "Tool Use with Claude",
+        "url": "https://docs.anthropic.com/en/docs/build-with-claude/tool-use",
+        "provider": "Anthropic",
+        "difficulty": "intermediate"
+      },
+      {
+        "title": "Building AI Agents",
+        "url": "https://docs.anthropic.com/en/docs/build-with-claude/agentic-systems",
+        "provider": "Anthropic",
+        "difficulty": "advanced"
+      }
+    ],
+    "customer_support": [
+      {
+        "title": "RAG for Customer Support",
+        "url": "https://github.com/anthropics/anthropic-cookbook/tree/main/misc/retrieval_augmented_generation",
+        "provider": "Anthropic",
+        "difficulty": "intermediate"
+      },
+      {
+        "title": "Supabase Vector Search",
+        "url": "https://supabase.com/docs/guides/ai/vector-columns",
+        "provider": "Supabase",
+        "difficulty": "intermediate"
+      }
+    ],
+    "content_generation": [
+      {
+        "title": "Prompt Engineering Guide",
+        "url": "https://docs.anthropic.com/en/docs/build-with-claude/prompt-engineering",
+        "provider": "Anthropic",
+        "difficulty": "beginner"
+      },
+      {
+        "title": "Structured Outputs with Claude",
+        "url": "https://docs.anthropic.com/en/docs/build-with-claude/tool-use#json-mode",
+        "provider": "Anthropic",
+        "difficulty": "intermediate"
+      }
+    ],
+    "data_analysis": [
+      {
+        "title": "Using Claude for Data Analysis",
+        "url": "https://docs.anthropic.com/en/docs/about-claude/use-case-guides/data-analysis",
+        "provider": "Anthropic",
+        "difficulty": "intermediate"
+      }
+    ]
+  },
+  "skills_by_project": {
+    "chatbot": {
+      "required": ["Python or TypeScript", "Basic API integration", "Prompt engineering"],
+      "optional": ["Frontend (React/HTML)", "WebSocket for streaming"],
+      "learning_time": "1-2 weeks"
+    },
+    "document_processing": {
+      "required": ["Python", "PDF/document parsing", "Prompt engineering"],
+      "optional": ["OCR libraries", "Data validation"],
+      "learning_time": "2-3 weeks"
+    },
+    "automation": {
+      "required": ["Python or Node.js", "API integration", "Cron/scheduling"],
+      "optional": ["Error handling patterns", "Queue systems"],
+      "learning_time": "1-2 weeks"
+    },
+    "data_analysis": {
+      "required": ["Python", "Pandas/data manipulation", "Basic statistics"],
+      "optional": ["Visualization", "SQL"],
+      "learning_time": "2-4 weeks"
+    },
+    "customer_support": {
+      "required": ["Python or TypeScript", "RAG/vector search", "API integration"],
+      "optional": ["Frontend basics", "Webhook handling"],
+      "learning_time": "3-4 weeks"
+    },
+    "content_generation": {
+      "required": ["Any programming language", "Prompt engineering", "API integration"],
+      "optional": ["CMS basics", "SEO concepts"],
+      "learning_time": "1-2 weeks"
+    }
+  },
+  "recommended_stacks": {
+    "minimal_mvp": {
+      "description": "Fastest path to working prototype",
+      "ai": "Claude Sonnet via API",
+      "frontend": "Vercel + Next.js",
+      "backend": "None (serverless functions)",
+      "database": "Supabase",
+      "estimated_monthly_cost": "0-50",
+      "setup_time": "1 day"
+    },
+    "standard_saas": {
+      "description": "Production-ready SaaS application",
+      "ai": "Claude Sonnet + Haiku (routing)",
+      "frontend": "Vercel + React/Next.js",
+      "backend": "Railway + FastAPI/Node",
+      "database": "Supabase",
+      "vector_db": "Supabase pgvector",
+      "monitoring": "Langfuse + Sentry",
+      "estimated_monthly_cost": "50-200",
+      "setup_time": "1 week"
+    },
+    "enterprise": {
+      "description": "Scale-ready with full observability",
+      "ai": "Claude Opus/Sonnet/Haiku (tiered)",
+      "frontend": "Vercel + Next.js",
+      "backend": "Railway/AWS + FastAPI",
+      "database": "Supabase Pro or AWS RDS",
+      "vector_db": "Pinecone",
+      "cache": "Redis",
+      "monitoring": "Langfuse + Logfire + Sentry",
+      "estimated_monthly_cost": "500+",
+      "setup_time": "2-4 weeks"
+    }
+  },
+  "meta": {
+    "last_updated": "2024-12",
+    "version": "1.0.0",
+    "update_frequency": "quarterly"
+  }
+}

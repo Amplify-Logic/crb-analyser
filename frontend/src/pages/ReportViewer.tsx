@@ -650,7 +650,7 @@ export default function ReportViewer() {
             >
               <ROICalculator
                 recommendations={recommendations}
-                valueSummary={value_summary}
+                valueSummary={value_summary as any}
               />
             </motion.div>
           )}

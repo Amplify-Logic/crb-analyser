@@ -23,19 +23,92 @@
 - Research shows granular 10-60% progress during tool calls
 - Step names: "Scanning website...", "Searching LinkedIn...", etc.
 
-## IN PROGRESS - TASTER ENHANCEMENT
+## COMPLETED - Q4 2025 RESEARCH-BACKED TASTER (No Fabrication)
 
-**Goal:** Enhance findings phase (Quiz.tsx ~line 667-880) with:
+**Implemented in Quiz.tsx lines 797-913:**
 
-1. **AI Readiness Score Preview** - Gauge showing ~65%
-2. **1-2 Teaser Recommendations** - Real opportunities, blur the rest
-3. **Value Potential Estimate** - "€50K-120K/year savings"
+### The Honest Approach
+We show the REALITY - 88% use AI, only 6% see profit impact. This builds trust.
 
-### Code Location:
+### What's Shown:
+1. **Proven Outcomes** (with sources):
+   - Customer Support: 60%+ resolution, 20-40% cost reduction (HubSpot Q3 2025)
+   - Content/Writing: 70% time savings on drafts (Industry benchmarks Dec 2025)
+
+2. **Reality Check Section**:
+   - "88% of organizations use AI... 6% see measurable profit impact"
+   - Key insight: "Unfocused 'AI transformation' fails. Narrow use cases succeed."
+   - Source: McKinsey State of AI 2025
+
+3. **Where AI Actually Works** (4 proven use cases with outcomes)
+
+4. **Report Promise**: "Specific, focused use cases... not vague 'AI transformation' promises"
+
+### Knowledge Base Created:
+
+**`backend/src/knowledge/ai_automation_reality_q4_2025.json`** - 400+ lines containing:
+- Q4 2025 earnings call data (Salesforce, HubSpot, ServiceNow)
+- METR study showing developers 19% SLOWER with AI (not faster)
+- 95% AI pilot failure rate (MIT)
+- Citizen developer reality: ~1 month to production, not minutes
+- API pricing December 2025
+- Where AI works vs. where it fails
+- Realistic parameters for ROI calculations
+
+### Key Research Insights:
+- Developer productivity is OVERSTATED (perception gap is real)
+- Customer support, content, document processing ARE working
+- Custom internal AI builds fail 67% of the time
+- Vendor solutions succeed 2x more than internal builds
+- Payback: 30-90 days for focused use cases
+
+### 2026 Outlook Added:
+The research shows current state, but Aquablu is proving the future:
+- **Atlas Support Hub** - production AI ops tool for 20 users
+- Multi-agent (Haiku→Sonnet→Opus) with real integrations
+- Shopify, Telemetry, HubSpot, Slack, DPD connected
+- Outcomes: response time 4-8hrs→minutes, 5-10x team capacity
+- Built with Claude Code by internal team, not consultants
+
+**Key insight:** "The 95% failure rate reflects 2024-era approaches. 2026 will see broad success in focused, well-architected implementations."
+
+### Knowledge Structure:
+
+**Shareable with clients:**
+- `backend/src/knowledge/patterns/ai_implementation_playbook.json`
+  - The HOW, WHY, WHAT, WHEN of AI implementation
+  - Distilled lessons without revealing internal projects
+  - Multi-agent patterns, integration patterns, guardrails
+  - Proven use cases with timelines and costs
+  - 2026 outlook and enabling tools
+
+**Internal reference only:**
+- `backend/src/knowledge/case_studies/aquablu_atlas.json` (INTERNAL_ONLY)
+- `backend/src/knowledge/case_studies/crb_analyser_self_improving.json` (INTERNAL_REFERENCE)
+
+## Testing Expertise Improvement
+
+See: `backend/TESTING_EXPERTISE_IMPROVEMENT.md`
+
+**Quick start:**
+```bash
+# Clear expertise to baseline
+rm -rf backend/src/expertise/data/industries/*
+
+# Run 5+ analyses in same vertical (e.g., marketing-agencies)
+
+# Check what was learned
+curl http://localhost:8383/api/expertise/industry/marketing-agencies
+
+# Compare report 1 vs report 6 for improvements
 ```
-frontend/src/pages/Quiz.tsx
-Line 797-858: Replace "Initial AI Insights" section with rich taster
-```
+
+**What "better" means:**
+- Pain points are industry-specific (not generic)
+- Recommendations reference "similar companies..."
+- Higher confidence findings
+- Vendor suggestions match company size
+- Prompt includes "AGENT EXPERTISE" block
 
 ## User Flow
 

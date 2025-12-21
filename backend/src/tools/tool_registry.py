@@ -415,6 +415,35 @@ TOOL_DEFINITIONS: List[Dict] = [
 ]
 
 
+from src.config.settings import settings
+
+
+# Tool category to timeout mapping
+TOOL_TIMEOUTS = {
+    # Discovery tools
+    "analyze_intake_responses": settings.TOOL_TIMEOUT_DISCOVERY,
+    "map_business_processes": settings.TOOL_TIMEOUT_DISCOVERY,
+    "identify_tech_stack": settings.TOOL_TIMEOUT_DISCOVERY,
+    # Research tools (need more time for external calls)
+    "search_industry_benchmarks": settings.TOOL_TIMEOUT_RESEARCH,
+    "search_vendor_solutions": settings.TOOL_TIMEOUT_RESEARCH,
+    "validate_source": settings.TOOL_TIMEOUT_RESEARCH,
+    # Analysis tools
+    "score_automation_potential": settings.TOOL_TIMEOUT_ANALYSIS,
+    "calculate_finding_impact": settings.TOOL_TIMEOUT_ANALYSIS,
+    "identify_ai_opportunities": settings.TOOL_TIMEOUT_ANALYSIS,
+    "assess_implementation_risk": settings.TOOL_TIMEOUT_ANALYSIS,
+    # Modeling tools
+    "calculate_roi": settings.TOOL_TIMEOUT_ANALYSIS,
+    "compare_vendors": settings.TOOL_TIMEOUT_RESEARCH,
+    "generate_timeline": settings.TOOL_TIMEOUT_ANALYSIS,
+    # Report tools
+    "create_finding": settings.TOOL_TIMEOUT_DEFAULT,
+    "create_recommendation": settings.TOOL_TIMEOUT_DEFAULT,
+    "generate_executive_summary": settings.TOOL_TIMEOUT_DEFAULT,
+}
+
+
 async def execute_tool(
     tool_name: str,
     tool_input: Dict[str, Any],
@@ -433,6 +462,39 @@ async def execute_tool(
     Returns:
         Tool execution result
     """
+    return await execute_tool_with_retry(
+        tool_name, tool_input, context, audit_id
+    )
+
+
+async def execute_tool_with_retry(
+    tool_name: str,
+    tool_input: Dict[str, Any],
+    context: Dict[str, Any],
+    audit_id: str,
+    max_retries: int = None,
+) -> Dict[str, Any]:
+    """
+    Execute a tool with retry logic and timeout.
+
+    Features:
+    - Configurable timeout per tool type
+    - Exponential backoff retry for transient failures
+    - Structured error responses with retry information
+
+    Args:
+        tool_name: Name of the tool to execute
+        tool_input: Input parameters for the tool
+        context: Current analysis context
+        audit_id: ID of the audit being analyzed
+        max_retries: Override for retry attempts
+
+    Returns:
+        Tool execution result or structured error
+    """
+    import asyncio
+    import time
+
     from src.tools.discovery_tools import (
         analyze_intake_responses,
         map_business_processes,
@@ -485,11 +547,141 @@ async def execute_tool(
     }
 
     if tool_name not in tool_map:
-        return {"error": f"Unknown tool: {tool_name}"}
+        return {
+            "error": {
+                "type": "unknown_tool",
+                "message": f"Unknown tool: {tool_name}",
+                "retryable": False,
+            }
+        }
 
-    try:
-        result = await tool_map[tool_name](tool_input, context, audit_id)
-        return result
-    except Exception as e:
-        logger.error(f"Tool execution error ({tool_name}): {e}")
-        return {"error": str(e)}
+    # Get timeout and retry settings
+    timeout = TOOL_TIMEOUTS.get(tool_name, settings.TOOL_TIMEOUT_DEFAULT)
+    retries = max_retries if max_retries is not None else settings.TOOL_RETRY_ATTEMPTS
+    base_delay = settings.TOOL_RETRY_DELAY
+
+    last_error = None
+    start_time = time.time()
+
+    for attempt in range(retries):
+        try:
+            # Log tool execution start
+            logger.info(
+                f"Tool {tool_name} starting (attempt {attempt + 1}/{retries}, "
+                f"timeout={timeout}s)"
+            )
+
+            # Execute with timeout
+            result = await asyncio.wait_for(
+                tool_map[tool_name](tool_input, context, audit_id),
+                timeout=timeout
+            )
+
+            # Log success
+            duration = time.time() - start_time
+            logger.info(
+                f"Tool {tool_name} completed in {duration:.2f}s "
+                f"(attempt {attempt + 1})"
+            )
+
+            return result
+
+        except asyncio.TimeoutError:
+            last_error = f"Tool timed out after {timeout}s"
+            logger.warning(
+                f"Tool {tool_name} timeout (attempt {attempt + 1}/{retries})"
+            )
+
+            # Timeouts are retryable
+            if attempt < retries - 1:
+                delay = base_delay * (2 ** attempt)
+                logger.info(f"Retrying {tool_name} in {delay:.1f}s...")
+                await asyncio.sleep(delay)
+
+        except Exception as e:
+            last_error = str(e)
+            logger.warning(
+                f"Tool {tool_name} error (attempt {attempt + 1}/{retries}): {e}"
+            )
+
+            # Check if error is retryable
+            retryable = _is_retryable_error(e)
+
+            if retryable and attempt < retries - 1:
+                delay = base_delay * (2 ** attempt)
+                logger.info(f"Retrying {tool_name} in {delay:.1f}s...")
+                await asyncio.sleep(delay)
+            elif not retryable:
+                # Non-retryable error, fail immediately
+                break
+
+    # All retries exhausted
+    duration = time.time() - start_time
+    logger.error(
+        f"Tool {tool_name} failed after {retries} attempts in {duration:.2f}s: "
+        f"{last_error}"
+    )
+
+    return {
+        "error": {
+            "type": "tool_execution_failed",
+            "message": last_error,
+            "tool_name": tool_name,
+            "attempts": retries,
+            "duration_seconds": round(duration, 2),
+            "retryable": False,  # All retries exhausted
+        }
+    }
+
+
+def _is_retryable_error(error: Exception) -> bool:
+    """
+    Determine if an error is retryable.
+
+    Retryable errors include:
+    - Network/connection errors
+    - Temporary service unavailability
+    - Rate limiting
+
+    Non-retryable errors include:
+    - Validation errors
+    - Authentication errors
+    - Not found errors
+    """
+    error_str = str(error).lower()
+
+    # Retryable patterns
+    retryable_patterns = [
+        "timeout",
+        "connection",
+        "network",
+        "temporary",
+        "unavailable",
+        "rate limit",
+        "429",
+        "503",
+        "504",
+    ]
+
+    # Non-retryable patterns
+    non_retryable_patterns = [
+        "validation",
+        "invalid",
+        "not found",
+        "404",
+        "401",
+        "403",
+        "permission",
+        "unauthorized",
+    ]
+
+    for pattern in non_retryable_patterns:
+        if pattern in error_str:
+            return False
+
+    for pattern in retryable_patterns:
+        if pattern in error_str:
+            return True
+
+    # Default to retryable for unknown errors
+    return True

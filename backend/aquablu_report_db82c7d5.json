@@ -1,0 +1,1225 @@
+{
+  "id": "db82c7d5-ab15-4158-8e47-65f01b7dcfda",
+  "quiz_session_id": "d71bb179-7afc-4669-b80d-8468adc337c8",
+  "audit_id": null,
+  "tier": "full",
+  "status": "completed",
+  "executive_summary": {
+    "verdict": {
+      "color": "green",
+      "headline": "Go For It - AI Will Accelerate Your Business",
+      "reasoning": [
+        "AI readiness score of 72 puts you in the top tier",
+        "Projected 3-year value of \u20ac2,587,882-\u20ac4,720,638",
+        "Average ROI of 642% across recommendations",
+        "Your business is well-positioned to benefit from AI adoption"
+      ],
+      "confidence": "high",
+      "subheadline": "Strong fundamentals, clear opportunity",
+      "recommendation": "proceed",
+      "when_to_revisit": "Quarterly check-ins to measure progress and adjust",
+      "recommended_approach": [
+        "Implement top 2-3 recommendations in parallel",
+        "Assign an internal AI champion to drive adoption",
+        "Measure ROI monthly and share wins with the team",
+        "Plan for Phase 2 expansions once initial implementations succeed"
+      ]
+    },
+    "key_insight": "Aquablu has excellent AI implementation potential with clear IoT data streams and high-value enterprise clients who directly benefit from predictive maintenance and sustainability reporting.",
+    "not_recommended": [
+      {
+        "title": "Full ERP Replacement with AI",
+        "reason": "Current budget and timeline insufficient for enterprise ERP transformation - focus on point solutions first"
+      },
+      {
+        "title": "Custom Computer Vision for Manufacturing",
+        "reason": "Manufacturing quality control automation requires 6-figure investment and 12+ month implementation beyond current scope"
+      }
+    ],
+    "top_opportunities": [
+      {
+        "title": "Predictive Maintenance System",
+        "time_horizon": "short",
+        "value_potential": "\u20ac25K-40K"
+      },
+      {
+        "title": "Automated Sustainability Reporting",
+        "time_horizon": "short",
+        "value_potential": "\u20ac15K-25K"
+      },
+      {
+        "title": "Sales Intelligence & Lead Scoring",
+        "time_horizon": "mid",
+        "value_potential": "\u20ac20K-35K"
+      },
+      {
+        "title": "Usage-Based Upselling Engine",
+        "time_horizon": "mid",
+        "value_potential": "\u20ac30K-50K"
+      }
+    ],
+    "ai_readiness_score": 72,
+    "customer_value_score": 8,
+    "business_health_score": 7,
+    "total_value_potential": {
+      "max": 300000,
+      "min": 180000,
+      "projection_years": 3
+    },
+    "recommended_investment": {
+      "year_1_max": 15000,
+      "year_1_min": 8000
+    }
+  },
+  "value_summary": {
+    "total": {
+      "max": 4720638,
+      "min": 2587882
+    },
+    "value_saved": {
+      "subtotal": {
+        "max": 358800,
+        "min": 239200
+      },
+      "hourly_rate": 50,
+      "hours_per_week": 115,
+      "time_savings_annual": 299000
+    },
+    "value_created": {
+      "subtotal": {
+        "max": 4361838,
+        "min": 2348682
+      },
+      "from_findings": 1045000,
+      "from_recommendations": 2310260
+    },
+    "projection_years": 3
+  },
+  "findings": [
+    {
+      "id": "finding-001",
+      "title": "IoT Predictive Maintenance for Water Dispensers",
+      "sources": [
+        "IoT maintenance industry benchmarks"
+      ],
+      "category": "efficiency",
+      "confidence": "high",
+      "description": "Use ML to predict filter replacements and equipment failures before they happen across your fleet.",
+      "value_saved": {
+        "hourly_rate": 60,
+        "annual_savings": 46800,
+        "hours_per_week": 15
+      },
+      "time_horizon": "mid",
+      "value_created": {
+        "description": "Reduce customer downtime, eliminate emergency service calls, optimize technician routes",
+        "potential_revenue": 75000
+      },
+      "customer_value_score": 9,
+      "business_health_score": 9
+    },
+    {
+      "id": "finding-002",
+      "title": "Automated Sustainability Report Generation",
+      "sources": [
+        "Client feedback on reporting pain points"
+      ],
+      "category": "efficiency",
+      "confidence": "high",
+      "description": "AI-powered system to automatically generate monthly sustainability reports for enterprise clients.",
+      "value_saved": {
+        "hourly_rate": 50,
+        "annual_savings": 52000,
+        "hours_per_week": 20
+      },
+      "time_horizon": "short",
+      "value_created": {
+        "description": "Real-time dashboards clients can share with employees, justify premium pricing",
+        "potential_revenue": 30000
+      },
+      "customer_value_score": 8,
+      "business_health_score": 8
+    },
+    {
+      "id": "finding-003",
+      "title": "AI Sales Intelligence for Prospect Research",
+      "sources": [
+        "Sales automation benchmarks"
+      ],
+      "category": "growth",
+      "confidence": "high",
+      "description": "Automated prospect research and lead scoring to reduce sales admin time.",
+      "value_saved": {
+        "hourly_rate": 55,
+        "annual_savings": 28600,
+        "hours_per_week": 10
+      },
+      "time_horizon": "short",
+      "value_created": {
+        "description": "20-40% increase in qualified pipeline through better lead prioritization",
+        "potential_revenue": 120000
+      },
+      "customer_value_score": 6,
+      "business_health_score": 9
+    },
+    {
+      "id": "finding-004",
+      "title": "Usage-Based Upselling Intelligence",
+      "sources": [
+        "Usage analytics best practices"
+      ],
+      "category": "growth",
+      "confidence": "medium",
+      "description": "AI identifies premium flavor and service upgrade opportunities from usage patterns.",
+      "value_saved": {
+        "hourly_rate": 50,
+        "annual_savings": 7800,
+        "hours_per_week": 3
+      },
+      "time_horizon": "short",
+      "value_created": {
+        "description": "15-25% increase in expansion revenue through data-driven recommendations",
+        "potential_revenue": 85000
+      },
+      "customer_value_score": 7,
+      "business_health_score": 8
+    },
+    {
+      "id": "finding-005",
+      "title": "Churn Prediction for Enterprise Accounts",
+      "sources": [
+        "Customer success benchmarks"
+      ],
+      "category": "risk",
+      "confidence": "medium",
+      "description": "AI models predict at-risk customers for proactive intervention before contract renewal.",
+      "value_saved": {
+        "hourly_rate": 50,
+        "annual_savings": 13000,
+        "hours_per_week": 5
+      },
+      "time_horizon": "mid",
+      "value_created": {
+        "description": "Reduce churn by 20-30% through early warning system",
+        "potential_revenue": 150000
+      },
+      "customer_value_score": 8,
+      "business_health_score": 9
+    },
+    {
+      "id": "finding-006",
+      "title": "Automated Data Integration Platform",
+      "sources": [
+        "Internal time tracking"
+      ],
+      "category": "efficiency",
+      "confidence": "high",
+      "description": "Eliminate re-entering data across multiple systems through AI-powered data sync.",
+      "value_saved": {
+        "hourly_rate": 45,
+        "annual_savings": 28080,
+        "hours_per_week": 12
+      },
+      "time_horizon": "short",
+      "value_created": {
+        "description": "Improved data accuracy reduces errors and customer complaints",
+        "potential_revenue": 20000
+      },
+      "customer_value_score": 6,
+      "business_health_score": 8
+    },
+    {
+      "id": "finding-007",
+      "title": "Smart Technician Route Optimization",
+      "sources": [
+        "Field service optimization studies"
+      ],
+      "category": "efficiency",
+      "confidence": "high",
+      "description": "AI optimizes service routes across 10+ cities based on priority, location, and traffic patterns.",
+      "value_saved": {
+        "hourly_rate": 65,
+        "annual_savings": 27040,
+        "hours_per_week": 8
+      },
+      "time_horizon": "mid",
+      "value_created": {
+        "description": "Faster response times improve customer satisfaction and enable more daily service calls",
+        "potential_revenue": 40000
+      },
+      "customer_value_score": 8,
+      "business_health_score": 7
+    },
+    {
+      "id": "finding-008",
+      "title": "Real-Time Fleet Performance Dashboard",
+      "sources": [
+        "IoT monitoring industry data"
+      ],
+      "category": "customer_experience",
+      "confidence": "medium",
+      "description": "IoT dashboard providing real-time visibility into machine performance across all client locations.",
+      "value_saved": {
+        "hourly_rate": 50,
+        "annual_savings": 15600,
+        "hours_per_week": 6
+      },
+      "time_horizon": "mid",
+      "value_created": {
+        "description": "Premium service offering that justifies higher pricing and reduces customer inquiries",
+        "potential_revenue": 50000
+      },
+      "customer_value_score": 9,
+      "business_health_score": 8
+    },
+    {
+      "id": "finding-009",
+      "title": "Instant Lead Response Automation",
+      "sources": [
+        "Marketing automation benchmarks"
+      ],
+      "category": "growth",
+      "confidence": "high",
+      "description": "AI chatbot and email automation reduces lead response time from 24-48 hours to minutes.",
+      "value_saved": {
+        "hourly_rate": 55,
+        "annual_savings": 11440,
+        "hours_per_week": 4
+      },
+      "time_horizon": "short",
+      "value_created": {
+        "description": "Faster response increases conversion rates by 20-30%",
+        "potential_revenue": 60000
+      },
+      "customer_value_score": 7,
+      "business_health_score": 8
+    },
+    {
+      "id": "finding-010",
+      "title": "AI-Generated Custom Sales Presentations",
+      "sources": [
+        "Sales enablement studies"
+      ],
+      "category": "growth",
+      "confidence": "medium",
+      "description": "Auto-generate tailored presentations based on prospect profile and pain points.",
+      "value_saved": {
+        "hourly_rate": 55,
+        "annual_savings": 17160,
+        "hours_per_week": 6
+      },
+      "time_horizon": "short",
+      "value_created": {
+        "description": "More personalized pitches improve close rates and reduce sales cycle time",
+        "potential_revenue": 35000
+      },
+      "customer_value_score": 7,
+      "business_health_score": 7
+    },
+    {
+      "id": "finding-011",
+      "title": "Predictive Filter Replacement Scheduling",
+      "sources": [
+        "Predictive maintenance ROI data"
+      ],
+      "category": "customer_experience",
+      "confidence": "high",
+      "description": "ML models predict optimal filter replacement timing based on usage patterns and water quality.",
+      "value_saved": {
+        "hourly_rate": 50,
+        "annual_savings": 26000,
+        "hours_per_week": 10
+      },
+      "time_horizon": "mid",
+      "value_created": {
+        "description": "Proactive service prevents downtime and demonstrates value to enterprise clients",
+        "potential_revenue": 45000
+      },
+      "customer_value_score": 9,
+      "business_health_score": 8
+    },
+    {
+      "id": "finding-012",
+      "title": "Automated Inventory Optimization",
+      "sources": [
+        "Supply chain optimization benchmarks"
+      ],
+      "category": "efficiency",
+      "confidence": "medium",
+      "description": "AI predicts cartridge and consumables demand across locations to optimize supply chain.",
+      "value_saved": {
+        "hourly_rate": 45,
+        "annual_savings": 16380,
+        "hours_per_week": 7
+      },
+      "time_horizon": "mid",
+      "value_created": {
+        "description": "Reduce stockouts and carrying costs while ensuring 99% availability",
+        "potential_revenue": 25000
+      },
+      "customer_value_score": 6,
+      "business_health_score": 8
+    },
+    {
+      "id": "finding-013",
+      "title": "Customer Success Health Scoring",
+      "sources": [
+        "Customer success metrics"
+      ],
+      "category": "risk",
+      "confidence": "high",
+      "description": "AI analyzes usage patterns, support tickets, and engagement to score account health.",
+      "value_saved": {
+        "hourly_rate": 50,
+        "annual_savings": 10400,
+        "hours_per_week": 4
+      },
+      "time_horizon": "short",
+      "value_created": {
+        "description": "Early intervention prevents churn and identifies expansion opportunities",
+        "potential_revenue": 80000
+      },
+      "customer_value_score": 8,
+      "business_health_score": 9
+    },
+    {
+      "id": "finding-014",
+      "title": "Geographic Expansion Decision Support",
+      "sources": [
+        "Market analysis frameworks"
+      ],
+      "category": "growth",
+      "confidence": "medium",
+      "description": "AI analyzes market data, operational complexity, and ROI to prioritize new city expansion.",
+      "value_saved": {
+        "hourly_rate": 60,
+        "annual_savings": 6240,
+        "hours_per_week": 2
+      },
+      "time_horizon": "long",
+      "value_created": {
+        "description": "Data-driven expansion reduces risk and improves success rate of new market entry",
+        "potential_revenue": 200000
+      },
+      "customer_value_score": 6,
+      "business_health_score": 9
+    },
+    {
+      "id": "finding-015",
+      "title": "Real-Time Sustainability Impact Tracking",
+      "sources": [
+        "ESG reporting trends"
+      ],
+      "category": "customer_experience",
+      "confidence": "medium",
+      "description": "AI tracks and visualizes plastic bottle reduction across all client locations in real-time.",
+      "value_saved": {
+        "hourly_rate": 45,
+        "annual_savings": 7020,
+        "hours_per_week": 3
+      },
+      "time_horizon": "short",
+      "value_created": {
+        "description": "Public dashboards help clients meet ESG goals and strengthen brand differentiation",
+        "potential_revenue": 30000
+      },
+      "customer_value_score": 8,
+      "business_health_score": 7
+    }
+  ],
+  "recommendations": [
+    {
+      "id": "rec-001",
+      "title": "IoT Predictive Maintenance for Water Dispensers",
+      "options": {
+        "best_in_class": {
+          "cons": [
+            "High cost",
+            "Complex enterprise sales process"
+          ],
+          "name": "PTC ThingWorx",
+          "pros": [
+            "Industry-specific IoT platform",
+            "AR maintenance capabilities",
+            "Comprehensive analytics"
+          ],
+          "vendor": "PTC",
+          "monthly_cost": 2400,
+          "implementation_weeks": 16
+        },
+        "off_the_shelf": {
+          "cons": [
+            "Generic models require customization",
+            "AWS vendor lock-in"
+          ],
+          "name": "AWS IoT Analytics",
+          "pros": [
+            "Scalable pay-per-use model",
+            "Strong ML integration",
+            "Established ecosystem"
+          ],
+          "vendor": "Amazon Web Services",
+          "monthly_cost": 300,
+          "implementation_weeks": 8
+        },
+        "custom_solution": {
+          "cons": [
+            "High development risk",
+            "Requires ongoing technical expertise"
+          ],
+          "pros": [
+            "Perfect fit for business model",
+            "Competitive differentiation",
+            "Full control over features"
+          ],
+          "approach": "Build proprietary IoT platform using open-source ML frameworks, tailored specifically for water dispenser maintenance patterns",
+          "estimated_cost": {
+            "max": 150000,
+            "min": 80000
+          },
+          "implementation_weeks": 24
+        }
+      },
+      "priority": "high",
+      "finding_id": "finding-001",
+      "assumptions": [
+        "15 hours/week time savings at \u20ac60/hour",
+        "37.5% reduction in emergency service calls",
+        "Current fleet size of 500+ dispensers"
+      ],
+      "description": "Implement ML-powered predictive maintenance system to monitor water dispenser health, predict filter replacements, and prevent equipment failures before they impact customers.",
+      "crb_analysis": {
+        "cost": {
+          "total": 78200,
+          "mid_term": {
+            "software": 14400,
+            "maintenance": 6000
+          },
+          "long_term": {
+            "software": 28800,
+            "upgrades": 8000
+          },
+          "short_term": {
+            "software": 3600,
+            "training": 2400,
+            "implementation": 15000
+          }
+        },
+        "risk": [
+          {
+            "impact": 15000,
+            "mitigation": "Deploy redundant sensors and establish manual backup procedures",
+            "description": "IoT sensors may fail or provide inaccurate readings",
+            "probability": "medium",
+            "time_horizon": "short"
+          },
+          {
+            "impact": 25000,
+            "mitigation": "Phased rollout starting with pilot locations",
+            "description": "Integration complexity with existing service management systems",
+            "probability": "high",
+            "time_horizon": "mid"
+          }
+        ],
+        "benefit": {
+          "total": 425300,
+          "mid_term": {
+            "value_saved": 46800,
+            "value_created": 75000
+          },
+          "long_term": {
+            "value_saved": 93600,
+            "value_created": 150000
+          },
+          "short_term": {
+            "value_saved": 23400,
+            "value_created": 37500
+          }
+        }
+      },
+      "payback_months": 4,
+      "roi_percentage": 444,
+      "why_it_matters": {
+        "customer_value": "Eliminates unexpected service interruptions and ensures consistent water quality through proactive maintenance",
+        "business_health": "Reduces emergency service costs by 60-80% while optimizing technician routes and inventory management"
+      },
+      "our_recommendation": "off_the_shelf",
+      "recommendation_rationale": "AWS IoT Analytics provides fastest time-to-value with proven scalability. Start here to validate the concept before considering custom development."
+    },
+    {
+      "id": "rec-002",
+      "title": "Automated Sustainability Report Generation",
+      "options": {
+        "best_in_class": {
+          "cons": [
+            "Requires data team expertise",
+            "Higher implementation complexity"
+          ],
+          "name": "Looker",
+          "pros": [
+            "Powerful data modeling",
+            "White-label reports",
+            "Advanced analytics"
+          ],
+          "vendor": "Google Cloud",
+          "monthly_cost": 800,
+          "implementation_weeks": 12
+        },
+        "off_the_shelf": {
+          "cons": [
+            "Limited sustainability-specific features",
+            "Basic customization options"
+          ],
+          "name": "Databox",
+          "pros": [
+            "Quick setup with templates",
+            "Good mobile experience",
+            "Affordable pricing"
+          ],
+          "vendor": "Databox",
+          "monthly_cost": 200,
+          "implementation_weeks": 4
+        },
+        "custom_solution": {
+          "cons": [
+            "Development time and cost",
+            "Maintenance responsibility"
+          ],
+          "pros": [
+            "Sustainability-focused features",
+            "Perfect brand alignment",
+            "Competitive moat"
+          ],
+          "approach": "Purpose-built sustainability reporting platform with automated data collection from IoT sensors and branded client portals",
+          "estimated_cost": {
+            "max": 80000,
+            "min": 40000
+          },
+          "implementation_weeks": 16
+        }
+      },
+      "priority": "high",
+      "finding_id": "finding-002",
+      "assumptions": [
+        "20 hours/week saved at \u20ac50/hour",
+        "\u20ac2,500 annual premium per enterprise client",
+        "Current 12 enterprise clients"
+      ],
+      "description": "Deploy AI system to automatically collect usage data, calculate environmental impact metrics, and generate branded sustainability reports for enterprise clients.",
+      "crb_analysis": {
+        "cost": {
+          "total": 47400,
+          "mid_term": {
+            "software": 9600,
+            "maintenance": 3000
+          },
+          "long_term": {
+            "software": 19200,
+            "upgrades": 4000
+          },
+          "short_term": {
+            "software": 2400,
+            "training": 1200,
+            "implementation": 8000
+          }
+        },
+        "risk": [
+          {
+            "impact": 20000,
+            "mitigation": "Validate against industry standards and third-party audits",
+            "description": "Data accuracy and compliance with sustainability reporting standards",
+            "probability": "medium",
+            "time_horizon": "short"
+          }
+        ],
+        "benefit": {
+          "total": 287000,
+          "mid_term": {
+            "value_saved": 52000,
+            "value_created": 30000
+          },
+          "long_term": {
+            "value_saved": 104000,
+            "value_created": 60000
+          },
+          "short_term": {
+            "value_saved": 26000,
+            "value_created": 15000
+          }
+        }
+      },
+      "payback_months": 3,
+      "roi_percentage": 505,
+      "why_it_matters": {
+        "customer_value": "Provides clients with real-time sustainability metrics they can share with stakeholders, supporting their ESG goals",
+        "business_health": "Justifies premium pricing while reducing manual reporting overhead by 80%"
+      },
+      "our_recommendation": "best_in_class",
+      "recommendation_rationale": "Looker provides the advanced analytics and white-labeling capabilities needed for professional sustainability reports that justify premium pricing."
+    },
+    {
+      "id": "rec-003",
+      "title": "AI Sales Intelligence for Prospect Research",
+      "options": {
+        "best_in_class": {
+          "cons": [
+            "Very expensive",
+            "Long contract commitments"
+          ],
+          "name": "ZoomInfo",
+          "pros": [
+            "Highest data quality",
+            "Intent data signals",
+            "Strong CRM integrations"
+          ],
+          "vendor": "ZoomInfo",
+          "monthly_cost": 1000,
+          "implementation_weeks": 6
+        },
+        "off_the_shelf": {
+          "cons": [
+            "Variable data quality",
+            "Email deliverability challenges"
+          ],
+          "name": "Apollo.io",
+          "pros": [
+            "Large contact database",
+            "Automated sequences",
+            "Good value for money"
+          ],
+          "vendor": "Apollo",
+          "monthly_cost": 300,
+          "implementation_weeks": 2
+        },
+        "custom_solution": {
+          "cons": [
+            "Data sourcing complexity",
+            "Compliance considerations"
+          ],
+          "pros": [
+            "Perfect fit for target market",
+            "Competitive advantage",
+            "No ongoing licensing"
+          ],
+          "approach": "Build proprietary lead scoring engine using public data sources, social signals, and industry-specific criteria",
+          "estimated_cost": {
+            "max": 60000,
+            "min": 30000
+          },
+          "implementation_weeks": 20
+        }
+      },
+      "priority": "high",
+      "finding_id": "finding-003",
+      "assumptions": [
+        "10 hours/week saved at \u20ac55/hour",
+        "30% increase in qualified pipeline",
+        "Average deal size \u20ac15,000"
+      ],
+      "description": "Implement automated prospect research and lead scoring system to reduce sales admin time and improve pipeline quality through data-driven prioritization.",
+      "crb_analysis": {
+        "cost": {
+          "total": 58300,
+          "mid_term": {
+            "software": 14400,
+            "maintenance": 2000
+          },
+          "long_term": {
+            "software": 28800,
+            "upgrades": 3000
+          },
+          "short_term": {
+            "software": 3600,
+            "training": 1500,
+            "implementation": 5000
+          }
+        },
+        "risk": [
+          {
+            "impact": 10000,
+            "mitigation": "Trial period to validate data quality for specific market segments",
+            "description": "Data quality and coverage limitations for target market",
+            "probability": "medium",
+            "time_horizon": "short"
+          }
+        ],
+        "benefit": {
+          "total": 520100,
+          "mid_term": {
+            "value_saved": 28600,
+            "value_created": 120000
+          },
+          "long_term": {
+            "value_saved": 57200,
+            "value_created": 240000
+          },
+          "short_term": {
+            "value_saved": 14300,
+            "value_created": 60000
+          }
+        }
+      },
+      "payback_months": 2,
+      "roi_percentage": 792,
+      "why_it_matters": {
+        "customer_value": "Enables more personalized and relevant sales conversations by providing deeper prospect insights",
+        "business_health": "Increases sales efficiency and pipeline quality, leading to 20-40% improvement in qualified opportunities"
+      },
+      "our_recommendation": "off_the_shelf",
+      "recommendation_rationale": "Apollo.io offers excellent value and quick implementation. The ROI is strong enough to upgrade later if needed."
+    },
+    {
+      "id": "rec-004",
+      "title": "Usage-Based Upselling Intelligence",
+      "options": {
+        "best_in_class": {
+          "cons": [
+            "Requires significant setup",
+            "Not commerce-focused"
+          ],
+          "name": "Amplitude",
+          "pros": [
+            "Powerful cohort analysis",
+            "Behavioral insights",
+            "Free tier available"
+          ],
+          "vendor": "Amplitude",
+          "monthly_cost": 200,
+          "implementation_weeks": 8
+        },
+        "off_the_shelf": {
+          "cons": [
+            "Not designed for physical products",
+            "Limited upselling automation"
+          ],
+          "name": "Pendo",
+          "pros": [
+            "Product analytics focused",
+            "In-app guidance features",
+            "Usage tracking"
+          ],
+          "vendor": "Pendo",
+          "monthly_cost": 150,
+          "implementation_weeks": 4
+        },
+        "custom_solution": {
+          "cons": [
+            "Development complexity",
+            "Data privacy considerations"
+          ],
+          "pros": [
+            "Perfect for water dispenser business",
+            "Competitive differentiation",
+            "Direct CRM integration"
+          ],
+          "approach": "Build usage analytics engine that tracks consumption patterns and automatically generates personalized upgrade recommendations",
+          "estimated_cost": {
+            "max": 50000,
+            "min": 25000
+          },
+          "implementation_weeks": 16
+        }
+      },
+      "priority": "medium",
+      "finding_id": "finding-004",
+      "assumptions": [
+        "\u20ac85,000 additional expansion revenue annually",
+        "20% average upselling success rate",
+        "Current customer base of 200+ active accounts"
+      ],
+      "description": "Deploy AI system to analyze customer usage patterns and automatically identify premium flavor and service upgrade opportunities with personalized recommendations.",
+      "crb_analysis": {
+        "cost": {
+          "total": 35900,
+          "mid_term": {
+            "software": 7200,
+            "maintenance": 2500
+          },
+          "long_term": {
+            "software": 14400,
+            "upgrades": 3000
+          },
+          "short_term": {
+            "software": 1800,
+            "training": 1000,
+            "implementation": 6000
+          }
+        },
+        "risk": [
+          {
+            "impact": 5000,
+            "mitigation": "Start with soft recommendations and gather feedback",
+            "description": "Customers may perceive AI recommendations as pushy or inaccurate",
+            "probability": "low",
+            "time_horizon": "short"
+          }
+        ],
+        "benefit": {
+          "total": 324800,
+          "mid_term": {
+            "value_saved": 7800,
+            "value_created": 85000
+          },
+          "long_term": {
+            "value_saved": 15600,
+            "value_created": 170000
+          },
+          "short_term": {
+            "value_saved": 3900,
+            "value_created": 42500
+          }
+        }
+      },
+      "payback_months": 3,
+      "roi_percentage": 804,
+      "why_it_matters": {
+        "customer_value": "Customers receive personalized recommendations that genuinely match their consumption patterns and preferences",
+        "business_health": "Increases expansion revenue by 15-25% through data-driven upselling without adding sales pressure"
+      },
+      "our_recommendation": "custom_solution",
+      "recommendation_rationale": "The specific nature of water dispenser usage patterns and upselling opportunities justify a custom solution that can be a competitive advantage."
+    },
+    {
+      "id": "rec-005",
+      "title": "Churn Prediction for Enterprise Accounts",
+      "options": {
+        "best_in_class": {
+          "cons": [
+            "High cost and complexity",
+            "Long implementation timeline"
+          ],
+          "name": "Gainsight",
+          "pros": [
+            "Advanced health scoring",
+            "Comprehensive CS platform",
+            "Industry-leading features"
+          ],
+          "vendor": "Gainsight",
+          "monthly_cost": 1200,
+          "implementation_weeks": 12
+        },
+        "off_the_shelf": {
+          "cons": [
+            "Less advanced AI capabilities",
+            "Limited reporting flexibility"
+          ],
+          "name": "ChurnZero",
+          "pros": [
+            "Purpose-built for churn prevention",
+            "Automated customer journeys",
+            "Good integrations"
+          ],
+          "vendor": "ChurnZero",
+          "monthly_cost": 350,
+          "implementation_weeks": 6
+        },
+        "custom_solution": {
+          "cons": [
+            "Requires ML expertise",
+            "Longer development time"
+          ],
+          "pros": [
+            "Tailored to water service business",
+            "Can incorporate IoT sensor data",
+            "Competitive advantage"
+          ],
+          "approach": "Build ML models using water dispenser usage data, service tickets, and engagement metrics to predict churn risk",
+          "estimated_cost": {
+            "max": 75000,
+            "min": 40000
+          },
+          "implementation_weeks": 20
+        }
+      },
+      "priority": "high",
+      "finding_id": "finding-005",
+      "assumptions": [
+        "25% churn reduction",
+        "Average contract value \u20ac25,000",
+        "Current enterprise customer base of 50 accounts"
+      ],
+      "description": "Implement AI models to identify at-risk enterprise customers through usage pattern analysis and engagement metrics for proactive intervention before contract renewal.",
+      "crb_analysis": {
+        "cost": {
+          "total": 76600,
+          "mid_term": {
+            "software": 16800,
+            "maintenance": 4000
+          },
+          "long_term": {
+            "software": 33600,
+            "upgrades": 6000
+          },
+          "short_term": {
+            "software": 4200,
+            "training": 2000,
+            "implementation": 10000
+          }
+        },
+        "risk": [
+          {
+            "impact": 8000,
+            "mitigation": "Tune models with historical data and establish confidence thresholds",
+            "description": "False positives may waste customer success resources",
+            "probability": "medium",
+            "time_horizon": "mid"
+          }
+        ],
+        "benefit": {
+          "total": 570500,
+          "mid_term": {
+            "value_saved": 13000,
+            "value_created": 150000
+          },
+          "long_term": {
+            "value_saved": 26000,
+            "value_created": 300000
+          },
+          "short_term": {
+            "value_saved": 6500,
+            "value_created": 75000
+          }
+        }
+      },
+      "payback_months": 3,
+      "roi_percentage": 644,
+      "why_it_matters": {
+        "customer_value": "Ensures customers receive proactive support before issues escalate, improving their overall experience",
+        "business_health": "Reduces customer churn by 20-30% through early warning system, protecting revenue base"
+      },
+      "our_recommendation": "off_the_shelf",
+      "recommendation_rationale": "ChurnZero provides proven churn prevention capabilities at reasonable cost. The ROI justifies the investment while reducing implementation risk."
+    },
+    {
+      "id": "rec-006",
+      "title": "AI-Generated Custom Sales Presentations",
+      "options": {
+        "best_in_class": {
+          "cons": [
+            "Enterprise pricing",
+            "Complex implementation"
+          ],
+          "name": "Seismic",
+          "pros": [
+            "Sales enablement platform",
+            "Content personalization",
+            "Analytics tracking"
+          ],
+          "vendor": "Seismic",
+          "monthly_cost": 500,
+          "implementation_weeks": 8
+        },
+        "off_the_shelf": {
+          "cons": [
+            "Generic business focus",
+            "Limited customization"
+          ],
+          "name": "Gamma",
+          "pros": [
+            "AI-powered presentation creation",
+            "Quick setup",
+            "Modern templates"
+          ],
+          "vendor": "Gamma",
+          "monthly_cost": 100,
+          "implementation_weeks": 2
+        },
+        "custom_solution": {
+          "cons": [
+            "Development complexity",
+            "Content maintenance overhead"
+          ],
+          "pros": [
+            "Perfect brand alignment",
+            "Water industry specific",
+            "Competitive advantage"
+          ],
+          "approach": "Build AI presentation generator using company templates, prospect data, and water industry-specific content modules",
+          "estimated_cost": {
+            "max": 30000,
+            "min": 15000
+          },
+          "implementation_weeks": 12
+        }
+      },
+      "priority": "medium",
+      "finding_id": "finding-010",
+      "assumptions": [
+        "6 hours/week saved at \u20ac55/hour",
+        "10% improvement in close rates",
+        "Average deal size \u20ac15,000"
+      ],
+      "description": "Implement AI system to automatically generate tailored sales presentations based on prospect profile, industry vertical, and identified pain points from research data.",
+      "crb_analysis": {
+        "cost": {
+          "total": 23900,
+          "mid_term": {
+            "software": 4800,
+            "maintenance": 1500
+          },
+          "long_term": {
+            "software": 9600,
+            "upgrades": 2000
+          },
+          "short_term": {
+            "software": 1200,
+            "training": 800,
+            "implementation": 4000
+          }
+        },
+        "risk": [
+          {
+            "impact": 3000,
+            "mitigation": "Implement review process and maintain human oversight",
+            "description": "AI-generated content may lack human touch or contain errors",
+            "probability": "medium",
+            "time_horizon": "short"
+          }
+        ],
+        "benefit": {
+          "total": 182560,
+          "mid_term": {
+            "value_saved": 17160,
+            "value_created": 35000
+          },
+          "long_term": {
+            "value_saved": 34320,
+            "value_created": 70000
+          },
+          "short_term": {
+            "value_saved": 8580,
+            "value_created": 17500
+          }
+        }
+      },
+      "payback_months": 2,
+      "roi_percentage": 664,
+      "why_it_matters": {
+        "customer_value": "Prospects receive highly relevant presentations that directly address their specific challenges and use cases",
+        "business_health": "Improves close rates and reduces sales cycle time through more personalized and effective presentations"
+      },
+      "our_recommendation": "off_the_shelf",
+      "recommendation_rationale": "Gamma provides immediate value at low cost. Test the concept and upgrade to custom solution if ROI proves strong."
+    }
+  ],
+  "roadmap": {
+    "mid_term": [
+      {
+        "title": "Deploy Looker Sustainability Reporting Platform",
+        "timeline": "Month 3-6",
+        "description": "Implement comprehensive sustainability reporting system with white-labeled client portals. Migrate existing clients and establish automated data flows.",
+        "expected_outcome": "80% reduction in manual reporting, \u20ac2,500 annual premium justified per enterprise client",
+        "related_recommendation_id": "rec-002"
+      },
+      {
+        "title": "Scale IoT Predictive Maintenance Fleet-Wide",
+        "timeline": "Month 4-8",
+        "description": "Expand predictive maintenance system to full dispenser fleet based on pilot results. Implement automated technician routing and inventory optimization.",
+        "expected_outcome": "60-80% reduction in emergency service costs, optimized maintenance schedules across 500+ dispensers",
+        "related_recommendation_id": "rec-001"
+      },
+      {
+        "title": "Develop Custom Usage-Based Upselling Engine",
+        "timeline": "Month 4-8",
+        "description": "Build proprietary analytics system to identify upgrade opportunities based on consumption patterns. Integrate with CRM for automated recommendations.",
+        "expected_outcome": "15-25% increase in expansion revenue, \u20ac85,000 additional annual revenue from personalized upselling",
+        "related_recommendation_id": "rec-004"
+      },
+      {
+        "title": "Optimize AI Systems Based on Performance Data",
+        "timeline": "Month 6-7",
+        "description": "Analyze 6-month performance data from all deployed AI systems. Fine-tune algorithms, expand successful implementations, and address any issues.",
+        "expected_outcome": "20% improvement in AI system accuracy, validated ROI across all implementations",
+        "related_recommendation_id": "multiple"
+      }
+    ],
+    "long_term": [
+      {
+        "title": "Integrate All AI Systems into Unified Platform",
+        "timeline": "Month 12-15",
+        "description": "Create single dashboard connecting predictive maintenance, customer success, sales intelligence, and sustainability reporting for holistic business intelligence.",
+        "expected_outcome": "360-degree customer view, predictive business insights, 30% improvement in operational efficiency",
+        "related_recommendation_id": "multiple"
+      },
+      {
+        "title": "Develop AI-Powered Water Service Optimization",
+        "timeline": "Month 15-18",
+        "description": "Build advanced ML models that optimize water flavor recommendations, delivery schedules, and service routes based on comprehensive usage and preference data.",
+        "expected_outcome": "Industry-leading service optimization, 40% improvement in customer satisfaction scores, competitive moat established",
+        "related_recommendation_id": "rec-004"
+      },
+      {
+        "title": "Launch AI-as-a-Service for Industry Partners",
+        "timeline": "Month 18-24",
+        "description": "Package proven AI solutions as white-label offerings for other water service companies, creating new revenue stream from intellectual property.",
+        "expected_outcome": "New B2B revenue stream launched, 25% additional revenue from AI licensing, market leadership position",
+        "related_recommendation_id": "multiple"
+      }
+    ],
+    "short_term": [
+      {
+        "title": "Deploy AI Sales Presentation Generator",
+        "timeline": "Week 1-4",
+        "description": "Implement Gamma AI presentation tool for sales team. Create company templates and train team on usage. Immediate impact on presentation quality and preparation time.",
+        "expected_outcome": "6 hours/week saved in presentation prep, 10% improvement in close rates, immediate ROI visibility",
+        "related_recommendation_id": "rec-006"
+      },
+      {
+        "title": "Launch Apollo.io Sales Intelligence Platform",
+        "timeline": "Week 2-4",
+        "description": "Deploy Apollo.io for automated prospect research and lead scoring. Integrate with existing CRM and train sales team on new workflows.",
+        "expected_outcome": "10 hours/week saved in research, 30% increase in qualified pipeline, 2-month payback achieved",
+        "related_recommendation_id": "rec-003"
+      },
+      {
+        "title": "Implement ChurnZero Customer Success Platform",
+        "timeline": "Week 4-10",
+        "description": "Deploy churn prediction system for enterprise accounts. Set up health scoring based on usage patterns and engagement metrics.",
+        "expected_outcome": "Early warning system operational, 25% reduction in enterprise churn risk identification",
+        "related_recommendation_id": "rec-005"
+      },
+      {
+        "title": "Start AWS IoT Analytics Pilot Program",
+        "timeline": "Week 6-14",
+        "description": "Deploy IoT sensors on 50 water dispensers for predictive maintenance pilot. Establish data collection and ML model training.",
+        "expected_outcome": "Proof of concept validated, 37.5% reduction in emergency calls for pilot locations",
+        "related_recommendation_id": "rec-001"
+      }
+    ]
+  },
+  "methodology_notes": {
+    "assumptions": [
+      "Hourly rate assumed at \u20ac50 unless specified",
+      "3-year projection period for ROI calculations",
+      "All estimates include \u00b120% uncertainty range",
+      "Vendor pricing as of report generation date"
+    ],
+    "limitations": [
+      "Estimates based on self-reported data",
+      "Actual implementation results may vary",
+      "Market conditions may affect vendor availability/pricing",
+      "Recommendations should be validated with actual business data"
+    ],
+    "data_sources": [
+      "Quiz responses provided by business owner",
+      "Industry benchmarks from our knowledge base",
+      "Vendor pricing data (verified where possible)",
+      "AI/automation adoption studies"
+    ],
+    "confidence_notes": "Findings marked as 'high' confidence have multiple supporting data points. 'Medium' confidence items are based on industry patterns. 'Low' confidence items are estimates requiring validation.",
+    "industry_benchmarks_used": [
+      "financial",
+      "operational",
+      "ai_adoption",
+      "iot_specific"
+    ]
+  },
+  "pdf_url": null,
+  "pdf_generated_at": null,
+  "generation_started_at": "2025-12-16T21:36:35.972838+00:00",
+  "generation_completed_at": "2025-12-16T21:39:00.561367+00:00",
+  "error_message": null,
+  "agent_context": {},
+  "created_at": "2025-12-16T21:36:46.068155+00:00",
+  "updated_at": "2025-12-16T21:39:10.652706+00:00"
+}

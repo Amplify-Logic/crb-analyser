@@ -1,0 +1,153 @@
+{
+  "id": "4a6fcdc6-e099-4b3e-a98c-ba611aff1ff7",
+  "quiz_session_id": "1f1b2cc3-9a4a-4a73-9877-6332f1d47afa",
+  "audit_id": null,
+  "tier": "full",
+  "status": "completed",
+  "executive_summary": {
+    "key_insight": "Aquablu has exceptional customer value potential through predictive maintenance and real-time sustainability dashboards, but needs to fix data integration before scaling AI solutions.",
+    "not_recommended": [
+      {
+        "title": "Full ERP Replacement with AI",
+        "reason": "Current budget insufficient for enterprise ERP overhaul; focus on point solutions first"
+      },
+      {
+        "title": "Custom AI Chatbot for Customer Support",
+        "reason": "No indication of high-volume support tickets; resources better spent on operational efficiency"
+      }
+    ],
+    "top_opportunities": [
+      {
+        "title": "IoT-Enabled Predictive Maintenance",
+        "time_horizon": "short",
+        "value_potential": "\u20ac35K-60K"
+      },
+      {
+        "title": "Automated Sustainability Reporting Dashboard",
+        "time_horizon": "short",
+        "value_potential": "\u20ac25K-40K"
+      },
+      {
+        "title": "Usage-Based Upselling Engine",
+        "time_horizon": "mid",
+        "value_potential": "\u20ac50K-100K"
+      },
+      {
+        "title": "AI-Powered Sales Intelligence Platform",
+        "time_horizon": "mid",
+        "value_potential": "\u20ac30K-50K"
+      }
+    ],
+    "ai_readiness_score": 72,
+    "customer_value_score": 8,
+    "business_health_score": 7,
+    "total_value_potential": {
+      "max": 320000,
+      "min": 180000,
+      "projection_years": 3
+    },
+    "recommended_investment": {
+      "year_1_max": 15000,
+      "year_1_min": 8000
+    }
+  },
+  "value_summary": {
+    "total": {
+      "max": 0,
+      "min": 0
+    },
+    "value_saved": {
+      "subtotal": {
+        "max": 0,
+        "min": 0
+      },
+      "hourly_rate": 50,
+      "hours_per_week": 0,
+      "time_savings_annual": 0
+    },
+    "value_created": {
+      "subtotal": {
+        "max": 0,
+        "min": 0
+      },
+      "from_findings": 0,
+      "from_recommendations": 0
+    },
+    "projection_years": 3
+  },
+  "findings": [],
+  "recommendations": [],
+  "roadmap": {
+    "mid_term": [
+      {
+        "title": "Conduct Comprehensive AI Readiness Analysis",
+        "timeline": "Month 1-2",
+        "description": "Work with AI consultant to perform detailed assessment of your business model, data infrastructure, team capabilities, and strategic goals to create personalized recommendations.",
+        "expected_outcome": "Custom AI implementation strategy with specific tool recommendations, ROI projections, and risk mitigation plans",
+        "related_recommendation_id": "strategic_planning"
+      },
+      {
+        "title": "Implement First AI Pilot Project",
+        "timeline": "Month 3-6",
+        "description": "Deploy initial AI solution based on assessment results, focusing on highest-impact, lowest-risk opportunity with clear success metrics.",
+        "expected_outcome": "Proven AI value delivery with measurable business impact and lessons learned for scaling",
+        "related_recommendation_id": "pilot_execution"
+      }
+    ],
+    "long_term": [
+      {
+        "title": "Scale Successful AI Implementations",
+        "timeline": "Month 12-18",
+        "description": "Expand proven AI solutions to additional business areas and integrate advanced AI capabilities based on pilot project learnings and business growth.",
+        "expected_outcome": "AI-enhanced business operations delivering sustained competitive advantage and measurable ROI across multiple departments",
+        "related_recommendation_id": "enterprise_scaling"
+      }
+    ],
+    "short_term": [
+      {
+        "title": "Complete Business Assessment Survey",
+        "timeline": "Week 1-2",
+        "description": "Fill out the comprehensive business analysis questionnaire to identify your company's specific AI implementation opportunities, current pain points, and readiness level.",
+        "expected_outcome": "Clear understanding of which business processes are prime candidates for AI enhancement and preliminary ROI estimates",
+        "related_recommendation_id": "assessment_required"
+      },
+      {
+        "title": "Document Current Business Processes",
+        "timeline": "Week 2-4",
+        "description": "Map out your key business workflows, identify bottlenecks, and quantify time spent on repetitive tasks that could benefit from automation.",
+        "expected_outcome": "Detailed process documentation with baseline metrics for measuring future AI implementation success",
+        "related_recommendation_id": "foundation_building"
+      }
+    ]
+  },
+  "methodology_notes": {
+    "assumptions": [
+      "Hourly rate assumed at \u20ac50 unless specified",
+      "3-year projection period for ROI calculations",
+      "All estimates include \u00b120% uncertainty range",
+      "Vendor pricing as of report generation date"
+    ],
+    "limitations": [
+      "Estimates based on self-reported data",
+      "Actual implementation results may vary",
+      "Market conditions may affect vendor availability/pricing",
+      "Recommendations should be validated with actual business data"
+    ],
+    "data_sources": [
+      "Quiz responses provided by business owner",
+      "Industry benchmarks from our knowledge base",
+      "Vendor pricing data (verified where possible)",
+      "AI/automation adoption studies"
+    ],
+    "confidence_notes": "Findings marked as 'high' confidence have multiple supporting data points. 'Medium' confidence items are based on industry patterns. 'Low' confidence items are estimates requiring validation.",
+    "industry_benchmarks_used": []
+  },
+  "pdf_url": null,
+  "pdf_generated_at": null,
+  "generation_started_at": "2025-12-14T23:28:09.164006+00:00",
+  "generation_completed_at": "2025-12-14T23:30:41.375912+00:00",
+  "error_message": null,
+  "agent_context": {},
+  "created_at": "2025-12-14T23:28:11.309209+00:00",
+  "updated_at": "2025-12-14T23:30:43.520774+00:00"
+}

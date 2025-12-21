@@ -1,0 +1,135 @@
+{
+  "meta": {
+    "INTERNAL_ONLY": true,
+    "do_not_share": "This case study is for internal reference. Share lessons via patterns/ai_implementation_playbook.json instead.",
+    "company": "Aquablu",
+    "project": "Atlas | Support Hub",
+    "industry": "IoT / Water Technology",
+    "team_size": "~20 internal users (target), 1000s of API interactions (projected)",
+    "date_documented": "2025-12-20",
+    "status": "Active development - core functional, full deployment Q1 2026",
+    "timeline": "Full functionality expected within 2 months (Feb 2026)",
+    "built_with": "Claude Code, Next.js 16, Supabase, Anthropic Claude"
+  },
+
+  "what_it_is": {
+    "description": "AI-augmented operations hub for support, quality, and operations. Not a chatbot - an AI colleague with access to real business systems.",
+    "key_differentiator": "Tool use, not just retrieval. Atlas DOES things - looks up warranty status, walks through troubleshooting, drafts RMAs, notifies ops via Slack."
+  },
+
+  "architecture": {
+    "multi_agent_routing": {
+      "L1_haiku": "Quick help, order info, basic FAQ",
+      "L2_sonnet": "Diagnosis, telemetry analysis, workflows",
+      "L3_opus": "Engineering-level access, root cause analysis"
+    },
+    "integrations": [
+      "Shopify (orders, warranty, customer data)",
+      "Telemetry (live device data - water usage, CO2, filter status, errors)",
+      "HubSpot (CRM)",
+      "Slack (notifications, approvals)",
+      "DPD (shipment tracking)",
+      "RAG pipeline (semantic search across all documentation)"
+    ],
+    "gatekeeper_layer": {
+      "functions": [
+        "PII protection",
+        "Hallucination check",
+        "Tone validation",
+        "Human escalation on failure"
+      ]
+    }
+  },
+
+  "what_theyve_built": {
+    "phase_1_complete": {
+      "name": "Chat Console",
+      "features": [
+        "Multi-agent framework with intelligent routing",
+        "RAG pipeline with semantic search",
+        "Shopify and telemetry integrations",
+        "Live chat and email draft modes",
+        "Streaming responses with tool execution visibility"
+      ]
+    },
+    "phase_2_complete": {
+      "name": "Quality Hub",
+      "features": [
+        "NC (Non-Conformity) case management",
+        "Automatic pattern detection from support conversations",
+        "Occurrence tracking linking cases to tickets",
+        "Severity and status workflow management"
+      ]
+    },
+    "phase_3_in_progress": {
+      "name": "Operations Hub",
+      "features": [
+        "RMA lifecycle management",
+        "Shipment tracking with DPD integration",
+        "Spare parts and inventory visibility (planned)",
+        "Field service scheduling integration (planned)"
+      ]
+    }
+  },
+
+  "outcomes": {
+    "status": "Projected targets - will be validated Q1 2026",
+    "response_time": {
+      "before": "4-8 hours",
+      "target": "Minutes"
+    },
+    "escalation_rate": {
+      "before": "40%",
+      "target": "15%"
+    },
+    "quality_pattern_detection": {
+      "before": "Weeks",
+      "target": "Real-time"
+    },
+    "documentation_lookup": {
+      "before": "5-10 min/case",
+      "target": "Automatic"
+    },
+    "team_capacity_multiplier": "5-10x leverage (projected)"
+  },
+
+  "why_it_works": {
+    "principles": [
+      {
+        "name": "Augmentation Over Automation",
+        "description": "AI handles data lookup, pattern matching, drafts. Humans handle judgment, empathy, edge cases."
+      },
+      {
+        "name": "Integration Over Isolation",
+        "description": "Connected to actual business systems - Shopify, HubSpot, Slack, telemetry. No copy-paste."
+      },
+      {
+        "name": "Quality Through Structure",
+        "description": "Every response validated. Every pattern tracked. Every escalation logged."
+      }
+    ]
+  },
+
+  "key_insight": {
+    "quote": "AI has crossed a threshold. It can now hold context, use tools, follow complex instructions, and work within safety guardrails.",
+    "implication": "The question isn't whether AI will transform operations—it's who builds the systems that channel that capability productively."
+  },
+
+  "lessons_for_crb_analyser": {
+    "why_this_succeeds_vs_failures": [
+      "Specific problem scope (support ops), not vague 'AI transformation'",
+      "Built by people who understand the problem (internal team)",
+      "Multi-agent with intelligent routing (right model for right task)",
+      "Integrated with actual business systems (not isolated)",
+      "Has guardrails (gatekeeper layer prevents failures)",
+      "Incremental phases, not big-bang deployment"
+    ],
+    "what_to_recommend": [
+      "Start with support/operations - highest proven ROI",
+      "Use vendor AI platforms with integration capabilities",
+      "Build guardrails from day one",
+      "Connect to existing systems, don't create silos",
+      "Phase rollout - prove value before expanding"
+    ]
+  }
+}

@@ -284,6 +284,10 @@ async def stripe_webhook(
         # Handle specific events
         if event["type"] == "checkout.session.completed":
             await handle_checkout_completed(event["data"]["object"])
+        elif event["type"] == "checkout.session.expired":
+            await handle_checkout_expired(event["data"]["object"])
+        elif event["type"] == "charge.refunded":
+            await handle_charge_refunded(event["data"]["object"])
         elif event["type"] == "payment_intent.succeeded":
             logger.info(f"Payment succeeded: {event['data']['object']['id']}")
         elif event["type"] == "payment_intent.payment_failed":
@@ -302,7 +306,7 @@ async def stripe_webhook(
 
 
 async def handle_checkout_completed(session: dict):
-    """Handle successful checkout."""
+    """Handle successful checkout with idempotency."""
     supabase = await get_async_supabase()
     metadata = session.get("metadata", {})
 
@@ -318,6 +322,15 @@ async def handle_checkout_completed(session: dict):
         return
 
     try:
+        # Idempotency check - skip if already processed
+        existing = await supabase.table("audits").select("payment_status").eq(
+            "id", audit_id
+        ).single().execute()
+
+        if existing.data and existing.data.get("payment_status") == "paid":
+            logger.info(f"Payment already processed for audit {audit_id}, skipping")
+            return
+
         # Update audit payment status
         await supabase.table("audits").update({
             "payment_status": "paid",
@@ -343,7 +356,7 @@ async def handle_checkout_completed(session: dict):
 
 
 async def handle_guest_checkout_completed(session: dict):
-    """Handle successful guest checkout from quiz flow."""
+    """Handle successful guest checkout from quiz flow with idempotency."""
     supabase = await get_async_supabase()
     metadata = session.get("metadata", {})
     quiz_session_id = metadata.get("quiz_session_id")
@@ -354,6 +367,15 @@ async def handle_guest_checkout_completed(session: dict):
         return
 
     try:
+        # Idempotency check - skip if already processed
+        existing = await supabase.table("quiz_sessions").select("status").eq(
+            "id", quiz_session_id
+        ).single().execute()
+
+        if existing.data and existing.data.get("status") in ["paid", "generating", "completed"]:
+            logger.info(f"Payment already processed for quiz {quiz_session_id}, skipping")
+            return
+
         # Update quiz session status
         await supabase.table("quiz_sessions").update({
             "status": "paid",
@@ -387,14 +409,34 @@ async def handle_guest_checkout_completed(session: dict):
             report = await get_report(report_id)
             if report and email:
                 executive_summary = report.get("executive_summary", {})
+
+                # Generate PDF for attachment
+                pdf_bytes = None
+                try:
+                    from src.services.pdf_generator import generate_pdf_from_report_data
+                    pdf_buffer = await generate_pdf_from_report_data(report)
+                    pdf_bytes = pdf_buffer.read()
+
+                    # Also cache PDF in storage
+                    from src.services.storage_service import upload_report_pdf
+                    await upload_report_pdf(report_id, pdf_bytes)
+                    logger.info(f"PDF generated and cached for report {report_id}")
+                except Exception as pdf_err:
+                    logger.warning(f"Failed to generate PDF for email: {pdf_err}")
+
                 await send_report_ready_email(
                     to_email=email,
                     report_id=report_id,
                     ai_readiness_score=executive_summary.get("ai_readiness_score", 0),
                     top_opportunities=executive_summary.get("top_opportunities", []),
+                    pdf_bytes=pdf_bytes,
                 )
         else:
             logger.error(f"Failed to generate report for quiz session {quiz_session_id}")
+            # Send failure email
+            if email:
+                from src.services.email import send_report_failed_email
+                await send_report_failed_email(email)
 
     except Exception as e:
         logger.error(f"Handle guest checkout error: {e}", exc_info=True)
@@ -403,8 +445,97 @@ async def handle_guest_checkout_completed(session: dict):
 async def handle_payment_failed(payment_intent: dict):
     """Handle failed payment."""
     logger.warning(f"Payment failed: {payment_intent.get('id')}")
-
     # Could notify user, update audit status, etc.
+
+
+async def handle_checkout_expired(session: dict):
+    """Handle expired checkout session."""
+    supabase = await get_async_supabase()
+    metadata = session.get("metadata", {})
+
+    logger.info(f"Checkout session expired: {session.get('id')}")
+
+    # Handle guest checkout expiration
+    if metadata.get("type") == "guest_checkout":
+        quiz_session_id = metadata.get("quiz_session_id")
+        if quiz_session_id:
+            try:
+                await supabase.table("quiz_sessions").update({
+                    "status": "expired",
+                }).eq("id", quiz_session_id).execute()
+                logger.info(f"Quiz session {quiz_session_id} marked as expired")
+            except Exception as e:
+                logger.error(f"Failed to update expired quiz session: {e}")
+        return
+
+    # Handle regular audit checkout expiration
+    audit_id = metadata.get("audit_id")
+    if audit_id:
+        try:
+            await supabase.table("audits").update({
+                "payment_status": "expired",
+            }).eq("id", audit_id).execute()
+
+            await supabase.table("audit_activity_log").insert({
+                "audit_id": audit_id,
+                "action": "checkout_expired",
+                "details": {"session_id": session.get("id")},
+            }).execute()
+            logger.info(f"Audit {audit_id} checkout marked as expired")
+        except Exception as e:
+            logger.error(f"Failed to update expired audit: {e}")
+
+
+async def handle_charge_refunded(charge: dict):
+    """Handle refunded charge."""
+    supabase = await get_async_supabase()
+    payment_intent_id = charge.get("payment_intent")
+    refund_amount = charge.get("amount_refunded", 0) / 100
+
+    logger.info(f"Charge refunded: {charge.get('id')}, amount: €{refund_amount}")
+
+    if not payment_intent_id:
+        logger.warning("No payment_intent in refunded charge")
+        return
+
+    try:
+        # Find audit by stripe_payment_id
+        audit_result = await supabase.table("audits").select("id").eq(
+            "stripe_payment_id", payment_intent_id
+        ).execute()
+
+        if audit_result.data:
+            audit_id = audit_result.data[0]["id"]
+            await supabase.table("audits").update({
+                "payment_status": "refunded",
+                "refund_amount": refund_amount,
+            }).eq("id", audit_id).execute()
+
+            await supabase.table("audit_activity_log").insert({
+                "audit_id": audit_id,
+                "action": "payment_refunded",
+                "details": {
+                    "charge_id": charge.get("id"),
+                    "amount": refund_amount,
+                },
+            }).execute()
+            logger.info(f"Audit {audit_id} marked as refunded")
+            return
+
+        # Check quiz sessions
+        quiz_result = await supabase.table("quiz_sessions").select("id, email").eq(
+            "stripe_payment_id", payment_intent_id
+        ).execute()
+
+        if quiz_result.data:
+            quiz_session_id = quiz_result.data[0]["id"]
+            await supabase.table("quiz_sessions").update({
+                "status": "refunded",
+            }).eq("id", quiz_session_id).execute()
+            logger.info(f"Quiz session {quiz_session_id} marked as refunded")
+
+    except Exception as e:
+        logger.error(f"Failed to handle refund: {e}")
 
 
 @router.get("/status/{audit_id}")

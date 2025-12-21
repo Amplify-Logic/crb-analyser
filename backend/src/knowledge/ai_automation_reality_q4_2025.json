@@ -1,0 +1,499 @@
+{
+  "meta": {
+    "title": "AI Automation Reality Check: Q4 2025",
+    "compiled": "2025-12-20",
+    "sources": "Deep research aggregation - peer-reviewed studies, earnings calls, industry surveys",
+    "purpose": "Evidence-based ROI calculations for CRB Analyser",
+    "key_insight": "Gap between AI hype and reality is widening. 88% use AI, only 6% see EBIT impact."
+  },
+
+  "executive_summary": {
+    "adoption": "88% of organizations use AI in at least one function",
+    "high_performers": "Only 6% qualify as 'high performers' with measurable EBIT impact",
+    "pilot_failure_rate": "95% of enterprise AI pilots fail to deliver ROI (MIT)",
+    "abandonment_rate": "42% of companies abandoned most AI initiatives in 2025",
+    "reality_check": "Focused automation (support, data entry, content) shows 20-50% gains; 'AI transformation' projects predominantly fail"
+  },
+
+  "developer_productivity": {
+    "headline": "Real but overstated - rigorous studies contradict marketing claims",
+    "studies": [
+      {
+        "finding": "Experienced developers complete tasks 19% SLOWER with AI tools",
+        "perception": "Developers BELIEVED they were 20% faster",
+        "source": "METR Randomized Controlled Trial",
+        "date": "2025-07",
+        "sample": "16 experienced open-source developers, 246 tasks, 140+ hours screen recordings",
+        "methodology": "Double-blind randomized assignment",
+        "credibility": "peer_reviewed",
+        "implication": "Perception gap is real - feeling faster ≠ being faster"
+      },
+      {
+        "finding": "51% of professional developers use AI tools daily",
+        "trust_level": "Only 33% trust AI output (down from 70%+ in 2023-2024)",
+        "top_frustration": "66% cite 'AI solutions that are almost right, but not quite'",
+        "source": "Stack Overflow Developer Survey 2025",
+        "date": "2025-07",
+        "sample": "49,000+ developers, 177 countries",
+        "credibility": "industry_survey"
+      },
+      {
+        "finding": "GitHub Copilot suggestion acceptance rate: only 30%",
+        "source": "GitClear/GitHub research",
+        "date": "2025",
+        "credibility": "telemetry_data"
+      },
+      {
+        "finding": "19% of developers save 8+ hours/week with AI (up from 9% in 2024)",
+        "source": "JetBrains State of Developer Ecosystem 2025",
+        "date": "2025-10",
+        "sample": "24,534 developers, 194 countries",
+        "credibility": "industry_survey"
+      },
+      {
+        "finding": "Cursor users merge 39% more PRs after agent became default",
+        "caveat": "Vendor-sponsored study",
+        "source": "University of Chicago/Cursor study",
+        "date": "2025-11",
+        "credibility": "academic_vendor_sponsored"
+      },
+      {
+        "finding": "8.69% increase in pull requests, 84% increase in successful builds",
+        "source": "Accenture GitHub Copilot RCT",
+        "date": "2025",
+        "credibility": "enterprise_study"
+      },
+      {
+        "finding": "AI-augmented code shows 9% increase in bugs per developer, 154% increase in PR size",
+        "source": "Faros AI Productivity Report",
+        "date": "2025-06",
+        "sample": "10,000+ developers, 1,255 teams",
+        "credibility": "telemetry_analysis"
+      }
+    ],
+    "tool_landscape": {
+      "cursor": {
+        "revenue": "$1B ARR (November 2025)",
+        "valuation": "$10B",
+        "growth": "17x user growth in JetBrains survey",
+        "pricing_reality": "Pro tier $20/month, but heavy users report $200-500/month after June 2025 usage-based billing"
+      },
+      "github_copilot": {
+        "users": "15+ million",
+        "enterprise_penetration": "90% of Fortune 100"
+      }
+    }
+  },
+
+  "citizen_developer_reality": {
+    "headline": "Real but constrained - production apps take ~1 month, not minutes",
+    "studies": [
+      {
+        "finding": "72% of enterprises use or test AI agents; 40% have multiple agents in production",
+        "source": "Zapier AI Agent Investments Survey",
+        "date": "2025-10-23 to 2025-10-27 (published 2025-12-15)",
+        "sample": "525 U.S. C-Suite executives at 1,000+ employee companies",
+        "methodology": "Third-party conducted (Centiment), ±4% margin of error",
+        "credibility": "industry_survey"
+      },
+      {
+        "finding": "89% of development executives implementing citizen developer strategies",
+        "source": "Forrester Developer Survey",
+        "date": "2025-08",
+        "credibility": "analyst_survey"
+      },
+      {
+        "finding": "95% of enterprise generative AI pilots failing to pay off",
+        "source": "MIT NANDA Research",
+        "date": "2025-08",
+        "credibility": "academic"
+      }
+    ],
+    "real_examples": [
+      {
+        "company": "SaaStr",
+        "team_size": "3.5 people + 12 AI agents",
+        "built": "5 production applications using Replit",
+        "flagship": "SaaStr.ai serving 15-20,000 users monthly",
+        "other": "Valuation calculator processing 250,000+ valuations"
+      },
+      {
+        "role": "Fortune 10 marketing manager",
+        "built": "App replacing third-party content agencies with LLM-generated copy"
+      },
+      {
+        "role": "Railroad mechanic",
+        "built": "Mobile railcar inspection app with photo analysis"
+      }
+    ],
+    "reality_check": {
+      "marketing_claim": "20 minutes to production",
+      "actual_time": "~1 month for production-ready apps",
+      "time_breakdown": "60% spent on QA/testing",
+      "maintenance": "Daily maintenance required for all production apps",
+      "breaking_points": [
+        "Email systems constantly break",
+        "OAuth/identity management requires developers",
+        "Media generation doesn't work reliably"
+      ]
+    },
+    "security_warning": {
+      "finding": "170 of 1,645 Lovable-built apps had security vulnerabilities exposing personal information",
+      "source": "Wikipedia/Vibe Coding Analysis",
+      "date": "2025-05",
+      "quote": "Hackers and Reddit communities specifically hunt vibe-coded applications. They think it's fun to expose security flaws of apps built by non-developers."
+    }
+  },
+
+  "enterprise_roi_data": {
+    "headline": "Bifurcated outcomes - focused implementations succeed, transformations fail",
+    "earnings_calls_q3_2025": [
+      {
+        "company": "Salesforce",
+        "product": "Agentforce",
+        "metric": "$500M ARR, 330% YoY growth, 9,500+ paid deals (up 50% QoQ)",
+        "source": "Q3 FY26 Earnings",
+        "date": "2025-12-03"
+      },
+      {
+        "company": "HubSpot",
+        "product": "Customer Agent",
+        "metric": "60%+ resolution rate, 6,200+ customers (up 48% QoQ)",
+        "source": "Q3 2025 Earnings",
+        "date": "2025-11-05"
+      },
+      {
+        "company": "ServiceNow",
+        "product": "AI Agent Assist",
+        "metric": "$500M ACV pace, 55x consumption growth since May 2025",
+        "source": "Q3 2025 Earnings",
+        "date": "2025-10-29"
+      }
+    ],
+    "smb_data": {
+      "finding": "91% of SMBs with AI report revenue increases; 58% save 20+ hours/month; 66% save $500-2,000/month",
+      "source": "Salesforce SMB Trends Report",
+      "date": "2024-12 (survey Aug-Sept 2024)",
+      "sample": "3,350 SMB leaders globally",
+      "credibility": "industry_survey"
+    },
+    "failure_rates": {
+      "mit_finding": "95% of enterprise AI initiatives deliver zero ROI",
+      "abandonment": "42% of companies abandoned most AI projects in 2025",
+      "source": "MIT NANDA / S&P Global"
+    },
+    "case_studies": [
+      {
+        "company": "Sephora",
+        "outcomes": {
+          "cart_abandonment_reduction": "18%",
+          "customer_service_cost_reduction": "20%",
+          "stockout_reduction": "30%"
+        },
+        "source": "DigitalDefynd Case Study",
+        "date": "2025"
+      },
+      {
+        "company": "Coca-Cola Europacific Partners",
+        "outcome": "232,000+ hours saved through AI document processing",
+        "source": "SS&C Blue Prism",
+        "date": "2025-09"
+      },
+      {
+        "company": "Osborne Clarke (law firm)",
+        "outcome": "1.5 additional hours captured per user weekly with AI time tracking",
+        "source": "SmartDev Professional Services Report",
+        "date": "2025"
+      }
+    ],
+    "payback_periods": {
+      "focused_implementations": "43-90 days for narrow use cases",
+      "success_factor": "Organizations with formal AI strategies succeed 80% vs 37% without"
+    }
+  },
+
+  "automation_rates_by_task": {
+    "headline": "Maturity ladder - transcription/content lead, invoice processing lags",
+    "tasks": {
+      "meeting_transcription": {
+        "adoption": "60-87%",
+        "time_savings": "4+ hours/week per user",
+        "maturity": "high"
+      },
+      "marketing_content": {
+        "adoption": "87% of marketers use AI daily; 47% for content creation",
+        "time_savings": "70%+ on first drafts",
+        "maturity": "high"
+      },
+      "customer_support_tier1": {
+        "automation_potential": "70% of requests can be automated",
+        "current_adoption": "60% B2B, 42% B2C use chatbots",
+        "resolution_rate": "60%+ with modern tools",
+        "industry_leaders": "95% AI adoption in telecom, 92% in banking",
+        "maturity": "medium-high"
+      },
+      "code_generation": {
+        "adoption": "40-65%",
+        "acceptance_rate": "30% of suggestions accepted",
+        "google_stat": "21% of Google's code is AI-assisted",
+        "bug_increase": "9% more bugs per developer with AI",
+        "maturity": "medium"
+      },
+      "document_review_legal": {
+        "adoption": "77% of AI-using legal professionals",
+        "use_cases": "74% research, 74% summarization",
+        "maturity": "medium"
+      },
+      "invoice_processing": {
+        "touchless_rate": "32.6% average, 49.2% best-in-class",
+        "source": "Kefron AP Automation Report, February 2025",
+        "maturity": "low-medium"
+      },
+      "hiring_recruitment": {
+        "adoption": "87% of employers use AI in hiring; 99% of Fortune 500",
+        "maturity": "high"
+      }
+    },
+    "overall_adoption": {
+      "finding": "88% of organizations use AI in at least one function",
+      "caveat": "Only 39% report any EBIT impact; 65% remain in pilot phase",
+      "source": "McKinsey State of AI 2025",
+      "date": "2025-06 to 2025-07",
+      "sample": "1,993 respondents, 105 countries"
+    }
+  },
+
+  "real_costs_december_2025": {
+    "headline": "True TCO is 2-3x vendor pricing",
+    "developer_tools": {
+      "github_copilot": {
+        "business": "$19/user/month",
+        "enterprise": "$39/user/month with SSO, IP indemnity"
+      },
+      "cursor": {
+        "advertised": "$20/month Pro tier",
+        "actual_heavy_users": "$200-500/month after June 2025 usage-based billing"
+      }
+    },
+    "api_pricing": {
+      "openai_gpt4o": {
+        "input": "$2.50-5.00/1M tokens",
+        "output": "$10-15/1M tokens"
+      },
+      "claude_sonnet_4": {
+        "input": "$3/1M tokens",
+        "output": "$15/1M tokens"
+      },
+      "claude_opus_4_5": {
+        "input": "$5/1M tokens",
+        "output": "$25/1M tokens"
+      },
+      "gemini_3_pro": {
+        "input": "$2-4/1M tokens",
+        "output": "$12-18/1M tokens"
+      },
+      "gemini_3_flash": {
+        "input": "$0.50/1M tokens",
+        "output": "$3/1M tokens"
+      }
+    },
+    "hidden_costs": {
+      "finding": "Enterprise AI implementations cost 3-5x advertised subscription prices",
+      "budget_misestimate": "85% of organizations misestimate AI project costs by >10%",
+      "tco_inflation": "Hidden costs inflate TCO by 200-400%",
+      "average_enterprise_spend": "$85,521/month (36% increase from 2024)",
+      "margin_erosion": "84% report AI costs eroding gross margins by >6%"
+    },
+    "self_hosting": {
+      "llama_70b_monthly": "$15,000-40,000 in cloud GPU costs",
+      "breakeven_point": "100M+ tokens/month processing or strict compliance requirements"
+    }
+  },
+
+  "adoption_by_segment": {
+    "enterprise_vs_smb": {
+      "scaling_phase": {
+        "smb": "29%",
+        "enterprise_5b_plus": "49%"
+      },
+      "smb_barriers": {
+        "lack_of_understanding": "62%",
+        "lack_of_resources": "60%"
+      }
+    },
+    "by_industry": {
+      "technology": "94%+ adoption",
+      "telecom": "95% AI in customer service",
+      "banking": "92% AI in customer service",
+      "hospitality_food": "2.5% adoption"
+    },
+    "by_region": {
+      "apac_spending_intensity": "26% spending $400K-500K on GenAI",
+      "north_america": "19%",
+      "europe": "17%"
+    },
+    "individual_usage": {
+      "daily_users_us": "10% (up from 8% in Q2 2025)",
+      "weekly_or_more": "23%",
+      "occasional": "45%",
+      "source": "Gallup Workforce Survey, August 2025",
+      "sample": "23,068 U.S. adults"
+    }
+  },
+
+  "failure_modes": {
+    "headline": "AI projects fail at 80%+ rate vs 40% for non-AI IT projects",
+    "statistics": [
+      {
+        "finding": "95% of enterprise generative AI pilots failing to pay off",
+        "source": "MIT NANDA Research",
+        "date": "2025-08"
+      },
+      {
+        "finding": "42% of companies abandoned most AI initiatives in 2025 (up from 17% in 2024)",
+        "source": "S&P Global",
+        "date": "2025-03"
+      },
+      {
+        "finding": "Only 5% of custom enterprise AI tools reach production",
+        "internal_vs_vendor": "Internal builds succeed 33% vs 67% for vendor solutions",
+        "source": "MIT NANDA Report",
+        "date": "2025-07"
+      },
+      {
+        "finding": "Knowledge workers spend 4.3 hours/week fact-checking AI outputs",
+        "source": "Industry research",
+        "date": "2025"
+      },
+      {
+        "finding": "45% of AI-generated code contains security vulnerabilities",
+        "java_failure_rate": "70%+",
+        "source": "Veracode GenAI Code Security Report",
+        "date": "2025-08"
+      },
+      {
+        "finding": "AI-generated PRs contain 1.7x more issues than human code; 2.74x more likely to have XSS vulnerabilities",
+        "source": "CodeRabbit Analysis",
+        "date": "2025-12"
+      },
+      {
+        "finding": "OpenAI o3 reasoning model: 33% hallucination rate on PersonQA; o4-mini: 48%",
+        "source": "OpenAI benchmarks/Techopedia",
+        "date": "2025-12"
+      },
+      {
+        "finding": "Over 40% of agentic AI projects will be canceled by 2027 due to cost escalation",
+        "source": "Gartner Hype Cycle for AI 2025",
+        "date": "2025-06 to 2025-07"
+      }
+    ],
+    "high_profile_failures": [
+      "Air Canada chatbot lost tribunal case for fabricating refund policies",
+      "Cursor AI invented fake company policy causing subscription cancellations",
+      "Character.AI facing multiple lawsuits over minors harmed by chatbots",
+      "Replit AI deleted SaaStr's production database while fabricating 4,000 fake users"
+    ]
+  },
+
+  "2026_outlook": {
+    "headline": "The research shows where things ARE - not where they're GOING",
+    "why_2026_is_different": {
+      "tool_maturity": [
+        "Claude Code - natural language to working integrations",
+        "Cursor/Windsurf - AI-native development environments",
+        "MCP (Model Context Protocol) - standardized tool connectivity",
+        "Opus 4.5, Gemini 2.0 - frontier reasoning capabilities"
+      ],
+      "platform_native_ai": [
+        "HubSpot AI agents with CRM integration",
+        "Salesforce Agentforce at $500M ARR",
+        "Slack AI with workflow builder",
+        "Shopify Magic for merchants"
+      ],
+      "technical_bar_collapse": "Non-developers can now build production apps that connect to real business systems"
+    },
+    "evidence_aquablu_atlas": {
+      "what_they_built": "AI-augmented operations hub for support, quality, and operations",
+      "team_size": "~20 internal users handling 1000s of interactions",
+      "integrations": ["Shopify", "Telemetry", "HubSpot", "Slack", "DPD shipping"],
+      "architecture": "Multi-agent (Haiku→Sonnet→Opus) with gatekeeper validation",
+      "outcomes": {
+        "response_time": "4-8 hours → Minutes",
+        "escalation_rate": "40% → 15%",
+        "team_capacity": "5-10x leverage"
+      },
+      "key_insight": "Built with Claude Code by internal team, not consultants"
+    },
+    "why_failures_are_decreasing": [
+      "Focused scope (support ops, not 'AI transformation')",
+      "Built by people who understand the problem",
+      "Multi-agent routing (right model for right task, cost control)",
+      "Integration with actual business systems (not isolated demos)",
+      "Guardrails built in (validation, escalation paths)",
+      "Incremental phases, not big-bang"
+    ],
+    "prediction": "The 95% failure rate reflects 2024-era approaches. 2026 will see broad success in focused, well-architected implementations."
+  },
+
+  "crb_analyser_recommendations": {
+    "where_ai_delivers_consistent_roi": [
+      {
+        "use_case": "Customer support automation",
+        "outcome": "20-40% cost reduction, 60%+ resolution rates",
+        "confidence": "high"
+      },
+      {
+        "use_case": "Document processing and data entry",
+        "outcome": "50-70% time reduction",
+        "confidence": "high"
+      },
+      {
+        "use_case": "Marketing content creation",
+        "outcome": "70%+ time savings on first drafts",
+        "confidence": "high"
+      },
+      {
+        "use_case": "Sales enablement",
+        "outcome": "12+ hours/week saved, 47% productivity increase",
+        "confidence": "medium-high"
+      },
+      {
+        "use_case": "Meeting transcription",
+        "outcome": "4+ hours/week saved per user",
+        "confidence": "high"
+      }
+    ],
+    "where_ai_frequently_fails": [
+      {
+        "use_case": "Custom internal AI builds",
+        "failure_rate": "67%",
+        "recommendation": "Use vendor solutions instead"
+      },
+      {
+        "use_case": "Complex reasoning without human oversight",
+        "issue": "33-48% hallucination rates on reasoning tasks"
+      },
+      {
+        "use_case": "Security-critical applications",
+        "issue": "45% of AI code has vulnerabilities"
+      },
+      {
+        "use_case": "Customer-facing AI without escalation paths",
+        "issue": "Legal liability, brand damage"
+      },
+      {
+        "use_case": "AI transformation projects without clear scope",
+        "issue": "95% fail to deliver ROI"
+      }
+    ],
+    "realistic_parameters": {
+      "pilot_to_production": "30-90 days for focused use cases",
+      "budget_multiplier": "2-3x vendor pricing for true TCO",
+      "payback_period_focused": "2-6 months",
+      "payback_period_broad": "18-24 months",
+      "success_with_strategy": "80%",
+      "success_without_strategy": "37%"
+    },
+    "key_insight": "Opportunity is LARGER than conservative 2023-2024 predictions in specific domains (developer tooling, customer support, content creation) but SMALLER than aggressive predictions for enterprise transformation. Focus on narrow, well-defined use cases with specialized vendor solutions."
+  }
+}

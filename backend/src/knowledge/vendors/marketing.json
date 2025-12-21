@@ -1,0 +1,1159 @@
+{
+  "category": "marketing_automation",
+  "description": "Email marketing and marketing automation platforms for customer engagement, campaign management, and automated workflows",
+  "vendors": [
+    {
+      "slug": "mailchimp",
+      "name": "Mailchimp",
+      "category": "marketing_automation",
+      "subcategory": "all_in_one_marketing",
+      "website": "https://mailchimp.com",
+      "pricing_url": "https://mailchimp.com/pricing/marketing/",
+      "description": "All-in-one marketing platform combining email marketing, automation, landing pages, and analytics. Known for its beginner-friendly interface and extensive template library. Offers drag-and-drop editor, real-time analytics, and AI growth assistant. Trusted by 12+ million businesses including TEDTalks, Shutterstock, and Boston Market.",
+      "tagline": "Turn emails into revenue with the #1 email marketing and automations platform",
+      "pricing": {
+        "model": "tiered_contacts",
+        "currency": "USD",
+        "billing_options": ["monthly", "annual"],
+        "annual_discount_percent": null,
+        "tiers": [
+          {
+            "name": "Free",
+            "price": 0,
+            "per": "month",
+            "billing": "monthly",
+            "features": [
+              "Up to 500 contacts",
+              "1,000 email sends/month",
+              "1 audience",
+              "Basic templates",
+              "Forms & landing pages",
+              "Basic reporting",
+              "Support for first 30 days only"
+            ],
+            "limits": {
+              "contacts": 500,
+              "emails_per_month": 1000,
+              "audiences": 1,
+              "seats": 1
+            }
+          },
+          {
+            "name": "Essentials",
+            "price": 13,
+            "per": "month",
+            "billing": "monthly",
+            "features": [
+              "Up to 50,000 contacts",
+              "10x contact limit in monthly sends",
+              "3 audiences",
+              "3 seats",
+              "Email scheduling",
+              "A/B testing",
+              "Basic automation",
+              "24/7 email & chat support",
+              "Branded templates"
+            ],
+            "limits": {
+              "contacts": 50000,
+              "emails_per_month": "10x contacts",
+              "audiences": 3,
+              "seats": 3
+            }
+          },
+          {
+            "name": "Standard",
+            "price": 20,
+            "per": "month",
+            "billing": "monthly",
+            "features": [
+              "All Essentials features",
+              "Up to 100,000 contacts",
+              "12x contact limit in monthly sends",
+              "5 audiences",
+              "5 seats",
+              "Enhanced automation",
+              "Custom-coded templates",
+              "Predictive segmentation",
+              "Campaign Manager",
+              "Enhanced reporting & analytics",
+              "4 user roles"
+            ],
+            "limits": {
+              "contacts": 100000,
+              "emails_per_month": "12x contacts",
+              "audiences": 5,
+              "seats": 5
+            }
+          },
+          {
+            "name": "Premium",
+            "price": 350,
+            "per": "month",
+            "billing": "monthly",
+            "features": [
+              "All Standard features",
+              "Up to 200,000 contacts",
+              "15x contact limit in monthly sends",
+              "Unlimited audiences",
+              "Unlimited seats",
+              "Advanced segmentation",
+              "Multivariate testing",
+              "Comparative reporting",
+              "Phone support",
+              "5 personalized onboarding sessions"
+            ],
+            "limits": {
+              "contacts": 200000,
+              "emails_per_month": "15x contacts",
+              "audiences": "unlimited",
+              "seats": "unlimited"
+            }
+          }
+        ],
+        "starting_price": 0,
+        "custom_pricing": false,
+        "free_trial_days": null,
+        "free_tier": true,
+        "startup_discount": null
+      },
+      "best_for": [
+        "Small businesses and startups testing email marketing",
+        "Beginners wanting user-friendly interface",
+        "Businesses needing all-in-one marketing tools",
+        "Companies prioritizing ease of use over advanced features",
+        "Organizations wanting strong template library"
+      ],
+      "industries": [
+        "E-commerce",
+        "Retail",
+        "Professional Services",
+        "Non-profits",
+        "Small Business"
+      ],
+      "company_sizes": [
+        "startup",
+        "smb",
+        "mid_market"
+      ],
+      "avoid_if": [
+        "Need advanced automation capabilities (limited compared to Klaviyo/HubSpot)",
+        "High-volume senders (costs scale rapidly)",
+        "Require deep ecommerce integrations",
+        "Want enterprise-grade features",
+        "Need extensive customization options"
+      ],
+      "implementation": {
+        "avg_weeks": 1,
+        "complexity": "low",
+        "requires_developer": false,
+        "cost_range": {
+          "diy": {
+            "min": 0,
+            "max": 500
+          },
+          "with_help": {
+            "min": 500,
+            "max": 2000
+          },
+          "full_service": {
+            "min": 2000,
+            "max": 5000
+          }
+        }
+      },
+      "ratings": {
+        "g2": {
+          "score": 4.3,
+          "reviews": 12500,
+          "last_updated": "2025-12"
+        },
+        "capterra": {
+          "score": 4.5,
+          "reviews": 17434,
+          "last_updated": "2025-12"
+        },
+        "our_rating": 4.0,
+        "our_notes": "Best for beginners with its intuitive interface and extensive templates. However, pricing becomes steep as contact lists grow, and many users report 'graduating' to more advanced platforms. Limited customization and automation capabilities compared to competitors. AI growth assistant (launched 2024-2025) improves usability."
+      },
+      "integrations": [
+        "Shopify",
+        "WooCommerce",
+        "Salesforce",
+        "QuickBooks",
+        "Canva",
+        "Google Analytics",
+        "Facebook Ads",
+        "Instagram",
+        "Zapier",
+        "API available"
+      ],
+      "api": {
+        "available": true,
+        "type": "REST",
+        "documentation": "https://mailchimp.com/developer/"
+      },
+      "competitors": [
+        "Klaviyo",
+        "Brevo",
+        "ConvertKit",
+        "ActiveCampaign",
+        "Constant Contact"
+      ],
+      "verified_at": "2025-12-17T00:00:00Z",
+      "verified_by": "manual",
+      "source_url": "https://mailchimp.com/pricing/marketing/",
+      "notes": "Pricing scales with contact count (500, 1k, 2.5k, 5k, 10k, etc.). Premium tier starts at $350/month for 10,000 contacts and scales to $1,600/month for 200,000 contacts. Transactional email add-on: $20/25k emails. Website Core add-on: $10/month. Monthly billing available but no annual discount offered."
+    },
+    {
+      "slug": "klaviyo",
+      "name": "Klaviyo",
+      "category": "marketing_automation",
+      "subcategory": "ecommerce_specialist",
+      "website": "https://www.klaviyo.com",
+      "pricing_url": "https://www.klaviyo.com/pricing",
+      "description": "E-commerce-focused email and SMS marketing platform with powerful segmentation and automation. Known for deep Shopify integration and data-driven personalization. Features AI-powered recommendations, predictive analytics, and revenue attribution. Industry leader for online retailers with 350+ integrations. Pricing switched from email volume to active profiles in February 2025.",
+      "tagline": "Email & SMS platform built for e-commerce",
+      "pricing": {
+        "model": "active_profiles",
+        "currency": "USD",
+        "billing_options": ["monthly", "annual"],
+        "annual_discount_percent": 17,
+        "tiers": [
+          {
+            "name": "Free",
+            "price": 0,
+            "per": "month",
+            "billing": "monthly",
+            "features": [
+              "Up to 250 contacts",
+              "Up to 500 email sends/month",
+              "150 free SMS/MMS credits",
+              "Email & SMS campaigns",
+              "Forms & landing pages",
+              "Pre-built automations",
+              "Segmentation",
+              "Email support"
+            ],
+            "limits": {
+              "profiles": 250,
+              "emails_per_month": 500,
+              "sms_credits": 150
+            }
+          },
+          {
+            "name": "Email",
+            "price": 20,
+            "per": "month",
+            "billing": "monthly",
+            "features": [
+              "251-500 active profiles",
+              "Unlimited email sends",
+              "150 free monthly SMS credits",
+              "Unlimited push notifications",
+              "A/B testing",
+              "Predictive analytics",
+              "Pre-built automations",
+              "Email & chat support"
+            ],
+            "limits": {
+              "profiles": 500,
+              "emails_per_month": "unlimited",
+              "sms_credits": 150
+            }
+          },
+          {
+            "name": "Email + SMS",
+            "price": 35,
+            "per": "month",
+            "billing": "monthly",
+            "features": [
+              "All Email plan features",
+              "251-500 active profiles",
+              "1,250 SMS/MMS credits",
+              "Two-way SMS conversations",
+              "SMS compliance tools",
+              "SMS performance analytics"
+            ],
+            "limits": {
+              "profiles": 500,
+              "emails_per_month": "unlimited",
+              "sms_credits": 1250
+            }
+          }
+        ],
+        "starting_price": 0,
+        "custom_pricing": false,
+        "free_trial_days": null,
+        "free_tier": true,
+        "startup_discount": "Special introductory pricing available until December 31, 2025"
+      },
+      "best_for": [
+        "E-commerce businesses of all sizes",
+        "Shopify store owners",
+        "Direct-to-consumer brands",
+        "Businesses wanting data-driven personalization",
+        "Companies needing SMS + email together",
+        "Retailers requiring revenue attribution"
+      ],
+      "industries": [
+        "E-commerce",
+        "Retail",
+        "Direct-to-Consumer",
+        "Fashion",
+        "Beauty & Cosmetics",
+        "Food & Beverage"
+      ],
+      "company_sizes": [
+        "startup",
+        "smb",
+        "mid_market",
+        "enterprise"
+      ],
+      "avoid_if": [
+        "Non-ecommerce business (B2B SaaS, services, etc.)",
+        "Very small budget (pricing scales quickly)",
+        "Don't need advanced segmentation",
+        "Simple newsletter-only needs",
+        "Require extensive B2B features"
+      ],
+      "implementation": {
+        "avg_weeks": 2,
+        "complexity": "medium",
+        "requires_developer": false,
+        "cost_range": {
+          "diy": {
+            "min": 0,
+            "max": 1000
+          },
+          "with_help": {
+            "min": 1000,
+            "max": 5000
+          },
+          "full_service": {
+            "min": 5000,
+            "max": 20000
+          }
+        }
+      },
+      "ratings": {
+        "g2": {
+          "score": 4.6,
+          "reviews": 1200,
+          "last_updated": "2025-12"
+        },
+        "capterra": {
+          "score": 4.6,
+          "reviews": 450,
+          "last_updated": "2025-12"
+        },
+        "trustpilot": {
+          "score": 2.4,
+          "reviews": 300,
+          "last_updated": "2025-12"
+        },
+        "shopify_app_store": {
+          "score": 4.5,
+          "reviews": 2290,
+          "last_updated": "2025-12"
+        },
+        "our_rating": 4.5,
+        "our_notes": "Best-in-class for e-commerce with powerful segmentation and revenue tracking. Users rave about Shopify integration and email builder. Pricing increased significantly in 2025 with switch to active profiles model (up to 35% for some users). Advanced features can be complex for beginners. Support is email-only (no live chat). Low Trustpilot score reflects pricing complaints."
+      },
+      "integrations": [
+        "Shopify",
+        "WooCommerce",
+        "Magento",
+        "BigCommerce",
+        "Stripe",
+        "PayPal",
+        "Facebook Ads",
+        "Google Ads",
+        "TikTok",
+        "350+ integrations",
+        "API available"
+      ],
+      "api": {
+        "available": true,
+        "type": "REST",
+        "documentation": "https://developers.klaviyo.com"
+      },
+      "competitors": [
+        "Drip",
+        "Omnisend",
+        "Mailchimp",
+        "ActiveCampaign",
+        "Attentive"
+      ],
+      "verified_at": "2025-12-17T00:00:00Z",
+      "verified_by": "manual",
+      "source_url": "https://www.klaviyo.com/pricing",
+      "notes": "Pricing scales based on active profiles: $20/mo (500), $60/mo (1k), $150/mo (5k), $350/mo (10k), $1,200/mo (100k). Email + SMS adds $15/mo for smaller tiers. Add-ons: CDP ($500/mo for 100k profiles), Marketing Analytics ($100/mo for 13.5k profiles), Customer Hub ($20/mo for 10k profiles), Helpdesk ($10/mo for 50 tickets). Introductory pricing ends Dec 31, 2025. Legacy users get 25% max price increase protection."
+    },
+    {
+      "slug": "hubspot-marketing-hub",
+      "name": "HubSpot Marketing Hub",
+      "category": "marketing_automation",
+      "subcategory": "inbound_marketing_platform",
+      "website": "https://www.hubspot.com",
+      "pricing_url": "https://www.hubspot.com/pricing/marketing/enterprise",
+      "description": "Comprehensive inbound marketing platform with CRM integration, content management, and marketing automation. Features AI-powered content recommendations, landing pages, email marketing, social media management, and advanced analytics. Part of HubSpot's unified CRM platform. Known for extensive educational resources and ease of use. Best for companies prioritizing lead generation and nurturing.",
+      "tagline": "Marketing software to help you grow traffic, convert leads, and prove ROI",
+      "pricing": {
+        "model": "tiered_contacts",
+        "currency": "USD",
+        "billing_options": ["monthly", "annual"],
+        "annual_discount_percent": 10,
+        "tiers": [
+          {
+            "name": "Free",
+            "price": 0,
+            "per": "month",
+            "billing": "monthly",
+            "features": [
+              "Up to 2,000 email sends/month",
+              "100 marketing contacts",
+              "20 landing pages",
+              "Forms",
+              "Live chat",
+              "Ads management",
+              "Basic reporting",
+              "HubSpot CRM included"
+            ],
+            "limits": {
+              "marketing_contacts": 100,
+              "emails_per_month": 2000,
+              "landing_pages": 20
+            }
+          },
+          {
+            "name": "Starter",
+            "price": 9,
+            "per": "seat/month",
+            "billing": "monthly",
+            "features": [
+              "1,000 marketing contacts included",
+              "Email marketing & automation",
+              "Landing pages & forms",
+              "Ad management",
+              "Live chat",
+              "Reporting dashboards",
+              "Email & in-app chat support",
+              "Save 40% first year ($15/seat thereafter)"
+            ],
+            "limits": {
+              "marketing_contacts": 1000,
+              "seats": "starts at 1",
+              "additional_contacts_cost": "50/1000"
+            }
+          },
+          {
+            "name": "Professional",
+            "price": 890,
+            "per": "month (3 seats)",
+            "billing": "annual",
+            "features": [
+              "2,000 marketing contacts included",
+              "All Starter features",
+              "Marketing automation",
+              "A/B testing",
+              "Social media scheduling",
+              "Blog hosting",
+              "SEO recommendations",
+              "Campaign reporting",
+              "Multi-language content",
+              "Phone support",
+              "$3,000 onboarding fee (one-time)"
+            ],
+            "limits": {
+              "marketing_contacts": 2000,
+              "seats": 3,
+              "additional_seats_cost": "45/month",
+              "additional_contacts_increment": 5000
+            }
+          },
+          {
+            "name": "Enterprise",
+            "price": 3600,
+            "per": "month (5 seats)",
+            "billing": "annual",
+            "features": [
+              "10,000 marketing contacts included",
+              "All Professional features",
+              "Predictive lead scoring",
+              "Custom objects",
+              "Behavioral triggers",
+              "Multi-touch revenue attribution",
+              "Webhooks",
+              "Advanced permissions",
+              "Hierarchical teams",
+              "Single sign-on (SSO)",
+              "$7,000 onboarding fee (one-time)"
+            ],
+            "limits": {
+              "marketing_contacts": 10000,
+              "seats": 5,
+              "additional_contacts_increment": 10000
+            }
+          }
+        ],
+        "starting_price": 0,
+        "custom_pricing": false,
+        "free_trial_days": 14,
+        "free_tier": true,
+        "startup_discount": "50% off Professional/Enterprise for qualifying startups"
+      },
+      "best_for": [
+        "B2B companies focused on inbound marketing",
+        "Organizations wanting unified CRM + Marketing",
+        "Content-heavy marketing strategies",
+        "Companies prioritizing lead nurturing",
+        "Teams needing extensive reporting and attribution",
+        "Businesses already using HubSpot CRM"
+      ],
+      "industries": [
+        "B2B SaaS",
+        "Professional Services",
+        "Technology",
+        "Consulting",
+        "Manufacturing",
+        "Healthcare",
+        "Education"
+      ],
+      "company_sizes": [
+        "smb",
+        "mid_market",
+        "enterprise"
+      ],
+      "avoid_if": [
+        "E-commerce focus (Klaviyo/Drip better suited)",
+        "Limited budget (expensive as you scale)",
+        "Simple email marketing needs only",
+        "Need per-seat pricing only (contact-based gets expensive)",
+        "Want fast implementation (complex setup)",
+        "Small team with <1000 contacts"
+      ],
+      "implementation": {
+        "avg_weeks": 6,
+        "complexity": "high",
+        "requires_developer": false,
+        "cost_range": {
+          "diy": {
+            "min": 3000,
+            "max": 7000
+          },
+          "with_help": {
+            "min": 7000,
+            "max": 20000
+          },
+          "full_service": {
+            "min": 20000,
+            "max": 75000
+          }
+        }
+      },
+      "ratings": {
+        "g2": {
+          "score": 4.4,
+          "reviews": 14242,
+          "last_updated": "2025-12"
+        },
+        "capterra": {
+          "score": 4.5,
+          "reviews": 5800,
+          "last_updated": "2025-12",
+          "value_for_money": 4.2
+        },
+        "our_rating": 4.3,
+        "our_notes": "Industry-leading for B2B inbound marketing with powerful CRM integration. AI-powered content recommendations and comprehensive analytics are standout features. Pricing is highest among marketing platforms and can shock as database grows. Professional/Enterprise require annual commitment + onboarding fees ($3k-$7k). Many limitations between tiers with big cost jumps. Excellent for companies wanting unified platform; overkill for simple email marketing."
+      },
+      "integrations": [
+        "Salesforce",
+        "Microsoft Dynamics",
+        "Zoom",
+        "Slack",
+        "WordPress",
+        "Shopify",
+        "Stripe",
+        "QuickBooks",
+        "1,000+ integrations via marketplace",
+        "API available"
+      ],
+      "api": {
+        "available": true,
+        "type": "REST",
+        "documentation": "https://developers.hubspot.com"
+      },
+      "competitors": [
+        "Marketo",
+        "Pardot (Salesforce)",
+        "ActiveCampaign",
+        "Mailchimp",
+        "Eloqua"
+      ],
+      "verified_at": "2025-12-17T00:00:00Z",
+      "verified_by": "manual",
+      "source_url": "https://www.hubspot.com/pricing/marketing/enterprise",
+      "notes": "Contact-based pricing makes this expensive at scale. Starter: $9/seat/mo (first year), $15/seat thereafter + $50/1k additional contacts. Professional: $890/mo (3 seats, 2k contacts, annual) + $3k onboarding. Enterprise: $3,600/mo (5 seats, 10k contacts, annual, paid upfront) + $7k onboarding. Professional/Enterprise require annual commitment. Cannot track sales/deals from email campaigns (major limitation for ecommerce)."
+    },
+    {
+      "slug": "brevo",
+      "name": "Brevo",
+      "category": "marketing_automation",
+      "subcategory": "affordable_all_in_one",
+      "website": "https://www.brevo.com",
+      "pricing_url": "https://www.brevo.com/pricing/",
+      "description": "Affordable all-in-one marketing platform formerly known as Sendinblue. Combines email marketing, SMS, chat, CRM, and marketing automation at competitive prices. Known for send-based pricing (not contact-based) and generous free tier. Features drag-and-drop editor, transactional emails, and WhatsApp integration. Winner of 'Best Email Marketing Tool For Value For Money' 2023-2025.",
+      "tagline": "All-in-one platform to manage your customer relationships via Email, SMS, Chat and more",
+      "pricing": {
+        "model": "send_based",
+        "currency": "USD",
+        "billing_options": ["monthly", "annual", "pay_as_you_go"],
+        "annual_discount_percent": null,
+        "tiers": [
+          {
+            "name": "Free",
+            "price": 0,
+            "per": "month",
+            "billing": "monthly",
+            "features": [
+              "Up to 100,000 contacts",
+              "300 emails/day (9,000/month)",
+              "Drag & drop editor",
+              "Email templates",
+              "SMS campaigns",
+              "Contact management",
+              "Marketing automation",
+              "Web tracking",
+              "Brevo logo on emails"
+            ],
+            "limits": {
+              "contacts": 100000,
+              "emails_per_day": 300,
+              "emails_per_month": 9000
+            }
+          },
+          {
+            "name": "Starter",
+            "price": 9,
+            "per": "month",
+            "billing": "monthly",
+            "features": [
+              "5,000 emails/month",
+              "No daily sending limit",
+              "Remove Brevo logo (+$12/month)",
+              "Email support",
+              "Basic reporting",
+              "A/B testing",
+              "Marketing automation"
+            ],
+            "limits": {
+              "emails_per_month": 5000,
+              "contacts": "unlimited"
+            }
+          },
+          {
+            "name": "Business",
+            "price": 18,
+            "per": "month",
+            "billing": "monthly",
+            "features": [
+              "5,000 emails/month",
+              "All Starter features",
+              "Marketing automation",
+              "Landing pages",
+              "Multi-user access",
+              "Send time optimization",
+              "A/B testing",
+              "Priority email support",
+              "Statistics & heatmaps"
+            ],
+            "limits": {
+              "emails_per_month": 5000,
+              "contacts": "unlimited"
+            }
+          },
+          {
+            "name": "BrevoPlus",
+            "price": 499,
+            "per": "month",
+            "billing": "monthly",
+            "features": [
+              "150,000+ emails/month",
+              "All Business features",
+              "WhatsApp campaigns",
+              "Web push notifications",
+              "Contact scoring",
+              "AI segmentation",
+              "Advanced ecommerce features",
+              "Phone support",
+              "Sub-account management"
+            ],
+            "limits": {
+              "emails_per_month": 150000,
+              "contacts": "unlimited"
+            }
+          },
+          {
+            "name": "Enterprise",
+            "price": 10000,
+            "per": "year",
+            "billing": "annual",
+            "features": [
+              "350,000+ emails/month",
+              "All BrevoPlus features",
+              "Dedicated account manager",
+              "Priority support",
+              "Custom integrations",
+              "Advanced security",
+              "SLA guarantees",
+              "Custom contract terms"
+            ],
+            "limits": {
+              "emails_per_month": 350000,
+              "contacts": "unlimited"
+            }
+          }
+        ],
+        "starting_price": 0,
+        "custom_pricing": false,
+        "free_trial_days": null,
+        "free_tier": true,
+        "startup_discount": null
+      },
+      "best_for": [
+        "Small to medium businesses on tight budgets",
+        "Companies wanting email + SMS together",
+        "Businesses needing transactional emails",
+        "Organizations prioritizing value for money",
+        "Teams wanting unlimited contacts",
+        "European businesses (strong EU presence)"
+      ],
+      "industries": [
+        "E-commerce",
+        "Small Business",
+        "Retail",
+        "Agencies",
+        "Startups",
+        "Non-profits"
+      ],
+      "company_sizes": [
+        "startup",
+        "smb",
+        "mid_market"
+      ],
+      "avoid_if": [
+        "Need advanced automation (limited compared to HubSpot/ActiveCampaign)",
+        "Require deep analytics and reporting",
+        "Want sophisticated segmentation",
+        "High-volume sending on pay-as-you-go (expensive)",
+        "Need enterprise-grade compliance features on lower tiers"
+      ],
+      "implementation": {
+        "avg_weeks": 1,
+        "complexity": "low",
+        "requires_developer": false,
+        "cost_range": {
+          "diy": {
+            "min": 0,
+            "max": 500
+          },
+          "with_help": {
+            "min": 500,
+            "max": 2000
+          },
+          "full_service": {
+            "min": 2000,
+            "max": 5000
+          }
+        }
+      },
+      "ratings": {
+        "g2": {
+          "score": 4.5,
+          "reviews": 1900,
+          "last_updated": "2025-12"
+        },
+        "capterra": {
+          "score": 4.6,
+          "reviews": 3205,
+          "last_updated": "2025-12",
+          "value_for_money": 4.5
+        },
+        "our_rating": 4.4,
+        "our_notes": "Best value for money in the email marketing space (won awards 2023-2025). Send-based pricing is unique and beneficial for businesses with large contact lists but moderate sending. Generous free tier includes automation and web tracking. Analytics could be deeper, and automation is basic compared to premium competitors. Recent pricing restructure (Oct 2025) moved some features to higher tiers. Excellent for budget-conscious teams needing multi-channel marketing."
+      },
+      "integrations": [
+        "WordPress",
+        "Shopify",
+        "WooCommerce",
+        "Salesforce",
+        "HubSpot CRM",
+        "Stripe",
+        "Zapier",
+        "WhatsApp",
+        "Facebook Ads",
+        "Google Ads",
+        "API available"
+      ],
+      "api": {
+        "available": true,
+        "type": "REST",
+        "documentation": "https://developers.brevo.com"
+      },
+      "competitors": [
+        "Mailchimp",
+        "Sendinblue (old name)",
+        "MailerLite",
+        "Moosend",
+        "EmailOctopus"
+      ],
+      "verified_at": "2025-12-17T00:00:00Z",
+      "verified_by": "manual",
+      "source_url": "https://www.brevo.com/pricing/",
+      "notes": "Send-based pricing scales: $9 (5k emails), $18 (5k), $499 (150k+), $10k/year (350k+). Remove Brevo logo: +$12/month. Dedicated IP: $251/year. Pay-as-you-go prepaid credits available (don't expire) but can be expensive. October 2025 pricing restructure moved landing pages and popups to higher tiers. Free plan is very generous for testing (300 emails/day, 9k/month, 100k contacts). Unlimited contacts on all plans."
+    },
+    {
+      "slug": "convertkit",
+      "name": "Kit (formerly ConvertKit)",
+      "category": "marketing_automation",
+      "subcategory": "creator_focused",
+      "website": "https://kit.com",
+      "pricing_url": "https://kit.com/pricing",
+      "description": "Creator-focused email marketing platform designed for bloggers, podcasters, YouTubers, and online course creators. Features simple automation builder, customizable landing pages, and subscriber tagging. Known for creator-friendly features like newsletter referral system, subscriber scoring, and commerce tools. Unlimited email sends on all plans. Recently increased free tier to 10,000 subscribers (up from 1,000).",
+      "tagline": "The email marketing platform for creators",
+      "pricing": {
+        "model": "subscriber_based",
+        "currency": "USD",
+        "billing_options": ["monthly", "annual"],
+        "annual_discount_percent": 17,
+        "tiers": [
+          {
+            "name": "Newsletter (Free)",
+            "price": 0,
+            "per": "month",
+            "billing": "monthly",
+            "features": [
+              "Up to 10,000 subscribers",
+              "Unlimited broadcast emails",
+              "Unlimited landing pages & forms",
+              "1 basic visual automation",
+              "1 email sequence",
+              "Basic subscriber management",
+              "Tag & segment subscribers",
+              "Creator Network access"
+            ],
+            "limits": {
+              "subscribers": 10000,
+              "automations": 1,
+              "sequences": 1
+            }
+          },
+          {
+            "name": "Creator",
+            "price": 39,
+            "per": "month",
+            "billing": "monthly",
+            "features": [
+              "Up to 1,000 subscribers",
+              "Unlimited emails",
+              "Unlimited automations",
+              "Unlimited sequences",
+              "Email templates",
+              "Third-party integrations",
+              "Automated funnels",
+              "Email support"
+            ],
+            "limits": {
+              "subscribers": 1000,
+              "automations": "unlimited",
+              "sequences": "unlimited"
+            }
+          },
+          {
+            "name": "Creator Pro",
+            "price": 79,
+            "per": "month",
+            "billing": "monthly",
+            "features": [
+              "Up to 1,000 subscribers",
+              "All Creator features",
+              "Newsletter referral system",
+              "Subscriber scoring",
+              "Advanced reporting",
+              "Facebook custom audiences",
+              "Unlimited user accounts",
+              "Free migration support",
+              "Priority support"
+            ],
+            "limits": {
+              "subscribers": 1000,
+              "team_members": "unlimited"
+            }
+          }
+        ],
+        "starting_price": 0,
+        "custom_pricing": false,
+        "free_trial_days": 14,
+        "free_tier": true,
+        "startup_discount": null
+      },
+      "best_for": [
+        "Content creators (bloggers, podcasters, YouTubers)",
+        "Online course creators and coaches",
+        "Authors and writers",
+        "Small creator businesses",
+        "Solopreneurs and side hustlers",
+        "Newsletter-focused creators"
+      ],
+      "industries": [
+        "Creator Economy",
+        "Education & Courses",
+        "Publishing",
+        "Media & Entertainment",
+        "Coaching & Consulting",
+        "Content Marketing"
+      ],
+      "company_sizes": [
+        "startup",
+        "smb"
+      ],
+      "avoid_if": [
+        "E-commerce business (Klaviyo/Drip better suited)",
+        "Need advanced automation workflows",
+        "Require deep ecommerce integrations",
+        "Want sophisticated reporting/analytics",
+        "B2B SaaS company (HubSpot better fit)",
+        "Large enterprise needs"
+      ],
+      "implementation": {
+        "avg_weeks": 1,
+        "complexity": "low",
+        "requires_developer": false,
+        "cost_range": {
+          "diy": {
+            "min": 0,
+            "max": 500
+          },
+          "with_help": {
+            "min": 500,
+            "max": 2000
+          },
+          "full_service": {
+            "min": 2000,
+            "max": 5000
+          }
+        }
+      },
+      "ratings": {
+        "g2": {
+          "score": 4.6,
+          "reviews": 200,
+          "last_updated": "2025-12"
+        },
+        "capterra": {
+          "score": 4.7,
+          "reviews": 200,
+          "last_updated": "2025-12"
+        },
+        "trustpilot": {
+          "score": 4.3,
+          "reviews": 150,
+          "last_updated": "2025-12"
+        },
+        "shopify_app_store": {
+          "score": 4.7,
+          "reviews": 80,
+          "last_updated": "2025-12"
+        },
+        "our_rating": 4.5,
+        "our_notes": "Top choice for creators with most generous free tier (10k subscribers, up from 1k in 2025). Interface is intuitive and creator-friendly with excellent segmentation and automation for its price point. Newsletter referral system is unique feature for growing audience. Recent ~35% price increase ($10-20/mo) hit small creators hard. Higher priced than competitors at scale. Some find interface overwhelming initially. Recognized as top-rated tool in 2 Capterra Shortlist reports."
+      },
+      "integrations": [
+        "Shopify",
+        "Stripe",
+        "WordPress",
+        "Teachable",
+        "Gumroad",
+        "Zapier",
+        "Patreon",
+        "Memberful",
+        "Crowdcast",
+        "API available"
+      ],
+      "api": {
+        "available": true,
+        "type": "REST",
+        "documentation": "https://developers.kit.com"
+      },
+      "competitors": [
+        "Mailchimp",
+        "MailerLite",
+        "Flodesk",
+        "Substack",
+        "Beehiiv"
+      ],
+      "verified_at": "2025-12-17T00:00:00Z",
+      "verified_by": "manual",
+      "source_url": "https://kit.com/pricing",
+      "notes": "Subscriber-based pricing scales: $39/mo (1k), $59/mo (3k), $89/mo (5k), $199/mo (25k), $566/mo (100k). Creator Pro adds $40/mo to each tier. Annual billing saves ~17% (2 months free). Free tier increased to 10k subscribers in 2025 (major upgrade from 1k). Recent price increase (~35%) frustrated budget-conscious creators. 14-day free trial + 30-day money-back guarantee. Free migration support on Creator Pro."
+    },
+    {
+      "slug": "drip",
+      "name": "Drip",
+      "category": "marketing_automation",
+      "subcategory": "ecommerce_automation",
+      "website": "https://www.drip.com",
+      "pricing_url": "https://www.drip.com/pricing",
+      "description": "E-commerce CRM and marketing automation platform built for B2C brands selling physical or digital products. Features advanced segmentation, visual workflow builder, and revenue attribution. Gathers customer data from stores, websites, and campaigns to power personalized multi-channel journeys. Known for code-free automation builder and deep ecommerce integrations. Strong alternative to Klaviyo for online retailers.",
+      "tagline": "The ecommerce CRM that's as ambitious as you are",
+      "pricing": {
+        "model": "contact_based",
+        "currency": "USD",
+        "billing_options": ["monthly", "annual"],
+        "annual_discount_percent": null,
+        "tiers": [
+          {
+            "name": "Standard",
+            "price": 39,
+            "per": "month",
+            "billing": "monthly",
+            "features": [
+              "Up to 2,500 contacts",
+              "Unlimited email sends",
+              "Visual workflow builder",
+              "Email & onsite campaigns",
+              "Pre-built playbooks",
+              "Forms & popups",
+              "Revenue attribution",
+              "Email & chat support",
+              "Basic segmentation",
+              "Basic reporting"
+            ],
+            "limits": {
+              "contacts": 2500,
+              "emails": "unlimited"
+            }
+          },
+          {
+            "name": "Pro",
+            "price": 154,
+            "per": "month",
+            "billing": "monthly",
+            "features": [
+              "Up to 5,000 contacts",
+              "All Standard features",
+              "Advanced segmentation",
+              "SMS marketing",
+              "Predictive sending",
+              "Revenue insights",
+              "Advanced workflows",
+              "Multi-site support",
+              "Priority support"
+            ],
+            "limits": {
+              "contacts": 5000,
+              "emails": "unlimited"
+            }
+          }
+        ],
+        "starting_price": 39,
+        "custom_pricing": false,
+        "free_trial_days": 14,
+        "free_tier": false,
+        "startup_discount": null
+      },
+      "best_for": [
+        "E-commerce SMBs",
+        "Direct-to-consumer brands",
+        "Online stores wanting automation",
+        "Brands needing revenue attribution",
+        "Businesses migrating from Klaviyo (cost savings)",
+        "Companies wanting code-free workflows"
+      ],
+      "industries": [
+        "E-commerce",
+        "Retail",
+        "Direct-to-Consumer",
+        "Fashion",
+        "Beauty & Cosmetics",
+        "Digital Products"
+      ],
+      "company_sizes": [
+        "startup",
+        "smb",
+        "mid_market"
+      ],
+      "avoid_if": [
+        "Non-ecommerce business",
+        "Need landing page builder (not included)",
+        "Very small budget (<$39/month)",
+        "Prefer contact-based pricing over email volume",
+        "Need extensive B2B features",
+        "Want simplified email creator (users report it's not intuitive)"
+      ],
+      "implementation": {
+        "avg_weeks": 2,
+        "complexity": "medium",
+        "requires_developer": false,
+        "cost_range": {
+          "diy": {
+            "min": 0,
+            "max": 1000
+          },
+          "with_help": {
+            "min": 1000,
+            "max": 5000
+          },
+          "full_service": {
+            "min": 5000,
+            "max": 15000
+          }
+        }
+      },
+      "ratings": {
+        "g2": {
+          "score": 4.4,
+          "reviews": 500,
+          "last_updated": "2025-12"
+        },
+        "capterra": {
+          "score": 4.4,
+          "reviews": 250,
+          "last_updated": "2025-12"
+        },
+        "our_rating": 4.3,
+        "our_notes": "Strong Klaviyo alternative for ecommerce with similar features at lower price point. Visual workflow builder is praised as best-in-class for non-technical users. True ecommerce CRM with deep customer data integration and revenue attribution. Lacks landing page builder (surprising omission). Email creator reported as less intuitive than competitors. Pricing scales quickly as list grows. Recognized as top-rated tool in 1 Capterra Shortlist report."
+      },
+      "integrations": [
+        "Shopify",
+        "WooCommerce",
+        "Magento",
+        "BigCommerce",
+        "Stripe",
+        "PayPal",
+        "Facebook Ads",
+        "Google Ads",
+        "Zapier",
+        "API available"
+      ],
+      "api": {
+        "available": true,
+        "type": "REST",
+        "documentation": "https://developer.drip.com"
+      },
+      "competitors": [
+        "Klaviyo",
+        "Omnisend",
+        "ActiveCampaign",
+        "Mailchimp",
+        "GetResponse"
+      ],
+      "verified_at": "2025-12-17T00:00:00Z",
+      "verified_by": "manual",
+      "source_url": "https://www.drip.com/pricing",
+      "notes": "Contact-based pricing scales from $39/mo (2,500 contacts) and increases with list size. Pricing can reach $1,500+/month for larger lists. Unlimited email sends on all plans. 14-day free trial available. No free tier. Focused exclusively on ecommerce - not suitable for B2B SaaS or service businesses. SMS available on Pro tier."
+    }
+  ],
+  "last_updated": "2025-12-17T00:00:00Z"
+}

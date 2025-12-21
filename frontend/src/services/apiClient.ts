@@ -134,6 +134,32 @@ class ApiClient {
 
     return response.json();
   }
+
+  async transcribeInterviewAudio(audioBlob: Blob, sessionId?: string): Promise<{ text: string; confidence: number }> {
+    const formData = new FormData();
+    formData.append('audio', audioBlob, 'recording.webm');
+    if (sessionId) {
+      formData.append('session_id', sessionId);
+    }
+
+    const response = await fetch(`${this.baseURL}/api/interview/transcribe`, {
+      method: 'POST',
+      body: formData,
+    });
+
+    if (!response.ok) {
+      let errorDetail: string;
+      try {
+        const errorJson = await response.json();
+        errorDetail = errorJson.detail || errorJson.message || response.statusText;
+      } catch {
+        errorDetail = await response.text() || response.statusText;
+      }
+      throw { message: errorDetail, status: response.status };
+    }
+
+    return response.json();
+  }
 }
 
 export const apiClient = new ApiClient(API_BASE);

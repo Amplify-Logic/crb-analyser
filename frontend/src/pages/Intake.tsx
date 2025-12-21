@@ -270,7 +270,7 @@ interface QuestionFieldProps {
 }
 
 function QuestionField({ question, value, onChange }: QuestionFieldProps) {
-  const { type, id, required, placeholder, options, scale_min, scale_max, scale_labels } = question
+  const { type, required, placeholder, options, scale_min, scale_max, scale_labels } = question
 
   return (
     <div>

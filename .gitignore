@@ -37,3 +37,7 @@ htmlcov/
 # Misc
 *.bak
 *.tmp
+*.env.production
+*.env.staging
+.env.production
+.env.staging

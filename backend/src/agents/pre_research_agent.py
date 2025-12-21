@@ -301,6 +301,17 @@ For each field, also note your confidence level (high/medium/low) and source."""
                 source=source,
             )
 
+        def ensure_list(value: Any) -> list:
+            """Ensure value is a list - handles LLM returning strings instead of arrays."""
+            if value is None:
+                return []
+            if isinstance(value, list):
+                return value
+            if isinstance(value, str):
+                # LLM returned a string instead of array - return empty
+                return []
+            return []
+
         # Extract from various data shapes
         basics_data = data.get("basics", {})
         size_data = data.get("size", {})
@@ -341,25 +352,25 @@ For each field, also note your confidence level (high/medium/low) and source."""
             ) if industry_data else None,
 
             products=ProductsServices(
-                main_products=[make_field(p) for p in products_data.get("main_products", [])] if products_data.get("main_products") else None,
-                services=[make_field(s) for s in products_data.get("services", [])] if products_data.get("services") else None,
+                main_products=[make_field(p) for p in ensure_list(products_data.get("main_products"))] or None,
+                services=[make_field(s) for s in ensure_list(products_data.get("services"))] or None,
                 pricing_model=make_field(products_data.get("pricing_model")) if products_data.get("pricing_model") else None,
                 key_features=products_data.get("key_features"),
             ) if products_data else None,
 
             tech_stack=TechStack(
-                technologies_detected=[make_field(t) for t in tech_data.get("technologies", [])] if tech_data.get("technologies") else None,
-                platforms_used=[make_field(p) for p in tech_data.get("platforms", [])] if tech_data.get("platforms") else None,
+                technologies_detected=[make_field(t) for t in ensure_list(tech_data.get("technologies"))] or None,
+                platforms_used=[make_field(p) for p in ensure_list(tech_data.get("platforms"))] or None,
             ) if tech_data else None,
 
             team=TeamLeadership(
-                founders=[make_field(f) for f in team_data.get("founders", [])] if team_data.get("founders") else None,
-                key_executives=[make_field(e) for e in team_data.get("executives", [])] if team_data.get("executives") else None,
+                founders=[make_field(f) for f in ensure_list(team_data.get("founders"))] or None,
+                key_executives=[make_field(e) for e in ensure_list(team_data.get("executives"))] or None,
                 hiring_roles=team_data.get("hiring_roles"),
             ) if team_data else None,
 
             activity=RecentActivity(
-                recent_news=[make_field(n) for n in activity_data.get("recent_news", [])] if activity_data.get("recent_news") else None,
+                recent_news=[make_field(n) for n in ensure_list(activity_data.get("recent_news"))] or None,
                 social_presence=activity_data.get("social_presence"),
             ) if activity_data else None,
         )

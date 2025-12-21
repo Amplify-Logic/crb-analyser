@@ -1,0 +1,38 @@
+{
+  "audit_id": "test-audit-001",
+  "timestamp": "2025-12-20T15:17:41.175251",
+  "industry": "marketing-agencies",
+  "company_size": "11-50",
+  "pain_points_found": [
+    "Manual client reporting",
+    "Data entry from multiple platforms"
+  ],
+  "processes_analyzed": [],
+  "recommendations_made": [
+    {
+      "title": "Automated reporting dashboard",
+      "type": "efficiency",
+      "priority": "high",
+      "vendors": [],
+      "roi": {}
+    }
+  ],
+  "vendors_recommended": [],
+  "ai_readiness_score": 55,
+  "total_potential_savings": 25000.0,
+  "findings_count": 2,
+  "tools_used": {
+    "analyze_findings": 1,
+    "generate_summary": 1
+  },
+  "token_usage": {
+    "input_tokens": 1000,
+    "output_tokens": 500
+  },
+  "phases_completed": [
+    "discovery",
+    "analysis",
+    "summary"
+  ],
+  "errors_encountered": []
+}

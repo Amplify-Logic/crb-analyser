@@ -16,6 +16,7 @@ import anthropic
 
 from src.config.supabase_client import get_async_supabase
 from src.config.settings import settings
+from src.config.system_prompt import get_interview_system_prompt, FOUNDATIONAL_LOGIC
 from src.services.transcription_service import transcription_service
 
 logger = logging.getLogger(__name__)
@@ -201,7 +202,14 @@ async def generate_ai_response(
     all_topic_names = [t["name"] for t in INTERVIEW_TOPICS if t["id"] != "deep_dive"]
     uncovered = [t for t in all_topic_names if t not in topics_covered]
 
-    system_prompt = f"""You are conducting a business discovery interview to understand a company's AI implementation opportunities.
+    # Use the centralized interview system prompt with session-specific context
+    interview_base = get_interview_system_prompt()
+
+    system_prompt = f"""{interview_base}
+
+═══════════════════════════════════════════════════════════════════════════════
+CURRENT SESSION CONTEXT
+═══════════════════════════════════════════════════════════════════════════════
 
 {company_info}
 
@@ -209,7 +217,10 @@ Topics already covered: {', '.join(topics_covered)}
 Topics still to explore: {', '.join(uncovered) if uncovered else 'All main topics covered'}
 Questions asked so far: {question_count}
 
-Your job:
+═══════════════════════════════════════════════════════════════════════════════
+RESPONSE GUIDELINES
+═══════════════════════════════════════════════════════════════════════════════
+
 1. Acknowledge what they shared (1-2 sentences, be specific to what they said)
 2. Ask a follow-up OR transition to a new topic naturally
 3. Keep responses conversational and warm, not robotic
@@ -220,7 +231,8 @@ Important:
 - Be genuinely curious, not just checking boxes
 - If they mention something interesting, dig deeper before moving on
 - Use their words back to them to show you're listening
-- Keep responses under 100 words total"""
+- Keep responses under 100 words total
+- Do NOT make recommendations during the interview - just gather information"""
 
     try:
         client = anthropic.Anthropic(api_key=settings.ANTHROPIC_API_KEY)
@@ -421,4 +433,46 @@ async def transcribe_interview_audio(
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail="Failed to transcribe audio"
+        )
+
+
+class TTSRequest(BaseModel):
+    text: str
+    voice: str = "aura-asteria-en"
+
+
+@router.post("/tts")
+async def text_to_speech(request: TTSRequest):
+    """
+    Convert text to speech using Deepgram TTS.
+    Returns audio as base64-encoded data.
+    """
+    import base64
+
+    try:
+        audio_data = await transcription_service.text_to_speech(
+            request.text,
+            request.voice
+        )
+
+        # Return as base64 for easy frontend consumption
+        audio_base64 = base64.b64encode(audio_data).decode('utf-8')
+
+        return {
+            "audio": audio_base64,
+            "format": "mp3",
+            "text": request.text,
+        }
+
+    except ValueError as e:
+        logger.error(f"TTS config error: {e}")
+        raise HTTPException(
+            status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
+            detail="TTS service not configured"
+        )
+    except Exception as e:
+        logger.error(f"TTS error: {e}")
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail="Failed to generate speech"
         )

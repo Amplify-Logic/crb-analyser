@@ -1,0 +1,109 @@
+{
+  "industry": "marketing-agencies",
+  "last_updated": "2025-12-20T15:18:16.202580",
+  "total_analyses": 5,
+  "confidence": "medium",
+  "pain_points": {
+    "Manual client reporting": {
+      "name": "Manual client reporting",
+      "frequency": 5,
+      "avg_impact": "medium",
+      "typical_causes": [],
+      "effective_solutions": [],
+      "last_seen": "2025-12-20T15:18:16.202564"
+    },
+    "Data entry from multiple platforms": {
+      "name": "Data entry from multiple platforms",
+      "frequency": 1,
+      "avg_impact": "medium",
+      "typical_causes": [],
+      "effective_solutions": [],
+      "last_seen": "2025-12-20T15:17:41.176291"
+    },
+    "Social media scheduling chaos": {
+      "name": "Social media scheduling chaos",
+      "frequency": 1,
+      "avg_impact": "medium",
+      "typical_causes": [],
+      "effective_solutions": [],
+      "last_seen": "2025-12-20T15:18:13.730059"
+    },
+    "Campaign analytics fragmented": {
+      "name": "Campaign analytics fragmented",
+      "frequency": 1,
+      "avg_impact": "medium",
+      "typical_causes": [],
+      "effective_solutions": [],
+      "last_seen": "2025-12-20T15:18:14.608972"
+    },
+    "Invoice generation delays": {
+      "name": "Invoice generation delays",
+      "frequency": 1,
+      "avg_impact": "medium",
+      "typical_causes": [],
+      "effective_solutions": [],
+      "last_seen": "2025-12-20T15:18:14.608976"
+    },
+    "Content creation bottleneck": {
+      "name": "Content creation bottleneck",
+      "frequency": 1,
+      "avg_impact": "medium",
+      "typical_causes": [],
+      "effective_solutions": [],
+      "last_seen": "2025-12-20T15:18:15.336173"
+    },
+    "Proposal creation too slow": {
+      "name": "Proposal creation too slow",
+      "frequency": 1,
+      "avg_impact": "medium",
+      "typical_causes": [],
+      "effective_solutions": [],
+      "last_seen": "2025-12-20T15:18:16.202570"
+    }
+  },
+  "processes": {},
+  "effective_patterns": [
+    {
+      "pattern": "For 11-50 marketing-agencies companies",
+      "recommendation": "Automated reporting dashboard",
+      "frequency": 1,
+      "context": {
+        "company_size": "11-50",
+        "ai_readiness": 55
+      }
+    }
+  ],
+  "anti_patterns": [],
+  "size_specific": {
+    "11-50": {
+      "count": 3,
+      "avg_readiness": 55.666666666666664,
+      "common_pain_points": [
+        "Manual client reporting",
+        "Data entry from multiple platforms",
+        "Campaign analytics fragmented",
+        "Invoice generation delays",
+        "Proposal creation too slow"
+      ]
+    },
+    "1-10": {
+      "count": 1,
+      "avg_readiness": 45.0,
+      "common_pain_points": [
+        "Manual client reporting",
+        "Social media scheduling chaos"
+      ]
+    },
+    "51-200": {
+      "count": 1,
+      "avg_readiness": 70.0,
+      "common_pain_points": [
+        "Manual client reporting",
+        "Content creation bottleneck"
+      ]
+    }
+  },
+  "avg_ai_readiness": 56.4,
+  "avg_potential_savings": 29000.0,
+  "common_tech_stacks": []
+}

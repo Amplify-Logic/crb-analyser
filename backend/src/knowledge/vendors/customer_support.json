@@ -1,0 +1,1138 @@
+{
+  "category": "customer_support",
+  "description": "Customer support and helpdesk platforms for managing customer communications, tickets, and support workflows",
+  "vendors": [
+    {
+      "slug": "intercom",
+      "name": "Intercom",
+      "category": "customer_support",
+      "subcategory": "ai_first_messaging",
+      "website": "https://www.intercom.com",
+      "pricing_url": "https://www.intercom.com/pricing",
+      "description": "AI-first customer messaging platform combining live chat, chatbots, help desk, and proactive support. Known for Fin AI Agent that resolves up to 66% of customer queries automatically. Trusted by 6,000+ customer service teams including Anthropic.",
+      "tagline": "AI-powered customer service platform with industry-leading automation",
+      "pricing": {
+        "model": "per_seat",
+        "currency": "USD",
+        "billing_options": ["monthly", "annual"],
+        "annual_discount_percent": null,
+        "tiers": [
+          {
+            "name": "Essential",
+            "price": 29,
+            "per": "seat/month",
+            "billing": "annual",
+            "features": [
+              "Fin AI Agent ($0.99/resolution)",
+              "Fin AI Copilot",
+              "Shared inbox",
+              "Live chat & messenger",
+              "Help center",
+              "Ticketing system",
+              "Basic automation",
+              "Email support"
+            ],
+            "limits": {
+              "users": "unlimited",
+              "conversations": "unlimited"
+            }
+          },
+          {
+            "name": "Advanced",
+            "price": 85,
+            "per": "seat/month",
+            "billing": "annual",
+            "features": [
+              "All Essential features",
+              "Advanced automation & workflows",
+              "Custom reports & analytics",
+              "Team performance insights",
+              "Multiple workspaces",
+              "SLA management",
+              "Advanced integrations",
+              "Priority support"
+            ],
+            "limits": {
+              "users": "unlimited",
+              "conversations": "unlimited"
+            }
+          },
+          {
+            "name": "Expert",
+            "price": 132,
+            "per": "seat/month",
+            "billing": "annual",
+            "features": [
+              "All Advanced features",
+              "Multi-brand support",
+              "Advanced security controls",
+              "Enterprise workload management",
+              "Custom roles & permissions",
+              "HIPAA compliance",
+              "99.99% uptime SLA",
+              "Dedicated account manager",
+              "50 free Lite seats"
+            ],
+            "limits": {
+              "users": "unlimited",
+              "conversations": "unlimited"
+            }
+          }
+        ],
+        "starting_price": 29,
+        "custom_pricing": false,
+        "free_trial_days": 14,
+        "free_tier": false,
+        "startup_discount": "90% off for startups under 2 years old, raised <$1M, not currently using Intercom (Early Stage program)"
+      },
+      "best_for": [
+        "Startups and scale-ups wanting AI-first support",
+        "Product-led growth companies",
+        "SaaS businesses with in-app messaging needs",
+        "Teams prioritizing automation and self-service",
+        "Companies wanting proactive customer engagement"
+      ],
+      "industries": [
+        "SaaS",
+        "E-commerce",
+        "Fintech",
+        "Technology",
+        "Healthcare"
+      ],
+      "company_sizes": [
+        "startup",
+        "smb",
+        "mid_market",
+        "enterprise"
+      ],
+      "avoid_if": [
+        "Need traditional phone support as primary channel",
+        "Require offline/on-premise deployment",
+        "Limited budget for AI features (pay-per-resolution adds up)",
+        "Need deep CRM capabilities beyond support"
+      ],
+      "implementation": {
+        "avg_weeks": 2,
+        "complexity": "low",
+        "requires_developer": false,
+        "cost_range": {
+          "diy": {
+            "min": 0,
+            "max": 500
+          },
+          "with_help": {
+            "min": 500,
+            "max": 2000
+          },
+          "full_service": {
+            "min": 2000,
+            "max": 10000
+          }
+        }
+      },
+      "ratings": {
+        "g2": {
+          "score": 4.4,
+          "reviews": 2900,
+          "last_updated": "2025-12"
+        },
+        "capterra": {
+          "score": 4.5,
+          "reviews": 1000,
+          "last_updated": "2025-12"
+        },
+        "our_rating": 4.5,
+        "our_notes": "Best-in-class AI automation with Fin. Expensive at scale but worth it for high-volume support teams. Startup discount makes it accessible for early-stage companies."
+      },
+      "integrations": [
+        "Salesforce",
+        "HubSpot",
+        "Slack",
+        "Jira",
+        "Stripe",
+        "Segment",
+        "Zapier",
+        "API available"
+      ],
+      "api": {
+        "available": true,
+        "type": "REST",
+        "documentation": "https://developers.intercom.com"
+      },
+      "competitors": [
+        "Zendesk",
+        "Freshdesk",
+        "Help Scout",
+        "Drift",
+        "LivePerson"
+      ],
+      "verified_at": "2025-12-17T00:00:00Z",
+      "verified_by": "manual",
+      "source_url": "https://www.intercom.com/pricing",
+      "notes": "Pricing includes base platform + pay-per-resolution for Fin AI Agent. SMS/WhatsApp/Phone are usage-based add-ons. Proactive Support Plus adds $99/month. AI Copilot is $29/agent/month for unlimited usage."
+    },
+    {
+      "slug": "zendesk",
+      "name": "Zendesk",
+      "category": "customer_support",
+      "subcategory": "enterprise_helpdesk",
+      "website": "https://www.zendesk.com",
+      "pricing_url": "https://www.zendesk.com/pricing",
+      "description": "Enterprise-grade customer support platform with omnichannel capabilities. Industry leader for high-volume support operations with robust ticketing, automation, and analytics. Supports email, chat, phone, social, and messaging channels from a unified workspace.",
+      "tagline": "Complete customer service solution for teams of all sizes",
+      "pricing": {
+        "model": "per_seat",
+        "currency": "USD",
+        "billing_options": ["monthly", "annual"],
+        "annual_discount_percent": 20,
+        "tiers": [
+          {
+            "name": "Support Team",
+            "price": 19,
+            "per": "seat/month",
+            "billing": "annual",
+            "features": [
+              "Email-based support",
+              "Ticketing system",
+              "Pre-defined ticket views",
+              "Mobile app",
+              "Web widget",
+              "Basic reporting",
+              "Community forums",
+              "Email support"
+            ],
+            "limits": {
+              "agents": "unlimited",
+              "light_agents": 0
+            }
+          },
+          {
+            "name": "Suite Team",
+            "price": 55,
+            "per": "seat/month",
+            "billing": "annual",
+            "features": [
+              "All Support Team features",
+              "Messaging (WhatsApp, SMS, social)",
+              "Live chat",
+              "Help center",
+              "AI-powered answers",
+              "Pre-built analytics dashboards",
+              "50+ integrations",
+              "24/7 support"
+            ],
+            "limits": {
+              "agents": "unlimited",
+              "light_agents": 0
+            }
+          },
+          {
+            "name": "Suite Growth",
+            "price": 89,
+            "per": "seat/month",
+            "billing": "annual",
+            "features": [
+              "All Suite Team features",
+              "SLA management",
+              "Multilingual support",
+              "Light agents",
+              "Custom ticket fields",
+              "Business rules automation",
+              "Advanced analytics",
+              "Side conversations"
+            ],
+            "limits": {
+              "agents": "unlimited",
+              "light_agents": "unlimited"
+            }
+          },
+          {
+            "name": "Suite Professional",
+            "price": 115,
+            "per": "seat/month",
+            "billing": "annual",
+            "features": [
+              "All Suite Growth features",
+              "Custom agent roles",
+              "Contextual workspaces",
+              "Skills-based routing",
+              "Integrated community forums",
+              "Satisfaction prediction",
+              "Talk Partner Edition (voice)",
+              "Advanced AI features"
+            ],
+            "limits": {
+              "agents": "unlimited",
+              "light_agents": "unlimited"
+            }
+          },
+          {
+            "name": "Suite Enterprise",
+            "price": 169,
+            "per": "seat/month",
+            "billing": "annual",
+            "features": [
+              "All Suite Professional features",
+              "HIPAA compliance",
+              "Data encryption",
+              "Disaster recovery",
+              "Audit logs",
+              "Advanced role management",
+              "Sandbox environment",
+              "Custom integrations",
+              "Dedicated account manager"
+            ],
+            "limits": {
+              "agents": "unlimited",
+              "light_agents": "unlimited"
+            }
+          },
+          {
+            "name": "Suite Enterprise Plus",
+            "price": null,
+            "per": "seat/month",
+            "billing": "annual",
+            "features": [
+              "All Suite Enterprise features",
+              "Advanced data residency",
+              "Custom success planning",
+              "Premium onboarding",
+              "Technical account manager",
+              "99.9% uptime SLA"
+            ],
+            "limits": null
+          }
+        ],
+        "starting_price": 19,
+        "custom_pricing": true,
+        "free_trial_days": 14,
+        "free_tier": false,
+        "startup_discount": "6 months free via Zendesk for Startups program (qualification required)"
+      },
+      "best_for": [
+        "Enterprise teams with high ticket volumes",
+        "Multi-channel support operations",
+        "Companies needing HIPAA/compliance features",
+        "Organizations with complex routing needs",
+        "Businesses wanting deep analytics and reporting"
+      ],
+      "industries": [
+        "Enterprise SaaS",
+        "E-commerce",
+        "Financial Services",
+        "Healthcare",
+        "Telecommunications",
+        "Technology"
+      ],
+      "company_sizes": [
+        "smb",
+        "mid_market",
+        "enterprise"
+      ],
+      "avoid_if": [
+        "Small team with simple support needs (overkill)",
+        "Limited budget (gets expensive fast)",
+        "Need out-of-box simplicity (steep learning curve)",
+        "Want AI-first approach (AI features lag competitors)"
+      ],
+      "implementation": {
+        "avg_weeks": 4,
+        "complexity": "medium",
+        "requires_developer": false,
+        "cost_range": {
+          "diy": {
+            "min": 500,
+            "max": 2000
+          },
+          "with_help": {
+            "min": 2000,
+            "max": 10000
+          },
+          "full_service": {
+            "min": 10000,
+            "max": 50000
+          }
+        }
+      },
+      "ratings": {
+        "g2": {
+          "score": 4.3,
+          "reviews": 5900,
+          "last_updated": "2025-12"
+        },
+        "capterra": {
+          "score": 4.4,
+          "reviews": 3400,
+          "last_updated": "2025-12"
+        },
+        "trustpilot": {
+          "score": 2.4,
+          "reviews": 550,
+          "last_updated": "2025-12"
+        },
+        "our_rating": 4.0,
+        "our_notes": "Industry standard for enterprise support. Robust but complex. Pricing model can get expensive. Strong for compliance-heavy industries. AI features improving but behind competitors like Intercom."
+      },
+      "integrations": [
+        "Salesforce",
+        "Jira",
+        "Slack",
+        "Microsoft Teams",
+        "Shopify",
+        "Magento",
+        "1000+ apps via marketplace",
+        "API available"
+      ],
+      "api": {
+        "available": true,
+        "type": "REST",
+        "documentation": "https://developer.zendesk.com"
+      },
+      "competitors": [
+        "Intercom",
+        "Freshdesk",
+        "Salesforce Service Cloud",
+        "HubSpot Service Hub",
+        "Kustomer"
+      ],
+      "verified_at": "2025-12-17T00:00:00Z",
+      "verified_by": "manual",
+      "source_url": "https://www.zendesk.com/pricing",
+      "notes": "Add-ons: Quality Assurance ($35/agent/month), Workforce Engagement Bundle ($50/agent/month). Monthly billing ~30% more expensive. Enterprise Plus requires custom quote (estimated $249+/seat)."
+    },
+    {
+      "slug": "freshdesk",
+      "name": "Freshdesk",
+      "category": "customer_support",
+      "subcategory": "smb_helpdesk",
+      "website": "https://www.freshworks.com/freshdesk",
+      "pricing_url": "https://www.freshworks.com/freshdesk/pricing",
+      "description": "SMB-friendly helpdesk software with intuitive interface and affordable pricing. Offers ticketing, automation, knowledge base, and AI features at competitive price points. Part of the Freshworks suite for comprehensive business software.",
+      "tagline": "Delight customers with effortless support",
+      "pricing": {
+        "model": "per_seat",
+        "currency": "USD",
+        "billing_options": ["monthly", "annual"],
+        "annual_discount_percent": 17,
+        "tiers": [
+          {
+            "name": "Free",
+            "price": 0,
+            "per": "seat/month",
+            "billing": "monthly",
+            "features": [
+              "Up to 10 agents",
+              "Email ticketing",
+              "Social ticketing",
+              "Knowledge base",
+              "Out-of-box analytics",
+              "Team collaboration",
+              "Mobile apps",
+              "Valid for 6 months"
+            ],
+            "limits": {
+              "agents": 10,
+              "duration_months": 6
+            }
+          },
+          {
+            "name": "Growth",
+            "price": 15,
+            "per": "seat/month",
+            "billing": "annual",
+            "features": [
+              "All Free features",
+              "Unlimited agents",
+              "Ticket dispatch automation",
+              "Knowledge base with SEO",
+              "SLA management",
+              "Custom email servers",
+              "Business hours",
+              "Email/phone/chat support"
+            ],
+            "limits": {
+              "agents": "unlimited"
+            }
+          },
+          {
+            "name": "Pro",
+            "price": 49,
+            "per": "seat/month",
+            "billing": "annual",
+            "features": [
+              "All Growth features",
+              "Multiple products support",
+              "Custom objects",
+              "Round-robin routing",
+              "Time tracking",
+              "Custom reports",
+              "CSAT surveys",
+              "Role-based access"
+            ],
+            "limits": {
+              "agents": "unlimited"
+            }
+          },
+          {
+            "name": "Enterprise",
+            "price": 83,
+            "per": "seat/month",
+            "billing": "annual",
+            "features": [
+              "All Pro features",
+              "Freddy AI automation",
+              "Skills-based routing",
+              "Service level dependencies",
+              "IP whitelisting",
+              "Audit logs",
+              "Sandbox",
+              "Custom apps",
+              "Email bot detection"
+            ],
+            "limits": {
+              "agents": "unlimited"
+            }
+          }
+        ],
+        "starting_price": 0,
+        "custom_pricing": false,
+        "free_trial_days": 14,
+        "free_tier": true,
+        "startup_discount": null
+      },
+      "best_for": [
+        "Small to medium businesses",
+        "Startups testing helpdesk software",
+        "Teams wanting quick setup and ease of use",
+        "Budget-conscious organizations",
+        "Companies wanting unified Freshworks ecosystem"
+      ],
+      "industries": [
+        "E-commerce",
+        "SMB SaaS",
+        "Retail",
+        "Education",
+        "Professional Services"
+      ],
+      "company_sizes": [
+        "startup",
+        "smb",
+        "mid_market"
+      ],
+      "avoid_if": [
+        "Need enterprise-grade compliance features on lower tiers",
+        "Want advanced AI without paying for top tier",
+        "Require deep customization (limited on lower plans)",
+        "Need phone support as primary channel"
+      ],
+      "implementation": {
+        "avg_weeks": 1,
+        "complexity": "low",
+        "requires_developer": false,
+        "cost_range": {
+          "diy": {
+            "min": 0,
+            "max": 500
+          },
+          "with_help": {
+            "min": 500,
+            "max": 2000
+          },
+          "full_service": {
+            "min": 2000,
+            "max": 5000
+          }
+        }
+      },
+      "ratings": {
+        "g2": {
+          "score": 4.4,
+          "reviews": 3500,
+          "last_updated": "2025-12"
+        },
+        "capterra": {
+          "score": 4.5,
+          "reviews": 3300,
+          "last_updated": "2025-12"
+        },
+        "our_rating": 4.3,
+        "our_notes": "Best value for SMBs. Intuitive interface with minimal learning curve. Free tier is generous for testing. Advanced features require expensive Enterprise plan. Great balance of features and affordability."
+      },
+      "integrations": [
+        "Slack",
+        "Microsoft Teams",
+        "Salesforce",
+        "Shopify",
+        "Zapier",
+        "Google Workspace",
+        "Freshworks suite",
+        "API available"
+      ],
+      "api": {
+        "available": true,
+        "type": "REST",
+        "documentation": "https://developers.freshdesk.com"
+      },
+      "competitors": [
+        "Zendesk",
+        "Help Scout",
+        "Zoho Desk",
+        "HubSpot Service Hub",
+        "Kayako"
+      ],
+      "verified_at": "2025-12-17T00:00:00Z",
+      "verified_by": "manual",
+      "source_url": "https://www.freshworks.com/freshdesk/pricing",
+      "notes": "Free plan limited to 6 months with up to 10 agents. Freddy AI add-on available for automation. Monthly billing ~17% higher than annual. No cancellation fees - pay-as-you-go model."
+    },
+    {
+      "slug": "help-scout",
+      "name": "Help Scout",
+      "category": "customer_support",
+      "subcategory": "email_first_support",
+      "website": "https://www.helpscout.com",
+      "pricing_url": "https://www.helpscout.com/pricing",
+      "description": "Email-first customer support platform designed for human, conversational support. Features shared inbox, knowledge base, live chat, and AI-powered automation. Focused on making support feel personal rather than ticket-number driven. Excellent for teams prioritizing customer experience quality.",
+      "tagline": "Customer support software that helps you help your customers",
+      "pricing": {
+        "model": "tiered",
+        "currency": "USD",
+        "billing_options": ["monthly", "annual"],
+        "annual_discount_percent": 9,
+        "tiers": [
+          {
+            "name": "Free",
+            "price": 0,
+            "per": "month",
+            "billing": "monthly",
+            "features": [
+              "Up to 5 users",
+              "Up to 50 contacts/month",
+              "1 Inbox",
+              "1 Docs site",
+              "Shared inbox",
+              "Docs knowledge base",
+              "AI-powered help widget",
+              "Unlimited users"
+            ],
+            "limits": {
+              "users": 5,
+              "contacts": 50,
+              "inboxes": 1,
+              "docs_sites": 1
+            }
+          },
+          {
+            "name": "Standard",
+            "price": 50,
+            "per": "month (100 contacts)",
+            "billing": "annual",
+            "features": [
+              "All Free features",
+              "Unlimited contacts",
+              "2 Mailboxes",
+              "1 Docs site",
+              "Email support",
+              "Live chat",
+              "In-app messaging (free up to 2000 viewers)",
+              "Collision detection",
+              "Custom fields",
+              "iOS/Android apps"
+            ],
+            "limits": {
+              "starting_contacts": 100,
+              "mailboxes": 2,
+              "docs_sites": 1
+            }
+          },
+          {
+            "name": "Plus",
+            "price": 75,
+            "per": "month (100 contacts)",
+            "billing": "annual",
+            "features": [
+              "All Standard features",
+              "5 Mailboxes",
+              "2 Docs sites",
+              "Facebook Messenger",
+              "Advanced API access",
+              "Custom fields",
+              "Salesforce integration",
+              "Jira integration",
+              "HubSpot integration"
+            ],
+            "limits": {
+              "starting_contacts": 100,
+              "mailboxes": 5,
+              "docs_sites": 2
+            }
+          },
+          {
+            "name": "Pro",
+            "price": 65,
+            "per": "user/month",
+            "billing": "annual",
+            "features": [
+              "All Plus features",
+              "25 Mailboxes",
+              "10 Docs sites",
+              "Enterprise security",
+              "50 free light users",
+              "Concierge onboarding",
+              "Dedicated account manager",
+              "Advanced permissions",
+              "SAML SSO"
+            ],
+            "limits": {
+              "mailboxes": 25,
+              "docs_sites": 10,
+              "light_users": 50
+            }
+          }
+        ],
+        "starting_price": 0,
+        "custom_pricing": false,
+        "free_trial_days": 15,
+        "free_tier": true,
+        "startup_discount": "Startup plan available for early-stage companies (pricing on application)"
+      },
+      "best_for": [
+        "Teams prioritizing human, personal support",
+        "Email-centric support workflows",
+        "Small to medium support teams",
+        "Companies wanting simple, clean interface",
+        "Organizations valuing customer experience over ticket velocity"
+      ],
+      "industries": [
+        "SaaS",
+        "E-commerce",
+        "Education",
+        "Professional Services",
+        "Non-profits"
+      ],
+      "company_sizes": [
+        "startup",
+        "smb",
+        "mid_market"
+      ],
+      "avoid_if": [
+        "Need phone support as primary channel",
+        "Require complex multi-channel routing",
+        "Want deep reporting and analytics (limited capabilities)",
+        "Need advanced automation (basic compared to Zendesk/Intercom)",
+        "High-volume ticket operations (contact-based pricing gets expensive)"
+      ],
+      "implementation": {
+        "avg_weeks": 1,
+        "complexity": "low",
+        "requires_developer": false,
+        "cost_range": {
+          "diy": {
+            "min": 0,
+            "max": 500
+          },
+          "with_help": {
+            "min": 500,
+            "max": 2000
+          },
+          "full_service": {
+            "min": 2000,
+            "max": 5000
+          }
+        }
+      },
+      "ratings": {
+        "g2": {
+          "score": 4.4,
+          "reviews": 427,
+          "last_updated": "2025-12",
+          "ease_of_use": 9.2,
+          "quality_of_support": 9.1
+        },
+        "capterra": {
+          "score": 4.6,
+          "reviews": 400,
+          "last_updated": "2025-12",
+          "value_for_money": 4.4
+        },
+        "our_rating": 4.5,
+        "our_notes": "Top choice for teams wanting email-first, human support. Excellent UI/UX and ease of use (9.2/10 on G2). Limited reporting capabilities. Pricing scales with contacts, not just seats. 72% of reviewers mention positive value for money."
+      },
+      "integrations": [
+        "Salesforce",
+        "HubSpot",
+        "Jira",
+        "Slack",
+        "Zapier",
+        "Shopify",
+        "WordPress",
+        "Mailchimp",
+        "API available"
+      ],
+      "api": {
+        "available": true,
+        "type": "REST",
+        "documentation": "https://developer.helpscout.com"
+      },
+      "competitors": [
+        "Front",
+        "Zendesk",
+        "Freshdesk",
+        "Groove",
+        "Hiver"
+      ],
+      "verified_at": "2025-12-17T00:00:00Z",
+      "verified_by": "manual",
+      "source_url": "https://www.helpscout.com/pricing",
+      "notes": "Contact-based pricing scales with usage. Additional Inboxes: $10/month (annual) or $12/month (monthly). Additional Docs sites: $20/month (annual) or $24/month (monthly). 3 months of free AI Answers resolutions included with new accounts. Help Scout for Good program offers discounts for non-profits and B Corps."
+    },
+    {
+      "slug": "crisp",
+      "name": "Crisp",
+      "category": "customer_support",
+      "subcategory": "all_in_one_messaging",
+      "website": "https://crisp.chat",
+      "pricing_url": "https://crisp.chat/en/pricing",
+      "description": "All-in-one customer messaging platform combining live chat, chatbot, CRM, knowledge base, and team collaboration. Flat-rate pricing per workspace regardless of conversation volume. Strong omnichannel capabilities with email, chat, WhatsApp, Messenger, and more integrated into one platform.",
+      "tagline": "All-in-one business messaging platform",
+      "pricing": {
+        "model": "flat",
+        "currency": "EUR",
+        "billing_options": ["monthly", "annual"],
+        "annual_discount_percent": null,
+        "tiers": [
+          {
+            "name": "Free/Basic",
+            "price": 0,
+            "per": "workspace/month",
+            "billing": "monthly",
+            "features": [
+              "2 live chat agents",
+              "Live chat widget",
+              "Team inbox",
+              "Mobile apps",
+              "Push notifications",
+              "Basic conversations",
+              "Limited features"
+            ],
+            "limits": {
+              "agents": 2,
+              "profiles": null
+            }
+          },
+          {
+            "name": "Mini",
+            "price": 45,
+            "per": "workspace/month",
+            "billing": "monthly",
+            "features": [
+              "Up to 5000 user profiles",
+              "Email support",
+              "Shortcuts",
+              "Simple automations",
+              "Custom branding",
+              "Chat triggers",
+              "Visitor insights",
+              "Canned responses"
+            ],
+            "limits": {
+              "profiles": 5000,
+              "agents": "varies by plan"
+            }
+          },
+          {
+            "name": "Essentials",
+            "price": 95,
+            "per": "workspace/month",
+            "billing": "monthly",
+            "features": [
+              "All Mini features",
+              "Workflow automation",
+              "Analytics dashboard",
+              "AI features (50 uses/month)",
+              "Video calls",
+              "Screen sharing",
+              "Advanced routing",
+              "CSAT surveys"
+            ],
+            "limits": {
+              "ai_uses_monthly": 50
+            }
+          },
+          {
+            "name": "Plus",
+            "price": 295,
+            "per": "workspace/month",
+            "billing": "monthly",
+            "features": [
+              "All Essentials features",
+              "AI-powered omnichannel support",
+              "Unlimited AI usage",
+              "White-labeling",
+              "Customer portal",
+              "Advanced integrations",
+              "Priority support",
+              "Additional seats (€10/agent/month)"
+            ],
+            "limits": {
+              "ai_uses_monthly": "unlimited"
+            }
+          }
+        ],
+        "starting_price": 0,
+        "custom_pricing": false,
+        "free_trial_days": 14,
+        "free_tier": true,
+        "startup_discount": null
+      },
+      "best_for": [
+        "Small to medium businesses wanting all-in-one platform",
+        "Companies needing predictable flat-rate pricing",
+        "Teams managing multiple communication channels",
+        "Businesses wanting chat + CRM + knowledge base in one",
+        "European companies (EUR pricing)"
+      ],
+      "industries": [
+        "E-commerce",
+        "SaaS",
+        "Agencies",
+        "Startups",
+        "SMBs"
+      ],
+      "company_sizes": [
+        "startup",
+        "smb",
+        "mid_market"
+      ],
+      "avoid_if": [
+        "Need extensive AI automation (limited to 50 uses/month on Essentials)",
+        "Require advanced reporting and analytics",
+        "Need more than 5k profiles on lower tiers (pricing jumps)",
+        "Want enterprise-grade compliance features",
+        "Prefer usage-based or per-seat pricing"
+      ],
+      "implementation": {
+        "avg_weeks": 1,
+        "complexity": "low",
+        "requires_developer": false,
+        "cost_range": {
+          "diy": {
+            "min": 0,
+            "max": 500
+          },
+          "with_help": {
+            "min": 500,
+            "max": 1500
+          },
+          "full_service": {
+            "min": 1500,
+            "max": 3000
+          }
+        }
+      },
+      "ratings": {
+        "g2": {
+          "score": 4.5,
+          "reviews": 179,
+          "last_updated": "2025-12"
+        },
+        "capterra": {
+          "score": 4.6,
+          "reviews": 143,
+          "last_updated": "2025-12"
+        },
+        "our_rating": 4.2,
+        "our_notes": "Strong value for flat-rate pricing model. Good for small teams needing multiple channels. AI features heavily limited on lower tiers. Some UX issues with conversation history. Praised for customer support and ease of setup."
+      },
+      "integrations": [
+        "Slack",
+        "Discord",
+        "Facebook Messenger",
+        "WhatsApp",
+        "Telegram",
+        "Email",
+        "Zapier",
+        "Shopify",
+        "WordPress",
+        "API available"
+      ],
+      "api": {
+        "available": true,
+        "type": "REST",
+        "documentation": "https://docs.crisp.chat/api"
+      },
+      "competitors": [
+        "Intercom",
+        "Drift",
+        "Tidio",
+        "LiveChat",
+        "Tawk.to"
+      ],
+      "verified_at": "2025-12-17T00:00:00Z",
+      "verified_by": "manual",
+      "source_url": "https://crisp.chat/en/pricing",
+      "notes": "Flat rate per workspace means unlimited conversations. Pricing in EUR (~$1 = €0.95 in Dec 2025). Additional agents on Plus plan: €10/month each. 14-day free trial on all paid plans. Conversation history issues noted by users - old chats can interfere with new ones."
+    },
+    {
+      "slug": "ada",
+      "name": "Ada",
+      "category": "customer_support",
+      "subcategory": "ai_chatbot_specialist",
+      "website": "https://www.ada.cx",
+      "pricing_url": "https://www.ada.cx/pricing",
+      "description": "Enterprise-focused AI chatbot platform designed to automate up to 80% of customer inquiries. Uses generative AI and NLP for sophisticated customer interactions. Pay-per-resolved-conversation pricing model. Recently launched Voice AI for phone support automation. Best for large organizations with massive ticket volumes.",
+      "tagline": "AI customer service platform with simple, usage-based pricing",
+      "pricing": {
+        "model": "usage_based",
+        "currency": "USD",
+        "billing_options": ["annual"],
+        "annual_discount_percent": null,
+        "tiers": [
+          {
+            "name": "Generative",
+            "price": null,
+            "per": "resolved conversation",
+            "billing": "usage_based",
+            "features": [
+              "Generative AI responses",
+              "Knowledge base integration",
+              "No training required",
+              "Multi-channel support",
+              "Basic analytics",
+              "Email support",
+              "Pay per resolved conversation"
+            ],
+            "limits": null
+          },
+          {
+            "name": "Scripted",
+            "price": null,
+            "per": "resolved conversation",
+            "billing": "usage_based",
+            "features": [
+              "All Generative features",
+              "NLP-powered conversations",
+              "Drag-and-drop builder",
+              "Advanced customization",
+              "Workflow automation",
+              "Premium integrations",
+              "Advanced analytics",
+              "Priority support"
+            ],
+            "limits": null
+          },
+          {
+            "name": "Enterprise",
+            "price": null,
+            "per": "custom",
+            "billing": "annual",
+            "features": [
+              "All Scripted features",
+              "Voice AI (phone support)",
+              "Custom AI training",
+              "Dedicated account manager",
+              "Advanced security",
+              "SLA guarantees",
+              "Custom integrations",
+              "White-glove onboarding"
+            ],
+            "limits": null
+          }
+        ],
+        "starting_price": 60000,
+        "custom_pricing": true,
+        "free_trial_days": null,
+        "free_tier": false,
+        "startup_discount": null
+      },
+      "best_for": [
+        "Enterprise companies with high ticket volumes",
+        "Organizations wanting 70%+ automation rates",
+        "Businesses with substantial support budgets ($60k+/year)",
+        "Companies needing voice AI capabilities",
+        "Teams focused on deflection and containment metrics"
+      ],
+      "industries": [
+        "Enterprise SaaS",
+        "Financial Services",
+        "Telecommunications",
+        "E-commerce (large)",
+        "Healthcare",
+        "Insurance"
+      ],
+      "company_sizes": [
+        "enterprise"
+      ],
+      "avoid_if": [
+        "Small to medium business (too expensive)",
+        "Limited budget (starts at ~$60k/year or $5k/month)",
+        "Want self-serve trial (requires sales engagement)",
+        "Need transparent upfront pricing",
+        "Prefer per-seat or flat-rate pricing",
+        "Small support teams (<10 agents)"
+      ],
+      "implementation": {
+        "avg_weeks": 8,
+        "complexity": "high",
+        "requires_developer": true,
+        "cost_range": {
+          "diy": {
+            "min": 5000,
+            "max": 15000
+          },
+          "with_help": {
+            "min": 15000,
+            "max": 50000
+          },
+          "full_service": {
+            "min": 50000,
+            "max": 150000
+          }
+        }
+      },
+      "ratings": {
+        "g2": {
+          "score": 4.6,
+          "reviews": 200,
+          "last_updated": "2025-12",
+          "ease_of_use": 9.0,
+          "quality_of_support": 9.4,
+          "ease_of_setup": 8.7
+        },
+        "capterra": {
+          "score": 4.8,
+          "reviews": 50,
+          "last_updated": "2025-12"
+        },
+        "our_rating": 4.0,
+        "our_notes": "Powerful AI automation for enterprises but prohibitively expensive for SMBs. Users report 70%+ containment rates and improved response times. No free trial or transparent pricing is a major barrier. Best for organizations already spending $100k+/year on support."
+      },
+      "integrations": [
+        "Salesforce",
+        "Zendesk",
+        "Kustomer",
+        "Shopify",
+        "Slack",
+        "Microsoft Teams",
+        "Custom API integrations"
+      ],
+      "api": {
+        "available": true,
+        "type": "REST",
+        "documentation": "https://developers.ada.cx"
+      },
+      "competitors": [
+        "Intercom Fin",
+        "Zendesk AI",
+        "Forethought",
+        "Ultimate.ai",
+        "Yellow.ai"
+      ],
+      "verified_at": "2025-12-17T00:00:00Z",
+      "verified_by": "manual",
+      "source_url": "https://www.ada.cx/pricing",
+      "notes": "Estimated starting price ~$60,000/year or ~$5,000/month based on third-party sources. Actual pricing requires custom quote based on ticket volume and agent count. No free plan or trial. Voice AI launched in Spring 2025. Users report some AI limitations and integration issues despite high ratings."
+    }
+  ],
+  "last_updated": "2025-12-17T00:00:00Z"
+}

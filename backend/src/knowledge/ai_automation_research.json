@@ -1,0 +1,315 @@
+{
+  "meta": {
+    "last_updated": "2024-12-20",
+    "purpose": "Peer-reviewed and credible research on AI automation potential",
+    "usage": "All ROI estimates must cite sources from this file"
+  },
+
+  "productivity_studies": {
+    "github_copilot_2022": {
+      "source": "GitHub & Microsoft Research",
+      "title": "Research: quantifying GitHub Copilot's impact on developer productivity and happiness",
+      "date": "2022-09",
+      "url": "https://github.blog/2022-09-07-research-quantifying-github-copilots-impact-on-developer-productivity-and-happiness/",
+      "findings": {
+        "task_completion_speed": {
+          "value": 55,
+          "unit": "percent_faster",
+          "context": "Developers using Copilot completed tasks 55% faster than control group"
+        },
+        "success_rate": {
+          "with_copilot": 78,
+          "without_copilot": 70,
+          "unit": "percent"
+        }
+      },
+      "methodology": "Controlled experiment with 95 professional developers",
+      "credibility": "peer_reviewed"
+    },
+
+    "mckinsey_genai_2023": {
+      "source": "McKinsey Global Institute",
+      "title": "The economic potential of generative AI: The next productivity frontier",
+      "date": "2023-06",
+      "url": "https://www.mckinsey.com/capabilities/mckinsey-digital/our-insights/the-economic-potential-of-generative-ai-the-next-productivity-frontier",
+      "findings": {
+        "knowledge_work_automation": {
+          "value_range": [60, 70],
+          "unit": "percent_of_tasks_automatable",
+          "context": "60-70% of knowledge work activities could be automated with current gen AI"
+        },
+        "productivity_boost": {
+          "value_range": [0.1, 0.6],
+          "unit": "percent_annual_gdp_growth",
+          "context": "Could add 0.1-0.6% annually to productivity growth"
+        },
+        "value_creation": {
+          "value_range": [2.6, 4.4],
+          "unit": "trillion_usd_annually",
+          "context": "Potential economic value across analyzed use cases"
+        },
+        "by_function": {
+          "customer_operations": {
+            "automation_potential": 45,
+            "productivity_gain_range": [30, 45],
+            "unit": "percent"
+          },
+          "marketing_sales": {
+            "automation_potential": 40,
+            "productivity_gain_range": [5, 15],
+            "unit": "percent"
+          },
+          "software_engineering": {
+            "automation_potential": 35,
+            "productivity_gain_range": [20, 45],
+            "unit": "percent"
+          },
+          "rnd": {
+            "automation_potential": 25,
+            "productivity_gain_range": [10, 15],
+            "unit": "percent"
+          }
+        }
+      },
+      "methodology": "Analysis of 850 occupations and 2,100 work activities",
+      "credibility": "industry_research"
+    },
+
+    "stanford_hai_2024": {
+      "source": "Stanford Institute for Human-Centered AI",
+      "title": "AI Index Report 2024",
+      "date": "2024-04",
+      "url": "https://aiindex.stanford.edu/report/",
+      "findings": {
+        "worker_productivity_with_ai": {
+          "value": 14,
+          "unit": "percent_increase",
+          "context": "Average productivity increase across studies of AI tool adoption"
+        },
+        "quality_improvement": {
+          "value": 18,
+          "unit": "percent_increase",
+          "context": "Quality of work output improved with AI assistance"
+        },
+        "time_on_task_reduction": {
+          "value_range": [25, 40],
+          "unit": "percent",
+          "context": "Reduction in time spent on routine tasks"
+        }
+      },
+      "methodology": "Meta-analysis of peer-reviewed AI productivity studies",
+      "credibility": "academic"
+    },
+
+    "nber_customer_service_2023": {
+      "source": "National Bureau of Economic Research",
+      "title": "Generative AI at Work",
+      "date": "2023-04",
+      "url": "https://www.nber.org/papers/w31161",
+      "findings": {
+        "productivity_increase": {
+          "value": 14,
+          "unit": "percent",
+          "context": "Customer support agents with AI assistance"
+        },
+        "novice_worker_boost": {
+          "value": 35,
+          "unit": "percent",
+          "context": "Less experienced workers saw largest gains"
+        },
+        "resolution_time": {
+          "value": 9,
+          "unit": "percent_reduction",
+          "context": "Average time to resolve customer issues"
+        },
+        "customer_sentiment": {
+          "value": 15,
+          "unit": "percent_improvement",
+          "context": "Improvement in customer satisfaction scores"
+        }
+      },
+      "methodology": "Study of 5,000+ customer support agents at Fortune 500 company",
+      "credibility": "peer_reviewed"
+    },
+
+    "mit_writing_productivity_2023": {
+      "source": "MIT Sloan / Science journal",
+      "title": "Experimental Evidence on the Productivity Effects of Generative AI",
+      "date": "2023-07",
+      "url": "https://www.science.org/doi/10.1126/science.adh2586",
+      "findings": {
+        "time_reduction": {
+          "value": 40,
+          "unit": "percent",
+          "context": "Time to complete writing tasks"
+        },
+        "quality_improvement": {
+          "value": 18,
+          "unit": "percent",
+          "context": "Rated quality of output"
+        },
+        "inequality_reduction": {
+          "value": true,
+          "context": "AI compressed the productivity distribution - helped lower performers more"
+        }
+      },
+      "methodology": "Randomized controlled trial with 444 college-educated professionals",
+      "credibility": "peer_reviewed"
+    }
+  },
+
+  "automation_by_task_type": {
+    "source_note": "Aggregated from McKinsey 2023, Accenture 2024, and academic studies",
+    "tasks": {
+      "data_entry_extraction": {
+        "automation_potential_2024": 85,
+        "automation_potential_2026": 95,
+        "time_savings_percent": [70, 90],
+        "sources": ["mckinsey_genai_2023", "accenture_ai_2024"]
+      },
+      "document_processing": {
+        "automation_potential_2024": 75,
+        "automation_potential_2026": 90,
+        "time_savings_percent": [60, 80],
+        "sources": ["mckinsey_genai_2023"]
+      },
+      "customer_support_tier1": {
+        "automation_potential_2024": 70,
+        "automation_potential_2026": 85,
+        "time_savings_percent": [40, 60],
+        "sources": ["nber_customer_service_2023", "mckinsey_genai_2023"]
+      },
+      "content_creation_drafting": {
+        "automation_potential_2024": 65,
+        "automation_potential_2026": 80,
+        "time_savings_percent": [40, 60],
+        "sources": ["mit_writing_productivity_2023"]
+      },
+      "code_generation": {
+        "automation_potential_2024": 55,
+        "automation_potential_2026": 75,
+        "time_savings_percent": [30, 55],
+        "sources": ["github_copilot_2022"]
+      },
+      "reporting_dashboards": {
+        "automation_potential_2024": 70,
+        "automation_potential_2026": 90,
+        "time_savings_percent": [50, 80],
+        "sources": ["mckinsey_genai_2023"]
+      },
+      "email_communication": {
+        "automation_potential_2024": 50,
+        "automation_potential_2026": 70,
+        "time_savings_percent": [30, 50],
+        "sources": ["mit_writing_productivity_2023"]
+      },
+      "meeting_notes_actions": {
+        "automation_potential_2024": 80,
+        "automation_potential_2026": 95,
+        "time_savings_percent": [70, 90],
+        "sources": ["product_capabilities"]
+      },
+      "research_analysis": {
+        "automation_potential_2024": 45,
+        "automation_potential_2026": 65,
+        "time_savings_percent": [25, 45],
+        "sources": ["mckinsey_genai_2023"]
+      },
+      "strategic_decisions": {
+        "automation_potential_2024": 10,
+        "automation_potential_2026": 20,
+        "time_savings_percent": [5, 15],
+        "sources": ["mckinsey_genai_2023"],
+        "note": "AI assists but humans decide"
+      }
+    }
+  },
+
+  "2025_2026_trends": {
+    "source_note": "Based on current product releases and announced roadmaps",
+    "technical_bar_reduction": {
+      "observation": "Non-developers can build custom integrations",
+      "evidence": [
+        {
+          "platform": "Claude Code / Anthropic MCP",
+          "capability": "Natural language to working integrations",
+          "availability": "2024-present",
+          "source": "Anthropic product announcements"
+        },
+        {
+          "platform": "Cursor / AI-native IDEs",
+          "capability": "AI pair programming reduces coding barrier",
+          "availability": "2024-present",
+          "source": "Product capabilities"
+        },
+        {
+          "platform": "Make.com / Zapier AI",
+          "capability": "No-code automation with AI-generated workflows",
+          "availability": "2024-present",
+          "source": "Product capabilities"
+        }
+      ],
+      "implication": "Implementation costs and time-to-value dropping significantly"
+    },
+    "integration_ecosystem": {
+      "major_platforms_with_native_ai": [
+        "HubSpot (AI-powered CRM, content)",
+        "Slack (Slack AI, workflow builder)",
+        "Shopify (Shopify Magic, Sidekick)",
+        "Salesforce (Einstein GPT)",
+        "Microsoft 365 (Copilot)",
+        "Google Workspace (Gemini)",
+        "Notion (Notion AI)",
+        "Linear (AI features)",
+        "Intercom (Fin AI)"
+      ],
+      "api_accessibility": "Most major SaaS platforms now offer APIs that AI agents can interact with"
+    },
+    "cost_trajectory": {
+      "observation": "AI API costs declining rapidly",
+      "evidence": {
+        "gpt4_cost_reduction": "10x cheaper from 2023 to 2024",
+        "open_source_alternatives": "Llama, Mistral provide free alternatives for many use cases"
+      },
+      "implication": "ROI improves as implementation and running costs decrease"
+    }
+  },
+
+  "hourly_rates_by_region": {
+    "source": "Glassdoor, PayScale, Bureau of Labor Statistics 2024",
+    "rates_eur": {
+      "western_europe": {
+        "entry_level": 25,
+        "mid_level": 45,
+        "senior": 75,
+        "management": 100
+      },
+      "eastern_europe": {
+        "entry_level": 12,
+        "mid_level": 25,
+        "senior": 45,
+        "management": 65
+      },
+      "north_america": {
+        "entry_level": 30,
+        "mid_level": 55,
+        "senior": 90,
+        "management": 120
+      }
+    }
+  },
+
+  "roi_calculation_methodology": {
+    "formula": {
+      "annual_savings": "hours_on_task × automation_rate × hourly_rate × employees × 52",
+      "implementation_cost": "varies by approach (DIY/SaaS/Custom)",
+      "roi_percent": "((annual_savings - annual_cost) / implementation_cost) × 100",
+      "payback_months": "implementation_cost / monthly_savings"
+    },
+    "conservative_assumptions": {
+      "adoption_rate": 0.7,
+      "note": "Not all employees adopt immediately, assume 70% utilization"
+    },
+    "transparency_requirement": "All estimates must show assumptions and source references"
+  }
+}
