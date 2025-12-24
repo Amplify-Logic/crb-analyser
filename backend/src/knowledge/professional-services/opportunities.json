@@ -1,0 +1,237 @@
+{
+  "industry": "professional-services",
+  "opportunities": [
+    {
+      "id": "ai-time-capture",
+      "name": "AI-Powered Time Capture",
+      "category": "billing",
+      "description": "Automatically capture billable time from calendar, email, and document activity",
+      "typical_roi": {
+        "time_saved_hours_weekly": 5,
+        "revenue_increase_percentage": 15,
+        "payback_months": 2
+      },
+      "implementation_complexity": "medium",
+      "vendor_category": "time_billing",
+      "quick_win": true,
+      "two_pillars": {
+        "customer_value": 6,
+        "business_health": 9
+      }
+    },
+    {
+      "id": "document-drafting-ai",
+      "name": "AI Document Drafting & Templates",
+      "category": "productivity",
+      "description": "Use AI to draft first versions of contracts, letters, and documents from templates",
+      "typical_roi": {
+        "time_saved_hours_weekly": 8,
+        "cost_reduction_percentage": 25,
+        "payback_months": 3
+      },
+      "implementation_complexity": "medium",
+      "vendor_category": "document_automation",
+      "quick_win": true,
+      "two_pillars": {
+        "customer_value": 7,
+        "business_health": 8
+      }
+    },
+    {
+      "id": "contract-review-ai",
+      "name": "AI Contract Review & Analysis",
+      "category": "productivity",
+      "description": "AI-powered review of contracts to identify risks, missing clauses, and deviations",
+      "typical_roi": {
+        "time_saved_hours_weekly": 10,
+        "error_reduction_percentage": 40,
+        "payback_months": 4
+      },
+      "implementation_complexity": "high",
+      "vendor_category": "contract_intelligence",
+      "quick_win": false,
+      "two_pillars": {
+        "customer_value": 8,
+        "business_health": 8
+      }
+    },
+    {
+      "id": "client-intake-automation",
+      "name": "Automated Client Intake & Onboarding",
+      "category": "client_experience",
+      "description": "Digital intake forms, automated conflict checks, e-signatures for engagement letters",
+      "typical_roi": {
+        "time_saved_hours_weekly": 4,
+        "conversion_increase_percentage": 20,
+        "payback_months": 2
+      },
+      "implementation_complexity": "low",
+      "vendor_category": "practice_management",
+      "quick_win": true,
+      "two_pillars": {
+        "customer_value": 8,
+        "business_health": 7
+      }
+    },
+    {
+      "id": "ai-legal-research",
+      "name": "AI-Powered Legal/Regulatory Research",
+      "category": "productivity",
+      "description": "AI tools for faster legal research, case law analysis, and regulatory tracking",
+      "typical_roi": {
+        "time_saved_hours_weekly": 6,
+        "quality_improvement_percentage": 30,
+        "payback_months": 3
+      },
+      "implementation_complexity": "medium",
+      "vendor_category": "research_tools",
+      "quick_win": false,
+      "two_pillars": {
+        "customer_value": 7,
+        "business_health": 7
+      }
+    },
+    {
+      "id": "client-portal",
+      "name": "Client Portal & Self-Service",
+      "category": "client_experience",
+      "description": "Secure portal for document sharing, status updates, and billing transparency",
+      "typical_roi": {
+        "time_saved_hours_weekly": 3,
+        "client_satisfaction_increase": 25,
+        "payback_months": 4
+      },
+      "implementation_complexity": "medium",
+      "vendor_category": "practice_management",
+      "quick_win": true,
+      "two_pillars": {
+        "customer_value": 9,
+        "business_health": 6
+      }
+    },
+    {
+      "id": "email-ai-assistant",
+      "name": "AI Email Drafting & Triage",
+      "category": "productivity",
+      "description": "AI assistance for drafting client emails, triaging inbox, and summarizing threads",
+      "typical_roi": {
+        "time_saved_hours_weekly": 5,
+        "response_time_improvement": 40,
+        "payback_months": 1
+      },
+      "implementation_complexity": "low",
+      "vendor_category": "ai_assistants",
+      "quick_win": true,
+      "two_pillars": {
+        "customer_value": 7,
+        "business_health": 7
+      }
+    },
+    {
+      "id": "proposal-automation",
+      "name": "AI-Assisted Proposal & RFP Response",
+      "category": "business_development",
+      "description": "Automate RFP responses, pitch decks, and proposal generation",
+      "typical_roi": {
+        "time_saved_hours_weekly": 4,
+        "win_rate_increase_percentage": 15,
+        "payback_months": 3
+      },
+      "implementation_complexity": "medium",
+      "vendor_category": "proposal_tools",
+      "quick_win": false,
+      "two_pillars": {
+        "customer_value": 5,
+        "business_health": 8
+      }
+    },
+    {
+      "id": "knowledge-management-ai",
+      "name": "AI Knowledge Management",
+      "category": "productivity",
+      "description": "AI-powered search across documents, precedents, and institutional knowledge",
+      "typical_roi": {
+        "time_saved_hours_weekly": 3,
+        "knowledge_retention_improvement": 50,
+        "payback_months": 6
+      },
+      "implementation_complexity": "high",
+      "vendor_category": "knowledge_management",
+      "quick_win": false,
+      "two_pillars": {
+        "customer_value": 5,
+        "business_health": 8
+      }
+    },
+    {
+      "id": "billing-collections",
+      "name": "Automated Billing & Collections",
+      "category": "billing",
+      "description": "Automated invoice generation, payment reminders, and collections workflows",
+      "typical_roi": {
+        "dso_reduction_days": 15,
+        "collection_rate_increase": 10,
+        "payback_months": 2
+      },
+      "implementation_complexity": "low",
+      "vendor_category": "time_billing",
+      "quick_win": true,
+      "two_pillars": {
+        "customer_value": 6,
+        "business_health": 9
+      }
+    }
+  ],
+  "anti_patterns": [
+    {
+      "id": "full-ai-drafting",
+      "name": "Fully Autonomous AI Drafting",
+      "why_avoid": "Client work requires human judgment - AI should assist, not replace review",
+      "what_instead": "AI first draft with mandatory human review and approval"
+    },
+    {
+      "id": "complex-before-simple",
+      "name": "AI Research Before Time Capture",
+      "why_avoid": "Time capture has immediate ROI, AI research takes longer to show value",
+      "what_instead": "Start with time capture and billing automation, then add research tools"
+    },
+    {
+      "id": "enterprise-tools-boutique",
+      "name": "Enterprise Tools for Small Firms",
+      "why_avoid": "iManage and NetDocuments are overkill for <20 person firms",
+      "what_instead": "Start with Clio/PracticePanther, grow into enterprise tools"
+    }
+  ],
+  "quick_wins": [
+    "ai-time-capture",
+    "client-intake-automation",
+    "email-ai-assistant",
+    "billing-collections"
+  ],
+  "implementation_sequence": [
+    {
+      "phase": 1,
+      "name": "Billing & Admin",
+      "opportunities": ["ai-time-capture", "billing-collections"],
+      "rationale": "Immediate revenue impact, low risk"
+    },
+    {
+      "phase": 2,
+      "name": "Client Experience",
+      "opportunities": ["client-intake-automation", "client-portal"],
+      "rationale": "Win more clients, improve satisfaction"
+    },
+    {
+      "phase": 3,
+      "name": "Productivity",
+      "opportunities": ["document-drafting-ai", "email-ai-assistant"],
+      "rationale": "Multiply professional capacity"
+    },
+    {
+      "phase": 4,
+      "name": "Advanced AI",
+      "opportunities": ["contract-review-ai", "ai-legal-research", "knowledge-management-ai"],
+      "rationale": "Higher complexity, higher reward"
+    }
+  ]
+}

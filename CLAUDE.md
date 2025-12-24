@@ -330,7 +330,7 @@ All target industries share these characteristics:
 
 | Industry | Status | Files | Verification |
 |----------|--------|-------|--------------|
-| `professional-services` | ✅ Complete | processes, opportunities, benchmarks, vendors | ⚠️ Needs verification |
+| `professional-services` | ✅ Complete | processes, opportunities, benchmarks, vendors | ⚠️ Needs verification (created Dec 2024) |
 | `home-services` | ✅ Complete | processes, opportunities, benchmarks, vendors | ✅ Dec 2024 |
 | `dental` | ✅ Complete | processes, opportunities, benchmarks, vendors | ✅ Dec 2024 |
 | `recruiting` | ✅ Complete | processes, opportunities, benchmarks, vendors | ✅ Dec 2024 |
@@ -341,9 +341,20 @@ All target industries share these characteristics:
 
 **⚠️ VERIFICATION REQUIRED:** All knowledge base data must be verified against current (2025) sources before use in production reports. See "Data Verification Policy" below.
 
+### Target Countries (Launch Markets)
+
+| Country | Language | Rationale |
+|---------|----------|-----------|
+| **Netherlands** | English/Dutch | Home market, iterate fast |
+| **Germany** | German/English | Biggest EU economy, strong Mittelstand |
+| **United Kingdom** | English | Large professional services sector |
+| **Ireland** | English | Tech-savvy, strong professional services hub |
+
+**Phase 2 Expansion:** France, Nordics, Benelux, Spain
+
 ### Dropped Industries
 
-These are no longer targets (remove from knowledge base):
+These are no longer targets (removed from knowledge base Dec 2024):
 - ~~Music Studios~~ (budget constraints)
 - ~~Marketing Agencies~~ (DIY mentality, competitive)
 - ~~E-commerce~~ (not passion-driven service)
@@ -580,30 +591,21 @@ backend/src/knowledge/
 ├── ai_tools/
 │   └── llm_providers.json     # Claude, GPT pricing for custom solutions
 │
-│   # PRIMARY INDUSTRIES (Launch) - Need complete knowledge bases
-├── professional-services/     # ✅ Complete
+│   # PRIMARY INDUSTRIES (Launch) - All 6 complete
+├── professional-services/     # ✅ Complete (Legal, Accounting, Consulting)
 │   ├── processes.json
 │   ├── opportunities.json
 │   ├── benchmarks.json
 │   └── vendors.json
-├── home-services/             # 🚧 TODO: HVAC, Plumbing, Electrical
-├── dental/                    # 🚧 TODO: Practices & DSOs
+├── home-services/             # ✅ Complete (HVAC, Plumbing, Electrical)
+├── dental/                    # ✅ Complete (Practices & DSOs)
+├── recruiting/                # ✅ Complete (Staffing agencies)
+├── coaching/                  # ✅ Complete (Business coaching)
+├── veterinary/                # ✅ Complete (Vet clinics, pet care)
 │
-│   # SECONDARY INDUSTRIES (Phase 2)
-├── recruiting/                # 🚧 TODO: Staffing agencies
-├── coaching/                  # 🚧 TODO: Business coaching
-├── veterinary/                # 🚧 TODO: Vet clinics, pet care
-│
-│   # EXPANSION INDUSTRIES (Phase 3)
+│   # EXPANSION INDUSTRIES (Phase 3) - Not yet created
 ├── physical-therapy/          # 🚧 TODO: PT, Chiropractic
 ├── medspa/                    # 🚧 TODO: MedSpa, Beauty
-│
-│   # LEGACY (to be removed/archived)
-├── marketing-agencies/        # ❌ DROPPED - DIY mentality
-├── ecommerce/                 # ❌ DROPPED - Not passion-driven
-├── retail/                    # ❌ DROPPED - Not passion-driven
-├── tech-companies/            # ❌ DROPPED - DIY mentality
-├── music-studios/             # ❌ DROPPED - Budget constraints
 │
 └── patterns/
     └── ai_implementation_playbook.json

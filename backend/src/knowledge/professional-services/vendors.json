@@ -1,0 +1,378 @@
+{
+  "industry": "professional-services",
+  "last_updated": "2024-12",
+  "verification_status": "NEEDS_VERIFICATION",
+  "categories": {
+    "practice_management": {
+      "name": "Practice Management Software",
+      "vendors": [
+        {
+          "name": "Clio",
+          "website": "https://www.clio.com",
+          "focus": "Legal",
+          "pricing": {
+            "starter": 39,
+            "professional": 69,
+            "advanced": 99,
+            "complete": 129,
+            "currency": "EUR",
+            "period": "month",
+            "per": "user"
+          },
+          "features": ["Time tracking", "Billing", "Matter management", "Client portal", "Document management"],
+          "best_for": "Small to mid-size law firms",
+          "eu_available": true,
+          "gdpr_compliant": true,
+          "verified": false
+        },
+        {
+          "name": "PracticePanther",
+          "website": "https://www.practicepanther.com",
+          "focus": "Legal",
+          "pricing": {
+            "solo": 49,
+            "essential": 69,
+            "business": 89,
+            "currency": "USD",
+            "period": "month",
+            "per": "user"
+          },
+          "features": ["Time tracking", "Billing", "Client intake", "Calendar", "Trust accounting"],
+          "best_for": "Solo practitioners and small firms",
+          "eu_available": true,
+          "gdpr_compliant": true,
+          "verified": false
+        },
+        {
+          "name": "Smokeball",
+          "website": "https://www.smokeball.com",
+          "focus": "Legal",
+          "pricing": {
+            "bill": 29,
+            "boost": 89,
+            "grow": 149,
+            "currency": "USD",
+            "period": "month",
+            "per": "user"
+          },
+          "features": ["Automatic time capture", "Document automation", "Productivity tracking", "Billing"],
+          "best_for": "Firms wanting automatic time capture",
+          "eu_available": true,
+          "gdpr_compliant": true,
+          "verified": false
+        },
+        {
+          "name": "Karbon",
+          "website": "https://www.karbonhq.com",
+          "focus": "Accounting",
+          "pricing": {
+            "team": 59,
+            "business": 79,
+            "currency": "USD",
+            "period": "month",
+            "per": "user"
+          },
+          "features": ["Workflow automation", "Client management", "Email integration", "Triage"],
+          "best_for": "Modern accounting firms",
+          "eu_available": true,
+          "gdpr_compliant": true,
+          "verified": false
+        }
+      ]
+    },
+    "document_automation": {
+      "name": "Document Automation & Drafting",
+      "vendors": [
+        {
+          "name": "HotDocs",
+          "website": "https://www.hotdocs.com",
+          "focus": "Legal",
+          "pricing": {
+            "note": "Quote-based, typically 200-500/user/month",
+            "currency": "EUR"
+          },
+          "features": ["Document assembly", "Template creation", "Interview-based drafting"],
+          "best_for": "High-volume document generation",
+          "eu_available": true,
+          "verified": false
+        },
+        {
+          "name": "Documate",
+          "website": "https://www.documate.org",
+          "focus": "Legal",
+          "pricing": {
+            "starter": 0,
+            "professional": 99,
+            "business": 299,
+            "currency": "USD",
+            "period": "month"
+          },
+          "features": ["No-code document automation", "Client intake", "Conditional logic"],
+          "best_for": "Firms wanting DIY automation",
+          "eu_available": true,
+          "verified": false
+        },
+        {
+          "name": "Gavel",
+          "website": "https://www.gavel.io",
+          "focus": "Legal",
+          "pricing": {
+            "note": "Quote-based",
+            "currency": "USD"
+          },
+          "features": ["Document automation", "Intake workflows", "E-signature"],
+          "best_for": "Law firms automating client-facing documents",
+          "eu_available": true,
+          "verified": false
+        }
+      ]
+    },
+    "contract_intelligence": {
+      "name": "AI Contract Review",
+      "vendors": [
+        {
+          "name": "Luminance",
+          "website": "https://www.luminance.com",
+          "focus": "Legal",
+          "pricing": {
+            "note": "Enterprise pricing, typically 500-1500/user/month",
+            "currency": "EUR"
+          },
+          "features": ["AI contract review", "Due diligence", "Anomaly detection"],
+          "best_for": "M&A and corporate legal teams",
+          "eu_available": true,
+          "gdpr_compliant": true,
+          "verified": false
+        },
+        {
+          "name": "Kira Systems",
+          "website": "https://www.kirasystems.com",
+          "focus": "Legal",
+          "pricing": {
+            "note": "Enterprise pricing",
+            "currency": "USD"
+          },
+          "features": ["Contract analysis", "Due diligence", "Lease abstraction"],
+          "best_for": "Large law firms and in-house teams",
+          "eu_available": true,
+          "verified": false
+        },
+        {
+          "name": "Juro",
+          "website": "https://www.juro.com",
+          "focus": "General",
+          "pricing": {
+            "note": "From 500/month",
+            "currency": "GBP"
+          },
+          "features": ["Contract creation", "Negotiation", "Analytics", "E-signature"],
+          "best_for": "In-house legal and sales teams",
+          "eu_available": true,
+          "gdpr_compliant": true,
+          "verified": false
+        }
+      ]
+    },
+    "research_tools": {
+      "name": "Legal & Regulatory Research",
+      "vendors": [
+        {
+          "name": "Westlaw Edge",
+          "website": "https://www.westlaw.com",
+          "focus": "Legal",
+          "pricing": {
+            "note": "Quote-based, typically 200-400/user/month",
+            "currency": "EUR"
+          },
+          "features": ["Legal research", "AI-powered search", "Litigation analytics"],
+          "best_for": "Litigation-focused firms",
+          "eu_available": true,
+          "verified": false
+        },
+        {
+          "name": "LexisNexis",
+          "website": "https://www.lexisnexis.com",
+          "focus": "Legal",
+          "pricing": {
+            "note": "Quote-based",
+            "currency": "EUR"
+          },
+          "features": ["Legal research", "News", "Company data", "Regulatory tracking"],
+          "best_for": "Full-service research needs",
+          "eu_available": true,
+          "verified": false
+        },
+        {
+          "name": "Harvey AI",
+          "website": "https://www.harvey.ai",
+          "focus": "Legal",
+          "pricing": {
+            "note": "Enterprise only, invite-based",
+            "currency": "USD"
+          },
+          "features": ["AI legal research", "Document drafting", "Contract analysis"],
+          "best_for": "Elite law firms (waitlist)",
+          "eu_available": true,
+          "verified": false
+        },
+        {
+          "name": "Casetext CoCounsel",
+          "website": "https://www.casetext.com",
+          "focus": "Legal",
+          "pricing": {
+            "note": "From 180/user/month",
+            "currency": "USD"
+          },
+          "features": ["AI legal assistant", "Research", "Document review", "Deposition prep"],
+          "best_for": "Firms wanting accessible AI research",
+          "eu_available": true,
+          "verified": false
+        }
+      ]
+    },
+    "time_billing": {
+      "name": "Time Tracking & Billing",
+      "vendors": [
+        {
+          "name": "TimeSolv",
+          "website": "https://www.timesolv.com",
+          "focus": "Professional Services",
+          "pricing": {
+            "standard": 39.95,
+            "professional": 49.95,
+            "currency": "USD",
+            "period": "month",
+            "per": "user"
+          },
+          "features": ["Time tracking", "Expense tracking", "Billing", "Trust accounting"],
+          "best_for": "Budget-conscious firms",
+          "eu_available": true,
+          "verified": false
+        },
+        {
+          "name": "BigTime",
+          "website": "https://www.bigtime.net",
+          "focus": "Professional Services",
+          "pricing": {
+            "essentials": 20,
+            "premier": 35,
+            "projector": 45,
+            "currency": "USD",
+            "period": "month",
+            "per": "user"
+          },
+          "features": ["Time tracking", "Project management", "Billing", "Reporting"],
+          "best_for": "Consulting and accounting firms",
+          "eu_available": true,
+          "verified": false
+        },
+        {
+          "name": "Harvest",
+          "website": "https://www.getharvest.com",
+          "focus": "General",
+          "pricing": {
+            "free": 0,
+            "pro": 12,
+            "currency": "USD",
+            "period": "month",
+            "per": "user"
+          },
+          "features": ["Time tracking", "Invoicing", "Expense tracking", "Reporting"],
+          "best_for": "Simple time tracking needs",
+          "eu_available": true,
+          "gdpr_compliant": true,
+          "verified": false
+        }
+      ]
+    },
+    "ai_assistants": {
+      "name": "AI Productivity Assistants",
+      "vendors": [
+        {
+          "name": "Microsoft Copilot",
+          "website": "https://www.microsoft.com/copilot",
+          "focus": "General",
+          "pricing": {
+            "copilot_pro": 22,
+            "copilot_365": 28,
+            "currency": "EUR",
+            "period": "month",
+            "per": "user"
+          },
+          "features": ["Email drafting", "Document creation", "Meeting summaries", "Excel analysis"],
+          "best_for": "Microsoft 365 users",
+          "eu_available": true,
+          "gdpr_compliant": true,
+          "verified": false
+        },
+        {
+          "name": "Claude for Work",
+          "website": "https://www.anthropic.com",
+          "focus": "General",
+          "pricing": {
+            "team": 30,
+            "enterprise": "Quote-based",
+            "currency": "USD",
+            "period": "month",
+            "per": "user"
+          },
+          "features": ["Document analysis", "Research", "Writing", "Coding"],
+          "best_for": "Complex reasoning and analysis tasks",
+          "eu_available": true,
+          "gdpr_compliant": true,
+          "verified": false
+        }
+      ]
+    }
+  },
+  "regional_vendors": {
+    "netherlands": [
+      {
+        "name": "Lexxyn",
+        "focus": "Legal practice management for Dutch market",
+        "website": "https://www.lexxyn.nl"
+      },
+      {
+        "name": "Basecone",
+        "focus": "Accounting automation (Wolters Kluwer)",
+        "website": "https://www.basecone.com"
+      }
+    ],
+    "germany": [
+      {
+        "name": "DATEV",
+        "focus": "Dominant accounting/tax software in Germany",
+        "website": "https://www.datev.de"
+      },
+      {
+        "name": "RA-MICRO",
+        "focus": "Legal practice management for German market",
+        "website": "https://www.ra-micro.de"
+      }
+    ],
+    "uk": [
+      {
+        "name": "Bundledocs",
+        "focus": "Court bundling and document management",
+        "website": "https://www.bundledocs.com"
+      },
+      {
+        "name": "IRIS",
+        "focus": "Accounting practice management",
+        "website": "https://www.iris.co.uk"
+      }
+    ],
+    "ireland": [
+      {
+        "name": "Keyhouse",
+        "focus": "Legal practice management for Irish market",
+        "website": "https://www.keyhouse.ie"
+      },
+      {
+        "name": "Relate Software",
+        "focus": "CRM for Irish professional services",
+        "website": "https://www.relate-software.com"
+      }
+    ]
+  }
+}

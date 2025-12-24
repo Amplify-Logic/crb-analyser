@@ -1,0 +1,159 @@
+{
+  "industry": "professional-services",
+  "description": "Professional service firms including legal (law firms), accounting/tax advisory, and management consulting",
+  "common_processes": [
+    {
+      "id": "client-intake",
+      "name": "Client Intake & Onboarding",
+      "description": "New client screening, conflict checks, engagement letters, KYC/AML compliance, document collection",
+      "typical_time_spent": "2-4 hours/client",
+      "pain_level": "high",
+      "automation_potential": 80,
+      "ai_opportunities": [
+        "Automated conflict of interest checks",
+        "Digital engagement letter generation",
+        "AI-powered KYC/AML screening",
+        "Smart document collection portals",
+        "Client intake form automation"
+      ]
+    },
+    {
+      "id": "time-tracking",
+      "name": "Time Tracking & Billing",
+      "description": "Tracking billable hours, creating invoices, managing WIP, collections",
+      "typical_time_spent": "1-2 hours/day per professional",
+      "pain_level": "very high",
+      "automation_potential": 85,
+      "ai_opportunities": [
+        "AI-assisted time entry from calendar/email",
+        "Automated invoice generation",
+        "Smart billing narratives",
+        "WIP monitoring and alerts",
+        "Collections automation"
+      ]
+    },
+    {
+      "id": "document-management",
+      "name": "Document Management & Review",
+      "description": "Creating, reviewing, organizing, and storing client documents",
+      "typical_time_spent": "3-5 hours/day",
+      "pain_level": "high",
+      "automation_potential": 75,
+      "ai_opportunities": [
+        "AI document drafting and templates",
+        "Contract review and analysis",
+        "Document classification and tagging",
+        "Version control automation",
+        "Smart search across document repositories"
+      ]
+    },
+    {
+      "id": "research",
+      "name": "Research & Analysis",
+      "description": "Legal research, market analysis, due diligence, regulatory review",
+      "typical_time_spent": "2-4 hours/day",
+      "pain_level": "medium",
+      "automation_potential": 70,
+      "ai_opportunities": [
+        "AI-powered legal/regulatory research",
+        "Automated due diligence reports",
+        "Market intelligence gathering",
+        "Precedent document search",
+        "Citation checking and verification"
+      ]
+    },
+    {
+      "id": "client-communication",
+      "name": "Client Communication & Reporting",
+      "description": "Status updates, meeting scheduling, progress reports, client portals",
+      "typical_time_spent": "2-3 hours/day",
+      "pain_level": "medium",
+      "automation_potential": 75,
+      "ai_opportunities": [
+        "Automated status update emails",
+        "AI meeting scheduling",
+        "Client portal automation",
+        "Report generation",
+        "Email drafting assistance"
+      ]
+    },
+    {
+      "id": "business-development",
+      "name": "Business Development & Proposals",
+      "description": "RFP responses, pitches, networking follow-up, CRM management",
+      "typical_time_spent": "3-5 hours/week",
+      "pain_level": "medium",
+      "automation_potential": 65,
+      "ai_opportunities": [
+        "AI-assisted proposal writing",
+        "RFP response automation",
+        "CRM data enrichment",
+        "Follow-up automation",
+        "Pitch deck generation"
+      ]
+    },
+    {
+      "id": "compliance-risk",
+      "name": "Compliance & Risk Management",
+      "description": "Regulatory compliance, risk assessments, audit preparation, policy management",
+      "typical_time_spent": "2-4 hours/week",
+      "pain_level": "high",
+      "automation_potential": 70,
+      "ai_opportunities": [
+        "Automated compliance monitoring",
+        "Risk assessment automation",
+        "Policy document updates",
+        "Audit trail generation",
+        "Regulatory change tracking"
+      ]
+    },
+    {
+      "id": "knowledge-management",
+      "name": "Knowledge Management & Training",
+      "description": "Capturing institutional knowledge, onboarding new staff, precedent libraries",
+      "typical_time_spent": "1-2 hours/week",
+      "pain_level": "medium",
+      "automation_potential": 75,
+      "ai_opportunities": [
+        "AI-powered knowledge base search",
+        "Automated precedent tagging",
+        "Training content generation",
+        "Expert identification",
+        "Best practices documentation"
+      ]
+    }
+  ],
+  "typical_team_structure": {
+    "boutique": {
+      "size": "5-15",
+      "roles": ["Partners", "Associates/Consultants", "Office Manager", "Paralegal/Support Staff"]
+    },
+    "mid_size": {
+      "size": "15-100",
+      "roles": ["Managing Partner", "Practice Group Heads", "Senior Associates", "Associates", "Business Development", "Operations Manager", "Finance/Billing", "IT Support", "Paralegals", "Admin Staff"]
+    },
+    "large_firm": {
+      "size": "100+",
+      "roles": ["Executive Committee", "Practice Group Leaders", "Regional Heads", "Partners", "Senior Associates", "Associates", "COO", "CFO", "CMO", "HR Director", "IT Director", "Professional Development", "Compliance", "Support Staff"]
+    }
+  },
+  "common_tools": [
+    "Clio", "PracticePanther", "MyCase", "Smokeball",
+    "iManage", "NetDocuments", "SharePoint",
+    "Westlaw", "LexisNexis", "Practical Law",
+    "HubSpot", "Salesforce", "Lawmatics",
+    "QuickBooks", "Xero", "BigTime",
+    "Microsoft 365", "Google Workspace",
+    "Zoom", "Teams", "Calendly"
+  ],
+  "industry_specific_challenges": [
+    "Professionals resist time tracking (lost billable hours)",
+    "High partner/senior time spent on admin tasks",
+    "Document version control chaos",
+    "Knowledge leaving when staff depart",
+    "Slow client intake losing deals",
+    "Compliance burden increasing annually",
+    "Clients demanding fee predictability over hourly billing",
+    "Junior staff retention and development"
+  ]
+}

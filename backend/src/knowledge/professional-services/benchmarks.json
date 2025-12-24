@@ -1,0 +1,191 @@
+{
+  "industry": "professional-services",
+  "last_updated": "2024-12",
+  "verification_status": "NEEDS_VERIFICATION",
+  "verified_date": null,
+  "verification_sources": [],
+  "verification_note": "Initial data from AI training data - requires verification against 2025 industry reports before production use",
+  "segments": {
+    "legal": {
+      "name": "Law Firms",
+      "benchmarks": {
+        "billable_hours_target": {
+          "value": "1800-2200",
+          "unit": "hours/year",
+          "source": "Industry standard",
+          "verified": false
+        },
+        "realization_rate": {
+          "value": "80-92%",
+          "unit": "percentage",
+          "source": "Clio Legal Trends Report",
+          "verified": false
+        },
+        "collection_rate": {
+          "value": "85-95%",
+          "unit": "percentage",
+          "source": "Thomson Reuters",
+          "verified": false
+        },
+        "utilization_rate": {
+          "value": "30-35%",
+          "unit": "percentage of workday",
+          "source": "Clio Legal Trends Report",
+          "verified": false,
+          "note": "Only 30-35% of lawyer time is actually billed - rest is admin"
+        },
+        "admin_time_daily": {
+          "value": "2-3",
+          "unit": "hours/day",
+          "source": "Industry surveys",
+          "verified": false
+        },
+        "client_acquisition_cost": {
+          "value": "500-2000",
+          "unit": "EUR",
+          "source": "Varies by practice area",
+          "verified": false
+        },
+        "ai_adoption_rate": {
+          "value": "35-45%",
+          "unit": "percentage",
+          "source": "ABA TechReport 2024",
+          "verified": false
+        }
+      }
+    },
+    "accounting": {
+      "name": "Accounting & Tax Firms",
+      "benchmarks": {
+        "billable_hours_target": {
+          "value": "1600-1900",
+          "unit": "hours/year",
+          "source": "AICPA benchmarks",
+          "verified": false
+        },
+        "realization_rate": {
+          "value": "85-95%",
+          "unit": "percentage",
+          "source": "Industry standard",
+          "verified": false
+        },
+        "busy_season_utilization": {
+          "value": "50-60",
+          "unit": "hours/week",
+          "source": "Industry standard",
+          "verified": false,
+          "note": "Jan-Apr tax season"
+        },
+        "client_churn_rate": {
+          "value": "5-10%",
+          "unit": "percentage/year",
+          "source": "Industry surveys",
+          "verified": false
+        },
+        "fee_growth_rate": {
+          "value": "3-5%",
+          "unit": "percentage/year",
+          "source": "Industry surveys",
+          "verified": false
+        },
+        "ai_adoption_rate": {
+          "value": "50-60%",
+          "unit": "percentage",
+          "source": "Thomson Reuters AI survey",
+          "verified": false,
+          "note": "Higher than legal due to structured data"
+        }
+      }
+    },
+    "consulting": {
+      "name": "Management Consulting",
+      "benchmarks": {
+        "billable_utilization": {
+          "value": "60-75%",
+          "unit": "percentage",
+          "source": "Industry standard",
+          "verified": false
+        },
+        "project_margin": {
+          "value": "30-50%",
+          "unit": "percentage",
+          "source": "Industry standard",
+          "verified": false
+        },
+        "proposal_win_rate": {
+          "value": "20-35%",
+          "unit": "percentage",
+          "source": "Industry surveys",
+          "verified": false
+        },
+        "repeat_client_revenue": {
+          "value": "60-80%",
+          "unit": "percentage",
+          "source": "Industry standard",
+          "verified": false
+        },
+        "ai_adoption_rate": {
+          "value": "65-75%",
+          "unit": "percentage",
+          "source": "McKinsey survey",
+          "verified": false,
+          "note": "Consulting leads AI adoption in professional services"
+        }
+      }
+    }
+  },
+  "common_metrics": {
+    "revenue_per_professional": {
+      "boutique": "150000-250000",
+      "mid_size": "200000-400000",
+      "large": "300000-600000",
+      "unit": "EUR/year",
+      "verified": false
+    },
+    "profit_margin": {
+      "boutique": "25-35%",
+      "mid_size": "30-40%",
+      "large": "35-50%",
+      "unit": "percentage",
+      "verified": false
+    },
+    "staff_to_partner_ratio": {
+      "legal": "4:1 to 8:1",
+      "accounting": "5:1 to 10:1",
+      "consulting": "6:1 to 12:1",
+      "verified": false
+    }
+  },
+  "ai_impact_benchmarks": {
+    "time_capture_improvement": {
+      "value": "15-25%",
+      "unit": "additional billable hours captured",
+      "source": "Smokeball, TimeSolv case studies",
+      "verified": false
+    },
+    "document_review_speedup": {
+      "value": "50-70%",
+      "unit": "time reduction",
+      "source": "Kira Systems, Luminance",
+      "verified": false
+    },
+    "research_time_reduction": {
+      "value": "30-50%",
+      "unit": "time reduction",
+      "source": "Casetext, Harvey AI",
+      "verified": false
+    },
+    "proposal_creation_speedup": {
+      "value": "40-60%",
+      "unit": "time reduction",
+      "source": "Industry reports",
+      "verified": false
+    }
+  },
+  "regional_notes": {
+    "netherlands": "Strong legal tech adoption, GDPR expertise valuable, many English-speaking firms",
+    "germany": "Conservative adoption, Steuerberater market large, DATEV dominant in accounting",
+    "uk": "Most advanced legal tech market in Europe, post-Brexit regulatory complexity",
+    "ireland": "Growing professional services hub, Big 4 presence, tech-forward"
+  }
+}
