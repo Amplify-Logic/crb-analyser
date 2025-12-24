@@ -165,15 +165,26 @@ async def create_guest_checkout(request: GuestCheckoutRequest):
 
         # Get pricing based on tier
         tier_config = {
+            "ai": {
+                "price": 147,
+                "name": "CRB Report",
+                "description": "15-20 AI opportunities analyzed with honest verdicts, vendor pricing, ROI calculations, and implementation roadmap",
+            },
+            "human": {
+                "price": 497,
+                "name": "CRB Report + Strategy Call",
+                "description": "Complete CRB report plus 60-minute strategy call with expert and live Q&A on your specific situation",
+            },
+            # Legacy tiers (keep for backwards compatibility)
             "quick": {
-                "price": settings.PRICE_QUICK_REPORT,
-                "name": "Quick Report",
-                "description": "10-15 detailed findings with ROI calculations and vendor recommendations",
+                "price": 147,
+                "name": "CRB Report",
+                "description": "15-20 AI opportunities analyzed with honest verdicts, vendor pricing, ROI calculations, and implementation roadmap",
             },
             "full": {
-                "price": settings.PRICE_FULL_ANALYSIS,
-                "name": "Full Analysis",
-                "description": "Complete CRB analysis with vendor comparisons, implementation roadmap, and 30-min consultation",
+                "price": 497,
+                "name": "CRB Report + Strategy Call",
+                "description": "Complete CRB report plus 60-minute strategy call with expert and live Q&A on your specific situation",
             },
         }
 
