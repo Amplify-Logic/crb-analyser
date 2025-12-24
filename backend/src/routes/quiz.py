@@ -54,6 +54,8 @@ class QuizProgressUpdate(BaseModel):
     current_section: Optional[int] = None
     current_question: Optional[int] = None
     answers: Optional[Dict[str, Any]] = None
+    email: Optional[EmailStr] = None  # For capturing real email after quiz preview
+    industry: Optional[str] = None  # For market data collection
 
 
 class QuizProgressResponse(BaseModel):
@@ -285,6 +287,17 @@ async def save_quiz_progress(session_id: str, progress: QuizProgressUpdate):
 
         if progress.current_question is not None:
             update_data["current_question"] = progress.current_question
+
+        # Update email if provided (for lead capture after quiz preview)
+        if progress.email is not None:
+            update_data["email"] = progress.email
+            logger.info(f"Captured email for session {session_id}: {progress.email}")
+
+        # Update industry if provided (for market data)
+        if progress.industry is not None:
+            # Store in answers under special key for tracking
+            existing_answers["_detected_industry"] = progress.industry
+            update_data["answers"] = existing_answers
 
         # Update session
         result = await supabase.table("quiz_sessions").update(

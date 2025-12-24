@@ -69,7 +69,7 @@ interface ResearchResult {
   }
 }
 
-type QuizPhase = 'website' | 'researching' | 'findings' | 'questions' | 'complete'
+type QuizPhase = 'website' | 'researching' | 'findings' | 'email_capture' | 'questions' | 'complete'
 
 // ============================================================================
 // Component
@@ -84,6 +84,8 @@ export default function Quiz() {
   const [sessionId, setSessionId] = useState<string | null>(null)
   const [websiteUrl, setWebsiteUrl] = useState('')
   const [companyName, setCompanyName] = useState('')
+  const [userEmail, setUserEmail] = useState('')
+  const [emailSubmitting, setEmailSubmitting] = useState(false)
 
   // Research state
   const [researchProgress, setResearchProgress] = useState(0)
@@ -943,39 +945,151 @@ export default function Quiz() {
                 </div>
               </div>
 
-              {/* Natural CTA - Voice Interview */}
+              {/* Natural CTA - Continue to get report */}
               <div className="text-center">
                 <p className="text-gray-600 mb-2">
-                  Let's have a quick conversation to understand your specific situation.
+                  Ready to get your personalized AI roadmap?
                 </p>
                 <p className="text-sm text-gray-500 mb-6">
-                  ~5 minute voice interview • You can also type if you prefer
+                  Enter your email to save your progress and continue
                 </p>
                 <button
-                  onClick={() => {
-                    // Save company profile for voice interview
-                    sessionStorage.setItem('companyProfile', JSON.stringify(researchResult?.company_profile || {}))
-                    sessionStorage.setItem('quizSessionId', sessionId || '')
-                    sessionStorage.setItem('companyName', companyName)
-                    // Navigate to voice interview
-                    navigate(`/quiz/interview${sessionId ? `?session_id=${sessionId}` : ''}`)
-                  }}
+                  onClick={() => setPhase('email_capture')}
                   className="px-8 py-4 bg-primary-600 text-white font-semibold rounded-xl hover:bg-primary-700 transition shadow-lg shadow-primary-600/25 text-lg flex items-center gap-3 mx-auto"
                 >
-                  <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z" />
+                  Continue to Full Analysis
+                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
                   </svg>
-                  Start Voice Interview
-                </button>
-                <button
-                  onClick={() => setPhase('questions')}
-                  className="mt-4 text-sm text-gray-500 hover:text-gray-700"
-                >
-                  prefer the old form instead?
                 </button>
               </div>
             </motion.div>
           </div>
+        </div>
+      </div>
+    )
+  }
+
+  // ============================================================================
+  // Render: Email Capture Phase
+  // ============================================================================
+
+  if (phase === 'email_capture') {
+    const detectedIndustry = researchResult?.company_profile?.industry?.primary_industry?.value || ''
+
+    const handleEmailSubmit = async (e: React.FormEvent) => {
+      e.preventDefault()
+      if (!userEmail || !sessionId) return
+
+      setEmailSubmitting(true)
+      try {
+        // Save email to session via API
+        const response = await fetch(`${API_BASE_URL}/api/quiz/sessions/${sessionId}`, {
+          method: 'PATCH',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            email: userEmail,
+            industry: detectedIndustry,
+          }),
+        })
+
+        if (!response.ok) {
+          throw new Error('Failed to save email')
+        }
+
+        // Save to session storage for checkout
+        sessionStorage.setItem('userEmail', userEmail)
+        sessionStorage.setItem('companyProfile', JSON.stringify(researchResult?.company_profile || {}))
+        sessionStorage.setItem('quizSessionId', sessionId)
+        sessionStorage.setItem('companyName', companyName)
+
+        // Navigate to voice interview
+        navigate(`/quiz/interview?session_id=${sessionId}`)
+      } catch (error) {
+        console.error('Email save error:', error)
+        // Still proceed even if save fails
+        navigate(`/quiz/interview?session_id=${sessionId}`)
+      } finally {
+        setEmailSubmitting(false)
+      }
+    }
+
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-gray-50 to-primary-50">
+        <nav className="fixed top-0 left-0 right-0 z-50 bg-white/80 backdrop-blur-md border-b border-gray-100">
+          <div className="max-w-6xl mx-auto px-4 py-4">
+            <Link to="/" className="text-xl font-bold text-gray-900">
+              CRB<span className="text-primary-600">Analyser</span>
+            </Link>
+          </div>
+        </nav>
+
+        <div className="pt-24 pb-20 px-4 flex items-center justify-center min-h-screen">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="max-w-md w-full"
+          >
+            <div className="text-center mb-8">
+              <div className="inline-flex items-center justify-center w-16 h-16 bg-primary-100 rounded-2xl mb-4">
+                <svg className="w-8 h-8 text-primary-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                </svg>
+              </div>
+              <h1 className="text-2xl font-bold text-gray-900 mb-2">
+                Save your progress
+              </h1>
+              <p className="text-gray-600">
+                Enter your email to save your analysis and receive your personalized report.
+              </p>
+            </div>
+
+            <form onSubmit={handleEmailSubmit} className="bg-white rounded-2xl p-8 shadow-sm border border-gray-100">
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Work email
+              </label>
+              <input
+                type="email"
+                value={userEmail}
+                onChange={(e) => setUserEmail(e.target.value)}
+                placeholder="you@company.com"
+                required
+                className="w-full px-4 py-4 text-lg border border-gray-200 rounded-xl focus:ring-2 focus:ring-primary-500 focus:border-transparent mb-4"
+              />
+
+              {detectedIndustry && (
+                <div className="mb-6 p-3 bg-gray-50 rounded-lg">
+                  <p className="text-sm text-gray-600">
+                    <span className="font-medium">Industry detected:</span> {detectedIndustry}
+                  </p>
+                </div>
+              )}
+
+              <button
+                type="submit"
+                disabled={!userEmail || emailSubmitting}
+                className={`w-full py-4 font-semibold rounded-xl transition text-lg ${
+                  userEmail && !emailSubmitting
+                    ? 'bg-primary-600 text-white hover:bg-primary-700 shadow-lg shadow-primary-600/25'
+                    : 'bg-gray-200 text-gray-400 cursor-not-allowed'
+                }`}
+              >
+                {emailSubmitting ? 'Saving...' : 'Continue to Interview'}
+              </button>
+
+              <p className="text-xs text-gray-500 text-center mt-4">
+                We'll send your report here. No spam, ever.
+              </p>
+            </form>
+
+            {/* Skip option - goes to form instead */}
+            <button
+              onClick={() => setPhase('questions')}
+              className="w-full mt-4 text-sm text-gray-500 hover:text-gray-700"
+            >
+              Skip and answer questions manually instead
+            </button>
+          </motion.div>
         </div>
       </div>
     )
