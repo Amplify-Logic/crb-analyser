@@ -22,7 +22,7 @@
           "cons": ["Expensive", "Complex for small teams", "Sales-heavy company"],
           "company_sizes": ["smb", "mid-market", "enterprise"],
           "integrations": ["LinkedIn", "Job boards", "VMS systems", "Automation tools"],
-          "pricing_verified_date": "2024-12"
+          "pricing_verified_date": "2025-12"
         },
         {
           "name": "JobAdder",
@@ -37,7 +37,7 @@
           "cons": ["Smaller ecosystem", "Less brand recognition"],
           "company_sizes": ["startup", "smb", "mid-market"],
           "integrations": ["Major job boards", "LinkedIn", "Video tools"],
-          "pricing_verified_date": "2024-12"
+          "pricing_verified_date": "2025-12"
         },
         {
           "name": "Greenhouse",
@@ -52,7 +52,7 @@
           "cons": ["Expensive", "Less suited for agencies", "Annual commitment"],
           "company_sizes": ["smb", "mid-market", "enterprise"],
           "integrations": ["500+ integrations", "Open API"],
-          "pricing_verified_date": "2024-12"
+          "pricing_verified_date": "2025-12"
         },
         {
           "name": "Workable",
@@ -67,7 +67,7 @@
           "cons": ["Not agency-focused", "Limited customization"],
           "company_sizes": ["startup", "smb"],
           "integrations": ["Major job boards", "HRIS systems"],
-          "pricing_verified_date": "2024-12"
+          "pricing_verified_date": "2025-12"
         }
       ]
     },
@@ -88,7 +88,7 @@
           "cons": ["Per-seat cost adds up", "Learning curve", "Some data accuracy issues"],
           "company_sizes": ["smb", "mid-market", "enterprise"],
           "integrations": ["Major ATS systems", "LinkedIn", "Email platforms"],
-          "pricing_verified_date": "2024-12"
+          "pricing_verified_date": "2025-12"
         },
         {
           "name": "SeekOut",
@@ -102,7 +102,7 @@
           "cons": ["Premium pricing", "Enterprise sales process"],
           "company_sizes": ["mid-market", "enterprise"],
           "integrations": ["Major ATS platforms", "HRIS"],
-          "pricing_verified_date": "2024-12"
+          "pricing_verified_date": "2025-12"
         },
         {
           "name": "Eightfold AI",
@@ -115,7 +115,7 @@
           "cons": ["Enterprise only", "Complex implementation", "High cost"],
           "company_sizes": ["enterprise"],
           "integrations": ["All major systems"],
-          "pricing_verified_date": "2024-12"
+          "pricing_verified_date": "2025-12"
         },
         {
           "name": "Fetcher",
@@ -129,7 +129,7 @@
           "cons": ["Limited customization", "Volume caps"],
           "company_sizes": ["startup", "smb"],
           "integrations": ["ATS systems", "Email"],
-          "pricing_verified_date": "2024-12"
+          "pricing_verified_date": "2025-12"
         }
       ]
     },
@@ -150,7 +150,7 @@
           "cons": ["Premium pricing", "Tech-focused"],
           "company_sizes": ["smb", "mid-market", "enterprise"],
           "integrations": ["LinkedIn", "ATS systems", "Email"],
-          "pricing_verified_date": "2024-12"
+          "pricing_verified_date": "2025-12"
         },
         {
           "name": "Beamery",
@@ -163,7 +163,7 @@
           "cons": ["Enterprise pricing", "Complex setup"],
           "company_sizes": ["mid-market", "enterprise"],
           "integrations": ["All major ATS", "Marketing tools"],
-          "pricing_verified_date": "2024-12"
+          "pricing_verified_date": "2025-12"
         },
         {
           "name": "Hireflow",
@@ -177,7 +177,7 @@
           "cons": ["Fewer features than Gem", "Smaller company"],
           "company_sizes": ["startup", "smb"],
           "integrations": ["LinkedIn", "Email", "ATS"],
-          "pricing_verified_date": "2024-12"
+          "pricing_verified_date": "2025-12"
         }
       ]
     },
@@ -199,7 +199,7 @@
           "cons": ["Monthly minimums", "Setup complexity"],
           "company_sizes": ["mid-market", "enterprise"],
           "integrations": ["All major ATS", "HRIS"],
-          "pricing_verified_date": "2024-12"
+          "pricing_verified_date": "2025-12"
         },
         {
           "name": "XOR",
@@ -213,7 +213,7 @@
           "cons": ["Smaller than Paradox", "Limited brand recognition"],
           "company_sizes": ["smb", "mid-market"],
           "integrations": ["Bullhorn", "Major ATS"],
-          "pricing_verified_date": "2024-12"
+          "pricing_verified_date": "2025-12"
         }
       ]
     },
@@ -234,7 +234,7 @@
           "cons": ["Higher cost than simple tools", "Overkill for small teams"],
           "company_sizes": ["smb", "mid-market", "enterprise"],
           "integrations": ["Greenhouse", "Lever", "Major ATS"],
-          "pricing_verified_date": "2024-12"
+          "pricing_verified_date": "2025-12"
         },
         {
           "name": "Calendly",
@@ -248,7 +248,7 @@
           "cons": ["Limited recruiting features", "Basic analytics"],
           "company_sizes": ["startup", "smb"],
           "integrations": ["Calendars", "Zoom", "Basic ATS"],
-          "pricing_verified_date": "2024-12"
+          "pricing_verified_date": "2025-12"
         },
         {
           "name": "Cronofy",
@@ -262,7 +262,7 @@
           "cons": ["Less polished UX", "Technical setup"],
           "company_sizes": ["startup", "smb", "mid-market"],
           "integrations": ["All calendar systems", "ATS platforms"],
-          "pricing_verified_date": "2024-12"
+          "pricing_verified_date": "2025-12"
         }
       ]
     },
@@ -283,7 +283,7 @@
           "cons": ["Enterprise sales", "Per-doc pricing adds up"],
           "company_sizes": ["smb", "mid-market", "enterprise"],
           "integrations": ["All major ATS"],
-          "pricing_verified_date": "2024-12"
+          "pricing_verified_date": "2025-12"
         },
         {
           "name": "Affinda",
@@ -297,7 +297,7 @@
           "cons": ["Smaller company", "Less advanced matching"],
           "company_sizes": ["startup", "smb"],
           "integrations": ["API-based"],
-          "pricing_verified_date": "2024-12"
+          "pricing_verified_date": "2025-12"
         }
       ]
     }

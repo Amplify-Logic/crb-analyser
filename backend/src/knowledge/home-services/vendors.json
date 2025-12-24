@@ -23,7 +23,7 @@
           "company_sizes": ["mid-market", "enterprise"],
           "ai_capabilities": ["Smart scheduling", "Demand forecasting", "AI call booking", "Performance insights"],
           "integrations": ["QuickBooks", "Intuit", "Marketing platforms", "Financing"],
-          "pricing_verified_date": "2024-12"
+          "pricing_verified_date": "2025-12"
         },
         {
           "name": "Housecall Pro",
@@ -39,7 +39,7 @@
           "company_sizes": ["startup", "smb", "mid-market"],
           "ai_capabilities": ["Automated reminders", "Online booking", "Basic automation"],
           "integrations": ["QuickBooks", "Google Calendar", "Stripe", "Mailchimp"],
-          "pricing_verified_date": "2024-12"
+          "pricing_verified_date": "2025-12"
         },
         {
           "name": "Jobber",
@@ -55,7 +55,7 @@
           "company_sizes": ["startup", "smb"],
           "ai_capabilities": ["Automated texts", "Smart scheduling suggestions"],
           "integrations": ["QuickBooks", "Stripe", "PayPal", "Zapier"],
-          "pricing_verified_date": "2024-12"
+          "pricing_verified_date": "2025-12"
         },
         {
           "name": "FieldEdge",
@@ -70,7 +70,7 @@
           "company_sizes": ["smb", "mid-market"],
           "ai_capabilities": ["Dispatch optimization", "Automated reminders"],
           "integrations": ["QuickBooks", "Flat rate books"],
-          "pricing_verified_date": "2024-12"
+          "pricing_verified_date": "2025-12"
         }
       ]
     },
@@ -93,7 +93,7 @@
           "company_sizes": ["smb", "mid-market", "enterprise"],
           "ai_capabilities": ["AI response suggestions", "Sentiment analysis"],
           "integrations": ["ServiceTitan", "Housecall Pro", "Most FSMs"],
-          "pricing_verified_date": "2024-12"
+          "pricing_verified_date": "2025-12"
         },
         {
           "name": "Birdeye",
@@ -109,7 +109,7 @@
           "company_sizes": ["mid-market", "enterprise"],
           "ai_capabilities": ["AI review responses", "Competitive benchmarking"],
           "integrations": ["Most major FSMs", "CRMs", "Marketing tools"],
-          "pricing_verified_date": "2024-12"
+          "pricing_verified_date": "2025-12"
         },
         {
           "name": "Broadly",
@@ -124,7 +124,7 @@
           "company_sizes": ["startup", "smb"],
           "ai_capabilities": ["Automated review requests"],
           "integrations": ["Common FSMs"],
-          "pricing_verified_date": "2024-12"
+          "pricing_verified_date": "2025-12"
         }
       ]
     },
@@ -147,7 +147,7 @@
           "company_sizes": ["smb", "mid-market"],
           "ai_capabilities": ["AI screening", "Spam blocking", "Booking integration"],
           "integrations": ["Most CRMs and FSMs"],
-          "pricing_verified_date": "2024-12"
+          "pricing_verified_date": "2025-12"
         },
         {
           "name": "Ruby Receptionist",
@@ -163,7 +163,7 @@
           "company_sizes": ["startup", "smb"],
           "ai_capabilities": ["Basic AI screening"],
           "integrations": ["CRMs", "Calendars"],
-          "pricing_verified_date": "2024-12"
+          "pricing_verified_date": "2025-12"
         }
       ]
     },
@@ -185,7 +185,7 @@
           "company_sizes": ["smb", "mid-market", "enterprise"],
           "ai_capabilities": ["Instant approval decisions"],
           "integrations": ["ServiceTitan", "Housecall Pro", "Jobber"],
-          "pricing_verified_date": "2024-12"
+          "pricing_verified_date": "2025-12"
         },
         {
           "name": "GreenSky",
@@ -200,7 +200,7 @@
           "company_sizes": ["mid-market", "enterprise"],
           "ai_capabilities": ["Instant credit decisions"],
           "integrations": ["Most major FSMs"],
-          "pricing_verified_date": "2024-12"
+          "pricing_verified_date": "2025-12"
         }
       ]
     }

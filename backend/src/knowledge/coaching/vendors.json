@@ -23,7 +23,7 @@
           "cons": ["Learning curve", "Interface dated", "Mobile experience limited"],
           "company_sizes": ["solo", "growing"],
           "integrations": ["Zoom", "Calendly", "Stripe", "PayPal"],
-          "pricing_verified_date": "2024-12"
+          "pricing_verified_date": "2025-12"
         },
         {
           "name": "Practice Better",
@@ -38,7 +38,7 @@
           "cons": ["More suited for health focus", "Some features overkill for exec coaching"],
           "company_sizes": ["solo", "growing"],
           "integrations": ["Zoom", "Stripe", "Mailchimp"],
-          "pricing_verified_date": "2024-12"
+          "pricing_verified_date": "2025-12"
         },
         {
           "name": "Paperbell",
@@ -52,7 +52,7 @@
           "cons": ["Limited advanced features", "No team features", "Basic reporting"],
           "company_sizes": ["solo"],
           "integrations": ["Calendly", "Acuity", "Stripe", "Zoom"],
-          "pricing_verified_date": "2024-12"
+          "pricing_verified_date": "2025-12"
         },
         {
           "name": "Satori",
@@ -67,7 +67,7 @@
           "cons": ["Smaller company", "Limited integrations"],
           "company_sizes": ["solo", "growing"],
           "integrations": ["Calendars", "Zoom", "Stripe"],
-          "pricing_verified_date": "2024-12"
+          "pricing_verified_date": "2025-12"
         }
       ]
     },
@@ -89,7 +89,7 @@
           "cons": ["Limited payment integration", "No package tracking"],
           "company_sizes": ["solo", "growing", "firm"],
           "integrations": ["Google", "Outlook", "Zoom", "Stripe", "PayPal"],
-          "pricing_verified_date": "2024-12"
+          "pricing_verified_date": "2025-12"
         },
         {
           "name": "Acuity Scheduling",
@@ -104,7 +104,7 @@
           "cons": ["More complex", "Squarespace focused"],
           "company_sizes": ["solo", "growing"],
           "integrations": ["Squarespace", "Zoom", "QuickBooks", "Mailchimp"],
-          "pricing_verified_date": "2024-12"
+          "pricing_verified_date": "2025-12"
         }
       ]
     },
@@ -126,7 +126,7 @@
           "cons": ["Generic summaries", "Privacy considerations"],
           "company_sizes": ["solo", "growing", "firm"],
           "integrations": ["Zoom", "Google Meet", "Microsoft Teams"],
-          "pricing_verified_date": "2024-12"
+          "pricing_verified_date": "2025-12"
         },
         {
           "name": "Fathom",
@@ -140,7 +140,7 @@
           "cons": ["Less established", "Limited integrations"],
           "company_sizes": ["solo", "growing"],
           "integrations": ["Zoom", "Google Meet"],
-          "pricing_verified_date": "2024-12"
+          "pricing_verified_date": "2025-12"
         },
         {
           "name": "Fireflies.ai",
@@ -155,7 +155,7 @@
           "cons": ["Per-seat pricing", "Learning curve"],
           "company_sizes": ["growing", "firm"],
           "integrations": ["CRM systems", "Zoom", "Teams", "Slack"],
-          "pricing_verified_date": "2024-12"
+          "pricing_verified_date": "2025-12"
         }
       ]
     },
@@ -177,7 +177,7 @@
           "cons": ["Monthly commitment", "Transaction fees on payments"],
           "company_sizes": ["solo", "growing", "firm"],
           "integrations": ["Zapier", "Payment processors"],
-          "pricing_verified_date": "2024-12"
+          "pricing_verified_date": "2025-12"
         },
         {
           "name": "Skool",
@@ -190,7 +190,7 @@
           "cons": ["Limited customization", "Newer platform", "No native payments in some regions"],
           "company_sizes": ["solo", "growing"],
           "integrations": ["Stripe", "Basic integrations"],
-          "pricing_verified_date": "2024-12"
+          "pricing_verified_date": "2025-12"
         },
         {
           "name": "Mighty Networks",
@@ -205,7 +205,7 @@
           "cons": ["Complex pricing", "Transaction fees", "Learning curve"],
           "company_sizes": ["growing", "firm"],
           "integrations": ["Zapier", "Payment processors"],
-          "pricing_verified_date": "2024-12"
+          "pricing_verified_date": "2025-12"
         },
         {
           "name": "Kajabi",
@@ -220,7 +220,7 @@
           "cons": ["Premium pricing", "Overkill for simple needs", "Learning curve"],
           "company_sizes": ["growing", "firm"],
           "integrations": ["Payment processors", "Email tools", "Zapier"],
-          "pricing_verified_date": "2024-12"
+          "pricing_verified_date": "2025-12"
         }
       ]
     },
@@ -242,7 +242,7 @@
           "cons": ["Limited design options", "Pricing scales with list"],
           "company_sizes": ["solo", "growing"],
           "integrations": ["Many platforms", "Zapier"],
-          "pricing_verified_date": "2024-12"
+          "pricing_verified_date": "2025-12"
         },
         {
           "name": "ActiveCampaign",
@@ -257,7 +257,7 @@
           "cons": ["Learning curve", "Can be expensive"],
           "company_sizes": ["growing", "firm"],
           "integrations": ["Extensive integrations"],
-          "pricing_verified_date": "2024-12"
+          "pricing_verified_date": "2025-12"
         }
       ]
     }

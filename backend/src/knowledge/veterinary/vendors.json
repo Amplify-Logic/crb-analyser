@@ -21,7 +21,7 @@
           "cons": ["Fewer integrations than legacy systems", "Smaller market share"],
           "company_sizes": ["small", "multi-doctor"],
           "integrations": ["Major lab systems", "Payment processors", "Communication tools"],
-          "pricing_verified_date": "2024-12"
+          "pricing_verified_date": "2025-12"
         },
         {
           "name": "Cornerstone (IDEXX)",
@@ -35,7 +35,7 @@
           "cons": ["Expensive", "Dated interface", "Complex setup"],
           "company_sizes": ["multi-doctor", "specialty"],
           "integrations": ["IDEXX labs", "VetConnect Plus", "Communication tools"],
-          "pricing_verified_date": "2024-12"
+          "pricing_verified_date": "2025-12"
         },
         {
           "name": "Shepherd Veterinary Software",
@@ -49,7 +49,7 @@
           "cons": ["Newer company", "Smaller ecosystem", "May lack some advanced features"],
           "company_sizes": ["small", "multi-doctor"],
           "integrations": ["Major labs", "Payment tools", "Communication platforms"],
-          "pricing_verified_date": "2024-12"
+          "pricing_verified_date": "2025-12"
         },
         {
           "name": "AVImark (Covetrus)",
@@ -63,7 +63,7 @@
           "cons": ["Dated interface", "On-premise legacy", "Slower innovation"],
           "company_sizes": ["small", "multi-doctor"],
           "integrations": ["Covetrus ecosystem", "Labs", "Pharmacies"],
-          "pricing_verified_date": "2024-12"
+          "pricing_verified_date": "2025-12"
         }
       ]
     },
@@ -84,7 +84,7 @@
           "cons": ["Requires phone system change", "Monthly commitment"],
           "company_sizes": ["small", "multi-doctor"],
           "integrations": ["Major PIMS systems", "Payment processors"],
-          "pricing_verified_date": "2024-12"
+          "pricing_verified_date": "2025-12"
         },
         {
           "name": "PetDesk",
@@ -99,7 +99,7 @@
           "cons": ["Per-location pricing", "Feature overlap"],
           "company_sizes": ["small", "multi-doctor", "specialty"],
           "integrations": ["Most PIMS systems", "Labs"],
-          "pricing_verified_date": "2024-12"
+          "pricing_verified_date": "2025-12"
         },
         {
           "name": "AllyDVM",
@@ -113,7 +113,7 @@
           "cons": ["Smaller company", "Less name recognition"],
           "company_sizes": ["small", "multi-doctor"],
           "integrations": ["Major PIMS systems"],
-          "pricing_verified_date": "2024-12"
+          "pricing_verified_date": "2025-12"
         }
       ]
     },
@@ -134,7 +134,7 @@
           "cons": ["Additional cost if using other comm tools", "Per-location pricing"],
           "company_sizes": ["small", "multi-doctor", "specialty"],
           "integrations": ["Most major PIMS", "Google", "Websites"],
-          "pricing_verified_date": "2024-12"
+          "pricing_verified_date": "2025-12"
         },
         {
           "name": "Vet2Pet",
@@ -148,7 +148,7 @@
           "cons": ["Fewer advanced features", "Less integration depth"],
           "company_sizes": ["small", "multi-doctor"],
           "integrations": ["Major PIMS systems"],
-          "pricing_verified_date": "2024-12"
+          "pricing_verified_date": "2025-12"
         }
       ]
     },
@@ -169,7 +169,7 @@
           "cons": ["Per-user cost", "Voice only (no AI generation)"],
           "company_sizes": ["small", "multi-doctor", "specialty"],
           "integrations": ["Most PIMS systems"],
-          "pricing_verified_date": "2024-12"
+          "pricing_verified_date": "2025-12"
         },
         {
           "name": "ScribeVet",
@@ -183,7 +183,7 @@
           "cons": ["Fewer features", "Smaller company"],
           "company_sizes": ["small", "multi-doctor"],
           "integrations": ["Major PIMS systems"],
-          "pricing_verified_date": "2024-12"
+          "pricing_verified_date": "2025-12"
         },
         {
           "name": "Dragon Veterinary",
@@ -196,7 +196,7 @@
           "cons": ["Expensive", "Complex setup", "Overkill for small practices"],
           "company_sizes": ["multi-doctor", "specialty"],
           "integrations": ["Enterprise systems"],
-          "pricing_verified_date": "2024-12"
+          "pricing_verified_date": "2025-12"
         }
       ]
     },
@@ -216,7 +216,7 @@
           "cons": ["Transaction fees", "Not all clients approved"],
           "company_sizes": ["small", "multi-doctor", "specialty"],
           "integrations": ["PIMS systems", "Websites"],
-          "pricing_verified_date": "2024-12"
+          "pricing_verified_date": "2025-12"
         },
         {
           "name": "CareCredit",
@@ -229,7 +229,7 @@
           "cons": ["Lower approval rates for some", "Transaction costs"],
           "company_sizes": ["small", "multi-doctor", "specialty"],
           "integrations": ["Most PIMS systems", "Payment terminals"],
-          "pricing_verified_date": "2024-12"
+          "pricing_verified_date": "2025-12"
         },
         {
           "name": "Sunbit",
@@ -242,7 +242,7 @@
           "cons": ["Higher interest for clients", "Newer in vet space"],
           "company_sizes": ["small", "multi-doctor"],
           "integrations": ["Payment systems"],
-          "pricing_verified_date": "2024-12"
+          "pricing_verified_date": "2025-12"
         }
       ]
     },
@@ -262,7 +262,7 @@
           "cons": ["Premium pricing", "Tied to IDEXX ecosystem"],
           "company_sizes": ["small", "multi-doctor", "specialty"],
           "integrations": ["VetConnect Plus", "Most PIMS systems"],
-          "pricing_verified_date": "2024-12"
+          "pricing_verified_date": "2025-12"
         },
         {
           "name": "Antech Diagnostics (Mars)",
@@ -275,7 +275,7 @@
           "cons": ["Integration not as seamless as IDEXX", "Mars consolidation concerns"],
           "company_sizes": ["small", "multi-doctor", "specialty"],
           "integrations": ["Major PIMS systems"],
-          "pricing_verified_date": "2024-12"
+          "pricing_verified_date": "2025-12"
         }
       ]
     }

@@ -317,9 +317,9 @@ All target industries share these characteristics:
 | **Physical Therapy/Chiropractic** | `physical-therapy` | 79/100 | 80% believe AI will integrate, $43B market |
 | **MedSpa/Beauty** | `medspa` | 78/100 | 58% cloud adoption, only 10% market consolidated |
 
-**✅ Verified Dec 2024** - Stats marked ✅ verified via web search against 2024-2025 sources. ⚠️ Phase 3 stats still need verification.
+**✅ Verified Dec 2025** - Stats marked ✅ verified via web search against 2025 sources. ⚠️ Phase 3 stats still need verification.
 
-### Key Sources (Verified Dec 2024)
+### Key Sources (Verified Dec 2025)
 - Home Services: [Zuper FSM Trends 2025](https://www.zuper.co/field-service/field-service-management-trends-2025), [Housecall Pro 2024](https://www.housecallpro.com/resources/home-services-industry-trends/)
 - Dental: [GoTu AI in Dentistry 2025](https://gotu.com/dental-practices/ai-in-dentistry-2025/), [InsightAce Market Report](https://www.insightaceanalytic.com/report/ai-in-dentistry-market/3004)
 - Recruiting: [StaffingHub 2025](https://staffinghub.com/state-of-staffing/ai-isnt-optional-anymore-how-staffing-firms-are-using-it-to-win-in-2025/), [LinkedIn Future of Recruiting](https://business.linkedin.com/talent-solutions/resources/future-of-recruiting)
@@ -330,12 +330,12 @@ All target industries share these characteristics:
 
 | Industry | Status | Files | Verification |
 |----------|--------|-------|--------------|
-| `professional-services` | ✅ Complete | processes, opportunities, benchmarks, vendors | ⚠️ Needs verification (created Dec 2024) |
-| `home-services` | ✅ Complete | processes, opportunities, benchmarks, vendors | ✅ Dec 2024 |
-| `dental` | ✅ Complete | processes, opportunities, benchmarks, vendors | ✅ Dec 2024 |
-| `recruiting` | ✅ Complete | processes, opportunities, benchmarks, vendors | ✅ Dec 2024 |
-| `coaching` | ✅ Complete | processes, opportunities, benchmarks, vendors | ✅ Dec 2024 |
-| `veterinary` | ✅ Complete | processes, opportunities, benchmarks, vendors | ✅ Dec 2024 |
+| `professional-services` | ✅ Complete | processes, opportunities, benchmarks, vendors | ⚠️ Needs verification (created Dec 2025) |
+| `home-services` | ✅ Complete | processes, opportunities, benchmarks, vendors | ✅ Dec 2025 |
+| `dental` | ✅ Complete | processes, opportunities, benchmarks, vendors | ✅ Dec 2025 |
+| `recruiting` | ✅ Complete | processes, opportunities, benchmarks, vendors | ✅ Dec 2025 |
+| `coaching` | ✅ Complete | processes, opportunities, benchmarks, vendors | ✅ Dec 2025 |
+| `veterinary` | ✅ Complete | processes, opportunities, benchmarks, vendors | ✅ Dec 2025 |
 | `physical-therapy` | 🚧 Needed | - | - |
 | `medspa` | 🚧 Needed | - | - |
 
@@ -354,7 +354,7 @@ All target industries share these characteristics:
 
 ### Dropped Industries
 
-These are no longer targets (removed from knowledge base Dec 2024):
+These are no longer targets (removed from knowledge base Dec 2025):
 - ~~Music Studios~~ (budget constraints)
 - ~~Marketing Agencies~~ (DIY mentality, competitive)
 - ~~E-commerce~~ (not passion-driven service)

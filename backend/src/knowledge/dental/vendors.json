@@ -21,7 +21,7 @@
           "cons": ["Expensive", "Dated interface", "Support quality varies"],
           "company_sizes": ["smb", "mid-market", "enterprise"],
           "integrations": ["Most dental vendors", "Henry Schein ecosystem"],
-          "pricing_verified_date": "2024-12"
+          "pricing_verified_date": "2025-12"
         },
         {
           "name": "Eaglesoft",
@@ -35,7 +35,7 @@
           "cons": ["Less modern", "Patterson ecosystem lock-in"],
           "company_sizes": ["smb", "mid-market"],
           "integrations": ["Patterson ecosystem", "Major imaging systems"],
-          "pricing_verified_date": "2024-12"
+          "pricing_verified_date": "2025-12"
         },
         {
           "name": "Open Dental",
@@ -49,7 +49,7 @@
           "cons": ["Less polished UI", "More technical setup", "Limited official support"],
           "company_sizes": ["startup", "smb", "mid-market"],
           "integrations": ["Open API", "Many third-party integrations"],
-          "pricing_verified_date": "2024-12"
+          "pricing_verified_date": "2025-12"
         },
         {
           "name": "Curve Dental",
@@ -63,7 +63,7 @@
           "cons": ["Smaller market share", "Some features less mature"],
           "company_sizes": ["startup", "smb"],
           "integrations": ["Growing integration ecosystem"],
-          "pricing_verified_date": "2024-12"
+          "pricing_verified_date": "2025-12"
         }
       ]
     },
@@ -85,7 +85,7 @@
           "company_sizes": ["smb", "mid-market"],
           "ai_capabilities": ["Missed call texting", "Smart reminders", "Review sentiment"],
           "integrations": ["Most dental PM systems"],
-          "pricing_verified_date": "2024-12"
+          "pricing_verified_date": "2025-12"
         },
         {
           "name": "Lighthouse 360",
@@ -100,7 +100,7 @@
           "company_sizes": ["smb"],
           "ai_capabilities": ["Smart scheduling suggestions", "Automated recalls"],
           "integrations": ["Dentrix", "Eaglesoft", "Open Dental"],
-          "pricing_verified_date": "2024-12"
+          "pricing_verified_date": "2025-12"
         },
         {
           "name": "NexHealth",
@@ -115,7 +115,7 @@
           "company_sizes": ["startup", "smb", "mid-market"],
           "ai_capabilities": ["Smart scheduling", "Automated waitlist"],
           "integrations": ["Major PM systems", "Google", "APIs"],
-          "pricing_verified_date": "2024-12"
+          "pricing_verified_date": "2025-12"
         }
       ]
     },
@@ -137,7 +137,7 @@
           "company_sizes": ["smb", "mid-market", "enterprise"],
           "ai_capabilities": ["Caries detection", "Bone loss", "Calculus", "Margin assessment"],
           "integrations": ["Most imaging systems", "PM systems"],
-          "pricing_verified_date": "2024-12"
+          "pricing_verified_date": "2025-12"
         },
         {
           "name": "Overjet",
@@ -152,7 +152,7 @@
           "company_sizes": ["mid-market", "enterprise"],
           "ai_capabilities": ["Quantitative analysis", "Bone level measurements", "Treatment tracking"],
           "integrations": ["Insurance platforms", "Major PM systems"],
-          "pricing_verified_date": "2024-12"
+          "pricing_verified_date": "2025-12"
         }
       ]
     },
@@ -175,7 +175,7 @@
           "company_sizes": ["smb", "mid-market"],
           "ai_capabilities": ["Smart eligibility", "Claim status automation"],
           "integrations": ["Major PM systems"],
-          "pricing_verified_date": "2024-12"
+          "pricing_verified_date": "2025-12"
         },
         {
           "name": "Dental Intelligence",
@@ -190,7 +190,7 @@
           "company_sizes": ["smb", "mid-market"],
           "ai_capabilities": ["Predictive analytics", "Smart scheduling", "Performance insights"],
           "integrations": ["Dentrix", "Eaglesoft", "Open Dental"],
-          "pricing_verified_date": "2024-12"
+          "pricing_verified_date": "2025-12"
         }
       ]
     },
@@ -211,7 +211,7 @@
           "cons": ["Higher merchant fees for promos", "Patient interest rates"],
           "company_sizes": ["startup", "smb", "mid-market", "enterprise"],
           "integrations": ["Most PM systems"],
-          "pricing_verified_date": "2024-12"
+          "pricing_verified_date": "2025-12"
         },
         {
           "name": "Sunbit",
@@ -224,7 +224,7 @@
           "cons": ["Less brand recognition than CareCredit"],
           "company_sizes": ["startup", "smb", "mid-market"],
           "integrations": ["Growing integrations"],
-          "pricing_verified_date": "2024-12"
+          "pricing_verified_date": "2025-12"
         },
         {
           "name": "Proceed Finance",
@@ -237,7 +237,7 @@
           "cons": ["Smaller company"],
           "company_sizes": ["startup", "smb"],
           "integrations": ["Dental PM systems"],
-          "pricing_verified_date": "2024-12"
+          "pricing_verified_date": "2025-12"
         }
       ]
     }
