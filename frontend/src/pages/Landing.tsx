@@ -296,70 +296,131 @@ export default function Landing() {
 
       {/* Pricing Section */}
       <section id="pricing" className="py-20 px-4 bg-gray-50">
-        <div className="max-w-3xl mx-auto">
+        <div className="max-w-5xl mx-auto">
           <div className="text-center mb-12">
             <h2 className="text-3xl font-bold text-gray-900 mb-4">
-              One price. No upsells.
+              Simple, transparent pricing
             </h2>
             <p className="text-lg text-gray-600">
-              €147 for the complete analysis. That's it.
+              Start with the report, add expert guidance if you need it.
             </p>
           </div>
 
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5 }}
-            className="bg-white rounded-3xl p-8 md:p-10 shadow-xl border border-gray-100"
-          >
-            <div className="text-center mb-8">
-              <div className="inline-block px-4 py-1 bg-primary-100 text-primary-700 rounded-full text-sm font-medium mb-4">
-                CRB Analysis Report
+          <div className="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
+            {/* Tier 1: Report Only */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5 }}
+              className="bg-white rounded-3xl p-8 shadow-lg border border-gray-200"
+            >
+              <div className="text-center mb-6">
+                <div className="inline-block px-4 py-1 bg-gray-100 text-gray-700 rounded-full text-sm font-medium mb-4">
+                  CRB Report
+                </div>
+                <div className="flex items-baseline justify-center gap-2 mb-2">
+                  <span className="text-4xl font-bold text-gray-900">€147</span>
+                  <span className="text-gray-500">one-time</span>
+                </div>
+                <p className="text-gray-500 text-sm">
+                  Self-service analysis
+                </p>
               </div>
-              <div className="flex items-baseline justify-center gap-2 mb-2">
-                <span className="text-5xl font-bold text-gray-900">€147</span>
-                <span className="text-gray-500">one-time</span>
-              </div>
-              <p className="text-gray-500 text-sm">
-                Requires ~90 min workshop completion
-              </p>
-            </div>
 
-            <ul className="space-y-4 mb-8">
-              {REPORT_FEATURES.map((feature, index) => (
-                <li key={index} className="flex items-center gap-3">
-                  <svg className="w-5 h-5 text-green-500 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <ul className="space-y-3 mb-8">
+                {REPORT_FEATURES.map((feature, index) => (
+                  <li key={index} className="flex items-center gap-3">
+                    <svg className="w-5 h-5 text-green-500 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                    </svg>
+                    <span className="text-gray-700 text-sm">{feature}</span>
+                  </li>
+                ))}
+              </ul>
+
+              <button
+                onClick={handleQuizStart}
+                className="w-full py-3 border-2 border-gray-300 text-gray-700 font-semibold rounded-xl hover:border-gray-400 hover:bg-gray-50 transition text-lg"
+              >
+                Get Started
+              </button>
+            </motion.div>
+
+            {/* Tier 2: Report + Call (Recommended) */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0.1 }}
+              className="bg-white rounded-3xl p-8 shadow-xl border-2 border-primary-500 relative"
+            >
+              <div className="absolute -top-4 left-1/2 transform -translate-x-1/2">
+                <span className="bg-primary-600 text-white text-sm font-medium px-4 py-1 rounded-full">
+                  Most Popular
+                </span>
+              </div>
+
+              <div className="text-center mb-6">
+                <div className="inline-block px-4 py-1 bg-primary-100 text-primary-700 rounded-full text-sm font-medium mb-4">
+                  CRB Report + Strategy Call
+                </div>
+                <div className="flex items-baseline justify-center gap-2 mb-2">
+                  <span className="text-4xl font-bold text-gray-900">€497</span>
+                  <span className="text-gray-500">one-time</span>
+                </div>
+                <p className="text-gray-500 text-sm">
+                  Expert-guided analysis
+                </p>
+              </div>
+
+              <ul className="space-y-3 mb-8">
+                {REPORT_FEATURES.map((feature, index) => (
+                  <li key={index} className="flex items-center gap-3">
+                    <svg className="w-5 h-5 text-green-500 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                    </svg>
+                    <span className="text-gray-700 text-sm">{feature}</span>
+                  </li>
+                ))}
+                <li className="flex items-center gap-3 pt-2 border-t border-gray-100">
+                  <svg className="w-5 h-5 text-primary-600 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                   </svg>
-                  <span className="text-gray-700">{feature}</span>
+                  <span className="text-gray-900 font-medium text-sm">60-minute strategy call</span>
                 </li>
-              ))}
-            </ul>
+                <li className="flex items-center gap-3">
+                  <svg className="w-5 h-5 text-primary-600 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                  </svg>
+                  <span className="text-gray-900 font-medium text-sm">Personalized implementation plan</span>
+                </li>
+                <li className="flex items-center gap-3">
+                  <svg className="w-5 h-5 text-primary-600 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                  </svg>
+                  <span className="text-gray-900 font-medium text-sm">Q&A and vendor introductions</span>
+                </li>
+              </ul>
 
-            <button
-              onClick={handleQuizStart}
-              className="w-full py-4 bg-primary-600 text-white font-semibold rounded-xl hover:bg-primary-700 transition shadow-lg shadow-primary-600/25 text-lg mb-4"
-            >
-              Start With Free Quiz
-            </button>
+              <button
+                onClick={handleQuizStart}
+                className="w-full py-3 bg-primary-600 text-white font-semibold rounded-xl hover:bg-primary-700 transition shadow-lg shadow-primary-600/25 text-lg"
+              >
+                Get Started
+              </button>
+            </motion.div>
+          </div>
 
-            <p className="text-center text-sm text-gray-500">
-              Not satisfied? Full refund within 14 days.
+          <p className="text-center text-sm text-gray-500 mt-8">
+            14-day money-back guarantee on both options. Choose your tier after completing the quiz.
+          </p>
+
+          {/* Implementation projects teaser */}
+          <div className="text-center mt-8 p-6 bg-white rounded-2xl border border-gray-200 max-w-2xl mx-auto">
+            <p className="font-medium text-gray-900 mb-2">Need help implementing?</p>
+            <p className="text-gray-600 text-sm">
+              We also offer hands-on implementation projects (€2,000-€10,000) for businesses ready to execute.
+              Discuss during your strategy call or contact us directly.
             </p>
-          </motion.div>
-
-          {/* Enterprise option */}
-          <div className="text-center mt-8 p-6 bg-white rounded-2xl border border-gray-200">
-            <p className="font-medium text-gray-900 mb-2">Need hands-on help?</p>
-            <p className="text-gray-600 text-sm mb-4">
-              We offer live consultation packages where we work through the analysis together.
-            </p>
-            <a
-              href="mailto:hello@crb-analyser.com?subject=Consultation%20Inquiry"
-              className="text-primary-600 font-semibold hover:text-primary-700 transition"
-            >
-              Contact us for pricing →
-            </a>
           </div>
         </div>
       </section>
