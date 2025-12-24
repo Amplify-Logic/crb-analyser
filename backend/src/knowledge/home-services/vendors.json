@@ -1,0 +1,222 @@
+{
+  "industry": "home-services",
+  "last_updated": "2025-12",
+  "verification_status": "UNVERIFIED",
+  "verification_note": "Pricing requires verification from vendor websites",
+  "vendor_categories": [
+    {
+      "category": "field-service-management",
+      "name": "Field Service Management (FSM) Software",
+      "description": "All-in-one platforms for scheduling, dispatch, invoicing, and customer management",
+      "vendors": [
+        {
+          "name": "ServiceTitan",
+          "website": "servicetitan.com",
+          "pricing": {
+            "starter": {"price": 200, "currency": "EUR", "period": "month/user", "features": ["Core FSM", "Basic reporting"]},
+            "essentials": {"price": 300, "currency": "EUR", "period": "month/user", "features": ["Dispatch Pro", "Marketing", "Pricebook"]},
+            "works": {"price": "custom", "features": ["Full platform", "AI features", "Integrations"]}
+          },
+          "best_for": "Growing contractors ($2M+ revenue) wanting enterprise features",
+          "pros": ["Industry leader", "Comprehensive features", "Great reporting", "Strong AI/automation"],
+          "cons": ["Expensive", "Long implementation", "Overkill for small shops"],
+          "company_sizes": ["mid-market", "enterprise"],
+          "ai_capabilities": ["Smart scheduling", "Demand forecasting", "AI call booking", "Performance insights"],
+          "integrations": ["QuickBooks", "Intuit", "Marketing platforms", "Financing"],
+          "pricing_verified_date": "2024-12"
+        },
+        {
+          "name": "Housecall Pro",
+          "website": "housecallpro.com",
+          "pricing": {
+            "basic": {"price": 65, "currency": "EUR", "period": "month", "features": ["1 user", "Scheduling", "Invoicing"]},
+            "essentials": {"price": 169, "currency": "EUR", "period": "month", "features": ["Up to 5 users", "Online booking", "Estimates"]},
+            "max": {"price": 299, "currency": "EUR", "period": "month", "features": ["Unlimited users", "Marketing", "Advanced reporting"]}
+          },
+          "best_for": "Small to mid-sized contractors wanting simplicity",
+          "pros": ["Easy to use", "Affordable", "Good mobile app", "Quick setup"],
+          "cons": ["Less powerful than ServiceTitan", "Limited customization"],
+          "company_sizes": ["startup", "smb", "mid-market"],
+          "ai_capabilities": ["Automated reminders", "Online booking", "Basic automation"],
+          "integrations": ["QuickBooks", "Google Calendar", "Stripe", "Mailchimp"],
+          "pricing_verified_date": "2024-12"
+        },
+        {
+          "name": "Jobber",
+          "website": "getjobber.com",
+          "pricing": {
+            "core": {"price": 69, "currency": "EUR", "period": "month", "features": ["Unlimited clients", "Quoting", "Invoicing"]},
+            "connect": {"price": 169, "currency": "EUR", "period": "month", "features": ["Online booking", "Automated follow-ups"]},
+            "grow": {"price": 349, "currency": "EUR", "period": "month", "features": ["Lead management", "Job costing", "Advanced reporting"]}
+          },
+          "best_for": "Service businesses wanting clean, simple software",
+          "pros": ["Beautiful interface", "Easy to learn", "Good customer service"],
+          "cons": ["Less industry-specific", "Limited dispatch features"],
+          "company_sizes": ["startup", "smb"],
+          "ai_capabilities": ["Automated texts", "Smart scheduling suggestions"],
+          "integrations": ["QuickBooks", "Stripe", "PayPal", "Zapier"],
+          "pricing_verified_date": "2024-12"
+        },
+        {
+          "name": "FieldEdge",
+          "website": "fieldedge.com",
+          "pricing": {
+            "select": {"price": 150, "currency": "EUR", "period": "month/user", "features": ["Core FSM", "QuickBooks sync"]},
+            "premier": {"price": "custom", "features": ["Advanced dispatch", "Flat rate pricing", "Performance pay"]}
+          },
+          "best_for": "HVAC/plumbing contractors wanting flat rate pricing",
+          "pros": ["Flat rate pricebook", "Strong dispatch", "Good for HVAC/plumbing"],
+          "cons": ["Dated interface", "Less marketing features"],
+          "company_sizes": ["smb", "mid-market"],
+          "ai_capabilities": ["Dispatch optimization", "Automated reminders"],
+          "integrations": ["QuickBooks", "Flat rate books"],
+          "pricing_verified_date": "2024-12"
+        }
+      ]
+    },
+    {
+      "category": "communication-reputation",
+      "name": "Customer Communication & Reputation Management",
+      "description": "Tools for automated communication, reviews, and customer engagement",
+      "vendors": [
+        {
+          "name": "Podium",
+          "website": "podium.com",
+          "pricing": {
+            "essentials": {"price": 249, "currency": "EUR", "period": "month", "features": ["Reviews", "Webchat", "Payments"]},
+            "standard": {"price": 449, "currency": "EUR", "period": "month", "features": ["Multi-location", "Marketing", "Surveys"]},
+            "professional": {"price": "custom", "features": ["API", "Integrations", "Enterprise"]}
+          },
+          "best_for": "Businesses focused on reviews and reputation",
+          "pros": ["Great for reviews", "Unified inbox", "Webchat", "Text marketing"],
+          "cons": ["Expensive", "Annual contracts"],
+          "company_sizes": ["smb", "mid-market", "enterprise"],
+          "ai_capabilities": ["AI response suggestions", "Sentiment analysis"],
+          "integrations": ["ServiceTitan", "Housecall Pro", "Most FSMs"],
+          "pricing_verified_date": "2024-12"
+        },
+        {
+          "name": "Birdeye",
+          "website": "birdeye.com",
+          "pricing": {
+            "starter": {"price": 299, "currency": "EUR", "period": "month"},
+            "growth": {"price": 399, "currency": "EUR", "period": "month"},
+            "dominate": {"price": "custom"}
+          },
+          "best_for": "Multi-location businesses wanting comprehensive reputation",
+          "pros": ["All-in-one reputation", "Strong analytics", "Social integration"],
+          "cons": ["Complex setup", "Can overlap with FSM features"],
+          "company_sizes": ["mid-market", "enterprise"],
+          "ai_capabilities": ["AI review responses", "Competitive benchmarking"],
+          "integrations": ["Most major FSMs", "CRMs", "Marketing tools"],
+          "pricing_verified_date": "2024-12"
+        },
+        {
+          "name": "Broadly",
+          "website": "broadly.com",
+          "pricing": {
+            "standard": {"price": 249, "currency": "EUR", "period": "month"},
+            "premium": {"price": 349, "currency": "EUR", "period": "month"}
+          },
+          "best_for": "Small businesses wanting simple review management",
+          "pros": ["Easy to use", "Good value", "Webchat included"],
+          "cons": ["Less features than Podium/Birdeye"],
+          "company_sizes": ["startup", "smb"],
+          "ai_capabilities": ["Automated review requests"],
+          "integrations": ["Common FSMs"],
+          "pricing_verified_date": "2024-12"
+        }
+      ]
+    },
+    {
+      "category": "call-handling",
+      "name": "AI Call Handling & Answering Services",
+      "description": "Services to answer calls, book appointments, and handle after-hours",
+      "vendors": [
+        {
+          "name": "Smith.ai",
+          "website": "smith.ai",
+          "pricing": {
+            "starter": {"price": 292.50, "currency": "EUR", "period": "month", "features": ["30 calls", "Live + AI hybrid"]},
+            "basic": {"price": 765, "currency": "EUR", "period": "month", "features": ["90 calls"]},
+            "pro": {"price": 1530, "currency": "EUR", "period": "month", "features": ["180 calls", "Advanced integrations"]}
+          },
+          "best_for": "Businesses wanting human + AI hybrid answering",
+          "pros": ["Live receptionists + AI", "24/7 available", "Appointment booking"],
+          "cons": ["Per-call pricing adds up", "Can be expensive at volume"],
+          "company_sizes": ["smb", "mid-market"],
+          "ai_capabilities": ["AI screening", "Spam blocking", "Booking integration"],
+          "integrations": ["Most CRMs and FSMs"],
+          "pricing_verified_date": "2024-12"
+        },
+        {
+          "name": "Ruby Receptionist",
+          "website": "ruby.com",
+          "pricing": {
+            "50_minutes": {"price": 235, "currency": "EUR", "period": "month"},
+            "100_minutes": {"price": 375, "currency": "EUR", "period": "month"},
+            "200_minutes": {"price": 680, "currency": "EUR", "period": "month"}
+          },
+          "best_for": "Small businesses wanting friendly, professional answering",
+          "pros": ["Excellent customer service", "Personal touch", "US-based"],
+          "cons": ["Expensive per minute", "Less AI-focused"],
+          "company_sizes": ["startup", "smb"],
+          "ai_capabilities": ["Basic AI screening"],
+          "integrations": ["CRMs", "Calendars"],
+          "pricing_verified_date": "2024-12"
+        }
+      ]
+    },
+    {
+      "category": "payments-financing",
+      "name": "Payments & Customer Financing",
+      "description": "Tools for payment processing and offering customer financing",
+      "vendors": [
+        {
+          "name": "Wisetack",
+          "website": "wisetack.com",
+          "pricing": {
+            "standard": {"price": 0, "features": ["No merchant fees", "Customer pays interest"]},
+            "promotional": {"price": "3-9%", "features": ["0% APR options for customers"]}
+          },
+          "best_for": "Contractors wanting to offer financing on bigger jobs",
+          "pros": ["No cost to contractor", "Easy application", "High approval rates"],
+          "cons": ["Customer pays interest", "Not for small jobs"],
+          "company_sizes": ["smb", "mid-market", "enterprise"],
+          "ai_capabilities": ["Instant approval decisions"],
+          "integrations": ["ServiceTitan", "Housecall Pro", "Jobber"],
+          "pricing_verified_date": "2024-12"
+        },
+        {
+          "name": "GreenSky",
+          "website": "greensky.com",
+          "pricing": {
+            "standard": {"price": "1-5%", "period": "per transaction", "features": ["Consumer financing"]},
+            "promotional": {"price": "5-10%", "features": ["0% APR promotional offers"]}
+          },
+          "best_for": "Larger ticket home improvement financing",
+          "pros": ["High credit limits", "Well-known brand", "Promotional options"],
+          "cons": ["Merchant fees on promos", "More paperwork"],
+          "company_sizes": ["mid-market", "enterprise"],
+          "ai_capabilities": ["Instant credit decisions"],
+          "integrations": ["Most major FSMs"],
+          "pricing_verified_date": "2024-12"
+        }
+      ]
+    }
+  ],
+  "custom_solution_partners": [
+    {
+      "type": "ai-development",
+      "description": "Build custom AI solutions for home services",
+      "typical_cost_range": {"min": 5000, "max": 30000, "currency": "EUR"},
+      "timeline": "4-12 weeks",
+      "when_to_consider": [
+        "Unique dispatch logic for specialized services",
+        "Custom integration between legacy systems",
+        "AI call handling with specific scripts",
+        "Proprietary pricing/quoting algorithms"
+      ]
+    }
+  ]
+}

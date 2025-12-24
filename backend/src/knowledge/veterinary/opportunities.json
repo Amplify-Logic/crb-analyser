@@ -1,0 +1,298 @@
+{
+  "industry": "veterinary",
+  "ai_opportunities": [
+    {
+      "id": "automated-client-communication",
+      "name": "Automated Client Communication System",
+      "description": "Two-way texting, appointment reminders, and wellness recall campaigns",
+      "category": "efficiency",
+      "impact": {
+        "value_saved": {
+          "time_hours_per_week": 15,
+          "description": "Eliminates manual reminder calls and follow-up tasks"
+        },
+        "value_created": {
+          "description": "30% reduction in no-shows, improved wellness compliance",
+          "potential_revenue_impact": "10-15% more appointments kept"
+        }
+      },
+      "customer_value_score": 9,
+      "business_health_score": 9,
+      "implementation": {
+        "complexity": "low",
+        "timeline_weeks": 2,
+        "required_data": ["Client contact info", "Pet records", "Practice management integration"]
+      },
+      "options": {
+        "off_the_shelf": {
+          "tools": ["Weave", "PetDesk", "AllyDVM"],
+          "cost_range": "€200-400/month",
+          "pros": ["Purpose-built for vet", "Easy setup", "Two-way texting"],
+          "cons": ["Monthly commitment", "Feature overlap with PM"]
+        },
+        "best_in_class": {
+          "tools": ["Weave Complete", "Otto (by Rapport)"],
+          "cost_range": "€400-600/month",
+          "pros": ["VoIP included", "Reviews", "Full client engagement", "AI features"],
+          "cons": ["Higher cost", "May require phone system change"]
+        },
+        "custom_solution": {
+          "approach": "Twilio + PM API integration for custom messaging",
+          "cost_range": "€3,000-8,000 one-time + €50-150/month",
+          "pros": ["Full customization", "Lower ongoing cost", "Unique workflows"],
+          "cons": ["Development required", "Integration complexity"]
+        }
+      },
+      "roi_example": {
+        "scenario": "Practice with 150 appointments/week, 15% no-show rate",
+        "cost": "€350/month",
+        "savings": "Reduce no-shows by 50% = 11 more appointments × €100 avg = €4,400/month",
+        "roi_percentage": 1157,
+        "payback_months": 0.5
+      }
+    },
+    {
+      "id": "online-booking",
+      "name": "Self-Service Online Booking",
+      "description": "24/7 online appointment booking for wellness visits and non-urgent cases",
+      "category": "growth",
+      "impact": {
+        "value_saved": {
+          "time_hours_per_week": 10,
+          "description": "Reduces phone calls and manual scheduling"
+        },
+        "value_created": {
+          "description": "Capture after-hours bookings, better client experience",
+          "potential_revenue_impact": "15-20% more appointments from online channel"
+        }
+      },
+      "customer_value_score": 9,
+      "business_health_score": 8,
+      "implementation": {
+        "complexity": "low",
+        "timeline_weeks": 2,
+        "required_data": ["Appointment types", "Provider schedules", "PM integration"]
+      },
+      "options": {
+        "off_the_shelf": {
+          "tools": ["Vetstoria", "PetDesk", "Vet2Pet"],
+          "cost_range": "€100-250/month",
+          "pros": ["Vet-specific", "PM integration", "Client-friendly"],
+          "cons": ["Per-location pricing", "Feature limitations"]
+        },
+        "best_in_class": {
+          "tools": ["Vetstoria Pro", "Instinct Science"],
+          "cost_range": "€250-500/month",
+          "pros": ["Advanced scheduling logic", "Multi-location", "Analytics"],
+          "cons": ["Higher cost", "Setup complexity"]
+        },
+        "custom_solution": {
+          "approach": "Custom booking widget integrated with PM system",
+          "cost_range": "€5,000-15,000 one-time",
+          "pros": ["Fully branded", "Custom workflows", "Unique experience"],
+          "cons": ["Development time", "Maintenance"]
+        }
+      },
+      "roi_example": {
+        "scenario": "Capturing 20 new bookings/month that would have gone elsewhere",
+        "cost": "€200/month",
+        "savings": "20 appointments × €100 avg = €2,000/month new revenue",
+        "roi_percentage": 900,
+        "payback_months": 0.5
+      }
+    },
+    {
+      "id": "ai-clinical-notes",
+      "name": "AI-Assisted Clinical Documentation",
+      "description": "Voice-to-text and AI-generated SOAP notes for faster documentation",
+      "category": "efficiency",
+      "impact": {
+        "value_saved": {
+          "time_hours_per_week": 8,
+          "description": "Cuts documentation time by 50%+"
+        },
+        "value_created": {
+          "description": "Less vet burnout, more time for patient care",
+          "potential_revenue_impact": "See more patients per day"
+        }
+      },
+      "customer_value_score": 8,
+      "business_health_score": 10,
+      "implementation": {
+        "complexity": "medium",
+        "timeline_weeks": 4,
+        "required_data": ["PM access", "Documentation templates", "Vet buy-in"]
+      },
+      "options": {
+        "off_the_shelf": {
+          "tools": ["Talkatoo", "ScribeVet", "Dragon Veterinary"],
+          "cost_range": "€100-300/user/month",
+          "pros": ["Vet-specific vocabulary", "PM integration", "Reliable"],
+          "cons": ["Per-user cost", "Learning curve"]
+        },
+        "best_in_class": {
+          "tools": ["DeepScribe Vet", "Instinct AI Notes"],
+          "cost_range": "€200-400/user/month",
+          "pros": ["Full AI documentation", "Less manual editing", "Ambient capture"],
+          "cons": ["Higher cost", "Newer technology"]
+        },
+        "custom_solution": {
+          "approach": "Whisper API + Claude for vet-specific note generation",
+          "cost_range": "€10,000-25,000 one-time + €100-300/month",
+          "pros": ["Custom templates", "Your workflow", "Proprietary"],
+          "cons": ["Development required", "Training needed"]
+        }
+      },
+      "roi_example": {
+        "scenario": "Vet spending 2 hours/day on notes, 3 vets in practice",
+        "cost": "€600/month for 3 users",
+        "savings": "1 hour/day × 3 vets × €150/hour = €9,000/month in vet time",
+        "roi_percentage": 1400,
+        "payback_months": 0.5
+      }
+    },
+    {
+      "id": "digital-forms-intake",
+      "name": "Digital Intake & Forms",
+      "description": "Online pre-visit forms, history questionnaires, and consent forms",
+      "category": "efficiency",
+      "impact": {
+        "value_saved": {
+          "time_hours_per_week": 5,
+          "description": "Eliminates paper forms and manual data entry"
+        },
+        "value_created": {
+          "description": "Better prepared appointments, cleaner data",
+          "potential_revenue_impact": "More efficient appointment flow"
+        }
+      },
+      "customer_value_score": 8,
+      "business_health_score": 7,
+      "implementation": {
+        "complexity": "low",
+        "timeline_weeks": 1,
+        "required_data": ["Current forms", "PM integration"]
+      },
+      "options": {
+        "off_the_shelf": {
+          "tools": ["PetDesk", "Digitail", "eVetPractice forms"],
+          "cost_range": "€50-150/month",
+          "pros": ["PM integration", "Easy setup", "Mobile-friendly"],
+          "cons": ["Limited customization", "May duplicate features"]
+        },
+        "best_in_class": {
+          "tools": ["Shepherd Intake", "Instinct Forms"],
+          "cost_range": "€100-250/month",
+          "pros": ["Advanced workflows", "Auto-populate records", "Good UX"],
+          "cons": ["Additional cost", "May overlap with PM"]
+        },
+        "custom_solution": {
+          "approach": "Custom forms with PM API integration",
+          "cost_range": "€2,000-5,000 one-time",
+          "pros": ["Fully branded", "Exact workflow match"],
+          "cons": ["Development required", "Maintenance"]
+        }
+      },
+      "roi_example": {
+        "scenario": "50 new client forms/month, 15 min each to process",
+        "cost": "€100/month",
+        "savings": "12 hours/month × €25 = €300/month + better data quality",
+        "roi_percentage": 200,
+        "payback_months": 1
+      }
+    },
+    {
+      "id": "ai-triage-chatbot",
+      "name": "AI Triage & Symptom Checker",
+      "description": "24/7 AI chatbot for initial symptom assessment and appointment guidance",
+      "category": "growth",
+      "impact": {
+        "value_saved": {
+          "time_hours_per_week": 6,
+          "description": "Handles routine triage questions automatically"
+        },
+        "value_created": {
+          "description": "Capture after-hours inquiries, better client education",
+          "potential_revenue_impact": "Convert more inquiries to appointments"
+        }
+      },
+      "customer_value_score": 8,
+      "business_health_score": 7,
+      "implementation": {
+        "complexity": "medium",
+        "timeline_weeks": 4,
+        "required_data": ["Common symptoms", "Urgency protocols", "Booking integration"]
+      },
+      "options": {
+        "off_the_shelf": {
+          "tools": ["VitusVet", "WhiskerDocs"],
+          "cost_range": "€200-400/month",
+          "pros": ["Vet-specific AI", "Liability protections", "24/7 coverage"],
+          "cons": ["Monthly cost", "May need customization"]
+        },
+        "best_in_class": {
+          "tools": ["Bond Vet Platform", "Vetspire AI"],
+          "cost_range": "€400-800/month",
+          "pros": ["Advanced AI", "Full integration", "Better triage logic"],
+          "cons": ["Higher cost", "Enterprise focus"]
+        },
+        "custom_solution": {
+          "approach": "Claude-powered chatbot with vet-specific protocols",
+          "cost_range": "€8,000-20,000 one-time + €100-300/month",
+          "pros": ["Your protocols", "Branded experience", "Custom workflows"],
+          "cons": ["Development required", "Liability considerations"]
+        }
+      },
+      "roi_example": {
+        "scenario": "Capturing 10 after-hours inquiries/week that convert to appointments",
+        "cost": "€300/month",
+        "savings": "40 appointments/month × €100 = €4,000/month new revenue",
+        "roi_percentage": 1233,
+        "payback_months": 0.5
+      }
+    }
+  ],
+  "quick_wins": [
+    {
+      "title": "Enable online appointment booking",
+      "time_to_implement": "2 days",
+      "expected_impact": "Capture 15-20% more appointments, reduce phone time",
+      "tools": ["Vetstoria", "PetDesk"]
+    },
+    {
+      "title": "Set up automated appointment reminders",
+      "time_to_implement": "1 day",
+      "expected_impact": "Reduce no-shows by 30-50%",
+      "tools": ["Weave", "AllyDVM", "PM built-in"]
+    },
+    {
+      "title": "Add digital intake forms",
+      "time_to_implement": "3 days",
+      "expected_impact": "Save 10-15 min per new client, cleaner data",
+      "tools": ["PetDesk", "PM forms module"]
+    },
+    {
+      "title": "Automate vaccination and wellness reminders",
+      "time_to_implement": "1 week",
+      "expected_impact": "20-30% improvement in wellness visit compliance",
+      "tools": ["PM automation", "Weave", "AllyDVM"]
+    }
+  ],
+  "anti_patterns": [
+    {
+      "pattern": "AI triage without proper vet oversight and liability protection",
+      "why_avoid": "Legal and ethical risks with medical advice",
+      "better_approach": "AI assists with education and booking, humans make medical decisions"
+    },
+    {
+      "pattern": "Forcing online-only booking for all appointment types",
+      "why_avoid": "Some cases need phone triage, older clients prefer calling",
+      "better_approach": "Online for routine wellness, phone available for complex cases"
+    },
+    {
+      "pattern": "Over-automating communication for sick pet updates",
+      "why_avoid": "Pet parents are emotionally invested, want human empathy",
+      "better_approach": "Automate routine reminders, human updates for health concerns"
+    }
+  ]
+}

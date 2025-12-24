@@ -47,7 +47,90 @@ AI_TOOLS_TYPES = [
 # =============================================================================
 
 INDUSTRY_MAPPING = {
-    # Marketing agencies
+    # ==========================================================================
+    # PRIMARY INDUSTRIES (Launch Priority)
+    # ==========================================================================
+
+    # Professional Services (Legal, Accounting, Consulting)
+    "professional_services": "professional-services",
+    "professional-services": "professional-services",
+    "professional services": "professional-services",
+    "consulting": "professional-services",
+    "legal": "professional-services",
+    "law_firm": "professional-services",
+    "law firm": "professional-services",
+    "accounting": "professional-services",
+    "accountant": "professional-services",
+    "cpa": "professional-services",
+    "bookkeeping": "professional-services",
+
+    # Home Services (HVAC, Plumbing, Electrical)
+    "home-services": "home-services",
+    "home_services": "home-services",
+    "home services": "home-services",
+    "hvac": "home-services",
+    "plumbing": "home-services",
+    "plumber": "home-services",
+    "electrical": "home-services",
+    "electrician": "home-services",
+    "contractor": "home-services",
+    "home_improvement": "home-services",
+    "field_service": "home-services",
+    "trades": "home-services",
+
+    # Dental (Practices & DSOs)
+    "dental": "dental",
+    "dentist": "dental",
+    "dental_practice": "dental",
+    "dental practice": "dental",
+    "dso": "dental",
+    "orthodontics": "dental",
+    "oral_surgery": "dental",
+
+    # ==========================================================================
+    # SECONDARY INDUSTRIES (Phase 2) - Placeholders for future
+    # ==========================================================================
+
+    # Recruiting/Staffing
+    "recruiting": "recruiting",
+    "staffing": "recruiting",
+    "recruitment": "recruiting",
+    "hr_agency": "recruiting",
+
+    # Coaching
+    "coaching": "coaching",
+    "business_coaching": "coaching",
+    "executive_coaching": "coaching",
+
+    # Veterinary/Pet Care
+    "veterinary": "veterinary",
+    "vet": "veterinary",
+    "pet_care": "veterinary",
+    "animal_hospital": "veterinary",
+
+    # ==========================================================================
+    # EXPANSION INDUSTRIES (Phase 3) - Placeholders for future
+    # ==========================================================================
+
+    # Physical Therapy/Chiropractic
+    "physical-therapy": "physical-therapy",
+    "physical_therapy": "physical-therapy",
+    "pt": "physical-therapy",
+    "chiropractic": "physical-therapy",
+    "chiropractor": "physical-therapy",
+
+    # MedSpa/Beauty
+    "medspa": "medspa",
+    "med_spa": "medspa",
+    "medical_spa": "medspa",
+    "beauty": "medspa",
+    "aesthetics": "medspa",
+
+    # ==========================================================================
+    # LEGACY INDUSTRIES (Dropped - kept for backward compatibility)
+    # ==========================================================================
+
+    # Marketing agencies (DROPPED - DIY mentality)
     "marketing": "marketing-agencies",
     "marketing_agency": "marketing-agencies",
     "marketing-agency": "marketing-agencies",
@@ -57,7 +140,7 @@ INDUSTRY_MAPPING = {
     "advertising": "marketing-agencies",
     "digital_marketing": "marketing-agencies",
 
-    # E-commerce
+    # E-commerce (DROPPED - not passion-driven service)
     "ecommerce": "ecommerce",
     "e-commerce": "ecommerce",
     "e_commerce": "ecommerce",
@@ -65,13 +148,13 @@ INDUSTRY_MAPPING = {
     "dtc": "ecommerce",
     "d2c": "ecommerce",
 
-    # Retail
+    # Retail (DROPPED - not passion-driven service)
     "retail": "retail",
     "brick_and_mortar": "retail",
     "store": "retail",
     "shops": "retail",
 
-    # Tech companies
+    # Tech companies (DROPPED - DIY mentality)
     "tech": "tech-companies",
     "tech-companies": "tech-companies",
     "technology": "tech-companies",
@@ -79,28 +162,46 @@ INDUSTRY_MAPPING = {
     "software": "tech-companies",
     "startup": "tech-companies",
 
-    # Music studios
+    # Music studios (DROPPED - budget constraints)
     "music": "music-studios",
     "music-studios": "music-studios",
     "music_studio": "music-studios",
     "recording_studio": "music-studios",
     "audio": "music-studios",
     "production": "music-studios",
-
-    # Professional services (new)
-    "professional_services": "professional-services",
-    "consulting": "professional-services",
-    "agency": "professional-services",
 }
 
-SUPPORTED_INDUSTRIES = [
+# Primary target industries with full knowledge bases
+PRIMARY_INDUSTRIES = [
+    "professional-services",
+    "home-services",
+    "dental",
+]
+
+# Secondary industries (Phase 2) - knowledge bases to be built
+SECONDARY_INDUSTRIES = [
+    "recruiting",
+    "coaching",
+    "veterinary",
+]
+
+# Expansion industries (Phase 3) - knowledge bases to be built
+EXPANSION_INDUSTRIES = [
+    "physical-therapy",
+    "medspa",
+]
+
+# Legacy industries (still supported but not target market)
+LEGACY_INDUSTRIES = [
     "marketing-agencies",
     "ecommerce",
     "retail",
     "tech-companies",
     "music-studios",
-    "professional-services",
 ]
+
+# All supported industries (for backward compatibility)
+SUPPORTED_INDUSTRIES = PRIMARY_INDUSTRIES + SECONDARY_INDUSTRIES + EXPANSION_INDUSTRIES + LEGACY_INDUSTRIES
 
 
 # =============================================================================
@@ -529,6 +630,46 @@ def get_not_recommended(industry: str) -> List[Dict]:
 def list_supported_industries() -> List[str]:
     """List all supported industries."""
     return SUPPORTED_INDUSTRIES.copy()
+
+
+def list_primary_industries() -> List[str]:
+    """List primary target industries (launch priority)."""
+    return PRIMARY_INDUSTRIES.copy()
+
+
+def list_secondary_industries() -> List[str]:
+    """List secondary target industries (Phase 2)."""
+    return SECONDARY_INDUSTRIES.copy()
+
+
+def list_expansion_industries() -> List[str]:
+    """List expansion industries (Phase 3)."""
+    return EXPANSION_INDUSTRIES.copy()
+
+
+def list_legacy_industries() -> List[str]:
+    """List legacy/dropped industries (still supported but not target)."""
+    return LEGACY_INDUSTRIES.copy()
+
+
+def get_industry_priority(industry: str) -> str:
+    """
+    Get the priority tier for an industry.
+
+    Returns: 'primary', 'secondary', 'expansion', 'legacy', or 'unknown'
+    """
+    normalized = normalize_industry(industry)
+
+    if normalized in PRIMARY_INDUSTRIES:
+        return "primary"
+    elif normalized in SECONDARY_INDUSTRIES:
+        return "secondary"
+    elif normalized in EXPANSION_INDUSTRIES:
+        return "expansion"
+    elif normalized in LEGACY_INDUSTRIES:
+        return "legacy"
+    else:
+        return "unknown"
 
 
 def list_vendor_categories() -> List[str]:

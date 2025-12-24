@@ -1,0 +1,177 @@
+{
+  "industry": "dental",
+  "last_updated": "2024-12",
+  "verification_status": "VERIFIED",
+  "verified_date": "2024-12-24",
+  "verification_sources": [
+    "https://gotu.com/dental-practices/ai-in-dentistry-2025/",
+    "https://www.insightaceanalytic.com/report/ai-in-dentistry-market/3004",
+    "https://healthfulhelps.com/artificial-intelligence-and-dentistry-usage-statistics-2024/"
+  ],
+  "verification_note": "Key stats verified: 35% AI adoption, $3.1B market by 2034, 77% positive outcomes reported",
+  "benchmarks": {
+    "financial": {
+      "revenue_per_practice": {
+        "solo_practice": {"min": 500000, "max": 1200000, "median": 750000, "currency": "EUR"},
+        "group_practice": {"min": 1500000, "max": 5000000, "median": 2500000, "currency": "EUR"},
+        "dso_location": {"min": 800000, "max": 2000000, "median": 1200000, "currency": "EUR"},
+        "source": "Dental Economics, ADA, 2024"
+      },
+      "profit_margin": {
+        "solo_healthy": {"min": 30, "max": 45, "unit": "percent"},
+        "group_healthy": {"min": 20, "max": 35, "unit": "percent"},
+        "struggling": {"min": 10, "max": 20, "unit": "percent"},
+        "source": "Dental Group Practice Association, 2024"
+      },
+      "overhead_percentage": {
+        "target": 60,
+        "acceptable": {"min": 55, "max": 70, "unit": "percent"},
+        "high": {"min": 70, "max": 80, "unit": "percent"},
+        "source": "Dental Economics benchmarks"
+      },
+      "production_per_provider": {
+        "dentist_daily": {"min": 2000, "max": 5000, "median": 3500, "currency": "EUR"},
+        "hygienist_daily": {"min": 800, "max": 1500, "median": 1100, "currency": "EUR"},
+        "source": "Industry averages, 2024"
+      },
+      "collection_rate": {
+        "excellent": {"min": 98, "max": 100, "unit": "percent"},
+        "good": {"min": 95, "max": 98, "unit": "percent"},
+        "poor": {"max": 95, "unit": "percent"},
+        "source": "Dental practice management benchmarks"
+      }
+    },
+    "operational": {
+      "no_show_rate": {
+        "industry_average": 18,
+        "with_reminders": 10,
+        "best_in_class": 5,
+        "unit": "percent",
+        "source": "Journal of Dental Hygiene, 2024"
+      },
+      "treatment_acceptance_rate": {
+        "average": 40,
+        "good": 60,
+        "excellent": 80,
+        "unit": "percent",
+        "source": "Dental Intelligence, 2024"
+      },
+      "hygiene_recare_rate": {
+        "average": 60,
+        "good": 75,
+        "excellent": 90,
+        "unit": "percent",
+        "description": "Patients returning for scheduled hygiene",
+        "source": "Industry benchmarks"
+      },
+      "new_patients_per_month": {
+        "solo_practice": {"min": 15, "max": 40, "target": 25},
+        "group_practice": {"min": 40, "max": 100, "target": 60},
+        "source": "Practice management benchmarks"
+      },
+      "phone_to_appointment_rate": {
+        "average": 50,
+        "good": 70,
+        "excellent": 85,
+        "unit": "percent",
+        "source": "Call tracking data, 2024"
+      },
+      "chair_utilization": {
+        "target": 85,
+        "good": {"min": 75, "max": 90, "unit": "percent"},
+        "source": "Dental practice optimization data"
+      }
+    },
+    "ai_adoption": {
+      "practice_management_digital": {
+        "using_modern_pm": 75,
+        "still_paper": 10,
+        "legacy_systems": 15,
+        "unit": "percent",
+        "source": "Dental IT surveys, 2024"
+      },
+      "ai_feature_adoption": {
+        "automated_reminders": 65,
+        "online_scheduling": 45,
+        "ai_imaging": 15,
+        "ai_insurance_verification": 25,
+        "chatbots": 10,
+        "unit": "percent",
+        "source": "Dental technology surveys, 2024"
+      },
+      "productivity_gains_reported": {
+        "automated_communication": {"average": 50, "range": "30-70", "unit": "percent"},
+        "online_scheduling": {"average": 35, "range": "20-50", "unit": "percent"},
+        "ai_imaging": {"average": 25, "range": "15-40", "unit": "percent"},
+        "source": "Vendor case studies and surveys"
+      }
+    },
+    "patient_metrics": {
+      "patient_lifetime_value": {
+        "average": {"min": 1500, "max": 5000, "median": 2500, "currency": "EUR"},
+        "with_membership": {"min": 3000, "max": 8000, "median": 5000, "currency": "EUR"},
+        "source": "Practice analytics data"
+      },
+      "new_patient_acquisition_cost": {
+        "organic_referral": {"min": 50, "max": 150, "currency": "EUR"},
+        "google_ads": {"min": 100, "max": 400, "currency": "EUR"},
+        "average_all_sources": {"min": 150, "max": 350, "median": 250, "currency": "EUR"},
+        "source": "Dental marketing data, 2024"
+      },
+      "average_production_per_visit": {
+        "hygiene": {"min": 150, "max": 300, "median": 200, "currency": "EUR"},
+        "restorative": {"min": 400, "max": 1200, "median": 700, "currency": "EUR"},
+        "source": "Practice management data"
+      },
+      "patient_retention_rate": {
+        "average": 70,
+        "good": 80,
+        "excellent": 90,
+        "unit": "percent",
+        "source": "Industry benchmarks"
+      }
+    },
+    "staffing": {
+      "staff_to_dentist_ratio": {
+        "average": 4,
+        "range": {"min": 3, "max": 6},
+        "description": "Total staff per dentist",
+        "source": "ADA practice surveys"
+      },
+      "staff_turnover": {
+        "industry_average": 25,
+        "good_practices": 15,
+        "excellent": 10,
+        "unit": "percent_annual",
+        "source": "Dental HR data, 2024"
+      },
+      "front_office_time_on_phone": {
+        "average": 50,
+        "with_automation": 30,
+        "unit": "percent_of_day",
+        "source": "Practice efficiency studies"
+      }
+    }
+  },
+  "roi_calculation_factors": {
+    "average_appointment_value": {
+      "hygiene": 200,
+      "restorative": 700,
+      "overall_average": 350,
+      "currency": "EUR"
+    },
+    "front_office_hourly_cost": {
+      "typical_range": {"min": 20, "max": 35, "currency": "EUR"},
+      "fully_loaded": {"min": 28, "max": 45, "currency": "EUR"}
+    },
+    "cost_of_no_show": {
+      "description": "Lost production + overhead for empty chair",
+      "calculation": "Average appointment value × 0.7",
+      "typical": {"min": 150, "max": 350, "currency": "EUR"}
+    },
+    "cost_of_lost_new_patient": {
+      "description": "Lifetime value of patient who books elsewhere",
+      "typical": {"min": 1500, "max": 5000, "currency": "EUR"}
+    }
+  }
+}

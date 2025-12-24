@@ -1,0 +1,298 @@
+{
+  "industry": "coaching",
+  "ai_opportunities": [
+    {
+      "id": "ai-session-notes",
+      "name": "AI Session Notes & Insights",
+      "description": "Automated transcription, summaries, and insight extraction from coaching sessions",
+      "category": "efficiency",
+      "impact": {
+        "value_saved": {
+          "time_hours_per_week": 8,
+          "description": "Eliminates post-session documentation time"
+        },
+        "value_created": {
+          "description": "Better session continuity, progress tracking, and pattern recognition",
+          "potential_revenue_impact": "More sessions possible per week"
+        }
+      },
+      "customer_value_score": 10,
+      "business_health_score": 9,
+      "implementation": {
+        "complexity": "medium",
+        "timeline_weeks": 2,
+        "required_data": ["Session recordings (with consent)", "Client goals", "Session history"]
+      },
+      "options": {
+        "off_the_shelf": {
+          "tools": ["Otter.ai", "Fathom", "Fireflies.ai"],
+          "cost_range": "€15-40/month",
+          "pros": ["Easy setup", "Good transcription", "Meeting integrations"],
+          "cons": ["Generic summaries", "Privacy concerns", "Not coaching-specific"]
+        },
+        "best_in_class": {
+          "tools": ["Poised", "Read AI"],
+          "cost_range": "€30-80/month",
+          "pros": ["Communication insights", "Real-time feedback", "Better AI analysis"],
+          "cons": ["Higher cost", "May be overkill"]
+        },
+        "custom_solution": {
+          "approach": "Whisper API for transcription + Claude for coaching-specific summaries and insights",
+          "cost_range": "€3,000-8,000 one-time + €50-150/month API",
+          "pros": ["Coaching-specific insights", "Custom summary format", "Progress tracking"],
+          "cons": ["Development required", "Need to ensure privacy/consent"]
+        }
+      },
+      "roi_example": {
+        "scenario": "Coach doing 20 sessions/week, 30 min notes per session",
+        "cost": "€50/month for transcription + summaries",
+        "savings": "10 hours/week × €100/hour coach rate = €4,000/month (more sessions or personal time)",
+        "roi_percentage": 7900,
+        "payback_months": 0.1
+      }
+    },
+    {
+      "id": "automated-scheduling",
+      "name": "Self-Service Scheduling with Package Tracking",
+      "description": "Clients book their own sessions, track remaining sessions in packages",
+      "category": "efficiency",
+      "impact": {
+        "value_saved": {
+          "time_hours_per_week": 5,
+          "description": "Eliminates back-and-forth scheduling emails"
+        },
+        "value_created": {
+          "description": "Better client experience, fewer no-shows",
+          "potential_revenue_impact": "Higher package utilization"
+        }
+      },
+      "customer_value_score": 9,
+      "business_health_score": 8,
+      "implementation": {
+        "complexity": "low",
+        "timeline_weeks": 1,
+        "required_data": ["Availability", "Package definitions", "Client list"]
+      },
+      "options": {
+        "off_the_shelf": {
+          "tools": ["Calendly", "Acuity Scheduling", "SimplyBook.me"],
+          "cost_range": "€15-50/month",
+          "pros": ["Quick setup", "Reliable", "Client-friendly"],
+          "cons": ["Limited package tracking", "Basic features"]
+        },
+        "best_in_class": {
+          "tools": ["CoachAccountable", "Practice Better", "Paperbell"],
+          "cost_range": "€40-100/month",
+          "pros": ["Built for coaches", "Package/credits tracking", "Client portal"],
+          "cons": ["Learning curve", "Feature overlap with other tools"]
+        },
+        "custom_solution": {
+          "approach": "Custom booking portal with package management",
+          "cost_range": "€5,000-12,000 one-time",
+          "pros": ["Fully branded", "Integrated with your systems", "Custom workflows"],
+          "cons": ["Development time", "Maintenance"]
+        }
+      },
+      "roi_example": {
+        "scenario": "20 clients, 2 hours/week on scheduling coordination",
+        "cost": "€50/month for coaching scheduling tool",
+        "savings": "5 hours/week × €100/hour = €2,000/month (more coaching time or capacity)",
+        "roi_percentage": 3900,
+        "payback_months": 0.1
+      }
+    },
+    {
+      "id": "ai-client-check-ins",
+      "name": "Automated Between-Session Check-ins",
+      "description": "AI-powered accountability nudges, progress check-ins, and resource delivery",
+      "category": "growth",
+      "impact": {
+        "value_saved": {
+          "time_hours_per_week": 4,
+          "description": "Automates routine check-in messages"
+        },
+        "value_created": {
+          "description": "Better client outcomes, higher retention, more referrals",
+          "potential_revenue_impact": "20-30% improvement in client retention"
+        }
+      },
+      "customer_value_score": 9,
+      "business_health_score": 8,
+      "implementation": {
+        "complexity": "medium",
+        "timeline_weeks": 2,
+        "required_data": ["Client goals", "Session summaries", "Engagement history"]
+      },
+      "options": {
+        "off_the_shelf": {
+          "tools": ["CoachAccountable", "Nudge Coach", "Coach.me"],
+          "cost_range": "€30-100/month",
+          "pros": ["Designed for coaches", "Habit tracking", "Accountability features"],
+          "cons": ["Generic messages", "Limited AI personalization"]
+        },
+        "best_in_class": {
+          "tools": ["Practice Better Pro", "Healthie"],
+          "cost_range": "€100-200/month",
+          "pros": ["Full client portal", "Automated workflows", "Progress tracking"],
+          "cons": ["More suited for health coaches", "Complex setup"]
+        },
+        "custom_solution": {
+          "approach": "Claude API for personalized check-ins + SMS/email automation",
+          "cost_range": "€5,000-15,000 one-time + €100-300/month",
+          "pros": ["Truly personalized messages", "Reference session context", "Your coaching voice"],
+          "cons": ["Development required", "Needs quality prompts"]
+        }
+      },
+      "roi_example": {
+        "scenario": "20 clients, improving retention from 60% to 80% (4 more re-engagements/year × €5,000)",
+        "cost": "€75/month for automation",
+        "savings": "4 hours/week saved + €20,000 more revenue/year from retention",
+        "roi_percentage": 2200,
+        "payback_months": 0.5
+      }
+    },
+    {
+      "id": "ai-content-creation",
+      "name": "AI-Assisted Content & Thought Leadership",
+      "description": "Generate newsletters, worksheets, and social content with AI assistance",
+      "category": "growth",
+      "impact": {
+        "value_saved": {
+          "time_hours_per_week": 6,
+          "description": "Faster content creation with AI drafting"
+        },
+        "value_created": {
+          "description": "More consistent content, broader reach",
+          "potential_revenue_impact": "More inbound leads from content marketing"
+        }
+      },
+      "customer_value_score": 7,
+      "business_health_score": 8,
+      "implementation": {
+        "complexity": "low",
+        "timeline_weeks": 1,
+        "required_data": ["Existing content", "Coaching frameworks", "Target audience"]
+      },
+      "options": {
+        "off_the_shelf": {
+          "tools": ["ChatGPT Plus", "Claude Pro", "Jasper"],
+          "cost_range": "€20-80/month",
+          "pros": ["Immediate access", "Versatile", "Good quality"],
+          "cons": ["Requires good prompting", "Generic without context"]
+        },
+        "best_in_class": {
+          "tools": ["Custom GPT with your frameworks", "Jasper for Teams"],
+          "cost_range": "€50-150/month",
+          "pros": ["Trained on your voice", "Team access", "Template library"],
+          "cons": ["Setup time", "Monthly commitment"]
+        },
+        "custom_solution": {
+          "approach": "Fine-tuned AI on your coaching methodology and content",
+          "cost_range": "€3,000-10,000 one-time + €50-100/month",
+          "pros": ["Your exact voice", "Methodology-aware", "Unique value"],
+          "cons": ["Needs content library for training", "Maintenance"]
+        }
+      },
+      "roi_example": {
+        "scenario": "Creating 2 blogs, 1 newsletter, 10 social posts per week",
+        "cost": "€40/month for AI tools",
+        "savings": "6 hours/week × €100/hour = €2,400/month in time",
+        "roi_percentage": 5900,
+        "payback_months": 0.1
+      }
+    },
+    {
+      "id": "group-program-automation",
+      "name": "Scalable Group Program Management",
+      "description": "Automate cohort management, engagement, and content delivery",
+      "category": "growth",
+      "impact": {
+        "value_saved": {
+          "time_hours_per_week": 8,
+          "description": "Automates program administration"
+        },
+        "value_created": {
+          "description": "Scale from 1:1 to 1:many without proportional admin increase",
+          "potential_revenue_impact": "2-3x revenue potential from same time"
+        }
+      },
+      "customer_value_score": 8,
+      "business_health_score": 10,
+      "implementation": {
+        "complexity": "medium",
+        "timeline_weeks": 4,
+        "required_data": ["Program curriculum", "Member management", "Content library"]
+      },
+      "options": {
+        "off_the_shelf": {
+          "tools": ["Circle", "Mighty Networks", "Kajabi"],
+          "cost_range": "€50-200/month",
+          "pros": ["All-in-one platform", "Community features", "Content hosting"],
+          "cons": ["Platform lock-in", "Learning curve"]
+        },
+        "best_in_class": {
+          "tools": ["Skool", "Maven", "Thinkific Plus"],
+          "cost_range": "€100-500/month",
+          "pros": ["Premium experience", "Better gamification", "Enterprise features"],
+          "cons": ["Higher cost", "May be complex for simple programs"]
+        },
+        "custom_solution": {
+          "approach": "Custom LMS with community features + automation",
+          "cost_range": "€15,000-40,000 one-time + hosting",
+          "pros": ["Full ownership", "Custom features", "Unique experience"],
+          "cons": ["Significant investment", "Ongoing maintenance"]
+        }
+      },
+      "roi_example": {
+        "scenario": "Running 10-person cohort at €2,000/person vs. 10 1:1 clients",
+        "cost": "€150/month for platform",
+        "savings": "50% less time per revenue dollar + €20,000 cohort vs €15,000 equivalent 1:1",
+        "roi_percentage": 900,
+        "payback_months": 1
+      }
+    }
+  ],
+  "quick_wins": [
+    {
+      "title": "Add AI transcription to all coaching sessions",
+      "time_to_implement": "1 day",
+      "expected_impact": "Save 30 min per session on notes",
+      "tools": ["Otter.ai", "Fathom"]
+    },
+    {
+      "title": "Set up self-service scheduling with package tracking",
+      "time_to_implement": "2 days",
+      "expected_impact": "Eliminate scheduling back-and-forth",
+      "tools": ["CoachAccountable", "Paperbell"]
+    },
+    {
+      "title": "Create automated welcome sequence for new clients",
+      "time_to_implement": "1 week",
+      "expected_impact": "Consistent onboarding, save 2 hours per new client",
+      "tools": ["ConvertKit", "ActiveCampaign"]
+    },
+    {
+      "title": "Use AI to draft weekly accountability check-ins",
+      "time_to_implement": "2 hours",
+      "expected_impact": "Maintain touch without manual messaging",
+      "tools": ["ChatGPT", "Claude"]
+    }
+  ],
+  "anti_patterns": [
+    {
+      "pattern": "Fully AI-automated coaching without human sessions",
+      "why_avoid": "Clients pay for human connection and expertise",
+      "better_approach": "AI augments between sessions, human leads actual coaching"
+    },
+    {
+      "pattern": "Generic AI check-ins that feel robotic",
+      "why_avoid": "Damages the relationship and trust",
+      "better_approach": "AI drafts, human reviews and personalizes"
+    },
+    {
+      "pattern": "Over-engineering systems before proving coaching model",
+      "why_avoid": "Premature optimization when fundamentals aren't solid",
+      "better_approach": "Prove 1:1 model first, then systematize what works"
+    }
+  ]
+}

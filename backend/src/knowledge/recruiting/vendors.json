@@ -1,0 +1,305 @@
+{
+  "industry": "recruiting",
+  "last_updated": "2025-12",
+  "verification_status": "UNVERIFIED",
+  "verification_note": "Pricing requires verification from vendor websites",
+  "vendor_categories": [
+    {
+      "category": "applicant-tracking",
+      "name": "Applicant Tracking Systems (ATS)",
+      "description": "Core systems for managing candidates, jobs, and placements",
+      "vendors": [
+        {
+          "name": "Bullhorn",
+          "website": "bullhorn.com",
+          "pricing": {
+            "team": {"price": 99, "currency": "EUR", "period": "user/month", "features": ["ATS", "CRM", "Basic automation"]},
+            "corporate": {"price": 175, "currency": "EUR", "period": "user/month", "features": ["Advanced features", "Integrations"]},
+            "enterprise": {"price": "custom", "features": ["Full platform", "API access", "Custom dev"]}
+          },
+          "best_for": "Staffing agencies of all sizes, especially temp/contract",
+          "pros": ["Industry leader", "Strong marketplace", "Great for staffing workflows"],
+          "cons": ["Expensive", "Complex for small teams", "Sales-heavy company"],
+          "company_sizes": ["smb", "mid-market", "enterprise"],
+          "integrations": ["LinkedIn", "Job boards", "VMS systems", "Automation tools"],
+          "pricing_verified_date": "2024-12"
+        },
+        {
+          "name": "JobAdder",
+          "website": "jobadder.com",
+          "pricing": {
+            "starter": {"price": 80, "currency": "EUR", "period": "user/month"},
+            "growth": {"price": 100, "currency": "EUR", "period": "user/month"},
+            "enterprise": {"price": "custom"}
+          },
+          "best_for": "Growing agencies, good balance of features/price",
+          "pros": ["Modern UI", "Good value", "Strong in APAC/EU"],
+          "cons": ["Smaller ecosystem", "Less brand recognition"],
+          "company_sizes": ["startup", "smb", "mid-market"],
+          "integrations": ["Major job boards", "LinkedIn", "Video tools"],
+          "pricing_verified_date": "2024-12"
+        },
+        {
+          "name": "Greenhouse",
+          "website": "greenhouse.io",
+          "pricing": {
+            "essential": {"price": 6000, "currency": "EUR", "period": "year", "features": ["Basic ATS"]},
+            "advanced": {"price": 15000, "currency": "EUR", "period": "year", "features": ["Sourcing", "CRM"]},
+            "expert": {"price": "custom", "features": ["Full platform"]}
+          },
+          "best_for": "In-house recruiting teams, tech companies",
+          "pros": ["Best-in-class UX", "Strong analytics", "Excellent integrations"],
+          "cons": ["Expensive", "Less suited for agencies", "Annual commitment"],
+          "company_sizes": ["smb", "mid-market", "enterprise"],
+          "integrations": ["500+ integrations", "Open API"],
+          "pricing_verified_date": "2024-12"
+        },
+        {
+          "name": "Workable",
+          "website": "workable.com",
+          "pricing": {
+            "starter": {"price": 149, "currency": "EUR", "period": "month", "features": ["Up to 2 jobs"]},
+            "growth": {"price": 349, "currency": "EUR", "period": "month", "features": ["Unlimited jobs", "Basic AI"]},
+            "premier": {"price": "custom", "features": ["Full features", "Priority support"]}
+          },
+          "best_for": "SMBs, in-house teams, growing companies",
+          "pros": ["Good value", "Easy to use", "Built-in sourcing"],
+          "cons": ["Not agency-focused", "Limited customization"],
+          "company_sizes": ["startup", "smb"],
+          "integrations": ["Major job boards", "HRIS systems"],
+          "pricing_verified_date": "2024-12"
+        }
+      ]
+    },
+    {
+      "category": "ai-sourcing",
+      "name": "AI Sourcing & Matching",
+      "description": "AI-powered tools for finding and matching candidates",
+      "vendors": [
+        {
+          "name": "HireEZ",
+          "website": "hireez.com",
+          "pricing": {
+            "professional": {"price": 299, "currency": "EUR", "period": "user/month", "features": ["AI sourcing", "Boolean builder", "Contact info"]},
+            "business": {"price": 449, "currency": "EUR", "period": "user/month", "features": ["Advanced AI", "Talent insights"]}
+          },
+          "best_for": "High-volume sourcing, tech recruiting",
+          "pros": ["Powerful AI matching", "Cross-platform sourcing", "Good contact data"],
+          "cons": ["Per-seat cost adds up", "Learning curve", "Some data accuracy issues"],
+          "company_sizes": ["smb", "mid-market", "enterprise"],
+          "integrations": ["Major ATS systems", "LinkedIn", "Email platforms"],
+          "pricing_verified_date": "2024-12"
+        },
+        {
+          "name": "SeekOut",
+          "website": "seekout.com",
+          "pricing": {
+            "recruiter": {"price": 350, "currency": "EUR", "period": "user/month"},
+            "enterprise": {"price": "custom"}
+          },
+          "best_for": "Diversity hiring, technical recruiting, enterprise",
+          "pros": ["Excellent diversity tools", "Strong GitHub/technical profiles", "Good UI"],
+          "cons": ["Premium pricing", "Enterprise sales process"],
+          "company_sizes": ["mid-market", "enterprise"],
+          "integrations": ["Major ATS platforms", "HRIS"],
+          "pricing_verified_date": "2024-12"
+        },
+        {
+          "name": "Eightfold AI",
+          "website": "eightfold.ai",
+          "pricing": {
+            "talent_intelligence": {"price": "custom", "features": ["Enterprise AI platform", "Skills ontology", "Career pathing"]}
+          },
+          "best_for": "Enterprise, internal mobility, workforce planning",
+          "pros": ["Most advanced AI", "Skills-based approach", "Full talent lifecycle"],
+          "cons": ["Enterprise only", "Complex implementation", "High cost"],
+          "company_sizes": ["enterprise"],
+          "integrations": ["All major systems"],
+          "pricing_verified_date": "2024-12"
+        },
+        {
+          "name": "Fetcher",
+          "website": "fetcher.ai",
+          "pricing": {
+            "starter": {"price": 249, "currency": "EUR", "period": "month", "features": ["AI sourcing", "50 leads/week"]},
+            "growth": {"price": 549, "currency": "EUR", "period": "month", "features": ["More leads", "Team features"]}
+          },
+          "best_for": "Small teams wanting done-for-you sourcing",
+          "pros": ["Leads delivered to inbox", "Easy to use", "Good quality"],
+          "cons": ["Limited customization", "Volume caps"],
+          "company_sizes": ["startup", "smb"],
+          "integrations": ["ATS systems", "Email"],
+          "pricing_verified_date": "2024-12"
+        }
+      ]
+    },
+    {
+      "category": "candidate-engagement",
+      "name": "Candidate Engagement & CRM",
+      "description": "Tools for nurturing and engaging candidates",
+      "vendors": [
+        {
+          "name": "Gem",
+          "website": "gem.com",
+          "pricing": {
+            "core": {"price": 300, "currency": "EUR", "period": "user/month", "features": ["Outreach automation", "CRM", "Analytics"]},
+            "complete": {"price": 500, "currency": "EUR", "period": "user/month", "features": ["Full platform"]}
+          },
+          "best_for": "Tech recruiting, outbound-heavy teams",
+          "pros": ["Best LinkedIn integration", "Great analytics", "Sequence automation"],
+          "cons": ["Premium pricing", "Tech-focused"],
+          "company_sizes": ["smb", "mid-market", "enterprise"],
+          "integrations": ["LinkedIn", "ATS systems", "Email"],
+          "pricing_verified_date": "2024-12"
+        },
+        {
+          "name": "Beamery",
+          "website": "beamery.com",
+          "pricing": {
+            "platform": {"price": "custom", "features": ["Talent CRM", "Campaigns", "Analytics"]}
+          },
+          "best_for": "Enterprise talent acquisition, employer branding",
+          "pros": ["Full CRM", "Marketing automation", "Great for talent pooling"],
+          "cons": ["Enterprise pricing", "Complex setup"],
+          "company_sizes": ["mid-market", "enterprise"],
+          "integrations": ["All major ATS", "Marketing tools"],
+          "pricing_verified_date": "2024-12"
+        },
+        {
+          "name": "Hireflow",
+          "website": "hireflow.com",
+          "pricing": {
+            "starter": {"price": 69, "currency": "EUR", "period": "user/month"},
+            "pro": {"price": 159, "currency": "EUR", "period": "user/month"}
+          },
+          "best_for": "Agencies wanting simple outreach automation",
+          "pros": ["Good value", "Easy setup", "Agency-friendly"],
+          "cons": ["Fewer features than Gem", "Smaller company"],
+          "company_sizes": ["startup", "smb"],
+          "integrations": ["LinkedIn", "Email", "ATS"],
+          "pricing_verified_date": "2024-12"
+        }
+      ]
+    },
+    {
+      "category": "conversational-ai",
+      "name": "Conversational AI & Chatbots",
+      "description": "AI chatbots for candidate screening and engagement",
+      "vendors": [
+        {
+          "name": "Paradox (Olivia)",
+          "website": "paradox.ai",
+          "pricing": {
+            "starter": {"price": 500, "currency": "EUR", "period": "month"},
+            "professional": {"price": 1500, "currency": "EUR", "period": "month"},
+            "enterprise": {"price": "custom"}
+          },
+          "best_for": "High-volume hiring, hourly workforce",
+          "pros": ["Best conversational AI", "SMS/web", "Great for scheduling"],
+          "cons": ["Monthly minimums", "Setup complexity"],
+          "company_sizes": ["mid-market", "enterprise"],
+          "integrations": ["All major ATS", "HRIS"],
+          "pricing_verified_date": "2024-12"
+        },
+        {
+          "name": "XOR",
+          "website": "xor.ai",
+          "pricing": {
+            "core": {"price": 400, "currency": "EUR", "period": "month"},
+            "advanced": {"price": 800, "currency": "EUR", "period": "month"}
+          },
+          "best_for": "Mid-market, staffing agencies",
+          "pros": ["Good for staffing", "Competitive pricing", "Text recruiting"],
+          "cons": ["Smaller than Paradox", "Limited brand recognition"],
+          "company_sizes": ["smb", "mid-market"],
+          "integrations": ["Bullhorn", "Major ATS"],
+          "pricing_verified_date": "2024-12"
+        }
+      ]
+    },
+    {
+      "category": "scheduling",
+      "name": "Interview Scheduling",
+      "description": "Tools for automated interview coordination",
+      "vendors": [
+        {
+          "name": "GoodTime",
+          "website": "goodtime.io",
+          "pricing": {
+            "starter": {"price": 200, "currency": "EUR", "period": "month"},
+            "professional": {"price": 400, "currency": "EUR", "period": "month"}
+          },
+          "best_for": "Complex scheduling, panel interviews",
+          "pros": ["Multi-party scheduling", "Analytics", "ATS integration"],
+          "cons": ["Higher cost than simple tools", "Overkill for small teams"],
+          "company_sizes": ["smb", "mid-market", "enterprise"],
+          "integrations": ["Greenhouse", "Lever", "Major ATS"],
+          "pricing_verified_date": "2024-12"
+        },
+        {
+          "name": "Calendly",
+          "website": "calendly.com",
+          "pricing": {
+            "professional": {"price": 12, "currency": "EUR", "period": "user/month"},
+            "teams": {"price": 20, "currency": "EUR", "period": "user/month"}
+          },
+          "best_for": "Simple scheduling, small teams",
+          "pros": ["Very affordable", "Easy setup", "Widely known"],
+          "cons": ["Limited recruiting features", "Basic analytics"],
+          "company_sizes": ["startup", "smb"],
+          "integrations": ["Calendars", "Zoom", "Basic ATS"],
+          "pricing_verified_date": "2024-12"
+        },
+        {
+          "name": "Cronofy",
+          "website": "cronofy.com",
+          "pricing": {
+            "starter": {"price": 10, "currency": "EUR", "period": "user/month"},
+            "business": {"price": 25, "currency": "EUR", "period": "user/month"}
+          },
+          "best_for": "Teams needing calendar sync across clients",
+          "pros": ["Strong calendar integration", "Good API", "Affordable"],
+          "cons": ["Less polished UX", "Technical setup"],
+          "company_sizes": ["startup", "smb", "mid-market"],
+          "integrations": ["All calendar systems", "ATS platforms"],
+          "pricing_verified_date": "2024-12"
+        }
+      ]
+    },
+    {
+      "category": "resume-parsing",
+      "name": "Resume Parsing & Data",
+      "description": "Tools for extracting and enriching candidate data",
+      "vendors": [
+        {
+          "name": "Textkernel",
+          "website": "textkernel.com",
+          "pricing": {
+            "parse": {"price": 0.25, "currency": "EUR", "period": "per resume"},
+            "enterprise": {"price": "custom", "features": ["Unlimited", "Search", "Matching"]}
+          },
+          "best_for": "High-volume parsing, semantic search",
+          "pros": ["Industry leader", "Multi-language", "Search/match AI"],
+          "cons": ["Enterprise sales", "Per-doc pricing adds up"],
+          "company_sizes": ["smb", "mid-market", "enterprise"],
+          "integrations": ["All major ATS"],
+          "pricing_verified_date": "2024-12"
+        },
+        {
+          "name": "Affinda",
+          "website": "affinda.com",
+          "pricing": {
+            "pay_as_you_go": {"price": 0.10, "currency": "EUR", "period": "per resume"},
+            "business": {"price": 500, "currency": "EUR", "period": "month", "features": ["5000 resumes/month"]}
+          },
+          "best_for": "Cost-effective parsing, startups",
+          "pros": ["Good accuracy", "Affordable", "Simple API"],
+          "cons": ["Smaller company", "Less advanced matching"],
+          "company_sizes": ["startup", "smb"],
+          "integrations": ["API-based"],
+          "pricing_verified_date": "2024-12"
+        }
+      ]
+    }
+  ]
+}

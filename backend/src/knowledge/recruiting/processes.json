@@ -1,0 +1,157 @@
+{
+  "industry": "recruiting",
+  "description": "Recruiting and staffing agencies including executive search, temp staffing, and specialized placement firms",
+  "common_processes": [
+    {
+      "id": "candidate-sourcing",
+      "name": "Candidate Sourcing & Outreach",
+      "description": "Finding candidates through job boards, LinkedIn, referrals, and direct outreach",
+      "typical_time_spent": "4-6 hours/day",
+      "pain_level": "very high",
+      "automation_potential": 85,
+      "ai_opportunities": [
+        "AI-powered candidate matching from resume databases",
+        "Automated LinkedIn and job board sourcing",
+        "Intelligent outreach personalization",
+        "Boolean search automation",
+        "Passive candidate identification"
+      ]
+    },
+    {
+      "id": "resume-screening",
+      "name": "Resume Screening & Qualification",
+      "description": "Reviewing resumes, assessing qualifications, and shortlisting candidates",
+      "typical_time_spent": "3-5 hours/day",
+      "pain_level": "very high",
+      "automation_potential": 90,
+      "ai_opportunities": [
+        "AI resume parsing and scoring",
+        "Automated skill extraction",
+        "Experience verification",
+        "Culture fit prediction",
+        "Red flag detection"
+      ]
+    },
+    {
+      "id": "candidate-communication",
+      "name": "Candidate Communication",
+      "description": "Scheduling interviews, sending updates, following up with candidates",
+      "typical_time_spent": "2-4 hours/day",
+      "pain_level": "high",
+      "automation_potential": 80,
+      "ai_opportunities": [
+        "Automated interview scheduling",
+        "Status update emails",
+        "Chatbot for candidate FAQs",
+        "Personalized nurture sequences",
+        "Rejection emails with feedback"
+      ]
+    },
+    {
+      "id": "interview-coordination",
+      "name": "Interview Coordination",
+      "description": "Scheduling interviews between candidates and clients, managing calendars",
+      "typical_time_spent": "2-3 hours/day",
+      "pain_level": "high",
+      "automation_potential": 85,
+      "ai_opportunities": [
+        "Self-service interview scheduling",
+        "Calendar integration across parties",
+        "Automated reminders",
+        "Video interview platform scheduling",
+        "Time zone management"
+      ]
+    },
+    {
+      "id": "client-management",
+      "name": "Client Relationship Management",
+      "description": "Managing job orders, client communication, and requirement gathering",
+      "typical_time_spent": "2-3 hours/day",
+      "pain_level": "medium",
+      "automation_potential": 60,
+      "ai_opportunities": [
+        "Automated job intake forms",
+        "Requirement parsing from job descriptions",
+        "Client portal for status updates",
+        "Hiring manager feedback collection",
+        "Market rate insights"
+      ]
+    },
+    {
+      "id": "database-management",
+      "name": "ATS & Database Management",
+      "description": "Maintaining candidate database, updating records, data hygiene",
+      "typical_time_spent": "1-2 hours/day",
+      "pain_level": "medium",
+      "automation_potential": 75,
+      "ai_opportunities": [
+        "Automated data enrichment",
+        "Duplicate detection and merging",
+        "Profile update reminders",
+        "Candidate re-engagement triggers",
+        "Data quality scoring"
+      ]
+    },
+    {
+      "id": "placement-onboarding",
+      "name": "Placement & Onboarding",
+      "description": "Managing offers, background checks, and placement paperwork",
+      "typical_time_spent": "1-2 hours/day",
+      "pain_level": "medium",
+      "automation_potential": 70,
+      "ai_opportunities": [
+        "Automated offer letter generation",
+        "Digital signature workflows",
+        "Background check coordination",
+        "Onboarding document collection",
+        "First-day reminders"
+      ]
+    },
+    {
+      "id": "reporting-analytics",
+      "name": "Reporting & Analytics",
+      "description": "Creating reports on placements, time-to-fill, client metrics",
+      "typical_time_spent": "2-4 hours/week",
+      "pain_level": "medium",
+      "automation_potential": 80,
+      "ai_opportunities": [
+        "Automated dashboard generation",
+        "Predictive placement analytics",
+        "Revenue forecasting",
+        "Recruiter performance tracking",
+        "Pipeline health monitoring"
+      ]
+    }
+  ],
+  "typical_team_structure": {
+    "boutique_agency": {
+      "size": "2-5",
+      "roles": ["Owner/Lead Recruiter", "Recruiters", "Coordinator/Admin"]
+    },
+    "mid_size_agency": {
+      "size": "10-30",
+      "roles": ["Managing Director", "Team Leads", "Senior Recruiters", "Junior Recruiters", "Sourcers", "Coordinators", "Business Development", "Admin"]
+    },
+    "large_staffing_firm": {
+      "size": "50+",
+      "roles": ["Executive Team", "Branch Managers", "Account Managers", "Recruiting Teams", "Sourcing Teams", "Operations", "Marketing", "IT", "HR"]
+    }
+  },
+  "common_tools": [
+    "Bullhorn", "JobAdder", "Greenhouse", "Lever", "Workable",
+    "LinkedIn Recruiter", "Indeed", "ZipRecruiter",
+    "Calendly", "GoodTime", "Cronofy",
+    "HireEZ", "SeekOut", "Hiretual",
+    "Textio", "Crystal", "Pymetrics"
+  ],
+  "industry_specific_challenges": [
+    "High competition for quality candidates",
+    "Time-to-fill pressure from clients",
+    "Candidate ghosting (30-50% ghost rate)",
+    "Maintaining warm candidate relationships",
+    "Data quality across multiple sources",
+    "Compliance with GDPR and hiring regulations",
+    "Commission-based comp creating urgency",
+    "Client exclusivity and fee negotiations"
+  ]
+}

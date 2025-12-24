@@ -123,6 +123,36 @@ async def cleanup_old_pdfs():
         logger.error(f"Storage cleanup job failed: {e}")
 
 
+async def refresh_vendor_pricing():
+    """
+    Refresh vendor pricing from vendor websites.
+    Runs weekly on Sundays at 2 AM.
+
+    This ensures our vendor pricing data stays current.
+    """
+    logger.info("Starting vendor pricing refresh job")
+
+    try:
+        from src.services.vendor_refresh_service import vendor_refresh_service
+
+        # Refresh vendors that haven't been updated in 7+ days
+        results = await vendor_refresh_service.refresh_all_vendors(
+            older_than_days=7,
+            limit=50,  # Limit per run to avoid overloading
+        )
+
+        success_count = sum(1 for r in results if r.get("success"))
+        changed_count = sum(1 for r in results if r.get("changed"))
+
+        logger.info(
+            f"Vendor refresh completed: {success_count}/{len(results)} successful, "
+            f"{changed_count} pricing changes detected"
+        )
+
+    except Exception as e:
+        logger.error(f"Vendor pricing refresh job failed: {e}")
+
+
 async def cleanup_expired_quiz_sessions():
     """
     Clean up quiz sessions that expired without payment.
@@ -185,7 +215,16 @@ def setup_scheduler():
         replace_existing=True,
     )
 
-    logger.info("Scheduler configured with 3 jobs")
+    # Vendor pricing refresh - weekly on Sundays at 2 AM UTC
+    scheduler.add_job(
+        refresh_vendor_pricing,
+        CronTrigger(day_of_week="sun", hour=2, minute=0),
+        id="vendor_refresh",
+        name="Refresh vendor pricing from websites",
+        replace_existing=True,
+    )
+
+    logger.info("Scheduler configured with 4 jobs")
     return scheduler
 
 
@@ -220,3 +259,8 @@ async def trigger_storage_cleanup():
 async def trigger_quiz_cleanup():
     """Manually trigger quiz session cleanup job."""
     await cleanup_expired_quiz_sessions()
+
+
+async def trigger_vendor_refresh():
+    """Manually trigger vendor pricing refresh job."""
+    await refresh_vendor_pricing()

@@ -1,0 +1,349 @@
+{
+  "industry": "dental",
+  "ai_opportunities": [
+    {
+      "id": "automated-patient-communication",
+      "name": "Automated Patient Communication System",
+      "description": "Two-way texting, automated reminders, and personalized recall campaigns",
+      "category": "efficiency",
+      "impact": {
+        "value_saved": {
+          "time_hours_per_week": 15,
+          "description": "Eliminates manual reminder calls and follow-up tasks"
+        },
+        "value_created": {
+          "description": "Reduce no-shows by 50%, improve recall compliance",
+          "potential_revenue_impact": "10-15% more appointments kept"
+        }
+      },
+      "customer_value_score": 9,
+      "business_health_score": 9,
+      "implementation": {
+        "complexity": "low",
+        "timeline_weeks": 2,
+        "required_data": ["Patient contact info", "Appointment data", "Practice management integration"]
+      },
+      "options": {
+        "off_the_shelf": {
+          "tools": ["Weave", "Lighthouse 360", "Solutionreach"],
+          "cost_range": "€300-500/month",
+          "pros": ["All-in-one communication", "HIPAA compliant", "Easy setup"],
+          "cons": ["Monthly commitment", "Feature overlap potential"]
+        },
+        "best_in_class": {
+          "tools": ["Weave Complete", "RevenueWell"],
+          "cost_range": "€400-700/month",
+          "pros": ["VoIP included", "Reviews", "Forms", "Analytics"],
+          "cons": ["Higher cost", "May replace existing phone system"]
+        },
+        "custom_solution": {
+          "approach": "Custom SMS/email automation using Twilio + practice management API",
+          "cost_range": "€3,000-8,000 one-time + €50-100/month",
+          "pros": ["Full customization", "Lower ongoing cost", "Unique messaging"],
+          "cons": ["Development required", "HIPAA compliance burden"]
+        }
+      },
+      "roi_example": {
+        "scenario": "Practice with 200 appointments/month, 18% no-show rate",
+        "cost": "€400/month",
+        "savings": "Reduce no-shows by 50% = 18 more appointments × €200 avg = €3,600/month",
+        "roi_percentage": 800,
+        "payback_months": 0.5
+      }
+    },
+    {
+      "id": "ai-insurance-verification",
+      "name": "AI-Powered Insurance Verification",
+      "description": "Real-time eligibility checks and automated benefits breakdown",
+      "category": "efficiency",
+      "impact": {
+        "value_saved": {
+          "time_hours_per_week": 20,
+          "description": "Eliminate manual phone calls to insurance companies"
+        },
+        "value_created": {
+          "description": "Fewer claim denials, faster payment, better patient experience",
+          "potential_revenue_impact": "10-20% reduction in claim rejections"
+        }
+      },
+      "customer_value_score": 7,
+      "business_health_score": 10,
+      "implementation": {
+        "complexity": "medium",
+        "timeline_weeks": 4,
+        "required_data": ["Patient insurance info", "Practice management system access"]
+      },
+      "options": {
+        "off_the_shelf": {
+          "tools": ["Vyne Dental", "Dentrix Ascend verification"],
+          "cost_range": "€200-400/month",
+          "pros": ["Integrated with PM", "Instant verification", "Benefits breakdown"],
+          "cons": ["Not all payers", "Accuracy varies"]
+        },
+        "best_in_class": {
+          "tools": ["Dental Intelligence", "Jarvis Analytics"],
+          "cost_range": "€400-800/month",
+          "pros": ["Advanced analytics", "Production tracking", "AI insights"],
+          "cons": ["Higher cost", "Learning curve"]
+        },
+        "custom_solution": {
+          "approach": "RPA bot + AI for insurance verification across multiple portals",
+          "cost_range": "€10,000-25,000 one-time",
+          "pros": ["Works with any payer", "Full automation", "Major time savings"],
+          "cons": ["Complex build", "Needs maintenance as portals change"]
+        }
+      },
+      "roi_example": {
+        "scenario": "Practice verifying 50 patients/week manually (30 min each)",
+        "cost": "€350/month",
+        "savings": "25 hours/week × €25/hour = €2,500/month saved",
+        "roi_percentage": 614,
+        "payback_months": 1
+      }
+    },
+    {
+      "id": "online-scheduling",
+      "name": "24/7 Online Patient Scheduling",
+      "description": "Allow patients to self-schedule appointments online anytime",
+      "category": "growth",
+      "impact": {
+        "value_saved": {
+          "time_hours_per_week": 10,
+          "description": "Fewer scheduling phone calls"
+        },
+        "value_created": {
+          "description": "Capture appointments outside office hours, reduce phone traffic",
+          "potential_revenue_impact": "15-25% of appointments booked online"
+        }
+      },
+      "customer_value_score": 9,
+      "business_health_score": 8,
+      "implementation": {
+        "complexity": "low",
+        "timeline_weeks": 2,
+        "required_data": ["Schedule availability", "Appointment types", "Provider preferences"]
+      },
+      "options": {
+        "off_the_shelf": {
+          "tools": ["LocalMed", "Zocdoc", "NexHealth"],
+          "cost_range": "€200-500/month",
+          "pros": ["Easy patient experience", "Google integration", "Real-time sync"],
+          "cons": ["Monthly fees", "May limit customization"]
+        },
+        "best_in_class": {
+          "tools": ["NexHealth Pro", "Dental Intelligence scheduling"],
+          "cost_range": "€400-700/month",
+          "pros": ["Smart scheduling rules", "Waitlist management", "Analytics"],
+          "cons": ["Higher cost"]
+        },
+        "custom_solution": {
+          "approach": "Custom booking widget integrated with practice management",
+          "cost_range": "€5,000-12,000 one-time",
+          "pros": ["Fully branded", "Custom rules", "No monthly fees"],
+          "cons": ["Development time", "Integration complexity"]
+        }
+      },
+      "roi_example": {
+        "scenario": "Practice receiving 50 scheduling calls/week",
+        "cost": "€350/month",
+        "savings": "15 appointments booked online/week × €200 avg production = €12,000/month potential",
+        "value_created": "After-hours booking captures new patients who would go elsewhere",
+        "roi_percentage": 500,
+        "payback_months": 1
+      }
+    },
+    {
+      "id": "ai-treatment-planning",
+      "name": "AI-Assisted Treatment Planning & Imaging",
+      "description": "AI analysis of X-rays and scans to assist with diagnosis and treatment planning",
+      "category": "efficiency",
+      "impact": {
+        "value_saved": {
+          "time_hours_per_week": 5,
+          "description": "Faster image analysis, reduced second opinions"
+        },
+        "value_created": {
+          "description": "Catch more issues, improve case acceptance with visuals",
+          "potential_revenue_impact": "10-15% increase in treatment acceptance"
+        }
+      },
+      "customer_value_score": 8,
+      "business_health_score": 8,
+      "implementation": {
+        "complexity": "medium",
+        "timeline_weeks": 4,
+        "required_data": ["Digital X-rays", "Imaging software integration"]
+      },
+      "options": {
+        "off_the_shelf": {
+          "tools": ["Pearl", "Overjet", "Dentistry.AI"],
+          "cost_range": "€300-600/month",
+          "pros": ["FDA-cleared", "Integrates with imaging", "Second read"],
+          "cons": ["Requires digital imaging", "Learning curve"]
+        },
+        "best_in_class": {
+          "tools": ["Pearl Second Opinion + Practice Analytics"],
+          "cost_range": "€500-900/month",
+          "pros": ["Comprehensive AI", "Patient engagement tools", "Clinical insights"],
+          "cons": ["Higher cost", "Full commitment needed"]
+        },
+        "custom_solution": {
+          "approach": "Not recommended - FDA approval requirements make custom AI infeasible",
+          "cost_range": "N/A",
+          "pros": [],
+          "cons": ["Regulatory hurdles", "Liability concerns"]
+        }
+      },
+      "roi_example": {
+        "scenario": "Practice with €50K/month production, 40% treatment acceptance",
+        "cost": "€500/month",
+        "value_created": "Increase acceptance to 50% = €12,500/month additional treatment",
+        "roi_percentage": 2400,
+        "payback_months": 0.5
+      }
+    },
+    {
+      "id": "patient-financing",
+      "name": "In-House Patient Financing Automation",
+      "description": "Offer payment plans and financing options to increase treatment acceptance",
+      "category": "growth",
+      "impact": {
+        "value_saved": {
+          "time_hours_per_week": 3,
+          "description": "Automated payment plan setup and collection"
+        },
+        "value_created": {
+          "description": "More patients say yes to treatment when payment options available",
+          "potential_revenue_impact": "20-40% increase in case acceptance for larger cases"
+        }
+      },
+      "customer_value_score": 9,
+      "business_health_score": 9,
+      "implementation": {
+        "complexity": "low",
+        "timeline_weeks": 2,
+        "required_data": ["Treatment costs", "Payment processing setup"]
+      },
+      "options": {
+        "off_the_shelf": {
+          "tools": ["CareCredit", "Sunbit", "Proceed Finance"],
+          "cost_range": "0-4% per transaction",
+          "pros": ["No upfront cost", "Instant decisions", "Patient pays interest"],
+          "cons": ["High patient interest rates", "Not all approved"]
+        },
+        "best_in_class": {
+          "tools": ["Sunbit + in-house payment plans via Weave"],
+          "cost_range": "2-5% per transaction + software fees",
+          "pros": ["Higher approval rates", "Multiple options", "In-house plans too"],
+          "cons": ["Need to manage multiple systems"]
+        },
+        "custom_solution": {
+          "approach": "In-house payment plans with automated ACH collection",
+          "cost_range": "€2,000-5,000 setup + payment processing fees",
+          "pros": ["No third-party fees", "Full control", "Better margins"],
+          "cons": ["Default risk", "Collection burden"]
+        }
+      },
+      "roi_example": {
+        "scenario": "10 patients/month declining €2,000+ treatment due to cost",
+        "cost": "3% average transaction fee",
+        "value_created": "Convert 5 patients = €10,000 revenue, €300 fee = €9,700 net gain",
+        "roi_percentage": 3100,
+        "payback_months": 0.5
+      }
+    },
+    {
+      "id": "reputation-reviews",
+      "name": "Automated Reputation & Review Management",
+      "description": "Systematically generate reviews and manage online reputation",
+      "category": "growth",
+      "impact": {
+        "value_saved": {
+          "time_hours_per_week": 3,
+          "description": "Automated review requests, no manual follow-up"
+        },
+        "value_created": {
+          "description": "Higher Google ranking, more new patient calls",
+          "potential_revenue_impact": "5-10 additional new patients/month"
+        }
+      },
+      "customer_value_score": 8,
+      "business_health_score": 9,
+      "implementation": {
+        "complexity": "low",
+        "timeline_weeks": 1,
+        "required_data": ["Patient email/phone", "Appointment completion data"]
+      },
+      "options": {
+        "off_the_shelf": {
+          "tools": ["Birdeye", "Podium", "Weave (included)"],
+          "cost_range": "€200-400/month (or included in communication platform)",
+          "pros": ["Easy setup", "Multi-platform reviews", "Response templates"],
+          "cons": ["Can be expensive standalone"]
+        },
+        "best_in_class": {
+          "tools": ["Birdeye + Google integration"],
+          "cost_range": "€350-500/month",
+          "pros": ["Comprehensive reputation", "Competitive insights", "Social integration"],
+          "cons": ["Higher cost"]
+        },
+        "custom_solution": {
+          "approach": "Custom review request automation via n8n/Make",
+          "cost_range": "€1,000-2,500 one-time + minimal ongoing",
+          "pros": ["Low ongoing cost", "Customized messaging"],
+          "cons": ["Basic features only", "No reputation dashboard"]
+        }
+      },
+      "roi_example": {
+        "scenario": "Practice currently getting 2 reviews/month",
+        "cost": "€300/month",
+        "value_created": "Increase to 15 reviews/month = higher ranking = 5 new patients × €1,000 lifetime value",
+        "roi_percentage": 1500,
+        "payback_months": 1
+      }
+    }
+  ],
+  "quick_wins": [
+    {
+      "name": "Implement automated appointment reminders",
+      "time_to_implement": "1 day",
+      "cost": "Often included in PM or €50-100/month",
+      "impact": "Reduce no-shows by 30-50%"
+    },
+    {
+      "name": "Add online booking to website",
+      "time_to_implement": "1 week",
+      "cost": "€200-400/month",
+      "impact": "Capture 15-25% of appointments online"
+    },
+    {
+      "name": "Set up automated review requests",
+      "time_to_implement": "1 day",
+      "cost": "€100-200/month or included",
+      "impact": "5-10x more reviews"
+    },
+    {
+      "name": "Digital patient intake forms",
+      "time_to_implement": "1 week",
+      "cost": "Often included or €50-150/month",
+      "impact": "Save 10 min/patient, better data accuracy"
+    }
+  ],
+  "not_recommended": [
+    {
+      "name": "Custom practice management software",
+      "reason": "Dental PM systems are complex and heavily regulated; existing solutions are mature",
+      "alternative": "Use established PM (Dentrix, Eaglesoft, Open Dental) and add integrations"
+    },
+    {
+      "name": "Custom AI diagnostic imaging",
+      "reason": "FDA approval requirements make custom medical AI extremely expensive and risky",
+      "alternative": "Use FDA-cleared solutions like Pearl or Overjet"
+    },
+    {
+      "name": "Building your own patient portal",
+      "reason": "HIPAA compliance complexity; patients expect standardized experiences",
+      "alternative": "Use portal from communication platform (Weave, NexHealth)"
+    }
+  ]
+}

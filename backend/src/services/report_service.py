@@ -82,6 +82,16 @@ from src.services.insights_generator import InsightsGenerator
 
 logger = logging.getLogger(__name__)
 
+# Confidence-Adjusted ROI factors
+# HIGH confidence: Full ROI estimate (100%)
+# MEDIUM confidence: Moderate adjustment (85%)
+# LOW confidence: Conservative adjustment (70%)
+CONFIDENCE_FACTORS = {
+    "high": 1.0,
+    "medium": 0.85,
+    "low": 0.70
+}
+
 
 class ReportGenerator:
     """
@@ -1145,42 +1155,74 @@ Return ONLY the JSON."""
             return {"short_term": [], "mid_term": [], "long_term": []}
 
     def _calculate_value_summary(self, findings: List[Dict], recommendations: List[Dict]) -> Dict[str, Any]:
-        """Calculate total value summary from findings and recommendations."""
-        # Calculate value saved
-        total_hours_saved = sum(
-            f.get("value_saved", {}).get("hours_per_week", 0) for f in findings
-        )
+        """Calculate total value summary from findings and recommendations.
+
+        Applies confidence-adjusted ROI (ROI-CA):
+        - HIGH confidence: 100% of estimated value
+        - MEDIUM confidence: 85% of estimated value
+        - LOW confidence: 70% of estimated value
+        """
+        # Calculate confidence-adjusted hours saved
+        total_hours_saved_raw = 0
+        total_hours_saved_adjusted = 0
+        for f in findings:
+            hours = f.get("value_saved", {}).get("hours_per_week", 0) or 0
+            confidence = f.get("confidence", "medium").lower()
+            factor = CONFIDENCE_FACTORS.get(confidence, 0.85)
+            total_hours_saved_raw += hours
+            total_hours_saved_adjusted += hours * factor
+
         hourly_rate = 50  # Default hourly rate
-        time_savings = total_hours_saved * hourly_rate * 52  # Annual
+        time_savings_raw = total_hours_saved_raw * hourly_rate * 52  # Annual
+        time_savings_adjusted = total_hours_saved_adjusted * hourly_rate * 52
 
-        # Calculate value created from findings
-        value_created_from_findings = sum(
-            f.get("value_created", {}).get("potential_revenue", 0) or 0 for f in findings
-        )
+        # Calculate confidence-adjusted value created from findings
+        value_created_raw = 0
+        value_created_adjusted = 0
+        for f in findings:
+            revenue = f.get("value_created", {}).get("potential_revenue", 0) or 0
+            confidence = f.get("confidence", "medium").lower()
+            factor = CONFIDENCE_FACTORS.get(confidence, 0.85)
+            value_created_raw += revenue
+            value_created_adjusted += revenue * factor
 
-        # Calculate from recommendations
+        # Calculate from recommendations (recommendations inherit confidence from their findings)
         total_benefit_from_recs = sum(
             rec.get("crb_analysis", {}).get("benefit", {}).get("total", 0) or 0
             for rec in recommendations
         )
+        # Apply average confidence factor to recommendations
+        avg_confidence_factor = 0.85  # Default to medium
+        if findings:
+            confidence_factors_sum = sum(
+                CONFIDENCE_FACTORS.get(f.get("confidence", "medium").lower(), 0.85)
+                for f in findings
+            )
+            avg_confidence_factor = confidence_factors_sum / len(findings)
+        total_benefit_adjusted = total_benefit_from_recs * avg_confidence_factor
 
-        # Apply uncertainty ranges (±20%)
-        time_savings_min = int(time_savings * 0.8)
-        time_savings_max = int(time_savings * 1.2)
+        # Apply uncertainty ranges (±20%) on adjusted values
+        time_savings_min = int(time_savings_adjusted * 0.8)
+        time_savings_max = int(time_savings_adjusted * 1.2)
 
-        value_created_min = int((value_created_from_findings + total_benefit_from_recs) * 0.7)
-        value_created_max = int((value_created_from_findings + total_benefit_from_recs) * 1.3)
+        value_created_total = value_created_adjusted + total_benefit_adjusted
+        value_created_min = int(value_created_total * 0.7)
+        value_created_max = int(value_created_total * 1.3)
 
         return {
             "value_saved": {
-                "hours_per_week": total_hours_saved,
+                "hours_per_week": round(total_hours_saved_adjusted, 1),
+                "hours_per_week_raw": total_hours_saved_raw,
                 "hourly_rate": hourly_rate,
-                "time_savings_annual": time_savings,
+                "time_savings_annual": int(time_savings_adjusted),
+                "time_savings_annual_raw": int(time_savings_raw),
                 "subtotal": {"min": time_savings_min, "max": time_savings_max},
             },
             "value_created": {
-                "from_findings": value_created_from_findings,
-                "from_recommendations": total_benefit_from_recs,
+                "from_findings": int(value_created_adjusted),
+                "from_findings_raw": int(value_created_raw),
+                "from_recommendations": int(total_benefit_adjusted),
+                "from_recommendations_raw": int(total_benefit_from_recs),
                 "subtotal": {"min": value_created_min, "max": value_created_max},
             },
             "total": {
@@ -1188,6 +1230,8 @@ Return ONLY the JSON."""
                 "max": time_savings_max + value_created_max,
             },
             "projection_years": 3,
+            "confidence_adjustment_applied": True,
+            "confidence_note": "Values are confidence-adjusted: HIGH=100%, MEDIUM=85%, LOW=70%",
         }
 
     def _generate_methodology_notes(self) -> Dict[str, Any]:
@@ -1215,6 +1259,16 @@ Return ONLY the JSON."""
             "confidence_notes": "Findings marked as 'high' confidence have multiple supporting data points. "
                                "'Medium' confidence items are based on industry patterns. "
                                "'Low' confidence items are estimates requiring validation.",
+            "confidence_adjusted_roi": {
+                "explanation": "ROI estimates are confidence-adjusted to reflect uncertainty",
+                "factors": {
+                    "high": "100% of estimated value",
+                    "medium": "85% of estimated value",
+                    "low": "70% of estimated value"
+                },
+                "rationale": "This adjustment provides more realistic projections by weighting estimates "
+                            "based on the strength of supporting evidence."
+            },
         }
 
     # Industry-specific verdict adjustments
@@ -1286,11 +1340,22 @@ Return ONLY the JSON."""
         ai_score = raw_ai_score + adjustments["ai_readiness_boost"]
         ai_score = min(100, max(0, ai_score))  # Clamp to 0-100
 
-        # Calculate aggregate metrics
-        avg_roi = 0
+        # Calculate confidence-weighted ROI (ROI-CA)
+        # Apply average confidence factor from findings to ROI estimates
+        avg_confidence_factor = 0.85  # Default to medium
+        if findings:
+            confidence_factors_sum = sum(
+                CONFIDENCE_FACTORS.get(f.get("confidence", "medium").lower(), 0.85)
+                for f in findings
+            )
+            avg_confidence_factor = confidence_factors_sum / len(findings)
+
+        avg_roi_raw = 0
+        avg_roi = 0  # Confidence-adjusted ROI
         if recommendations:
             roi_values = [r.get("roi_percentage", 0) or 0 for r in recommendations]
-            avg_roi = sum(roi_values) / len(roi_values) if roi_values else 0
+            avg_roi_raw = sum(roi_values) / len(roi_values) if roi_values else 0
+            avg_roi = avg_roi_raw * avg_confidence_factor
 
         # Count high-risk recommendations
         high_risk_count = 0
@@ -1319,7 +1384,8 @@ Return ONLY the JSON."""
             f"Verdict calculation for {industry}: "
             f"raw_score={raw_ai_score}, adjusted_score={ai_score}, "
             f"boost={adjustments['ai_readiness_boost']}, "
-            f"risk_tolerance={adjustments['risk_tolerance']}"
+            f"risk_tolerance={adjustments['risk_tolerance']}, "
+            f"ROI_raw={avg_roi_raw:.0f}%, ROI_adjusted={avg_roi:.0f}% (factor={avg_confidence_factor:.2f})"
         )
 
         # Decision tree for verdict
@@ -1355,7 +1421,7 @@ Return ONLY the JSON."""
                 "reasoning": [
                     "The numbers work, but margins are thin for early-stage AI adoption",
                     "Your processes show potential but need more maturity",
-                    f"Current ROI projection ({int(avg_roi)}%) is below our 150% threshold for confident recommendation",
+                    f"Estimated ROI ({int(avg_roi)}%, confidence-adjusted) is below our 150% threshold for confident recommendation",
                     "Implementation risks outweigh benefits at current scale"
                 ],
                 "when_to_revisit": "Check back in 6-12 months, or when your monthly revenue exceeds €50K consistently",
@@ -1418,7 +1484,7 @@ Return ONLY the JSON."""
                 "reasoning": [
                     f"AI readiness score of {ai_score} puts you in the top tier",
                     f"Projected 3-year value of €{total_value_min:,}-€{total_value_max:,}",
-                    f"Average ROI of {int(avg_roi)}% across recommendations",
+                    f"Estimated ROI of {int(avg_roi)}% (confidence-adjusted) across recommendations",
                     adjustments["context_note"]
                 ],
                 "when_to_revisit": "Quarterly check-ins to measure progress and adjust",

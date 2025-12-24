@@ -1,0 +1,158 @@
+{
+  "industry": "coaching",
+  "description": "Business and executive coaching practices including leadership coaching, team coaching, and coaching firms",
+  "common_processes": [
+    {
+      "id": "client-intake",
+      "name": "Client Intake & Assessment",
+      "description": "Initial discovery calls, assessments, and goal setting with new clients",
+      "typical_time_spent": "2-4 hours/client",
+      "pain_level": "medium",
+      "automation_potential": 60,
+      "ai_opportunities": [
+        "Automated assessment questionnaires",
+        "AI-analyzed personality/leadership assessments",
+        "Goal-setting frameworks with AI prompts",
+        "Scheduling for discovery calls",
+        "Pre-session intake forms"
+      ]
+    },
+    {
+      "id": "session-scheduling",
+      "name": "Session Scheduling & Calendar Management",
+      "description": "Booking coaching sessions, managing availability, handling reschedules",
+      "typical_time_spent": "3-5 hours/week",
+      "pain_level": "high",
+      "automation_potential": 90,
+      "ai_opportunities": [
+        "Self-service booking portals",
+        "Automated reminders and confirmations",
+        "Package/credits tracking",
+        "Recurring session scheduling",
+        "Time zone management for global clients"
+      ]
+    },
+    {
+      "id": "session-documentation",
+      "name": "Session Notes & Documentation",
+      "description": "Taking notes during sessions, tracking progress, maintaining client records",
+      "typical_time_spent": "30-60 min/session",
+      "pain_level": "very high",
+      "automation_potential": 75,
+      "ai_opportunities": [
+        "AI transcription of sessions",
+        "Automated session summaries",
+        "Progress tracking dashboards",
+        "Action item extraction",
+        "Theme and pattern identification"
+      ]
+    },
+    {
+      "id": "client-communication",
+      "name": "Client Communication",
+      "description": "Between-session check-ins, resource sharing, accountability messages",
+      "typical_time_spent": "3-5 hours/week",
+      "pain_level": "high",
+      "automation_potential": 70,
+      "ai_opportunities": [
+        "Automated check-in sequences",
+        "Resource recommendation engines",
+        "Accountability nudges",
+        "Progress milestone celebrations",
+        "Re-engagement campaigns for dormant clients"
+      ]
+    },
+    {
+      "id": "content-creation",
+      "name": "Content & Resource Development",
+      "description": "Creating worksheets, frameworks, videos, and thought leadership",
+      "typical_time_spent": "4-8 hours/week",
+      "pain_level": "medium",
+      "automation_potential": 65,
+      "ai_opportunities": [
+        "AI-assisted worksheet creation",
+        "Content repurposing (video to blog)",
+        "Newsletter drafting",
+        "Social media content generation",
+        "Personalized resource recommendations"
+      ]
+    },
+    {
+      "id": "billing-invoicing",
+      "name": "Billing & Invoicing",
+      "description": "Creating invoices, tracking payments, managing packages",
+      "typical_time_spent": "2-4 hours/week",
+      "pain_level": "medium",
+      "automation_potential": 85,
+      "ai_opportunities": [
+        "Automated recurring invoicing",
+        "Package usage tracking",
+        "Payment reminders",
+        "Financial reporting",
+        "Expense categorization"
+      ]
+    },
+    {
+      "id": "marketing-sales",
+      "name": "Marketing & New Client Acquisition",
+      "description": "Generating leads, nurturing prospects, conducting sales calls",
+      "typical_time_spent": "5-10 hours/week",
+      "pain_level": "high",
+      "automation_potential": 70,
+      "ai_opportunities": [
+        "Lead magnet delivery automation",
+        "Email nurture sequences",
+        "Social proof collection",
+        "Proposal generation",
+        "Discovery call prep summaries"
+      ]
+    },
+    {
+      "id": "program-delivery",
+      "name": "Group Program & Workshop Delivery",
+      "description": "Running cohorts, mastermind groups, and workshops",
+      "typical_time_spent": "Variable",
+      "pain_level": "medium",
+      "automation_potential": 50,
+      "ai_opportunities": [
+        "Cohort management automation",
+        "Discussion forum facilitation",
+        "Peer matching algorithms",
+        "Workshop content personalization",
+        "Engagement tracking"
+      ]
+    }
+  ],
+  "typical_team_structure": {
+    "solo_coach": {
+      "size": "1",
+      "roles": ["Coach/Owner doing everything"]
+    },
+    "growing_practice": {
+      "size": "2-5",
+      "roles": ["Lead Coach", "Virtual Assistant", "Part-time Coaches", "Marketing Support"]
+    },
+    "coaching_firm": {
+      "size": "5-20",
+      "roles": ["Founder/Managing Partner", "Senior Coaches", "Associate Coaches", "Operations Manager", "Marketing", "Client Success", "Admin"]
+    }
+  },
+  "common_tools": [
+    "Calendly", "Acuity", "CoachAccountable", "Practice Better",
+    "Zoom", "Loom", "Google Meet",
+    "Notion", "Airtable", "Monday.com",
+    "Stripe", "Square", "PayPal",
+    "Mailchimp", "ConvertKit", "ActiveCampaign",
+    "Typeform", "JotForm", "Google Forms"
+  ],
+  "industry_specific_challenges": [
+    "Time-intensive 1:1 model limits scale",
+    "Inconsistent income (project-based)",
+    "Admin time eating into coaching time",
+    "Demonstrating ROI to justify premium pricing",
+    "Client retention and re-engagement",
+    "Differentiating in crowded market",
+    "Balancing customization with systemization",
+    "Measuring coaching impact objectively"
+  ]
+}

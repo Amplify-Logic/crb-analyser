@@ -1,6 +1,12 @@
 # backend/src/models/playbook.py
 """
 Playbook models for personalized implementation guides.
+
+Enhanced with:
+- Implementation steps and success criteria
+- Common pitfalls to avoid
+- Resources (docs, videos, tools)
+- Task dependencies for critical path
 """
 from datetime import datetime
 from typing import Optional, List, Literal
@@ -12,6 +18,13 @@ class TaskCRB(BaseModel):
     cost: str = Field(..., description="Cost description, e.g., '€0 (free tier)'")
     risk: Literal["low", "medium", "high"] = "low"
     benefit: str = Field(..., description="Benefit description, e.g., 'Saves 2 hrs/week'")
+
+
+class TaskResource(BaseModel):
+    """A resource linked to a task."""
+    title: str
+    url: Optional[str] = None
+    type: Literal["doc", "video", "tool"] = "doc"
 
 
 class PlaybookTask(BaseModel):
@@ -27,6 +40,28 @@ class PlaybookTask(BaseModel):
     crb: TaskCRB
     completed: bool = False
     completed_at: Optional[datetime] = None
+
+    # Enhanced fields for implementation guidance
+    steps: List[str] = Field(
+        default_factory=list,
+        description="Step-by-step implementation instructions"
+    )
+    success_criteria: List[str] = Field(
+        default_factory=list,
+        description="How to know when this task is truly complete"
+    )
+    common_pitfalls: List[str] = Field(
+        default_factory=list,
+        description="Common mistakes to avoid"
+    )
+    resources: List[TaskResource] = Field(
+        default_factory=list,
+        description="Links to helpful docs, videos, or tools"
+    )
+    dependencies: List[str] = Field(
+        default_factory=list,
+        description="IDs of tasks that must be completed before this one"
+    )
 
 
 class Week(BaseModel):

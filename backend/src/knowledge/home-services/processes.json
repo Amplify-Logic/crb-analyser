@@ -1,0 +1,148 @@
+{
+  "industry": "home-services",
+  "description": "Home service businesses including HVAC, plumbing, electrical, and general contracting",
+  "common_processes": [
+    {
+      "id": "scheduling-dispatch",
+      "name": "Scheduling & Dispatch",
+      "description": "Coordinating technician schedules, job assignments, and route optimization",
+      "typical_time_spent": "2-4 hours/day",
+      "pain_level": "high",
+      "automation_potential": 90,
+      "ai_opportunities": [
+        "AI-powered scheduling optimization",
+        "Automatic route planning to minimize drive time",
+        "Real-time technician availability tracking",
+        "Smart job matching based on skills and location"
+      ]
+    },
+    {
+      "id": "customer-communication",
+      "name": "Customer Communication",
+      "description": "Appointment confirmations, on-the-way texts, follow-ups, and review requests",
+      "typical_time_spent": "1-2 hours/day",
+      "pain_level": "high",
+      "automation_potential": 85,
+      "ai_opportunities": [
+        "Automated appointment reminders (text/email)",
+        "AI chatbot for scheduling and FAQs",
+        "Automated on-the-way notifications with ETA",
+        "Post-service follow-up and review requests"
+      ]
+    },
+    {
+      "id": "estimates-quoting",
+      "name": "Estimates & Quoting",
+      "description": "Creating quotes for jobs, calculating material costs, presenting options to customers",
+      "typical_time_spent": "1-3 hours/day",
+      "pain_level": "high",
+      "automation_potential": 75,
+      "ai_opportunities": [
+        "AI-assisted price book management",
+        "Good-better-best option generation",
+        "Photo-based damage assessment",
+        "Instant quote generation from templates"
+      ]
+    },
+    {
+      "id": "invoicing-payments",
+      "name": "Invoicing & Payments",
+      "description": "Creating invoices, processing payments, handling financing options",
+      "typical_time_spent": "1-2 hours/day",
+      "pain_level": "medium",
+      "automation_potential": 95,
+      "ai_opportunities": [
+        "Automatic invoice generation from completed jobs",
+        "On-site payment processing",
+        "Financing option integration",
+        "Automated payment reminders"
+      ]
+    },
+    {
+      "id": "lead-management",
+      "name": "Lead Management",
+      "description": "Handling incoming calls, web leads, and converting inquiries to booked jobs",
+      "typical_time_spent": "2-4 hours/day",
+      "pain_level": "high",
+      "automation_potential": 70,
+      "ai_opportunities": [
+        "AI call answering and booking",
+        "Lead scoring and prioritization",
+        "Automated lead nurturing sequences",
+        "Missed call text-back automation"
+      ]
+    },
+    {
+      "id": "inventory-management",
+      "name": "Inventory & Parts Management",
+      "description": "Tracking truck stock, ordering parts, managing warehouse inventory",
+      "typical_time_spent": "1-2 hours/day",
+      "pain_level": "medium",
+      "automation_potential": 80,
+      "ai_opportunities": [
+        "Automated reorder alerts",
+        "Predictive inventory based on job types",
+        "Barcode scanning for usage tracking",
+        "Supplier integration for ordering"
+      ]
+    },
+    {
+      "id": "technician-management",
+      "name": "Technician Management",
+      "description": "Time tracking, performance monitoring, training, and payroll",
+      "typical_time_spent": "1-2 hours/day",
+      "pain_level": "medium",
+      "automation_potential": 65,
+      "ai_opportunities": [
+        "Automated time tracking via GPS",
+        "Performance dashboards and scorecards",
+        "AI-suggested training based on job outcomes",
+        "Commission calculation automation"
+      ]
+    },
+    {
+      "id": "service-agreements",
+      "name": "Service Agreements & Memberships",
+      "description": "Managing maintenance contracts, recurring service schedules, membership programs",
+      "typical_time_spent": "1-2 hours/week",
+      "pain_level": "medium",
+      "automation_potential": 90,
+      "ai_opportunities": [
+        "Automated membership renewal reminders",
+        "Smart scheduling for recurring maintenance",
+        "Membership benefit tracking",
+        "Upsell recommendations based on service history"
+      ]
+    }
+  ],
+  "typical_team_structure": {
+    "small": {
+      "size": "1-5",
+      "roles": ["Owner/Operator", "Technicians", "Office Manager (often owner)"]
+    },
+    "medium": {
+      "size": "5-20",
+      "roles": ["Owner", "Office Manager", "Dispatcher", "Lead Technicians", "Technicians", "Sales Rep"]
+    },
+    "large": {
+      "size": "20-100",
+      "roles": ["Owner/CEO", "Operations Manager", "Dispatch Team", "Sales Team", "Install Crew", "Service Techs", "CSRs", "Marketing"]
+    }
+  },
+  "common_tools": [
+    "ServiceTitan", "Housecall Pro", "Jobber", "FieldEdge",
+    "QuickBooks", "Square", "Stripe",
+    "Google Calendar", "Outlook",
+    "CallRail", "Podium", "Birdeye",
+    "Home Advisor", "Angi", "Thumbtack"
+  ],
+  "industry_specific_challenges": [
+    "High no-show rates for appointments",
+    "Difficulty hiring and retaining skilled technicians",
+    "Seasonal demand fluctuations",
+    "Price competition from national chains",
+    "Managing multiple job types and skill requirements",
+    "Truck inventory and parts availability",
+    "After-hours emergency calls"
+  ]
+}

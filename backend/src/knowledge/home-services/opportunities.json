@@ -1,0 +1,299 @@
+{
+  "industry": "home-services",
+  "ai_opportunities": [
+    {
+      "id": "ai-scheduling-dispatch",
+      "name": "AI-Powered Scheduling & Dispatch",
+      "description": "Optimize technician scheduling, routing, and job assignment using AI",
+      "category": "efficiency",
+      "impact": {
+        "value_saved": {
+          "time_hours_per_week": 15,
+          "description": "Eliminates manual scheduling, reduces drive time between jobs"
+        },
+        "value_created": {
+          "description": "Fit 1-2 more jobs per day per technician through route optimization",
+          "potential_revenue_impact": "15-25% increase in jobs completed"
+        }
+      },
+      "customer_value_score": 8,
+      "business_health_score": 10,
+      "implementation": {
+        "complexity": "medium",
+        "timeline_weeks": 4,
+        "required_data": ["Customer addresses", "Job types and durations", "Technician skills"]
+      },
+      "options": {
+        "off_the_shelf": {
+          "tools": ["Housecall Pro", "Jobber", "ServiceM8"],
+          "cost_range": "€50-200/month",
+          "pros": ["Quick setup", "Built-in features", "Mobile apps"],
+          "cons": ["Limited AI optimization", "Basic routing"]
+        },
+        "best_in_class": {
+          "tools": ["ServiceTitan", "FieldEdge"],
+          "cost_range": "€200-500/month per technician",
+          "pros": ["Advanced dispatching", "Real-time GPS", "Performance tracking"],
+          "cons": ["Higher cost", "Longer implementation"]
+        },
+        "custom_solution": {
+          "approach": "Custom dispatch board with AI route optimization using Google Maps API + ML",
+          "cost_range": "€5,000-15,000 one-time + €50-100/month",
+          "pros": ["Exactly fits your workflow", "Integration with existing tools", "Competitive advantage"],
+          "cons": ["Development time", "Needs maintenance"]
+        }
+      },
+      "roi_example": {
+        "scenario": "5-technician HVAC company, currently manual dispatch",
+        "cost": "€300/month (best-in-class)",
+        "savings": "2 extra jobs/day × 5 techs × €150 avg ticket × 22 days = €33,000/month extra revenue",
+        "roi_percentage": 1000,
+        "payback_months": 0.5
+      }
+    },
+    {
+      "id": "ai-call-handling",
+      "name": "AI Call Answering & Booking",
+      "description": "AI phone system that answers calls, books appointments, and handles after-hours",
+      "category": "growth",
+      "impact": {
+        "value_saved": {
+          "time_hours_per_week": 20,
+          "description": "Reduces office staff phone time, handles after-hours calls"
+        },
+        "value_created": {
+          "description": "Capture calls that would go to voicemail, book 24/7",
+          "potential_revenue_impact": "10-20% more booked jobs from captured leads"
+        }
+      },
+      "customer_value_score": 9,
+      "business_health_score": 9,
+      "implementation": {
+        "complexity": "low",
+        "timeline_weeks": 2,
+        "required_data": ["Service types", "Pricing info", "Availability"]
+      },
+      "options": {
+        "off_the_shelf": {
+          "tools": ["Smith.ai", "Ruby Receptionist", "Nexa"],
+          "cost_range": "€200-500/month",
+          "pros": ["Human + AI hybrid", "Immediate setup", "Professional"],
+          "cons": ["Per-call pricing adds up", "Less customizable"]
+        },
+        "best_in_class": {
+          "tools": ["ServiceTitan Phones Pro", "Callingly"],
+          "cost_range": "€150-400/month",
+          "pros": ["Integrated with FSM", "AI booking", "Call tracking"],
+          "cons": ["Platform lock-in"]
+        },
+        "custom_solution": {
+          "approach": "AI voice agent using Claude API + Twilio for calls, integrated with your booking system",
+          "cost_range": "€3,000-8,000 one-time + €100-200/month",
+          "pros": ["Fully customized script", "Speaks your brand voice", "24/7 AI"],
+          "cons": ["Development required", "Needs tuning"]
+        }
+      },
+      "roi_example": {
+        "scenario": "Plumbing company missing 30% of calls after hours",
+        "cost": "€300/month",
+        "value_created": "Capture 10 extra jobs/month × €300 avg = €3,000/month",
+        "roi_percentage": 900,
+        "payback_months": 0.5
+      }
+    },
+    {
+      "id": "automated-customer-communication",
+      "name": "Automated Customer Communication",
+      "description": "Automated texts, emails, and reminders throughout the customer journey",
+      "category": "efficiency",
+      "impact": {
+        "value_saved": {
+          "time_hours_per_week": 10,
+          "description": "No more manual appointment confirmations or follow-ups"
+        },
+        "value_created": {
+          "description": "Reduced no-shows, more reviews, repeat business",
+          "potential_revenue_impact": "Reduce no-shows by 50%, increase reviews by 3x"
+        }
+      },
+      "customer_value_score": 8,
+      "business_health_score": 8,
+      "implementation": {
+        "complexity": "low",
+        "timeline_weeks": 1,
+        "required_data": ["Customer phone/email", "Appointment data"]
+      },
+      "options": {
+        "off_the_shelf": {
+          "tools": ["Podium", "Birdeye", "Broadly"],
+          "cost_range": "€150-400/month",
+          "pros": ["Review generation", "Webchat", "Text marketing"],
+          "cons": ["Monthly commitment", "Feature overlap with FSM"]
+        },
+        "best_in_class": {
+          "tools": ["ServiceTitan Marketing Pro", "Housecall Pro + integrations"],
+          "cost_range": "€100-300/month (add-on)",
+          "pros": ["Integrated with dispatch", "Smart triggers", "Full automation"],
+          "cons": ["Platform dependent"]
+        },
+        "custom_solution": {
+          "approach": "n8n/Make automation with Twilio for SMS, integrated with your CRM",
+          "cost_range": "€1,000-3,000 one-time + €50/month",
+          "pros": ["Full control", "One-time cost", "Unlimited messages"],
+          "cons": ["Need to build", "Maintain yourself"]
+        }
+      },
+      "roi_example": {
+        "scenario": "20 appointments/week, 15% no-show rate",
+        "cost": "€200/month",
+        "savings": "Reduce no-shows by 50% = 6 more completed jobs/month × €250 = €1,500/month",
+        "roi_percentage": 650,
+        "payback_months": 1
+      }
+    },
+    {
+      "id": "ai-quoting-pricebook",
+      "name": "AI-Assisted Quoting & Price Book",
+      "description": "Generate accurate quotes instantly with good-better-best options",
+      "category": "efficiency",
+      "impact": {
+        "value_saved": {
+          "time_hours_per_week": 8,
+          "description": "Faster quotes, less back-and-forth"
+        },
+        "value_created": {
+          "description": "Higher average ticket from presenting options, faster close",
+          "potential_revenue_impact": "20-40% increase in average ticket value"
+        }
+      },
+      "customer_value_score": 7,
+      "business_health_score": 9,
+      "implementation": {
+        "complexity": "medium",
+        "timeline_weeks": 3,
+        "required_data": ["Price book", "Parts costs", "Labor rates", "Historical quotes"]
+      },
+      "options": {
+        "off_the_shelf": {
+          "tools": ["Successware", "ServiceTitan Pricebook Pro"],
+          "cost_range": "€100-300/month",
+          "pros": ["Pre-built price books", "Option presentation", "Mobile"],
+          "cons": ["Customization limits", "Industry-specific"]
+        },
+        "best_in_class": {
+          "tools": ["BuildOps", "ServiceTitan + flat rate pricing"],
+          "cost_range": "€200-500/month",
+          "pros": ["Dynamic pricing", "Visual presentations", "Financing integration"],
+          "cons": ["Complex setup", "Training required"]
+        },
+        "custom_solution": {
+          "approach": "Custom quoting app with AI that suggests upsells based on job type and customer history",
+          "cost_range": "€5,000-12,000 one-time",
+          "pros": ["Your pricing strategy", "AI upsells", "Competitive advantage"],
+          "cons": ["Significant investment", "Needs price book data"]
+        }
+      },
+      "roi_example": {
+        "scenario": "50 quotes/month, €500 average ticket",
+        "cost": "€250/month",
+        "value_created": "30% ticket increase on 40% of jobs = €3,000/month extra revenue",
+        "roi_percentage": 1100,
+        "payback_months": 0.5
+      }
+    },
+    {
+      "id": "membership-automation",
+      "name": "Service Agreement & Membership Automation",
+      "description": "Automate recurring revenue from maintenance agreements and memberships",
+      "category": "growth",
+      "impact": {
+        "value_saved": {
+          "time_hours_per_week": 3,
+          "description": "Automated renewals, scheduling, and reminders"
+        },
+        "value_created": {
+          "description": "Predictable recurring revenue, higher customer lifetime value",
+          "potential_revenue_impact": "Build to 30-40% of revenue from agreements"
+        }
+      },
+      "customer_value_score": 8,
+      "business_health_score": 10,
+      "implementation": {
+        "complexity": "medium",
+        "timeline_weeks": 4,
+        "required_data": ["Customer list", "Equipment data", "Service history"]
+      },
+      "options": {
+        "off_the_shelf": {
+          "tools": ["Housecall Pro memberships", "Jobber quotes"],
+          "cost_range": "Included or €50-100/month add-on",
+          "pros": ["Basic membership tracking", "Recurring billing"],
+          "cons": ["Limited automation", "Basic reporting"]
+        },
+        "best_in_class": {
+          "tools": ["ServiceTitan Memberships", "FieldEdge agreements"],
+          "cost_range": "€100-200/month add-on",
+          "pros": ["Full automation", "Smart scheduling", "Revenue forecasting"],
+          "cons": ["Platform lock-in"]
+        },
+        "custom_solution": {
+          "approach": "Custom membership portal with AI-triggered maintenance scheduling and upsells",
+          "cost_range": "€8,000-20,000 one-time",
+          "pros": ["Customer portal", "AI maintenance predictions", "Differentiation"],
+          "cons": ["Major investment", "Long-term play"]
+        }
+      },
+      "roi_example": {
+        "scenario": "100 existing customers, 20% conversion to €30/month membership",
+        "cost": "€150/month",
+        "value_created": "20 members × €30 × 12 = €7,200/year recurring revenue",
+        "additional_revenue": "Membership customers spend 2-3x more on repairs",
+        "roi_percentage": 400,
+        "payback_months": 3
+      }
+    }
+  ],
+  "quick_wins": [
+    {
+      "name": "Set up automated appointment reminders",
+      "time_to_implement": "1 day",
+      "cost": "€0-50/month",
+      "impact": "Reduce no-shows by 30-50%"
+    },
+    {
+      "name": "Add online booking to website",
+      "time_to_implement": "1 day",
+      "cost": "Often included in FSM",
+      "impact": "Capture leads 24/7, reduce phone time"
+    },
+    {
+      "name": "Implement automated review requests",
+      "time_to_implement": "1 day",
+      "cost": "€50-150/month",
+      "impact": "3-5x more reviews, higher ranking"
+    },
+    {
+      "name": "Set up missed call text-back",
+      "time_to_implement": "2 hours",
+      "cost": "€20-50/month",
+      "impact": "Capture 20-30% of missed calls"
+    }
+  ],
+  "not_recommended": [
+    {
+      "name": "Full ERP system for small operators",
+      "reason": "Overkill for teams under 20, FSM software handles core needs",
+      "alternative": "Use FSM with QuickBooks integration"
+    },
+    {
+      "name": "Custom mobile app for customers",
+      "reason": "Low adoption, customers prefer text and calls",
+      "alternative": "Focus on great text/SMS communication instead"
+    },
+    {
+      "name": "Complex AI without clean data",
+      "reason": "AI needs historical data to work well",
+      "alternative": "Start with FSM to collect data, add AI later"
+    }
+  ]
+}

@@ -1,0 +1,298 @@
+{
+  "industry": "recruiting",
+  "ai_opportunities": [
+    {
+      "id": "ai-candidate-matching",
+      "name": "AI-Powered Candidate Matching",
+      "description": "Intelligent matching of candidates to job requirements using AI/ML",
+      "category": "efficiency",
+      "impact": {
+        "value_saved": {
+          "time_hours_per_week": 20,
+          "description": "Reduces manual resume screening by 80%"
+        },
+        "value_created": {
+          "description": "50% faster time-to-fill, higher quality shortlists",
+          "potential_revenue_impact": "20-30% more placements with same team"
+        }
+      },
+      "customer_value_score": 9,
+      "business_health_score": 10,
+      "implementation": {
+        "complexity": "medium",
+        "timeline_weeks": 4,
+        "required_data": ["Existing candidate database", "Historical placement data", "Job requirements"]
+      },
+      "options": {
+        "off_the_shelf": {
+          "tools": ["HireEZ", "SeekOut", "Textkernel"],
+          "cost_range": "€200-600/user/month",
+          "pros": ["Immediate AI matching", "Cross-platform sourcing", "Proven technology"],
+          "cons": ["Per-seat pricing adds up", "Learning curve", "Data privacy considerations"]
+        },
+        "best_in_class": {
+          "tools": ["Eightfold AI", "Phenom People"],
+          "cost_range": "€1,000-3,000/month base + per seat",
+          "pros": ["Enterprise AI", "Skills-based matching", "Career pathing", "Talent intelligence"],
+          "cons": ["High cost", "Complex implementation", "Enterprise focus"]
+        },
+        "custom_solution": {
+          "approach": "Build matching engine with Claude API + vector database for semantic search",
+          "cost_range": "€15,000-40,000 one-time + €200-500/month API",
+          "pros": ["Full customization", "Proprietary algorithm", "Lower ongoing cost at scale"],
+          "cons": ["Development time", "Needs ML expertise", "Ongoing maintenance"]
+        }
+      },
+      "roi_example": {
+        "scenario": "Agency making 10 placements/month, 40 hours/week on sourcing",
+        "cost": "€500/month for AI matching tool",
+        "savings": "20 hours/week saved × €35/hour = €2,800/month + 2 extra placements × €5,000 = €10,000/month",
+        "roi_percentage": 2460,
+        "payback_months": 0.1
+      }
+    },
+    {
+      "id": "automated-candidate-outreach",
+      "name": "Automated Personalized Outreach",
+      "description": "AI-generated personalized messages for candidate engagement at scale",
+      "category": "growth",
+      "impact": {
+        "value_saved": {
+          "time_hours_per_week": 15,
+          "description": "Automates initial outreach and follow-ups"
+        },
+        "value_created": {
+          "description": "3x response rates with personalization",
+          "potential_revenue_impact": "30-50% more candidate responses"
+        }
+      },
+      "customer_value_score": 8,
+      "business_health_score": 9,
+      "implementation": {
+        "complexity": "low",
+        "timeline_weeks": 2,
+        "required_data": ["LinkedIn access", "Candidate profiles", "Email accounts"]
+      },
+      "options": {
+        "off_the_shelf": {
+          "tools": ["Gem", "Fetcher", "Hireflow"],
+          "cost_range": "€200-500/user/month",
+          "pros": ["Quick setup", "LinkedIn integration", "Sequence automation"],
+          "cons": ["Per-user cost", "Volume limits", "LinkedIn connection limits"]
+        },
+        "best_in_class": {
+          "tools": ["Gem Complete", "Beamery CRM"],
+          "cost_range": "€500-1,000/user/month",
+          "pros": ["Full CRM", "Analytics", "Multi-channel", "AI personalization"],
+          "cons": ["Premium pricing", "Feature overload for small teams"]
+        },
+        "custom_solution": {
+          "approach": "Claude API + email automation + LinkedIn automation tool",
+          "cost_range": "€5,000-15,000 one-time + €100-300/month",
+          "pros": ["Unlimited messages", "Full personalization control", "Custom templates"],
+          "cons": ["LinkedIn automation risks", "Setup complexity"]
+        }
+      },
+      "roi_example": {
+        "scenario": "Sending 200 outreach messages/week with 5% response rate",
+        "cost": "€400/month for outreach tool",
+        "savings": "15 hours/week × €35 = €2,100/month saved",
+        "roi_percentage": 425,
+        "payback_months": 0.5
+      }
+    },
+    {
+      "id": "interview-scheduling-automation",
+      "name": "Self-Service Interview Scheduling",
+      "description": "Candidates and clients book interviews directly without recruiter coordination",
+      "category": "efficiency",
+      "impact": {
+        "value_saved": {
+          "time_hours_per_week": 10,
+          "description": "Eliminates back-and-forth scheduling emails"
+        },
+        "value_created": {
+          "description": "Faster scheduling = faster placements",
+          "potential_revenue_impact": "10-20% faster time-to-offer"
+        }
+      },
+      "customer_value_score": 9,
+      "business_health_score": 8,
+      "implementation": {
+        "complexity": "low",
+        "timeline_weeks": 1,
+        "required_data": ["Calendar access", "ATS integration"]
+      },
+      "options": {
+        "off_the_shelf": {
+          "tools": ["Calendly", "Cronofy", "x.ai"],
+          "cost_range": "€10-30/user/month",
+          "pros": ["Simple setup", "Widely adopted", "Good integrations"],
+          "cons": ["Basic scheduling only", "Limited multi-party support"]
+        },
+        "best_in_class": {
+          "tools": ["GoodTime", "ModernLoop", "Prelude"],
+          "cost_range": "€200-500/month base",
+          "pros": ["Multi-party scheduling", "ATS integration", "Analytics", "Panel interviews"],
+          "cons": ["Higher cost", "May be overkill for small agencies"]
+        },
+        "custom_solution": {
+          "approach": "Build scheduling module with calendar APIs + candidate portal",
+          "cost_range": "€3,000-10,000 one-time",
+          "pros": ["Branded experience", "Full control", "Integrated with your workflow"],
+          "cons": ["Development required", "Maintenance burden"]
+        }
+      },
+      "roi_example": {
+        "scenario": "Scheduling 50 interviews/week taking 20 min each",
+        "cost": "€100/month for scheduling tool",
+        "savings": "16 hours/week × €35 = €2,240/month",
+        "roi_percentage": 2140,
+        "payback_months": 0.1
+      }
+    },
+    {
+      "id": "ai-resume-parsing",
+      "name": "AI Resume Parsing & Enrichment",
+      "description": "Automatically extract, structure, and enrich candidate data from resumes",
+      "category": "efficiency",
+      "impact": {
+        "value_saved": {
+          "time_hours_per_week": 8,
+          "description": "Eliminates manual data entry from resumes"
+        },
+        "value_created": {
+          "description": "Richer candidate profiles, better searchability",
+          "potential_revenue_impact": "Faster matching, better database quality"
+        }
+      },
+      "customer_value_score": 7,
+      "business_health_score": 8,
+      "implementation": {
+        "complexity": "low",
+        "timeline_weeks": 2,
+        "required_data": ["Resume files", "ATS access"]
+      },
+      "options": {
+        "off_the_shelf": {
+          "tools": ["Textkernel", "Sovren", "Affinda"],
+          "cost_range": "€0.10-0.50/resume parsed",
+          "pros": ["High accuracy", "Multi-language", "ATS integrations"],
+          "cons": ["Per-resume cost", "Quality varies by format"]
+        },
+        "best_in_class": {
+          "tools": ["Daxtra", "HireAbility"],
+          "cost_range": "€500-1,500/month unlimited",
+          "pros": ["Unlimited parsing", "Semantic search", "Data enrichment"],
+          "cons": ["Higher fixed cost", "Enterprise features may be unused"]
+        },
+        "custom_solution": {
+          "approach": "Claude API for resume parsing with custom schema",
+          "cost_range": "€2,000-5,000 one-time + €50-200/month API",
+          "pros": ["Custom extraction fields", "Flexible output", "Lower per-resume cost"],
+          "cons": ["Some development needed", "May need fine-tuning"]
+        }
+      },
+      "roi_example": {
+        "scenario": "Processing 500 resumes/month, 5 min manual entry each",
+        "cost": "€150/month for parsing (€0.30/resume)",
+        "savings": "42 hours/month × €30 = €1,260/month",
+        "roi_percentage": 740,
+        "payback_months": 0.5
+      }
+    },
+    {
+      "id": "chatbot-candidate-screening",
+      "name": "AI Chatbot for Initial Screening",
+      "description": "Conversational AI for candidate FAQs, initial qualification, and scheduling",
+      "category": "efficiency",
+      "impact": {
+        "value_saved": {
+          "time_hours_per_week": 12,
+          "description": "Handles routine candidate questions 24/7"
+        },
+        "value_created": {
+          "description": "Better candidate experience, faster qualification",
+          "potential_revenue_impact": "10-15% more candidates through funnel"
+        }
+      },
+      "customer_value_score": 8,
+      "business_health_score": 7,
+      "implementation": {
+        "complexity": "medium",
+        "timeline_weeks": 4,
+        "required_data": ["FAQs", "Screening questions", "Job details"]
+      },
+      "options": {
+        "off_the_shelf": {
+          "tools": ["Paradox (Olivia)", "XOR", "AllyO"],
+          "cost_range": "€500-1,500/month",
+          "pros": ["Purpose-built for recruiting", "SMS/web chat", "ATS integration"],
+          "cons": ["Monthly commitment", "Customization limits"]
+        },
+        "best_in_class": {
+          "tools": ["Paradox Enterprise", "Mya"],
+          "cost_range": "€2,000-5,000/month",
+          "pros": ["Advanced conversational AI", "Full workflow automation", "Analytics"],
+          "cons": ["Enterprise pricing", "Complex setup"]
+        },
+        "custom_solution": {
+          "approach": "Build chatbot with Claude API + web widget + SMS integration",
+          "cost_range": "€8,000-20,000 one-time + €100-400/month",
+          "pros": ["Full control over conversation", "No per-candidate fees", "Unique experience"],
+          "cons": ["Development time", "Needs conversation design"]
+        }
+      },
+      "roi_example": {
+        "scenario": "500 candidate inquiries/month, 10 min average to answer",
+        "cost": "€800/month for chatbot",
+        "savings": "80 hours/month × €30 = €2,400/month + faster funnel",
+        "roi_percentage": 200,
+        "payback_months": 1
+      }
+    }
+  ],
+  "quick_wins": [
+    {
+      "title": "Enable self-service interview scheduling",
+      "time_to_implement": "1 day",
+      "expected_impact": "Save 10+ hours/week on coordination",
+      "tools": ["Calendly", "Cronofy"]
+    },
+    {
+      "title": "Add AI resume parsing to ATS",
+      "time_to_implement": "3 days",
+      "expected_impact": "Eliminate 80% of manual data entry",
+      "tools": ["Textkernel", "Affinda", "ATS built-in"]
+    },
+    {
+      "title": "Set up automated candidate status updates",
+      "time_to_implement": "1 week",
+      "expected_impact": "Reduce candidate ghosting, better experience",
+      "tools": ["ATS workflows", "Make/Zapier"]
+    },
+    {
+      "title": "Implement LinkedIn automation for sourcing",
+      "time_to_implement": "2 days",
+      "expected_impact": "3x outreach volume with personalization",
+      "tools": ["Gem", "Hireflow", "Expandi"]
+    }
+  ],
+  "anti_patterns": [
+    {
+      "pattern": "Full ATS replacement when existing system works",
+      "why_avoid": "Migration disrupts workflow; fix processes first",
+      "better_approach": "Add AI layer on top of existing ATS"
+    },
+    {
+      "pattern": "Aggressive LinkedIn automation risking account bans",
+      "why_avoid": "LinkedIn can ban accounts, losing network access",
+      "better_approach": "Conservative limits with human oversight, use email as backup"
+    },
+    {
+      "pattern": "AI-only candidate communication without human touchpoints",
+      "why_avoid": "Candidates want human connection for career decisions",
+      "better_approach": "AI for initial screening, humans for relationship building"
+    }
+  ]
+}

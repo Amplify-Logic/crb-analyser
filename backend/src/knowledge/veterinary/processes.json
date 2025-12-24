@@ -1,0 +1,157 @@
+{
+  "industry": "veterinary",
+  "description": "Veterinary practices including general practice, specialty clinics, emergency hospitals, and pet care facilities",
+  "common_processes": [
+    {
+      "id": "appointment-scheduling",
+      "name": "Appointment Scheduling & Reminders",
+      "description": "Booking appointments, wellness reminders, vaccination due dates",
+      "typical_time_spent": "3-5 hours/day",
+      "pain_level": "high",
+      "automation_potential": 85,
+      "ai_opportunities": [
+        "Online self-service booking",
+        "Automated vaccination and wellness reminders",
+        "AI-optimized appointment scheduling",
+        "Waitlist management",
+        "No-show prediction and prevention"
+      ]
+    },
+    {
+      "id": "client-communication",
+      "name": "Client Communication",
+      "description": "Appointment confirmations, post-visit follow-ups, treatment updates",
+      "typical_time_spent": "2-4 hours/day",
+      "pain_level": "high",
+      "automation_potential": 80,
+      "ai_opportunities": [
+        "Automated appointment confirmations and reminders",
+        "Two-way texting with pet parents",
+        "Post-procedure care instructions",
+        "Prescription refill reminders",
+        "Review request automation"
+      ]
+    },
+    {
+      "id": "medical-records",
+      "name": "Medical Records & Documentation",
+      "description": "Maintaining patient records, documenting exams, updating treatment history",
+      "typical_time_spent": "2-3 hours/day",
+      "pain_level": "very high",
+      "automation_potential": 65,
+      "ai_opportunities": [
+        "Voice-to-text clinical notes",
+        "AI-assisted SOAP notes",
+        "Automated record summaries",
+        "Treatment protocol templates",
+        "Lab result interpretation assistance"
+      ]
+    },
+    {
+      "id": "client-check-in",
+      "name": "Client Check-in & Intake",
+      "description": "Registering arrivals, updating pet info, collecting history",
+      "typical_time_spent": "1-2 hours/day",
+      "pain_level": "medium",
+      "automation_potential": 75,
+      "ai_opportunities": [
+        "Digital check-in kiosks or app",
+        "Pre-visit intake forms",
+        "Medical history questionnaires",
+        "Photo upload for symptoms",
+        "Insurance information collection"
+      ]
+    },
+    {
+      "id": "billing-payments",
+      "name": "Billing & Payment Collection",
+      "description": "Creating invoices, processing payments, managing pet insurance claims",
+      "typical_time_spent": "2-3 hours/day",
+      "pain_level": "high",
+      "automation_potential": 70,
+      "ai_opportunities": [
+        "Automated invoice generation",
+        "Payment plan setup",
+        "Pet insurance claim submission",
+        "Digital payment options",
+        "Outstanding balance follow-up"
+      ]
+    },
+    {
+      "id": "inventory-pharmacy",
+      "name": "Inventory & Pharmacy Management",
+      "description": "Managing medication inventory, ordering supplies, tracking expirations",
+      "typical_time_spent": "1-2 hours/day",
+      "pain_level": "medium",
+      "automation_potential": 80,
+      "ai_opportunities": [
+        "Automated reorder triggers",
+        "Expiration tracking and alerts",
+        "Usage forecasting",
+        "Controlled substance tracking",
+        "Vendor price comparison"
+      ]
+    },
+    {
+      "id": "prescription-refills",
+      "name": "Prescription Refills",
+      "description": "Processing refill requests, authorization, and fulfillment",
+      "typical_time_spent": "1-2 hours/day",
+      "pain_level": "medium",
+      "automation_potential": 75,
+      "ai_opportunities": [
+        "Online refill requests",
+        "Automated refill authorization (for approved meds)",
+        "Home delivery integration",
+        "Refill reminder sequences",
+        "E-prescribing to pharmacies"
+      ]
+    },
+    {
+      "id": "marketing-reviews",
+      "name": "Marketing & Online Reputation",
+      "description": "Managing online presence, collecting reviews, attracting new clients",
+      "typical_time_spent": "2-4 hours/week",
+      "pain_level": "medium",
+      "automation_potential": 70,
+      "ai_opportunities": [
+        "Automated review requests",
+        "AI-assisted review responses",
+        "Social media content generation",
+        "Local SEO optimization",
+        "Client re-engagement campaigns"
+      ]
+    }
+  ],
+  "typical_team_structure": {
+    "small_practice": {
+      "size": "5-10",
+      "roles": ["Veterinarian/Owner", "Associate Vet", "Vet Techs", "Receptionist", "Practice Manager"]
+    },
+    "multi_doctor_practice": {
+      "size": "15-30",
+      "roles": ["Lead Veterinarian", "Associate Vets", "Vet Tech Team", "Client Service Reps", "Practice Manager", "Inventory Manager"]
+    },
+    "specialty_hospital": {
+      "size": "30+",
+      "roles": ["Medical Director", "Specialists", "Emergency Vets", "Tech Teams", "Client Care Team", "Operations", "Admin", "Marketing"]
+    }
+  },
+  "common_tools": [
+    "eVetPractice", "Cornerstone", "IDEXX Neo", "AVImark", "Shepherd",
+    "Weave", "PetDesk", "AllyDVM",
+    "VetCove", "Covetrus", "Patterson Veterinary",
+    "Scratchpay", "CareCredit", "Sunbit",
+    "Google Business Profile", "Yelp"
+  ],
+  "industry_specific_challenges": [
+    "Emotional nature of pet health decisions",
+    "Price sensitivity (no universal pet insurance)",
+    "High no-show rates for wellness visits",
+    "Staff burnout and veterinary shortage",
+    "Managing emergency vs. scheduled cases",
+    "Client compliance with treatment plans",
+    "Competition from low-cost clinics and online pharmacies",
+    "Communicating complex medical info to pet parents"
+  ]
+}

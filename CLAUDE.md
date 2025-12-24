@@ -1,5 +1,33 @@
 # CRB Analyser - Development Guide
 
+## Shortcut Terms
+
+Quick communication shortcuts between user and Claude Code:
+
+| Shortcut | Meaning |
+|----------|---------|
+| **CW** | Context Window (remaining conversation capacity) |
+| **HO** | Handoff document needed |
+| **KB** | Knowledge Base (`backend/src/knowledge/`) |
+| **PM** | Practice Management (software) |
+| **FSM** | Field Service Management (software) |
+| **DSO** | Dental Service Organization |
+| **3O** | Three Options (off-shelf/best-in-class/custom) |
+| **2P** | Two Pillars (Customer Value + Business Health) |
+| **ROI-CA** | ROI Confidence-Adjusted |
+| **TDD** | Test-Driven Development |
+| **LGTM** | Looks Good To Me (approve) |
+| **WIP** | Work In Progress |
+| **PR** | Pull Request |
+| **FE** | Frontend |
+| **BE** | Backend |
+| **DB** | Database |
+| **API** | API endpoint |
+| **SSE** | Server-Sent Events (streaming) |
+| **RLS** | Row Level Security (Supabase) |
+
+---
+
 ## Quick Start
 
 ```bash
@@ -66,6 +94,372 @@ brew services start redis
 
 ---
 
+## Solution Philosophy: Automation vs Custom Software
+
+CRB Analyser recommends solutions across a spectrum. Understanding when to recommend each approach is critical.
+
+### The Spectrum
+
+```
+┌──────────────────────────────────────────────────────────────────────────┐
+│                         SOLUTION SPECTRUM                                 │
+├────────────────┬─────────────────────┬───────────────────────────────────┤
+│   AUTOMATION   │   HYBRID            │   CUSTOM SOFTWARE                 │
+│   (Connect)    │   (Enhance)         │   (Build)                         │
+├────────────────┼─────────────────────┼───────────────────────────────────┤
+│ n8n, Make,     │ Automation +        │ Custom platform like              │
+│ Zapier         │ Claude Code         │ Aquablu's Atlas Service Hub       │
+│                │ enhancements        │                                   │
+├────────────────┼─────────────────────┼───────────────────────────────────┤
+│ Connect        │ Connect + Add       │ Full control over:                │
+│ existing       │ AI intelligence     │ - Data ownership                  │
+│ software       │ where needed        │ - Feature design                  │
+│ together       │                     │ - User experience                 │
+│                │                     │ - Competitive moat                │
+└────────────────┴─────────────────────┴───────────────────────────────────┘
+```
+
+### When to Recommend Each
+
+#### Automation (n8n, Make, Zapier)
+**Recommend when:**
+- Problem is workflow coordination between existing tools
+- Standard integrations exist
+- Speed to deploy matters most
+- Budget is constrained
+- No unique data/logic requirements
+
+**Example:** "Connect HubSpot to Slack notifications when deals close"
+
+#### Hybrid (Automation + AI Enhancement)
+**Recommend when:**
+- Core workflow is standard, but needs intelligent processing
+- Claude Code can add AI layer to automation
+- Custom logic needed at specific steps
+- Want benefits of both approaches
+
+**Example:** "n8n workflow that routes support tickets, but Claude API classifies urgency and drafts responses"
+
+#### Custom Software
+**Recommend when:**
+- Data ownership/access is strategic
+- Features need to work exactly as envisioned
+- Building a competitive advantage
+- Existing tools don't fit the mental model
+- Long-term cost of SaaS subscriptions > build cost
+- Integration complexity would be higher than building
+
+**Example:** "Aquablu's Atlas Service Hub - custom platform because they need precise control over service delivery workflows and client data"
+
+### Decision Framework
+
+```
+┌─────────────────────────────────────────────────────────────┐
+│ Does the solution require unique data ownership or          │
+│ features that create competitive advantage?                 │
+├─────────────────────────────────────────────────────────────┤
+│ YES → Consider CUSTOM SOFTWARE                              │
+│ NO  ↓                                                       │
+├─────────────────────────────────────────────────────────────┤
+│ Can existing tools be connected to solve the problem?       │
+├─────────────────────────────────────────────────────────────┤
+│ YES → AUTOMATION (n8n/Make/Zapier)                          │
+│       Does it need AI intelligence at any step?             │
+│       YES → HYBRID (add Claude Code/API)                    │
+│ NO  → Consider CUSTOM SOFTWARE                              │
+└─────────────────────────────────────────────────────────────┘
+```
+
+---
+
+## Recommendation Framework: Three Options
+
+Every recommendation MUST present three options to give clients real choice:
+
+### Option Structure
+
+```
+┌─────────────────────────────────────────────────────────────┐
+│                    THREE OPTIONS MODEL                       │
+├─────────────────────────────────────────────────────────────┤
+│                                                             │
+│  OPTION A: Off-the-Shelf                                    │
+│  ├── Fastest to deploy                                      │
+│  ├── Lowest risk                                            │
+│  ├── Proven solution                                        │
+│  └── Trade-off: Less customization                          │
+│                                                             │
+│  OPTION B: Best-in-Class                                    │
+│  ├── Premium vendor/solution                                │
+│  ├── Full feature set                                       │
+│  ├── Better support/ecosystem                               │
+│  └── Trade-off: Higher cost                                 │
+│                                                             │
+│  OPTION C: Custom Solution                                  │
+│  ├── Build with AI/APIs (Claude, etc.)                      │
+│  ├── Full control and ownership                             │
+│  ├── Competitive advantage potential                        │
+│  ├── Includes: tech stack, dev hours, resources             │
+│  └── Trade-off: Higher effort, needs technical capability   │
+│                                                             │
+├─────────────────────────────────────────────────────────────┤
+│  OUR RECOMMENDATION                                         │
+│  └── Which option we prefer and WHY                         │
+└─────────────────────────────────────────────────────────────┘
+```
+
+### Custom Solution Details
+
+When recommending custom solutions, include:
+- **Build Tools:** Claude Code, Cursor, VS Code
+- **Model Recommendation:** Which Claude model and why (Opus for complex reasoning, Sonnet for balanced, Haiku for speed/cost)
+- **Skills Required:** Python, API integration, frontend, etc.
+- **Dev Hours Estimate:** Realistic range
+- **Recommended Stack:** e.g., FastAPI + React + Supabase + Railway
+- **Key APIs:** Specific integrations needed
+- **Resources:** Documentation, tutorials, communities
+
+### Two Pillars Assessment
+
+Each finding is rated on two dimensions:
+- **Customer Value Score (1-10):** How does this help their customers?
+- **Business Health Score (1-10):** How does this strengthen the business?
+
+These inform prioritization - high scores on both = urgent, high on one = important, low on both = deprioritize.
+
+---
+
+## Agent Decision Logic
+
+### Model Selection by Phase
+
+The CRB Agent uses different models for different tasks:
+
+| Phase | Model | Reason |
+|-------|-------|--------|
+| Discovery | Haiku | Fast extraction, structured data |
+| Research | Haiku | Quick searches, data gathering |
+| Analysis | Sonnet | Deeper reasoning, pattern recognition |
+| Modeling | Sonnet | Complex ROI calculations, comparisons |
+| Report | Tier-based | Quality scales with customer tier |
+
+### Confidence Scoring Rules
+
+```
+HIGH Confidence (30% of findings):
+├── Quiz answer directly mentions the issue
+├── Multiple data points support the finding
+├── Calculation uses user-provided numbers
+└── Benchmark directly applies to their situation
+
+MEDIUM Confidence (50% of findings):
+├── Quiz answer implies the issue
+├── Industry pattern likely applies
+├── Calculation with reasonable assumptions
+└── One strong supporting data point
+
+LOW Confidence (20% of findings):
+├── Industry pattern suggests possibility
+├── Significant assumptions required
+├── Hypothesis worth validating
+└── Limited data available
+```
+
+### Confidence-Adjusted ROI
+
+ROI estimates are adjusted based on confidence:
+```python
+adjusted_roi = base_roi * confidence_factor
+# HIGH:   confidence_factor = 1.0  (100%)
+# MEDIUM: confidence_factor = 0.85 (85%)
+# LOW:    confidence_factor = 0.70 (70%)
+```
+
+**Display requirement:** Always show "Estimated ROI" with confidence level, never claim certainty.
+
+---
+
+## Industry Support
+
+> Target industries locked: December 2025
+
+### Target Customer Profile: "Passion-Driven Service Businesses"
+
+All target industries share these characteristics:
+- Owner-operators who make fast decisions
+- Relationship-driven (clients = humans, not logos)
+- Passion/craft-based (people love what they do)
+- Clear operational pain (admin eats creative/service time)
+- Pleasant to work with (not corporate bureaucracy)
+- Mid-market sweet spot ($500K - $20M revenue)
+- Local/regional focus
+
+### Primary Industries (Launch Priority)
+
+| Industry | Slug | Score | Key Metrics ✅ |
+|----------|------|-------|-------------|
+| **Professional Services** (Legal, Accounting, Consulting) | `professional-services` | 89/100 | 71% GenAI adoption, 7.4% B2B conversion, 37% cost savings |
+| **Home Services** (HVAC, Plumbing, Electrical) | `home-services` | 85/100 | 70% AI adoption in FSM ✅, 2.5 hrs/day admin waste ✅ |
+| **Dental** (Practices & DSOs) | `dental` | 85/100 | 35% using AI ✅, $3.1B market by 2034 ✅ |
+
+### Secondary Industries (Phase 2)
+
+| Industry | Slug | Score | Key Metrics ✅ |
+|----------|------|-------|-------------|
+| **Recruiting/Staffing** | `recruiting` | 82/100 | 61-67% using AI ✅, 50% time-to-hire reduction ✅ |
+| **Coaching** (businesses, not solopreneurs) | `coaching` | 80/100 | $7.3B market ✅, 75% admin time savings ✅ |
+| **Veterinary/Pet Care** | `veterinary` | 80/100 | 39% using AI ✅, productivity gains reported |
+
+### Expansion Industries (Phase 3)
+
+| Industry | Slug | Score | Key Metrics ⚠️ |
+|----------|------|-------|-------------|
+| **Physical Therapy/Chiropractic** | `physical-therapy` | 79/100 | 80% believe AI will integrate, $43B market |
+| **MedSpa/Beauty** | `medspa` | 78/100 | 58% cloud adoption, only 10% market consolidated |
+
+**✅ Verified Dec 2024** - Stats marked ✅ verified via web search against 2024-2025 sources. ⚠️ Phase 3 stats still need verification.
+
+### Key Sources (Verified Dec 2024)
+- Home Services: [Zuper FSM Trends 2025](https://www.zuper.co/field-service/field-service-management-trends-2025), [Housecall Pro 2024](https://www.housecallpro.com/resources/home-services-industry-trends/)
+- Dental: [GoTu AI in Dentistry 2025](https://gotu.com/dental-practices/ai-in-dentistry-2025/), [InsightAce Market Report](https://www.insightaceanalytic.com/report/ai-in-dentistry-market/3004)
+- Recruiting: [StaffingHub 2025](https://staffinghub.com/state-of-staffing/ai-isnt-optional-anymore-how-staffing-firms-are-using-it-to-win-in-2025/), [LinkedIn Future of Recruiting](https://business.linkedin.com/talent-solutions/resources/future-of-recruiting)
+- Coaching: [ICF Global Coaching Study 2025](https://coachingfederation.org/resources/research/global-coaching-study/)
+- Veterinary: [AAHA/Digitail Survey 2024](https://avmajournals.avma.org/view/journals/ajvr/86/S1/ajvr.24.10.0293.xml)
+
+### Knowledge Base Status
+
+| Industry | Status | Files | Verification |
+|----------|--------|-------|--------------|
+| `professional-services` | ✅ Complete | processes, opportunities, benchmarks, vendors | ⚠️ Needs verification |
+| `home-services` | ✅ Complete | processes, opportunities, benchmarks, vendors | ✅ Dec 2024 |
+| `dental` | ✅ Complete | processes, opportunities, benchmarks, vendors | ✅ Dec 2024 |
+| `recruiting` | ✅ Complete | processes, opportunities, benchmarks, vendors | ✅ Dec 2024 |
+| `coaching` | ✅ Complete | processes, opportunities, benchmarks, vendors | ✅ Dec 2024 |
+| `veterinary` | ✅ Complete | processes, opportunities, benchmarks, vendors | ✅ Dec 2024 |
+| `physical-therapy` | 🚧 Needed | - | - |
+| `medspa` | 🚧 Needed | - | - |
+
+**⚠️ VERIFICATION REQUIRED:** All knowledge base data must be verified against current (2025) sources before use in production reports. See "Data Verification Policy" below.
+
+### Dropped Industries
+
+These are no longer targets (remove from knowledge base):
+- ~~Music Studios~~ (budget constraints)
+- ~~Marketing Agencies~~ (DIY mentality, competitive)
+- ~~E-commerce~~ (not passion-driven service)
+- ~~Retail~~ (not passion-driven service)
+- ~~Tech Companies~~ (DIY mentality)
+- ~~Gyms/Fitness~~ (thin margins)
+- ~~Hotels/Hospitality~~ (slow enterprise decisions)
+
+### Unified Positioning
+
+> "We help passion-driven service professionals - from lawyers to plumbers, dentists to dog trainers - get the AI clarity they need to stop wasting time on admin and get back to the work they love."
+
+### Limited Support (Other Industries)
+
+Industries not in our target list fall back to general patterns:
+- Generic benchmarks applied
+- No industry-specific quick wins
+- No industry-specific anti-patterns
+- Vendor matching less precise
+
+**Recommendation:** For unsupported industries, acknowledge limitations and focus on universal efficiency opportunities. Consider whether they fit the "passion-driven service business" profile.
+
+---
+
+## Solution Ecosystem
+
+### Automation Tools (for connecting existing software)
+
+| Tool | Best For | Knowledge Base |
+|------|----------|----------------|
+| **n8n** | Self-hosted, complex workflows, developers | `vendors/automation.json` |
+| **Make** | Visual workflows, mid-complexity | `vendors/automation.json` |
+| **Zapier** | Simple integrations, non-technical users | `vendors/automation.json` |
+
+### AI Development Tools (for custom solutions)
+
+| Tool | Use Case |
+|------|----------|
+| **Claude Code** | AI-assisted development, code generation |
+| **Cursor** | AI-native IDE for building |
+| **Claude API** | Add AI to any application |
+
+### Deployment & Infrastructure
+
+| Service | Purpose | Knowledge Base |
+|---------|---------|----------------|
+| **Railway** | Easy deployment, auto-scaling | `vendors/dev_tools.json` |
+| **Vercel** | Frontend deployment, edge functions | `vendors/dev_tools.json` |
+| **Supabase** | Database, auth, real-time | `vendors/dev_tools.json` |
+| **Redis** | Caching, sessions | Infrastructure |
+
+### LLM Provider Pricing
+
+Stored in `knowledge/ai_tools/llm_providers.json`:
+- Claude (Opus, Sonnet, Haiku) pricing
+- GPT-4, GPT-3.5 pricing
+- Other providers for comparison
+
+Used for custom solution cost estimates.
+
+---
+
+## Self-Improving Agent (Expertise System)
+
+The CRB Agent learns from each analysis to improve future recommendations.
+
+### How It Works
+
+```
+┌─────────────────────────────────────────────────────────────┐
+│                    LEARNING LOOP                             │
+├─────────────────────────────────────────────────────────────┤
+│                                                             │
+│  1. BEFORE Analysis                                         │
+│     └── Load expertise for client's industry                │
+│         (pain_points, effective_patterns, anti_patterns)    │
+│                                                             │
+│  2. DURING Analysis                                         │
+│     └── Track tools used, errors, phase completion          │
+│                                                             │
+│  3. AFTER Analysis                                          │
+│     └── Update expertise store with:                        │
+│         - Which findings were generated                     │
+│         - Which recommendations were made                   │
+│         - Any patterns observed                             │
+│                                                             │
+│  4. NEXT Analysis (same industry)                           │
+│     └── Injected expertise improves prompts                 │
+│         - Known pain points surface faster                  │
+│         - Effective patterns prioritized                    │
+│         - Anti-patterns avoided                             │
+│                                                             │
+└─────────────────────────────────────────────────────────────┘
+```
+
+### Expertise Data Structure
+
+```python
+IndustryExpertise:
+├── pain_points        # Common issues + frequency + solutions that worked
+├── processes          # Typical workflows + automation potential observed
+├── effective_patterns # Recommendations that succeeded
+├── anti_patterns      # What NOT to recommend (learned from failures)
+├── size_specific      # Insights by company size (SMB vs enterprise)
+└── avg_metrics        # Trends over time (avg savings, ROI, etc.)
+```
+
+### Files
+
+- `backend/src/expertise/__init__.py` - Expertise store implementation
+- `backend/src/expertise/schemas.py` - Data structures
+
+**This is a competitive advantage** - the more analyses we run, the better our recommendations become for each industry.
+
+---
+
 ## Development Rules
 
 ### 1. Code Quality
@@ -75,10 +469,36 @@ brew services start redis
 - **Test critical paths** - Auth, payments, report generation
 
 ### 2. CRB-Specific Rules
-- **Every claim needs a source** - No hallucinated data in reports
-- **Transparent calculations** - Show assumptions in ROI math
-- **Validate vendors** - Real pricing, verified dates
-- **Confidence scores** - Rate certainty of each finding
+- **NO MOCK DATA OR GUESSING** - Every statistic, benchmark, and claim in the knowledge base MUST be verified against real, current sources. If you cannot verify a claim, mark it as "UNVERIFIED" or remove it.
+- **Every claim needs a verifiable source** - Include the actual source (study name, vendor website, industry report) and verification date. "Industry patterns" is NOT acceptable without a real source.
+- **Transparent calculations** - Show assumptions in ROI math. All ROI figures are **estimates** - display confidence level and key assumptions visibly.
+- **Confidence affects ROI** - Apply confidence-based adjustments: HIGH (100%), MEDIUM (85%), LOW (70%). Always label as "Estimated ROI" with confidence indicator.
+- **Validate vendors** - Pricing from curated knowledge base (refreshed via vendor_refresh_service). Mark "Last verified: [date]" on vendor data. Verify pricing via vendor websites.
+- **Confidence distribution** - Each report should have ~30% HIGH, ~50% MEDIUM, ~20% LOW confidence findings. If everything is HIGH, we're not being honest about uncertainty.
+
+### 2b. Data Verification Policy
+
+**CRITICAL: No unverified data in production.**
+
+| Data Type | Verification Method | Refresh Frequency |
+|-----------|--------------------|--------------------|
+| Vendor pricing | Check vendor website directly | Monthly |
+| Industry benchmarks | Cite specific study/report with year | Quarterly |
+| AI adoption stats | Link to survey/study source | Quarterly |
+| Market size | Link to market research report | Annually |
+| ROI claims | Must show calculation with sources | Per-use |
+
+**Before adding ANY data to knowledge base:**
+1. Find a real, verifiable source (not AI-generated)
+2. Include source name, URL if available, and date
+3. Add `"verified_date": "YYYY-MM"` to the data
+4. If cannot verify, mark as `"status": "UNVERIFIED"`
+
+**Unverified data handling:**
+- NEVER present unverified data as fact
+- Mark with ⚠️ in reports
+- Apply LOW confidence automatically
+- Prioritize verification before production use
 
 ### 3. Security
 - **RLS everywhere** - All tables have Row Level Security
@@ -103,7 +523,13 @@ brew services start redis
 | **Agent** | `backend/src/agents/crb_agent.py` | Main analysis agent |
 | **Tools** | `backend/src/tools/tool_registry.py` | Tool definitions |
 | **ROI** | `backend/src/services/roi_calculator.py` | ROI calculations |
-| **Reports** | `backend/src/services/report_generator.py` | PDF generation |
+| **Reports** | `backend/src/services/report_service.py` | Report generation (1500+ lines) |
+| **PDF** | `backend/src/services/report_generator.py` | PDF generation |
+| **Expertise** | `backend/src/expertise/__init__.py` | Self-improving agent store |
+| **Knowledge** | `backend/src/knowledge/__init__.py` | Industry data loader |
+| **Assumptions** | `backend/src/models/assumptions.py` | ROI assumption tracking |
+| **Recommendations** | `backend/src/models/recommendation.py` | Three Options model |
+| **Vendor Refresh** | `backend/src/services/vendor_refresh_service.py` | Live pricing updates |
 | **Auth (FE)** | `frontend/src/contexts/AuthContext.tsx` | Auth state |
 | **API Client** | `frontend/src/services/apiClient.ts` | HTTP client |
 
@@ -133,6 +559,63 @@ workspace
                     │       └── recommendations
                     └── reports
 ```
+
+### Knowledge Base Structure
+
+```
+backend/src/knowledge/
+├── vendors/                    # Vendor pricing database (our moat)
+│   ├── ai_assistants.json
+│   ├── analytics.json
+│   ├── automation.json        # n8n, Make, Zapier, etc.
+│   ├── crm.json
+│   ├── customer_support.json
+│   ├── dev_tools.json         # Railway, Vercel, Supabase
+│   ├── scheduling.json        # For home services, dental, etc.
+│   ├── finance.json
+│   ├── hr_payroll.json
+│   ├── marketing.json
+│   └── project_management.json
+│
+├── ai_tools/
+│   └── llm_providers.json     # Claude, GPT pricing for custom solutions
+│
+│   # PRIMARY INDUSTRIES (Launch) - Need complete knowledge bases
+├── professional-services/     # ✅ Complete
+│   ├── processes.json
+│   ├── opportunities.json
+│   ├── benchmarks.json
+│   └── vendors.json
+├── home-services/             # 🚧 TODO: HVAC, Plumbing, Electrical
+├── dental/                    # 🚧 TODO: Practices & DSOs
+│
+│   # SECONDARY INDUSTRIES (Phase 2)
+├── recruiting/                # 🚧 TODO: Staffing agencies
+├── coaching/                  # 🚧 TODO: Business coaching
+├── veterinary/                # 🚧 TODO: Vet clinics, pet care
+│
+│   # EXPANSION INDUSTRIES (Phase 3)
+├── physical-therapy/          # 🚧 TODO: PT, Chiropractic
+├── medspa/                    # 🚧 TODO: MedSpa, Beauty
+│
+│   # LEGACY (to be removed/archived)
+├── marketing-agencies/        # ❌ DROPPED - DIY mentality
+├── ecommerce/                 # ❌ DROPPED - Not passion-driven
+├── retail/                    # ❌ DROPPED - Not passion-driven
+├── tech-companies/            # ❌ DROPPED - DIY mentality
+├── music-studios/             # ❌ DROPPED - Budget constraints
+│
+└── patterns/
+    └── ai_implementation_playbook.json
+```
+
+**Vendor data refresh:** Use `vendor_refresh_service.py` to update pricing. Mark "Last verified: [date]" in reports.
+
+**Industry knowledge structure:** Each industry folder needs:
+- `processes.json` - Common workflows and pain points
+- `opportunities.json` - AI automation opportunities
+- `benchmarks.json` - Industry-specific metrics
+- `vendors.json` - Relevant software for that industry
 
 ---
 
@@ -391,6 +874,72 @@ When adapting code, reference these MMAI files:
 | API client | `mmai-frontend/src/services/apiClient.ts` |
 | Tool stream hook | `mmai-frontend/src/hooks/useToolStream.ts` |
 | Wizard pattern | `mmai-frontend/src/components/onboarding/OnboardingWizard.tsx` |
+
+---
+
+## Hybrid Mode: Auto-Claude + Superpowers
+
+This project uses **Auto-Claude** for orchestration and parallel agent management, combined with **Superpowers** discipline skills for code quality.
+
+### How It Works
+
+```
+┌─────────────────────────────────────────────────────────────┐
+│                     AUTO-CLAUDE UI                           │
+│         (Kanban, 12 terminals, visual management)            │
+├─────────────────────────────────────────────────────────────┤
+│  Each Claude Code terminal loads this CLAUDE.md             │
+│  → Superpowers discipline skills remain active              │
+│  → Orchestration skills are disabled (Auto-Claude handles)  │
+└─────────────────────────────────────────────────────────────┘
+```
+
+### Superpowers Skills Configuration
+
+**DISABLED** (Auto-Claude handles these):
+| Skill | Reason |
+|-------|--------|
+| `using-git-worktrees` | Auto-Claude manages worktrees in `.worktrees/` |
+| `dispatching-parallel-agents` | Auto-Claude orchestrates parallel execution |
+| `execute-plan` | Use Auto-Claude's spec system instead |
+| `subagent-driven-development` | Auto-Claude handles task dispatch |
+
+**ENABLED** (Use these in every terminal):
+| Skill | Purpose |
+|-------|---------|
+| `test-driven-development` | Write tests first, always |
+| `systematic-debugging` | Four-phase debugging framework |
+| `verification-before-completion` | Run verification before claiming done |
+| `testing-anti-patterns` | Prevent bad testing practices |
+| `root-cause-tracing` | Trace bugs to source |
+| `brainstorming` | Refine ideas before implementation |
+| `code-reviewer` | Review implementation quality |
+
+### Starting Auto-Claude
+
+```bash
+# Terminal 1: Start the UI
+cd "/Users/larsmusic/CRB Analyser/Auto-Claude/auto-claude-ui"
+pnpm dev
+
+# Or build and run the desktop app
+pnpm build:mac
+open dist/mac-arm64/Auto\ Claude.app
+```
+
+### Workflow
+
+1. **Brainstorm** in Claude Code (use superpowers brainstorming skill)
+2. **Create spec** in Auto-Claude UI
+3. **Auto-Claude dispatches** parallel agents to terminals
+4. **Each agent follows TDD** (superpowers skill active)
+5. **Auto-Claude QA reviews** the implementation
+6. **Auto-Claude merges** to main branch
+7. **You do final human review**
+
+### Auto-Claude Location
+
+Auto-Claude is installed at: `/Users/larsmusic/CRB Analyser/Auto-Claude`
 
 ---
 

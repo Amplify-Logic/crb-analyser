@@ -1,0 +1,155 @@
+{
+  "industry": "dental",
+  "description": "Dental practices including general dentistry, specialty practices, and DSOs (Dental Service Organizations)",
+  "common_processes": [
+    {
+      "id": "patient-scheduling",
+      "name": "Patient Scheduling & Appointment Management",
+      "description": "Booking appointments, managing hygiene recalls, handling cancellations and reschedules",
+      "typical_time_spent": "3-5 hours/day",
+      "pain_level": "high",
+      "automation_potential": 85,
+      "ai_opportunities": [
+        "Online self-scheduling for patients",
+        "AI-powered schedule optimization",
+        "Automated recall and reactivation campaigns",
+        "Smart waitlist management",
+        "Predictive no-show identification"
+      ]
+    },
+    {
+      "id": "patient-communication",
+      "name": "Patient Communication",
+      "description": "Appointment reminders, treatment follow-ups, birthday messages, and patient education",
+      "typical_time_spent": "2-3 hours/day",
+      "pain_level": "high",
+      "automation_potential": 90,
+      "ai_opportunities": [
+        "Automated appointment confirmations and reminders",
+        "Two-way texting with patients",
+        "Post-treatment care instructions",
+        "Personalized recall messages",
+        "Review request automation"
+      ]
+    },
+    {
+      "id": "insurance-billing",
+      "name": "Insurance Verification & Billing",
+      "description": "Verifying patient insurance, submitting claims, following up on denials",
+      "typical_time_spent": "4-6 hours/day",
+      "pain_level": "very high",
+      "automation_potential": 75,
+      "ai_opportunities": [
+        "Real-time insurance eligibility verification",
+        "AI-assisted claim scrubbing",
+        "Automated claim submission",
+        "Denial management and appeals",
+        "Treatment plan financial presentations"
+      ]
+    },
+    {
+      "id": "treatment-planning",
+      "name": "Treatment Planning & Case Presentation",
+      "description": "Creating treatment plans, presenting to patients, handling acceptance",
+      "typical_time_spent": "1-2 hours/day",
+      "pain_level": "medium",
+      "automation_potential": 60,
+      "ai_opportunities": [
+        "AI-assisted treatment plan creation from X-rays",
+        "Visual treatment simulators",
+        "Automated financial options presentation",
+        "Treatment acceptance tracking",
+        "Follow-up for unscheduled treatment"
+      ]
+    },
+    {
+      "id": "front-office",
+      "name": "Front Office Operations",
+      "description": "Check-in/check-out, payment collection, phone handling, patient intake",
+      "typical_time_spent": "4-6 hours/day",
+      "pain_level": "high",
+      "automation_potential": 70,
+      "ai_opportunities": [
+        "Digital patient intake forms",
+        "Automated payment processing",
+        "AI phone answering for simple queries",
+        "Digital check-in kiosks",
+        "Payment plan automation"
+      ]
+    },
+    {
+      "id": "hygiene-management",
+      "name": "Hygiene Department Management",
+      "description": "Hygiene scheduling, perio charting, patient recare",
+      "typical_time_spent": "1-2 hours/day",
+      "pain_level": "medium",
+      "automation_potential": 65,
+      "ai_opportunities": [
+        "Smart hygiene scheduling optimization",
+        "Automated recare reminders",
+        "AI-assisted perio risk assessment",
+        "Hygiene production tracking"
+      ]
+    },
+    {
+      "id": "inventory-supplies",
+      "name": "Inventory & Supply Management",
+      "description": "Ordering supplies, tracking inventory, managing vendors",
+      "typical_time_spent": "1-2 hours/week",
+      "pain_level": "low",
+      "automation_potential": 80,
+      "ai_opportunities": [
+        "Automated reorder based on usage",
+        "Price comparison across vendors",
+        "Expiration date tracking",
+        "Usage forecasting"
+      ]
+    },
+    {
+      "id": "marketing-growth",
+      "name": "Marketing & New Patient Acquisition",
+      "description": "Attracting new patients, managing online presence, handling reviews",
+      "typical_time_spent": "2-4 hours/week",
+      "pain_level": "medium",
+      "automation_potential": 75,
+      "ai_opportunities": [
+        "Automated review requests and responses",
+        "Social media content generation",
+        "SEO optimization",
+        "Targeted recall campaigns",
+        "New patient nurturing sequences"
+      ]
+    }
+  ],
+  "typical_team_structure": {
+    "solo_practice": {
+      "size": "3-5",
+      "roles": ["Dentist/Owner", "Office Manager", "Dental Assistant", "Hygienist", "Front Desk"]
+    },
+    "group_practice": {
+      "size": "10-25",
+      "roles": ["Lead Dentist", "Associate Dentists", "Practice Manager", "Treatment Coordinator", "Hygiene Team", "Assistants", "Front Office Team", "Billing Specialist"]
+    },
+    "dso": {
+      "size": "25+",
+      "roles": ["Regional Manager", "Practice Leads", "Central Billing", "HR", "Marketing", "IT Support", "Clinical Teams"]
+    }
+  },
+  "common_tools": [
+    "Dentrix", "Eaglesoft", "Open Dental", "Curve Dental",
+    "Weave", "Lighthouse 360", "Solutionreach",
+    "Patterson", "Henry Schein", "Benco",
+    "CareCredit", "Sunbit", "Proceed Finance",
+    "Google Business Profile", "Yelp", "Healthgrades"
+  ],
+  "industry_specific_challenges": [
+    "High no-show rates (15-20% industry average)",
+    "Insurance verification complexity",
+    "Treatment acceptance rates (typically 30-50%)",
+    "Staff turnover and hiring challenges",
+    "Competition from DSOs and corporate dentistry",
+    "Managing multiple insurance plans",
+    "Patient anxiety and fear of dentistry",
+    "Recall compliance (patients not returning for cleanings)"
+  ]
+}

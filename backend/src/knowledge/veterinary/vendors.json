@@ -1,0 +1,283 @@
+{
+  "industry": "veterinary",
+  "last_updated": "2025-12",
+  "verification_status": "UNVERIFIED",
+  "verification_note": "Pricing requires verification from vendor websites",
+  "vendor_categories": [
+    {
+      "category": "practice-management",
+      "name": "Practice Management Software (PIMS)",
+      "description": "Core systems for patient records, scheduling, billing, and inventory",
+      "vendors": [
+        {
+          "name": "eVetPractice",
+          "website": "evetpractice.com",
+          "pricing": {
+            "standard": {"price": 200, "currency": "EUR", "period": "month", "features": ["Core PM", "Cloud-based"]},
+            "professional": {"price": 350, "currency": "EUR", "period": "month", "features": ["Advanced features", "Integrations"]}
+          },
+          "best_for": "Small to mid-size practices wanting affordable cloud PM",
+          "pros": ["Cloud-native", "Good value", "Modern interface", "Regular updates"],
+          "cons": ["Fewer integrations than legacy systems", "Smaller market share"],
+          "company_sizes": ["small", "multi-doctor"],
+          "integrations": ["Major lab systems", "Payment processors", "Communication tools"],
+          "pricing_verified_date": "2024-12"
+        },
+        {
+          "name": "Cornerstone (IDEXX)",
+          "website": "idexx.com/cornerstone",
+          "pricing": {
+            "standard": {"price": 300, "currency": "EUR", "period": "month"},
+            "enterprise": {"price": "custom", "features": ["Multi-location", "Advanced analytics"]}
+          },
+          "best_for": "Established practices, specialty hospitals",
+          "pros": ["Industry standard", "IDEXX lab integration", "Comprehensive features"],
+          "cons": ["Expensive", "Dated interface", "Complex setup"],
+          "company_sizes": ["multi-doctor", "specialty"],
+          "integrations": ["IDEXX labs", "VetConnect Plus", "Communication tools"],
+          "pricing_verified_date": "2024-12"
+        },
+        {
+          "name": "Shepherd Veterinary Software",
+          "website": "shepherd.vet",
+          "pricing": {
+            "standard": {"price": 250, "currency": "EUR", "period": "month"},
+            "professional": {"price": 400, "currency": "EUR", "period": "month"}
+          },
+          "best_for": "Forward-thinking practices wanting modern PM",
+          "pros": ["Modern design", "Built-in communication", "Good UX", "AI features"],
+          "cons": ["Newer company", "Smaller ecosystem", "May lack some advanced features"],
+          "company_sizes": ["small", "multi-doctor"],
+          "integrations": ["Major labs", "Payment tools", "Communication platforms"],
+          "pricing_verified_date": "2024-12"
+        },
+        {
+          "name": "AVImark (Covetrus)",
+          "website": "covetrus.com/avimark",
+          "pricing": {
+            "standard": {"price": 250, "currency": "EUR", "period": "month"},
+            "enterprise": {"price": "custom"}
+          },
+          "best_for": "Traditional practices, Covetrus customers",
+          "pros": ["Well-established", "Covetrus integration", "Solid features"],
+          "cons": ["Dated interface", "On-premise legacy", "Slower innovation"],
+          "company_sizes": ["small", "multi-doctor"],
+          "integrations": ["Covetrus ecosystem", "Labs", "Pharmacies"],
+          "pricing_verified_date": "2024-12"
+        }
+      ]
+    },
+    {
+      "category": "client-communication",
+      "name": "Client Communication & Engagement",
+      "description": "Platforms for reminders, two-way texting, and client engagement",
+      "vendors": [
+        {
+          "name": "Weave",
+          "website": "getweave.com",
+          "pricing": {
+            "core": {"price": 350, "currency": "EUR", "period": "month", "features": ["VoIP", "Texting", "Reviews"]},
+            "complete": {"price": 500, "currency": "EUR", "period": "month", "features": ["Full platform", "Payments"]}
+          },
+          "best_for": "Practices wanting all-in-one communication + phone",
+          "pros": ["VoIP included", "Two-way texting", "Reviews", "Multi-industry proven"],
+          "cons": ["Requires phone system change", "Monthly commitment"],
+          "company_sizes": ["small", "multi-doctor"],
+          "integrations": ["Major PIMS systems", "Payment processors"],
+          "pricing_verified_date": "2024-12"
+        },
+        {
+          "name": "PetDesk",
+          "website": "petdesk.com",
+          "pricing": {
+            "starter": {"price": 150, "currency": "EUR", "period": "month"},
+            "professional": {"price": 250, "currency": "EUR", "period": "month"},
+            "enterprise": {"price": "custom"}
+          },
+          "best_for": "Vet-specific communication with strong app",
+          "pros": ["Purpose-built for vet", "Client app", "Reminders", "Online booking"],
+          "cons": ["Per-location pricing", "Feature overlap"],
+          "company_sizes": ["small", "multi-doctor", "specialty"],
+          "integrations": ["Most PIMS systems", "Labs"],
+          "pricing_verified_date": "2024-12"
+        },
+        {
+          "name": "AllyDVM",
+          "website": "allydvm.com",
+          "pricing": {
+            "standard": {"price": 200, "currency": "EUR", "period": "month"},
+            "professional": {"price": 350, "currency": "EUR", "period": "month"}
+          },
+          "best_for": "Practices focused on client retention and compliance",
+          "pros": ["Strong retention focus", "Compliance tracking", "Analytics"],
+          "cons": ["Smaller company", "Less name recognition"],
+          "company_sizes": ["small", "multi-doctor"],
+          "integrations": ["Major PIMS systems"],
+          "pricing_verified_date": "2024-12"
+        }
+      ]
+    },
+    {
+      "category": "online-booking",
+      "name": "Online Appointment Booking",
+      "description": "Self-service booking for clients",
+      "vendors": [
+        {
+          "name": "Vetstoria",
+          "website": "vetstoria.com",
+          "pricing": {
+            "standard": {"price": 150, "currency": "EUR", "period": "month"},
+            "professional": {"price": 250, "currency": "EUR", "period": "month"}
+          },
+          "best_for": "Dedicated online booking with PIMS integration",
+          "pros": ["Strong PIMS integration", "Customizable rules", "Good UX"],
+          "cons": ["Additional cost if using other comm tools", "Per-location pricing"],
+          "company_sizes": ["small", "multi-doctor", "specialty"],
+          "integrations": ["Most major PIMS", "Google", "Websites"],
+          "pricing_verified_date": "2024-12"
+        },
+        {
+          "name": "Vet2Pet",
+          "website": "vet2pet.com",
+          "pricing": {
+            "basic": {"price": 100, "currency": "EUR", "period": "month"},
+            "professional": {"price": 175, "currency": "EUR", "period": "month"}
+          },
+          "best_for": "Affordable booking with client app",
+          "pros": ["Good value", "Client app", "Basic features solid"],
+          "cons": ["Fewer advanced features", "Less integration depth"],
+          "company_sizes": ["small", "multi-doctor"],
+          "integrations": ["Major PIMS systems"],
+          "pricing_verified_date": "2024-12"
+        }
+      ]
+    },
+    {
+      "category": "clinical-documentation",
+      "name": "Clinical Documentation & AI Notes",
+      "description": "Voice-to-text and AI-assisted clinical documentation",
+      "vendors": [
+        {
+          "name": "Talkatoo",
+          "website": "talkatoo.com",
+          "pricing": {
+            "standard": {"price": 100, "currency": "EUR", "period": "user/month", "features": ["Voice-to-text", "Vet vocabulary"]},
+            "professional": {"price": 150, "currency": "EUR", "period": "user/month", "features": ["Advanced features"]}
+          },
+          "best_for": "Vets wanting reliable voice dictation",
+          "pros": ["Vet-specific vocabulary", "PIMS integration", "Reliable"],
+          "cons": ["Per-user cost", "Voice only (no AI generation)"],
+          "company_sizes": ["small", "multi-doctor", "specialty"],
+          "integrations": ["Most PIMS systems"],
+          "pricing_verified_date": "2024-12"
+        },
+        {
+          "name": "ScribeVet",
+          "website": "scribevet.com",
+          "pricing": {
+            "starter": {"price": 75, "currency": "EUR", "period": "user/month"},
+            "professional": {"price": 125, "currency": "EUR", "period": "user/month"}
+          },
+          "best_for": "Budget-conscious practices wanting dictation",
+          "pros": ["Lower cost", "Good accuracy", "Simple"],
+          "cons": ["Fewer features", "Smaller company"],
+          "company_sizes": ["small", "multi-doctor"],
+          "integrations": ["Major PIMS systems"],
+          "pricing_verified_date": "2024-12"
+        },
+        {
+          "name": "Dragon Veterinary",
+          "website": "nuance.com/dragon",
+          "pricing": {
+            "professional": {"price": 200, "currency": "EUR", "period": "user/month"}
+          },
+          "best_for": "Enterprise practices wanting proven solution",
+          "pros": ["Industry leader", "Excellent accuracy", "Robust"],
+          "cons": ["Expensive", "Complex setup", "Overkill for small practices"],
+          "company_sizes": ["multi-doctor", "specialty"],
+          "integrations": ["Enterprise systems"],
+          "pricing_verified_date": "2024-12"
+        }
+      ]
+    },
+    {
+      "category": "payment-financing",
+      "name": "Payment & Client Financing",
+      "description": "Payment processing and financing options for pet parents",
+      "vendors": [
+        {
+          "name": "Scratchpay",
+          "website": "scratchpay.com",
+          "pricing": {
+            "merchant": {"price": 0, "features": ["No monthly fee", "Per-transaction rate"]}
+          },
+          "best_for": "Practices wanting to offer payment plans",
+          "pros": ["No monthly fee", "Easy for clients", "High approval rates", "Vet-focused"],
+          "cons": ["Transaction fees", "Not all clients approved"],
+          "company_sizes": ["small", "multi-doctor", "specialty"],
+          "integrations": ["PIMS systems", "Websites"],
+          "pricing_verified_date": "2024-12"
+        },
+        {
+          "name": "CareCredit",
+          "website": "carecredit.com",
+          "pricing": {
+            "merchant": {"price": 0, "features": ["No monthly fee", "Per-transaction merchant fee"]}
+          },
+          "best_for": "Established financing brand clients recognize",
+          "pros": ["Well-known brand", "Promotional financing", "Multi-industry"],
+          "cons": ["Lower approval rates for some", "Transaction costs"],
+          "company_sizes": ["small", "multi-doctor", "specialty"],
+          "integrations": ["Most PIMS systems", "Payment terminals"],
+          "pricing_verified_date": "2024-12"
+        },
+        {
+          "name": "Sunbit",
+          "website": "sunbit.com",
+          "pricing": {
+            "merchant": {"price": 0, "features": ["No monthly fee", "High approval focus"]}
+          },
+          "best_for": "Practices wanting higher approval rates",
+          "pros": ["90%+ approval claim", "Quick approval", "No hard credit check"],
+          "cons": ["Higher interest for clients", "Newer in vet space"],
+          "company_sizes": ["small", "multi-doctor"],
+          "integrations": ["Payment systems"],
+          "pricing_verified_date": "2024-12"
+        }
+      ]
+    },
+    {
+      "category": "diagnostics-labs",
+      "name": "Diagnostic Labs & Integration",
+      "description": "Laboratory services with PIMS integration",
+      "vendors": [
+        {
+          "name": "IDEXX Reference Laboratories",
+          "website": "idexx.com",
+          "pricing": {
+            "varies": {"description": "Per-test pricing, volume discounts"}
+          },
+          "best_for": "Industry-leading diagnostics with best integration",
+          "pros": ["Comprehensive test menu", "Best PIMS integration", "Fast results"],
+          "cons": ["Premium pricing", "Tied to IDEXX ecosystem"],
+          "company_sizes": ["small", "multi-doctor", "specialty"],
+          "integrations": ["VetConnect Plus", "Most PIMS systems"],
+          "pricing_verified_date": "2024-12"
+        },
+        {
+          "name": "Antech Diagnostics (Mars)",
+          "website": "antechdiagnostics.com",
+          "pricing": {
+            "varies": {"description": "Per-test pricing, volume discounts"}
+          },
+          "best_for": "Alternative to IDEXX with good quality",
+          "pros": ["Competitive pricing", "Good quality", "Broad test menu"],
+          "cons": ["Integration not as seamless as IDEXX", "Mars consolidation concerns"],
+          "company_sizes": ["small", "multi-doctor", "specialty"],
+          "integrations": ["Major PIMS systems"],
+          "pricing_verified_date": "2024-12"
+        }
+      ]
+    }
+  ]
+}

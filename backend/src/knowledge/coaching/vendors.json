@@ -1,0 +1,265 @@
+{
+  "industry": "coaching",
+  "last_updated": "2025-12",
+  "verification_status": "UNVERIFIED",
+  "verification_note": "Pricing requires verification from vendor websites",
+  "vendor_categories": [
+    {
+      "category": "coaching-platforms",
+      "name": "Coaching Practice Management",
+      "description": "All-in-one platforms for managing coaching practices",
+      "vendors": [
+        {
+          "name": "CoachAccountable",
+          "website": "coachaccountable.com",
+          "pricing": {
+            "starter": {"price": 20, "currency": "EUR", "period": "month", "features": ["2 clients", "Core features"]},
+            "level_2": {"price": 40, "currency": "EUR", "period": "month", "features": ["8 clients", "Full features"]},
+            "level_3": {"price": 70, "currency": "EUR", "period": "month", "features": ["20 clients"]},
+            "level_4": {"price": 100, "currency": "EUR", "period": "month", "features": ["50 clients", "Team features"]}
+          },
+          "best_for": "Business and executive coaches wanting comprehensive tracking",
+          "pros": ["Deep progress tracking", "Package management", "Client accountability tools", "Metrics dashboards"],
+          "cons": ["Learning curve", "Interface dated", "Mobile experience limited"],
+          "company_sizes": ["solo", "growing"],
+          "integrations": ["Zoom", "Calendly", "Stripe", "PayPal"],
+          "pricing_verified_date": "2024-12"
+        },
+        {
+          "name": "Practice Better",
+          "website": "practicebetter.io",
+          "pricing": {
+            "starter": {"price": 0, "currency": "EUR", "period": "month", "features": ["3 clients", "Basic features"]},
+            "professional": {"price": 65, "currency": "EUR", "period": "month", "features": ["Unlimited clients", "Telehealth"]},
+            "plus": {"price": 95, "currency": "EUR", "period": "month", "features": ["Programs", "Automation"]}
+          },
+          "best_for": "Health and wellness coaches, nutrition coaches",
+          "pros": ["Beautiful interface", "Telehealth built-in", "Good client portal", "Programs feature"],
+          "cons": ["More suited for health focus", "Some features overkill for exec coaching"],
+          "company_sizes": ["solo", "growing"],
+          "integrations": ["Zoom", "Stripe", "Mailchimp"],
+          "pricing_verified_date": "2024-12"
+        },
+        {
+          "name": "Paperbell",
+          "website": "paperbell.com",
+          "pricing": {
+            "starter": {"price": 0, "currency": "EUR", "period": "month", "features": ["1 client"]},
+            "coach": {"price": 47, "currency": "EUR", "period": "month", "features": ["Unlimited clients", "All features"]}
+          },
+          "best_for": "Solo coaches wanting simple all-in-one solution",
+          "pros": ["Very easy to use", "Clean client experience", "Contracts built-in", "Simple pricing"],
+          "cons": ["Limited advanced features", "No team features", "Basic reporting"],
+          "company_sizes": ["solo"],
+          "integrations": ["Calendly", "Acuity", "Stripe", "Zoom"],
+          "pricing_verified_date": "2024-12"
+        },
+        {
+          "name": "Satori",
+          "website": "satoriapp.com",
+          "pricing": {
+            "starter": {"price": 29, "currency": "EUR", "period": "month"},
+            "professional": {"price": 49, "currency": "EUR", "period": "month"},
+            "business": {"price": 79, "currency": "EUR", "period": "month"}
+          },
+          "best_for": "Coaches wanting good client management with discovery calls",
+          "pros": ["Good booking flow", "Client management", "Session notes"],
+          "cons": ["Smaller company", "Limited integrations"],
+          "company_sizes": ["solo", "growing"],
+          "integrations": ["Calendars", "Zoom", "Stripe"],
+          "pricing_verified_date": "2024-12"
+        }
+      ]
+    },
+    {
+      "category": "scheduling",
+      "name": "Scheduling & Calendar",
+      "description": "Tools for appointment booking and calendar management",
+      "vendors": [
+        {
+          "name": "Calendly",
+          "website": "calendly.com",
+          "pricing": {
+            "basic": {"price": 0, "currency": "EUR", "period": "month", "features": ["1 event type"]},
+            "standard": {"price": 10, "currency": "EUR", "period": "user/month", "features": ["Unlimited events"]},
+            "teams": {"price": 15, "currency": "EUR", "period": "user/month", "features": ["Team features"]}
+          },
+          "best_for": "Simple scheduling needs, discovery calls",
+          "pros": ["Industry standard", "Easy to use", "Reliable", "Good integrations"],
+          "cons": ["Limited payment integration", "No package tracking"],
+          "company_sizes": ["solo", "growing", "firm"],
+          "integrations": ["Google", "Outlook", "Zoom", "Stripe", "PayPal"],
+          "pricing_verified_date": "2024-12"
+        },
+        {
+          "name": "Acuity Scheduling",
+          "website": "acuityscheduling.com",
+          "pricing": {
+            "emerging": {"price": 16, "currency": "EUR", "period": "month"},
+            "growing": {"price": 27, "currency": "EUR", "period": "month"},
+            "powerhouse": {"price": 49, "currency": "EUR", "period": "month"}
+          },
+          "best_for": "Coaches wanting more customization and packages",
+          "pros": ["Package/credits support", "Intake forms", "Good customization"],
+          "cons": ["More complex", "Squarespace focused"],
+          "company_sizes": ["solo", "growing"],
+          "integrations": ["Squarespace", "Zoom", "QuickBooks", "Mailchimp"],
+          "pricing_verified_date": "2024-12"
+        }
+      ]
+    },
+    {
+      "category": "transcription-notes",
+      "name": "Transcription & Meeting Notes",
+      "description": "AI tools for transcribing sessions and generating notes",
+      "vendors": [
+        {
+          "name": "Otter.ai",
+          "website": "otter.ai",
+          "pricing": {
+            "basic": {"price": 0, "currency": "EUR", "period": "month", "features": ["300 min/month"]},
+            "pro": {"price": 10, "currency": "EUR", "period": "user/month", "features": ["1200 min/month"]},
+            "business": {"price": 20, "currency": "EUR", "period": "user/month", "features": ["6000 min/month"]}
+          },
+          "best_for": "Basic transcription and meeting summaries",
+          "pros": ["Good accuracy", "Real-time transcription", "Searchable notes"],
+          "cons": ["Generic summaries", "Privacy considerations"],
+          "company_sizes": ["solo", "growing", "firm"],
+          "integrations": ["Zoom", "Google Meet", "Microsoft Teams"],
+          "pricing_verified_date": "2024-12"
+        },
+        {
+          "name": "Fathom",
+          "website": "fathom.video",
+          "pricing": {
+            "free": {"price": 0, "currency": "EUR", "period": "month", "features": ["Unlimited recordings"]},
+            "premium": {"price": 19, "currency": "EUR", "period": "month", "features": ["Advanced features"]}
+          },
+          "best_for": "Free transcription with good AI summaries",
+          "pros": ["Generous free tier", "Good summaries", "Action items"],
+          "cons": ["Less established", "Limited integrations"],
+          "company_sizes": ["solo", "growing"],
+          "integrations": ["Zoom", "Google Meet"],
+          "pricing_verified_date": "2024-12"
+        },
+        {
+          "name": "Fireflies.ai",
+          "website": "fireflies.ai",
+          "pricing": {
+            "free": {"price": 0, "currency": "EUR", "period": "month", "features": ["800 min storage"]},
+            "pro": {"price": 10, "currency": "EUR", "period": "user/month"},
+            "business": {"price": 19, "currency": "EUR", "period": "user/month"}
+          },
+          "best_for": "Teams wanting shared meeting intelligence",
+          "pros": ["Good AI features", "Team sharing", "CRM integration"],
+          "cons": ["Per-seat pricing", "Learning curve"],
+          "company_sizes": ["growing", "firm"],
+          "integrations": ["CRM systems", "Zoom", "Teams", "Slack"],
+          "pricing_verified_date": "2024-12"
+        }
+      ]
+    },
+    {
+      "category": "community-courses",
+      "name": "Community & Course Platforms",
+      "description": "Platforms for group programs, communities, and courses",
+      "vendors": [
+        {
+          "name": "Circle",
+          "website": "circle.so",
+          "pricing": {
+            "basic": {"price": 49, "currency": "EUR", "period": "month"},
+            "professional": {"price": 99, "currency": "EUR", "period": "month"},
+            "business": {"price": 219, "currency": "EUR", "period": "month"}
+          },
+          "best_for": "Community-first coaches, mastermind groups",
+          "pros": ["Great community features", "Clean design", "Good mobile app", "Courses feature"],
+          "cons": ["Monthly commitment", "Transaction fees on payments"],
+          "company_sizes": ["solo", "growing", "firm"],
+          "integrations": ["Zapier", "Payment processors"],
+          "pricing_verified_date": "2024-12"
+        },
+        {
+          "name": "Skool",
+          "website": "skool.com",
+          "pricing": {
+            "standard": {"price": 99, "currency": "EUR", "period": "month", "features": ["Unlimited members", "Gamification"]}
+          },
+          "best_for": "Coaches wanting simple community + courses",
+          "pros": ["Simple pricing", "Gamification built-in", "No transaction fees", "Growing platform"],
+          "cons": ["Limited customization", "Newer platform", "No native payments in some regions"],
+          "company_sizes": ["solo", "growing"],
+          "integrations": ["Stripe", "Basic integrations"],
+          "pricing_verified_date": "2024-12"
+        },
+        {
+          "name": "Mighty Networks",
+          "website": "mightynetworks.com",
+          "pricing": {
+            "community": {"price": 39, "currency": "EUR", "period": "month"},
+            "business": {"price": 119, "currency": "EUR", "period": "month"},
+            "path_to_pro": {"price": 399, "currency": "EUR", "period": "month"}
+          },
+          "best_for": "Coaches building branded community apps",
+          "pros": ["Branded mobile apps", "Courses + community", "Events"],
+          "cons": ["Complex pricing", "Transaction fees", "Learning curve"],
+          "company_sizes": ["growing", "firm"],
+          "integrations": ["Zapier", "Payment processors"],
+          "pricing_verified_date": "2024-12"
+        },
+        {
+          "name": "Kajabi",
+          "website": "kajabi.com",
+          "pricing": {
+            "basic": {"price": 149, "currency": "EUR", "period": "month"},
+            "growth": {"price": 199, "currency": "EUR", "period": "month"},
+            "pro": {"price": 399, "currency": "EUR", "period": "month"}
+          },
+          "best_for": "Coaches selling courses as primary business model",
+          "pros": ["All-in-one platform", "No transaction fees", "Marketing automation"],
+          "cons": ["Premium pricing", "Overkill for simple needs", "Learning curve"],
+          "company_sizes": ["growing", "firm"],
+          "integrations": ["Payment processors", "Email tools", "Zapier"],
+          "pricing_verified_date": "2024-12"
+        }
+      ]
+    },
+    {
+      "category": "email-marketing",
+      "name": "Email Marketing & Automation",
+      "description": "Tools for nurturing leads and client communication",
+      "vendors": [
+        {
+          "name": "ConvertKit",
+          "website": "convertkit.com",
+          "pricing": {
+            "free": {"price": 0, "currency": "EUR", "period": "month", "features": ["1000 subscribers"]},
+            "creator": {"price": 9, "currency": "EUR", "period": "month", "features": ["300 subscribers"]},
+            "creator_pro": {"price": 25, "currency": "EUR", "period": "month", "features": ["Advanced features"]}
+          },
+          "best_for": "Coaches focused on content and newsletters",
+          "pros": ["Creator-focused", "Good automation", "Easy to use"],
+          "cons": ["Limited design options", "Pricing scales with list"],
+          "company_sizes": ["solo", "growing"],
+          "integrations": ["Many platforms", "Zapier"],
+          "pricing_verified_date": "2024-12"
+        },
+        {
+          "name": "ActiveCampaign",
+          "website": "activecampaign.com",
+          "pricing": {
+            "lite": {"price": 29, "currency": "EUR", "period": "month"},
+            "plus": {"price": 49, "currency": "EUR", "period": "month"},
+            "professional": {"price": 149, "currency": "EUR", "period": "month"}
+          },
+          "best_for": "Coaches wanting advanced automation and CRM",
+          "pros": ["Powerful automation", "CRM built-in", "Good deliverability"],
+          "cons": ["Learning curve", "Can be expensive"],
+          "company_sizes": ["growing", "firm"],
+          "integrations": ["Extensive integrations"],
+          "pricing_verified_date": "2024-12"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,18 @@
+{
+  "isAutoProfile": false,
+  "phaseModels": {
+    "spec": "opus",
+    "planning": "opus",
+    "coding": "opus",
+    "qa": "opus"
+  },
+  "phaseThinking": {
+    "spec": "high",
+    "planning": "high",
+    "coding": "high",
+    "qa": "high"
+  },
+  "model": "opus",
+  "thinkingLevel": "high",
+  "requireReviewBeforeCoding": false
+}

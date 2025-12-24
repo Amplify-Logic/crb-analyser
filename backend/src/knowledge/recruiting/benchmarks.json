@@ -1,0 +1,187 @@
+{
+  "industry": "recruiting",
+  "last_updated": "2024-12",
+  "verification_status": "VERIFIED",
+  "verified_date": "2024-12-24",
+  "verification_sources": [
+    "https://staffinghub.com/state-of-staffing/ai-isnt-optional-anymore-how-staffing-firms-are-using-it-to-win-in-2025/",
+    "https://business.linkedin.com/talent-solutions/resources/future-of-recruiting",
+    "https://www.demandsage.com/ai-recruitment-statistics/"
+  ],
+  "verification_note": "Key stats verified: 61% staffing firms using AI (not 87% as previously claimed), 50% time-to-hire reduction confirmed",
+  "benchmarks": {
+    "financial": {
+      "revenue_per_agency": {
+        "boutique": {"min": 200000, "max": 800000, "median": 400000, "currency": "EUR"},
+        "mid_size": {"min": 1000000, "max": 10000000, "median": 3000000, "currency": "EUR"},
+        "large_firm": {"min": 10000000, "max": 100000000, "median": 30000000, "currency": "EUR"},
+        "source": "Staffing Industry Analysts, 2024"
+      },
+      "profit_margin": {
+        "healthy_perm": {"min": 20, "max": 35, "unit": "percent"},
+        "healthy_temp": {"min": 8, "max": 15, "unit": "percent"},
+        "average_blended": {"min": 12, "max": 25, "unit": "percent"},
+        "source": "Staffing Industry Analysts, 2024"
+      },
+      "revenue_per_recruiter": {
+        "average": {"min": 150000, "max": 400000, "median": 250000, "currency": "EUR"},
+        "top_performer": {"min": 400000, "max": 800000, "currency": "EUR"},
+        "source": "Industry benchmarks, 2024"
+      },
+      "average_placement_fee": {
+        "perm_percentage": {"min": 15, "max": 30, "median": 20, "unit": "percent"},
+        "perm_flat": {"min": 5000, "max": 30000, "median": 12000, "currency": "EUR"},
+        "temp_markup": {"min": 25, "max": 60, "median": 40, "unit": "percent"},
+        "source": "Industry surveys, 2024"
+      }
+    },
+    "operational": {
+      "time_to_fill": {
+        "average": 42,
+        "good": 30,
+        "excellent": 21,
+        "unit": "days",
+        "source": "SHRM, LinkedIn, 2024"
+      },
+      "time_to_fill_with_ai": {
+        "average": 28,
+        "good": 21,
+        "excellent": 14,
+        "unit": "days",
+        "reduction_percentage": 33,
+        "source": "AI recruiting tool vendors, 2024"
+      },
+      "submit_to_interview_ratio": {
+        "average": 25,
+        "good": 40,
+        "excellent": 60,
+        "unit": "percent",
+        "source": "Industry benchmarks"
+      },
+      "interview_to_offer_ratio": {
+        "average": 20,
+        "good": 33,
+        "excellent": 50,
+        "unit": "percent",
+        "source": "Industry benchmarks"
+      },
+      "offer_acceptance_rate": {
+        "average": 70,
+        "good": 85,
+        "excellent": 95,
+        "unit": "percent",
+        "source": "Gartner, 2024"
+      },
+      "candidate_ghosting_rate": {
+        "industry_average": 35,
+        "with_engagement_tools": 20,
+        "best_in_class": 10,
+        "unit": "percent",
+        "source": "Indeed, 2024"
+      },
+      "recruiter_outreach_response_rate": {
+        "cold_average": 8,
+        "personalized": 25,
+        "ai_personalized": 35,
+        "unit": "percent",
+        "source": "LinkedIn, 2024"
+      },
+      "placements_per_recruiter_month": {
+        "average": 2,
+        "good": 4,
+        "excellent": 6,
+        "unit": "placements",
+        "source": "Industry benchmarks"
+      }
+    },
+    "ai_adoption": {
+      "agencies_using_ai_tools": {
+        "any_ai": 65,
+        "staffing_firms": 61,
+        "organizations_overall": 67,
+        "ai_sourcing": 65,
+        "ai_screening": 55,
+        "ai_matching": 45,
+        "conversational_ai": 30,
+        "unit": "percent",
+        "source": "StaffingHub 2025, LinkedIn Global Talent Intelligence",
+        "note": "Corrected from 87% - actual adoption is 61-67% depending on segment"
+      },
+      "productivity_gains_reported": {
+        "time_to_hire_reduction": {"average": 50, "range": "30-70", "unit": "percent"},
+        "sourcing_efficiency": {"average": 60, "range": "40-80", "unit": "percent"},
+        "screening_automation": {"average": 75, "range": "50-90", "unit": "percent"},
+        "source": "AI tool vendor case studies, 2024"
+      },
+      "top_ai_use_cases": [
+        "Resume parsing and matching",
+        "Candidate sourcing automation",
+        "Interview scheduling",
+        "Outreach personalization",
+        "Predictive analytics"
+      ]
+    },
+    "candidate_metrics": {
+      "applications_per_req": {
+        "average": 250,
+        "low_volume_role": 50,
+        "high_volume_role": 1000,
+        "source": "Jobvite, 2024"
+      },
+      "qualified_candidates_per_req": {
+        "average": {"min": 5, "max": 15, "median": 8},
+        "source": "Industry data"
+      },
+      "candidate_experience_impact": {
+        "positive_refer_likelihood": 80,
+        "negative_refer_likelihood": 22,
+        "impact_on_employer_brand": "significant",
+        "unit": "percent",
+        "source": "Talent Board, 2024"
+      }
+    },
+    "staffing": {
+      "recruiter_to_coordinator_ratio": {
+        "typical": {"min": 3, "max": 5, "description": "recruiters per coordinator"},
+        "source": "Industry practice"
+      },
+      "recruiter_turnover": {
+        "industry_average": 35,
+        "good_agencies": 20,
+        "unit": "percent_annual",
+        "source": "Staffing Industry Analysts"
+      },
+      "sourcing_vs_selling_time": {
+        "sourcing": 40,
+        "admin_coordination": 30,
+        "client_candidate_calls": 20,
+        "other": 10,
+        "unit": "percent_of_time",
+        "source": "Time studies, 2024"
+      }
+    }
+  },
+  "roi_calculation_factors": {
+    "average_placement_value": {
+      "perm_mid_level": 12000,
+      "perm_senior": 25000,
+      "temp_weekly_margin": 400,
+      "currency": "EUR"
+    },
+    "recruiter_hourly_cost": {
+      "junior": {"min": 25, "max": 40, "currency": "EUR"},
+      "senior": {"min": 40, "max": 70, "currency": "EUR"},
+      "fully_loaded": {"min": 50, "max": 100, "currency": "EUR"}
+    },
+    "cost_of_unfilled_requisition": {
+      "description": "Revenue lost per day a position is unfilled",
+      "calculation": "Placement fee / average days to fill",
+      "typical_per_day": {"min": 200, "max": 600, "currency": "EUR"}
+    },
+    "cost_of_bad_hire": {
+      "description": "Cost if placement fails within guarantee period",
+      "typical": {"min": 5000, "max": 25000, "currency": "EUR"},
+      "includes": ["Replacement search", "Client relationship impact", "Refund/replacement work"]
+    }
+  }
+}

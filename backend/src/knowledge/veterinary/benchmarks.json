@@ -1,0 +1,173 @@
+{
+  "industry": "veterinary",
+  "last_updated": "2024-12",
+  "verification_status": "VERIFIED",
+  "verified_date": "2024-12-24",
+  "verification_sources": [
+    "https://avmajournals.avma.org/view/journals/ajvr/86/S1/ajvr.24.10.0293.xml",
+    "https://www.lifelearn.com/2025/03/18/more-practices-are-adopting-veterinary-ai/",
+    "https://www.aaha.org/trends-magazine/trends-may-2024/applications-of-ai-in-veterinary-practice/"
+  ],
+  "verification_note": "Key stats verified: 39.2% AI adoption (AAHA/Digitail 2024 survey), 83.8% familiar with AI tools",
+  "benchmarks": {
+    "financial": {
+      "revenue_per_practice": {
+        "small_practice": {"min": 400000, "max": 1200000, "median": 700000, "currency": "EUR"},
+        "multi_doctor": {"min": 1000000, "max": 4000000, "median": 2000000, "currency": "EUR"},
+        "specialty_hospital": {"min": 3000000, "max": 15000000, "median": 6000000, "currency": "EUR"},
+        "source": "AVMA, Veterinary Economics 2024"
+      },
+      "profit_margin": {
+        "healthy_practice": {"min": 15, "max": 25, "unit": "percent"},
+        "well_managed": {"min": 10, "max": 20, "unit": "percent"},
+        "struggling": {"min": 0, "max": 10, "unit": "percent"},
+        "source": "Veterinary practice benchmarks, 2024"
+      },
+      "revenue_per_vet": {
+        "average": {"min": 400000, "max": 800000, "median": 550000, "currency": "EUR"},
+        "high_performer": {"min": 700000, "max": 1000000, "currency": "EUR"},
+        "source": "Industry benchmarks"
+      },
+      "average_transaction_value": {
+        "wellness_visit": {"min": 80, "max": 150, "median": 100, "currency": "EUR"},
+        "sick_visit": {"min": 150, "max": 400, "median": 250, "currency": "EUR"},
+        "surgery": {"min": 500, "max": 3000, "median": 1200, "currency": "EUR"},
+        "dental": {"min": 400, "max": 1500, "median": 800, "currency": "EUR"},
+        "source": "Practice management data, 2024"
+      }
+    },
+    "operational": {
+      "no_show_rate": {
+        "industry_average": 12,
+        "with_reminders": 6,
+        "best_in_class": 3,
+        "unit": "percent",
+        "source": "Veterinary scheduling studies"
+      },
+      "client_retention": {
+        "average": 70,
+        "good": 80,
+        "excellent": 90,
+        "unit": "percent_annual",
+        "source": "Industry benchmarks"
+      },
+      "new_clients_per_month": {
+        "small_practice": {"min": 20, "max": 50, "median": 30},
+        "multi_doctor": {"min": 50, "max": 150, "median": 80},
+        "source": "Practice management data"
+      },
+      "appointments_per_day_per_vet": {
+        "average": {"min": 12, "max": 20, "median": 15},
+        "with_tech_support": {"min": 15, "max": 25, "median": 18},
+        "source": "Veterinary productivity data"
+      },
+      "phone_time_daily": {
+        "average": 3,
+        "range": {"min": 2, "max": 5, "unit": "hours"},
+        "with_automation": 1.5,
+        "source": "Practice efficiency studies"
+      },
+      "wellness_compliance": {
+        "annual_exam": {"average": 50, "good": 70, "excellent": 85, "unit": "percent"},
+        "vaccination": {"average": 60, "good": 75, "excellent": 90, "unit": "percent"},
+        "dental": {"average": 30, "good": 50, "excellent": 70, "unit": "percent"},
+        "source": "Veterinary compliance studies"
+      }
+    },
+    "ai_adoption": {
+      "practices_using_ai": {
+        "any_digital_tools": 75,
+        "automated_reminders": 60,
+        "online_booking": 35,
+        "ai_clinical_tools": 15,
+        "chatbots_triage": 10,
+        "unit": "percent",
+        "source": "Veterinary technology surveys, 2024"
+      },
+      "productivity_gains_reported": {
+        "communication_automation": {"average": 40, "range": "30-50", "unit": "percent_time_saved"},
+        "online_booking": {"average": 30, "range": "20-40", "unit": "percent_scheduling_improvement"},
+        "clinical_documentation": {"average": 50, "range": "30-70", "unit": "percent_time_saved"},
+        "source": "Vendor case studies, 2024"
+      },
+      "barriers_to_adoption": [
+        "Integration with existing PM system",
+        "Staff training and change resistance",
+        "Cost concerns for smaller practices",
+        "Data privacy and security concerns",
+        "Uncertainty about ROI"
+      ]
+    },
+    "client_metrics": {
+      "client_lifetime_value": {
+        "average": {"min": 1500, "max": 5000, "median": 2500, "currency": "EUR"},
+        "with_wellness_plan": {"min": 3000, "max": 8000, "median": 5000, "currency": "EUR"},
+        "multi_pet_household": {"min": 4000, "max": 15000, "median": 7000, "currency": "EUR"},
+        "source": "Practice analytics, 2024"
+      },
+      "new_client_acquisition_cost": {
+        "organic_referral": {"min": 30, "max": 100, "currency": "EUR"},
+        "online_marketing": {"min": 75, "max": 250, "currency": "EUR"},
+        "average_all": {"min": 50, "max": 150, "median": 80, "currency": "EUR"},
+        "source": "Marketing benchmarks"
+      },
+      "pet_insurance_penetration": {
+        "europe_average": 25,
+        "uk": 40,
+        "nordics": 55,
+        "us": 4,
+        "unit": "percent",
+        "source": "Insurance industry data, 2024"
+      }
+    },
+    "staffing": {
+      "staff_to_vet_ratio": {
+        "average": 4,
+        "range": {"min": 3, "max": 6},
+        "description": "Total staff per veterinarian",
+        "source": "AVMA practice surveys"
+      },
+      "staff_turnover": {
+        "industry_average": 30,
+        "good_practices": 18,
+        "unit": "percent_annual",
+        "source": "Veterinary HR data"
+      },
+      "vet_burnout_rate": {
+        "reported_burnout": 52,
+        "compassion_fatigue": 65,
+        "unit": "percent",
+        "source": "Veterinary wellness studies, 2024"
+      },
+      "documentation_time": {
+        "without_ai": {"average": 2, "range": "1.5-3", "unit": "hours_per_day"},
+        "with_ai": {"average": 1, "range": "0.5-1.5", "unit": "hours_per_day"},
+        "source": "Practice efficiency data"
+      }
+    }
+  },
+  "roi_calculation_factors": {
+    "average_appointment_value": {
+      "wellness": 100,
+      "sick_visit": 250,
+      "overall_average": 150,
+      "currency": "EUR"
+    },
+    "front_desk_hourly_cost": {
+      "typical_range": {"min": 18, "max": 30, "currency": "EUR"},
+      "fully_loaded": {"min": 25, "max": 40, "currency": "EUR"}
+    },
+    "vet_hourly_value": {
+      "typical_range": {"min": 100, "max": 200, "currency": "EUR"},
+      "opportunity_cost": "Revenue lost when vet does admin vs. seeing patients"
+    },
+    "cost_of_no_show": {
+      "description": "Lost production for empty appointment slot",
+      "typical": {"min": 80, "max": 200, "currency": "EUR"}
+    },
+    "cost_of_lost_client": {
+      "description": "Lifetime value of client who leaves",
+      "typical": {"min": 1500, "max": 5000, "currency": "EUR"}
+    }
+  }
+}

@@ -1,0 +1,264 @@
+{
+  "industry": "dental",
+  "last_updated": "2025-12",
+  "verification_status": "UNVERIFIED",
+  "verification_note": "Pricing requires verification from vendor websites",
+  "vendor_categories": [
+    {
+      "category": "practice-management",
+      "name": "Practice Management Software",
+      "description": "Core systems for scheduling, charting, billing, and patient records",
+      "vendors": [
+        {
+          "name": "Dentrix",
+          "website": "dentrix.com",
+          "pricing": {
+            "essentials": {"price": 400, "currency": "EUR", "period": "month", "features": ["Basic PM", "Scheduling", "Billing"]},
+            "enterprise": {"price": "custom", "features": ["Multi-location", "Advanced analytics", "Integrations"]}
+          },
+          "best_for": "Established practices wanting comprehensive features",
+          "pros": ["Industry standard", "Extensive integrations", "Full feature set"],
+          "cons": ["Expensive", "Dated interface", "Support quality varies"],
+          "company_sizes": ["smb", "mid-market", "enterprise"],
+          "integrations": ["Most dental vendors", "Henry Schein ecosystem"],
+          "pricing_verified_date": "2024-12"
+        },
+        {
+          "name": "Eaglesoft",
+          "website": "eaglesoft.net",
+          "pricing": {
+            "standard": {"price": 350, "currency": "EUR", "period": "month"},
+            "enterprise": {"price": "custom"}
+          },
+          "best_for": "Patterson customers, traditional practices",
+          "pros": ["Solid clinical features", "Patterson integration", "Reliable"],
+          "cons": ["Less modern", "Patterson ecosystem lock-in"],
+          "company_sizes": ["smb", "mid-market"],
+          "integrations": ["Patterson ecosystem", "Major imaging systems"],
+          "pricing_verified_date": "2024-12"
+        },
+        {
+          "name": "Open Dental",
+          "website": "opendental.com",
+          "pricing": {
+            "standard": {"price": 179, "currency": "EUR", "period": "month", "features": ["Full PM", "Unlimited users"]},
+            "support": {"price": 129, "currency": "EUR", "period": "month", "features": ["Add-on support plan"]}
+          },
+          "best_for": "Tech-savvy practices, DSOs, budget-conscious",
+          "pros": ["Open source flexibility", "Great value", "Active community", "Unlimited users"],
+          "cons": ["Less polished UI", "More technical setup", "Limited official support"],
+          "company_sizes": ["startup", "smb", "mid-market"],
+          "integrations": ["Open API", "Many third-party integrations"],
+          "pricing_verified_date": "2024-12"
+        },
+        {
+          "name": "Curve Dental",
+          "website": "curvedental.com",
+          "pricing": {
+            "hero": {"price": 350, "currency": "EUR", "period": "month", "features": ["Cloud PM", "Imaging", "Patient communication"]},
+            "superhero": {"price": 500, "currency": "EUR", "period": "month", "features": ["Advanced features", "Analytics"]}
+          },
+          "best_for": "Cloud-first practices wanting modern interface",
+          "pros": ["True cloud", "Modern UI", "Good patient communication", "All-in-one"],
+          "cons": ["Smaller market share", "Some features less mature"],
+          "company_sizes": ["startup", "smb"],
+          "integrations": ["Growing integration ecosystem"],
+          "pricing_verified_date": "2024-12"
+        }
+      ]
+    },
+    {
+      "category": "patient-communication",
+      "name": "Patient Communication & Engagement",
+      "description": "Platforms for automated reminders, two-way texting, and patient communication",
+      "vendors": [
+        {
+          "name": "Weave",
+          "website": "getweave.com",
+          "pricing": {
+            "core": {"price": 400, "currency": "EUR", "period": "month", "features": ["VoIP phones", "Texting", "Reviews", "Scheduling"]},
+            "complete": {"price": 550, "currency": "EUR", "period": "month", "features": ["Forms", "Payments", "Email marketing"]}
+          },
+          "best_for": "Practices wanting all-in-one communication + phone system",
+          "pros": ["VoIP included", "Great mobile app", "Unified inbox", "Reviews"],
+          "cons": ["Replaces phone system", "Higher cost", "Contract terms"],
+          "company_sizes": ["smb", "mid-market"],
+          "ai_capabilities": ["Missed call texting", "Smart reminders", "Review sentiment"],
+          "integrations": ["Most dental PM systems"],
+          "pricing_verified_date": "2024-12"
+        },
+        {
+          "name": "Lighthouse 360",
+          "website": "lh360.com",
+          "pricing": {
+            "essentials": {"price": 299, "currency": "EUR", "period": "month"},
+            "complete": {"price": 449, "currency": "EUR", "period": "month"}
+          },
+          "best_for": "Practices focused on recalls and patient reactivation",
+          "pros": ["Strong recall features", "Family messaging", "Good reporting"],
+          "cons": ["Less all-in-one than Weave", "Dated interface"],
+          "company_sizes": ["smb"],
+          "ai_capabilities": ["Smart scheduling suggestions", "Automated recalls"],
+          "integrations": ["Dentrix", "Eaglesoft", "Open Dental"],
+          "pricing_verified_date": "2024-12"
+        },
+        {
+          "name": "NexHealth",
+          "website": "nexhealth.com",
+          "pricing": {
+            "growth": {"price": 350, "currency": "EUR", "period": "month", "features": ["Online booking", "Messaging", "Forms"]},
+            "enterprise": {"price": "custom", "features": ["Multi-location", "API access", "Advanced"]}
+          },
+          "best_for": "Modern practices wanting best online scheduling",
+          "pros": ["Excellent online booking", "Real-time sync", "Modern API"],
+          "cons": ["Newer company", "Less recall-focused"],
+          "company_sizes": ["startup", "smb", "mid-market"],
+          "ai_capabilities": ["Smart scheduling", "Automated waitlist"],
+          "integrations": ["Major PM systems", "Google", "APIs"],
+          "pricing_verified_date": "2024-12"
+        }
+      ]
+    },
+    {
+      "category": "ai-imaging-diagnostics",
+      "name": "AI Imaging & Diagnostic Tools",
+      "description": "AI-powered analysis of X-rays and clinical images",
+      "vendors": [
+        {
+          "name": "Pearl",
+          "website": "hellopearl.com",
+          "pricing": {
+            "second_opinion": {"price": 400, "currency": "EUR", "period": "month", "features": ["AI X-ray analysis", "Detection assistance"]},
+            "practice_intelligence": {"price": 600, "currency": "EUR", "period": "month", "features": ["Analytics", "Patient engagement"]}
+          },
+          "best_for": "Practices wanting FDA-cleared AI second opinion",
+          "pros": ["FDA-cleared", "Excellent detection", "Patient engagement tools"],
+          "cons": ["Additional cost", "Requires digital X-rays"],
+          "company_sizes": ["smb", "mid-market", "enterprise"],
+          "ai_capabilities": ["Caries detection", "Bone loss", "Calculus", "Margin assessment"],
+          "integrations": ["Most imaging systems", "PM systems"],
+          "pricing_verified_date": "2024-12"
+        },
+        {
+          "name": "Overjet",
+          "website": "overjet.com",
+          "pricing": {
+            "standard": {"price": 350, "currency": "EUR", "period": "month"},
+            "enterprise": {"price": "custom"}
+          },
+          "best_for": "DSOs and insurance-focused practices",
+          "pros": ["FDA-cleared", "Insurance integration", "Quantitative measurements"],
+          "cons": ["More enterprise-focused"],
+          "company_sizes": ["mid-market", "enterprise"],
+          "ai_capabilities": ["Quantitative analysis", "Bone level measurements", "Treatment tracking"],
+          "integrations": ["Insurance platforms", "Major PM systems"],
+          "pricing_verified_date": "2024-12"
+        }
+      ]
+    },
+    {
+      "category": "insurance-billing",
+      "name": "Insurance Verification & Revenue Cycle",
+      "description": "Tools for insurance verification, claims, and billing automation",
+      "vendors": [
+        {
+          "name": "Vyne Dental",
+          "website": "vynedental.com",
+          "pricing": {
+            "claims": {"price": 150, "currency": "EUR", "period": "month", "features": ["Claims submission", "ERA/EOB"]},
+            "eligibility": {"price": 200, "currency": "EUR", "period": "month", "features": ["Real-time verification"]},
+            "bundle": {"price": 300, "currency": "EUR", "period": "month", "features": ["Full suite"]}
+          },
+          "best_for": "Practices wanting streamlined claims and verification",
+          "pros": ["Fast eligibility", "Claim tracking", "ERA processing"],
+          "cons": ["Add-on to PM", "Payer coverage varies"],
+          "company_sizes": ["smb", "mid-market"],
+          "ai_capabilities": ["Smart eligibility", "Claim status automation"],
+          "integrations": ["Major PM systems"],
+          "pricing_verified_date": "2024-12"
+        },
+        {
+          "name": "Dental Intelligence",
+          "website": "dentalintel.com",
+          "pricing": {
+            "analytics": {"price": 400, "currency": "EUR", "period": "month", "features": ["Practice analytics", "KPI tracking"]},
+            "complete": {"price": 600, "currency": "EUR", "period": "month", "features": ["Scheduling", "Communication", "Analytics"]}
+          },
+          "best_for": "Data-driven practices wanting comprehensive analytics",
+          "pros": ["Excellent analytics", "Morning huddle feature", "Performance tracking"],
+          "cons": ["Higher cost", "Requires commitment to use data"],
+          "company_sizes": ["smb", "mid-market"],
+          "ai_capabilities": ["Predictive analytics", "Smart scheduling", "Performance insights"],
+          "integrations": ["Dentrix", "Eaglesoft", "Open Dental"],
+          "pricing_verified_date": "2024-12"
+        }
+      ]
+    },
+    {
+      "category": "patient-financing",
+      "name": "Patient Financing Solutions",
+      "description": "Payment plans and financing options for patients",
+      "vendors": [
+        {
+          "name": "CareCredit",
+          "website": "carecredit.com",
+          "pricing": {
+            "standard": {"price": "2-5%", "period": "per transaction", "features": ["Patient financing", "No interest promos available"]},
+            "promotional": {"price": "5-8%", "features": ["0% APR offers for patients"]}
+          },
+          "best_for": "Well-known option patients may already have",
+          "pros": ["Brand recognition", "High approval rates", "Established"],
+          "cons": ["Higher merchant fees for promos", "Patient interest rates"],
+          "company_sizes": ["startup", "smb", "mid-market", "enterprise"],
+          "integrations": ["Most PM systems"],
+          "pricing_verified_date": "2024-12"
+        },
+        {
+          "name": "Sunbit",
+          "website": "sunbit.com",
+          "pricing": {
+            "standard": {"price": "0-3%", "period": "per transaction", "features": ["High approval (85%+)", "Instant decisions"]}
+          },
+          "best_for": "Practices wanting highest approval rates",
+          "pros": ["Very high approval", "Instant", "Lower fees", "Good UX"],
+          "cons": ["Less brand recognition than CareCredit"],
+          "company_sizes": ["startup", "smb", "mid-market"],
+          "integrations": ["Growing integrations"],
+          "pricing_verified_date": "2024-12"
+        },
+        {
+          "name": "Proceed Finance",
+          "website": "proceedfinance.com",
+          "pricing": {
+            "standard": {"price": "0-2%", "period": "per transaction"}
+          },
+          "best_for": "Dental-specific financing",
+          "pros": ["Dental focused", "Good approval rates", "Low fees"],
+          "cons": ["Smaller company"],
+          "company_sizes": ["startup", "smb"],
+          "integrations": ["Dental PM systems"],
+          "pricing_verified_date": "2024-12"
+        }
+      ]
+    }
+  ],
+  "custom_solution_partners": [
+    {
+      "type": "ai-development",
+      "description": "Build custom solutions for dental practices",
+      "typical_cost_range": {"min": 5000, "max": 25000, "currency": "EUR"},
+      "timeline": "4-12 weeks",
+      "when_to_consider": [
+        "Custom integrations between PM and other systems",
+        "Multi-location reporting dashboards",
+        "Custom patient communication flows",
+        "Proprietary recall and reactivation systems"
+      ],
+      "not_recommended": [
+        "Custom diagnostic AI (FDA requirements)",
+        "Custom practice management software (too complex)",
+        "Custom patient portals (HIPAA complexity)"
+      ]
+    }
+  ]
+}
