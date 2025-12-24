@@ -40,7 +40,6 @@ const TIER_INFO = {
     bonusFeatures: [
       '60-minute strategy call with expert',
       'Live Q&A on your specific situation',
-      'Priority support for 30 days',
     ],
   },
 }
