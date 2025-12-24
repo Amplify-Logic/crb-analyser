@@ -38,9 +38,9 @@ const TIER_INFO = {
       '"Don\'t do this" section',
     ],
     bonusFeatures: [
-      '60-minute strategy call',
-      'Personalized implementation plan',
-      'Q&A and vendor introductions',
+      '60-minute strategy call with expert',
+      'Live Q&A on your specific situation',
+      'Priority support for 30 days',
     ],
   },
 }

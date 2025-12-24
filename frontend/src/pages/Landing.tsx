@@ -385,19 +385,19 @@ export default function Landing() {
                   <svg className="w-5 h-5 text-primary-600 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                   </svg>
-                  <span className="text-gray-900 font-medium text-sm">60-minute strategy call</span>
+                  <span className="text-gray-900 font-medium text-sm">60-minute strategy call with expert</span>
                 </li>
                 <li className="flex items-center gap-3">
                   <svg className="w-5 h-5 text-primary-600 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                   </svg>
-                  <span className="text-gray-900 font-medium text-sm">Personalized implementation plan</span>
+                  <span className="text-gray-900 font-medium text-sm">Live Q&A on your specific situation</span>
                 </li>
                 <li className="flex items-center gap-3">
                   <svg className="w-5 h-5 text-primary-600 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                   </svg>
-                  <span className="text-gray-900 font-medium text-sm">Q&A and vendor introductions</span>
+                  <span className="text-gray-900 font-medium text-sm">Priority support for 30 days</span>
                 </li>
               </ul>
 
