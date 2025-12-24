@@ -413,15 +413,6 @@ export default function Landing() {
           <p className="text-center text-sm text-gray-500 mt-8">
             14-day money-back guarantee on both options. Choose your tier after completing the quiz.
           </p>
-
-          {/* Implementation projects teaser */}
-          <div className="text-center mt-8 p-6 bg-white rounded-2xl border border-gray-200 max-w-2xl mx-auto">
-            <p className="font-medium text-gray-900 mb-2">Need help implementing?</p>
-            <p className="text-gray-600 text-sm">
-              We also offer hands-on implementation projects (€2,000-€10,000) for businesses ready to execute.
-              Discuss during your strategy call or contact us directly.
-            </p>
-          </div>
         </div>
       </section>
 

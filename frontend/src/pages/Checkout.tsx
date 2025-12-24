@@ -15,8 +15,9 @@ interface QuizAnswer {
 
 const TIER_INFO = {
   ai: {
-    name: 'CRB Analysis Report',
+    name: 'CRB Report',
     price: 147,
+    description: 'Self-service analysis',
     features: [
       '15-20 AI opportunities analyzed',
       'Honest verdicts: Go / Caution / Wait / No',
@@ -26,12 +27,20 @@ const TIER_INFO = {
     ],
   },
   human: {
-    name: 'Human Audit',
+    name: 'CRB Report + Strategy Call',
     price: 497,
+    description: 'Expert-guided analysis',
     features: [
-      'Everything in AI Report',
-      'In-person audit by human expert',
-      '60-min strategy call',
+      '15-20 AI opportunities analyzed',
+      'Honest verdicts: Go / Caution / Wait / No',
+      'Real vendor pricing & ROI',
+      'Implementation roadmap',
+      '"Don\'t do this" section',
+    ],
+    bonusFeatures: [
+      '60-minute strategy call',
+      'Personalized implementation plan',
+      'Q&A and vendor introductions',
     ],
   },
 }
@@ -62,12 +71,16 @@ export default function Checkout() {
     const answersStr = sessionStorage.getItem('quizAnswers')
     const resultsStr = sessionStorage.getItem('quizResults')
     const quizCompleted = sessionStorage.getItem('quizCompleted')
+    const savedEmail = sessionStorage.getItem('userEmail')
 
     if (answersStr) {
       setQuizAnswers(JSON.parse(answersStr))
     }
     if (resultsStr) {
       setQuizResults(JSON.parse(resultsStr))
+    }
+    if (savedEmail) {
+      setEmail(savedEmail)
     }
 
     // If no quiz data at all, redirect to quiz
@@ -150,21 +163,35 @@ export default function Checkout() {
                   <div className="flex justify-between items-start mb-4">
                     <div>
                       <div className="font-medium text-gray-900">{tierInfo.name}</div>
-                      <div className="text-sm text-gray-500">CRB Analysis Report</div>
+                      <div className="text-sm text-gray-500">{tierInfo.description}</div>
                     </div>
                     <div className="text-xl font-bold text-gray-900">€{tierInfo.price}</div>
                   </div>
 
-                  <ul className="space-y-2 mb-6">
+                  <ul className="space-y-2 mb-4">
                     {tierInfo.features.map((feature, i) => (
                       <li key={i} className="flex items-center gap-2 text-sm text-gray-600">
-                        <svg className="w-4 h-4 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <svg className="w-4 h-4 text-green-500 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                         </svg>
                         {feature}
                       </li>
                     ))}
                   </ul>
+
+                  {/* Bonus features for human tier */}
+                  {'bonusFeatures' in tierInfo && tierInfo.bonusFeatures && (
+                    <ul className="space-y-2 mb-6 pt-3 border-t border-gray-100">
+                      {tierInfo.bonusFeatures.map((feature, i) => (
+                        <li key={i} className="flex items-center gap-2 text-sm text-gray-900 font-medium">
+                          <svg className="w-4 h-4 text-primary-600 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                          </svg>
+                          {feature}
+                        </li>
+                      ))}
+                    </ul>
+                  )}
                 </div>
 
                 {/* Total */}
@@ -180,16 +207,16 @@ export default function Checkout() {
                   {tier === 'ai' ? (
                     <Link
                       to="/checkout?tier=human"
-                      className="text-sm text-primary-600 hover:text-primary-700"
+                      className="text-sm text-primary-600 hover:text-primary-700 font-medium"
                     >
-                      Upgrade to Human Audit (€497)
+                      + Add Strategy Call (€497 total)
                     </Link>
                   ) : (
                     <Link
                       to="/checkout?tier=ai"
                       className="text-sm text-gray-500 hover:text-gray-700"
                     >
-                      Switch to AI Report (€147)
+                      Just the report (€147)
                     </Link>
                   )}
                 </div>
