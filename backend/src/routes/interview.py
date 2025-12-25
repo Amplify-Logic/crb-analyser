@@ -3,6 +3,10 @@ Interview Routes
 
 Routes for the AI-powered interview experience after payment.
 This provides a conversational interface to gather detailed business context.
+
+Skills Integration:
+- FollowUpQuestionSkill: Generates adaptive follow-up questions
+- PainExtractionSkill: Extracts structured pain points from transcript
 """
 
 import logging
@@ -18,8 +22,22 @@ from src.config.supabase_client import get_async_supabase
 from src.config.settings import settings
 from src.config.system_prompt import get_interview_system_prompt, FOUNDATIONAL_LOGIC
 from src.services.transcription_service import transcription_service
+from src.skills import get_skill, SkillContext
+from src.expertise import get_expertise_store
+from src.knowledge import normalize_industry
 
 logger = logging.getLogger(__name__)
+
+# Global client for skills (lazy initialized)
+_anthropic_client: Optional[anthropic.Anthropic] = None
+
+
+def get_anthropic_client() -> anthropic.Anthropic:
+    """Get or create the Anthropic client."""
+    global _anthropic_client
+    if _anthropic_client is None:
+        _anthropic_client = anthropic.Anthropic(api_key=settings.ANTHROPIC_API_KEY)
+    return _anthropic_client
 
 router = APIRouter()
 
@@ -163,9 +181,14 @@ async def generate_ai_response(
     user_message: str,
     context: InterviewContext,
     previous_messages: List[MessageContext],
+    industry: str = "general",
 ) -> tuple[str, List[str], int, bool]:
     """
-    Generate an AI-powered response using Claude.
+    Generate an AI-powered response using FollowUpQuestionSkill.
+
+    Uses the skills framework for adaptive follow-up questions.
+    Falls back to legacy Claude-based method if skill fails.
+
     Returns: (response, updated_topics, progress, is_complete)
     """
     topics_covered = context.topics_covered or ["introduction"]
@@ -181,6 +204,72 @@ async def generate_ai_response(
             True
         )
 
+    # Try skill-based generation
+    client = get_anthropic_client()
+    skill = get_skill("followup-question", client=client)
+
+    if skill:
+        try:
+            # Get expertise for the industry
+            expertise_store = get_expertise_store()
+            normalized_industry = normalize_industry(industry)
+            expertise = expertise_store.get_expertise(normalized_industry)
+
+            skill_context = SkillContext(
+                industry=normalized_industry,
+                expertise=expertise,
+                metadata={
+                    "user_message": user_message,
+                    "previous_messages": [
+                        {"role": m.role, "content": m.content}
+                        for m in previous_messages[-10:]
+                    ],
+                    "topics_covered": topics_covered,
+                    "question_count": question_count,
+                }
+            )
+
+            result = await skill.run(skill_context)
+
+            if result.success:
+                data = result.data
+                # Build response with the generated question
+                response = data["question"]
+
+                # Update topics
+                new_topics = list(set(topics_covered + data.get("topics_touched", [])))
+
+                # Calculate progress
+                total_expected = 12
+                progress = min(95, int((question_count / total_expected) * 100))
+
+                is_complete = data.get("is_completion_candidate", False)
+
+                logger.info(
+                    f"FollowUp skill: type={data['question_type']}, "
+                    f"progress={progress}%, expertise_applied={result.expertise_applied}"
+                )
+                return (response, new_topics, progress, is_complete)
+
+        except Exception as e:
+            logger.warning(f"FollowUpQuestionSkill failed, using legacy: {e}")
+
+    # Fall back to legacy Claude-based response
+    return await generate_ai_response_legacy(user_message, context, previous_messages)
+
+
+async def generate_ai_response_legacy(
+    user_message: str,
+    context: InterviewContext,
+    previous_messages: List[MessageContext],
+) -> tuple[str, List[str], int, bool]:
+    """
+    Generate an AI-powered response using Claude (legacy method).
+    Returns: (response, updated_topics, progress, is_complete)
+    """
+    topics_covered = context.topics_covered or ["introduction"]
+    question_count = context.question_count
+
     # Build company context
     company_info = ""
     if context.company_profile:
@@ -191,7 +280,7 @@ async def generate_ai_response(
 
     # Build conversation history
     messages = []
-    for msg in previous_messages[-10:]:  # Last 10 messages for context
+    for msg in previous_messages[-10:]:
         messages.append({
             "role": msg.role if msg.role in ["user", "assistant"] else "user",
             "content": msg.content
@@ -202,7 +291,7 @@ async def generate_ai_response(
     all_topic_names = [t["name"] for t in INTERVIEW_TOPICS if t["id"] != "deep_dive"]
     uncovered = [t for t in all_topic_names if t not in topics_covered]
 
-    # Use the centralized interview system prompt with session-specific context
+    # Use the centralized interview system prompt
     interview_base = get_interview_system_prompt()
 
     system_prompt = f"""{interview_base}
@@ -235,7 +324,7 @@ Important:
 - Do NOT make recommendations during the interview - just gather information"""
 
     try:
-        client = anthropic.Anthropic(api_key=settings.ANTHROPIC_API_KEY)
+        client = get_anthropic_client()
         response = client.messages.create(
             model="claude-sonnet-4-20250514",
             max_tokens=300,
@@ -261,7 +350,6 @@ Important:
 
     except Exception as e:
         logger.error(f"Claude API error: {e}")
-        # Fallback to rule-based
         return generate_fallback_response(user_message, context)
 
 
@@ -292,16 +380,24 @@ def generate_fallback_response(
 async def interview_respond(request: InterviewRespondRequest):
     """
     Process a user message and return an AI response.
-    Uses Claude for natural conversation.
+    Uses FollowUpQuestionSkill for adaptive conversations.
     """
     try:
         context = request.context or InterviewContext()
         previous_messages = context.previous_messages or []
 
+        # Get industry from company profile
+        industry = "general"
+        if context.company_profile:
+            industry = context.company_profile.get("industry", {}).get(
+                "primary_industry", {}
+            ).get("value", "general")
+
         response, topics, progress, is_complete = await generate_ai_response(
             user_message=request.message,
             context=context,
             previous_messages=previous_messages,
+            industry=industry,
         )
 
         return {
@@ -322,7 +418,8 @@ async def interview_respond(request: InterviewRespondRequest):
 @router.post("/complete")
 async def interview_complete(request: InterviewCompleteRequest):
     """
-    Mark the interview as complete and save all data.
+    Mark the interview as complete, save data, and extract pain points.
+    Uses PainExtractionSkill to analyze the conversation.
     """
     try:
         supabase = await get_async_supabase()
@@ -338,13 +435,53 @@ async def interview_complete(request: InterviewCompleteRequest):
                 detail="Session not found"
             )
 
-        # Save interview data
+        session = session_result.data
+
+        # Get industry from session answers
+        answers = session.get("answers", {})
+        industry = answers.get("industry", "general")
+
+        # Extract pain points using PainExtractionSkill
+        pain_points_data = {}
+        client = get_anthropic_client()
+        skill = get_skill("pain-extraction", client=client)
+
+        if skill and request.messages:
+            try:
+                expertise_store = get_expertise_store()
+                normalized_industry = normalize_industry(industry)
+                expertise = expertise_store.get_expertise(normalized_industry)
+
+                skill_context = SkillContext(
+                    industry=normalized_industry,
+                    expertise=expertise,
+                    metadata={
+                        "transcript": request.messages,
+                        "company_profile": answers.get("company_profile", {}),
+                    }
+                )
+
+                result = await skill.run(skill_context)
+
+                if result.success:
+                    pain_points_data = result.data
+                    logger.info(
+                        f"Extracted {len(pain_points_data.get('pain_points', []))} pain points "
+                        f"(confidence={pain_points_data.get('confidence_score', 0):.2f}, "
+                        f"expertise_applied={result.expertise_applied})"
+                    )
+
+            except Exception as e:
+                logger.warning(f"PainExtractionSkill failed: {e}")
+
+        # Save interview data with extracted pain points
         await supabase.table("quiz_sessions").update({
             "interview_completed": True,
             "interview_data": {
                 "messages": request.messages,
                 "topics_covered": request.topics_covered,
                 "completed_at": datetime.utcnow().isoformat(),
+                "pain_points": pain_points_data,
             },
             "updated_at": datetime.utcnow().isoformat(),
         }).eq("id", request.session_id).execute()
@@ -353,7 +490,8 @@ async def interview_complete(request: InterviewCompleteRequest):
 
         return {
             "success": True,
-            "message": "Interview saved successfully"
+            "message": "Interview saved successfully",
+            "pain_points_extracted": len(pain_points_data.get("pain_points", [])),
         }
 
     except HTTPException:

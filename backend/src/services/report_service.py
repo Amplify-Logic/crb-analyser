@@ -514,7 +514,7 @@ class ReportGenerator:
             methodology_notes = self._generate_methodology_notes()
 
             # Generate verdict - the honest consultant assessment
-            verdict = self._generate_verdict(executive_summary, findings, recommendations, value_summary)
+            verdict = await self._generate_verdict(executive_summary, findings, recommendations, value_summary)
 
             await supabase.table("reports").update({
                 "roadmap": roadmap,
@@ -815,7 +815,43 @@ Return ONLY the JSON, no explanation."""
             return default_summary
 
     async def _generate_findings(self) -> List[Dict[str, Any]]:
-        """Generate findings based on quiz data and industry knowledge."""
+        """
+        Generate findings using the FindingGenerationSkill.
+
+        Uses the skills framework for consistent output and expertise integration.
+        Falls back to legacy method if skill fails.
+        """
+        # Try skill-based generation first
+        skill = get_skill("finding-generation", client=self.client)
+
+        if skill:
+            try:
+                context = self._get_skill_context()
+                # Pass tier info for finding count
+                context.metadata["tier"] = self.tier
+                result = await skill.run(context)
+
+                if result.success:
+                    logger.info(
+                        f"Findings generated via skill "
+                        f"(count={len(result.data)}, "
+                        f"expertise_applied={result.expertise_applied}, "
+                        f"execution_time={result.execution_time_ms:.0f}ms)"
+                    )
+                    return result.data
+                else:
+                    logger.warning(
+                        f"FindingGenerationSkill failed, using legacy method: "
+                        f"{result.warnings}"
+                    )
+            except Exception as e:
+                logger.warning(f"Skill execution failed, using legacy: {e}")
+
+        # Fall back to legacy method
+        return await self._generate_findings_legacy()
+
+    async def _generate_findings_legacy(self) -> List[Dict[str, Any]]:
+        """Generate findings using Claude (legacy method)."""
         answers = self.context.get("answers", {})
         opportunities = self.context.get("opportunities", [])
         benchmarks = self.context.get("benchmarks", {})
@@ -997,7 +1033,59 @@ IMPORTANT:
             return []
 
     async def _generate_recommendations(self, findings: List[Dict]) -> List[Dict[str, Any]]:
-        """Generate recommendations with full Three Options pattern including Build It Yourself."""
+        """
+        Generate recommendations using the ThreeOptionsSkill.
+
+        Uses the skills framework for consistent Three Options output.
+        Falls back to legacy method if skill fails.
+        """
+        # Try skill-based generation first
+        skill = get_skill("three-options", client=self.client)
+
+        if skill:
+            try:
+                # Filter out not-recommended findings
+                recommendable = [f for f in findings if not f.get("is_not_recommended")]
+
+                # Group by priority
+                high_priority = [f for f in recommendable if f.get("customer_value_score", 0) >= 8 or f.get("business_health_score", 0) >= 8]
+                other = [f for f in recommendable if f not in high_priority]
+
+                # Top findings for recommendations
+                priority_findings = high_priority[:5] + other[:5]
+
+                recommendations = []
+                for i, finding in enumerate(priority_findings):
+                    try:
+                        context = self._get_skill_context()
+                        context.metadata["finding"] = finding
+
+                        result = await skill.run(context)
+
+                        if result.success:
+                            rec = result.data
+                            rec["id"] = f"rec-{i+1:03d}"
+                            recommendations.append(rec)
+                        else:
+                            logger.warning(f"ThreeOptionsSkill failed for finding {finding.get('id')}: {result.warnings}")
+                    except Exception as e:
+                        logger.warning(f"Skill failed for finding {finding.get('id')}: {e}")
+
+                if recommendations:
+                    logger.info(
+                        f"Recommendations generated via skill "
+                        f"(count={len(recommendations)})"
+                    )
+                    return recommendations
+
+            except Exception as e:
+                logger.warning(f"Skill execution failed, using legacy: {e}")
+
+        # Fall back to legacy method
+        return await self._generate_recommendations_legacy(findings)
+
+    async def _generate_recommendations_legacy(self, findings: List[Dict]) -> List[Dict[str, Any]]:
+        """Generate recommendations using Claude (legacy method)."""
         vendors = self.context.get("vendors", [])
 
         # Group findings by priority
@@ -1471,7 +1559,7 @@ Return ONLY the JSON."""
         }
     }
 
-    def _generate_verdict(
+    async def _generate_verdict(
         self,
         executive_summary: Dict[str, Any],
         findings: List[Dict],
@@ -1479,7 +1567,54 @@ Return ONLY the JSON."""
         value_summary: Dict[str, Any]
     ) -> Dict[str, Any]:
         """
-        Generate an honest verdict about whether AI is right for this business.
+        Generate verdict using the VerdictSkill.
+
+        Uses the skills framework for consistent Go/Caution/Wait/No verdicts.
+        Falls back to legacy method if skill fails.
+        """
+        # Try skill-based generation first
+        skill = get_skill("verdict", client=self.client)
+
+        if skill:
+            try:
+                context = self._get_skill_context()
+                # Provide report data for verdict generation
+                context.report_data = {
+                    "executive_summary": executive_summary,
+                    "findings": findings,
+                    "recommendations": recommendations,
+                    "value_summary": value_summary,
+                }
+
+                result = await skill.run(context)
+
+                if result.success:
+                    logger.info(
+                        f"Verdict generated via skill "
+                        f"(recommendation={result.data.get('recommendation')}, "
+                        f"execution_time={result.execution_time_ms:.0f}ms)"
+                    )
+                    return result.data
+                else:
+                    logger.warning(
+                        f"VerdictSkill failed, using legacy method: "
+                        f"{result.warnings}"
+                    )
+            except Exception as e:
+                logger.warning(f"Skill execution failed, using legacy: {e}")
+
+        # Fall back to legacy method
+        return self._generate_verdict_legacy(executive_summary, findings, recommendations, value_summary)
+
+    def _generate_verdict_legacy(
+        self,
+        executive_summary: Dict[str, Any],
+        findings: List[Dict],
+        recommendations: List[Dict],
+        value_summary: Dict[str, Any]
+    ) -> Dict[str, Any]:
+        """
+        Generate verdict using rule-based logic (legacy method).
 
         This is the 'brutally honest consultant' logic - we tell people the truth,
         including when AI is NOT the answer for them right now.
