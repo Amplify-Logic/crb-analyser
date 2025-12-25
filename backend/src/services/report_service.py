@@ -506,10 +506,20 @@ class ReportGenerator:
                 "recommendations": recommendations,
             }).eq("id", self.report_id).execute()
 
+            # Phase 5b: Identify quick wins
+            yield {"phase": "quick_wins", "step": "Identifying quick wins...", "progress": 76}
+
+            quick_wins = await self._identify_quick_wins(findings, recommendations)
+            self._partial_data["quick_wins"] = quick_wins
+
+            yield {"phase": "quick_wins", "step": f"Found {len(quick_wins.get('quick_wins', []))} quick wins", "progress": 78}
+
             # Phase 6: Generate roadmap and value summary
             yield {"phase": "roadmap", "step": "Building implementation roadmap...", "progress": 80}
 
             roadmap = await self._generate_roadmap(recommendations)
+            roadmap["quick_wins"] = quick_wins.get("quick_wins", [])  # Add quick wins to roadmap
+
             value_summary = self._calculate_value_summary(findings, recommendations)
             methodology_notes = self._generate_methodology_notes()
 
@@ -544,7 +554,7 @@ class ReportGenerator:
             # Phase 6d: Generate industry insights
             yield {"phase": "insights", "step": "Loading industry insights...", "progress": 92}
 
-            industry_insights = self._generate_industry_insights()
+            industry_insights = await self._generate_industry_insights()
             self._partial_data["industry_insights"] = industry_insights
 
             yield {"phase": "insights", "step": "Industry insights complete", "progress": 94}
@@ -1055,6 +1065,9 @@ IMPORTANT:
                 priority_findings = high_priority[:5] + other[:5]
 
                 recommendations = []
+                roi_skill = get_skill("roi-calculator", client=self.client)
+                vendor_skill = get_skill("vendor-matching", client=self.client)
+
                 for i, finding in enumerate(priority_findings):
                     try:
                         context = self._get_skill_context()
@@ -1065,6 +1078,58 @@ IMPORTANT:
                         if result.success:
                             rec = result.data
                             rec["id"] = f"rec-{i+1:03d}"
+
+                            # Enrich with specific vendor matches
+                            if vendor_skill:
+                                try:
+                                    vendor_context = self._get_skill_context()
+                                    vendor_context.metadata["finding"] = finding
+                                    vendor_context.metadata["company_context"] = self.context.get("company_profile", {})
+
+                                    vendor_result = await vendor_skill.run(vendor_context)
+
+                                    if vendor_result.success:
+                                        vendor_data = vendor_result.data
+                                        # Enhance options with specific vendor info
+                                        if vendor_data.get("off_the_shelf") and rec.get("options", {}).get("off_the_shelf"):
+                                            rec["options"]["off_the_shelf"]["matched_vendor"] = vendor_data["off_the_shelf"]
+                                        if vendor_data.get("best_in_class") and rec.get("options", {}).get("best_in_class"):
+                                            rec["options"]["best_in_class"]["matched_vendor"] = vendor_data["best_in_class"]
+                                        rec["vendor_match"] = {
+                                            "category": vendor_data.get("category"),
+                                            "confidence": vendor_data.get("match_confidence"),
+                                            "alternatives": vendor_data.get("alternatives", []),
+                                        }
+                                except Exception as vendor_e:
+                                    logger.debug(f"Vendor matching skipped for {finding.get('id')}: {vendor_e}")
+
+                            # Enrich with detailed ROI analysis
+                            if roi_skill:
+                                try:
+                                    roi_context = self._get_skill_context()
+                                    roi_context.metadata["finding"] = finding
+                                    roi_context.metadata["recommendation"] = rec
+                                    roi_context.metadata["company_context"] = self.context.get("company_profile", {})
+
+                                    roi_result = await roi_skill.run(roi_context)
+
+                                    if roi_result.success:
+                                        # Add detailed ROI data
+                                        rec["roi_detail"] = {
+                                            "sensitivity": roi_result.data.get("sensitivity", {}),
+                                            "assumptions": roi_result.data.get("assumptions", []),
+                                            "calculation_breakdown": roi_result.data.get("calculation_breakdown", ""),
+                                            "time_savings": roi_result.data.get("time_savings", {}),
+                                            "financial_impact": roi_result.data.get("financial_impact", {}),
+                                        }
+                                        # Update main ROI if calculated
+                                        if roi_result.data.get("roi_percentage"):
+                                            rec["roi_percentage"] = roi_result.data["roi_percentage"]
+                                            rec["roi_confidence_adjusted"] = roi_result.data.get("roi_confidence_adjusted")
+                                            rec["payback_months"] = roi_result.data.get("payback_months")
+                                except Exception as roi_e:
+                                    logger.debug(f"ROI calculation skipped for {finding.get('id')}: {roi_e}")
+
                             recommendations.append(rec)
                         else:
                             logger.warning(f"ThreeOptionsSkill failed for finding {finding.get('id')}: {result.warnings}")
@@ -1074,7 +1139,9 @@ IMPORTANT:
                 if recommendations:
                     logger.info(
                         f"Recommendations generated via skill "
-                        f"(count={len(recommendations)})"
+                        f"(count={len(recommendations)}, "
+                        f"with_vendor_match={sum(1 for r in recommendations if 'vendor_match' in r)}, "
+                        f"with_roi_detail={sum(1 for r in recommendations if 'roi_detail' in r)})"
                     )
                     return recommendations
 
@@ -1811,6 +1878,56 @@ Return ONLY the JSON."""
 
         return playbooks
 
+    async def _identify_quick_wins(
+        self,
+        findings: List[Dict],
+        recommendations: List[Dict],
+    ) -> Dict[str, Any]:
+        """
+        Identify quick wins using the QuickWinIdentifierSkill.
+
+        Quick wins are low-effort, high-impact opportunities
+        that can be implemented quickly.
+        """
+        skill = get_skill("quick-win-identifier", client=self.client)
+
+        if skill:
+            try:
+                context = self._get_skill_context()
+                context.metadata["findings"] = findings
+                context.metadata["recommendations"] = recommendations
+
+                result = await skill.run(context)
+
+                if result.success:
+                    logger.info(
+                        f"Quick wins identified: {len(result.data.get('quick_wins', []))} "
+                        f"from {result.data.get('total_findings_analyzed', 0)} findings"
+                    )
+                    return result.data
+
+            except Exception as e:
+                logger.warning(f"QuickWinIdentifierSkill failed: {e}")
+
+        # Fallback: simple quick win detection
+        quick_wins = []
+        for finding in findings[:3]:
+            if finding.get("confidence", "").lower() == "high":
+                quick_wins.append({
+                    "finding_id": finding.get("id"),
+                    "title": finding.get("title"),
+                    "why_quick": "High confidence finding",
+                    "implementation_hours": 20,
+                    "estimated_roi": 100,
+                    "risk_level": "low",
+                })
+
+        return {
+            "quick_wins": quick_wins,
+            "total_findings_analyzed": len(findings),
+            "quick_wins_found": len(quick_wins),
+        }
+
     def _generate_system_architecture(self, recommendations: List[Dict]) -> Dict[str, Any]:
         """Generate system architecture diagram data."""
         arch_gen = ArchitectureGenerator()
@@ -1820,17 +1937,56 @@ Return ONLY the JSON."""
         )
         return architecture.model_dump()
 
-    def _generate_industry_insights(self) -> Dict[str, Any]:
-        """Generate industry insights and benchmarks."""
+    async def _generate_industry_insights(self) -> Dict[str, Any]:
+        """Generate industry insights, benchmarks, and competitor analysis."""
         insights_gen = InsightsGenerator()
         exec_summary = self._partial_data.get("executive_summary", {})
         ai_score = exec_summary.get("ai_readiness_score", 50)
 
+        # Base insights
         insights = insights_gen.generate_insights(
             industry=self.context.get("industry", "general"),
             ai_readiness_score=ai_score,
         )
-        return insights.model_dump()
+        result = insights.model_dump()
+
+        # Enrich with competitor analysis
+        competitor_skill = get_skill("competitor-analyzer", client=self.client)
+        if competitor_skill:
+            try:
+                context = self._get_skill_context()
+                context.metadata["findings"] = self._partial_data.get("findings", [])
+
+                competitor_result = await competitor_skill.run(context)
+
+                if competitor_result.success:
+                    result["competitor_analysis"] = competitor_result.data
+                    logger.info(
+                        f"Competitor analysis: {competitor_result.data.get('ai_adoption_rate')} "
+                        f"adoption, risk={competitor_result.data.get('risk_assessment', {}).get('risk_level')}"
+                    )
+
+            except Exception as e:
+                logger.debug(f"Competitor analysis skipped: {e}")
+
+        # Enrich with industry benchmarking
+        benchmarker_skill = get_skill("industry-benchmarker", client=self.client)
+        if benchmarker_skill:
+            try:
+                context = self._get_skill_context()
+                benchmarker_result = await benchmarker_skill.run(context)
+
+                if benchmarker_result.success:
+                    result["company_benchmarks"] = benchmarker_result.data
+                    logger.info(
+                        f"Benchmarks: AI readiness {benchmarker_result.data.get('ai_readiness', {}).get('score')}/100, "
+                        f"percentile={benchmarker_result.data.get('ai_readiness', {}).get('percentile')}"
+                    )
+
+            except Exception as e:
+                logger.debug(f"Industry benchmarking skipped: {e}")
+
+        return result
 
 
 async def generate_report_for_quiz(quiz_session_id: str, tier: str = "quick") -> str:

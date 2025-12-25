@@ -76,13 +76,24 @@ Change ROI calculation? Edit one skill file, not hunt through 1500-line services
 | `followup-question` | Adaptive interview questions | ✅ Integrated |
 | `pain-extraction` | Extract pain points from transcript | ✅ Integrated |
 
+### Analysis
+| Skill | Purpose | Status |
+|-------|---------|--------|
+| `roi-calculator` | ROI with transparent assumptions & sensitivity | ✅ Integrated |
+| `vendor-matching` | Match findings to specific vendor solutions | ✅ Integrated |
+| `quick-win-identifier` | Low-effort, high-impact opportunities | ✅ Integrated |
+| `source-validator` | Validate claims against knowledge base | ✅ Integrated |
+| `industry-benchmarker` | Compare company to industry benchmarks | ✅ Integrated |
+| `competitor-analyzer` | Analyze competitor AI adoption | ✅ Integrated |
+| `playbook-generator` | Generate implementation playbooks | ✅ Integrated |
+
 ---
 
 ## Future Skills to Build
 
-### High Priority (Direct Revenue Impact)
+### ~~High Priority (Direct Revenue Impact)~~ ✅ COMPLETE
 
-#### `vendor-matching`
+#### ~~`vendor-matching`~~ ✅ Built
 Match findings to specific vendors from knowledge base.
 ```python
 # Input: finding about "scheduling issues"
@@ -94,7 +105,7 @@ Match findings to specific vendors from knowledge base.
 ```
 **Impact**: Better recommendations = higher customer satisfaction
 
-#### `roi-calculator`
+#### ~~`roi-calculator`~~ ✅ Built
 Standardized ROI math with transparent assumptions.
 ```python
 # Input: finding + recommendation + company context
@@ -108,7 +119,7 @@ Standardized ROI math with transparent assumptions.
 ```
 **Impact**: Credible numbers = trust = conversions
 
-#### `quick-win-identifier`
+#### ~~`quick-win-identifier`~~ ✅ Built
 Identify low-effort, high-impact opportunities.
 ```python
 # Input: all findings
@@ -119,9 +130,9 @@ Identify low-effort, high-impact opportunities.
 ```
 **Impact**: Actionable reports = customer success stories
 
-### Medium Priority (Quality Improvement)
+### ~~Medium Priority (Quality Improvement)~~ ✅ COMPLETE
 
-#### `source-validator`
+#### ~~`source-validator`~~ ✅ Built
 Validate claims against knowledge base, flag unverified data.
 ```python
 # Input: finding with claims
@@ -134,7 +145,7 @@ Validate claims against knowledge base, flag unverified data.
 ```
 **Impact**: Honest reports = brand trust
 
-#### `industry-benchmarker`
+#### ~~`industry-benchmarker`~~ ✅ Built
 Compare company to industry benchmarks.
 ```python
 # Input: company metrics + industry
@@ -147,7 +158,7 @@ Compare company to industry benchmarks.
 ```
 **Impact**: Context = perceived value
 
-#### `competitor-analyzer`
+#### ~~`competitor-analyzer`~~ ✅ Built
 Identify what competitors are doing with AI.
 ```python
 # Input: industry + company size
@@ -162,7 +173,7 @@ Identify what competitors are doing with AI.
 
 ### Lower Priority (Future Features)
 
-#### `playbook-generator`
+#### ~~`playbook-generator`~~ ✅ Built
 Generate implementation playbooks for recommendations.
 ```python
 # Input: recommendation + option chosen
@@ -217,20 +228,20 @@ Identify opportunities for human consulting tier.
 │                                                             │
 │  ANALYSIS STAGE                                             │
 │  ├── finding-generation ✅                                  │
-│  ├── (future) source-validator                             │
-│  ├── (future) industry-benchmarker                         │
-│  └── (future) competitor-analyzer                          │
+│  ├── source-validator ✅                                    │
+│  ├── industry-benchmarker ✅                                │
+│  └── competitor-analyzer ✅                                 │
 │                                                             │
 │  RECOMMENDATION STAGE                                       │
 │  ├── three-options ✅                                       │
-│  ├── (future) vendor-matching                              │
-│  ├── (future) roi-calculator                               │
-│  └── (future) quick-win-identifier                         │
+│  ├── roi-calculator ✅                                      │
+│  ├── vendor-matching ✅                                     │
+│  └── quick-win-identifier ✅                                │
 │                                                             │
 │  REPORT STAGE                                               │
 │  ├── exec-summary ✅                                        │
 │  ├── verdict ✅                                             │
-│  └── (future) playbook-generator                           │
+│  └── playbook-generator ✅                                  │
 │                                                             │
 │  POST-REPORT STAGE                                          │
 │  ├── (future) follow-up-scheduler                          │
@@ -243,19 +254,22 @@ Identify opportunities for human consulting tier.
 
 ## Implementation Priority
 
-### Phase 1: ROI & Recommendations (Next)
-1. `roi-calculator` - Credible numbers
-2. `vendor-matching` - Specific recommendations
-3. `quick-win-identifier` - Actionable outputs
+### Phase 1: ROI & Recommendations ✅ COMPLETE
+1. ~~`roi-calculator`~~ ✅ Credible numbers with sensitivity analysis
+2. ~~`vendor-matching`~~ ✅ Specific vendor recommendations with fit scoring
+3. ~~`quick-win-identifier`~~ ✅ Actionable outputs
 
-### Phase 2: Quality & Trust
-4. `source-validator` - Honest reporting
-5. `industry-benchmarker` - Context
+### Phase 2: Quality & Trust ✅ COMPLETE
+4. ~~`source-validator`~~ ✅ Honest reporting
+5. ~~`industry-benchmarker`~~ ✅ Context
 
-### Phase 3: Growth Features
-6. `competitor-analyzer` - Urgency
-7. `playbook-generator` - Implementation help
-8. `upsell-identifier` - Revenue optimization
+### Phase 3: Growth Features ✅ COMPLETE
+6. ~~`competitor-analyzer`~~ ✅ Urgency
+7. ~~`playbook-generator`~~ ✅ Implementation help
+
+### Phase 4: Future Features
+8. `follow-up-scheduler` - Post-report engagement
+9. `upsell-identifier` - Revenue optimization
 
 ---
 
