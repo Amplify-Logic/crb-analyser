@@ -75,10 +75,12 @@ from src.knowledge import (
     get_benchmarks_for_metrics,
     normalize_industry,
 )
-from src.expertise import get_self_improve_service
+from src.expertise import get_self_improve_service, get_expertise_store
+from src.skills import get_skill, SkillContext
 from src.services.playbook_generator import PlaybookGenerator
 from src.services.architecture_generator import ArchitectureGenerator
 from src.services.insights_generator import InsightsGenerator
+from src.services.review_service import ReviewService
 
 logger = logging.getLogger(__name__)
 
@@ -117,6 +119,34 @@ class ReportGenerator:
         self.report_id: Optional[str] = None
         self.token_tracker = TokenTracker()
         self._partial_data: Dict[str, Any] = {}  # Store partial results for recovery
+        self.review_service = ReviewService(tier=tier)  # Multi-model review & refinement
+
+    def _get_skill_context(self) -> SkillContext:
+        """
+        Build SkillContext from current report context.
+
+        Used by skill-based generation methods for consistent context passing.
+        """
+        industry = self.context.get("industry", "general")
+
+        # Get expertise data for this industry
+        try:
+            store = get_expertise_store()
+            expertise = store.get_all_expertise_context(industry)
+        except Exception as e:
+            logger.warning(f"Could not load expertise for {industry}: {e}")
+            expertise = None
+
+        return SkillContext(
+            industry=industry,
+            company_name=self.context.get("company_name"),
+            company_size=self.context.get("company_size"),
+            quiz_answers=self.context.get("answers", {}),
+            interview_data=self.context.get("interview_data"),
+            expertise=expertise,
+            knowledge=self.context.get("industry_knowledge"),
+            report_data=self.context,
+        )
 
     def _call_claude(self, task: str, prompt: str, max_tokens: int = 4000) -> str:
         """
@@ -206,12 +236,10 @@ class ReportGenerator:
             return
 
         try:
+            # Base update - always safe
             partial_report = {
                 "status": "partial",
                 "error_message": error_message,
-                "error_at": datetime.utcnow().isoformat(),
-                "partial_data": self._partial_data,
-                "token_usage": self.token_tracker.to_dict(),
             }
 
             # Update with whatever partial data we have
@@ -222,7 +250,21 @@ class ReportGenerator:
             if self._partial_data.get("recommendations"):
                 partial_report["recommendations"] = self._partial_data["recommendations"]
 
-            await supabase.table("reports").update(partial_report).eq("id", self.report_id).execute()
+            # Try with optional columns first
+            try:
+                optional_fields = {
+                    "error_at": datetime.utcnow().isoformat(),
+                    "partial_data": self._partial_data,
+                    "token_usage": self.token_tracker.to_dict(),
+                }
+                await supabase.table("reports").update({**partial_report, **optional_fields}).eq("id", self.report_id).execute()
+            except Exception as optional_err:
+                if "column" in str(optional_err).lower() and "schema cache" in str(optional_err).lower():
+                    # Some columns don't exist, use minimal update
+                    logger.warning(f"Some columns missing in partial save: {optional_err}")
+                    await supabase.table("reports").update(partial_report).eq("id", self.report_id).execute()
+                else:
+                    raise
 
             logger.info(f"Saved partial report {self.report_id} with data: {list(self._partial_data.keys())}")
         except Exception as save_error:
@@ -281,6 +323,17 @@ class ReportGenerator:
             self.context["email"] = quiz_data.get("email")
             self.context["answers"] = quiz_data.get("answers", {})
             self.context["results"] = quiz_data.get("results", {})
+
+            # Load interview data if available
+            interview_data = quiz_data.get("interview_data", {})
+            interview_completed = quiz_data.get("interview_completed", False)
+            self.context["interview"] = {
+                "transcript": interview_data.get("messages", []),
+                "topics_covered": interview_data.get("topics_covered", []),
+                "completed": interview_completed,
+            }
+            if interview_completed:
+                logger.info(f"Loaded interview data: {len(self.context['interview']['transcript'])} messages")
 
             # Load validated assumptions if validation session was completed
             validated_assumptions = quiz_data.get("validated_assumptions", [])
@@ -370,7 +423,54 @@ class ReportGenerator:
                     }
                 }
 
-            yield {"phase": "findings", "step": f"Generated {len(findings)} findings", "progress": 55}
+            yield {"phase": "findings", "step": f"Generated {len(findings)} findings", "progress": 50}
+
+            # Phase 4b: Review & Refine findings with multi-model validation
+            yield {"phase": "review", "step": "Validating findings with research...", "progress": 52}
+
+            # Build original sources for review
+            original_sources = {
+                "quiz": self.context.get("answers", {}),
+                "interview": self.context.get("interview", {}),
+                "research": self.context.get("industry_knowledge", {}),
+            }
+
+            # Review and refine findings
+            try:
+                review_result = await self.review_service.review_and_refine(
+                    content={"findings": findings},
+                    content_type="findings",
+                    original_sources=original_sources,
+                    industry=self.context.get("industry", "general"),
+                )
+
+                # Use refined findings
+                findings = review_result.get("content", findings)
+                quality_scores = review_result.get("review_scores", {})
+                findings_added = review_result.get("findings_added", 0)
+
+                # Update executive summary if needed
+                exec_updates = review_result.get("executive_summary_updates", {})
+                if exec_updates:
+                    executive_summary.update(exec_updates)
+
+                yield {
+                    "phase": "review",
+                    "step": f"Validated: {quality_scores.get('overall', '?')}/10 quality, +{findings_added} findings",
+                    "progress": 58,
+                    "quality_scores": quality_scores,
+                }
+
+                logger.info(
+                    f"Review complete - Quality: {quality_scores.get('overall', '?')}/10, "
+                    f"Findings: {len(findings)}, Added: {findings_added}"
+                )
+
+            except Exception as review_error:
+                logger.warning(f"Review step failed, using original findings: {review_error}")
+                yield {"phase": "review", "step": "Review skipped (using original)", "progress": 58}
+
+            self._partial_data["findings"] = findings  # Update with refined findings
 
             await supabase.table("reports").update({
                 "findings": findings,
@@ -463,12 +563,25 @@ class ReportGenerator:
             token_summary = self.token_tracker.get_summary()
             logger.info(f"Report {self.report_id} token usage: {token_summary['total_tokens']} tokens, ~${token_summary['estimated_cost_usd']}")
 
-            await supabase.table("reports").update({
+            # Update report status - be resilient to missing columns
+            update_data = {
                 "status": "completed",
                 "generation_completed_at": datetime.utcnow().isoformat(),
-                "token_usage": self.token_tracker.to_dict(),
-                "assumption_log": self.context.get("assumption_log", {}),
-            }).eq("id", self.report_id).execute()
+            }
+            try:
+                # Try with all fields first
+                await supabase.table("reports").update({
+                    **update_data,
+                    "token_usage": self.token_tracker.to_dict(),
+                    "assumption_log": self.context.get("assumption_log", {}),
+                }).eq("id", self.report_id).execute()
+            except Exception as update_err:
+                if "column" in str(update_err).lower() and "schema cache" in str(update_err).lower():
+                    # Column doesn't exist, try minimal update
+                    logger.warning(f"Some columns missing, using minimal update: {update_err}")
+                    await supabase.table("reports").update(update_data).eq("id", self.report_id).execute()
+                else:
+                    raise
 
             # Update quiz session
             await supabase.table("quiz_sessions").update({
@@ -521,13 +634,23 @@ class ReportGenerator:
                 await self._save_partial_report(supabase, str(e))
                 logger.info(f"Partial report saved for {self.report_id}")
             elif self.report_id:
-                # No partial data, just mark as failed
-                await supabase.table("reports").update({
-                    "status": "failed",
-                    "error_message": str(e),
-                    "error_at": datetime.utcnow().isoformat(),
-                    "token_usage": self.token_tracker.to_dict(),  # Still save token usage
-                }).eq("id", self.report_id).execute()
+                # No partial data, just mark as failed - be resilient to missing columns
+                try:
+                    await supabase.table("reports").update({
+                        "status": "failed",
+                        "error_message": str(e),
+                        "error_at": datetime.utcnow().isoformat(),
+                        "token_usage": self.token_tracker.to_dict(),
+                    }).eq("id", self.report_id).execute()
+                except Exception as update_err:
+                    if "column" in str(update_err).lower() and "schema cache" in str(update_err).lower():
+                        # Minimal update without optional columns
+                        await supabase.table("reports").update({
+                            "status": "failed",
+                            "error_message": str(e),
+                        }).eq("id", self.report_id).execute()
+                    else:
+                        raise
 
             yield {
                 "phase": "error",
@@ -584,7 +707,40 @@ class ReportGenerator:
         return normalize_industry(industry)
 
     async def _generate_executive_summary(self) -> Dict[str, Any]:
-        """Generate executive summary using Claude."""
+        """
+        Generate executive summary using the ExecSummarySkill.
+
+        Uses the skills framework for consistent output and expertise integration.
+        Falls back to legacy method if skill fails.
+        """
+        # Try skill-based generation first
+        skill = get_skill("exec-summary", client=self.client)
+
+        if skill:
+            try:
+                context = self._get_skill_context()
+                result = await skill.run(context)
+
+                if result.success:
+                    logger.info(
+                        f"Executive summary generated via skill "
+                        f"(expertise_applied={result.expertise_applied}, "
+                        f"execution_time={result.execution_time_ms:.0f}ms)"
+                    )
+                    return result.data
+                else:
+                    logger.warning(
+                        f"ExecSummarySkill failed, using legacy method: "
+                        f"{result.warnings}"
+                    )
+            except Exception as e:
+                logger.warning(f"Skill execution failed, using legacy: {e}")
+
+        # Fall back to legacy method
+        return await self._generate_executive_summary_legacy()
+
+    async def _generate_executive_summary_legacy(self) -> Dict[str, Any]:
+        """Generate executive summary using Claude (legacy method)."""
         answers = self.context.get("answers", {})
         results = self.context.get("results", {})
         industry_knowledge = self.context.get("industry_knowledge", {})
@@ -648,10 +804,14 @@ Return ONLY the JSON, no explanation."""
             content = self._call_claude("generate_executive_summary", prompt, max_tokens=2000)
             summary = safe_parse_json(content, default_summary)
             if not isinstance(summary, dict):
-                return default_summary
+                summary = default_summary
+
+            # Add report date at the top
+            summary["report_date"] = datetime.utcnow().strftime("%B %d, %Y")
             return summary
         except Exception as e:
             logger.error(f"Failed to parse executive summary: {e}")
+            default_summary["report_date"] = datetime.utcnow().strftime("%B %d, %Y")
             return default_summary
 
     async def _generate_findings(self) -> List[Dict[str, Any]]:
