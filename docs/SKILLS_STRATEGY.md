@@ -87,6 +87,12 @@ Change ROI calculation? Edit one skill file, not hunt through 1500-line services
 | `competitor-analyzer` | Analyze competitor AI adoption | ✅ Integrated |
 | `playbook-generator` | Generate implementation playbooks | ✅ Integrated |
 
+### Post-Report
+| Skill | Purpose | Status |
+|-------|---------|--------|
+| `followup-scheduler` | Schedule optimal follow-up touchpoints | ✅ Integrated |
+| `upsell-identifier` | Identify upsell opportunities | ✅ Integrated |
+
 ---
 
 ## Future Skills to Build
@@ -185,7 +191,7 @@ Generate implementation playbooks for recommendations.
 # }
 ```
 
-#### `follow-up-scheduler`
+#### ~~`follow-up-scheduler`~~ ✅ Built
 Determine optimal follow-up timing and content.
 ```python
 # Input: report + customer engagement
@@ -196,7 +202,7 @@ Determine optimal follow-up timing and content.
 # }
 ```
 
-#### `upsell-identifier`
+#### ~~`upsell-identifier`~~ ✅ Built
 Identify opportunities for human consulting tier.
 ```python
 # Input: report complexity + customer signals
@@ -244,8 +250,8 @@ Identify opportunities for human consulting tier.
 │  └── playbook-generator ✅                                  │
 │                                                             │
 │  POST-REPORT STAGE                                          │
-│  ├── (future) follow-up-scheduler                          │
-│  └── (future) upsell-identifier                            │
+│  ├── followup-scheduler ✅                                  │
+│  └── upsell-identifier ✅                                   │
 │                                                             │
 └─────────────────────────────────────────────────────────────┘
 ```
@@ -267,9 +273,11 @@ Identify opportunities for human consulting tier.
 6. ~~`competitor-analyzer`~~ ✅ Urgency
 7. ~~`playbook-generator`~~ ✅ Implementation help
 
-### Phase 4: Future Features
-8. `follow-up-scheduler` - Post-report engagement
-9. `upsell-identifier` - Revenue optimization
+### Phase 4: Future Features ✅ COMPLETE
+8. ~~`follow-up-scheduler`~~ ✅ Post-report engagement
+9. ~~`upsell-identifier`~~ ✅ Revenue optimization
+
+**All planned skills are now complete!**
 
 ---
 

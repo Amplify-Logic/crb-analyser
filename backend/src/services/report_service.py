@@ -557,13 +557,30 @@ class ReportGenerator:
             industry_insights = await self._generate_industry_insights()
             self._partial_data["industry_insights"] = industry_insights
 
-            yield {"phase": "insights", "step": "Industry insights complete", "progress": 94}
+            yield {"phase": "insights", "step": "Industry insights complete", "progress": 92}
+
+            # Phase 6e: Generate post-report metadata (follow-up, upsell)
+            yield {"phase": "post_report", "step": "Preparing follow-up plan...", "progress": 93}
+
+            post_report_data = await self._generate_post_report_metadata(
+                report={
+                    "findings": findings,
+                    "recommendations": recommendations,
+                    "verdict": verdict,
+                },
+                quick_wins=quick_wins.get("quick_wins", []),
+            )
+            self._partial_data["post_report_metadata"] = post_report_data
+
+            yield {"phase": "post_report", "step": "Follow-up plan ready", "progress": 94}
 
             # Save all new enhanced report data
             await supabase.table("reports").update({
                 "playbooks": playbooks,
                 "system_architecture": system_architecture,
                 "industry_insights": industry_insights,
+                "follow_up_schedule": post_report_data.get("follow_up_schedule", {}),
+                "upsell_analysis": post_report_data.get("upsell_analysis", {}),
             }).eq("id", self.report_id).execute()
 
             # Phase 7: Finalize
@@ -1985,6 +2002,94 @@ Return ONLY the JSON."""
 
             except Exception as e:
                 logger.debug(f"Industry benchmarking skipped: {e}")
+
+        return result
+
+    async def _generate_post_report_metadata(
+        self,
+        report: Dict[str, Any],
+        quick_wins: List[Dict[str, Any]],
+    ) -> Dict[str, Any]:
+        """
+        Generate post-report metadata (follow-up schedule, upsell analysis).
+
+        Uses the followup-scheduler and upsell-identifier skills to determine
+        optimal follow-up timing and identify upsell opportunities.
+        """
+        result = {
+            "follow_up_schedule": {},
+            "upsell_analysis": {},
+        }
+
+        # Get the customer tier from context
+        customer_tier = self.tier  # "quick", "full", or "human"
+
+        # Generate follow-up schedule
+        followup_skill = get_skill("followup-scheduler", client=self.client)
+        if followup_skill:
+            try:
+                context = self._get_skill_context()
+                context.metadata["report"] = report
+                context.metadata["quick_wins"] = quick_wins
+                context.metadata["customer_tier"] = customer_tier
+                context.metadata["company_name"] = self.context.get("company_name", "")
+
+                followup_result = await followup_skill.run(context)
+
+                if followup_result.success:
+                    result["follow_up_schedule"] = followup_result.data
+                    logger.info(
+                        f"Follow-up schedule: {followup_result.data.get('recommended_touchpoints')} touchpoints, "
+                        f"complexity={followup_result.data.get('complexity')}"
+                    )
+
+            except Exception as e:
+                logger.debug(f"Follow-up scheduler skipped: {e}")
+                # Provide minimal fallback
+                result["follow_up_schedule"] = {
+                    "follow_up_schedule": [
+                        {"timing": "1 week", "type": "first_check", "channel": "email"},
+                        {"timing": "2 weeks", "type": "progress_review", "channel": "email"},
+                    ],
+                    "recommended_touchpoints": 2,
+                }
+
+        # Identify upsell opportunities (only if not already on human tier)
+        if customer_tier != "human":
+            upsell_skill = get_skill("upsell-identifier", client=self.client)
+            if upsell_skill:
+                try:
+                    context = self._get_skill_context()
+                    context.metadata["report"] = report
+                    context.metadata["current_tier"] = customer_tier
+                    context.metadata["company_context"] = {
+                        "name": self.context.get("company_name", ""),
+                        "employee_count": self.context.get("answers", {}).get("employee_count", 0),
+                    }
+
+                    upsell_result = await upsell_skill.run(context)
+
+                    if upsell_result.success:
+                        result["upsell_analysis"] = upsell_result.data
+                        if upsell_result.data.get("upsell_recommended"):
+                            logger.info(
+                                f"Upsell recommended: confidence={upsell_result.data.get('recommendation', {}).get('confidence')}, "
+                                f"reason={upsell_result.data.get('recommendation', {}).get('reason')}"
+                            )
+                        else:
+                            logger.info("No upsell recommended for this customer")
+
+                except Exception as e:
+                    logger.debug(f"Upsell identifier skipped: {e}")
+                    result["upsell_analysis"] = {
+                        "upsell_recommended": False,
+                        "reason": "Analysis not available",
+                    }
+        else:
+            result["upsell_analysis"] = {
+                "upsell_recommended": False,
+                "reason": "Customer already on human tier",
+            }
 
         return result
 

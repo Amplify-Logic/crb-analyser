@@ -11,6 +11,8 @@ Available Skills:
 - IndustryBenchmarkerSkill: Compare company to industry benchmarks
 - CompetitorAnalyzerSkill: Analyze competitor AI adoption
 - PlaybookGeneratorSkill: Generate implementation playbooks
+- FollowupSchedulerSkill: Schedule optimal follow-up touchpoints
+- UpsellIdentifierSkill: Identify upsell opportunities
 """
 
 from .roi_calculator import ROICalculatorSkill
@@ -20,6 +22,8 @@ from .source_validator import SourceValidatorSkill
 from .industry_benchmarker import IndustryBenchmarkerSkill
 from .competitor_analyzer import CompetitorAnalyzerSkill
 from .playbook_generator import PlaybookGeneratorSkill
+from .followup_scheduler import FollowupSchedulerSkill
+from .upsell_identifier import UpsellIdentifierSkill
 
 __all__ = [
     "ROICalculatorSkill",
@@ -29,4 +33,6 @@ __all__ = [
     "IndustryBenchmarkerSkill",
     "CompetitorAnalyzerSkill",
     "PlaybookGeneratorSkill",
+    "FollowupSchedulerSkill",
+    "UpsellIdentifierSkill",
 ]
