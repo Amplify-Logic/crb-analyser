@@ -32,6 +32,13 @@ from src.expertise import get_self_improve_service, get_expertise_store
 logger = logging.getLogger(__name__)
 
 
+def json_serializer(obj):
+    """JSON serializer for objects not serializable by default."""
+    if isinstance(obj, datetime):
+        return obj.isoformat()
+    raise TypeError(f"Object of type {type(obj)} is not JSON serializable")
+
+
 # =============================================================================
 # PROMPTS
 # =============================================================================
@@ -180,7 +187,7 @@ REFINEMENT REQUIREMENTS
    - Target: 8-12 total findings (including 2-3 not-recommended)
 
 4. GROUND ALL CLAIMS
-   - Use knowledge base benchmarks (cite: "Source: CRB Knowledge Base, {industry}")
+   - Use knowledge base benchmarks (cite: "Source: CRB Knowledge Base, [industry name]")
    - Use knowledge base vendor pricing (verified dates included)
    - If no KB data, mark confidence as LOW
 
@@ -415,9 +422,9 @@ class ReviewService:
         prompt = REFINE_PROMPT.format(
             original=json.dumps(content.get("findings", []), indent=2),
             review=json.dumps(review, indent=2),
-            benchmarks=json.dumps(kb_data.get("benchmarks", {}), indent=2),
-            vendors=json.dumps(kb_data.get("vendors", {}), indent=2),
-            expertise=json.dumps(kb_data.get("expertise", {}), indent=2),
+            benchmarks=json.dumps(kb_data.get("benchmarks", {}), indent=2, default=json_serializer),
+            vendors=json.dumps(kb_data.get("vendors", {}), indent=2, default=json_serializer),
+            expertise=json.dumps(kb_data.get("expertise", {}), indent=2, default=json_serializer),
             interview=transcript_text,
             quiz=json.dumps(original_sources.get("quiz", {}), indent=2),
         )
