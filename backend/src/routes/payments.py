@@ -6,8 +6,10 @@ Stripe integration for CRB Analyser payments.
 
 import asyncio
 import logging
+import secrets
+import string
 import stripe
-from typing import Optional
+from typing import Optional, Dict, Any
 from datetime import datetime
 
 from fastapi import APIRouter, Depends, HTTPException, status, Request, Header, BackgroundTasks
@@ -17,7 +19,7 @@ from src.config.settings import settings
 from src.config.supabase_client import get_async_supabase
 from src.middleware.auth import require_workspace, CurrentUser
 from src.services.report_service import generate_report_for_quiz, get_report
-from src.services.email import send_report_ready_email, send_payment_confirmation_email
+from src.services.email import send_report_ready_email, send_payment_confirmation_email, send_welcome_email
 
 logger = logging.getLogger(__name__)
 
@@ -49,6 +51,103 @@ class CheckoutResponse(BaseModel):
     """Checkout session response."""
     checkout_url: str
     session_id: str
+
+
+# ============================================================================
+# Account Creation from Quiz Session
+# ============================================================================
+
+async def create_user_from_quiz_session(
+    supabase,
+    session: Dict[str, Any],
+    tier_purchased: str
+) -> Dict[str, Any]:
+    """
+    Create user account from quiz session after payment.
+
+    Returns: {user_id, workspace_id, audit_id, password}
+    """
+    email = session["email"]
+    company_name = session.get("company_name", "My Company")
+
+    # Generate random password
+    password = ''.join(secrets.choice(string.ascii_letters + string.digits) for _ in range(16))
+
+    # Create user in Supabase Auth
+    auth_response = await supabase.auth.admin.create_user({
+        "email": email,
+        "password": password,
+        "email_confirm": True,  # Auto-confirm since they paid
+        "user_metadata": {
+            "full_name": company_name,
+            "source": "quiz_payment"
+        }
+    })
+
+    if not auth_response.user:
+        raise Exception("Failed to create user account")
+
+    user = auth_response.user
+
+    # Create workspace
+    workspace_result = await supabase.table("workspaces").insert({
+        "name": f"{company_name} Workspace",
+    }).execute()
+
+    workspace_id = workspace_result.data[0]["id"]
+
+    # Link user to workspace
+    await supabase.table("users").insert({
+        "id": user.id,
+        "email": email,
+        "full_name": company_name,
+        "workspace_id": workspace_id,
+        "role": "admin",
+    }).execute()
+
+    # Create client
+    industry = session.get("company_profile", {}).get("industry", {}).get("primary_industry", {}).get("value", "general")
+    client_result = await supabase.table("clients").insert({
+        "workspace_id": workspace_id,
+        "name": company_name,
+        "industry": industry,
+        "website": session.get("company_website"),
+    }).execute()
+
+    client_id = client_result.data[0]["id"]
+
+    # Determine if strategy call is included
+    strategy_call_included = tier_purchased in ["report_plus_call", "human", "full"]
+
+    # Create audit
+    audit_result = await supabase.table("audits").insert({
+        "workspace_id": workspace_id,
+        "client_id": client_id,
+        "title": f"{company_name} - CRB Audit",
+        "tier": tier_purchased,
+        "status": "pending",
+        "workshop_status": "pending",
+        "strategy_call_included": strategy_call_included,
+    }).execute()
+
+    audit_id = audit_result.data[0]["id"]
+
+    # Create interview_responses record
+    await supabase.table("interview_responses").insert({
+        "audit_id": audit_id,
+        "user_id": user.id,
+        "status": "not_started",
+    }).execute()
+
+    logger.info(f"Created account for {email}: user={user.id}, workspace={workspace_id}, audit={audit_id}")
+
+    return {
+        "user_id": user.id,
+        "workspace_id": workspace_id,
+        "client_id": client_id,
+        "audit_id": audit_id,
+        "password": password,
+    }
 
 
 @router.post("/create-checkout", response_model=CheckoutResponse)
@@ -367,7 +466,7 @@ async def handle_checkout_completed(session: dict):
 
 
 async def handle_guest_checkout_completed(session: dict):
-    """Handle successful guest checkout from quiz flow with idempotency."""
+    """Handle successful guest checkout from quiz flow with idempotency and account creation."""
     supabase = await get_async_supabase()
     metadata = session.get("metadata", {})
     quiz_session_id = metadata.get("quiz_session_id")
@@ -378,36 +477,72 @@ async def handle_guest_checkout_completed(session: dict):
         return
 
     try:
-        # Idempotency check - skip if already processed
-        existing = await supabase.table("quiz_sessions").select("status").eq(
+        # Idempotency check - skip if already processed (check for user_id as indicator)
+        existing = await supabase.table("quiz_sessions").select("*").eq(
             "id", quiz_session_id
         ).single().execute()
 
-        if existing.data and existing.data.get("status") in ["paid", "generating", "completed"]:
+        if not existing.data:
+            logger.error(f"Quiz session not found: {quiz_session_id}")
+            return
+
+        quiz_data = existing.data
+
+        if quiz_data.get("user_id"):
             logger.info(f"Payment already processed for quiz {quiz_session_id}, skipping")
             return
 
-        # Update quiz session status
-        await supabase.table("quiz_sessions").update({
-            "status": "paid",
-            "payment_completed_at": datetime.utcnow().isoformat(),
-            "stripe_payment_id": session.get("payment_intent"),
-            "amount_paid": session.get("amount_total", 0) / 100,
-        }).eq("id", quiz_session_id).execute()
+        if quiz_data.get("status") in ["paid", "generating", "completed"]:
+            logger.info(f"Payment already processed for quiz {quiz_session_id}, skipping")
+            return
 
-        logger.info(f"Guest checkout completed for quiz session {quiz_session_id}")
-
-        # Get email from quiz session
-        quiz_result = await supabase.table("quiz_sessions").select("email").eq(
-            "id", quiz_session_id
-        ).single().execute()
-
-        email = quiz_result.data.get("email") if quiz_result.data else None
+        email = quiz_data.get("email")
+        company_name = quiz_data.get("company_name", "My Company")
         amount = session.get("amount_total", 0) / 100
 
-        # Send payment confirmation email
-        if email:
-            await send_payment_confirmation_email(email, tier, amount)
+        # Create user account from quiz session
+        logger.info(f"Creating account for quiz session {quiz_session_id}")
+        try:
+            account_data = await create_user_from_quiz_session(supabase, quiz_data, tier)
+
+            # Update quiz session with links
+            await supabase.table("quiz_sessions").update({
+                "user_id": account_data["user_id"],
+                "workspace_id": account_data["workspace_id"],
+                "audit_id": account_data["audit_id"],
+                "tier_purchased": tier,
+                "status": "paid",
+                "stripe_payment_id": session.get("payment_intent"),
+                "amount_paid": amount,
+                "payment_completed_at": datetime.utcnow().isoformat(),
+            }).eq("id", quiz_session_id).execute()
+
+            logger.info(f"Account created for quiz session {quiz_session_id}: user={account_data['user_id']}")
+
+            # Send welcome email with credentials
+            if email:
+                strategy_call_included = tier in ["report_plus_call", "human", "full"]
+                await send_welcome_email(
+                    to_email=email,
+                    company_name=company_name,
+                    password=account_data["password"],
+                    audit_id=account_data["audit_id"],
+                    has_strategy_call=strategy_call_included
+                )
+
+        except Exception as account_err:
+            logger.error(f"Failed to create account for quiz {quiz_session_id}: {account_err}")
+            # Still update quiz session status even if account creation fails
+            await supabase.table("quiz_sessions").update({
+                "status": "paid",
+                "payment_completed_at": datetime.utcnow().isoformat(),
+                "stripe_payment_id": session.get("payment_intent"),
+                "amount_paid": amount,
+            }).eq("id", quiz_session_id).execute()
+
+            # Send payment confirmation email as fallback
+            if email:
+                await send_payment_confirmation_email(email, tier, amount)
 
         # Generate report (runs async in background)
         logger.info(f"Starting report generation for quiz session {quiz_session_id}")

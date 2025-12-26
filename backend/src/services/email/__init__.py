@@ -272,6 +272,170 @@ async def send_report_failed_email(
         return False
 
 
+async def send_teaser_report_email(
+    to_email: str,
+    company_name: str,
+    score: int,
+    findings: list,
+    session_id: str
+) -> bool:
+    """Send teaser report via email."""
+    if not settings.SENDGRID_API_KEY:
+        logger.warning("SendGrid not configured, skipping email")
+        return False
+
+    try:
+        from sendgrid import SendGridAPIClient
+        from sendgrid.helpers.mail import Mail, Email, To, Content
+
+        # Build findings HTML
+        findings_html = ""
+        for i, finding in enumerate(findings, 1):
+            roi_html = ""
+            if finding.get("roi_estimate"):
+                roi_html = f'<p style="margin: 10px 0 0 0; color: #22c55e; font-weight: bold;">Potential ROI: €{finding["roi_estimate"]["min"]:,} - €{finding["roi_estimate"]["max"]:,}</p>'
+            findings_html += f"""
+            <div style="margin-bottom: 20px; padding: 15px; background: #f8f9fa; border-radius: 8px;">
+                <h3 style="margin: 0 0 10px 0; color: #1a1a1a;">Finding {i}: {finding['title']}</h3>
+                <p style="margin: 0; color: #4a4a4a;">{finding.get('summary', '')}</p>
+                {roi_html}
+            </div>
+            """
+
+        # Build frontend URL
+        base_url = settings.CORS_ORIGINS.split(",")[0]
+
+        html_content = f"""
+        <html>
+        <body style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px;">
+            <h1 style="color: #1a1a1a;">Your AI Readiness Report</h1>
+
+            <div style="text-align: center; padding: 30px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 12px; margin: 20px 0;">
+                <p style="color: white; margin: 0; font-size: 18px;">AI Readiness Score</p>
+                <p style="color: white; margin: 10px 0; font-size: 48px; font-weight: bold;">{score}/100</p>
+            </div>
+
+            <h2 style="color: #1a1a1a;">Your Top Findings</h2>
+            {findings_html}
+
+            <div style="text-align: center; margin: 30px 0;">
+                <p style="color: #666; margin-bottom: 15px;">Unlock your complete report with 15-20 detailed findings and implementation roadmap.</p>
+                <a href="{base_url}/quiz?session={session_id}#pricing"
+                   style="display: inline-block; padding: 15px 30px; background: #667eea; color: white; text-decoration: none; border-radius: 8px; font-weight: bold;">
+                    Get Full Report
+                </a>
+            </div>
+
+            <p style="color: #999; font-size: 12px; text-align: center;">
+                CRB Analyser - AI-Powered Business Audits
+            </p>
+        </body>
+        </html>
+        """
+
+        message = Mail(
+            from_email=Email(settings.SENDGRID_FROM_EMAIL, settings.SENDGRID_FROM_NAME),
+            to_emails=To(to_email),
+            subject=f"Your AI Readiness Score: {score}/100 - {company_name}",
+            html_content=Content("text/html", html_content),
+        )
+
+        sg = SendGridAPIClient(settings.SENDGRID_API_KEY)
+        response = sg.send(message)
+
+        logger.info(f"Teaser email sent to {to_email}, status: {response.status_code}")
+        return response.status_code in [200, 201, 202]
+
+    except Exception as e:
+        logger.error(f"Failed to send teaser email: {e}")
+        return False
+
+
+async def send_welcome_email(
+    to_email: str,
+    company_name: str,
+    password: str,
+    audit_id: str,
+    has_strategy_call: bool = False
+) -> bool:
+    """Send welcome email with login credentials."""
+    if not settings.SENDGRID_API_KEY:
+        logger.warning("SendGrid not configured, skipping email")
+        return False
+
+    try:
+        from sendgrid import SendGridAPIClient
+        from sendgrid.helpers.mail import Mail, Email, To, Content
+
+        # Build frontend URL
+        base_url = settings.CORS_ORIGINS.split(",")[0]
+
+        call_section = ""
+        if has_strategy_call:
+            call_section = """
+            <div style="margin: 20px 0; padding: 15px; background: #fef3c7; border-radius: 8px;">
+                <h3 style="margin: 0 0 10px 0; color: #92400e;">Strategy Call Included</h3>
+                <p style="margin: 0; color: #78350f;">After your workshop is complete and report is ready, you'll receive a link to book your 60-minute strategy call with our founders.</p>
+            </div>
+            """
+
+        html_content = f"""
+        <html>
+        <body style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px;">
+            <h1 style="color: #1a1a1a;">Welcome, {company_name}!</h1>
+
+            <p style="color: #4a4a4a; font-size: 16px;">
+                Thank you for your purchase. Your account has been created and you can now access your personalized AI audit dashboard.
+            </p>
+
+            <div style="background: #f3f4f6; padding: 20px; border-radius: 8px; margin: 20px 0;">
+                <h3 style="margin: 0 0 15px 0; color: #1a1a1a;">Your Login Credentials</h3>
+                <p style="margin: 5px 0;"><strong>Email:</strong> {to_email}</p>
+                <p style="margin: 5px 0;"><strong>Temporary Password:</strong> <code style="background: #e5e7eb; padding: 2px 8px; border-radius: 4px;">{password}</code></p>
+                <p style="margin: 15px 0 0 0; font-size: 14px; color: #666;">We recommend changing your password after first login.</p>
+            </div>
+
+            {call_section}
+
+            <h2 style="color: #1a1a1a;">Next Steps</h2>
+            <ol style="color: #4a4a4a;">
+                <li style="margin-bottom: 10px;"><strong>Complete your workshop</strong> - 90 minutes of questions to give us deep insight into your business</li>
+                <li style="margin-bottom: 10px;"><strong>We review</strong> - Our experts review your report within 24-48 hours</li>
+                <li style="margin-bottom: 10px;"><strong>Get your report</strong> - Full interactive report with 15-20 findings</li>
+            </ol>
+
+            <div style="text-align: center; margin: 30px 0;">
+                <a href="{base_url}/login"
+                   style="display: inline-block; padding: 15px 30px; background: #667eea; color: white; text-decoration: none; border-radius: 8px; font-weight: bold;">
+                    Start Your Workshop
+                </a>
+            </div>
+
+            <p style="color: #999; font-size: 12px; text-align: center;">
+                Questions? Reply to this email and we'll help you out.
+            </p>
+        </body>
+        </html>
+        """
+
+        message = Mail(
+            from_email=Email(settings.SENDGRID_FROM_EMAIL, settings.SENDGRID_FROM_NAME),
+            to_emails=To(to_email),
+            subject="Welcome to CRB Analyser - Your Account is Ready",
+            html_content=Content("text/html", html_content),
+        )
+
+        sg = SendGridAPIClient(settings.SENDGRID_API_KEY)
+        response = sg.send(message)
+
+        logger.info(f"Welcome email sent to {to_email}, status: {response.status_code}")
+        return response.status_code in [200, 201, 202]
+
+    except Exception as e:
+        logger.error(f"Failed to send welcome email: {e}")
+        return False
+
+
 async def send_follow_up_email(
     to_email: str,
     report_id: str,

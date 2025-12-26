@@ -23,6 +23,8 @@ from src.config.questionnaire import (
 )
 from src.agents.pre_research_agent import PreResearchAgent, start_company_research
 from src.models.research import StartResearchRequest, DynamicQuestionnaire
+from src.services.teaser_service import generate_teaser_report
+from src.services.email import send_teaser_report_email
 
 logger = logging.getLogger(__name__)
 
@@ -878,4 +880,92 @@ async def get_dynamic_questions(session_id: str):
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail="Failed to get dynamic questions"
+        )
+
+
+# ============================================================================
+# Teaser Report Routes
+# ============================================================================
+
+class TeaserEmailRequest(BaseModel):
+    """Request with email for teaser report."""
+    email: Optional[EmailStr] = None
+
+
+@router.post("/sessions/{session_id}/teaser")
+async def generate_session_teaser(
+    session_id: str,
+    email_data: Optional[TeaserEmailRequest] = None
+):
+    """
+    Generate teaser report for completed quiz.
+
+    Optionally captures email and sends the teaser.
+    """
+    try:
+        supabase = await get_async_supabase()
+
+        # Get session
+        result = await supabase.table("quiz_sessions").select("*").eq(
+            "id", session_id
+        ).single().execute()
+
+        if not result.data:
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail="Session not found"
+            )
+
+        session = result.data
+        company_profile = session.get("company_profile", {})
+        answers = session.get("answers", {})
+
+        # Generate teaser
+        teaser = generate_teaser_report(company_profile, answers)
+
+        # Update email if provided
+        update_data = {
+            "teaser_report": teaser,
+            "updated_at": datetime.utcnow().isoformat(),
+        }
+
+        email_sent = False
+        if email_data and email_data.email:
+            real_email = email_data.email
+            update_data["email"] = real_email
+
+            # Send email
+            try:
+                success = await send_teaser_report_email(
+                    to_email=real_email,
+                    company_name=teaser.get("company_name", "Your Company"),
+                    score=teaser["ai_readiness_score"],
+                    findings=teaser["revealed_findings"],
+                    session_id=session_id
+                )
+                if success:
+                    update_data["teaser_sent_at"] = datetime.utcnow().isoformat()
+                    email_sent = True
+            except Exception as e:
+                logger.error(f"Failed to send teaser email: {e}")
+
+        await supabase.table("quiz_sessions").update(update_data).eq(
+            "id", session_id
+        ).execute()
+
+        logger.info(f"Generated teaser for session {session_id}")
+
+        return {
+            "success": True,
+            "teaser": teaser,
+            "email_sent": email_sent,
+        }
+
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"Generate teaser error: {e}")
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail="Failed to generate teaser report"
         )

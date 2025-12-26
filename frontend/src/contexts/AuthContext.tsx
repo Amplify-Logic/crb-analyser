@@ -210,4 +210,34 @@ export const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children }) => {
   return isAuthenticated ? <>{children}</> : null;
 };
 
+// Anonymous Route component - redirects logged-in users to dashboard
+interface AnonymousRouteProps {
+  children: React.ReactNode;
+  redirectTo?: string;
+}
+
+export const AnonymousRoute: React.FC<AnonymousRouteProps> = ({
+  children,
+  redirectTo = '/dashboard'
+}) => {
+  const { isAuthenticated, loading } = useAuth();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (!loading && isAuthenticated) {
+      navigate(redirectTo, { replace: true });
+    }
+  }, [isAuthenticated, loading, navigate, redirectTo]);
+
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary-600"></div>
+      </div>
+    );
+  }
+
+  return !isAuthenticated ? <>{children}</> : null;
+};
+
 export default AuthContext;

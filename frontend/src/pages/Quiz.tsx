@@ -69,7 +69,24 @@ interface ResearchResult {
   }
 }
 
-type QuizPhase = 'website' | 'researching' | 'findings' | 'email_capture' | 'questions' | 'complete'
+type QuizPhase = 'website' | 'researching' | 'findings' | 'teaser' | 'pricing' | 'email_capture' | 'questions' | 'complete'
+
+interface TeaserReport {
+  ai_readiness_score: number
+  score_breakdown: Record<string, { score: number; max: number; factors: string[] }>
+  score_interpretation: { level: string; summary: string; recommendation: string }
+  revealed_findings: Array<{
+    title: string
+    category: string
+    summary: string
+    impact: string
+    roi_estimate?: { min: number; max: number; currency: string }
+  }>
+  blurred_findings: Array<{ title: string; category: string; blurred: boolean }>
+  total_findings_available: number
+  company_name: string
+  industry: string
+}
 
 // ============================================================================
 // Component
@@ -104,6 +121,10 @@ export default function Quiz() {
 
   // Knowledge completeness
   const [knowledgeScore, setKnowledgeScore] = useState(0)
+
+  // Teaser report state
+  const [teaserReport, setTeaserReport] = useState<TeaserReport | null>(null)
+  const [teaserLoading, setTeaserLoading] = useState(false)
 
   // ============================================================================
   // Helper Functions (defined before useEffect that uses them)
@@ -401,6 +422,52 @@ export default function Quiz() {
       }
     }
   }, [])
+
+  // ============================================================================
+  // Teaser Report Generation
+  // ============================================================================
+
+  const fetchTeaserReport = async () => {
+    if (!sessionId) return
+
+    setTeaserLoading(true)
+    try {
+      const response = await fetch(`${API_BASE_URL}/api/quiz/sessions/${sessionId}/teaser`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({}),
+      })
+
+      if (response.ok) {
+        const data = await response.json()
+        setTeaserReport(data.teaser)
+        setPhase('teaser')
+      } else {
+        console.error('Failed to fetch teaser report')
+        // Fall back to pricing without teaser
+        setPhase('pricing')
+      }
+    } catch (error) {
+      console.error('Teaser fetch error:', error)
+      setPhase('pricing')
+    } finally {
+      setTeaserLoading(false)
+    }
+  }
+
+  const handleTierSelect = (tier: 'report_only' | 'report_plus_call') => {
+    // Store session data for checkout
+    sessionStorage.setItem('quizSessionId', sessionId || '')
+    sessionStorage.setItem('selectedTier', tier)
+    sessionStorage.setItem('companyName', companyName)
+    if (researchResult) {
+      sessionStorage.setItem('companyProfile', JSON.stringify(researchResult.company_profile))
+    }
+
+    // Navigate to checkout with tier
+    const tierParam = tier === 'report_only' ? 'report' : 'report_plus_call'
+    navigate(`/checkout?tier=${tierParam}&session_id=${sessionId}`)
+  }
 
   // ============================================================================
   // Question Handling
@@ -945,22 +1012,348 @@ export default function Quiz() {
                 </div>
               </div>
 
-              {/* Natural CTA - Continue to get report */}
+              {/* Natural CTA - Continue to teaser */}
               <div className="text-center">
                 <p className="text-gray-600 mb-2">
-                  Ready to get your personalized AI roadmap?
+                  Ready to see your AI Readiness Score?
                 </p>
                 <p className="text-sm text-gray-500 mb-6">
-                  Enter your email to save your progress and continue
+                  Get your personalized score and preview findings
                 </p>
                 <button
-                  onClick={() => setPhase('email_capture')}
-                  className="px-8 py-4 bg-primary-600 text-white font-semibold rounded-xl hover:bg-primary-700 transition shadow-lg shadow-primary-600/25 text-lg flex items-center gap-3 mx-auto"
+                  onClick={fetchTeaserReport}
+                  disabled={teaserLoading}
+                  className="px-8 py-4 bg-primary-600 text-white font-semibold rounded-xl hover:bg-primary-700 transition shadow-lg shadow-primary-600/25 text-lg flex items-center gap-3 mx-auto disabled:opacity-50"
                 >
-                  Continue to Full Analysis
-                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
-                  </svg>
+                  {teaserLoading ? (
+                    <>
+                      <svg className="animate-spin w-5 h-5" fill="none" viewBox="0 0 24 24">
+                        <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                        <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                      </svg>
+                      Generating Your Score...
+                    </>
+                  ) : (
+                    <>
+                      See My AI Readiness Score
+                      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                      </svg>
+                    </>
+                  )}
+                </button>
+              </div>
+            </motion.div>
+          </div>
+        </div>
+      </div>
+    )
+  }
+
+  // ============================================================================
+  // Render: Teaser Phase (AI Readiness Score + 2 Findings)
+  // ============================================================================
+
+  if (phase === 'teaser' && teaserReport) {
+    const score = teaserReport.ai_readiness_score
+    const scoreColor = score >= 70 ? 'text-green-600' : score >= 40 ? 'text-yellow-600' : 'text-red-600'
+    const scoreBgColor = score >= 70 ? 'from-green-500 to-emerald-600' : score >= 40 ? 'from-yellow-500 to-orange-500' : 'from-red-500 to-rose-600'
+
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-gray-50 to-primary-50">
+        <nav className="fixed top-0 left-0 right-0 z-50 bg-white/80 backdrop-blur-md border-b border-gray-100">
+          <div className="max-w-6xl mx-auto px-4 py-4">
+            <Link to="/" className="text-xl font-bold text-gray-900">
+              CRB<span className="text-primary-600">Analyser</span>
+            </Link>
+          </div>
+        </nav>
+
+        <div className="pt-24 pb-20 px-4">
+          <div className="max-w-3xl mx-auto">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+            >
+              {/* Score Header */}
+              <div className="text-center mb-8">
+                <h1 className="text-2xl font-bold text-gray-900 mb-4">
+                  Your AI Readiness Score
+                </h1>
+
+                {/* Big Score Circle */}
+                <div className={`inline-flex items-center justify-center w-40 h-40 rounded-full bg-gradient-to-br ${scoreBgColor} shadow-2xl mb-4`}>
+                  <div className="bg-white rounded-full w-32 h-32 flex items-center justify-center">
+                    <span className={`text-5xl font-bold ${scoreColor}`}>{score}</span>
+                  </div>
+                </div>
+
+                <p className={`text-xl font-semibold ${scoreColor} mb-2`}>
+                  {teaserReport.score_interpretation.level}
+                </p>
+                <p className="text-gray-600 max-w-md mx-auto">
+                  {teaserReport.score_interpretation.summary}
+                </p>
+              </div>
+
+              {/* Score Breakdown */}
+              <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100 mb-6">
+                <h3 className="font-semibold text-gray-900 mb-4">Score Breakdown</h3>
+                <div className="space-y-4">
+                  {Object.entries(teaserReport.score_breakdown).map(([key, data]) => (
+                    <div key={key}>
+                      <div className="flex justify-between text-sm mb-1">
+                        <span className="text-gray-700 capitalize">{key.replace(/_/g, ' ')}</span>
+                        <span className="font-medium text-gray-900">{data.score}/{data.max}</span>
+                      </div>
+                      <div className="w-full bg-gray-200 rounded-full h-2">
+                        <div
+                          className="bg-primary-600 h-2 rounded-full transition-all"
+                          style={{ width: `${(data.score / data.max) * 100}%` }}
+                        />
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* Revealed Findings */}
+              <div className="mb-6">
+                <h3 className="font-semibold text-gray-900 mb-4">Your Top Opportunities</h3>
+                <div className="space-y-4">
+                  {teaserReport.revealed_findings.map((finding, index) => (
+                    <motion.div
+                      key={index}
+                      initial={{ opacity: 0, y: 10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ delay: index * 0.1 }}
+                      className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100"
+                    >
+                      <div className="flex items-start justify-between mb-3">
+                        <h4 className="font-semibold text-gray-900">{finding.title}</h4>
+                        <span className={`px-2 py-1 text-xs font-medium rounded-full ${
+                          finding.impact === 'high' ? 'bg-green-100 text-green-700' :
+                          finding.impact === 'medium' ? 'bg-yellow-100 text-yellow-700' :
+                          'bg-gray-100 text-gray-700'
+                        }`}>
+                          {finding.impact} impact
+                        </span>
+                      </div>
+                      <p className="text-gray-600 mb-3">{finding.summary}</p>
+                      {finding.roi_estimate && (
+                        <div className="flex items-center gap-2 text-green-600 font-semibold">
+                          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                          </svg>
+                          Potential: €{finding.roi_estimate.min.toLocaleString()} - €{finding.roi_estimate.max.toLocaleString()}/year
+                        </div>
+                      )}
+                    </motion.div>
+                  ))}
+                </div>
+              </div>
+
+              {/* Blurred Findings Preview */}
+              {teaserReport.blurred_findings.length > 0 && (
+                <div className="mb-8">
+                  <h3 className="font-semibold text-gray-900 mb-4 flex items-center gap-2">
+                    <svg className="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                    </svg>
+                    {teaserReport.blurred_findings.length} More Findings in Full Report
+                  </h3>
+                  <div className="space-y-3">
+                    {teaserReport.blurred_findings.map((finding, index) => (
+                      <div
+                        key={index}
+                        className="bg-gray-100 rounded-xl p-4 relative overflow-hidden"
+                      >
+                        <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/60 to-transparent backdrop-blur-sm" />
+                        <div className="relative blur-[2px] select-none">
+                          <h4 className="font-medium text-gray-700">{finding.title}</h4>
+                          <p className="text-sm text-gray-500 mt-1">Detailed analysis with ROI calculations...</p>
+                        </div>
+                        <div className="absolute inset-0 flex items-center justify-center">
+                          <span className="bg-primary-600 text-white text-xs font-medium px-3 py-1 rounded-full">
+                            Unlock in full report
+                          </span>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {/* CTA to Pricing */}
+              <div className="text-center">
+                <p className="text-gray-600 mb-4">
+                  Unlock your complete report with {teaserReport.total_findings_available}+ findings, implementation roadmap, and vendor recommendations.
+                </p>
+                <button
+                  onClick={() => setPhase('pricing')}
+                  className="px-8 py-4 bg-primary-600 text-white font-semibold rounded-xl hover:bg-primary-700 transition shadow-lg shadow-primary-600/25 text-lg"
+                >
+                  Get Full Report →
+                </button>
+              </div>
+            </motion.div>
+          </div>
+        </div>
+      </div>
+    )
+  }
+
+  // ============================================================================
+  // Render: Pricing Phase
+  // ============================================================================
+
+  if (phase === 'pricing') {
+    const reportOnlyFeatures = [
+      '15-20 AI opportunities analyzed',
+      'Honest verdicts: Go / Caution / Wait / No',
+      'Real vendor pricing (not guesses)',
+      'ROI calculations with visible assumptions',
+      'Three options per recommendation',
+      '"Don\'t do this" section included',
+      '90-minute AI workshop interview',
+    ]
+
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-gray-50 to-primary-50">
+        <nav className="fixed top-0 left-0 right-0 z-50 bg-white/80 backdrop-blur-md border-b border-gray-100">
+          <div className="max-w-6xl mx-auto px-4 py-4">
+            <Link to="/" className="text-xl font-bold text-gray-900">
+              CRB<span className="text-primary-600">Analyser</span>
+            </Link>
+          </div>
+        </nav>
+
+        <div className="pt-24 pb-20 px-4">
+          <div className="max-w-4xl mx-auto">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+            >
+              {/* Header */}
+              <div className="text-center mb-12">
+                <h1 className="text-3xl font-bold text-gray-900 mb-4">
+                  Choose Your Report Package
+                </h1>
+                <p className="text-lg text-gray-600">
+                  Both options include the full AI analysis. Add expert guidance if you need it.
+                </p>
+              </div>
+
+              {/* Pricing Cards */}
+              <div className="grid md:grid-cols-2 gap-8 max-w-3xl mx-auto">
+                {/* Tier 1: Report Only */}
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.1 }}
+                  className="bg-white rounded-3xl p-8 shadow-lg border border-gray-200"
+                >
+                  <div className="text-center mb-6">
+                    <div className="inline-block px-4 py-1 bg-gray-100 text-gray-700 rounded-full text-sm font-medium mb-4">
+                      CRB Report
+                    </div>
+                    <div className="flex items-baseline justify-center gap-2 mb-2">
+                      <span className="text-4xl font-bold text-gray-900">€147</span>
+                      <span className="text-gray-500">one-time</span>
+                    </div>
+                    <p className="text-gray-500 text-sm">
+                      Self-service analysis
+                    </p>
+                  </div>
+
+                  <ul className="space-y-3 mb-8">
+                    {reportOnlyFeatures.map((feature, index) => (
+                      <li key={index} className="flex items-center gap-3">
+                        <svg className="w-5 h-5 text-green-500 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                        </svg>
+                        <span className="text-gray-700 text-sm">{feature}</span>
+                      </li>
+                    ))}
+                  </ul>
+
+                  <button
+                    onClick={() => handleTierSelect('report_only')}
+                    className="w-full py-3 border-2 border-gray-300 text-gray-700 font-semibold rounded-xl hover:border-gray-400 hover:bg-gray-50 transition text-lg"
+                  >
+                    Get Report Only
+                  </button>
+                </motion.div>
+
+                {/* Tier 2: Report + Call (Recommended) */}
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.2 }}
+                  className="bg-white rounded-3xl p-8 shadow-xl border-2 border-primary-500 relative"
+                >
+                  <div className="absolute -top-4 left-1/2 transform -translate-x-1/2">
+                    <span className="bg-primary-600 text-white text-sm font-medium px-4 py-1 rounded-full">
+                      Most Popular
+                    </span>
+                  </div>
+
+                  <div className="text-center mb-6">
+                    <div className="inline-block px-4 py-1 bg-primary-100 text-primary-700 rounded-full text-sm font-medium mb-4">
+                      CRB Report + Strategy Call
+                    </div>
+                    <div className="flex items-baseline justify-center gap-2 mb-2">
+                      <span className="text-4xl font-bold text-gray-900">€497</span>
+                      <span className="text-gray-500">one-time</span>
+                    </div>
+                    <p className="text-gray-500 text-sm">
+                      Expert-guided analysis
+                    </p>
+                  </div>
+
+                  <ul className="space-y-3 mb-8">
+                    {reportOnlyFeatures.map((feature, index) => (
+                      <li key={index} className="flex items-center gap-3">
+                        <svg className="w-5 h-5 text-green-500 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                        </svg>
+                        <span className="text-gray-700 text-sm">{feature}</span>
+                      </li>
+                    ))}
+                    <li className="flex items-center gap-3 pt-2 border-t border-gray-100">
+                      <svg className="w-5 h-5 text-primary-600 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                      </svg>
+                      <span className="text-gray-900 font-medium text-sm">60-minute strategy call with expert</span>
+                    </li>
+                    <li className="flex items-center gap-3">
+                      <svg className="w-5 h-5 text-primary-600 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                      </svg>
+                      <span className="text-gray-900 font-medium text-sm">Live Q&A on your specific situation</span>
+                    </li>
+                  </ul>
+
+                  <button
+                    onClick={() => handleTierSelect('report_plus_call')}
+                    className="w-full py-3 bg-primary-600 text-white font-semibold rounded-xl hover:bg-primary-700 transition shadow-lg shadow-primary-600/25 text-lg"
+                  >
+                    Get Report + Strategy Call
+                  </button>
+                </motion.div>
+              </div>
+
+              <p className="text-center text-sm text-gray-500 mt-8">
+                14-day money-back guarantee on both options.
+              </p>
+
+              {/* Back button */}
+              <div className="text-center mt-6">
+                <button
+                  onClick={() => setPhase('teaser')}
+                  className="text-gray-500 hover:text-gray-700 text-sm"
+                >
+                  ← Back to your score
                 </button>
               </div>
             </motion.div>

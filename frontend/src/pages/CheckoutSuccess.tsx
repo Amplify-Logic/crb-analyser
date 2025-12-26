@@ -6,11 +6,14 @@ export default function CheckoutSuccess() {
   const [searchParams] = useSearchParams()
   const navigate = useNavigate()
   const stripeSessionId = searchParams.get('session_id')
-  const quizSessionId = sessionStorage.getItem('quizSessionId')
+  const selectedTier = sessionStorage.getItem('selectedTier') || 'report_only'
+  const companyName = sessionStorage.getItem('companyName') || 'Your Company'
 
   const [isVerifying, setIsVerifying] = useState(true)
   const [isVerified, setIsVerified] = useState(false)
   const [error, setError] = useState<string | null>(null)
+
+  const hasStrategyCall = selectedTier === 'report_plus_call'
 
   useEffect(() => {
     const verifySession = async () => {
@@ -27,7 +30,11 @@ export default function CheckoutSuccess() {
         setIsVerified(true)
         setIsVerifying(false)
 
-        // Keep session data - we need it for the interview
+        // Clear quiz session data since account is now created
+        sessionStorage.removeItem('quizSessionId')
+        sessionStorage.removeItem('selectedTier')
+        sessionStorage.removeItem('companyProfile')
+        // Keep companyName for display
       } catch (err: unknown) {
         console.error('Verification error:', err)
         // Still show success - webhook handles the real verification
@@ -39,8 +46,8 @@ export default function CheckoutSuccess() {
     verifySession()
   }, [stripeSessionId])
 
-  const handleStartInterview = () => {
-    navigate(`/interview${quizSessionId ? `?session_id=${quizSessionId}` : ''}`)
+  const handleGoToLogin = () => {
+    navigate('/login')
   }
 
   if (isVerifying) {
@@ -111,78 +118,106 @@ export default function CheckoutSuccess() {
                 </svg>
               </motion.div>
 
-              <h1 className="text-3xl font-bold text-gray-900 mb-2">Payment Successful!</h1>
-              <p className="text-lg text-gray-600 mb-8">
-                You're now ready to start your in-depth AI workshop interview.
+              <h1 className="text-3xl font-bold text-gray-900 mb-2">Welcome, {companyName}!</h1>
+              <p className="text-lg text-gray-600 mb-4">
+                Your payment was successful and your account has been created.
               </p>
+
+              {/* Email Credentials Notice */}
+              <div className="bg-blue-50 border border-blue-200 rounded-xl p-4 mb-6 text-left">
+                <div className="flex items-start gap-3">
+                  <svg className="w-6 h-6 text-blue-600 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                  </svg>
+                  <div>
+                    <h4 className="font-semibold text-blue-900">Check your email</h4>
+                    <p className="text-sm text-blue-800 mt-1">
+                      We've sent your login credentials to your email address. Use them to access your dashboard and start your workshop.
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              {/* Strategy Call Badge (if applicable) */}
+              {hasStrategyCall && (
+                <div className="bg-amber-50 border border-amber-200 rounded-xl p-4 mb-6 text-left">
+                  <div className="flex items-start gap-3">
+                    <svg className="w-6 h-6 text-amber-600 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                    </svg>
+                    <div>
+                      <h4 className="font-semibold text-amber-900">Strategy Call Included</h4>
+                      <p className="text-sm text-amber-800 mt-1">
+                        After your workshop is complete and report is ready, you'll receive a link to book your 60-minute strategy call with our founders.
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              )}
 
               {/* What's next */}
               <div className="bg-gradient-to-br from-primary-50 to-purple-50 rounded-xl p-6 text-left mb-8">
                 <h3 className="font-semibold text-gray-900 mb-4 flex items-center gap-2">
                   <svg className="w-5 h-5 text-primary-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4" />
                   </svg>
-                  Your AI Workshop Interview
+                  Next Steps
                 </h3>
-                <p className="text-gray-600 text-sm mb-4">
-                  This is a conversational interview with our AI analyst. You can type your answers
-                  or speak them - just click the microphone button.
-                </p>
                 <div className="space-y-3">
                   <div className="flex items-center gap-3 text-sm">
-                    <div className="w-8 h-8 bg-primary-100 rounded-full flex items-center justify-center">
-                      <svg className="w-4 h-4 text-primary-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-                      </svg>
+                    <div className="w-8 h-8 bg-primary-600 text-white rounded-full flex items-center justify-center font-semibold">
+                      1
                     </div>
-                    <span className="text-gray-700">Takes about 60-90 minutes (take breaks anytime)</span>
+                    <span className="text-gray-700">Check your email for login credentials</span>
                   </div>
                   <div className="flex items-center gap-3 text-sm">
-                    <div className="w-8 h-8 bg-primary-100 rounded-full flex items-center justify-center">
-                      <svg className="w-4 h-4 text-primary-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z" />
-                      </svg>
+                    <div className="w-8 h-8 bg-primary-100 text-primary-700 rounded-full flex items-center justify-center font-semibold">
+                      2
                     </div>
-                    <span className="text-gray-700">Type or speak your answers</span>
+                    <span className="text-gray-700">Log in and complete the 90-minute workshop</span>
                   </div>
                   <div className="flex items-center gap-3 text-sm">
-                    <div className="w-8 h-8 bg-primary-100 rounded-full flex items-center justify-center">
-                      <svg className="w-4 h-4 text-primary-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
-                      </svg>
+                    <div className="w-8 h-8 bg-primary-100 text-primary-700 rounded-full flex items-center justify-center font-semibold">
+                      3
                     </div>
-                    <span className="text-gray-700">Your data is secure and confidential</span>
+                    <span className="text-gray-700">Our team reviews your report (24-48 hours)</span>
+                  </div>
+                  <div className="flex items-center gap-3 text-sm">
+                    <div className="w-8 h-8 bg-primary-100 text-primary-700 rounded-full flex items-center justify-center font-semibold">
+                      4
+                    </div>
+                    <span className="text-gray-700">Get your personalized AI roadmap</span>
                   </div>
                 </div>
               </div>
 
               {/* CTA Button */}
               <button
-                onClick={handleStartInterview}
+                onClick={handleGoToLogin}
                 className="w-full py-4 bg-primary-600 text-white font-semibold rounded-xl hover:bg-primary-700 transition shadow-lg shadow-primary-600/25 text-lg flex items-center justify-center gap-2"
               >
-                Start Your Interview
+                Go to Login
                 <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
                 </svg>
               </button>
 
               <p className="text-sm text-gray-500 mt-4">
-                Tip: Find a quiet space where you can focus without interruption.
+                Didn't receive the email? Check your spam folder or contact support.
               </p>
             </div>
 
-            {/* Alternative: Skip interview */}
+            {/* Support */}
             <div className="text-center">
               <p className="text-gray-600 mb-3">
-                Not ready yet? We can still generate a report based on your quiz answers.
+                Questions? We're here to help.
               </p>
-              <Link
-                to="/"
-                className="text-gray-500 hover:text-gray-700 underline text-sm"
+              <a
+                href="mailto:support@crb-analyser.com"
+                className="text-primary-600 hover:text-primary-700 font-medium"
               >
-                Skip interview (your report will be less personalized)
-              </Link>
+                Contact Support
+              </a>
             </div>
           </motion.div>
         </div>
