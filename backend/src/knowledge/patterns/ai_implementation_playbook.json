@@ -262,5 +262,617 @@
       "with_formal_strategy": "80% success rate",
       "without_strategy": "37% success rate"
     }
+  },
+
+  "platform_evolution": {
+    "meta": {
+      "title": "From Point Solution to Operating System",
+      "source": "Video: 'The Boring AI Niches Making Millionaires in 2026' (Ben, 2025)",
+      "added": "2025-12-26"
+    },
+    "the_opportunity": {
+      "insight": "AI turns previously 'too small' niches into massive opportunities by increasing LTV 10-15x over traditional SaaS",
+      "example": {
+        "traditional": "Eye care clinic CRM at €100/month = €22.8M TAM (too small)",
+        "ai_native": "Barti AI operating system at €1,500/month = €342M TAM (raised $12M Series A)"
+      },
+      "why_now": "AI democratizes software building - time to platform reduced from 5-10 years to 1-2 years"
+    },
+    "evolution_stages": [
+      {
+        "stage": 1,
+        "name": "Function-Specific AI",
+        "description": "Solve ONE high-ROI problem for a specific niche",
+        "examples": [
+          "AI voice answering for plumbers",
+          "AI candidate screening for recruiters",
+          "AI appointment booking for dental"
+        ],
+        "pricing": "€200-500/month or project-based",
+        "focus": "Learn the industry, validate the pain, get paid while learning",
+        "our_recommendation_trigger": "Client needs quick win, limited budget"
+      },
+      {
+        "stage": 2,
+        "name": "Integrated Workflows",
+        "description": "Connect multiple functions into automated workflows",
+        "examples": [
+          "AI booking → automated reminders → post-visit review request → follow-up scheduling",
+          "AI candidate screen → interview scheduling → feedback collection → offer generation"
+        ],
+        "pricing": "€500-1,000/month",
+        "focus": "Reduce manual touchpoints, increase stickiness, capture more data",
+        "our_recommendation_trigger": "Client wants efficiency gains across multiple areas"
+      },
+      {
+        "stage": 3,
+        "name": "Vertical Operating System",
+        "description": "Become THE platform for the niche - CRM, operations, marketing, AI integrated",
+        "examples": [
+          "Barti (eye care clinics)",
+          "Nautilus (car washes)",
+          "ServiceTitan (home services)"
+        ],
+        "pricing": "€1,000-2,500/month",
+        "focus": "Own the data, own the relationship, become indispensable",
+        "our_recommendation_trigger": "Client wants competitive advantage, not just efficiency"
+      }
+    ],
+    "when_to_recommend_platform_play": {
+      "good_candidates": [
+        "Agencies looking to productize (recruiting, marketing, staffing)",
+        "Businesses in niches with no dominant vertical software",
+        "Companies with competitive advantage aspirations",
+        "Technical founders or teams that can build",
+        "Niches with <50,000 potential customers (too small for big players)"
+      ],
+      "not_good_candidates": [
+        "Pure efficiency seekers (recommend existing tools)",
+        "Niches with strong incumbents (ServiceTitan for home services)",
+        "Non-technical teams without build resources",
+        "Companies needing immediate value (recommend SaaS)"
+      ]
+    },
+    "our_role_in_platform_evolution": {
+      "stage_1_support": "Identify highest-ROI automation opportunities",
+      "stage_2_support": "Map workflow integration opportunities, recommend build vs buy",
+      "stage_3_support": "Architecture guidance, competitive analysis, vendor vs build decision"
+    },
+    "yc_examples_reference": "See vertical_ai_saas_examples.json for detailed company examples"
+  },
+
+  "jevons_effect": {
+    "meta": {
+      "title": "The Jevons Effect - Why AI Creates More Demand",
+      "source": "Video: 'The Boring AI Niches Making Millionaires in 2026' (Ben, 2025)",
+      "added": "2025-12-26"
+    },
+    "concept": {
+      "definition": "When efficiency increases, costs drop, demand often INCREASES - leading to more capacity utilization, not less",
+      "wikipedia": "https://en.wikipedia.org/wiki/Jevons_paradox",
+      "implication_for_ai": "AI isn't just about cutting costs - it's about SCALING CAPACITY which can grow revenue"
+    },
+    "historical_examples": [
+      {
+        "era": "Containerization",
+        "what_happened": "Automated container loading replaced dock workers",
+        "jevons_result": "Cheaper shipping → explosion in global trade → MASSIVE increase in logistics and warehousing jobs"
+      },
+      {
+        "era": "Cloud Computing",
+        "what_happened": "Cloud eliminated on-prem server management jobs",
+        "jevons_result": "Cheaper compute → explosion of web apps → MASSIVE increase in DevOps, cloud engineering jobs"
+      }
+    ],
+    "ai_examples": [
+      {
+        "domain": "AI Radiology",
+        "efficiency": "AI reads scans faster and more accurately than humans alone",
+        "jevons_result": "Lower cost per scan → more people get preventive scans → MORE radiologists needed for edge cases"
+      },
+      {
+        "domain": "AI Receptionist (Home Services)",
+        "efficiency": "24/7 call handling, instant booking, no missed calls",
+        "jevons_result": "Capture 30% more leads → book more jobs → need MORE technicians to handle volume"
+      },
+      {
+        "domain": "AI Candidate Screening (Recruiting)",
+        "efficiency": "Screen 10x more candidates in same time",
+        "jevons_result": "Faster placements → handle more job orders → MORE revenue → may need MORE recruiters for final interviews"
+      }
+    ],
+    "how_to_use_in_recommendations": {
+      "reframe_the_narrative": "Don't just talk about cost savings - talk about capacity unlocked and revenue potential",
+      "show_two_roi_scenarios": {
+        "conservative": "Cost savings only (traditional ROI)",
+        "with_growth": "Cost savings + demand expansion revenue (Jevons Effect)"
+      },
+      "industry_defaults": "See INDUSTRY_DEMAND_EXPANSION_DEFAULTS in backend/src/models/roi_calculator.py"
+    }
+  },
+
+  "emerging_protocols": {
+    "meta": {
+      "title": "Emerging AI Protocols to Watch",
+      "source": "Liam Ottley Podcast - 2024 Year in Review (Dec 2025)",
+      "added": "2025-12-26"
+    },
+    "mcp": {
+      "name": "Model Context Protocol (MCP)",
+      "owner": "Anthropic (donated to Linux Foundation Dec 2025)",
+      "purpose": "Standardized way for AI models to access external tools and services",
+      "status": "Widely adopted but being superseded",
+      "limitations": [
+        "High context/token usage - can consume half context window with 4-5 servers",
+        "Security vulnerabilities with remote servers",
+        "Slow startup (npx/uvx commands can take 30+ seconds)",
+        "Not suitable for real-time voice AI applications"
+      ],
+      "our_recommendation": "Use for prototyping, but consider direct API integration for production"
+    },
+    "a2a": {
+      "name": "Agent-to-Agent Protocol (A2A)",
+      "owner": "Google",
+      "purpose": "Standardized way for AI agents to communicate with each other",
+      "status": "Emerging - watch closely for 2026",
+      "how_it_works": {
+        "concept": "Agents can send tasks to other agents and receive results asynchronously",
+        "difference_from_mcp": "MCP connects agents to tools; A2A connects agents to agents",
+        "streaming": "Uses streaming so no timeout issues - agents can take as long as needed",
+        "artifacts": "Agents can request information multiple times during task execution"
+      },
+      "future_vision": {
+        "example": "Your agent talks to Zapier's agent, which authenticates and executes tasks across their ecosystem",
+        "business_implication": "Companies may need 'agent profiles' like they have Google Business Profiles",
+        "timeline": "2-3 years before mainstream adoption"
+      },
+      "our_recommendation": "Monitor but don't build on it yet. Focus on voice/phone as current agent-to-business bridge."
+    }
+  },
+
+  "custom_solution_guidance": {
+    "meta": {
+      "title": "Building Custom AI Solutions - Practical Guidance",
+      "source": "Liam Ottley Podcast insights + field experience",
+      "added": "2025-12-26"
+    },
+    "vibe_coding_reality": {
+      "what_it_is": "Using AI coding assistants (Claude Code, Cursor, Bolt, Lovable) to build apps with minimal coding knowledge",
+      "coined_by": "Andrej Karpathy (February 2025)",
+      "the_opportunity": "Anyone with an idea can now build a working prototype without being a developer",
+      "the_reality": [
+        "First version comes out quickly and easily",
+        "Iteration and maintenance is where challenges begin",
+        "Security is often completely overlooked",
+        "Production-grade apps still need engineering oversight"
+      ]
+    },
+    "claude_code_for_non_coders": {
+      "insight": "Claude Code is becoming a general-purpose automation tool, not just for developers",
+      "use_cases_beyond_coding": [
+        "Research and document creation",
+        "File management and organization",
+        "Data processing and analysis",
+        "Workflow automation (creating scripts without understanding them)",
+        "Content pipeline management"
+      ],
+      "example": "YouTuber managing entire content pipeline - thumbnails, research, scheduling - all through Claude Code without opening a single code file",
+      "recommendation_for_clients": "Consider Claude Code for power users who want automation without learning to code"
+    },
+    "security_checklist_for_custom_builds": {
+      "critical_warning": "Vibe coding without security awareness leads to disasters",
+      "real_incidents": [
+        "API keys committed to public repositories",
+        "Production database access given to AI tools",
+        "Authentication flows broken by non-technical changes",
+        "Sensitive data exposed through misconfigured endpoints"
+      ],
+      "mandatory_checklist": [
+        {
+          "item": "API Key Security",
+          "requirement": "All API keys in environment variables, NEVER in code",
+          "check": "Search codebase for any hardcoded keys before deployment"
+        },
+        {
+          "item": "Database Access",
+          "requirement": "Use read-only credentials for AI tools during development",
+          "check": "Verify AI tools cannot access production data"
+        },
+        {
+          "item": "Authentication",
+          "requirement": "Use established auth providers (Supabase, Auth0, Clerk)",
+          "check": "Never let AI modify auth code without expert review"
+        },
+        {
+          "item": "Input Validation",
+          "requirement": "Validate all user inputs server-side",
+          "check": "Test with malicious inputs before launch"
+        },
+        {
+          "item": "HTTPS Only",
+          "requirement": "All traffic encrypted",
+          "check": "Verify no HTTP endpoints exist"
+        },
+        {
+          "item": "Rate Limiting",
+          "requirement": "Protect APIs from abuse",
+          "check": "Test that rate limits actually work"
+        },
+        {
+          "item": "Error Handling",
+          "requirement": "No sensitive data in error messages",
+          "check": "Trigger errors and verify safe responses"
+        },
+        {
+          "item": "Dependency Audit",
+          "requirement": "Check for known vulnerabilities",
+          "check": "Run npm audit / pip audit before deployment"
+        }
+      ],
+      "when_to_require_expert_review": [
+        "Any app handling customer data",
+        "Any app processing payments",
+        "Any app in healthcare (HIPAA)",
+        "Any app with user authentication",
+        "Any app connecting to production databases"
+      ]
+    },
+    "saas_disruption_thesis": {
+      "insight": "Traditional SaaS is being disrupted by tailored AI solutions",
+      "quote": "This will be the couple years where SaaS becomes cooked... everything will be tailored.",
+      "what_this_means": [
+        "Generic CRM → Company-specific CRM built with AI",
+        "One-size-fits-all → Apps 'good enough' for one company",
+        "Monthly subscriptions → One-time builds with lower ongoing costs"
+      ],
+      "implication_for_recommendations": "Custom solutions are increasingly viable even for smaller clients",
+      "caveat": "Still need ongoing maintenance and iteration - not truly 'set and forget'"
+    },
+    "product_management_gap": {
+      "insight": "Building is now easy; iterating based on user feedback is the new bottleneck",
+      "the_problem": [
+        "Anyone can build v1 quickly",
+        "Understanding what users actually need is still hard",
+        "Getting and processing user feedback requires systems",
+        "Iterating effectively requires product thinking, not just coding"
+      ],
+      "opportunity_for_us": "Help clients set up feedback loops and iteration processes for their custom builds",
+      "tools_to_recommend": [
+        "Hotjar / FullStory for user behavior",
+        "Simple feedback widgets",
+        "Usage analytics dashboards",
+        "Regular user interview processes"
+      ]
+    }
+  },
+
+  "enterprise_ai_market_context": {
+    "meta": {
+      "title": "Enterprise AI Adoption - Market Context (Q4 2025)",
+      "source": "Nathaniel Whittemore (AI Daily Brief / Superintelligent) - ROI Study + KPMG/McKinsey data",
+      "added": "2025-12-26"
+    },
+    "adoption_stats": {
+      "general_adoption": "Pretty much everyone using AI at least a little, increasingly a lot",
+      "coding_inflection": "2024 was the year of coding/software engineering adoption - huge uptick",
+      "non_tech_coding": "Other parts of organization now thinking about how they can build with code"
+    },
+    "agent_adoption": {
+      "source": "KPMG Quarterly Pulse Survey (companies over $1B revenue)",
+      "stat": "Production agents (not pilots): 11% in Q1 2024 → 42% in Q3 2024",
+      "insight": "Moved through pilot phase faster than expected",
+      "shift": "Now seeing emphasis on human-agent interaction, upskilling, decreased resistance"
+    },
+    "scale_challenges": {
+      "source": "McKinsey State of AI Study",
+      "fully_at_scale": "Only 7% of organizations",
+      "still_experimenting": "62% still in pilot/experimental phase",
+      "big_vs_small": "Big organizations ahead of small ones in scaling (counterintuitive)"
+    },
+    "roi_expectations": {
+      "source": "KPMG CEO Survey",
+      "2024_expectations": {
+        "1_to_3_years": "20%",
+        "3_to_5_years": "63%",
+        "more_than_5_years": "16%"
+      },
+      "2025_expectations": {
+        "6_months_to_1_year": "19%",
+        "1_to_3_years": "67%",
+        "3_to_5_years": "12%"
+      },
+      "trend": "Massive pull-forward of ROI expectations"
+    },
+    "spend_trends": {
+      "source": "KPMG Pulse Survey",
+      "expected_spend_next_12_months": "Up from $88M (Q4 2023) → $114M (Q1 2024) → $130M (Q3 2024)",
+      "increase_intent": "90%+ of organizations intend to increase AI spend"
+    },
+    "measurement_challenge": {
+      "stat": "78% say traditional impact metrics not keeping up with AI reality",
+      "implication": "Need new frameworks for measuring AI ROI"
+    }
+  },
+
+  "seven_ai_skills_framework": {
+    "meta": {
+      "title": "7 AI Skills Framework - Opportunity Categories",
+      "source": "WeAreNoCode - 7 AI Skills to Learn in 2026 (Christian Peverelli, Dec 2025)",
+      "added": "2025-12-27",
+      "use_case": "Use this framework to communicate AI opportunities to clients in accessible terms"
+    },
+    "the_insight": {
+      "key_message": "You don't need to master all 7 skills - mastering just 1-2 puts you way ahead",
+      "technical_barrier": "None of these require technical skills to start using"
+    },
+    "skills": [
+      {
+        "skill": "AI Coding",
+        "description": "Building websites, landing pages, and small tools without being a developer",
+        "applies_to": "Every department - marketing builds landing pages, ops builds internal tools",
+        "stat_support": {
+          "stat": "60%+ of shipped software in 2026 will be AI generated or AI assisted",
+          "source": "Gartner and McKinsey",
+          "verified_status": "UNVERIFIED"
+        },
+        "tools_by_level": {
+          "no_technical_skills": ["Hostinger", "Base44"],
+          "learning_to_build": ["Lovable", "Bolt", "Replit"],
+          "software_engineers": ["Cursor", "Claude Code", "Windsurf"]
+        },
+        "our_recommendation_trigger": "Client mentions wanting to build internal tools, landing pages, or custom software",
+        "vendors_file": "vendors/dev_tools.json"
+      },
+      {
+        "skill": "AI Sales",
+        "description": "AI-powered prospecting, meeting intelligence, and sales enablement",
+        "stat_support": {
+          "stat": "35-50% higher win rates when using AI (35% with AI features, 50% when completing AI recommendations)",
+          "source": "Gong Labs",
+          "source_url": "https://www.gong.io/resources/labs/we-measured-the-roi-of-ai-in-sales-heres-how-it-really-impacts-your-deals/",
+          "verified_status": "VERIFIED",
+          "verified_date": "2025-12-27"
+        },
+        "time_waste_addressed": {
+          "stat": "Salespeople spend 70%+ of their time on non-selling activities (prospecting, enrichment, research)",
+          "source": "Industry pattern"
+        },
+        "key_tools": ["Outbound", "Fireflies", "Gamma", "Attio"],
+        "workflow_replaced": "LinkedIn Navigator → enrichment tools → email verification → copywriting across 20 tabs",
+        "our_recommendation_trigger": "Client has sales team doing manual prospecting or spending hours on meeting follow-ups",
+        "vendors_file": "vendors/ai_sales_tools.json"
+      },
+      {
+        "skill": "AI Content Creation",
+        "description": "Creating images, videos, and multimedia content with AI assistance",
+        "applies_to": "Marketing, social media, brand content, SEO articles",
+        "key_tools": {
+          "image_generation": ["Midjourney", "DALL-E", "Google ImageFX"],
+          "video_generation": ["Runway", "Google Veo", "Pika"],
+          "video_clipping": ["Opus Clip", "Vidyo.ai"],
+          "video_editing": ["Descript", "CapCut"]
+        },
+        "use_cases": [
+          "Product photo shoots without photographers",
+          "Social media content at scale",
+          "Long video → short clips extraction",
+          "Podcast/interview editing"
+        ],
+        "our_recommendation_trigger": "Client mentions content creation bottlenecks, social media needs, or video repurposing",
+        "vendors_file": "vendors/ai_content_creation.json"
+      },
+      {
+        "skill": "AI Automation",
+        "description": "Automating repetitive tasks with if-this-then-that logic",
+        "stat_support": {
+          "stat": "Repetitive tasks take 30-50% of entire work life",
+          "source": "Industry pattern",
+          "verified_status": "UNVERIFIED"
+        },
+        "key_principle": "If this, then that - triggers and actions connecting existing tools",
+        "key_tools_by_technical_level": {
+          "non_technical": ["Zapier"],
+          "intermediate": ["Make (Integromat)"],
+          "technical": ["n8n"]
+        },
+        "example_automations": [
+          "Form submission → CRM entry → email sequence",
+          "New lead → notify sales rep",
+          "Invoice paid → update spreadsheet → send thank you"
+        ],
+        "our_recommendation_trigger": "Client mentions manual data entry, copy-pasting between tools, or repetitive workflows",
+        "vendors_file": "vendors/automation.json"
+      },
+      {
+        "skill": "AI Agents",
+        "description": "Building autonomous AI that can make decisions and take actions",
+        "key_difference_from_automation": "Agents can be trained with specific information, access tools, and make decisions autonomously - not just follow predefined if-then rules",
+        "key_tools_by_technical_level": {
+          "non_technical": ["Lindy"],
+          "intermediate": ["n8n with AI nodes"],
+          "for_sales_research": ["Outbound"]
+        },
+        "use_cases": [
+          "AI executive assistant that schedules meetings",
+          "Research agent that gathers competitive intel",
+          "Support triage agent that routes and drafts responses"
+        ],
+        "our_recommendation_trigger": "Client needs tasks that require judgment, research, or decision-making - not just triggers",
+        "vendors_file": "vendors/ai_agents.json"
+      },
+      {
+        "skill": "AI Browsers",
+        "description": "AI-native browsers that understand context and take actions",
+        "the_shift": "Not just Google → ChatGPT, but Chrome → AI browsers",
+        "key_tools": ["DIA Browser", "Perplexity Comet", "ChatGPT Atlas"],
+        "capabilities": [
+          "Contextual understanding of what you're working on",
+          "Draft messages based on context",
+          "Take actions on your behalf",
+          "Enhanced research and synthesis"
+        ],
+        "timeline": "2026 prediction: widespread adoption of AI browsers replacing Chrome/Safari",
+        "our_recommendation_trigger": "Power users who live in their browser for research/work - early adopter clients"
+      },
+      {
+        "skill": "AI Decision Support",
+        "description": "Using AI for better business decisions by feeding it context over time",
+        "stat_support": {
+          "stat": "Executives using AI for decision-making make 30-50% faster decisions with more accuracy",
+          "source": "BCG and Deloitte",
+          "verified_status": "UNVERIFIED"
+        },
+        "key_concept": "AI + Memory - feed information over time so AI gets smarter about your specific context",
+        "implementation": [
+          "Upload documentation to teach AI your business",
+          "Regular conversations with updates",
+          "Use AI for strategic decisions (pricing, hiring, expansion)",
+          "Let it learn patterns from your specific situation"
+        ],
+        "key_tools": ["ChatGPT with Memory", "Claude with Projects", "Custom GPTs"],
+        "our_recommendation_trigger": "Client mentions wanting better data-driven decisions or strategic planning support"
+      }
+    ],
+    "how_to_use_in_reports": {
+      "framing": "Present findings using skill categories clients can understand and act on",
+      "example": "Your business would benefit most from AI Sales and AI Automation skills - here's what that looks like..."
+    }
+  },
+
+  "roi_framework": {
+    "meta": {
+      "title": "ROI Categories Framework - From 2,500+ Use Case Study",
+      "source": "Superintelligent ROI Survey (roicervey.ai) - First 2,500 use cases from 1,000+ orgs",
+      "added": "2025-12-26",
+      "caveat": "Self-reported from engaged AI podcast audience - likely more optimistic than average"
+    },
+    "current_roi_reality": {
+      "seeing_modest_roi": "44.3%",
+      "seeing_high_roi": "37.6%",
+      "negative_roi": "Only 5%",
+      "future_expectations": "67% expect high ROI growth next year",
+      "negative_roi_still_optimistic": "53% of negative ROI teams expect high growth"
+    },
+    "eight_roi_categories": {
+      "description": "Framework for categorizing AI ROI - ordered by frequency in study",
+      "categories": [
+        {
+          "rank": 1,
+          "name": "Time Savings",
+          "percentage_of_use_cases": "35%",
+          "description": "The default starting point for most organizations",
+          "benchmark": "Cluster around 5 hours/week saved (= 7-10 work weeks/year)"
+        },
+        {
+          "rank": 2,
+          "name": "Increased Output",
+          "percentage_of_use_cases": "~15%",
+          "description": "More deliverables with same resources",
+          "note": "200-1000 person orgs focus heavily here (still scaling)"
+        },
+        {
+          "rank": 3,
+          "name": "Quality Improvement",
+          "percentage_of_use_cases": "~12%",
+          "description": "Better results, fewer errors, higher standards"
+        },
+        {
+          "rank": 4,
+          "name": "New Capabilities",
+          "percentage_of_use_cases": "~10%",
+          "description": "Doing things that weren't possible before",
+          "note": "C-suite leaders focus more here than junior positions"
+        },
+        {
+          "rank": 5,
+          "name": "Improved Decision-Making",
+          "percentage_of_use_cases": "~8%",
+          "description": "Better data analysis, faster insights, smarter choices"
+        },
+        {
+          "rank": 6,
+          "name": "Cost Savings",
+          "percentage_of_use_cases": "~7%",
+          "description": "Direct expense reduction beyond time savings"
+        },
+        {
+          "rank": 7,
+          "name": "Increased Revenue",
+          "percentage_of_use_cases": "~6%",
+          "description": "Growth impact, new sales, higher conversion"
+        },
+        {
+          "rank": 8,
+          "name": "Risk Reduction",
+          "percentage_of_use_cases": "3.4%",
+          "description": "Compliance, error prevention, security",
+          "key_insight": "LOWEST frequency BUT 25% have TRANSFORMATIONAL impact",
+          "why": "Back office/compliance/risk functions deal with volume AI handles well"
+        }
+      ]
+    },
+    "the_5_hour_benchmark": {
+      "finding": "Time savings cluster between 1-10 hours/week, especially around 5 hours",
+      "annual_impact": "5 hours/week = 260 hours/year = 6.5 work weeks saved",
+      "10_hours_impact": "10 hours/week = 520 hours/year = 13 work weeks saved",
+      "use_in_calculations": "5 hours/week is a conservative, credible starting benchmark"
+    },
+    "risk_reduction_insight": {
+      "key_finding": "Risk reduction is the MOST UNDERRATED ROI category",
+      "frequency": "Only 3.4% of use cases",
+      "transformational_rate": "25% have transformational impact (highest of any category)",
+      "why_it_works": "Back office, compliance, and risk functions deal with sheer volume",
+      "examples": [
+        "Contract review and compliance checking",
+        "Audit trail analysis",
+        "Regulatory monitoring",
+        "Quality control at scale",
+        "Fraud detection patterns"
+      ],
+      "recommendation": "Actively look for risk reduction opportunities - clients often overlook them"
+    },
+    "patterns_by_org_size": {
+      "1_to_50": {
+        "pattern": "Getting transformational benefit earliest",
+        "reason": "More nimble, less bureaucracy, faster implementation"
+      },
+      "50_to_200": {
+        "pattern": "Mixed - some scaling, some still experimenting"
+      },
+      "200_to_1000": {
+        "pattern": "Higher focus on 'increased output' use cases",
+        "reason": "Reached scale but still striving for more growth"
+      },
+      "1000_plus": {
+        "pattern": "Ahead in formal adoption but slower to scale",
+        "reason": "More resources but also more complexity"
+      }
+    },
+    "patterns_by_role": {
+      "c_suite_leaders": {
+        "focus": "Less on time savings, more on output and new capabilities",
+        "transformational_roi": "17% report transformational impact already",
+        "optimism": "More optimistic than junior positions"
+      },
+      "junior_positions": {
+        "focus": "More on time savings and efficiency",
+        "reason": "Focused on immediate personal productivity"
+      }
+    },
+    "patterns_by_industry": {
+      "healthcare": "Higher impact than average",
+      "manufacturing": "Higher impact than average",
+      "technology": "Highest volume but average impact",
+      "professional_services": "High volume, average impact"
+    },
+    "automation_and_agents_outperform": {
+      "finding": "Use cases mentioning automation or agents 'wildly outperform' in ROI",
+      "implication": "Push clients beyond basic productivity to automation where ready"
+    },
+    "systematic_approach_wins": {
+      "finding": "More use cases submitted → better ROI reported",
+      "implication": "Cross-organizational, systematic thinking beats spot experiments",
+      "validation": "Confirms value of comprehensive AI audits vs. single-point solutions"
+    }
   }
 }

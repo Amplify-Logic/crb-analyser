@@ -1,0 +1,293 @@
+{
+  "category": "ai_sales_tools",
+  "description": "AI-powered sales tools for prospecting, meeting intelligence, and sales enablement",
+  "meta": {
+    "source": "WeAreNoCode - 7 AI Skills video (Dec 2025) + web verification",
+    "added": "2025-12-27",
+    "verified_status": "UNVERIFIED - needs pricing verification"
+  },
+  "vendors": [
+    {
+      "slug": "outbound-ai",
+      "name": "Outbound",
+      "category": "ai_sales_tools",
+      "subcategory": "ai_prospecting",
+      "website": "https://www.outbound.com",
+      "description": "AI-powered prospecting platform that works like ChatGPT for sales. Build lead lists with natural language prompts, find and verify emails, research companies at scale, qualify leads, and generate personalized copy - all in one platform. Replaces the manual prospecting workflow of LinkedIn Navigator + enrichment tools + email copy.",
+      "tagline": "ChatGPT for sales prospecting",
+      "key_capabilities": [
+        "Natural language lead list building",
+        "Automated email finding and verification",
+        "Company research at scale",
+        "Lead qualification and scoring",
+        "AI-powered copywriting for outreach",
+        "Website analysis for lead targeting"
+      ],
+      "use_case_example": "Build me a list of marketing managers at tech companies in Austin, Texas with 11 to 500 employees - and it builds the list, finds emails, verifies them, and can generate personalized outreach.",
+      "pricing": {
+        "model": "subscription",
+        "currency": "USD",
+        "verified_status": "UNVERIFIED",
+        "note": "Pricing not verified - check website"
+      },
+      "best_for": [
+        "Sales teams doing outbound prospecting",
+        "SDRs wanting to 10x lead research speed",
+        "Teams replacing manual LinkedIn + enrichment workflows",
+        "High-volume outreach campaigns"
+      ],
+      "replaces_workflow": [
+        "LinkedIn Sales Navigator manual searching",
+        "Apollo/ZoomInfo for enrichment",
+        "Separate email verification tools",
+        "Manual research across 20+ tabs",
+        "Individual email copywriting"
+      ],
+      "industries": [
+        "B2B SaaS",
+        "Technology",
+        "Professional Services",
+        "Agencies",
+        "Recruiting"
+      ],
+      "company_sizes": ["startup", "smb", "mid_market"],
+      "implementation": {
+        "avg_weeks": 1,
+        "complexity": "low",
+        "requires_developer": false
+      },
+      "competitors": [
+        "Apollo.io",
+        "ZoomInfo",
+        "LinkedIn Sales Navigator",
+        "Lemlist",
+        "Instantly"
+      ],
+      "verified_at": null,
+      "source": "WeAreNoCode video Dec 2025"
+    },
+    {
+      "slug": "fireflies-ai",
+      "name": "Fireflies.ai",
+      "category": "ai_sales_tools",
+      "subcategory": "meeting_intelligence",
+      "website": "https://fireflies.ai",
+      "pricing_url": "https://fireflies.ai/pricing",
+      "description": "AI meeting assistant that records, transcribes, and summarizes meetings. Automatically captures action items, generates follow-up emails, and integrates with major video conferencing platforms. Saves hours of manual note-taking and follow-up work.",
+      "tagline": "AI that takes meeting notes so you can focus on the conversation",
+      "key_capabilities": [
+        "Automatic meeting recording",
+        "Full transcription with speaker identification",
+        "Action item extraction",
+        "Meeting summary generation",
+        "Follow-up email drafting",
+        "Searchable meeting archive",
+        "CRM integration for automatic logging"
+      ],
+      "pricing": {
+        "model": "freemium",
+        "currency": "USD",
+        "tiers": [
+          {
+            "name": "Free",
+            "price": 0,
+            "features": ["Limited transcription credits", "Basic features"]
+          },
+          {
+            "name": "Pro",
+            "price": 18,
+            "per": "seat/month",
+            "billing": "annual",
+            "features": ["Unlimited transcription", "AI summaries", "Action items", "CRM integrations"]
+          },
+          {
+            "name": "Business",
+            "price": 29,
+            "per": "seat/month",
+            "billing": "annual",
+            "features": ["All Pro features", "Conversation intelligence", "Team analytics", "Custom vocabulary"]
+          },
+          {
+            "name": "Enterprise",
+            "price": null,
+            "per": "custom",
+            "features": ["All Business features", "SSO", "Custom retention", "Dedicated support"]
+          }
+        ],
+        "verified_status": "UNVERIFIED"
+      },
+      "best_for": [
+        "Sales teams wanting automatic meeting documentation",
+        "Managers needing meeting insights across team",
+        "Customer success teams tracking client conversations",
+        "Anyone spending 10+ hours/week in meetings"
+      ],
+      "time_savings": {
+        "estimate": "2-4 hours per week per user",
+        "activities_eliminated": [
+          "Manual note-taking",
+          "Writing meeting summaries",
+          "Creating follow-up emails",
+          "Searching for what was discussed"
+        ]
+      },
+      "industries": [
+        "SaaS",
+        "Professional Services",
+        "Consulting",
+        "Sales",
+        "Customer Success"
+      ],
+      "company_sizes": ["startup", "smb", "mid_market", "enterprise"],
+      "integrations": [
+        "Zoom",
+        "Google Meet",
+        "Microsoft Teams",
+        "Webex",
+        "Salesforce",
+        "HubSpot",
+        "Slack",
+        "Notion"
+      ],
+      "implementation": {
+        "avg_weeks": 0,
+        "complexity": "none",
+        "requires_developer": false
+      },
+      "competitors": [
+        "Otter.ai",
+        "Gong",
+        "Chorus",
+        "Grain",
+        "tl;dv"
+      ],
+      "verified_at": null,
+      "source": "WeAreNoCode video Dec 2025"
+    },
+    {
+      "slug": "gamma-presentations",
+      "name": "Gamma",
+      "category": "ai_sales_tools",
+      "subcategory": "ai_presentations",
+      "website": "https://gamma.app",
+      "pricing_url": "https://gamma.app/pricing",
+      "description": "AI-powered presentation builder that creates beautiful decks from prompts or templates. Can update specific slides with new information, allowing rapid customization for each prospect. Eliminates all-nighters creating PowerPoint slides manually.",
+      "tagline": "Present ideas effortlessly with AI",
+      "key_capabilities": [
+        "Generate presentations from prompts",
+        "Update individual slides with new data",
+        "Template-based customization",
+        "Beautiful default designs",
+        "Export to PowerPoint/PDF",
+        "Embed interactive content",
+        "Real-time collaboration"
+      ],
+      "use_case_example": "Have a template where a specific slide is updated with prospect data, allowing customized presentations in minutes instead of hours.",
+      "pricing": {
+        "model": "freemium",
+        "currency": "USD",
+        "tiers": [
+          {
+            "name": "Free",
+            "price": 0,
+            "features": ["400 AI credits", "Basic exports", "Gamma branding"]
+          },
+          {
+            "name": "Plus",
+            "price": 10,
+            "per": "month",
+            "features": ["Unlimited AI", "Remove branding", "Custom fonts", "Analytics"]
+          },
+          {
+            "name": "Pro",
+            "price": 20,
+            "per": "month",
+            "features": ["All Plus features", "Priority support", "Advanced analytics", "Custom domains"]
+          }
+        ],
+        "verified_status": "UNVERIFIED"
+      },
+      "best_for": [
+        "Sales teams creating prospect-specific decks",
+        "Consultants building client presentations",
+        "Marketers creating pitch decks",
+        "Anyone spending hours on PowerPoint"
+      ],
+      "time_savings": {
+        "estimate": "3-5 hours per presentation",
+        "comparison": "All-nighter → 30 minutes"
+      },
+      "industries": [
+        "Sales",
+        "Consulting",
+        "Marketing",
+        "Agencies",
+        "Startups"
+      ],
+      "company_sizes": ["startup", "smb", "mid_market"],
+      "implementation": {
+        "avg_weeks": 0,
+        "complexity": "none",
+        "requires_developer": false
+      },
+      "competitors": [
+        "Beautiful.ai",
+        "Tome",
+        "Canva Presentations",
+        "Microsoft Copilot for PowerPoint",
+        "Google Slides + Gemini"
+      ],
+      "verified_at": null,
+      "source": "WeAreNoCode video Dec 2025"
+    },
+    {
+      "slug": "attio-crm",
+      "name": "Attio",
+      "category": "ai_sales_tools",
+      "subcategory": "modern_crm",
+      "website": "https://attio.com",
+      "description": "Modern CRM used by fastest-growing startups. Notion-like interface with object-based flexibility. See full entry in crm.json for detailed pricing.",
+      "note": "Full vendor entry in vendors/crm.json",
+      "verified_at": "2025-12-17T00:00:00Z"
+    }
+  ],
+  "industry_statistics": {
+    "ai_sales_impact": {
+      "stats": [
+        {
+          "stat": "35% higher win rate when sellers use AI functionality",
+          "source": "Gong Labs",
+          "source_url": "https://www.gong.io/resources/labs/we-measured-the-roi-of-ai-in-sales-heres-how-it-really-impacts-your-deals/",
+          "verified_status": "VERIFIED",
+          "verified_date": "2025-12-27"
+        },
+        {
+          "stat": "50% higher win rate when reps complete AI-recommended actions",
+          "source": "Gong Labs",
+          "source_url": "https://www.gong.io/resources/labs/we-measured-the-roi-of-ai-in-sales-heres-how-it-really-impacts-your-deals/",
+          "verified_status": "VERIFIED",
+          "verified_date": "2025-12-27"
+        },
+        {
+          "stat": "45% more deals closed by salespeople using AI and ML tools",
+          "source": "Forrester",
+          "verified_status": "UNVERIFIED - needs direct Forrester source"
+        },
+        {
+          "stat": "40% increase in sales productivity (time with customers, leads converted)",
+          "source": "Harvard Business Review (Microsoft case study)",
+          "source_url": "https://hbr.org/2024/09/can-ai-assistants-add-value-to-your-sales-team",
+          "verified_status": "VERIFIED",
+          "verified_date": "2025-12-27"
+        }
+      ],
+      "note": "Original video claimed 'HBR 35-50%' but this appears to be Gong Labs research"
+    },
+    "sales_time_waste": {
+      "stat": "Sales people spend 70%+ of their time on non-selling activities (prospecting, enrichment, research)",
+      "source": "Industry pattern",
+      "verified_status": "UNVERIFIED"
+    }
+  },
+  "last_updated": "2025-12-27T00:00:00Z"
+}

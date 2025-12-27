@@ -1,0 +1,143 @@
+{
+  "category": "ai_agents",
+  "description": "No-code and low-code platforms for building AI agents that can take autonomous actions",
+  "meta": {
+    "source": "WeAreNoCode - 7 AI Skills video (Dec 2025) + web research",
+    "added": "2025-12-27",
+    "verified_status": "UNVERIFIED - needs pricing verification"
+  },
+  "vendors": [
+    {
+      "slug": "lindy-ai",
+      "name": "Lindy",
+      "category": "ai_agents",
+      "subcategory": "no_code_agents",
+      "website": "https://www.lindy.ai",
+      "pricing_url": "https://www.lindy.ai/pricing",
+      "description": "No-code AI agent builder for creating autonomous agents that can be trained with specific information, access tools, and make decisions. Best for non-technical users wanting to build basic agents without coding.",
+      "tagline": "Build AI employees in minutes",
+      "key_capabilities": [
+        "No-code agent creation",
+        "Train agents with custom knowledge",
+        "Tool access and integrations",
+        "Autonomous decision making",
+        "Pre-built agent templates",
+        "Email, calendar, and app integrations",
+        "Multi-step workflows"
+      ],
+      "use_cases": [
+        "AI executive assistant",
+        "Meeting scheduler",
+        "Email responder",
+        "Research assistant",
+        "Customer support triage"
+      ],
+      "pricing": {
+        "model": "subscription",
+        "currency": "USD",
+        "tiers": [
+          {
+            "name": "Free",
+            "price": 0,
+            "features": ["Limited credits", "Basic agents", "Email support"]
+          },
+          {
+            "name": "Pro",
+            "price": 49,
+            "per": "month",
+            "features": ["More credits", "Priority support", "Advanced integrations"]
+          },
+          {
+            "name": "Team",
+            "price": null,
+            "per": "custom",
+            "features": ["Team collaboration", "Custom limits", "Enterprise security"]
+          }
+        ],
+        "verified_status": "UNVERIFIED"
+      },
+      "best_for": [
+        "Non-technical users wanting AI automation",
+        "Individual professionals automating workflows",
+        "Small teams needing AI assistants",
+        "Those who want agents but can't code"
+      ],
+      "avoid_if": [
+        "Need complex multi-agent systems",
+        "Require deep technical customization",
+        "Enterprise-grade security requirements"
+      ],
+      "technical_requirements": {
+        "coding_required": false,
+        "learning_curve": "low",
+        "time_to_first_agent": "minutes"
+      },
+      "industries": [
+        "Professional Services",
+        "Consulting",
+        "Small Business",
+        "Startups",
+        "Individual Professionals"
+      ],
+      "company_sizes": ["individual", "startup", "smb"],
+      "implementation": {
+        "avg_weeks": 0,
+        "complexity": "low",
+        "requires_developer": false
+      },
+      "competitors": [
+        "Relevance AI",
+        "AgentGPT",
+        "AutoGPT",
+        "Crew AI",
+        "n8n (with AI nodes)"
+      ],
+      "verified_at": null,
+      "source": "WeAreNoCode video Dec 2025"
+    },
+    {
+      "slug": "n8n-ai",
+      "name": "n8n (AI Agents)",
+      "category": "ai_agents",
+      "subcategory": "technical_agents",
+      "website": "https://n8n.io",
+      "description": "Open-source workflow automation with powerful AI agent capabilities. For more technical users. See full entry in automation.json for detailed pricing.",
+      "note": "Full vendor entry in vendors/automation.json - AI agents are built using AI nodes within n8n workflows",
+      "technical_level": "medium-high",
+      "best_for": [
+        "Technical teams building advanced AI agents",
+        "Self-hosted requirements",
+        "Complex multi-step agent workflows"
+      ],
+      "verified_at": "2025-12-17T00:00:00Z"
+    },
+    {
+      "slug": "outbound-agents",
+      "name": "Outbound (AI Research Agents)",
+      "category": "ai_agents",
+      "subcategory": "sales_research_agents",
+      "website": "https://www.outbound.com",
+      "description": "AI agents for sales research and prospecting. Best for doing research about leads at scale. See full entry in ai_sales_tools.json.",
+      "note": "Full vendor entry in vendors/ai_sales_tools.json",
+      "use_case": "Research thousands of leads simultaneously - company info, decision makers, competitive intel",
+      "verified_at": null
+    }
+  ],
+  "agent_use_case_framework": {
+    "description": "When to recommend AI agents vs simple automation",
+    "simple_automation_zapier_make": [
+      "If this, then that logic",
+      "Predictable workflows",
+      "Single-step actions",
+      "No decision-making required"
+    ],
+    "ai_agents_lindy_n8n": [
+      "Requires judgment or decisions",
+      "Multiple possible paths based on context",
+      "Needs to understand and respond to content",
+      "Research and synthesis tasks",
+      "Multi-step reasoning required"
+    ]
+  },
+  "last_updated": "2025-12-27T00:00:00Z"
+}

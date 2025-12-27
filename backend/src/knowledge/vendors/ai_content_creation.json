@@ -1,0 +1,289 @@
+{
+  "category": "ai_content_creation",
+  "description": "AI-powered content creation tools for video generation, video editing, and multimedia production",
+  "meta": {
+    "source": "WeAreNoCode - 7 AI Skills video (Dec 2025) + web research",
+    "added": "2025-12-27",
+    "verified_status": "UNVERIFIED - needs pricing verification"
+  },
+  "vendors": [
+    {
+      "slug": "runway-ml",
+      "name": "Runway",
+      "category": "ai_content_creation",
+      "subcategory": "video_generation",
+      "website": "https://runwayml.com",
+      "pricing_url": "https://runwayml.com/pricing",
+      "description": "Leading AI video generation platform. Create videos from text prompts or images. Used by professional creators and studios for AI-powered video production, effects, and editing.",
+      "tagline": "Everything you need to make anything you want",
+      "key_capabilities": [
+        "Text-to-video generation (Gen-3 Alpha)",
+        "Image-to-video animation",
+        "Video editing with AI",
+        "Motion brush for targeted animation",
+        "Background removal",
+        "Color grading",
+        "Green screen alternatives"
+      ],
+      "pricing": {
+        "model": "credits",
+        "currency": "USD",
+        "tiers": [
+          {
+            "name": "Free",
+            "price": 0,
+            "features": ["125 credits/month", "Basic features", "720p exports"]
+          },
+          {
+            "name": "Standard",
+            "price": 15,
+            "per": "month",
+            "features": ["625 credits/month", "Gen-3 Alpha access", "1080p exports", "Unlimited projects"]
+          },
+          {
+            "name": "Pro",
+            "price": 35,
+            "per": "month",
+            "features": ["2250 credits/month", "4K exports", "Priority generation", "Custom branding"]
+          },
+          {
+            "name": "Unlimited",
+            "price": 95,
+            "per": "month",
+            "features": ["Unlimited Gen-3 generations", "All Pro features", "Commercial license"]
+          }
+        ],
+        "verified_status": "UNVERIFIED"
+      },
+      "best_for": [
+        "Content creators needing AI-generated video",
+        "Marketing teams creating promotional content",
+        "Studios exploring AI video production",
+        "YouTubers/social media creators"
+      ],
+      "industries": [
+        "Media & Entertainment",
+        "Marketing",
+        "Advertising",
+        "Content Creation",
+        "Film Production"
+      ],
+      "company_sizes": ["individual", "startup", "smb", "mid_market"],
+      "implementation": {
+        "avg_weeks": 0,
+        "complexity": "low",
+        "requires_developer": false
+      },
+      "competitors": [
+        "Pika",
+        "Luma AI",
+        "Google Veo",
+        "OpenAI Sora",
+        "Kling AI"
+      ],
+      "verified_at": null,
+      "source": "WeAreNoCode video Dec 2025"
+    },
+    {
+      "slug": "opus-clip",
+      "name": "Opus Clip",
+      "category": "ai_content_creation",
+      "subcategory": "video_clipping",
+      "website": "https://www.opus.pro",
+      "pricing_url": "https://www.opus.pro/pricing",
+      "description": "AI-powered tool that automatically finds the best moments from long-form videos and extracts them into short clips perfect for social media. Analyzes content for virality, adds captions, and formats for different platforms.",
+      "tagline": "Turn long videos into viral clips",
+      "key_capabilities": [
+        "Automatic clip extraction from long videos",
+        "Virality scoring for best moments",
+        "Auto-captioning with styles",
+        "Multi-platform formatting (TikTok, Reels, Shorts)",
+        "AI B-roll suggestions",
+        "Face and speaker detection",
+        "Batch processing"
+      ],
+      "use_case_example": "Upload a 2-hour interview, get 10-15 viral-ready short clips with captions and perfect aspect ratios in minutes.",
+      "pricing": {
+        "model": "subscription",
+        "currency": "USD",
+        "tiers": [
+          {
+            "name": "Free",
+            "price": 0,
+            "features": ["60 minutes/month", "Basic features", "Watermark"]
+          },
+          {
+            "name": "Starter",
+            "price": 19,
+            "per": "month",
+            "features": ["200 minutes/month", "No watermark", "1080p exports"]
+          },
+          {
+            "name": "Pro",
+            "price": 49,
+            "per": "month",
+            "features": ["600 minutes/month", "Priority processing", "Team features", "API access"]
+          },
+          {
+            "name": "Business",
+            "price": 149,
+            "per": "month",
+            "features": ["2400 minutes/month", "Multi-brand management", "Advanced analytics"]
+          }
+        ],
+        "verified_status": "UNVERIFIED"
+      },
+      "best_for": [
+        "Podcasters repurposing long interviews",
+        "YouTubers creating Shorts from long videos",
+        "Agencies managing multiple content channels",
+        "Speakers repurposing talks into clips"
+      ],
+      "time_savings": {
+        "estimate": "5-10 hours per long-form video",
+        "comparison": "Manual clipping → automatic extraction in minutes"
+      },
+      "industries": [
+        "Content Creation",
+        "Podcasting",
+        "Media",
+        "Marketing Agencies",
+        "Education"
+      ],
+      "company_sizes": ["individual", "startup", "smb"],
+      "implementation": {
+        "avg_weeks": 0,
+        "complexity": "none",
+        "requires_developer": false
+      },
+      "competitors": [
+        "Vidyo.ai",
+        "Munch",
+        "GetMunch",
+        "Klap",
+        "Pictory"
+      ],
+      "verified_at": null,
+      "source": "WeAreNoCode video Dec 2025"
+    },
+    {
+      "slug": "descript",
+      "name": "Descript",
+      "category": "ai_content_creation",
+      "subcategory": "video_editing",
+      "website": "https://www.descript.com",
+      "pricing_url": "https://www.descript.com/pricing",
+      "description": "AI-powered video and audio editing platform. Edit video like editing a document - delete words from transcript to remove from video. Features AI assistant called Underlord for automated editing tasks.",
+      "tagline": "Edit video by editing text",
+      "key_capabilities": [
+        "Text-based video editing",
+        "Underlord AI assistant for editing tasks",
+        "Automatic transcription",
+        "Filler word removal",
+        "Studio Sound (audio enhancement)",
+        "Screen recording",
+        "Eye contact correction",
+        "Overdub (AI voice cloning)"
+      ],
+      "pricing": {
+        "model": "subscription",
+        "currency": "USD",
+        "tiers": [
+          {
+            "name": "Free",
+            "price": 0,
+            "features": ["1 hour transcription/month", "Basic editing", "Watermark"]
+          },
+          {
+            "name": "Hobbyist",
+            "price": 15,
+            "per": "month",
+            "features": ["10 hours transcription", "No watermark", "Filler word removal"]
+          },
+          {
+            "name": "Creator",
+            "price": 30,
+            "per": "month",
+            "features": ["30 hours transcription", "Underlord AI", "Studio Sound", "Green screen"]
+          },
+          {
+            "name": "Business",
+            "price": 50,
+            "per": "month",
+            "features": ["40 hours transcription", "Team features", "API access", "Priority support"]
+          }
+        ],
+        "verified_status": "UNVERIFIED"
+      },
+      "best_for": [
+        "Podcasters editing audio and video",
+        "YouTubers wanting faster editing",
+        "Course creators building content",
+        "Anyone who hates traditional video editing software"
+      ],
+      "time_savings": {
+        "estimate": "50-70% reduction in editing time",
+        "key_feature": "Delete words from transcript = removes from video"
+      },
+      "industries": [
+        "Podcasting",
+        "Content Creation",
+        "Education",
+        "Marketing",
+        "Media Production"
+      ],
+      "company_sizes": ["individual", "startup", "smb"],
+      "implementation": {
+        "avg_weeks": 0,
+        "complexity": "low",
+        "requires_developer": false
+      },
+      "competitors": [
+        "Adobe Premiere + AI",
+        "CapCut",
+        "DaVinci Resolve",
+        "Final Cut Pro"
+      ],
+      "verified_at": null,
+      "source": "WeAreNoCode video Dec 2025"
+    },
+    {
+      "slug": "google-veo",
+      "name": "Google Veo/VO3",
+      "category": "ai_content_creation",
+      "subcategory": "video_generation",
+      "website": "https://deepmind.google/technologies/veo/",
+      "description": "Google's video generation AI. Creates high-quality videos from text prompts. Part of Google's Gemini ecosystem.",
+      "tagline": "Google's frontier video generation model",
+      "key_capabilities": [
+        "Text-to-video generation",
+        "High resolution output",
+        "Cinematic quality",
+        "Integration with Google ecosystem"
+      ],
+      "pricing": {
+        "model": "subscription",
+        "note": "Available through Gemini Advanced subscription or Google AI Studio",
+        "verified_status": "UNVERIFIED"
+      },
+      "best_for": [
+        "Users already in Google ecosystem",
+        "Creators wanting Google-quality video AI"
+      ],
+      "industries": [
+        "Content Creation",
+        "Marketing",
+        "Media"
+      ],
+      "company_sizes": ["individual", "startup", "smb"],
+      "competitors": [
+        "Runway",
+        "Pika",
+        "OpenAI Sora"
+      ],
+      "verified_at": null,
+      "source": "WeAreNoCode video Dec 2025"
+    }
+  ],
+  "last_updated": "2025-12-27T00:00:00Z"
+}
