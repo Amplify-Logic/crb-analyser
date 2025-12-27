@@ -4,7 +4,7 @@ import { motion } from 'framer-motion'
 const VALUE_PROPS = [
   {
     title: 'No BS Assessment',
-    description: "We tell you what NOT to do. That's often more valuable than what to do.",
+    description: "We tell you what NOT to do—that's often more valuable than what to do. No vendor agenda, just honest recommendations.",
     icon: (
       <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
@@ -13,7 +13,7 @@ const VALUE_PROPS = [
   },
   {
     title: 'Real Pricing, Real Data',
-    description: 'Actual vendor costs, not guesses. We do the research so you can make informed decisions.',
+    description: 'Actual vendor costs and industry benchmarks, not guesses. ROI calculations with visible assumptions you can trust.',
     icon: (
       <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
@@ -21,8 +21,8 @@ const VALUE_PROPS = [
     ),
   },
   {
-    title: 'Gold In, Gold Out',
-    description: 'Quality analysis requires quality input. Your effort in the workshop shapes every recommendation.',
+    title: 'Built to Keep Learning',
+    description: 'Your analysis benefits from patterns across our growing network. Better insights for your industry, every time.',
     icon: (
       <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M13 10V3L4 14h7v7l9-11h-7z" />
@@ -35,25 +35,25 @@ const HOW_IT_WORKS = [
   {
     step: 1,
     title: 'Take the free quiz',
-    description: '5 minutes to see your AI readiness score and preview what we can find.',
+    description: 'See your AI readiness score and a preview of opportunities.',
     time: '5 min',
   },
   {
     step: 2,
     title: 'Complete the workshop',
-    description: 'Deep-dive questions about your business. The more detailed your answers, the better your report.',
+    description: 'Deep-dive questions about your operations. Better answers = better report.',
     time: '90 min',
   },
   {
     step: 3,
     title: 'AI analyzes everything',
-    description: 'We research your industry, benchmark your operations, and identify real opportunities.',
+    description: 'We research your industry, benchmark your operations, and build your report.',
     time: '24-48 hrs',
   },
   {
     step: 4,
-    title: 'Get your roadmap',
-    description: 'Specific recommendations with real pricing, honest ROI calculations, and clear next steps.',
+    title: 'Get your interactive report',
+    description: 'Specific recommendations with real pricing, honest ROI, and clear next steps.',
     time: 'Delivered',
   },
 ]
@@ -84,11 +84,12 @@ const SAMPLE_FINDINGS = [
 
 const REPORT_FEATURES = [
   '15-20 AI opportunities analyzed',
-  'Honest verdicts: Go / Caution / Wait / No',
-  'Real vendor pricing (not guesses)',
+  'Honest verdicts: Go / Caution / Wait / Skip',
+  'Real vendor pricing, not guesses',
   'ROI calculations with visible assumptions',
   'Three options per recommendation',
-  '"Don\'t do this" section included',
+  'Interactive web report with live calculators',
+  'Shareable link for your team',
 ]
 
 export default function Landing() {
@@ -129,20 +130,21 @@ export default function Landing() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
           >
-            <div className="inline-block px-4 py-1.5 bg-primary-50 text-primary-700 rounded-full text-sm font-medium mb-6">
-              No fluff. No false promises. Just clarity.
+            <div className="inline-block px-4 py-1.5 bg-green-50 text-green-700 rounded-full text-sm font-medium mb-6">
+              What used to cost €15,000 now costs €147
             </div>
             <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold text-gray-900 mb-6 leading-tight">
-              Find Out Where AI
-              <span className="text-primary-600"> Actually </span>
-              Makes Sense for Your Business
+              AI Clarity in 48 Hours,
+              <span className="text-primary-600"> Not 6 Weeks</span>
             </h1>
             <p className="text-lg sm:text-xl text-gray-600 mb-4 max-w-2xl mx-auto">
-              A 90-minute workshop that produces a genuinely useful AI roadmap.
+              Get an unbiased Cost-Risk-Benefit analysis delivered as an interactive web report—with live ROI calculators, vendor comparisons, and a visual implementation roadmap.
             </p>
-            <p className="text-base text-gray-500 mb-8 max-w-2xl mx-auto">
-              Most AI assessments are 5-minute quizzes that tell you nothing.
-              Ours requires effort because quality input = quality output.
+            <p className="text-base text-gray-500 mb-3 max-w-2xl mx-auto">
+              No vendor agenda. No consulting upsell. Just what's best for you and your customers.
+            </p>
+            <p className="text-sm text-gray-400 mb-8 max-w-2xl mx-auto">
+              Built for service businesses—dental, legal, home services, recruiting, coaching, and beyond.
             </p>
 
             <div className="flex flex-col sm:flex-row gap-4 justify-center mb-6">
@@ -162,7 +164,7 @@ export default function Landing() {
             </div>
 
             <p className="text-sm text-gray-500">
-              Free quiz: 5 min • Full workshop: 90 min • Report: €147
+              Free quiz: 5 min • Full workshop: 90 min • Report from €147
             </p>
           </motion.div>
         </div>
@@ -200,13 +202,10 @@ export default function Landing() {
             </h2>
             <div className="space-y-4 text-yellow-800">
               <p>
-                <strong>This is not a magic 10-minute solution.</strong> If you want a superficial AI assessment, there are plenty of free ones online. They'll tell you "AI can help!" and leave you no wiser.
+                <strong>This isn't a magic 5-minute quiz.</strong> Our workshop takes 90 minutes because generic questions = generic answers = useless report.
               </p>
               <p>
-                Our workshop takes <strong>90 minutes</strong> because we ask hard questions about your actual business operations, pain points, and goals. Generic questions = generic answers = useless report.
-              </p>
-              <p>
-                <strong>The quality of your report directly depends on the quality of your answers.</strong> Rush through it, get a rushed report. Take it seriously, get insights worth 100x what you paid.
+                <strong>The quality of your report depends on the quality of your input.</strong> Rush through it, get a rushed report. Take it seriously, get insights worth 100x what you paid.
               </p>
             </div>
           </div>
@@ -265,7 +264,7 @@ export default function Landing() {
               How it works
             </h2>
             <p className="text-lg text-gray-600">
-              From quick assessment to comprehensive roadmap
+              From quick quiz to comprehensive roadmap
             </p>
           </div>
 
@@ -373,15 +372,8 @@ export default function Landing() {
               </div>
 
               <ul className="space-y-3 mb-8">
-                {REPORT_FEATURES.map((feature, index) => (
-                  <li key={index} className="flex items-center gap-3">
-                    <svg className="w-5 h-5 text-green-500 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                    </svg>
-                    <span className="text-gray-700 text-sm">{feature}</span>
-                  </li>
-                ))}
-                <li className="flex items-center gap-3 pt-2 border-t border-gray-100">
+                <li className="text-gray-600 text-sm mb-2">Everything in CRB Report, plus:</li>
+                <li className="flex items-center gap-3">
                   <svg className="w-5 h-5 text-primary-600 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                   </svg>
@@ -392,6 +384,12 @@ export default function Landing() {
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                   </svg>
                   <span className="text-gray-900 font-medium text-sm">Live Q&A on your specific situation</span>
+                </li>
+                <li className="flex items-center gap-3">
+                  <svg className="w-5 h-5 text-primary-600 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                  </svg>
+                  <span className="text-gray-900 font-medium text-sm">Priority support</span>
                 </li>
               </ul>
 
@@ -417,7 +415,7 @@ export default function Landing() {
             Ready to find out what actually makes sense?
           </h2>
           <p className="text-lg text-gray-400 mb-8">
-            Start with the free quiz. If the preview looks valuable, continue to the full workshop. No pressure, no tricks.
+            What consultants charge €15,000 for, you can get for €147. Start with the free quiz—no commitment, no tricks.
           </p>
           <button
             onClick={handleQuizStart}
