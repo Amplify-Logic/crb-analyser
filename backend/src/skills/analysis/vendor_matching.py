@@ -49,6 +49,7 @@ import logging
 from typing import Dict, Any, List, Optional
 
 from src.skills.base import LLMSkill, SkillContext, SkillError
+from src.config.settings import get_settings
 from src.knowledge import (
     get_vendor_recommendations,
     get_vendor_by_slug,
@@ -56,6 +57,7 @@ from src.knowledge import (
     normalize_industry,
     VENDOR_CATEGORIES,
 )
+from src.services.vendor_service import vendor_service
 
 logger = logging.getLogger(__name__)
 
@@ -154,11 +156,22 @@ class VendorMatchingSkill(LLMSkill[Dict[str, Any]]):
         # Detect category from finding
         category = self._detect_category(finding)
 
-        # Get relevant vendors
-        vendors = self._get_candidate_vendors(
-            category=category,
-            industry=context.industry,
-        )
+        # Extract finding tags for recommendation matching
+        finding_tags = self._extract_finding_tags(finding)
+
+        # Get relevant vendors (with tier boosts if using Supabase)
+        settings = get_settings()
+        if settings.USE_SUPABASE_VENDORS:
+            vendors = await self._get_candidate_vendors_supabase(
+                category=category,
+                industry=context.industry,
+                finding_tags=finding_tags,
+            )
+        else:
+            vendors = self._get_candidate_vendors(
+                category=category,
+                industry=context.industry,
+            )
 
         if not vendors:
             # Try broader search
@@ -207,6 +220,75 @@ class VendorMatchingSkill(LLMSkill[Dict[str, Any]]):
             return max(category_scores, key=category_scores.get)
 
         return None
+
+    def _extract_finding_tags(self, finding: Dict[str, Any]) -> List[str]:
+        """Extract tags from finding for vendor recommendation matching."""
+        tags = []
+        text = " ".join([
+            str(finding.get("title", "")),
+            str(finding.get("description", "")),
+            str(finding.get("category", "")),
+        ]).lower()
+
+        # Map common keywords to recommended_for tags
+        tag_keywords = {
+            "website_chat": ["chat", "chatbot", "website support", "live chat"],
+            "policy_based_support": ["policy", "faq", "knowledge base"],
+            "ticket_deflection": ["ticket", "deflection", "self-service"],
+            "sales_enrichment": ["sales", "enrichment", "lead data"],
+            "lead_research": ["lead", "research", "prospecting"],
+            "data_automation": ["data", "automation", "sync"],
+            "personalization_at_scale": ["personalization", "personalize", "outreach"],
+            "meeting_intelligence": ["meeting", "recording", "transcript"],
+            "content_creation": ["content", "video", "presentation"],
+            "workflow_automation": ["workflow", "automation", "integration"],
+            "email_automation": ["email", "campaign", "newsletter"],
+            "analytics": ["analytics", "reporting", "dashboard"],
+        }
+
+        for tag, keywords in tag_keywords.items():
+            if any(kw in text for kw in keywords):
+                tags.append(tag)
+
+        return tags
+
+    async def _get_candidate_vendors_supabase(
+        self,
+        category: Optional[str],
+        industry: str,
+        finding_tags: List[str],
+    ) -> List[Dict[str, Any]]:
+        """Get candidate vendors from Supabase with tier boosts."""
+        try:
+            normalized_industry = normalize_industry(industry)
+
+            # Get vendors with tier boosts applied
+            vendors = await vendor_service.get_vendors_with_tier_boost(
+                industry=normalized_industry,
+                category=category,
+                finding_tags=finding_tags,
+            )
+
+            if vendors:
+                logger.info(
+                    f"Found {len(vendors)} vendors from Supabase for "
+                    f"{normalized_industry}/{category}"
+                )
+                return vendors
+
+            # Fallback: try without category filter
+            if category:
+                vendors = await vendor_service.get_vendors_with_tier_boost(
+                    industry=normalized_industry,
+                    category=None,
+                    finding_tags=finding_tags,
+                )
+
+            return vendors
+
+        except Exception as e:
+            logger.warning(f"Supabase vendor fetch failed, using JSON fallback: {e}")
+            return self._get_candidate_vendors(category, industry)
 
     def _get_candidate_vendors(
         self,
@@ -289,6 +371,32 @@ class VendorMatchingSkill(LLMSkill[Dict[str, Any]]):
             score = 50  # Base score
             reasons = []
             limitations = []
+
+            # Include tier boost from Supabase (if available)
+            tier_boost = vendor.get("_tier_boost", 0)
+            tier = vendor.get("_tier")
+            if tier_boost > 0:
+                score += tier_boost
+                tier_names = {1: "Top Pick", 2: "Recommended", 3: "Alternative"}
+                reasons.append(f"Industry {tier_names.get(tier, 'tier')} (+{tier_boost})")
+
+            # Boost for recommended_default vendors (only if not already counted in tier)
+            if vendor.get("recommended_default") and tier is None:
+                score += 25
+                reasons.append("Default recommendation")
+
+            # Boost for matching recommended_for tags
+            recommended_for = vendor.get("recommended_for", [])
+            finding_text = " ".join([
+                str(finding.get("title", "")),
+                str(finding.get("description", "")),
+                str(finding.get("category", "")),
+            ]).lower()
+            for tag in recommended_for:
+                if tag.replace("_", " ") in finding_text or tag in finding_text:
+                    score += 10
+                    reasons.append(f"Recommended for {tag}")
+                    break  # Only count once
 
             # Size fit
             vendor_sizes = vendor.get("company_sizes", [])

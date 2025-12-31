@@ -1,7 +1,7 @@
 """
 Vendor Service
 
-Core vendor database operations.
+Core vendor database operations with industry tier boost support.
 """
 
 import logging
@@ -9,8 +9,16 @@ from datetime import datetime
 from typing import Optional, List, Dict, Any
 
 from src.config.supabase_client import get_async_supabase
+from src.config.settings import get_settings
 
 logger = logging.getLogger(__name__)
+
+# Industry tier boost scores
+TIER_BOOST = {
+    1: 30,  # Top pick
+    2: 20,  # Recommended
+    3: 10,  # Alternative
+}
 
 
 class VendorService:
@@ -291,6 +299,259 @@ class VendorService:
             "last_refresh_attempt": datetime.utcnow().isoformat(),
             "refresh_error": error,
         }).eq("id", vendor_id).execute()
+
+    # =========================================================================
+    # INDUSTRY TIER METHODS
+    # =========================================================================
+
+    async def get_vendors_with_tier_boost(
+        self,
+        industry: str,
+        category: Optional[str] = None,
+        finding_tags: Optional[List[str]] = None,
+    ) -> List[Dict[str, Any]]:
+        """
+        Get vendors for an industry with tier boosts applied.
+
+        Args:
+            industry: Industry slug (e.g., 'dental', 'recruiting')
+            category: Optional category filter
+            finding_tags: Tags from finding for recommended_for matching
+
+        Returns:
+            Vendors with _tier_boost and _recommendation_score fields
+        """
+        settings = get_settings()
+
+        if not settings.USE_SUPABASE_VENDORS:
+            return self._get_vendors_from_json_with_boost(industry, category, finding_tags)
+
+        supabase = await get_async_supabase()
+
+        try:
+            # Query vendors that include this industry
+            query = supabase.table("vendors").select("*").eq("status", "active")
+
+            if category:
+                query = query.eq("category", category)
+
+            # Filter by industry array (contains)
+            query = query.contains("industries", [industry])
+
+            result = await query.execute()
+            vendors = result.data or []
+
+            # Apply tier boosts
+            vendors = await self._apply_industry_boosts(vendors, industry)
+
+            # Calculate recommendation scores
+            for vendor in vendors:
+                score = vendor.get("_tier_boost", 0)
+
+                # Boost for recommended_default
+                if vendor.get("recommended_default"):
+                    score += 25
+
+                # Boost for matching recommended_for tags
+                if finding_tags:
+                    recommended_for = vendor.get("recommended_for", [])
+                    for tag in finding_tags:
+                        tag_normalized = tag.lower().replace(" ", "_")
+                        if tag_normalized in recommended_for or tag in recommended_for:
+                            score += 10
+                            break
+
+                vendor["_recommendation_score"] = score
+
+            # Sort by recommendation score
+            vendors.sort(key=lambda v: v.get("_recommendation_score", 0), reverse=True)
+
+            return vendors
+
+        except Exception as e:
+            logger.error(f"Failed to get vendors with tier boost for {industry}: {e}")
+            return self._get_vendors_from_json_with_boost(industry, category, finding_tags)
+
+    async def _apply_industry_boosts(
+        self,
+        vendors: List[Dict[str, Any]],
+        industry: str,
+    ) -> List[Dict[str, Any]]:
+        """Apply industry tier boosts to vendors."""
+        if not vendors:
+            return vendors
+
+        supabase = await get_async_supabase()
+
+        try:
+            # Get industry tiers for all vendor IDs
+            vendor_ids = [v.get("id") for v in vendors if v.get("id")]
+
+            tiers_result = await supabase.table("industry_vendor_tiers").select(
+                "vendor_id, tier, boost_score"
+            ).eq("industry", industry).in_("vendor_id", vendor_ids).execute()
+
+            tiers_by_vendor = {
+                t["vendor_id"]: t for t in (tiers_result.data or [])
+            }
+
+            # Apply boosts
+            for vendor in vendors:
+                vendor_id = vendor.get("id")
+                tier_info = tiers_by_vendor.get(vendor_id)
+
+                if tier_info:
+                    tier = tier_info.get("tier", 3)
+                    custom_boost = tier_info.get("boost_score", 0)
+                    vendor["_tier"] = tier
+                    vendor["_tier_boost"] = TIER_BOOST.get(tier, 0) + custom_boost
+                else:
+                    vendor["_tier"] = None
+                    vendor["_tier_boost"] = 0
+
+            return vendors
+
+        except Exception as e:
+            logger.warning(f"Failed to apply industry boosts: {e}")
+            for vendor in vendors:
+                vendor["_tier"] = None
+                vendor["_tier_boost"] = 0
+            return vendors
+
+    async def get_tier_vendors(
+        self,
+        industry: str,
+        tier: int = 1,
+    ) -> List[Dict[str, Any]]:
+        """
+        Get vendors in a specific tier for an industry.
+
+        Args:
+            industry: Industry slug
+            tier: Tier level (1, 2, or 3)
+
+        Returns:
+            Vendors in that tier
+        """
+        supabase = await get_async_supabase()
+
+        try:
+            # Get tiers for this industry
+            tiers_result = await supabase.table("industry_vendor_tiers").select(
+                "vendor_id, tier, boost_score"
+            ).eq("industry", industry).eq("tier", tier).execute()
+
+            if not tiers_result.data:
+                return []
+
+            vendor_ids = [t["vendor_id"] for t in tiers_result.data]
+
+            # Get the actual vendors
+            vendors_result = await supabase.table("vendors").select(
+                "*"
+            ).in_("id", vendor_ids).eq("status", "active").execute()
+
+            return vendors_result.data or []
+
+        except Exception as e:
+            logger.error(f"Failed to get tier {tier} vendors for {industry}: {e}")
+            return []
+
+    async def set_vendor_tier(
+        self,
+        industry: str,
+        vendor_id: str,
+        tier: int,
+        boost_score: int = 0,
+        notes: Optional[str] = None,
+    ) -> bool:
+        """
+        Set or update a vendor's tier for an industry.
+
+        Args:
+            industry: Industry slug
+            vendor_id: Vendor UUID
+            tier: Tier level (1, 2, or 3)
+            boost_score: Additional boost score
+            notes: Optional notes
+
+        Returns:
+            True if successful
+        """
+        supabase = await get_async_supabase()
+
+        try:
+            # Upsert the tier assignment
+            await supabase.table("industry_vendor_tiers").upsert({
+                "industry": industry,
+                "vendor_id": vendor_id,
+                "tier": tier,
+                "boost_score": boost_score,
+                "notes": notes,
+                "updated_at": datetime.utcnow().isoformat(),
+            }).execute()
+
+            logger.info(f"Set vendor {vendor_id} to tier {tier} for {industry}")
+            return True
+
+        except Exception as e:
+            logger.error(f"Failed to set vendor tier: {e}")
+            return False
+
+    async def remove_vendor_tier(self, industry: str, vendor_id: str) -> bool:
+        """Remove a vendor from an industry's tier list."""
+        supabase = await get_async_supabase()
+
+        try:
+            await supabase.table("industry_vendor_tiers").delete().eq(
+                "industry", industry
+            ).eq("vendor_id", vendor_id).execute()
+
+            logger.info(f"Removed vendor {vendor_id} from {industry} tiers")
+            return True
+
+        except Exception as e:
+            logger.error(f"Failed to remove vendor tier: {e}")
+            return False
+
+    def _get_vendors_from_json_with_boost(
+        self,
+        industry: str,
+        category: Optional[str],
+        finding_tags: Optional[List[str]],
+    ) -> List[Dict[str, Any]]:
+        """Fallback to JSON knowledge base with scoring."""
+        from src.knowledge import get_vendor_recommendations, get_all_vendors
+
+        # Get vendors
+        if industry:
+            vendors = get_vendor_recommendations(industry, category)
+            if not vendors:
+                vendors = get_all_vendors([category] if category else None)
+        else:
+            vendors = get_all_vendors([category] if category else None)
+
+        # Apply scoring (no tier boosts in JSON mode)
+        for vendor in vendors:
+            score = 0
+
+            if vendor.get("recommended_default"):
+                score += 25
+
+            if finding_tags:
+                recommended_for = vendor.get("recommended_for", [])
+                for tag in finding_tags:
+                    tag_normalized = tag.lower().replace(" ", "_")
+                    if tag_normalized in recommended_for or tag in recommended_for:
+                        score += 10
+                        break
+
+            vendor["_tier"] = None
+            vendor["_tier_boost"] = 0
+            vendor["_recommendation_score"] = score
+
+        vendors.sort(key=lambda v: v.get("_recommendation_score", 0), reverse=True)
+        return vendors
 
 
 # Singleton instance

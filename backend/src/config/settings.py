@@ -30,7 +30,7 @@ class Settings(BaseSettings):
 
     # Security
     SECRET_KEY: str = "change-me-in-production-min-32-characters"
-    CORS_ORIGINS: str = "http://localhost:5174,http://127.0.0.1:5174"
+    CORS_ORIGINS: str = "http://localhost:5173,http://localhost:5174,http://localhost:5175,http://localhost:5176,http://localhost:5177,http://127.0.0.1:5173,http://127.0.0.1:5174,http://127.0.0.1:5175,http://127.0.0.1:5176,http://127.0.0.1:5177"
 
     # Supabase
     SUPABASE_URL: str = ""
@@ -51,10 +51,20 @@ class Settings(BaseSettings):
     CACHE_TTL_REPORT: int = 3600  # 1 hour
     CACHE_TTL_QUIZ: int = 86400  # 24 hours
 
-    # AI/LLM
+    # Vendor Database
+    USE_SUPABASE_VENDORS: bool = True  # True = Supabase, False = JSON fallback
+
+    # AI/LLM - Verified December 2025
+    # Supported providers: anthropic, google, openai, deepseek
     ANTHROPIC_API_KEY: str = ""
-    OPENAI_API_KEY: Optional[str] = None
-    DEFAULT_MODEL: str = "claude-sonnet-4-20250514"
+    GOOGLE_API_KEY: Optional[str] = None  # For Gemini 3 models
+    OPENAI_API_KEY: Optional[str] = None  # For GPT-5.2 models
+    DEEPSEEK_API_KEY: Optional[str] = None  # For DeepSeek V3.2 (budget option)
+    DEFAULT_MODEL: str = "claude-haiku-4-5-20251001"  # Haiku 4.5 for research (fastest, cost-effective)
+    MODEL_PROVIDER: str = "anthropic"  # "anthropic", "google", "openai", "deepseek"
+    # Strategy options: cost_optimized, quality_first, hybrid, gemini_primary,
+    #                   openai_primary, budget, multi_provider
+    MULTI_MODEL_STRATEGY: str = "hybrid"
 
     # Tool execution settings
     TOOL_TIMEOUT_DEFAULT: int = 30  # seconds
@@ -71,6 +81,11 @@ class Settings(BaseSettings):
     # Speech-to-Text (Deepgram)
     DEEPGRAM_API_KEY: Optional[str] = None
 
+    # Text-to-Speech (ElevenLabs)
+    ELEVENLABS_API_KEY: Optional[str] = None
+    ELEVENLABS_VOICE_ID: str = "21m00Tcm4TlvDq8ikWAM"  # "Rachel" - calm, professional voice
+    ELEVENLABS_MODEL_ID: str = "eleven_flash_v2_5"  # Fast, low-latency model
+
     # Payments (Stripe) - Fixed naming to match .env.production
     STRIPE_SECRET_KEY: str = ""
     STRIPE_WEBHOOK_SECRET: str = ""
@@ -80,10 +95,13 @@ class Settings(BaseSettings):
     STRIPE_PRICE_PROFESSIONAL: Optional[str] = None
     STRIPE_PRICE_PROFESSIONAL_EARLY: Optional[str] = None
 
-    # Email (SendGrid)
+    # Email (SendGrid) - Legacy, for transactional
     SENDGRID_API_KEY: Optional[str] = None
     SENDGRID_FROM_EMAIL: str = "reports@crb-analyser.com"
     SENDGRID_FROM_NAME: str = "CRB Analyser"
+
+    # Email Marketing (Brevo) - For nurture sequences
+    BREVO_API_KEY: Optional[str] = None
 
     # Monitoring
     LOGFIRE_TOKEN: Optional[str] = None
