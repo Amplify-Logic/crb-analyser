@@ -62,8 +62,8 @@ class TestTokenAnalyticsService:
     @pytest.mark.asyncio
     async def test_get_usage_summary(self, mock_reports_data):
         """Should aggregate usage correctly."""
-        with patch('src.services.token_analytics.get_async_supabase') as mock_supabase:
-            mock_client = AsyncMock()
+        with patch('src.services.token_analytics.get_async_supabase', new_callable=AsyncMock) as mock_supabase:
+            mock_client = MagicMock()
             mock_supabase.return_value = mock_client
 
             # Setup mock chain
@@ -82,8 +82,8 @@ class TestTokenAnalyticsService:
     @pytest.mark.asyncio
     async def test_get_cost_trend(self, mock_reports_data):
         """Should return daily cost breakdown."""
-        with patch('src.services.token_analytics.get_async_supabase') as mock_supabase:
-            mock_client = AsyncMock()
+        with patch('src.services.token_analytics.get_async_supabase', new_callable=AsyncMock) as mock_supabase:
+            mock_client = MagicMock()
             mock_supabase.return_value = mock_client
 
             mock_query = MagicMock()
@@ -99,8 +99,8 @@ class TestTokenAnalyticsService:
     @pytest.mark.asyncio
     async def test_get_model_efficiency(self, mock_reports_data):
         """Should analyze model usage efficiency."""
-        with patch('src.services.token_analytics.get_async_supabase') as mock_supabase:
-            mock_client = AsyncMock()
+        with patch('src.services.token_analytics.get_async_supabase', new_callable=AsyncMock) as mock_supabase:
+            mock_client = MagicMock()
             mock_supabase.return_value = mock_client
 
             mock_query = MagicMock()
@@ -117,8 +117,8 @@ class TestTokenAnalyticsService:
     @pytest.mark.asyncio
     async def test_get_report_cost_breakdown(self, mock_reports_data):
         """Should return detailed breakdown for single report."""
-        with patch('src.services.token_analytics.get_async_supabase') as mock_supabase:
-            mock_client = AsyncMock()
+        with patch('src.services.token_analytics.get_async_supabase', new_callable=AsyncMock) as mock_supabase:
+            mock_client = MagicMock()
             mock_supabase.return_value = mock_client
 
             mock_query = MagicMock()

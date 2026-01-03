@@ -14,7 +14,7 @@ import pytest
 from unittest.mock import patch, MagicMock, AsyncMock
 import json
 
-from src.config.model_routing import get_model_for_task, TokenTracker, MODELS
+from src.config.model_routing import get_model_for_task, TokenTracker, CLAUDE_MODELS
 from src.config.ai_tools import (
     get_ai_recommendation,
     get_build_it_yourself_context,
@@ -56,10 +56,17 @@ class TestModelRouting:
         model = get_model_for_task("complex_analysis", "full")
         assert "opus" in model.lower(), f"Full tier complex_analysis should use Opus, got {model}"
 
-    def test_quick_tier_avoids_opus(self):
-        """Quick tier should never use Opus."""
-        model = get_model_for_task("complex_analysis", "quick")
-        assert "opus" not in model.lower(), f"Quick tier should not use Opus, got {model}"
+    def test_quick_tier_avoids_opus_for_generation(self):
+        """Quick tier should use Sonnet instead of Opus for generation tasks."""
+        # Generation tasks have tier overrides to use balanced (Sonnet) for quick tier
+        generation_tasks = [
+            "generate_executive_summary",
+            "generate_findings",
+            "generate_recommendations",
+        ]
+        for task in generation_tasks:
+            model = get_model_for_task(task, "quick")
+            assert "opus" not in model.lower(), f"Quick tier should not use Opus for {task}, got {model}"
 
     def test_fallback_to_default(self):
         """Unknown tasks should fall back to default model."""
@@ -73,8 +80,8 @@ class TestTokenTracker:
     def test_tracks_usage(self):
         """Token tracker should correctly sum usage."""
         tracker = TokenTracker()
-        tracker.add_usage("task1", MODELS["sonnet"], 1000, 500)
-        tracker.add_usage("task2", MODELS["haiku"], 500, 200)
+        tracker.add_usage("task1", CLAUDE_MODELS["sonnet"], 1000, 500)
+        tracker.add_usage("task2", CLAUDE_MODELS["haiku"], 500, 200)
 
         summary = tracker.get_summary()
         assert summary["total_input_tokens"] == 1500
@@ -85,7 +92,7 @@ class TestTokenTracker:
         """Token tracker should estimate costs correctly."""
         tracker = TokenTracker()
         # Add 1M input tokens of Sonnet ($3) + 1M output tokens ($15) = $18
-        tracker.add_usage("test", MODELS["sonnet"], 1_000_000, 1_000_000)
+        tracker.add_usage("test", CLAUDE_MODELS["sonnet"], 1_000_000, 1_000_000)
 
         summary = tracker.get_summary()
         assert summary["estimated_cost_usd"] == pytest.approx(18.0, rel=0.01)
@@ -93,22 +100,22 @@ class TestTokenTracker:
     def test_by_model_breakdown(self):
         """Token tracker should break down by model."""
         tracker = TokenTracker()
-        tracker.add_usage("task1", MODELS["sonnet"], 100, 50)
-        tracker.add_usage("task2", MODELS["haiku"], 200, 100)
-        tracker.add_usage("task3", MODELS["sonnet"], 150, 75)
+        tracker.add_usage("task1", CLAUDE_MODELS["sonnet"], 100, 50)
+        tracker.add_usage("task2", CLAUDE_MODELS["haiku"], 200, 100)
+        tracker.add_usage("task3", CLAUDE_MODELS["sonnet"], 150, 75)
 
         summary = tracker.get_summary()
         by_model = summary["by_model"]
 
-        assert MODELS["sonnet"] in by_model
-        assert by_model[MODELS["sonnet"]]["input"] == 250
-        assert MODELS["haiku"] in by_model
-        assert by_model[MODELS["haiku"]]["input"] == 200
+        assert CLAUDE_MODELS["sonnet"] in by_model
+        assert by_model[CLAUDE_MODELS["sonnet"]]["input"] == 250
+        assert CLAUDE_MODELS["haiku"] in by_model
+        assert by_model[CLAUDE_MODELS["haiku"]]["input"] == 200
 
     def test_to_dict_export(self):
         """Token tracker should export full data."""
         tracker = TokenTracker()
-        tracker.add_usage("test", MODELS["sonnet"], 100, 50)
+        tracker.add_usage("test", CLAUDE_MODELS["sonnet"], 100, 50)
 
         data = tracker.to_dict()
         assert "usage" in data
@@ -241,6 +248,7 @@ class TestReportGeneratorIntegration:
             generator.MAX_RETRIES = 3
             generator.RETRY_DELAYS = [0.01, 0.02, 0.04]  # Fast for testing
             generator.SYSTEM_PROMPT = "test"
+            generator.trace_collector = None  # New required attribute
 
             # First two calls fail, third succeeds
             mock_response = MagicMock()

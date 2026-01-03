@@ -418,7 +418,9 @@ class VendorMatchingSkill(LLMSkill[Dict[str, Any]]):
 
             # G2 score
             g2 = ratings.get("g2", {})
-            if g2.get("score", 0) >= 4.5 and g2.get("reviews", 0) > 100:
+            g2_score = g2.get("score") or 0
+            g2_reviews = g2.get("reviews") or 0
+            if g2_score >= 4.5 and g2_reviews > 100:
                 score += 10
                 reasons.append(f"G2 rating: {g2.get('score')}/5")
 
@@ -582,14 +584,17 @@ Return ONLY a JSON object:
                 tiers = pricing.get("tiers", [])
                 if tiers:
                     mid_tier = tiers[len(tiers)//2]
-                    if mid_tier.get("price", 0) > (off_the_shelf.get("monthly_cost", 0) * 1.5):
+                    mid_price = mid_tier.get("price") or 0
+                    off_shelf_cost = off_the_shelf.get("monthly_cost") or 0
+                    if mid_price > (off_shelf_cost * 1.5):
                         best_in_class = self._format_vendor(vendor)
                         break
 
         # Determine confidence
-        if off_the_shelf and off_the_shelf.get("fit_score", 0) >= 75:
+        fit_score = (off_the_shelf.get("fit_score") or 0) if off_the_shelf else 0
+        if off_the_shelf and fit_score >= 75:
             confidence = "high"
-        elif off_the_shelf and off_the_shelf.get("fit_score", 0) >= 50:
+        elif off_the_shelf and fit_score >= 50:
             confidence = "medium"
         else:
             confidence = "low"

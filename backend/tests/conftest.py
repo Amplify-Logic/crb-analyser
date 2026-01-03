@@ -129,54 +129,73 @@ def mock_findings() -> list:
 @pytest.fixture
 def mock_recommendations() -> list:
     """Sample recommendations for testing."""
+    base_rec = {
+        "priority": "high",
+        "why_it_matters": {
+            "customer_value": "Faster response times",
+            "business_health": "Reduce support costs by 40%"
+        },
+        "options": {
+            "off_the_shelf": {
+                "name": "Intercom Fin",
+                "vendor": "Intercom",
+                "monthly_cost": 99,
+                "implementation_weeks": 2,
+                "implementation_cost": 500,
+                "pros": ["Quick setup", "No code"],
+                "cons": ["Monthly cost", "Limited customization"]
+            },
+            "best_in_class": {
+                "name": "Zendesk AI",
+                "vendor": "Zendesk",
+                "monthly_cost": 199,
+                "implementation_weeks": 4,
+                "implementation_cost": 2000,
+                "pros": ["Enterprise features"],
+                "cons": ["Higher cost"]
+            },
+            "custom_solution": {
+                "approach": "Build RAG-based support bot",
+                "estimated_cost": {"min": 5000, "max": 10000},
+                "monthly_running_cost": 50,
+                "implementation_weeks": 6,
+                "pros": ["Perfect fit", "Competitive advantage"],
+                "cons": ["Development time"],
+                "build_tools": ["Claude API", "Cursor", "Vercel"],
+                "model_recommendation": "Claude Sonnet 4",
+                "skills_required": ["Python", "API integration"],
+                "dev_hours_estimate": "60-100 hours"
+            },
+            "our_recommendation": "custom_solution",
+            "recommendation_rationale": "Tech team can execute, high ROI justifies investment"
+        },
+        "our_recommendation": "custom_solution",
+        "recommendation_rationale": "Tech team can execute, high ROI justifies investment",
+        "roi_percentage": 350,
+        "payback_months": 4,
+        "assumptions": ["50 EUR hourly rate", "20 hours saved weekly"]
+    }
     return [
         {
+            **base_rec,
             "id": "rec-001",
             "finding_id": "finding-001",
             "title": "AI Customer Support Assistant",
             "description": "Implement AI-powered support triage",
-            "priority": "high",
-            "why_it_matters": {
-                "customer_value": "Faster response times",
-                "business_health": "Reduce support costs by 40%"
-            },
-            "options": {
-                "off_the_shelf": {
-                    "name": "Intercom Fin",
-                    "vendor": "Intercom",
-                    "monthly_cost": 99,
-                    "implementation_weeks": 2,
-                    "implementation_cost": 500,
-                    "pros": ["Quick setup", "No code"],
-                    "cons": ["Monthly cost", "Limited customization"]
-                },
-                "best_in_class": {
-                    "name": "Zendesk AI",
-                    "vendor": "Zendesk",
-                    "monthly_cost": 199,
-                    "implementation_weeks": 4,
-                    "implementation_cost": 2000,
-                    "pros": ["Enterprise features"],
-                    "cons": ["Higher cost"]
-                },
-                "custom_solution": {
-                    "approach": "Build RAG-based support bot",
-                    "estimated_cost": {"min": 5000, "max": 10000},
-                    "monthly_running_cost": 50,
-                    "implementation_weeks": 6,
-                    "pros": ["Perfect fit", "Competitive advantage"],
-                    "cons": ["Development time"],
-                    "build_tools": ["Claude API", "Cursor", "Vercel"],
-                    "model_recommendation": "Claude Sonnet 4",
-                    "skills_required": ["Python", "API integration"],
-                    "dev_hours_estimate": "60-100 hours"
-                }
-            },
-            "our_recommendation": "custom_solution",
-            "recommendation_rationale": "Tech team can execute, high ROI justifies investment",
-            "roi_percentage": 350,
-            "payback_months": 4,
-            "assumptions": ["50 EUR hourly rate", "20 hours saved weekly"]
+        },
+        {
+            **base_rec,
+            "id": "rec-002",
+            "finding_id": "finding-002",
+            "title": "Data Entry Automation",
+            "description": "Automate repetitive data entry tasks",
+        },
+        {
+            **base_rec,
+            "id": "rec-003",
+            "finding_id": "finding-003",
+            "title": "Content Generation Assistant",
+            "description": "AI-powered marketing content creation",
         }
     ]
 

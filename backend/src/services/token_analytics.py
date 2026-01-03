@@ -11,7 +11,7 @@ from typing import Dict, Any, List, Optional
 from collections import defaultdict
 
 from src.config.supabase_client import get_async_supabase
-from src.config.model_routing import MODELS, TokenTracker
+from src.config.model_routing import CLAUDE_MODELS, TokenTracker
 
 logger = logging.getLogger(__name__)
 
@@ -29,9 +29,9 @@ class TokenAnalyticsService:
 
     # Model pricing (same as TokenTracker for consistency)
     PRICING = {
-        MODELS["haiku"]: {"input": 0.80, "output": 4.00, "name": "Haiku"},
-        MODELS["sonnet"]: {"input": 3.00, "output": 15.00, "name": "Sonnet"},
-        MODELS["opus"]: {"input": 15.00, "output": 75.00, "name": "Opus"},
+        CLAUDE_MODELS["haiku"]: {"input": 1.00, "output": 5.00, "name": "Haiku"},
+        CLAUDE_MODELS["sonnet"]: {"input": 3.00, "output": 15.00, "name": "Sonnet"},
+        CLAUDE_MODELS["opus"]: {"input": 5.00, "output": 25.00, "name": "Opus"},
     }
 
     @classmethod
@@ -272,15 +272,15 @@ class TokenAnalyticsService:
 
         # Check for expensive model overuse
         opus_usage = sum(
-            data.get("models_used", {}).get(MODELS["opus"], 0)
+            data.get("models_used", {}).get(CLAUDE_MODELS["opus"], 0)
             for data in efficiency.values()
         )
         sonnet_usage = sum(
-            data.get("models_used", {}).get(MODELS["sonnet"], 0)
+            data.get("models_used", {}).get(CLAUDE_MODELS["sonnet"], 0)
             for data in efficiency.values()
         )
         haiku_usage = sum(
-            data.get("models_used", {}).get(MODELS["haiku"], 0)
+            data.get("models_used", {}).get(CLAUDE_MODELS["haiku"], 0)
             for data in efficiency.values()
         )
 
