@@ -483,187 +483,156 @@ async def _map_pain_points_to_opportunity_categories(
 
 ---
 
-## Prerequisites Before Implementation
+## Data Architecture: Supabase-First
 
-### 1. KB Benchmark Data Required (Supabase)
+### Source of Truth: Supabase `knowledge_embeddings`
 
-Benchmarks are stored in the `knowledge_embeddings` table with `content_type='benchmark'`.
+```
+JSON files (seed data)
+        ↓
+vectorize_knowledge.py (sync script)
+        ↓
+┌─────────────────────────────────────────┐
+│  Supabase: knowledge_embeddings table   │  ← SOURCE OF TRUTH
+│  - content_type: 'benchmark'            │
+│  - industry: 'dental'                   │
+│  - metadata: { source: {...} }          │
+└─────────────────────────────────────────┘
+        ↑                    ↓
+Admin Portal (CRUD)    teaser_service.py (query)
+```
 
-**Required structure in metadata JSONB:**
+### Table Schema (from migration 008)
 
 ```sql
--- Insert benchmark into knowledge_embeddings
-INSERT INTO knowledge_embeddings (
-  content_type,
-  content_id,
-  industry,
-  title,
-  content,
-  metadata
-) VALUES (
-  'benchmark',
-  'dental-ai-adoption-2024',
-  'dental',
-  'AI Adoption in Dental Practices',
-  '34% of dental practices currently use AI-powered tools for scheduling, patient communication, or administrative tasks.',
-  '{
-    "metric": "ai_adoption_rate",
-    "value": "34%",
-    "value_numeric": 34,
-    "source": {
-      "name": "ADA Health Policy Institute Technology Survey",
-      "url": "https://ada.org/resources/research/health-policy-institute",
-      "verified_date": "2024-09",
-      "verified_by": "lars"
-    },
-    "relevance_template": "Your practice is among the {remaining}% with untapped AI potential"
-  }'
+CREATE TABLE knowledge_embeddings (
+    id UUID PRIMARY KEY,
+    content_type TEXT NOT NULL,  -- 'benchmark', 'opportunity', 'vendor', etc.
+    content_id TEXT NOT NULL,
+    industry TEXT,
+    title TEXT NOT NULL,
+    content TEXT NOT NULL,
+    metadata JSONB DEFAULT '{}',  -- Contains source attribution
+    embedding vector(1536),
+    source_file TEXT,
+    UNIQUE(content_type, content_id)
 );
 ```
 
-**Querying benchmarks for teaser:**
+### Required Metadata Structure for Benchmarks
+
+Benchmarks MUST have source attribution in metadata:
+
+```json
+{
+  "content_type": "benchmark",
+  "content_id": "dental-ai-adoption",
+  "industry": "dental",
+  "title": "AI Feature Adoption in Dental Practices",
+  "content": "65% of dental practices use automated reminders...",
+  "metadata": {
+    "metric_name": "ai_feature_adoption",
+    "value": "65%",
+    "value_numeric": 65,
+    "unit": "percent",
+    "source": {
+      "name": "Dental Technology Surveys 2024",
+      "url": "https://example.com/dental-tech-survey",
+      "verified_date": "2024-09"
+    },
+    "relevance_template": "Your practice could join the {value} already using this"
+  }
+}
+```
+
+### Validation Rules (Enforced in Code)
 
 ```python
-async def get_verified_benchmarks(industry: str) -> List[Dict]:
-    """Get verified benchmarks from Supabase."""
-    supabase = await get_async_supabase()
+def is_valid_benchmark(row: dict) -> bool:
+    """Benchmark must have verified source to be shown in teaser."""
+    metadata = row.get("metadata", {})
+    source = metadata.get("source", {})
 
-    result = await supabase.table("knowledge_embeddings").select(
-        "content_id, title, content, metadata"
-    ).eq(
-        "content_type", "benchmark"
-    ).eq(
-        "industry", industry
-    ).execute()
+    # Must have source name
+    if not source.get("name"):
+        return False
 
-    # Filter to only include benchmarks with verified sources
-    verified = []
-    for row in result.data or []:
-        metadata = row.get("metadata", {})
-        source = metadata.get("source", {})
+    # Must have verification date
+    if not source.get("verified_date"):
+        return False
 
-        # Must have source name and verified_date
-        if source.get("name") and source.get("verified_date"):
-            # Check freshness (within 18 months)
-            if not is_stale(source["verified_date"], months=18):
-                verified.append({
-                    "metric": metadata.get("metric"),
-                    "value": metadata.get("value"),
-                    "source": source,
-                    "relevance": metadata.get("relevance_template"),
-                })
+    # Must not be stale (>18 months)
+    if is_stale(source["verified_date"], months=18):
+        return False
 
-    return verified
+    return True
 ```
 
-### 2. Opportunity Categories (Supabase)
+### Opportunity Categories for Pain Point Mapping
 
-Opportunities are stored in `knowledge_embeddings` with `content_type='opportunity'`.
+Opportunities in `knowledge_embeddings` should have a `category` field:
 
-**Required structure in metadata JSONB:**
-
-```sql
-INSERT INTO knowledge_embeddings (
-  content_type,
-  content_id,
-  industry,
-  title,
-  content,
-  metadata
-) VALUES (
-  'opportunity',
-  'dental-patient-communication',
-  'dental',
-  'Patient Communication Automation',
-  'Automate patient follow-up, appointment reminders, and recall notifications...',
-  '{
-    "category": "customer_communication",
-    "keywords": ["follow-up", "reminders", "recalls", "confirmations", "patient"],
-    "in_full_report": [
-      "Specific automation tools with pricing",
-      "ROI calculation based on your patient volume",
-      "Implementation timeline"
-    ],
-    "business_health_score": 8,
-    "customer_value_score": 9
-  }'
-);
+```json
+{
+  "content_type": "opportunity",
+  "industry": "dental",
+  "metadata": {
+    "category": "customer_communication",  // Used for pain point mapping
+    "keywords": ["follow-up", "reminders", "patient"],
+    "in_full_report": ["Specific tools", "ROI calculation", "Timeline"]
+  }
+}
 ```
 
-### 3. Current Data Status
+### Admin Portal Integration
 
-Check what benchmark data exists:
+The Knowledge Base Admin (`/admin/knowledge`) allows:
+- Adding new benchmarks with source attribution
+- Editing existing entries
+- Marking entries as verified
+- Triggering re-embedding
 
-```sql
--- Count benchmarks per industry
-SELECT industry, COUNT(*) as benchmark_count
-FROM knowledge_embeddings
-WHERE content_type = 'benchmark'
-  AND metadata->'source'->>'verified_date' IS NOT NULL
-GROUP BY industry;
-```
-
-| Industry | Verified Benchmarks | Status |
-|----------|---------------------|--------|
-| dental | ? | Check Supabase |
-| professional-services | ? | Check Supabase |
-| home-services | ? | Check Supabase |
-
-### 4. Data Population Task
-
-Before implementing, run this audit:
-
-```bash
-# Check existing benchmark data
-python -c "
-from src.config.supabase_client import get_async_supabase
-import asyncio
-
-async def audit():
-    supabase = await get_async_supabase()
-    result = await supabase.table('knowledge_embeddings').select(
-        'industry, content_id, metadata'
-    ).eq('content_type', 'benchmark').execute()
-
-    for row in result.data or []:
-        source = row.get('metadata', {}).get('source', {})
-        verified = '✓' if source.get('verified_date') else '✗'
-        print(f'{verified} {row[\"industry\"]}: {row[\"content_id\"]}')
-        if source.get('name'):
-            print(f'   Source: {source[\"name\"]}')
-
-asyncio.run(audit())
-"
-```
+All teaser queries pull from this Supabase table, ensuring admin changes are immediately reflected.
 
 ---
 
 ## Migration Plan
 
-### Phase 1: Backend Changes
-1. Create new teaser schema types (`TeaserReportV2`)
-2. Implement `_extract_user_reflections()`
-3. Implement `_get_validated_benchmarks()`
-4. Implement `_map_pain_points_to_categories()`
-5. Create `/sessions/{id}/teaser-v2` endpoint (parallel to existing)
-6. Add tests for new functions
+### Phase 1: Ensure Supabase Data Has Sources
 
-### Phase 2: KB Data Population
-1. Research and add verified benchmarks for dental
-2. Research and add verified benchmarks for professional-services
-3. Research and add verified benchmarks for home-services
-4. Define opportunity categories per industry
+1. Run `vectorize_knowledge.py` to sync JSON → Supabase
+2. Verify benchmarks in Supabase have `metadata.source` populated
+3. Add any missing source attribution via Admin Portal
+
+```bash
+# Sync existing JSON data to Supabase
+cd backend && python -m src.scripts.vectorize_knowledge --type benchmark
+```
+
+### Phase 2: Backend Changes (teaser_service.py)
+
+1. Add `_get_verified_benchmarks_from_supabase()` - queries Supabase
+2. Add `_get_opportunity_categories_from_supabase()` - queries Supabase
+3. Add `_extract_user_reflections()` - reflects quiz answers
+4. Modify `generate_teaser_report()` to return new insights-first schema
+5. Remove AI generation (`_generate_ai_findings`, `_generate_fallback_findings`)
+6. Remove Haiku API call - no more LLM in teaser generation
 
 ### Phase 3: Frontend Changes
-1. Create `PreviewReportV2.tsx` component
-2. Update UI to display new schema
-3. Update `/quiz/preview` route to use new endpoint
-4. A/B test if needed
 
-### Phase 4: Deprecate Old Flow
-1. Remove old teaser generation code
-2. Remove Haiku API call for findings
-3. Update CLAUDE.md documentation
+1. Update `PreviewReport.tsx` to display new schema:
+   - "What You Told Us" section (user reflections)
+   - "Industry Context" section (benchmarks with sources)
+   - "High-Potential Areas" section (opportunity categories)
+   - "What's Next" section (workshop + report preview)
+2. Remove blurred findings display
+3. Remove ROI estimate display
+
+### Phase 4: Cleanup & Docs
+
+1. Remove dead code from teaser_service.py
+2. Update CLAUDE.md quiz flow documentation
+3. Add admin documentation for adding benchmarks with sources
 
 ---
 
