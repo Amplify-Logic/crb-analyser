@@ -108,6 +108,17 @@ from .roi_calculator import (
     SavedScenario,
     ROICalculator,
 )
+from .workshop import (
+    WorkshopPhase,
+    AccuracyRating,
+    DetectedSignals,
+    ConfirmationData,
+    DeepDiveData,
+    MilestoneData,
+    WorkshopData,
+    WorkshopConfidence,
+    DepthDimensions,
+)
 
 __all__ = [
     # Auth
@@ -202,4 +213,14 @@ __all__ = [
     "ROIResults",
     "SavedScenario",
     "ROICalculator",
+    # Workshop
+    "WorkshopPhase",
+    "AccuracyRating",
+    "DetectedSignals",
+    "ConfirmationData",
+    "DeepDiveData",
+    "MilestoneData",
+    "WorkshopData",
+    "WorkshopConfidence",
+    "DepthDimensions",
 ]

@@ -1,33 +1,5 @@
 # CRB Analyser - Development Guide
 
-## Shortcut Terms
-
-Quick communication shortcuts between user and Claude Code:
-
-| Shortcut | Meaning |
-|----------|---------|
-| **CW** | Context Window (remaining conversation capacity) |
-| **HO** | Handoff document needed |
-| **KB** | Knowledge Base (`backend/src/knowledge/`) |
-| **PM** | Practice Management (software) |
-| **FSM** | Field Service Management (software) |
-| **DSO** | Dental Service Organization |
-| **3O** | Three Options (off-shelf/best-in-class/custom) |
-| **2P** | Two Pillars (Customer Value + Business Health) |
-| **ROI-CA** | ROI Confidence-Adjusted |
-| **TDD** | Test-Driven Development |
-| **LGTM** | Looks Good To Me (approve) |
-| **WIP** | Work In Progress |
-| **PR** | Pull Request |
-| **FE** | Frontend |
-| **BE** | Backend |
-| **DB** | Database |
-| **API** | API endpoint |
-| **SSE** | Server-Sent Events (streaming) |
-| **RLS** | Row Level Security (Supabase) |
-
----
-
 ## Quick Start
 
 ```bash
@@ -37,615 +9,241 @@ cd backend && source venv/bin/activate && uvicorn src.main:app --reload --port 8
 # Frontend (port 5174)
 cd frontend && npm run dev
 
-# Redis (required for caching)
+# Redis (required)
 brew services start redis
 ```
 
 ---
 
-## Project Overview
+## Tech Stack
 
-**CRB Analyser** is an AI-powered business audit microservice delivering Cost/Risk/Benefit analysis for AI implementation.
-
-| Component | Technology |
-|-----------|------------|
+| Layer | Tech |
+|-------|------|
 | Backend | FastAPI + Python 3.12 |
 | Frontend | React 18 + Vite + TypeScript |
-| Database | Supabase (PostgreSQL) |
-| Auth | Supabase Auth (JWT) |
+| Database | Supabase (PostgreSQL + RLS) |
 | Cache | Redis |
 | AI | Anthropic Claude API |
 | Payments | Stripe |
-| Email | SendGrid |
-| Monitoring | Logfire + Langfuse |
+| Deploy | Railway |
 
 ---
 
 ## Architecture
 
 ```
-┌─────────────────────────────────────────────────────────────┐
-│                      CRB ANALYSER                           │
-├─────────────────────────────────────────────────────────────┤
-│  FRONTEND (React + Vite)          BACKEND (FastAPI)         │
-│  ├── Landing                      ├── /api/auth             │
-│  ├── Dashboard                    ├── /api/clients          │
-│  ├── Intake Wizard                ├── /api/audits           │
-│  ├── Progress View                ├── /api/findings         │
-│  ├── Report Viewer                ├── /api/reports          │
-│  └── Settings                     ├── /api/intake           │
-│                                   ├── /api/vendors          │
-│                                   ├── /api/payments         │
-│                                   └── /api/health           │
-├─────────────────────────────────────────────────────────────┤
-│  CRB AGENT                                                  │
-│  ├── Discovery Tools (analyze intake, map processes)        │
-│  ├── Research Tools (benchmarks, vendors, web search)       │
-│  ├── Analysis Tools (scoring, impact, risk)                 │
-│  ├── Modeling Tools (ROI, comparison, timeline)             │
-│  └── Report Tools (summary, full report, PDF)               │
-├─────────────────────────────────────────────────────────────┤
-│  DATA LAYER                                                 │
-│  ├── Supabase: clients, audits, findings, recommendations   │
-│  ├── Redis: caching, sessions, rate limiting                │
-│  └── Vendor DB: pricing, benchmarks (our moat)              │
-└─────────────────────────────────────────────────────────────┘
+Frontend (React)           Backend (FastAPI)
+├── Landing/Dashboard      ├── /api/auth, clients, audits
+├── Intake Wizard          ├── /api/findings, reports
+├── Progress/Report View   ├── /api/vendors, payments
+└── Settings               └── /api/health
+
+CRB Agent: Discovery → Research → Analysis → Modeling → Report
+
+Data: Supabase (clients, audits, findings) + Redis (cache) + Vendor KB (moat)
 ```
-
----
-
-## Solution Philosophy: Automation vs Custom Software
-
-CRB Analyser recommends solutions across a spectrum. Understanding when to recommend each approach is critical.
-
-### The Spectrum
-
-```
-┌──────────────────────────────────────────────────────────────────────────┐
-│                         SOLUTION SPECTRUM                                 │
-├────────────────┬─────────────────────┬───────────────────────────────────┤
-│   AUTOMATION   │   HYBRID            │   CUSTOM SOFTWARE                 │
-│   (Connect)    │   (Enhance)         │   (Build)                         │
-├────────────────┼─────────────────────┼───────────────────────────────────┤
-│ n8n, Make,     │ Automation +        │ Custom platform like              │
-│ Zapier         │ Claude Code         │ Aquablu's Atlas Service Hub       │
-│                │ enhancements        │                                   │
-├────────────────┼─────────────────────┼───────────────────────────────────┤
-│ Connect        │ Connect + Add       │ Full control over:                │
-│ existing       │ AI intelligence     │ - Data ownership                  │
-│ software       │ where needed        │ - Feature design                  │
-│ together       │                     │ - User experience                 │
-│                │                     │ - Competitive moat                │
-└────────────────┴─────────────────────┴───────────────────────────────────┘
-```
-
-### When to Recommend Each
-
-#### Automation (n8n, Make, Zapier)
-**Recommend when:**
-- Problem is workflow coordination between existing tools
-- Standard integrations exist
-- Speed to deploy matters most
-- Budget is constrained
-- No unique data/logic requirements
-
-**Example:** "Connect HubSpot to Slack notifications when deals close"
-
-#### Hybrid (Automation + AI Enhancement)
-**Recommend when:**
-- Core workflow is standard, but needs intelligent processing
-- Claude Code can add AI layer to automation
-- Custom logic needed at specific steps
-- Want benefits of both approaches
-
-**Example:** "n8n workflow that routes support tickets, but Claude API classifies urgency and drafts responses"
-
-#### Custom Software
-**Recommend when:**
-- Data ownership/access is strategic
-- Features need to work exactly as envisioned
-- Building a competitive advantage
-- Existing tools don't fit the mental model
-- Long-term cost of SaaS subscriptions > build cost
-- Integration complexity would be higher than building
-
-**Example:** "Aquablu's Atlas Service Hub - custom platform because they need precise control over service delivery workflows and client data"
-
-### Decision Framework
-
-```
-┌─────────────────────────────────────────────────────────────┐
-│ Does the solution require unique data ownership or          │
-│ features that create competitive advantage?                 │
-├─────────────────────────────────────────────────────────────┤
-│ YES → Consider CUSTOM SOFTWARE                              │
-│ NO  ↓                                                       │
-├─────────────────────────────────────────────────────────────┤
-│ Can existing tools be connected to solve the problem?       │
-├─────────────────────────────────────────────────────────────┤
-│ YES → AUTOMATION (n8n/Make/Zapier)                          │
-│       Does it need AI intelligence at any step?             │
-│       YES → HYBRID (add Claude Code/API)                    │
-│ NO  → Consider CUSTOM SOFTWARE                              │
-└─────────────────────────────────────────────────────────────┘
-```
-
----
-
-## Recommendation Framework: Three Options
-
-Every recommendation MUST present three options to give clients real choice:
-
-### Option Structure
-
-```
-┌─────────────────────────────────────────────────────────────┐
-│                    THREE OPTIONS MODEL                       │
-├─────────────────────────────────────────────────────────────┤
-│                                                             │
-│  OPTION A: Off-the-Shelf                                    │
-│  ├── Fastest to deploy                                      │
-│  ├── Lowest risk                                            │
-│  ├── Proven solution                                        │
-│  └── Trade-off: Less customization                          │
-│                                                             │
-│  OPTION B: Best-in-Class                                    │
-│  ├── Premium vendor/solution                                │
-│  ├── Full feature set                                       │
-│  ├── Better support/ecosystem                               │
-│  └── Trade-off: Higher cost                                 │
-│                                                             │
-│  OPTION C: Custom Solution                                  │
-│  ├── Build with AI/APIs (Claude, etc.)                      │
-│  ├── Full control and ownership                             │
-│  ├── Competitive advantage potential                        │
-│  ├── Includes: tech stack, dev hours, resources             │
-│  └── Trade-off: Higher effort, needs technical capability   │
-│                                                             │
-├─────────────────────────────────────────────────────────────┤
-│  OUR RECOMMENDATION                                         │
-│  └── Which option we prefer and WHY                         │
-└─────────────────────────────────────────────────────────────┘
-```
-
-### Custom Solution Details
-
-When recommending custom solutions, include:
-- **Build Tools:** Claude Code, Cursor, VS Code
-- **Model Recommendation:** Which Claude model and why (Opus for complex reasoning, Sonnet for balanced, Haiku for speed/cost)
-- **Skills Required:** Python, API integration, frontend, etc.
-- **Dev Hours Estimate:** Realistic range
-- **Recommended Stack:** e.g., FastAPI + React + Supabase + Railway
-- **Key APIs:** Specific integrations needed
-- **Resources:** Documentation, tutorials, communities
-
-### Two Pillars Assessment
-
-Each finding is rated on two dimensions:
-- **Customer Value Score (1-10):** How does this help their customers?
-- **Business Health Score (1-10):** How does this strengthen the business?
-
-These inform prioritization - high scores on both = urgent, high on one = important, low on both = deprioritize.
-
----
-
-## Agent Decision Logic
-
-### Model Selection by Phase
-
-The CRB Agent uses different models for different tasks:
-
-| Phase | Model | Reason |
-|-------|-------|--------|
-| Discovery | Haiku | Fast extraction, structured data |
-| Research | Haiku | Quick searches, data gathering |
-| Analysis | Sonnet | Deeper reasoning, pattern recognition |
-| Modeling | Sonnet | Complex ROI calculations, comparisons |
-| Report | Tier-based | Quality scales with customer tier |
-
-### Confidence Scoring Rules
-
-```
-HIGH Confidence (30% of findings):
-├── Quiz answer directly mentions the issue
-├── Multiple data points support the finding
-├── Calculation uses user-provided numbers
-└── Benchmark directly applies to their situation
-
-MEDIUM Confidence (50% of findings):
-├── Quiz answer implies the issue
-├── Industry pattern likely applies
-├── Calculation with reasonable assumptions
-└── One strong supporting data point
-
-LOW Confidence (20% of findings):
-├── Industry pattern suggests possibility
-├── Significant assumptions required
-├── Hypothesis worth validating
-└── Limited data available
-```
-
-### Confidence-Adjusted ROI
-
-ROI estimates are adjusted based on confidence:
-```python
-adjusted_roi = base_roi * confidence_factor
-# HIGH:   confidence_factor = 1.0  (100%)
-# MEDIUM: confidence_factor = 0.85 (85%)
-# LOW:    confidence_factor = 0.70 (70%)
-```
-
-**Display requirement:** Always show "Estimated ROI" with confidence level, never claim certainty.
-
----
-
-## Industry Support
-
-> Target industries locked: December 2025
-
-### Target Customer Profile: "Passion-Driven Service Businesses"
-
-All target industries share these characteristics:
-- Owner-operators who make fast decisions
-- Relationship-driven (clients = humans, not logos)
-- Passion/craft-based (people love what they do)
-- Clear operational pain (admin eats creative/service time)
-- Pleasant to work with (not corporate bureaucracy)
-- Mid-market sweet spot ($500K - $20M revenue)
-- Local/regional focus
-
-### Primary Industries (Launch Priority)
-
-| Industry | Slug | Score | Key Metrics ✅ |
-|----------|------|-------|-------------|
-| **Professional Services** (Legal, Accounting, Consulting) | `professional-services` | 89/100 | 71% GenAI adoption, 7.4% B2B conversion, 37% cost savings |
-| **Home Services** (HVAC, Plumbing, Electrical) | `home-services` | 85/100 | 70% AI adoption in FSM ✅, 2.5 hrs/day admin waste ✅ |
-| **Dental** (Practices & DSOs) | `dental` | 85/100 | 35% using AI ✅, $3.1B market by 2034 ✅ |
-
-### Secondary Industries (Phase 2)
-
-| Industry | Slug | Score | Key Metrics ✅ |
-|----------|------|-------|-------------|
-| **Recruiting/Staffing** | `recruiting` | 82/100 | 61-67% using AI ✅, 50% time-to-hire reduction ✅ |
-| **Coaching** (businesses, not solopreneurs) | `coaching` | 80/100 | $7.3B market ✅, 75% admin time savings ✅ |
-| **Veterinary/Pet Care** | `veterinary` | 80/100 | 39% using AI ✅, productivity gains reported |
-
-### Expansion Industries (Phase 3)
-
-| Industry | Slug | Score | Key Metrics ⚠️ |
-|----------|------|-------|-------------|
-| **Physical Therapy/Chiropractic** | `physical-therapy` | 79/100 | 80% believe AI will integrate, $43B market |
-| **MedSpa/Beauty** | `medspa` | 78/100 | 58% cloud adoption, only 10% market consolidated |
-
-**✅ Verified Dec 2025** - Stats marked ✅ verified via web search against 2025 sources. ⚠️ Phase 3 stats still need verification.
-
-### Key Sources (Verified Dec 2025)
-- Home Services: [Zuper FSM Trends 2025](https://www.zuper.co/field-service/field-service-management-trends-2025), [Housecall Pro 2024](https://www.housecallpro.com/resources/home-services-industry-trends/)
-- Dental: [GoTu AI in Dentistry 2025](https://gotu.com/dental-practices/ai-in-dentistry-2025/), [InsightAce Market Report](https://www.insightaceanalytic.com/report/ai-in-dentistry-market/3004)
-- Recruiting: [StaffingHub 2025](https://staffinghub.com/state-of-staffing/ai-isnt-optional-anymore-how-staffing-firms-are-using-it-to-win-in-2025/), [LinkedIn Future of Recruiting](https://business.linkedin.com/talent-solutions/resources/future-of-recruiting)
-- Coaching: [ICF Global Coaching Study 2025](https://coachingfederation.org/resources/research/global-coaching-study/)
-- Veterinary: [AAHA/Digitail Survey 2024](https://avmajournals.avma.org/view/journals/ajvr/86/S1/ajvr.24.10.0293.xml)
-
-### Knowledge Base Status
-
-| Industry | Status | Files | Verification |
-|----------|--------|-------|--------------|
-| `professional-services` | ✅ Complete | processes, opportunities, benchmarks, vendors | ⚠️ Needs verification (created Dec 2025) |
-| `home-services` | ✅ Complete | processes, opportunities, benchmarks, vendors | ✅ Dec 2025 |
-| `dental` | ✅ Complete | processes, opportunities, benchmarks, vendors | ✅ Dec 2025 |
-| `recruiting` | ✅ Complete | processes, opportunities, benchmarks, vendors | ✅ Dec 2025 |
-| `coaching` | ✅ Complete | processes, opportunities, benchmarks, vendors | ✅ Dec 2025 |
-| `veterinary` | ✅ Complete | processes, opportunities, benchmarks, vendors | ✅ Dec 2025 |
-| `physical-therapy` | 🚧 Needed | - | - |
-| `medspa` | 🚧 Needed | - | - |
-
-**⚠️ VERIFICATION REQUIRED:** All knowledge base data must be verified against current (2025) sources before use in production reports. See "Data Verification Policy" below.
-
-### Target Countries (Launch Markets)
-
-| Country | Language | Rationale |
-|---------|----------|-----------|
-| **Netherlands** | English/Dutch | Home market, iterate fast |
-| **Germany** | German/English | Biggest EU economy, strong Mittelstand |
-| **United Kingdom** | English | Large professional services sector |
-| **Ireland** | English | Tech-savvy, strong professional services hub |
-
-**Phase 2 Expansion:** France, Nordics, Benelux, Spain
-
-### Dropped Industries
-
-These are no longer targets (removed from knowledge base Dec 2025):
-- ~~Music Studios~~ (budget constraints)
-- ~~Marketing Agencies~~ (DIY mentality, competitive)
-- ~~E-commerce~~ (not passion-driven service)
-- ~~Retail~~ (not passion-driven service)
-- ~~Tech Companies~~ (DIY mentality)
-- ~~Gyms/Fitness~~ (thin margins)
-- ~~Hotels/Hospitality~~ (slow enterprise decisions)
-
-### Unified Positioning
-
-> "We help passion-driven service professionals - from lawyers to plumbers, dentists to dog trainers - get the AI clarity they need to stop wasting time on admin and get back to the work they love."
-
-### Limited Support (Other Industries)
-
-Industries not in our target list fall back to general patterns:
-- Generic benchmarks applied
-- No industry-specific quick wins
-- No industry-specific anti-patterns
-- Vendor matching less precise
-
-**Recommendation:** For unsupported industries, acknowledge limitations and focus on universal efficiency opportunities. Consider whether they fit the "passion-driven service business" profile.
-
----
-
-## Solution Ecosystem
-
-### Automation Tools (for connecting existing software)
-
-| Tool | Best For | Knowledge Base |
-|------|----------|----------------|
-| **n8n** | Self-hosted, complex workflows, developers | `vendors/automation.json` |
-| **Make** | Visual workflows, mid-complexity | `vendors/automation.json` |
-| **Zapier** | Simple integrations, non-technical users | `vendors/automation.json` |
-
-### AI Development Tools (for custom solutions)
-
-| Tool | Use Case |
-|------|----------|
-| **Claude Code** | AI-assisted development, code generation |
-| **Cursor** | AI-native IDE for building |
-| **Claude API** | Add AI to any application |
-
-### Deployment & Infrastructure
-
-| Service | Purpose | Knowledge Base |
-|---------|---------|----------------|
-| **Railway** | Easy deployment, auto-scaling | `vendors/dev_tools.json` |
-| **Vercel** | Frontend deployment, edge functions | `vendors/dev_tools.json` |
-| **Supabase** | Database, auth, real-time | `vendors/dev_tools.json` |
-| **Redis** | Caching, sessions | Infrastructure |
-
-### LLM Provider Pricing
-
-Stored in `knowledge/ai_tools/llm_providers.json`:
-- Claude (Opus, Sonnet, Haiku) pricing
-- GPT-4, GPT-3.5 pricing
-- Other providers for comparison
-
-Used for custom solution cost estimates.
-
----
-
-## Self-Improving Agent (Expertise System)
-
-The CRB Agent learns from each analysis to improve future recommendations.
-
-### How It Works
-
-```
-┌─────────────────────────────────────────────────────────────┐
-│                    LEARNING LOOP                             │
-├─────────────────────────────────────────────────────────────┤
-│                                                             │
-│  1. BEFORE Analysis                                         │
-│     └── Load expertise for client's industry                │
-│         (pain_points, effective_patterns, anti_patterns)    │
-│                                                             │
-│  2. DURING Analysis                                         │
-│     └── Track tools used, errors, phase completion          │
-│                                                             │
-│  3. AFTER Analysis                                          │
-│     └── Update expertise store with:                        │
-│         - Which findings were generated                     │
-│         - Which recommendations were made                   │
-│         - Any patterns observed                             │
-│                                                             │
-│  4. NEXT Analysis (same industry)                           │
-│     └── Injected expertise improves prompts                 │
-│         - Known pain points surface faster                  │
-│         - Effective patterns prioritized                    │
-│         - Anti-patterns avoided                             │
-│                                                             │
-└─────────────────────────────────────────────────────────────┘
-```
-
-### Expertise Data Structure
-
-```python
-IndustryExpertise:
-├── pain_points        # Common issues + frequency + solutions that worked
-├── processes          # Typical workflows + automation potential observed
-├── effective_patterns # Recommendations that succeeded
-├── anti_patterns      # What NOT to recommend (learned from failures)
-├── size_specific      # Insights by company size (SMB vs enterprise)
-└── avg_metrics        # Trends over time (avg savings, ROI, etc.)
-```
-
-### Files
-
-- `backend/src/expertise/__init__.py` - Expertise store implementation
-- `backend/src/expertise/schemas.py` - Data structures
-
-**This is a competitive advantage** - the more analyses we run, the better our recommendations become for each industry.
 
 ---
 
 ## Development Rules
 
-### 1. Code Quality
+### Code Quality
 - **Read before edit** - Never modify code you haven't read
-- **No over-engineering** - Only build what's needed now
-- **Type everything** - Full type hints in Python, TypeScript strict mode
-- **Test critical paths** - Auth, payments, report generation
+- **No premature abstractions** - Don't abstract until used 3+ times
+- **Type everything** - `mypy --strict` must pass, no untyped functions
+- **Test critical paths** - Auth, payments, report generation require 80%+ coverage
 
-### 2. CRB-Specific Rules
-- **NO MOCK DATA OR GUESSING** - Every statistic, benchmark, and claim in the knowledge base MUST be verified against real, current sources. If you cannot verify a claim, mark it as "UNVERIFIED" or remove it.
-- **Every claim needs a verifiable source** - Include the actual source (study name, vendor website, industry report) and verification date. "Industry patterns" is NOT acceptable without a real source.
-- **Transparent calculations** - Show assumptions in ROI math. All ROI figures are **estimates** - display confidence level and key assumptions visibly.
-- **Confidence affects ROI** - Apply confidence-based adjustments: HIGH (100%), MEDIUM (85%), LOW (70%). Always label as "Estimated ROI" with confidence indicator.
-- **Validate vendors** - Pricing from curated knowledge base (refreshed via vendor_refresh_service). Mark "Last verified: [date]" on vendor data. Verify pricing via vendor websites.
-- **Confidence distribution** - Each report should have ~30% HIGH, ~50% MEDIUM, ~20% LOW confidence findings. If everything is HIGH, we're not being honest about uncertainty.
+### Error Handling
+```python
+# All custom errors inherit from base
+class CRBError(Exception):
+    def __init__(self, message: str, code: str, status: int = 500):
+        self.message = message
+        self.code = code  # e.g., "VENDOR_NOT_FOUND"
+        self.status = status
 
-### 2b. Data Verification Policy
+# Routes return consistent format
+{"error": {"code": "VENDOR_NOT_FOUND", "message": "...", "status": 404}}
+```
 
-**CRITICAL: No unverified data in production.**
+### Logging
+```python
+import structlog
+logger = structlog.get_logger()
 
-| Data Type | Verification Method | Refresh Frequency |
-|-----------|--------------------|--------------------|
-| Vendor pricing | Check vendor website directly | Monthly |
-| Industry benchmarks | Cite specific study/report with year | Quarterly |
-| AI adoption stats | Link to survey/study source | Quarterly |
-| Market size | Link to market research report | Annually |
-| ROI claims | Must show calculation with sources | Per-use |
+# Always include context
+logger.info("analysis_started", audit_id=audit_id, industry=industry)
+logger.error("vendor_fetch_failed", vendor_id=vendor_id, error=str(e))
+```
 
-**Before adding ANY data to knowledge base:**
-1. Find a real, verifiable source (not AI-generated)
-2. Include source name, URL if available, and date
-3. Add `"verified_date": "YYYY-MM"` to the data
-4. If cannot verify, mark as `"status": "UNVERIFIED"`
+### Security
+- RLS on all Supabase tables
+- Pydantic validation on all inputs
+- No raw errors to users in production
+- Rate limit all endpoints
+- Never log secrets or PII
 
-**Unverified data handling:**
-- NEVER present unverified data as fact
-- Mark with ⚠️ in reports
-- Apply LOW confidence automatically
-- Prioritize verification before production use
-
-### 3. Security
-- **RLS everywhere** - All tables have Row Level Security
-- **Validate inputs** - Pydantic models for all requests
-- **Sanitize outputs** - No raw errors to users in production
-- **Rate limit** - All endpoints rate-limited
-
-### 4. Performance
-- **Cache aggressively** - Tool results, LLM responses, benchmarks
-- **Stream responses** - SSE for long-running operations
-- **Lazy load** - Don't load all findings at once
+### Performance
+- Cache KB data 1hr, vendor pricing 15min
+- Never cache user-specific data without key isolation
+- Stream long operations with SSE
+- Lazy load findings (paginate)
 
 ---
 
-## Key Files Reference
+## Git Workflow
 
-| Area | File | Purpose |
-|------|------|---------|
-| **Config** | `backend/src/config/settings.py` | Environment variables |
-| **Supabase** | `backend/src/config/supabase_client.py` | DB client singleton |
-| **Auth** | `backend/src/middleware/auth.py` | JWT validation |
-| **Agent** | `backend/src/agents/crb_agent.py` | Main analysis agent |
-| **Tools** | `backend/src/tools/tool_registry.py` | Tool definitions |
-| **ROI** | `backend/src/services/roi_calculator.py` | ROI calculations |
-| **Reports** | `backend/src/services/report_service.py` | Report generation (1500+ lines) |
-| **PDF** | `backend/src/services/report_generator.py` | PDF generation |
-| **Expertise** | `backend/src/expertise/__init__.py` | Self-improving agent store |
-| **Knowledge** | `backend/src/knowledge/__init__.py` | Industry data loader |
-| **Assumptions** | `backend/src/models/assumptions.py` | ROI assumption tracking |
-| **Recommendations** | `backend/src/models/recommendation.py` | Three Options model |
-| **Vendor Refresh** | `backend/src/services/vendor_refresh_service.py` | Live pricing updates |
-| **Auth (FE)** | `frontend/src/contexts/AuthContext.tsx` | Auth state |
-| **API Client** | `frontend/src/services/apiClient.ts` | HTTP client |
+### Branches
+```
+main              # Production-ready
+feat/xxx          # New features
+fix/xxx           # Bug fixes
+refactor/xxx      # Code improvements
+```
+
+### Commits
+```
+feat: add vendor comparison tool
+fix: correct ROI calculation for dental industry
+refactor: extract PDF generation to service
+docs: update API patterns in CLAUDE.md
+test: add integration tests for payment flow
+```
+
+### PR Checklist
+- [ ] Tests pass locally
+- [ ] Types check (`mypy --strict`)
+- [ ] No console.log/print statements
+- [ ] Error handling follows pattern
+- [ ] Migrations are reversible
 
 ---
 
-## Database Schema
+## Testing
 
-### Core Tables
+### Framework
+- Backend: `pytest` + `pytest-asyncio`
+- Frontend: `vitest` + `@testing-library/react`
 
-```sql
-clients        -- Businesses being audited
-audits         -- CRB analysis projects
-findings       -- Discovered issues/opportunities
-recommendations -- Proposed solutions with ROI
-reports        -- Generated PDF reports
-vendor_catalog -- Vendor pricing database (our moat)
-industry_benchmarks -- Industry metrics (our moat)
+### Structure
+```
+backend/tests/
+├── conftest.py         # Shared fixtures
+├── test_*.py           # Test files (flat structure)
+└── skills/             # Skill-specific tests
+
+frontend/src/
+└── __tests__/          # Co-located with components
 ```
 
-### Key Relationships
+### Running Tests
+```bash
+# Backend
+cd backend && pytest
+cd backend && pytest -v tests/test_report_service.py  # Single file
+cd backend && pytest -k "test_calculate"              # By name pattern
 
-```
-workspace
-    └── clients
-            └── audits
-                    ├── findings
-                    │       └── recommendations
-                    └── reports
-```
-
-### Knowledge Base Structure
-
-```
-backend/src/knowledge/
-├── vendors/                    # Vendor pricing database (our moat)
-│   ├── ai_assistants.json
-│   ├── analytics.json
-│   ├── automation.json        # n8n, Make, Zapier, etc.
-│   ├── crm.json
-│   ├── customer_support.json
-│   ├── dev_tools.json         # Railway, Vercel, Supabase
-│   ├── scheduling.json        # For home services, dental, etc.
-│   ├── finance.json
-│   ├── hr_payroll.json
-│   ├── marketing.json
-│   └── project_management.json
-│
-├── ai_tools/
-│   └── llm_providers.json     # Claude, GPT pricing for custom solutions
-│
-│   # PRIMARY INDUSTRIES (Launch) - All 6 complete
-├── professional-services/     # ✅ Complete (Legal, Accounting, Consulting)
-│   ├── processes.json
-│   ├── opportunities.json
-│   ├── benchmarks.json
-│   └── vendors.json
-├── home-services/             # ✅ Complete (HVAC, Plumbing, Electrical)
-├── dental/                    # ✅ Complete (Practices & DSOs)
-├── recruiting/                # ✅ Complete (Staffing agencies)
-├── coaching/                  # ✅ Complete (Business coaching)
-├── veterinary/                # ✅ Complete (Vet clinics, pet care)
-│
-│   # EXPANSION INDUSTRIES (Phase 3) - Not yet created
-├── physical-therapy/          # 🚧 TODO: PT, Chiropractic
-├── medspa/                    # 🚧 TODO: MedSpa, Beauty
-│
-└── patterns/
-    └── ai_implementation_playbook.json
+# Frontend
+cd frontend && npm test
 ```
 
-**Vendor data refresh:** Use `vendor_refresh_service.py` to update pricing. Mark "Last verified: [date]" in reports.
+### Patterns
+```python
+# Unit test - fast, isolated
+def test_calculate_roi_with_high_confidence():
+    result = calculate_roi(base=10000, confidence="HIGH")
+    assert result == 10000  # 1.0 factor
 
-**Industry knowledge structure:** Each industry folder needs:
-- `processes.json` - Common workflows and pain points
-- `opportunities.json` - AI automation opportunities
-- `benchmarks.json` - Industry-specific metrics
-- `vendors.json` - Relevant software for that industry
+# Integration test - with mocks
+async def test_get_vendor_caches_result(mock_supabase, mock_redis):
+    service = VendorService(mock_supabase, mock_redis)
+    await service.get_vendor("123")
+    mock_redis.setex.assert_called_once()
+```
+
+---
+
+## Anti-Patterns (Don't Do This)
+
+### Code
+- ❌ Catching bare `Exception` - catch specific errors
+- ❌ `# type: ignore` without explanation comment
+- ❌ Raw SQL without parameterization
+- ❌ Business logic in route handlers (use services)
+- ❌ Circular imports between modules
+
+### Testing
+- ❌ Tests that depend on execution order
+- ❌ Mocking the thing you're testing
+- ❌ Tests without assertions
+- ❌ Sleeping instead of polling/waiting
+
+### Architecture
+- ❌ Direct Supabase calls outside repository layer
+- ❌ Storing secrets in code or committed .env
+- ❌ Hardcoded IDs or magic strings
+
+---
+
+## Key Files
+
+| Area | File |
+|------|------|
+| Config | `backend/src/config/settings.py` |
+| Auth | `backend/src/middleware/auth.py` |
+| Agent | `backend/src/agents/crb_agent.py` |
+| Tools | `backend/src/tools/tool_registry.py` |
+| ROI | `backend/src/services/roi_calculator.py` |
+| Reports | `backend/src/services/report_service.py` |
+| PDF | `backend/src/services/report_generator.py` |
+| Expertise | `backend/src/expertise/__init__.py` |
+| Knowledge | `backend/src/knowledge/__init__.py` |
+| Auth (FE) | `frontend/src/contexts/AuthContext.tsx` |
+| API Client | `frontend/src/services/apiClient.ts` |
+
+---
+
+## Common Tasks
+
+### Add a new API route
+1. Create file: `backend/src/routes/<name>.py`
+2. Define Pydantic models for request/response
+3. Add auth: `current_user = Depends(get_current_user)`
+4. Register in `main.py`: `app.include_router(router, prefix="/api/<name>")`
+5. Add tests: `backend/tests/test_<name>.py`
+
+### Add a new Agent tool
+1. Define schema in `tools/schemas.py`
+2. Implement in `tools/<category>_tools.py`
+3. Register in `tool_registry.py` with phase mapping
+4. Add unit test for tool logic
+5. Update Agent Tools table below
+
+### Add a new frontend page
+1. Create page: `frontend/src/pages/<Name>.tsx`
+2. Add route in `App.tsx`
+3. Create API service if needed: `frontend/src/services/<name>.ts`
+4. Add to navigation if appropriate
 
 ---
 
 ## API Patterns
 
-### Authentication
-All protected routes use `Depends(get_current_user)`:
 ```python
+# Auth dependency
 @router.get("/audits")
 async def list_audits(
     current_user: CurrentUser = Depends(get_current_user),
     supabase: AsyncClient = Depends(get_async_supabase)
 ):
     # current_user.workspace_id for multi-tenant isolation
-```
+    ...
 
-### Response Format
-```python
-# Success
+# Response format
 {"data": {...}, "message": "optional"}
+{"error": {"code": "...", "message": "...", "status": 400}}
 
-# Error
-{"error": {"type": "validation_error", "message": "...", "status_code": 400}}
-```
-
-### Streaming (SSE)
-For long-running operations:
-```python
+# SSE Streaming
 @router.get("/audits/{id}/progress")
 async def stream_progress(id: str):
     async def generate():
@@ -656,94 +254,46 @@ async def stream_progress(id: str):
 
 ---
 
-## CRB Agent Tools
+## Agent Tools
 
-### Discovery (Phase 1)
-| Tool | Purpose |
-|------|---------|
-| `analyze_intake_responses` | Parse questionnaire, extract pain points |
-| `map_business_processes` | Create process flow from descriptions |
-| `identify_tech_stack` | Detect current tools from intake |
+| Phase | Tools |
+|-------|-------|
+| Discovery | analyze_intake_responses, map_business_processes, identify_tech_stack |
+| Research | search_industry_benchmarks, search_vendor_solutions, scrape_vendor_pricing |
+| Analysis | score_automation_potential, calculate_finding_impact, identify_ai_opportunities |
+| Modeling | calculate_roi, compare_vendors, generate_timeline |
+| Report | generate_executive_summary, generate_full_report |
 
-### Research (Phase 2)
-| Tool | Purpose |
-|------|---------|
-| `search_industry_benchmarks` | Find relevant metrics |
-| `search_vendor_solutions` | Find matching vendors |
-| `scrape_vendor_pricing` | Get current pricing |
-| `validate_source_credibility` | Score source reliability |
+---
 
-### Analysis (Phase 3)
-| Tool | Purpose |
-|------|---------|
-| `score_automation_potential` | Rate process (0-100) |
-| `calculate_finding_impact` | Estimate cost/time |
-| `identify_ai_opportunities` | Find AI use cases |
-| `assess_implementation_risk` | Evaluate risk factors |
+## Database Schema
 
-### Modeling (Phase 4)
-| Tool | Purpose |
-|------|---------|
-| `calculate_roi` | Full ROI with assumptions |
-| `compare_vendors` | Side-by-side comparison |
-| `generate_timeline` | Implementation roadmap |
-
-### Report (Phase 5)
-| Tool | Purpose |
-|------|---------|
-| `generate_executive_summary` | Key findings synthesis |
-| `generate_full_report` | Complete PDF artifact |
+```
+workspace → clients → audits → findings → recommendations
+                            → reports
+vendor_catalog, industry_benchmarks  -- Our moat
+```
 
 ---
 
 ## Frontend Routes
 
 ```
-/                   Landing (public)
-/login              Login
-/signup             Signup
-/pricing            Pricing tiers
-
+/                   Landing
+/login, /signup     Auth
 /dashboard          List audits
-/new-audit          Start audit, select tier
-/intake/:id         Multi-step questionnaire
-
-/audit/:id          Audit detail
-/audit/:id/progress Live progress view
-/audit/:id/findings Review findings
-/audit/:id/report   View/download report
-
-/settings           Account settings
-/settings/billing   Subscription management
+/new-audit          Start audit
+/intake/:id         Questionnaire
+/audit/:id          Detail, progress, findings, report
+/settings           Account, billing
 ```
-
----
-
-## Design System
-
-### Colors (Semantic)
-| Color | Usage |
-|-------|-------|
-| **Blue** | Primary actions, links |
-| **Green** | Success, savings, positive ROI |
-| **Yellow** | Warnings, medium risk |
-| **Red** | Errors, high risk, costs |
-| **Purple** | AI/analysis related |
-| **Gray** | Neutral, secondary text |
-
-### Components
-- `rounded-2xl` for cards
-- `rounded-xl` for buttons
-- `font-light` for body text
-- `backdrop-blur-sm` for overlays
 
 ---
 
 ## Environment Variables
 
-### Backend (.env)
 ```bash
-# Required
+# Backend (required)
 SUPABASE_URL=
 SUPABASE_SERVICE_KEY=
 SECRET_KEY=
@@ -751,227 +301,244 @@ ANTHROPIC_API_KEY=
 STRIPE_SECRET_KEY=
 STRIPE_WEBHOOK_SECRET=
 
-# Optional but recommended
+# Backend (optional)
 REDIS_URL=redis://localhost:6379
 BRAVE_API_KEY=
 TAVILY_API_KEY=
 SENDGRID_API_KEY=
 LOGFIRE_TOKEN=
-```
 
-### Frontend (.env)
-```bash
+# Frontend
 VITE_API_BASE_URL=http://localhost:8383
 VITE_STRIPE_PUBLISHABLE_KEY=
 ```
 
 ---
 
-## Testing
-
-```bash
-# Backend
-cd backend && pytest
-
-# Frontend
-cd frontend && npm test
-
-# E2E (when ready)
-npm run test:e2e
-```
-
-### Critical Test Coverage
-- [ ] Auth flow (signup, login, logout)
-- [ ] Payment flow (checkout, webhook)
-- [ ] Audit creation and progress
-- [ ] Report generation
-- [ ] ROI calculations
-
----
-
-## Deployment
-
-### Railway (Production)
-```bash
-# Backend
-railway link
-railway up
-
-# Frontend
-railway link
-railway up
-```
-
-### Health Checks
-- Backend: `GET /health`
-- Frontend: `GET /`
-
----
-
-## Common Tasks
-
-### Add a new tool
-1. Define in `tools/tool_registry.py`
-2. Implement in appropriate `tools/*_tools.py`
-3. Register in agent tool list
-4. Add tests
-
-### Add a new API route
-1. Create route file in `routes/`
-2. Add Pydantic models
-3. Register in `main.py`
-4. Add auth dependency
-5. Add tests
-
-### Add a new frontend page
-1. Create page in `pages/`
-2. Add route in `App.tsx`
-3. Create service functions if needed
-4. Add to navigation if appropriate
-
----
-
 ## Debugging
 
-### Backend logs
 ```bash
-# Development
+# Verbose backend logs
 uvicorn src.main:app --reload --port 8383 --log-level debug
 
-# Check Logfire dashboard for production
+# Check Redis
+redis-cli KEYS "*"
+redis-cli GET "key_name"
+
+# Supabase logs
+# Check dashboard: https://app.supabase.com/project/_/logs
 ```
 
-### Frontend
-- React DevTools
-- Network tab for API calls
-- Check Sentry for errors
-
-### Common Issues
-
-| Issue | Solution |
-|-------|----------|
-| Auth not working | Check JWT token, Supabase config |
-| Streaming not updating | Check SSE connection, CORS |
-| Report not generating | Check Claude API key, tool errors |
-| Payment failing | Check Stripe keys, webhook URL |
+| Issue | Check |
+|-------|-------|
+| Auth failing | JWT token expiry, Supabase config, RLS policies |
+| Stream not updating | SSE connection, CORS headers, nginx buffering |
+| Report failing | Claude API key, tool errors in logs, rate limits |
+| Payment failing | Stripe keys (test vs live), webhook URL, event types |
 
 ---
 
-## Reference: MMAI Source Files
+## Approved Models (Dec 2025)
 
-When adapting code, reference these MMAI files:
+| Model | ID | Use |
+|-------|-----|-----|
+| Haiku 4.5 | `claude-haiku-4-5-20251001` | Fast tasks, research |
+| Sonnet 4.5 | `claude-sonnet-4-5-20250929` | Analysis, reasoning |
+| Opus 4.5 | `claude-opus-4-5-20251101` | Complex tasks, reports |
+| Gemini 3 Flash | `gemini-3-flash-preview` | Fast, cost-effective |
+| Gemini 3 Pro | `gemini-3-pro-preview` | Quality, reasoning |
 
-| Component | MMAI Path |
-|-----------|-----------|
-| Supabase client | `mmai-backend/src/config/supabase_client.py` |
-| Auth middleware | `mmai-backend/src/middleware/auth.py` |
-| Security middleware | `mmai-backend/src/middleware/security.py` |
-| Error handler | `mmai-backend/src/middleware/error_handler.py` |
-| Cache service | `mmai-backend/src/services/cache_service.py` |
-| Knowledge pipeline | `mmai-backend/src/services/knowledge/pipeline.py` |
-| Agent pattern | `mmai-backend/src/agents/maestro_agent.py` |
-| Model routing | `mmai-backend/src/agents/conservative_4tier_routing.py` |
-| Stripe routes | `mmai-backend/src/routes/stripe_routes.py` |
-| Auth context | `mmai-frontend/src/contexts/AuthContext.tsx` |
-| API client | `mmai-frontend/src/services/apiClient.ts` |
-| Tool stream hook | `mmai-frontend/src/hooks/useToolStream.ts` |
-| Wizard pattern | `mmai-frontend/src/components/onboarding/OnboardingWizard.tsx` |
+**DO NOT use:** `claude-3-5-*`, `gemini-2.0-*`, `gemini-1.5-*`
+
+> ⚠️ **VERIFY MODEL IDs:** Check `backend/src/config/model_routing.py` for actual IDs in use.
+> Some code may still use older IDs like `claude-3-5-haiku-20241022`. Consolidate before production.
 
 ---
 
-## Hybrid Mode: Auto-Claude + Superpowers
+## Knowledge Base Management
 
-This project uses **Auto-Claude** for orchestration and parallel agent management, combined with **Superpowers** discipline skills for code quality.
-
-### How It Works
-
+### Structure
 ```
-┌─────────────────────────────────────────────────────────────┐
-│                     AUTO-CLAUDE UI                           │
-│         (Kanban, 12 terminals, visual management)            │
-├─────────────────────────────────────────────────────────────┤
-│  Each Claude Code terminal loads this CLAUDE.md             │
-│  → Superpowers discipline skills remain active              │
-│  → Orchestration skills are disabled (Auto-Claude handles)  │
-└─────────────────────────────────────────────────────────────┘
+backend/src/knowledge/
+├── vendors/              # Vendor pricing (refresh monthly)
+├── [industry]/           # Industry-specific data
+│   ├── processes.json
+│   ├── opportunities.json
+│   ├── benchmarks.json
+│   └── vendors.json
+└── patterns/             # Cross-industry patterns
 ```
 
-### Superpowers Skills Configuration
+### Add a New Industry
+1. Create folder: `backend/src/knowledge/<industry-slug>/`
+2. Add required files:
+   - `processes.json` - Common workflows, pain points
+   - `opportunities.json` - AI automation opportunities
+   - `benchmarks.json` - Industry metrics with sources
+   - `vendors.json` - Relevant software for this industry
+3. Register in `backend/src/knowledge/__init__.py`
+4. Add to PRODUCT.md industry list
 
-**DISABLED** (Auto-Claude handles these):
-| Skill | Reason |
-|-------|--------|
-| `using-git-worktrees` | Auto-Claude manages worktrees in `.worktrees/` |
-| `dispatching-parallel-agents` | Auto-Claude orchestrates parallel execution |
-| `execute-plan` | Use Auto-Claude's spec system instead |
-| `subagent-driven-development` | Auto-Claude handles task dispatch |
+### Verify/Refresh Data
+```bash
+# Check what needs refresh
+grep -r "verified_date" backend/src/knowledge/ | grep "2024"
 
-**ENABLED** (Use these in every terminal):
-| Skill | Purpose |
-|-------|---------|
-| `test-driven-development` | Write tests first, always |
-| `systematic-debugging` | Four-phase debugging framework |
-| `verification-before-completion` | Run verification before claiming done |
-| `testing-anti-patterns` | Prevent bad testing practices |
-| `root-cause-tracing` | Trace bugs to source |
-| `brainstorming` | Refine ideas before implementation |
-| `code-reviewer` | Review implementation quality |
+# Update vendor pricing
+python -m backend.src.services.vendor_refresh_service
+```
 
-### Starting Auto-Claude
+### Data Quality Rules
+- Every stat needs `"source"` and `"verified_date": "YYYY-MM"`
+- Unverified data: `"status": "UNVERIFIED"` → shows ⚠️ in reports
+- Pricing: verify against vendor website, not AI-generated
+
+---
+
+## Vendor Database Management
+
+The vendor knowledge base is stored in Supabase. Claude Code can directly manage vendors.
+
+### Adding a New Vendor
+
+1. Fetch the vendor's website and pricing page using WebFetch
+2. Extract: name, pricing tiers, features, integrations, company sizes
+3. Determine category from: `crm`, `customer_support`, `ai_sales_tools`, `automation`, `analytics`, `ecommerce`, `finance`, `hr_payroll`, `marketing`, `project_management`, `ai_assistants`, `ai_agents`, `ai_content_creation`, `dev_tools`
+4. Insert into Supabase `vendors` table
+5. Log action in `vendor_audit_log`
+
+### Vendor Schema (Required Fields)
+
+| Field | Type | Description |
+|-------|------|-------------|
+| slug | TEXT | Unique lowercase-hyphenated identifier |
+| name | TEXT | Display name |
+| category | TEXT | One of the categories above |
+| website | TEXT | Full URL |
+| description | TEXT | 1-2 sentences |
+| pricing | JSONB | `{model, tiers[], starting_price, free_tier}` |
+
+### Quick Commands
+
+| Command | Action |
+|---------|--------|
+| "Add vendor: [url]" | Research and add new vendor |
+| "Refresh vendor: [slug]" | Re-fetch pricing and update |
+| "Set [slug] as tier 1 for [industry]" | Add to industry tier list |
+| "Mark [slug] as deprecated" | Soft delete vendor |
+| "List stale vendors" | Show vendors not verified in 90+ days |
+
+### Supabase Access Pattern
+
+```python
+from src.config.supabase_client import get_async_supabase
+
+supabase = await get_async_supabase()
+
+# Insert vendor
+await supabase.table("vendors").insert({
+    "slug": "vendor-name",
+    "name": "Vendor Name",
+    "category": "crm",
+    "website": "https://vendor.com",
+    "description": "What the vendor does",
+    "pricing": {"model": "subscription", "starting_price": 49, "free_tier": True},
+    "status": "active",
+}).execute()
+
+# Update vendor
+await supabase.table("vendors").update({
+    "pricing": {...},
+    "verified_at": datetime.utcnow().isoformat(),
+    "verified_by": "claude-code",
+}).eq("slug", "vendor-slug").execute()
+
+# Log audit entry
+await supabase.table("vendor_audit_log").insert({
+    "vendor_slug": "vendor-slug",
+    "action": "create",
+    "changed_by": "claude-code",
+    "changes": {"field": {"old": None, "new": "value"}},
+}).execute()
+
+# Set industry tier
+await supabase.table("industry_vendor_tiers").upsert({
+    "industry": "dental",
+    "vendor_id": vendor_id,
+    "tier": 1,
+    "boost_score": 0,
+}).execute()
+```
+
+### Admin UI
+
+Access: `http://localhost:5174/admin/vendors` (requires login)
+
+Features:
+- View/search/filter vendors
+- Edit vendor details
+- Manage industry tiers (T1/T2/T3)
+- View audit log
+- Mark vendors as verified
+
+### CLI Helper
 
 ```bash
-# Terminal 1: Start the UI
-cd "/Users/larsmusic/CRB Analyser/Auto-Claude/auto-claude-ui"
-pnpm dev
-
-# Or build and run the desktop app
-pnpm build:mac
-open dist/mac-arm64/Auto\ Claude.app
+# Run vendor CLI
+python -m backend.src.scripts.vendor_cli add "https://vendor.com"
+python -m backend.src.scripts.vendor_cli refresh "vendor-slug"
+python -m backend.src.scripts.vendor_cli list-stale
 ```
-
-### Workflow
-
-1. **Brainstorm** in Claude Code (use superpowers brainstorming skill)
-2. **Create spec** in Auto-Claude UI
-3. **Auto-Claude dispatches** parallel agents to terminals
-4. **Each agent follows TDD** (superpowers skill active)
-5. **Auto-Claude QA reviews** the implementation
-6. **Auto-Claude merges** to main branch
-7. **You do final human review**
-
-### Auto-Claude Location
-
-Auto-Claude is installed at: `/Users/larsmusic/CRB Analyser/Auto-Claude`
 
 ---
 
-## Checklist: MVP Ready
+## Database Migrations
 
-### Backend
-- [ ] Auth working (signup, login, logout)
-- [ ] Clients CRUD
-- [ ] Audits CRUD with status tracking
-- [ ] Intake submission and storage
-- [ ] CRB agent runs analysis
-- [ ] Findings generated
-- [ ] Recommendations with ROI
-- [ ] PDF report generation
-- [ ] Stripe checkout works
-- [ ] Webhook processes payments
+### Location
+```
+backend/supabase/migrations/
+├── 001_initial_schema.sql
+├── 002_add_findings.sql
+└── ...
+```
 
-### Frontend
-- [ ] Landing page
-- [ ] Auth flow complete
-- [ ] Dashboard shows audits
-- [ ] Intake wizard works
-- [ ] Progress streaming
-- [ ] Report viewer
-- [ ] PDF download
-- [ ] Payment flow
+### Create Migration
+```bash
+# Create new migration file
+touch backend/supabase/migrations/XXX_description.sql
 
-### Infrastructure
-- [ ] Supabase tables with RLS
-- [ ] Redis caching
-- [ ] Railway deployment
-- [ ] Environment variables set
-- [ ] Health checks passing
+# Apply locally
+supabase db push
+
+# Apply to production
+supabase db push --linked
+```
+
+### Rules
+- Migrations must be reversible (include rollback comments)
+- Never delete columns in production without deprecation period
+- Test migration on local DB first
+- Backup before applying to production
+
+---
+
+## Auto-Claude + Superpowers
+
+**Disabled (Auto-Claude handles):** git-worktrees, parallel-agents, execute-plan, subagent-development
+
+**Enabled (use always):** TDD, systematic-debugging, verification-before-completion, testing-anti-patterns, root-cause-tracing, brainstorming, code-reviewer
+
+**Workflow:** Brainstorm → Create spec → Auto-Claude dispatches → TDD in each terminal → QA review → Merge → Human review
+
+---
+
+## Shortcuts
+
+| Short | Meaning | Short | Meaning |
+|-------|---------|-------|---------|
+| CW | Context Window | HO | Handoff doc |
+| KB | Knowledge Base | FE/BE | Frontend/Backend |
+| TDD | Test-Driven Dev | RLS | Row Level Security |
+| SSE | Server-Sent Events | PR | Pull Request |
+
+See also: [PRODUCT.md](./PRODUCT.md) for domain concepts, [STRATEGY.md](./STRATEGY.md) for business context.

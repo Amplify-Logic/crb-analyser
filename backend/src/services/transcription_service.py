@@ -1,12 +1,14 @@
 """
 Transcription Service
 
-Speech-to-text and text-to-speech using Deepgram API (SDK v5).
+Speech-to-text using Deepgram API (SDK v5).
+Text-to-speech using ElevenLabs API.
 """
 
 import logging
 from typing import Optional, Tuple
 import asyncio
+import httpx
 
 from deepgram import DeepgramClient
 
@@ -16,19 +18,19 @@ logger = logging.getLogger(__name__)
 
 
 class TranscriptionService:
-    """Service for transcribing audio to text and synthesizing speech using Deepgram."""
+    """Service for transcribing audio to text (Deepgram) and synthesizing speech (ElevenLabs)."""
 
     def __init__(self):
-        self._client: Optional[DeepgramClient] = None
+        self._deepgram_client: Optional[DeepgramClient] = None
 
     @property
-    def client(self) -> DeepgramClient:
-        """Get or create Deepgram client."""
-        if self._client is None:
+    def deepgram_client(self) -> DeepgramClient:
+        """Get or create Deepgram client for speech-to-text."""
+        if self._deepgram_client is None:
             if not settings.DEEPGRAM_API_KEY:
                 raise ValueError("DEEPGRAM_API_KEY not configured")
-            self._client = DeepgramClient(api_key=settings.DEEPGRAM_API_KEY)
-        return self._client
+            self._deepgram_client = DeepgramClient(api_key=settings.DEEPGRAM_API_KEY)
+        return self._deepgram_client
 
     async def transcribe_audio(
         self,
@@ -36,7 +38,7 @@ class TranscriptionService:
         mime_type: str = "audio/webm",
     ) -> Tuple[str, float]:
         """
-        Transcribe audio data to text.
+        Transcribe audio data to text using Deepgram.
 
         Args:
             audio_data: Raw audio bytes
@@ -50,7 +52,7 @@ class TranscriptionService:
             loop = asyncio.get_event_loop()
             response = await loop.run_in_executor(
                 None,
-                lambda: self.client.listen.v1.media.transcribe_file(
+                lambda: self.deepgram_client.listen.v1.media.transcribe_file(
                     request=audio_data,
                     model="nova-2",
                     smart_format=True,
@@ -83,42 +85,60 @@ class TranscriptionService:
     async def text_to_speech(
         self,
         text: str,
-        voice: str = "aura-asteria-en",  # Natural female voice
+        voice_id: Optional[str] = None,
     ) -> bytes:
         """
-        Convert text to speech audio.
+        Convert text to speech audio using ElevenLabs.
 
         Args:
             text: Text to convert to speech
-            voice: Voice model to use (default: aura-asteria-en)
-                   Options: aura-asteria-en, aura-luna-en, aura-stella-en,
-                           aura-athena-en, aura-hera-en, aura-orion-en,
-                           aura-arcas-en, aura-perseus-en, aura-angus-en,
-                           aura-orpheus-en, aura-helios-en, aura-zeus-en
-                           Aura 2 voices also available (aura-2-*)
+            voice_id: ElevenLabs voice ID (default from settings)
+                     Popular voices:
+                     - EXAVITQu4vr4xnSDxMaL: Sarah (conversational)
+                     - 21m00Tcm4TlvDq8ikWAM: Rachel (calm, professional)
+                     - AZnzlk1XvdvUeBnXmlld: Domi (engaging, friendly)
+                     - MF3mGyEYCl7XYWbV9V6O: Elli (friendly, warm)
+                     - TxGEqnHWrfWFTfGW9XjX: Josh (deep, authoritative)
 
         Returns:
             Audio data as bytes (mp3 format)
         """
+        if not settings.ELEVENLABS_API_KEY:
+            raise ValueError("ELEVENLABS_API_KEY not configured")
+
+        voice = voice_id or settings.ELEVENLABS_VOICE_ID
+        model = settings.ELEVENLABS_MODEL_ID
+
+        url = f"https://api.elevenlabs.io/v1/text-to-speech/{voice}"
+
+        headers = {
+            "Accept": "audio/mpeg",
+            "Content-Type": "application/json",
+            "xi-api-key": settings.ELEVENLABS_API_KEY,
+        }
+
+        payload = {
+            "text": text,
+            "model_id": model,
+            "voice_settings": {
+                "stability": 0.5,
+                "similarity_boost": 0.75,
+                "style": 0.0,
+                "use_speaker_boost": True,
+            }
+        }
+
         try:
-            # Run sync TTS in thread pool
-            loop = asyncio.get_event_loop()
+            async with httpx.AsyncClient(timeout=30.0) as client:
+                response = await client.post(url, json=payload, headers=headers)
+                response.raise_for_status()
+                audio_data = response.content
+                logger.info(f"ElevenLabs TTS generated: {len(audio_data)} bytes for {len(text)} chars")
+                return audio_data
 
-            def generate_audio():
-                # generate() returns an Iterator[bytes]
-                audio_iterator = self.client.speak.v1.audio.generate(
-                    text=text,
-                    model=voice,
-                    encoding="mp3",
-                )
-                # Collect all bytes from the iterator
-                audio_chunks = list(audio_iterator)
-                return b"".join(audio_chunks)
-
-            audio_data = await loop.run_in_executor(None, generate_audio)
-            logger.info(f"TTS generated: {len(audio_data)} bytes for {len(text)} chars")
-            return audio_data
-
+        except httpx.HTTPStatusError as e:
+            logger.error(f"ElevenLabs API error: {e.response.status_code} - {e.response.text}")
+            raise
         except Exception as e:
             logger.error(f"TTS error: {e}")
             raise

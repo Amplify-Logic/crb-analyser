@@ -1,0 +1,245 @@
+{
+  "industry": "recruiting",
+  "display_name": "Recruiting & Staffing",
+  "description": "Staffing agencies, executive search firms, and recruiting companies",
+  "questions": [
+    {
+      "id": "recruiter_count",
+      "question": "How many recruiters work at your agency?",
+      "input_type": "number",
+      "placeholder": "e.g., 8",
+      "target_categories": ["company_basics", "quantifiable_metrics"],
+      "expected_boosts": {"company_basics": 20, "quantifiable_metrics": 15},
+      "priority": 1,
+      "tags": ["scale", "capacity"]
+    },
+    {
+      "id": "placements_monthly",
+      "question": "How many placements does your team make per month?",
+      "input_type": "number",
+      "placeholder": "e.g., 15",
+      "target_categories": ["quantifiable_metrics", "operations"],
+      "expected_boosts": {"quantifiable_metrics": 25, "operations": 10},
+      "priority": 1,
+      "tags": ["volume", "performance"]
+    },
+    {
+      "id": "placement_type",
+      "question": "What type of placements do you primarily focus on?",
+      "input_type": "select",
+      "options": [
+        {"value": "permanent", "label": "Permanent placements"},
+        {"value": "contract", "label": "Contract/temp staffing"},
+        {"value": "executive", "label": "Executive search"},
+        {"value": "mixed", "label": "Mix of all types"}
+      ],
+      "target_categories": ["industry_context", "operations"],
+      "expected_boosts": {"industry_context": 20, "operations": 15},
+      "priority": 1,
+      "tags": ["business_model", "specialization"]
+    },
+    {
+      "id": "candidate_sourcing_hours",
+      "question": "How many hours per week do your recruiters spend sourcing candidates?",
+      "input_type": "select",
+      "options": [
+        {"value": "under_10", "label": "Under 10 hours"},
+        {"value": "10_20", "label": "10-20 hours"},
+        {"value": "20_30", "label": "20-30 hours"},
+        {"value": "over_30", "label": "Over 30 hours"}
+      ],
+      "target_categories": ["operations", "quantifiable_metrics"],
+      "expected_boosts": {"operations": 20, "quantifiable_metrics": 15},
+      "priority": 1,
+      "tags": ["sourcing", "productivity"],
+      "deep_dive_triggers": ["20_30", "over_30"]
+    },
+    {
+      "id": "ats_system",
+      "question": "What ATS (Applicant Tracking System) do you use?",
+      "input_type": "select",
+      "options": [
+        {"value": "bullhorn", "label": "Bullhorn"},
+        {"value": "greenhouse", "label": "Greenhouse"},
+        {"value": "lever", "label": "Lever"},
+        {"value": "jobadder", "label": "JobAdder"},
+        {"value": "crelate", "label": "Crelate"},
+        {"value": "pcrecruiter", "label": "PCRecruiter"},
+        {"value": "none", "label": "No ATS - use spreadsheets"},
+        {"value": "other", "label": "Other"}
+      ],
+      "target_categories": ["tech_stack"],
+      "expected_boosts": {"tech_stack": 25},
+      "priority": 1,
+      "tags": ["software", "integration"]
+    },
+    {
+      "id": "screening_time",
+      "question": "How much time does your team spend on initial candidate screening per week?",
+      "input_type": "select",
+      "options": [
+        {"value": "under_5", "label": "Under 5 hours"},
+        {"value": "5_10", "label": "5-10 hours"},
+        {"value": "10_20", "label": "10-20 hours"},
+        {"value": "over_20", "label": "Over 20 hours"}
+      ],
+      "target_categories": ["operations", "pain_points"],
+      "expected_boosts": {"operations": 15, "pain_points": 15},
+      "priority": 2,
+      "tags": ["screening", "productivity"]
+    },
+    {
+      "id": "biggest_bottleneck",
+      "question": "What's the biggest bottleneck in your recruiting process?",
+      "input_type": "voice",
+      "target_categories": ["pain_points", "operations"],
+      "expected_boosts": {"pain_points": 25, "operations": 20},
+      "priority": 1,
+      "tags": ["workflow", "efficiency"]
+    },
+    {
+      "id": "job_order_volume",
+      "question": "How many open job orders do you typically have at any given time?",
+      "input_type": "select",
+      "options": [
+        {"value": "under_20", "label": "Under 20"},
+        {"value": "20_50", "label": "20-50"},
+        {"value": "50_100", "label": "50-100"},
+        {"value": "over_100", "label": "Over 100"}
+      ],
+      "target_categories": ["quantifiable_metrics", "operations"],
+      "expected_boosts": {"quantifiable_metrics": 15, "operations": 10},
+      "priority": 2,
+      "tags": ["pipeline", "capacity"]
+    },
+    {
+      "id": "time_to_fill",
+      "question": "What's your average time-to-fill for a typical placement?",
+      "input_type": "select",
+      "options": [
+        {"value": "under_2_weeks", "label": "Under 2 weeks"},
+        {"value": "2_4_weeks", "label": "2-4 weeks"},
+        {"value": "4_8_weeks", "label": "4-8 weeks"},
+        {"value": "over_8_weeks", "label": "Over 8 weeks"}
+      ],
+      "target_categories": ["quantifiable_metrics", "industry_context"],
+      "expected_boosts": {"quantifiable_metrics": 15, "industry_context": 15},
+      "priority": 2,
+      "tags": ["speed", "performance"]
+    },
+    {
+      "id": "candidate_ghosting",
+      "question": "How often do candidates ghost or drop out of the process?",
+      "input_type": "select",
+      "options": [
+        {"value": "rarely", "label": "Rarely (under 10%)"},
+        {"value": "sometimes", "label": "Sometimes (10-25%)"},
+        {"value": "often", "label": "Often (25-40%)"},
+        {"value": "very_often", "label": "Very often (over 40%)"}
+      ],
+      "target_categories": ["pain_points", "industry_context"],
+      "expected_boosts": {"pain_points": 20, "industry_context": 10},
+      "priority": 2,
+      "tags": ["engagement", "follow_up"],
+      "deep_dive_triggers": ["often", "very_often"]
+    },
+    {
+      "id": "business_dev_time",
+      "question": "How much time do your recruiters spend on client development vs. recruiting?",
+      "input_type": "select",
+      "options": [
+        {"value": "mostly_recruiting", "label": "Mostly recruiting (80%+)"},
+        {"value": "split", "label": "About 50/50"},
+        {"value": "mostly_bd", "label": "Mostly business development (80%+)"},
+        {"value": "separate_roles", "label": "We have separate BD team"}
+      ],
+      "target_categories": ["operations", "industry_context"],
+      "expected_boosts": {"operations": 15, "industry_context": 10},
+      "priority": 2,
+      "tags": ["structure", "sales"]
+    },
+    {
+      "id": "growth_priority",
+      "question": "What's your main priority for the agency over the next 12 months?",
+      "input_type": "select",
+      "options": [
+        {"value": "more_clients", "label": "Acquire more clients"},
+        {"value": "more_placements", "label": "Increase placements per recruiter"},
+        {"value": "hire_recruiters", "label": "Hire more recruiters"},
+        {"value": "efficiency", "label": "Improve operational efficiency"},
+        {"value": "margins", "label": "Improve profit margins"},
+        {"value": "new_verticals", "label": "Expand into new verticals"}
+      ],
+      "target_categories": ["goals_priorities"],
+      "expected_boosts": {"goals_priorities": 30},
+      "priority": 1,
+      "tags": ["growth", "strategy"]
+    },
+    {
+      "id": "ai_tools_current",
+      "question": "Are you currently using any AI tools in your recruiting process?",
+      "input_type": "select",
+      "options": [
+        {"value": "none", "label": "No AI tools yet"},
+        {"value": "sourcing", "label": "AI for candidate sourcing"},
+        {"value": "screening", "label": "AI for resume screening"},
+        {"value": "outreach", "label": "AI for outreach automation"},
+        {"value": "multiple", "label": "Multiple AI tools"}
+      ],
+      "target_categories": ["tech_stack", "buying_signals"],
+      "expected_boosts": {"tech_stack": 15, "buying_signals": 15},
+      "priority": 2,
+      "tags": ["ai", "automation"]
+    },
+    {
+      "id": "budget_timeline",
+      "question": "If you found a solution that could significantly improve recruiter productivity, when would you want to implement it?",
+      "input_type": "select",
+      "options": [
+        {"value": "immediately", "label": "As soon as possible"},
+        {"value": "3_months", "label": "Within 3 months"},
+        {"value": "6_months", "label": "Within 6 months"},
+        {"value": "next_year", "label": "Sometime next year"},
+        {"value": "just_exploring", "label": "Just exploring for now"}
+      ],
+      "target_categories": ["buying_signals"],
+      "expected_boosts": {"buying_signals": 25},
+      "priority": 3,
+      "tags": ["timeline", "urgency"]
+    }
+  ],
+  "woven_confirmation_templates": [
+    {
+      "id": "confirm_ats",
+      "condition": "tech_stack.ats",
+      "template": "How's {tech_stack.ats} working for your recruiting workflow?",
+      "target_categories": ["tech_stack", "pain_points"],
+      "expected_boosts": {"tech_stack": 10, "pain_points": 15}
+    },
+    {
+      "id": "confirm_vertical",
+      "condition": "industry_context.vertical",
+      "template": "In {industry_context.vertical} recruiting, what's the hardest role to fill right now?",
+      "target_categories": ["industry_context", "pain_points"],
+      "expected_boosts": {"industry_context": 15, "pain_points": 15}
+    }
+  ],
+  "deep_dive_templates": [
+    {
+      "id": "sourcing_deep_dive",
+      "trigger_question": "candidate_sourcing_hours",
+      "trigger_values": ["20_30", "over_30"],
+      "template": "That's a lot of sourcing time. Is it finding candidates, or filtering through the noise?",
+      "target_categories": ["operations", "pain_points"],
+      "expected_boosts": {"operations": 15, "pain_points": 15}
+    },
+    {
+      "id": "ghosting_deep_dive",
+      "trigger_question": "candidate_ghosting",
+      "trigger_values": ["often", "very_often"],
+      "template": "Candidate ghosting is a huge problem. At what stage do they typically drop off?",
+      "target_categories": ["operations", "pain_points"],
+      "expected_boosts": {"operations": 15, "pain_points": 15}
+    }
+  ]
+}

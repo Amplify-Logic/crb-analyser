@@ -5,6 +5,142 @@ import { motion, AnimatePresence } from 'framer-motion'
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8383'
 
 // ============================================================================
+// Helper Functions
+// ============================================================================
+
+/**
+ * Format company name for display - handles domain-style names
+ * "oflahertyconstruction" -> "O'Flaherty Construction"
+ * "acme-corp" -> "Acme Corp"
+ */
+const formatCompanyName = (name: string): string => {
+  if (!name) return ''
+
+  // Remove common TLDs and www
+  let cleaned = name
+    .replace(/^(https?:\/\/)?(www\.)?/, '')
+    .replace(/\.(com|co|ie|uk|net|org|io|ai|app)(\/.*)?$/i, '')
+    .replace(/[-_]/g, ' ')
+
+  // Handle camelCase
+  cleaned = cleaned.replace(/([a-z])([A-Z])/g, '$1 $2')
+
+  // Common words to split on (business terms, nature, colors, etc.)
+  const splitWords = [
+    // Business suffixes
+    'construction', 'consulting', 'solutions', 'services', 'group', 'agency',
+    'studio', 'media', 'digital', 'tech', 'technologies', 'software', 'systems',
+    'partners', 'associates', 'industries', 'enterprises', 'holdings', 'corp',
+    'corporation', 'company', 'limited', 'ltd', 'inc', 'llc', 'plumbing',
+    'electric', 'electrical', 'mechanical', 'dental', 'medical', 'legal',
+    'financial', 'insurance', 'realty', 'properties', 'development', 'design',
+    'marketing', 'creative', 'labs', 'works', 'builders', 'contracting',
+    // Nature words (common in company names)
+    'oak', 'pine', 'maple', 'cedar', 'willow', 'birch', 'elm', 'ash',
+    'river', 'lake', 'hill', 'mountain', 'valley', 'creek', 'brook', 'stone',
+    'rock', 'wood', 'forest', 'meadow', 'field', 'spring', 'summit', 'peak',
+    'bay', 'harbor', 'harbour', 'coast', 'shore', 'bridge', 'gate', 'park',
+    // Colors
+    'green', 'blue', 'red', 'black', 'white', 'gold', 'golden', 'silver',
+    // Directions/positions
+    'north', 'south', 'east', 'west', 'central', 'pacific', 'atlantic',
+    // Common prefixes/words
+    'smart', 'bright', 'clear', 'pure', 'prime', 'first', 'apex', 'alpha',
+    'beta', 'omega', 'nova', 'star', 'sun', 'moon', 'sky', 'cloud', 'data',
+    'cyber', 'net', 'web', 'app', 'bit', 'byte', 'code', 'logic', 'sync',
+    'link', 'hub', 'point', 'base', 'core', 'pro', 'max', 'flex', 'flow'
+  ]
+
+  // Split concatenated words (longer words first to avoid partial matches)
+  const sortedWords = [...splitWords].sort((a, b) => b.length - a.length)
+  for (const word of sortedWords) {
+    const regex = new RegExp(`(${word})`, 'gi')
+    cleaned = cleaned.replace(regex, ' $1 ')
+  }
+
+  // Handle Irish/Scottish names: O'Brien, O'Flaherty, Mc/Mac prefixes
+  // But NOT common words starting with 'o' like oak, ocean, office, etc.
+  const commonOWords = ['oak', 'ocean', 'office', 'one', 'open', 'orange', 'order', 'organic', 'original', 'outdoor', 'owl', 'oxygen']
+  cleaned = cleaned
+    .split(' ')
+    .map(word => {
+      const lower = word.toLowerCase()
+      // Only apply O' prefix to words starting with 'o' that aren't common words
+      if (lower.match(/^o[a-z]/) && !commonOWords.includes(lower)) {
+        return "O'" + word.slice(1)
+      }
+      return word
+    })
+    .join(' ')
+    .replace(/\bmc([a-z])/gi, 'Mc$1')  // mccarthy -> McCarthy
+    .replace(/\bmac([a-z])/gi, 'Mac$1') // macdonald -> MacDonald
+
+  // Clean up multiple spaces and trim
+  cleaned = cleaned.replace(/\s+/g, ' ').trim()
+
+  // Capitalize each word properly
+  return cleaned
+    .split(' ')
+    .map(word => {
+      // Handle O'Names - keep apostrophe and capitalize after
+      if (word.startsWith("O'") || word.startsWith("o'")) {
+        return "O'" + word.slice(2).charAt(0).toUpperCase() + word.slice(3).toLowerCase()
+      }
+      // Handle Mc/Mac names
+      if (word.toLowerCase().startsWith('mc') && word.length > 2) {
+        return 'Mc' + word.charAt(2).toUpperCase() + word.slice(3).toLowerCase()
+      }
+      if (word.toLowerCase().startsWith('mac') && word.length > 3) {
+        return 'Mac' + word.charAt(3).toUpperCase() + word.slice(4).toLowerCase()
+      }
+      return word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()
+    })
+    .join(' ')
+    .trim()
+}
+
+/**
+ * Map technical research step names to user-friendly descriptions
+ */
+const formatResearchStep = (step: string): string => {
+  if (!step) return 'Initializing research...'
+
+  const stepMappings: Record<string, string> = {
+    // Tool names from backend
+    'scrape_website': 'Scanning website...',
+    'web_search': 'Searching the web...',
+    'search_web': 'Searching the web...',
+    'search_linkedin': 'Looking up LinkedIn profile...',
+    'search_linkedin_company': 'Looking up LinkedIn profile...',
+    'search_crunchbase': 'Finding company data...',
+    'search_news': 'Finding recent news...',
+    'search_company_news': 'Finding recent news...',
+    'search_jobs': 'Analyzing job postings...',
+    'analyze_tech_stack': 'Analyzing technology stack...',
+  }
+
+  // Check if step contains a tool name pattern like "Researching search_company_news..."
+  const toolMatch = step.match(/(?:Researching|Executing|Running)\s+(\w+)/i)
+  if (toolMatch) {
+    const toolName = toolMatch[1].toLowerCase()
+    if (stepMappings[toolName]) {
+      return stepMappings[toolName]
+    }
+  }
+
+  // Direct match
+  const lowerStep = step.toLowerCase()
+  for (const [key, value] of Object.entries(stepMappings)) {
+    if (lowerStep.includes(key)) {
+      return value
+    }
+  }
+
+  // Return original if no match (but capitalize nicely)
+  return step.replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase())
+}
+
+// ============================================================================
 // Types
 // ============================================================================
 
@@ -71,6 +207,26 @@ interface ResearchResult {
 
 type QuizPhase = 'website' | 'researching' | 'findings' | 'teaser' | 'pricing' | 'email_capture' | 'questions' | 'complete'
 
+// Helper to format any value (handles objects, arrays, primitives)
+const formatValue = (value: unknown): string => {
+  if (value === null || value === undefined) return ''
+  if (typeof value === 'string') return value
+  if (typeof value === 'number') return String(value)
+  if (Array.isArray(value)) return value.map(formatValue).join(', ')
+  if (typeof value === 'object') {
+    // Handle objects like {city: "Amsterdam", country: "Netherlands"}
+    const obj = value as Record<string, unknown>
+    const parts = Object.values(obj).filter(v => v && typeof v === 'string')
+    if (parts.length > 0) return parts.join(', ')
+    // Fallback: try to get meaningful values
+    return Object.entries(obj)
+      .filter(([k, v]) => v && !k.includes('confidence'))
+      .map(([_, v]) => formatValue(v))
+      .join(', ')
+  }
+  return String(value)
+}
+
 interface TeaserReport {
   ai_readiness_score: number
   score_breakdown: Record<string, { score: number; max: number; factors: string[] }>
@@ -86,6 +242,585 @@ interface TeaserReport {
   total_findings_available: number
   company_name: string
   industry: string
+}
+
+// ============================================================================
+// Industry-Specific Test Data
+// Each industry has unique tech stacks, pain points, and interview responses
+// ============================================================================
+
+interface IndustryTestData {
+  description: string
+  businessModel: string
+  employeeRange: string
+  employeeCount: number
+  annualRevenue: string
+  techStack: string[]
+  painPoints: string[]
+  biggestChallenge: string
+  currentTools: string[]
+  automationExperience: string
+  aiBudget: string
+  manualHoursWeekly: number
+  interview: Array<{ role: string; content: string }>
+  confidenceScores: Record<string, { score: number; evidence: string[] }>
+}
+
+const industryTestData: Record<string, IndustryTestData> = {
+  dental: {
+    description: 'Multi-location dental practice offering general dentistry, orthodontics, and cosmetic procedures. Known for family-friendly care and modern treatment techniques.',
+    businessModel: 'B2C Healthcare',
+    employeeRange: '21-50',
+    employeeCount: 35,
+    annualRevenue: '€2M-5M',
+    techStack: ['Dentrix', 'Eaglesoft', 'Pearl AI Imaging', 'Weave Communications', 'Open Dental'],
+    painPoints: ['patient no-shows costing revenue', 'insurance verification delays', 'treatment plan follow-up gaps', 'recalls and reactivations falling through'],
+    biggestChallenge: 'Patients ghost us after consultations - we present a €3,000 treatment plan and never hear from them again',
+    currentTools: ['Dentrix', 'Microsoft Office', 'WhatsApp for patient comms'],
+    automationExperience: 'Basic appointment reminders via text, nothing else automated',
+    aiBudget: '10000-25000',
+    manualHoursWeekly: 25,
+    interview: [
+      { role: 'user', content: 'We lose about 15-20 patients a week to no-shows. Each missed appointment costs us around €150 in chair time.' },
+      { role: 'user', content: 'Insurance verification is a nightmare - we spend 2 hours every morning on hold with insurance companies before we can confirm coverage.' },
+      { role: 'user', content: 'Our treatment acceptance rate is only about 40%. Patients say they\'ll think about it and we never follow up systematically.' },
+      { role: 'user', content: 'I wish we had a way to automatically reach out to patients who haven\'t been in for 6 months. Right now we just hope they remember to book.' },
+      { role: 'user', content: 'The front desk is overwhelmed - they\'re answering phones, checking in patients, verifying insurance, AND trying to schedule follow-ups all at once.' },
+    ],
+    confidenceScores: {
+      operations: { score: 85, evidence: ['Detailed no-show metrics provided', 'Specific cost per missed appointment'] },
+      technology: { score: 70, evidence: ['Listed current tools', 'Mentioned Dentrix usage'] },
+      financials: { score: 75, evidence: ['Revenue range provided', 'Cost per no-show calculated'] },
+      pain_points: { score: 90, evidence: ['Multiple specific pain points', 'Clear prioritization'] },
+    },
+  },
+
+  'home-services': {
+    description: 'Residential and light commercial construction company specializing in renovations, extensions, and new builds. 15 years in business with strong local reputation.',
+    businessModel: 'B2C/B2B Services',
+    employeeRange: '11-25',
+    employeeCount: 18,
+    annualRevenue: '€1.5M-3M',
+    techStack: ['BuilderTrend', 'QuickBooks', 'Jobber', 'CoConstruct', 'Housecall Pro'],
+    painPoints: ['estimating takes too long', 'job scheduling conflicts', 'material cost tracking', 'customer communication gaps during projects'],
+    biggestChallenge: 'Creating accurate estimates takes 4-5 hours per job and we still sometimes get it wrong, eating into profits',
+    currentTools: ['Excel for estimates', 'Google Calendar', 'WhatsApp groups with crews'],
+    automationExperience: 'Tried a few apps but the lads on site don\'t use them consistently',
+    aiBudget: '5000-15000',
+    manualHoursWeekly: 30,
+    interview: [
+      { role: 'user', content: 'Every estimate takes me a full evening. I\'m measuring, calculating materials, checking supplier prices - it\'s exhausting.' },
+      { role: 'user', content: 'Last month we had three crews show up at the wrong job. The scheduling mix-up cost us €2,000 in wasted travel and delays.' },
+      { role: 'user', content: 'Customers constantly ask "when will you be done?" and I have no good answer because we don\'t track progress properly.' },
+      { role: 'user', content: 'Material costs have gone up 30% but we\'re still quoting based on old prices. By the time we finish a job, our margins are gone.' },
+      { role: 'user', content: 'I spend half my Sundays doing invoices instead of being with my family. There has to be a better way.' },
+    ],
+    confidenceScores: {
+      operations: { score: 90, evidence: ['Detailed estimating process described', 'Scheduling issues quantified'] },
+      technology: { score: 60, evidence: ['Using basic tools', 'Mentioned failed app adoption'] },
+      financials: { score: 80, evidence: ['Material cost impact stated', 'Revenue range clear'] },
+      pain_points: { score: 95, evidence: ['Emotional response about work-life balance', 'Specific cost examples'] },
+    },
+  },
+
+  recruiting: {
+    description: 'Boutique recruitment agency specializing in tech and finance placements. Works with both startups and established enterprises across the DACH region.',
+    businessModel: 'B2B Services',
+    employeeRange: '6-15',
+    employeeCount: 12,
+    annualRevenue: '€800K-1.5M',
+    techStack: ['Bullhorn', 'LinkedIn Recruiter', 'Greenhouse', 'Lever', 'HireVue'],
+    painPoints: ['sourcing quality candidates takes forever', 'candidate ghosting after interviews', 'client relationship management', 'ATS data is a mess'],
+    biggestChallenge: 'We spend 70% of our time sourcing, only 30% actually talking to candidates and clients - the ratio should be reversed',
+    currentTools: ['Bullhorn ATS', 'LinkedIn Recruiter', 'Gmail', 'Google Sheets for pipeline tracking'],
+    automationExperience: 'We have some email sequences in Bullhorn but they feel generic',
+    aiBudget: '8000-20000',
+    manualHoursWeekly: 35,
+    interview: [
+      { role: 'user', content: 'I spend 3 hours a day on LinkedIn just trying to find candidates. Boolean searches only get me so far.' },
+      { role: 'user', content: 'Our response rate to outreach is maybe 5%. Most candidates ignore our messages because they\'re getting 20 others just like it.' },
+      { role: 'user', content: 'We had a perfect candidate ghost us at the final round last week. €15,000 placement fee gone because we didn\'t nurture the relationship.' },
+      { role: 'user', content: 'Client updates are embarrassing - I have to manually check Bullhorn before every call to remember where each search stands.' },
+      { role: 'user', content: 'Our database has 50,000 candidates but half the data is outdated. People have moved jobs 3 times since we last spoke.' },
+    ],
+    confidenceScores: {
+      operations: { score: 85, evidence: ['Time allocation breakdown provided', 'Specific metrics on response rates'] },
+      technology: { score: 75, evidence: ['Listed ATS and tools', 'Understood limitations'] },
+      financials: { score: 80, evidence: ['Placement fee mentioned', 'Revenue impact clear'] },
+      pain_points: { score: 90, evidence: ['Quantified lost revenue', 'Emotional frustration evident'] },
+    },
+  },
+
+  veterinary: {
+    description: 'Full-service veterinary hospital offering wellness care, surgery, emergency services, and boarding. Serves companion animals in a busy suburban area.',
+    businessModel: 'B2C Healthcare',
+    employeeRange: '15-30',
+    employeeCount: 22,
+    annualRevenue: '€1M-2.5M',
+    techStack: ['eVetPractice', 'Idexx VetLab', 'Covetrus Pulse', 'PetDesk', 'Vetter Software'],
+    painPoints: ['prescription refill requests pile up', 'lab result communication delays', 'inventory management chaos', 'after-hours emergency coordination'],
+    biggestChallenge: 'Pet owners expect instant communication but our vets are in surgery or consultations - we can\'t respond fast enough',
+    currentTools: ['eVetPractice', 'Paper charts for some legacy records', 'Phone calls for everything'],
+    automationExperience: 'Appointment reminders are automated, rest is manual',
+    aiBudget: '8000-18000',
+    manualHoursWeekly: 28,
+    interview: [
+      { role: 'user', content: 'We get 40+ phone calls a day just for prescription refills. Each one takes 5 minutes because we have to pull records and verify.' },
+      { role: 'user', content: 'Lab results sit in our inbox for hours before someone has time to call the owner. Meanwhile they\'re anxiously waiting for news about their pet.' },
+      { role: 'user', content: 'Our vaccine reminder system is a joke - we mail postcards. Half get returned, the other half ignored. Revenue walks out the door.' },
+      { role: 'user', content: 'Inventory counts don\'t match what we actually have. Last week we had to send a pet home and reschedule surgery because we were out of anesthesia.' },
+      { role: 'user', content: 'After-hours emergencies go to an answering service that can\'t help. By the time we call back, the owner went to a competitor.' },
+    ],
+    confidenceScores: {
+      operations: { score: 90, evidence: ['Call volume quantified', 'Specific time per task'] },
+      technology: { score: 65, evidence: ['Mixed paper/digital workflow', 'Legacy systems mentioned'] },
+      financials: { score: 70, evidence: ['Revenue impact implied', 'Lost client examples'] },
+      pain_points: { score: 95, evidence: ['Life-or-death urgency conveyed', 'Multiple concrete examples'] },
+    },
+  },
+
+  coaching: {
+    description: 'Executive and leadership coaching practice working with C-suite leaders and high-potential managers. Combines 1:1 coaching with group workshops.',
+    businessModel: 'B2B/B2C Services',
+    employeeRange: '3-10',
+    employeeCount: 6,
+    annualRevenue: '€400K-800K',
+    techStack: ['Calendly', 'Zoom', 'Notion', 'CoachAccountable', 'Kajabi'],
+    painPoints: ['session prep takes too long', 'tracking client progress manually', 'content creation for workshops', 'scaling beyond 1:1 sessions'],
+    biggestChallenge: 'I can only coach 20 clients at once. To grow revenue, I need to scale but I don\'t want to sacrifice quality.',
+    currentTools: ['Calendly', 'Zoom', 'Google Docs for session notes', 'Stripe for payments'],
+    automationExperience: 'Calendar booking is automated, but session prep and follow-up is all manual',
+    aiBudget: '3000-8000',
+    manualHoursWeekly: 15,
+    interview: [
+      { role: 'user', content: 'Before each session, I spend 30 minutes reviewing notes from our last 5 conversations. I can\'t remember every client\'s journey.' },
+      { role: 'user', content: 'My clients want homework and exercises between sessions. Creating personalized materials for 20 people is impossible.' },
+      { role: 'user', content: 'I\'ve thought about group programs but the admin of managing 30 people through a 12-week program terrifies me.' },
+      { role: 'user', content: 'Clients cancel last-minute constantly. I lose €500/hour slots because there\'s no consequence for late cancellations.' },
+      { role: 'user', content: 'My best insights happen in sessions but I forget to write them down. Two weeks later, I can\'t remember what breakthrough we had.' },
+    ],
+    confidenceScores: {
+      operations: { score: 80, evidence: ['Session prep time detailed', 'Client capacity stated'] },
+      technology: { score: 70, evidence: ['Current stack listed', 'Clear gaps identified'] },
+      financials: { score: 85, evidence: ['Hourly rate implied', 'Scaling constraints clear'] },
+      pain_points: { score: 85, evidence: ['Capacity constraints', 'Quality vs scale tension'] },
+    },
+  },
+
+  'professional-services': {
+    description: 'Mid-sized accounting and advisory firm serving SMEs and owner-managed businesses. Offers audit, tax, corporate finance, and business consulting.',
+    businessModel: 'B2B Services',
+    employeeRange: '25-50',
+    employeeCount: 38,
+    annualRevenue: '€3M-6M',
+    techStack: ['Xero', 'Sage', 'CCH Axcess', 'Practice Ignition', 'Karbon'],
+    painPoints: ['client data chasing every month', 'compliance deadline management', 'knowledge silos between partners', 'scope creep on fixed-fee engagements'],
+    biggestChallenge: 'We spend 40% of engagement time chasing clients for documents instead of doing actual advisory work',
+    currentTools: ['Xero/Sage integrations', 'Outlook', 'SharePoint', 'Excel for everything else'],
+    automationExperience: 'Bank feeds and some reconciliation automated, client comms and workflow still manual',
+    aiBudget: '15000-35000',
+    manualHoursWeekly: 45,
+    interview: [
+      { role: 'user', content: 'Our managers send 50 emails a day chasing bank statements, invoices, and receipts. It\'s degrading work for qualified accountants.' },
+      { role: 'user', content: 'We missed a VAT deadline last quarter because the reminder got lost in email. €8,000 penalty for the client, and they blamed us.' },
+      { role: 'user', content: 'Every partner has their own way of doing things. When someone\'s on holiday, their clients are stuck waiting.' },
+      { role: 'user', content: 'Fixed-fee engagements are killing us. A €5,000 annual accounts job turns into €8,000 of work because the client keeps asking questions.' },
+      { role: 'user', content: 'I wish we could clone our best partner. He spots tax planning opportunities others miss, but his knowledge is all in his head.' },
+    ],
+    confidenceScores: {
+      operations: { score: 95, evidence: ['Detailed time allocation', 'Specific penalty example'] },
+      technology: { score: 75, evidence: ['Listed integrations', 'Clear gaps in workflow tools'] },
+      financials: { score: 90, evidence: ['Revenue range provided', 'Scope creep quantified'] },
+      pain_points: { score: 95, evidence: ['Multiple partners affected', 'Emotional frustration evident'] },
+    },
+  },
+}
+
+// ============================================================================
+// Dev Mode Test Generator Component
+// ============================================================================
+
+// Model strategies available for testing
+const MODEL_STRATEGIES = [
+  { id: 'anthropic_quick', label: 'Claude Sonnet (Quick)', description: 'Fast, cost-effective - Sonnet for generation' },
+  { id: 'anthropic_full', label: 'Claude Opus (Full)', description: 'Premium quality - Opus for all generation' },
+  { id: 'hybrid', label: 'Hybrid (Recommended)', description: 'Haiku → Sonnet → Opus pipeline' },
+  { id: 'gemini_primary', label: 'Gemini Primary', description: 'Flash drafts, Pro final (1501 Elo)' },
+  { id: 'cost_optimized', label: 'Cost Optimized', description: 'Flash → Sonnet → Opus (cheapest)' },
+  { id: 'multi_provider', label: 'Multi-Provider', description: 'Opus + Gemini Pro + GPT-5.2 validation' },
+  { id: 'budget', label: 'Budget (DeepSeek)', description: 'DeepSeek V3 primary (94% cheaper)' },
+] as const
+
+const TEST_COMPANIES = [
+  { name: 'Nordic Dental Group', industry: 'dental', website: 'nordicdentalgroup.com' },
+  { name: 'Green Oak Construction', industry: 'home-services', website: 'greenoakconstruction.com' },
+  { name: 'Swift Recruit Partners', industry: 'recruiting', website: 'swiftrecruit.io' },
+  { name: 'Cascade Veterinary Clinic', industry: 'veterinary', website: 'cascadevet.com' },
+  { name: 'Summit Coaching Academy', industry: 'coaching', website: 'summitcoaching.co' },
+  { name: 'Anderson & Partners LLP', industry: 'professional-services', website: 'andersonpartners.com' },
+] as const
+
+interface DevModeTestGeneratorProps {
+  navigate: (path: string) => void
+}
+
+function DevModeTestGenerator({ navigate }: DevModeTestGeneratorProps) {
+  const [isGenerating, setIsGenerating] = useState(false)
+  const [currentStep, setCurrentStep] = useState('')
+  const [selectedCompany, setSelectedCompany] = useState<typeof TEST_COMPANIES[number] | null>(null)
+  const [progress, setProgress] = useState(0)
+  const [error, setError] = useState<string | null>(null)
+
+  // Dev config options
+  const [showAdvanced, setShowAdvanced] = useState(false)
+  const [selectedStrategy, setSelectedStrategy] = useState<string>('anthropic_quick')
+  const [selectedTier, setSelectedTier] = useState<'quick' | 'full'>('quick')
+  const [companyIndex, setCompanyIndex] = useState<number>(-1) // -1 = random
+
+  const testCompanies = TEST_COMPANIES
+
+  const steps = [
+    { label: 'Creating session', icon: '📝' },
+    { label: 'Loading knowledge base', icon: '📚' },
+    { label: 'Analyzing business context', icon: '🔍' },
+    { label: 'Generating findings', icon: '💡' },
+    { label: 'Building recommendations', icon: '🎯' },
+    { label: 'Calculating ROI', icon: '📊' },
+    { label: 'Finalizing report', icon: '✨' },
+  ]
+
+  async function generateTestReport() {
+    setIsGenerating(true)
+    setError(null)
+    setProgress(0)
+
+    // Use selected company or random
+    const testCompany = companyIndex >= 0
+      ? testCompanies[companyIndex]
+      : testCompanies[Math.floor(Math.random() * testCompanies.length)]
+    setSelectedCompany(testCompany)
+
+    // Get industry-specific test data
+    const industryData = industryTestData[testCompany.industry]
+    if (!industryData) {
+      setError(`No test data configured for industry: ${testCompany.industry}`)
+      setIsGenerating(false)
+      return
+    }
+
+    const mockProfile = {
+      basics: {
+        name: { value: testCompany.name },
+        description: { value: industryData.description },
+        website: { value: testCompany.website }
+      },
+      industry: {
+        primary_industry: { value: testCompany.industry },
+        business_model: { value: industryData.businessModel }
+      },
+      size: {
+        employee_range: { value: industryData.employeeRange },
+        employee_count: { value: industryData.employeeCount },
+        annual_revenue: { value: industryData.annualRevenue }
+      },
+      tech_stack: {
+        technologies_detected: industryData.techStack.slice(0, 3).map(t => ({ value: t }))
+      }
+    }
+
+    const mockAnswers = {
+      industry: testCompany.industry,
+      company_size: industryData.employeeRange,
+      employee_count: industryData.employeeCount,
+      pain_points: industryData.painPoints,
+      biggest_challenge: industryData.biggestChallenge,
+      current_tools: industryData.currentTools,
+      automation_experience: industryData.automationExperience,
+      ai_budget: industryData.aiBudget,
+      manual_hours_weekly: industryData.manualHoursWeekly,
+      tech_comfort: 'comfortable',
+      // Include interview responses in answers for dev context
+      interview_responses: industryData.interview.map(m => m.content),
+    }
+
+    // Full interview messages with assistant questions interspersed
+    const mockInterview = industryData.interview
+
+    try {
+      // Use streaming endpoint for real-time progress updates
+      const response = await fetch(`${API_BASE_URL}/api/quiz/dev/generate-test-report/stream`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          company_profile: mockProfile,
+          quiz_answers: mockAnswers,
+          interview_messages: mockInterview,
+          confidence_scores: industryData.confidenceScores,
+          tier: selectedTier,
+          model_strategy: selectedStrategy,
+        })
+      })
+
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => ({}))
+        throw new Error(errorData?.detail || errorData?.error?.message || `Failed: ${response.statusText}`)
+      }
+
+      // Read the stream for real-time progress updates
+      const reader = response.body?.getReader()
+      if (!reader) {
+        throw new Error('No response stream available')
+      }
+
+      const decoder = new TextDecoder()
+      let buffer = ''
+      let reportId: string | null = null
+
+      while (true) {
+        const { done, value } = await reader.read()
+        if (done) break
+
+        buffer += decoder.decode(value, { stream: true })
+
+        // Process SSE events in the buffer
+        const lines = buffer.split('\n')
+        buffer = lines.pop() || '' // Keep incomplete line in buffer
+
+        for (const line of lines) {
+          if (line.startsWith('data: ')) {
+            try {
+              const data = JSON.parse(line.slice(6))
+
+              // Update progress from real backend events
+              if (data.progress !== undefined) {
+                setProgress(data.progress)
+              }
+              if (data.step) {
+                setCurrentStep(data.step)
+              }
+
+              // Check for completion
+              if (data.report_id) {
+                reportId = data.report_id
+              }
+
+              // Check for errors
+              if (data.phase === 'error') {
+                throw new Error(data.error || data.step || 'Report generation failed')
+              }
+
+              // Navigate on completion
+              if ((data.phase === 'done' || data.phase === 'complete') && reportId) {
+                setProgress(100)
+                setCurrentStep('Report ready!')
+                await new Promise(r => setTimeout(r, 500))
+                navigate(`/report/${reportId}?dev=true`)
+                return
+              }
+            } catch (parseErr) {
+              // Only log if it's not a JSON parse error for empty/malformed data
+              if (line.trim() !== 'data: ') {
+                console.warn('Failed to parse SSE event:', line, parseErr)
+              }
+            }
+          }
+        }
+      }
+
+      // If we got here without navigating, check if we have a report_id
+      if (reportId) {
+        setProgress(100)
+        setCurrentStep('Report ready!')
+        await new Promise(r => setTimeout(r, 500))
+        navigate(`/report/${reportId}?dev=true`)
+      } else {
+        throw new Error('Report generation completed but no report ID received')
+      }
+    } catch (err: any) {
+      console.error('Failed to generate test report:', err)
+      setError(err.message || 'Failed to generate report')
+      setIsGenerating(false)
+    }
+  }
+
+  if (isGenerating) {
+    return (
+      <motion.div
+        initial={{ opacity: 0, y: 10 }}
+        animate={{ opacity: 1, y: 0 }}
+        className="mt-8 p-6 bg-gradient-to-br from-yellow-50 to-orange-50 border-2 border-yellow-300 rounded-2xl"
+      >
+        <div className="text-center">
+          <div className="inline-flex items-center gap-2 px-3 py-1 bg-yellow-200 text-yellow-800 rounded-full text-xs font-medium mb-4">
+            <span className="animate-pulse">●</span> DEV MODE
+          </div>
+
+          {selectedCompany && (
+            <div className="mb-4">
+              <h3 className="text-lg font-bold text-gray-900">{selectedCompany.name}</h3>
+              <p className="text-sm text-gray-500 capitalize">{selectedCompany.industry.replace('-', ' ')}</p>
+            </div>
+          )}
+
+          {/* Progress bar */}
+          <div className="w-full bg-gray-200 rounded-full h-3 mb-4 overflow-hidden">
+            <motion.div
+              className="h-full bg-gradient-to-r from-yellow-400 to-orange-500 rounded-full"
+              initial={{ width: 0 }}
+              animate={{ width: `${progress}%` }}
+              transition={{ duration: 0.5 }}
+            />
+          </div>
+
+          {/* Current step */}
+          <div className="flex items-center justify-center gap-2 text-gray-700">
+            <motion.div
+              animate={{ rotate: 360 }}
+              transition={{ duration: 1, repeat: Infinity, ease: 'linear' }}
+              className="w-5 h-5 border-2 border-yellow-500 border-t-transparent rounded-full"
+            />
+            <span className="font-medium">{currentStep || 'Starting...'}</span>
+          </div>
+
+          {/* Steps list */}
+          <div className="mt-6 grid grid-cols-2 gap-2 text-left">
+            {steps.map((step, i) => {
+              const stepProgress = (progress / 100) * steps.length
+              const isComplete = i < stepProgress
+              const isCurrent = i === Math.floor(stepProgress)
+              return (
+                <div
+                  key={step.label}
+                  className={`flex items-center gap-2 text-xs py-1 px-2 rounded ${
+                    isComplete ? 'text-green-700 bg-green-50' :
+                    isCurrent ? 'text-yellow-700 bg-yellow-100 font-medium' :
+                    'text-gray-400'
+                  }`}
+                >
+                  <span>{isComplete ? '✓' : step.icon}</span>
+                  <span>{step.label}</span>
+                </div>
+              )
+            })}
+          </div>
+
+          {error && (
+            <div className="mt-4 p-3 bg-red-100 text-red-700 rounded-lg text-sm">
+              {error}
+              <button
+                onClick={() => { setError(null); setIsGenerating(false) }}
+                className="block mt-2 text-red-800 underline text-xs"
+              >
+                Try again
+              </button>
+            </div>
+          )}
+        </div>
+      </motion.div>
+    )
+  }
+
+  return (
+    <div className="mt-8 p-4 bg-yellow-50 border border-yellow-200 rounded-xl">
+      <div className="flex items-center justify-between mb-3">
+        <p className="text-xs text-yellow-800 font-medium">🛠️ DEV MODE</p>
+        <button
+          onClick={() => setShowAdvanced(!showAdvanced)}
+          className="text-xs text-yellow-600 hover:text-yellow-800 underline"
+        >
+          {showAdvanced ? 'Hide options' : 'Show options'}
+        </button>
+      </div>
+
+      {showAdvanced && (
+        <div className="mb-4 space-y-3 p-3 bg-white/50 rounded-lg border border-yellow-200">
+          {/* Model Strategy Selector */}
+          <div>
+            <label className="block text-xs font-medium text-gray-700 mb-1">
+              Model Strategy
+            </label>
+            <select
+              value={selectedStrategy}
+              onChange={(e) => setSelectedStrategy(e.target.value)}
+              className="w-full text-sm border border-gray-300 rounded-md px-2 py-1.5 bg-white focus:ring-2 focus:ring-yellow-500 focus:border-yellow-500"
+            >
+              {MODEL_STRATEGIES.map((strategy) => (
+                <option key={strategy.id} value={strategy.id}>
+                  {strategy.label}
+                </option>
+              ))}
+            </select>
+            <p className="text-xs text-gray-500 mt-1">
+              {MODEL_STRATEGIES.find(s => s.id === selectedStrategy)?.description}
+            </p>
+          </div>
+
+          {/* Tier Selector */}
+          <div>
+            <label className="block text-xs font-medium text-gray-700 mb-1">
+              Report Tier
+            </label>
+            <div className="flex gap-2">
+              <button
+                onClick={() => setSelectedTier('quick')}
+                className={`flex-1 py-1.5 px-3 text-xs font-medium rounded-md border transition ${
+                  selectedTier === 'quick'
+                    ? 'bg-yellow-500 text-white border-yellow-500'
+                    : 'bg-white text-gray-700 border-gray-300 hover:border-yellow-400'
+                }`}
+              >
+                Quick (10-15 findings)
+              </button>
+              <button
+                onClick={() => setSelectedTier('full')}
+                className={`flex-1 py-1.5 px-3 text-xs font-medium rounded-md border transition ${
+                  selectedTier === 'full'
+                    ? 'bg-yellow-500 text-white border-yellow-500'
+                    : 'bg-white text-gray-700 border-gray-300 hover:border-yellow-400'
+                }`}
+              >
+                Full (25-50 findings)
+              </button>
+            </div>
+          </div>
+
+          {/* Company Selector */}
+          <div>
+            <label className="block text-xs font-medium text-gray-700 mb-1">
+              Test Company
+            </label>
+            <select
+              value={companyIndex}
+              onChange={(e) => setCompanyIndex(Number(e.target.value))}
+              className="w-full text-sm border border-gray-300 rounded-md px-2 py-1.5 bg-white focus:ring-2 focus:ring-yellow-500 focus:border-yellow-500"
+            >
+              <option value={-1}>🎲 Random</option>
+              {testCompanies.map((company, idx) => (
+                <option key={company.name} value={idx}>
+                  {company.name} ({company.industry})
+                </option>
+              ))}
+            </select>
+          </div>
+
+          {/* Config Summary */}
+          <div className="text-xs text-gray-600 bg-gray-100 rounded p-2">
+            <strong>Config:</strong> {MODEL_STRATEGIES.find(s => s.id === selectedStrategy)?.label} • {selectedTier} tier • {companyIndex >= 0 ? testCompanies[companyIndex].name : 'Random company'}
+          </div>
+        </div>
+      )}
+
+      <button
+        onClick={generateTestReport}
+        className="w-full py-2 bg-yellow-500 text-white font-medium rounded-lg hover:bg-yellow-600 text-sm transition"
+      >
+        Generate Test Report
+      </button>
+      <p className="text-xs text-yellow-600 mt-2 text-center">
+        Creates a real report with mock data for testing
+      </p>
+    </div>
+  )
 }
 
 // ============================================================================
@@ -122,9 +857,10 @@ export default function Quiz() {
   // Knowledge completeness
   const [knowledgeScore, setKnowledgeScore] = useState(0)
 
-  // Teaser report state
+  // Teaser report state (TODO: implement teaser API when backend is ready)
+  // Using void to suppress unused setter warning - will be used when teaser API is implemented
   const [teaserReport, setTeaserReport] = useState<TeaserReport | null>(null)
-  const [teaserLoading, setTeaserLoading] = useState(false)
+  void setTeaserReport // Suppress unused warning until teaser feature is complete
 
   // ============================================================================
   // Helper Functions (defined before useEffect that uses them)
@@ -424,36 +1160,8 @@ export default function Quiz() {
   }, [])
 
   // ============================================================================
-  // Teaser Report Generation
+  // Tier Selection
   // ============================================================================
-
-  const fetchTeaserReport = async () => {
-    if (!sessionId) return
-
-    setTeaserLoading(true)
-    try {
-      const response = await fetch(`${API_BASE_URL}/api/quiz/sessions/${sessionId}/teaser`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({}),
-      })
-
-      if (response.ok) {
-        const data = await response.json()
-        setTeaserReport(data.teaser)
-        setPhase('teaser')
-      } else {
-        console.error('Failed to fetch teaser report')
-        // Fall back to pricing without teaser
-        setPhase('pricing')
-      }
-    } catch (error) {
-      console.error('Teaser fetch error:', error)
-      setPhase('pricing')
-    } finally {
-      setTeaserLoading(false)
-    }
-  }
 
   const handleTierSelect = (tier: 'report_only' | 'report_plus_call') => {
     // Store session data for checkout
@@ -614,6 +1322,11 @@ export default function Quiz() {
             >
               Start a new analysis
             </button>
+
+            {/* DEV MODE: Generate test report */}
+            {import.meta.env.DEV && (
+              <DevModeTestGenerator navigate={navigate} />
+            )}
           </motion.div>
         </div>
       </div>
@@ -625,102 +1338,224 @@ export default function Quiz() {
   // ============================================================================
 
   if (phase === 'researching') {
+    const researchSteps = [
+      { label: 'Scanning website', icon: '🌐', done: researchProgress >= 20, active: researchProgress > 0 && researchProgress < 20 },
+      { label: 'Searching LinkedIn', icon: '💼', done: researchProgress >= 40, active: researchProgress >= 20 && researchProgress < 40 },
+      { label: 'Finding news & updates', icon: '📰', done: researchProgress >= 60, active: researchProgress >= 40 && researchProgress < 60 },
+      { label: 'Analyzing tech stack', icon: '⚙️', done: researchProgress >= 80, active: researchProgress >= 60 && researchProgress < 80 },
+      { label: 'Generating questions', icon: '✨', done: researchProgress >= 95, active: researchProgress >= 80 && researchProgress < 95 },
+    ]
+
     return (
-      <div className="min-h-screen bg-gradient-to-br from-gray-50 to-purple-50 flex items-center justify-center px-4">
+      <div className="min-h-screen bg-gradient-to-br from-slate-50 via-purple-50/30 to-indigo-50/50 flex items-center justify-center px-4">
+        {/* Subtle background pattern */}
+        <div className="fixed inset-0 overflow-hidden pointer-events-none">
+          <div className="absolute -top-1/2 -right-1/2 w-full h-full bg-gradient-radial from-purple-200/20 to-transparent rounded-full blur-3xl" />
+          <div className="absolute -bottom-1/2 -left-1/2 w-full h-full bg-gradient-radial from-indigo-200/20 to-transparent rounded-full blur-3xl" />
+        </div>
+
         <motion.div
-          initial={{ opacity: 0, scale: 0.95 }}
-          animate={{ opacity: 1, scale: 1 }}
-          className="max-w-lg w-full"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5 }}
+          className="max-w-md w-full relative"
         >
-          <div className="bg-white rounded-2xl p-8 shadow-lg border border-gray-100 text-center">
+          <div className="bg-white/80 backdrop-blur-xl rounded-3xl p-8 shadow-2xl shadow-purple-500/10 border border-white/50">
             {researchError ? (
-              <>
-                <div className="w-20 h-20 mx-auto mb-6 bg-red-100 rounded-full flex items-center justify-center">
-                  <svg className="w-10 h-10 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <motion.div
+                initial={{ scale: 0.9, opacity: 0 }}
+                animate={{ scale: 1, opacity: 1 }}
+                className="text-center"
+              >
+                <div className="w-20 h-20 mx-auto mb-6 bg-gradient-to-br from-red-50 to-rose-100 rounded-2xl flex items-center justify-center shadow-lg shadow-red-500/10">
+                  <svg className="w-10 h-10 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
                   </svg>
                 </div>
                 <h2 className="text-xl font-semibold text-gray-900 mb-2">Research Failed</h2>
-                <p className="text-gray-600 mb-6">{researchError}</p>
+                <p className="text-gray-500 mb-6">{researchError}</p>
                 <button
                   onClick={() => { setPhase('website'); setResearchError(null); }}
-                  className="px-6 py-3 bg-primary-600 text-white font-semibold rounded-xl hover:bg-primary-700 transition"
+                  className="px-8 py-3 bg-gradient-to-r from-purple-600 to-indigo-600 text-white font-semibold rounded-xl hover:shadow-lg hover:shadow-purple-500/25 transition-all duration-300"
                 >
                   Try Again
                 </button>
-              </>
+              </motion.div>
             ) : (
               <>
-                <div className="relative w-32 h-32 mx-auto mb-6">
-                  {/* Animated rings */}
+                {/* Animated Icon */}
+                <div className="relative w-28 h-28 mx-auto mb-8">
+                  {/* Outer glow ring */}
                   <motion.div
-                    animate={{ scale: [1, 1.2, 1], opacity: [0.5, 0.2, 0.5] }}
-                    transition={{ duration: 2, repeat: Infinity }}
-                    className="absolute inset-0 bg-purple-200 rounded-full"
+                    animate={{
+                      scale: [1, 1.15, 1],
+                      opacity: [0.3, 0.1, 0.3],
+                    }}
+                    transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
+                    className="absolute inset-0 bg-gradient-to-r from-purple-400 to-indigo-400 rounded-full blur-xl"
                   />
+                  {/* Middle ring */}
                   <motion.div
-                    animate={{ scale: [1, 1.1, 1], opacity: [0.7, 0.3, 0.7] }}
-                    transition={{ duration: 2, repeat: Infinity, delay: 0.3 }}
-                    className="absolute inset-2 bg-purple-300 rounded-full"
+                    animate={{
+                      scale: [1, 1.08, 1],
+                      opacity: [0.5, 0.2, 0.5],
+                    }}
+                    transition={{ duration: 2.5, repeat: Infinity, ease: "easeInOut", delay: 0.2 }}
+                    className="absolute inset-2 bg-gradient-to-br from-purple-300 to-indigo-300 rounded-full"
                   />
-                  <div className="absolute inset-4 bg-white rounded-full flex items-center justify-center shadow-lg">
-                    <svg className="w-12 h-12 text-purple-600" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                  {/* Inner circle with icon */}
+                  <motion.div
+                    animate={{ rotate: 360 }}
+                    transition={{ duration: 8, repeat: Infinity, ease: "linear" }}
+                    className="absolute inset-4 bg-gradient-to-br from-purple-500 to-indigo-600 rounded-full shadow-lg"
+                  />
+                  <div className="absolute inset-5 bg-white rounded-full flex items-center justify-center shadow-inner">
+                    <motion.svg
+                      className="w-10 h-10 text-purple-600"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      animate={{ scale: [1, 1.1, 1] }}
+                      transition={{ duration: 2, repeat: Infinity }}
+                    >
+                      <circle cx="11" cy="11" r="8" strokeWidth={2} />
                       <motion.path
                         strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={1.5}
-                        d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
-                        initial={{ pathLength: 0 }}
-                        animate={{ pathLength: 1 }}
-                        transition={{ duration: 2, repeat: Infinity }}
+                        strokeWidth={2}
+                        d="M21 21l-4.35-4.35"
+                        animate={{ pathLength: [0, 1, 0] }}
+                        transition={{ duration: 1.5, repeat: Infinity }}
                       />
-                    </svg>
+                    </motion.svg>
                   </div>
                 </div>
 
-                <h2 className="text-xl font-semibold text-gray-900 mb-2">
-                  Researching {companyName || 'your company'}...
-                </h2>
-                <p className="text-gray-600 mb-6">{researchStep}</p>
-
-                {/* Progress bar */}
-                <div className="w-full bg-gray-200 rounded-full h-3 mb-2">
-                  <motion.div
-                    className="bg-gradient-to-r from-purple-500 to-primary-600 h-3 rounded-full"
-                    initial={{ width: 0 }}
-                    animate={{ width: `${researchProgress}%` }}
-                    transition={{ duration: 0.5 }}
-                  />
+                {/* Title & Status */}
+                <div className="text-center mb-8">
+                  <h2 className="text-2xl font-bold text-gray-900 mb-1">
+                    {companyName ? (
+                      <>Analyzing <span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-600 to-indigo-600">{formatCompanyName(companyName)}</span></>
+                    ) : (
+                      'Analyzing your company'
+                    )}
+                  </h2>
+                  <motion.p
+                    key={researchStep}
+                    initial={{ opacity: 0, y: 5 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    className="text-gray-500 text-sm mt-2"
+                  >
+                    {formatResearchStep(researchStep)}
+                  </motion.p>
                 </div>
-                <p className="text-sm text-gray-500">{researchProgress}% complete</p>
 
-                {/* What we're doing */}
-                <div className="mt-8 text-left">
-                  <div className="space-y-3">
-                    {[
-                      { label: 'Scanning website', done: researchProgress >= 20 },
-                      { label: 'Searching LinkedIn', done: researchProgress >= 40 },
-                      { label: 'Finding news & updates', done: researchProgress >= 60 },
-                      { label: 'Analyzing tech stack', done: researchProgress >= 80 },
-                      { label: 'Generating questions', done: researchProgress >= 95 },
-                    ].map((step, i) => (
-                      <div key={i} className="flex items-center gap-3">
-                        <div className={`w-5 h-5 rounded-full flex items-center justify-center ${
-                          step.done ? 'bg-green-500' : 'bg-gray-200'
-                        }`}>
-                          {step.done && (
-                            <svg className="w-3 h-3 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
-                            </svg>
-                          )}
-                        </div>
-                        <span className={step.done ? 'text-gray-900' : 'text-gray-400'}>
-                          {step.label}
-                        </span>
+                {/* Progress Section */}
+                <div className="mb-8">
+                  {/* Progress bar */}
+                  <div className="relative h-2 bg-gray-100 rounded-full overflow-hidden mb-3">
+                    <motion.div
+                      className="absolute inset-y-0 left-0 bg-gradient-to-r from-purple-500 via-indigo-500 to-purple-600 rounded-full"
+                      initial={{ width: 0 }}
+                      animate={{ width: `${researchProgress}%` }}
+                      transition={{ duration: 0.5, ease: "easeOut" }}
+                    />
+                    {/* Shimmer effect */}
+                    <motion.div
+                      className="absolute inset-y-0 w-20 bg-gradient-to-r from-transparent via-white/40 to-transparent"
+                      animate={{ x: [-80, 400] }}
+                      transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}
+                    />
+                  </div>
+                  <div className="flex justify-between items-center">
+                    <span className="text-xs text-gray-400 uppercase tracking-wider font-medium">Progress</span>
+                    <span className="text-sm font-semibold text-purple-600">{researchProgress}%</span>
+                  </div>
+                </div>
+
+                {/* Steps */}
+                <div className="space-y-3">
+                  {researchSteps.map((step, i) => (
+                    <motion.div
+                      key={i}
+                      initial={{ opacity: 0, x: -10 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      transition={{ delay: i * 0.1 }}
+                      className={`flex items-center gap-4 p-3 rounded-xl transition-all duration-300 ${
+                        step.done
+                          ? 'bg-green-50/80'
+                          : step.active
+                            ? 'bg-purple-50/80 ring-1 ring-purple-200'
+                            : 'bg-gray-50/50'
+                      }`}
+                    >
+                      {/* Status indicator */}
+                      <div className={`relative w-8 h-8 rounded-lg flex items-center justify-center transition-all duration-300 ${
+                        step.done
+                          ? 'bg-gradient-to-br from-green-400 to-emerald-500 shadow-md shadow-green-500/20'
+                          : step.active
+                            ? 'bg-gradient-to-br from-purple-400 to-indigo-500 shadow-md shadow-purple-500/20'
+                            : 'bg-gray-200'
+                      }`}>
+                        {step.done ? (
+                          <motion.svg
+                            initial={{ scale: 0 }}
+                            animate={{ scale: 1 }}
+                            className="w-4 h-4 text-white"
+                            fill="none"
+                            stroke="currentColor"
+                            viewBox="0 0 24 24"
+                          >
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
+                          </motion.svg>
+                        ) : step.active ? (
+                          <motion.div
+                            animate={{ rotate: 360 }}
+                            transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
+                            className="w-4 h-4 border-2 border-white border-t-transparent rounded-full"
+                          />
+                        ) : (
+                          <span className="text-sm grayscale opacity-50">{step.icon}</span>
+                        )}
                       </div>
-                    ))}
-                  </div>
+
+                      {/* Label */}
+                      <span className={`flex-1 text-sm font-medium transition-colors ${
+                        step.done
+                          ? 'text-green-700'
+                          : step.active
+                            ? 'text-purple-700'
+                            : 'text-gray-400'
+                      }`}>
+                        {step.label}
+                      </span>
+
+                      {/* Status text */}
+                      {step.done && (
+                        <motion.span
+                          initial={{ opacity: 0, scale: 0.8 }}
+                          animate={{ opacity: 1, scale: 1 }}
+                          className="text-xs text-green-600 font-medium"
+                        >
+                          Done
+                        </motion.span>
+                      )}
+                      {step.active && (
+                        <motion.span
+                          animate={{ opacity: [1, 0.5, 1] }}
+                          transition={{ duration: 1.5, repeat: Infinity }}
+                          className="text-xs text-purple-600 font-medium"
+                        >
+                          In progress...
+                        </motion.span>
+                      )}
+                    </motion.div>
+                  ))}
                 </div>
+
+                {/* Footer note */}
+                <p className="text-center text-xs text-gray-400 mt-6">
+                  This usually takes 30-60 seconds
+                </p>
               </>
             )}
           </div>
@@ -730,319 +1565,332 @@ export default function Quiz() {
   }
 
   // ============================================================================
-  // Render: Findings Phase (What we know / What we need)
+  // Render: Findings Phase - Redesigned for clarity
   // ============================================================================
 
   if (phase === 'findings') {
-    const highConfidence = findings.filter(f => f.confidence === 'high')
-    const mediumConfidence = findings.filter(f => f.confidence === 'medium')
-    const lowConfidence = findings.filter(f => f.confidence === 'low')
+    // Extract key company info for display
+    const profile = researchResult?.company_profile
+    const description = profile?.basics?.description?.value || ''
+
+    const nextSteps = [
+      {
+        num: 1,
+        title: 'AI-powered interview',
+        description: 'Quick conversation to understand your pain points, goals, and priorities',
+        active: true,
+        icon: '💬'
+      },
+      {
+        num: 2,
+        title: 'See your AI Readiness Score',
+        description: 'Get an instant preview of your top opportunities for automation',
+        active: false,
+        icon: '📊'
+      },
+      {
+        num: 3,
+        title: '90-minute AI workshop',
+        description: 'Deep-dive session to gather the context needed for an impactful report',
+        active: false,
+        icon: '🎯'
+      },
+      {
+        num: 4,
+        title: 'Receive your full report',
+        description: 'Expert-reviewed by Amplify Logic AI, delivered within 24-48 hours',
+        active: false,
+        icon: '📋'
+      }
+    ]
 
     return (
-      <div className="min-h-screen bg-gray-50">
-        <nav className="fixed top-0 left-0 right-0 z-50 bg-white/80 backdrop-blur-md border-b border-gray-100">
+      <div className="min-h-screen bg-gradient-to-br from-slate-50 via-emerald-50/30 to-teal-50/50">
+        {/* Subtle background decoration */}
+        <div className="fixed inset-0 overflow-hidden pointer-events-none">
+          <div className="absolute -top-1/2 -right-1/4 w-[800px] h-[800px] bg-gradient-radial from-emerald-200/30 to-transparent rounded-full blur-3xl" />
+          <div className="absolute -bottom-1/4 -left-1/4 w-[600px] h-[600px] bg-gradient-radial from-teal-200/20 to-transparent rounded-full blur-3xl" />
+        </div>
+
+        {/* Navigation */}
+        <nav className="fixed top-0 left-0 right-0 z-50 bg-white/70 backdrop-blur-xl border-b border-white/50">
           <div className="max-w-6xl mx-auto px-4 py-4 flex justify-between items-center">
             <Link to="/" className="text-xl font-bold text-gray-900">
-              CRB<span className="text-primary-600">Analyser</span>
+              CRB<span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-600 to-indigo-600">Analyser</span>
             </Link>
-            <div className="text-sm text-gray-500">
+            <motion.div
+              initial={{ opacity: 0, x: 20 }}
+              animate={{ opacity: 1, x: 0 }}
+              className="flex items-center gap-2 text-sm font-medium text-emerald-600 bg-emerald-50 px-3 py-1.5 rounded-full"
+            >
+              <motion.div
+                initial={{ scale: 0 }}
+                animate={{ scale: 1 }}
+                transition={{ type: "spring", delay: 0.3 }}
+              >
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 13l4 4L19 7" />
+                </svg>
+              </motion.div>
               Research complete
-            </div>
+            </motion.div>
           </div>
         </nav>
 
-        <div className="pt-24 pb-20 px-4">
-          <div className="max-w-3xl mx-auto">
+        <div className="relative pt-28 pb-20 px-4">
+          <div className="max-w-2xl mx-auto">
             <motion.div
-              initial={{ opacity: 0, y: 20 }}
+              initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6 }}
             >
-              {/* Header */}
-              <div className="text-center mb-8">
-                <div className="inline-flex items-center justify-center w-16 h-16 bg-green-100 rounded-2xl mb-4">
-                  <svg className="w-8 h-8 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                  </svg>
-                </div>
-                <h1 className="text-2xl font-bold text-gray-900 mb-2">
-                  Here's what we found about {companyName}
-                </h1>
-                <p className="text-gray-600">
-                  {researchResult?.questionnaire?.research_summary ||
-                   'We gathered public information about your business. Review what we found and help us fill in the gaps.'}
-                </p>
-              </div>
-
-              {/* Research Quality Score */}
-              <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100 mb-6">
-                <div className="flex items-center justify-between mb-4">
-                  <h2 className="font-semibold text-gray-900">Research Coverage</h2>
-                  <span className={`text-2xl font-bold ${
-                    knowledgeScore >= 60 ? 'text-green-600' : knowledgeScore >= 30 ? 'text-yellow-600' : 'text-red-600'
-                  }`}>
-                    {knowledgeScore}%
-                  </span>
-                </div>
-                <div className="w-full bg-gray-200 rounded-full h-3">
-                  <div
-                    className={`h-3 rounded-full transition-all ${
-                      knowledgeScore >= 60 ? 'bg-green-500' : knowledgeScore >= 30 ? 'bg-yellow-500' : 'bg-red-500'
-                    }`}
-                    style={{ width: `${knowledgeScore}%` }}
-                  />
-                </div>
-                <p className="text-sm text-gray-500 mt-2">
-                  {knowledgeScore >= 60
-                    ? 'Good foundation! A few more questions will complete the picture.'
-                    : knowledgeScore >= 30
-                    ? 'We found some useful info. Let\'s fill in the important gaps.'
-                    : 'Limited public info found. Your answers are crucial for a quality report.'}
-                </p>
-              </div>
-
-              {/* What we found - High Confidence */}
-              {highConfidence.length > 0 && (
-                <div className="bg-green-50 rounded-2xl p-6 border border-green-200 mb-4">
-                  <div className="flex items-center gap-2 mb-4">
-                    <div className="w-3 h-3 bg-green-500 rounded-full" />
-                    <h3 className="font-semibold text-green-900">Confirmed Information</h3>
-                  </div>
-                  <div className="grid gap-3">
-                    {highConfidence.map((finding, i) => (
-                      <div key={i} className="flex justify-between items-start bg-white/50 rounded-xl p-3">
-                        <span className="text-sm text-green-800 font-medium">{finding.field}</span>
-                        <span className="text-sm text-green-900 text-right max-w-[60%]">
-                          {Array.isArray(finding.value) ? finding.value.join(', ') : String(finding.value)}
-                        </span>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              )}
-
-              {/* Medium Confidence */}
-              {mediumConfidence.length > 0 && (
-                <div className="bg-yellow-50 rounded-2xl p-6 border border-yellow-200 mb-4">
-                  <div className="flex items-center gap-2 mb-4">
-                    <div className="w-3 h-3 bg-yellow-500 rounded-full" />
-                    <h3 className="font-semibold text-yellow-900">Needs Confirmation</h3>
-                    <span className="text-xs text-yellow-700 bg-yellow-200 px-2 py-0.5 rounded-full">
-                      We'll ask about these
-                    </span>
-                  </div>
-                  <div className="grid gap-3">
-                    {mediumConfidence.map((finding, i) => (
-                      <div key={i} className="flex justify-between items-start bg-white/50 rounded-xl p-3">
-                        <span className="text-sm text-yellow-800 font-medium">{finding.field}</span>
-                        <span className="text-sm text-yellow-900 text-right max-w-[60%]">
-                          {Array.isArray(finding.value) ? finding.value.join(', ') : String(finding.value)}
-                        </span>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              )}
-
-              {/* Low Confidence */}
-              {lowConfidence.length > 0 && (
-                <div className="bg-orange-50 rounded-2xl p-6 border border-orange-200 mb-4">
-                  <div className="flex items-center gap-2 mb-4">
-                    <div className="w-3 h-3 bg-orange-500 rounded-full" />
-                    <h3 className="font-semibold text-orange-900">Low Confidence</h3>
-                  </div>
-                  <div className="grid gap-3">
-                    {lowConfidence.map((finding, i) => (
-                      <div key={i} className="flex justify-between items-start bg-white/50 rounded-xl p-3">
-                        <span className="text-sm text-orange-800 font-medium">{finding.field}</span>
-                        <span className="text-sm text-orange-900 text-right max-w-[60%]">
-                          {Array.isArray(finding.value) ? finding.value.join(', ') : String(finding.value)}
-                        </span>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              )}
-
-              {/* AI Opportunity Preview - Q4 2025 Research */}
-              {(() => {
-                // Extract findings for context
-                const teamSizeFinding = findings.find(f => f.field === 'Team Size' || f.field === 'Employee Count')
-
-                // Q4 2025 research-backed insights (from peer-reviewed studies and industry data)
-                const researchInsights = [
-                  {
-                    title: 'Customer Support Automation',
-                    stat: '60%+',
-                    description: 'resolution rate with AI agents, 20-40% cost reduction',
-                    source: 'HubSpot Q3 2025 Earnings / Industry data',
-                    color: 'text-green-600'
-                  },
-                  {
-                    title: 'Content & Writing Tasks',
-                    stat: '70%',
-                    description: 'time savings on first drafts with AI assistance',
-                    source: 'Industry benchmarks, December 2025',
-                    color: 'text-green-600'
-                  }
-                ]
-
-                // The opportunity - honest but forward-looking
-                const opportunityCheck = {
-                  title: 'The 2026 Opportunity',
-                  insight: 'Tools like Claude Code and Cursor are enabling non-developers to build custom business apps that connect to HubSpot, Slack, Shopify, and more.',
-                  example: 'Companies are building internal support hubs, sales tools, and operations dashboards - without traditional dev teams.',
-                  key: 'The difference? Focused scope, real integrations, and built by people who understand the problem.'
-                }
-
-                // Where it actually works
-                const provenUseCases = [
-                  { name: 'Customer support automation', outcome: '60%+ resolution, 20-40% cost reduction' },
-                  { name: 'Document processing', outcome: '50-70% time reduction' },
-                  { name: 'Content creation', outcome: '70%+ time savings on drafts' },
-                  { name: 'Meeting transcription', outcome: '4+ hours/week saved per user' }
-                ]
-
-                return (
-                  <div className="bg-gradient-to-br from-purple-50 via-primary-50 to-blue-50 rounded-2xl p-6 border border-purple-200 mb-6">
-                    <div className="flex items-center gap-2 mb-4">
-                      <svg className="w-5 h-5 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
-                      </svg>
-                      <h3 className="font-semibold text-purple-900">What Q4 2025 Research Shows</h3>
+              {/* Success Header */}
+              <div className="text-center mb-10">
+                {/* Animated Success Icon */}
+                <div className="relative w-24 h-24 mx-auto mb-8">
+                  <motion.div
+                    initial={{ scale: 0.8, opacity: 0 }}
+                    animate={{ scale: 1, opacity: 1 }}
+                    transition={{ delay: 0.2, type: "spring", stiffness: 200 }}
+                    className="absolute inset-0"
+                  >
+                    {/* Outer glow */}
+                    <motion.div
+                      animate={{ scale: [1, 1.1, 1], opacity: [0.3, 0.1, 0.3] }}
+                      transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
+                      className="absolute inset-0 bg-gradient-to-r from-emerald-400 to-teal-400 rounded-full blur-xl"
+                    />
+                    {/* Middle ring */}
+                    <div className="absolute inset-2 bg-gradient-to-br from-emerald-400 to-teal-500 rounded-full shadow-lg shadow-emerald-500/30" />
+                    {/* Inner white circle with checkmark */}
+                    <div className="absolute inset-4 bg-white rounded-full flex items-center justify-center shadow-inner">
+                      <motion.svg
+                        className="w-10 h-10 text-emerald-500"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                        initial={{ pathLength: 0 }}
+                        animate={{ pathLength: 1 }}
+                        transition={{ delay: 0.5, duration: 0.5 }}
+                      >
+                        <motion.path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2.5}
+                          d="M5 13l4 4L19 7"
+                          initial={{ pathLength: 0 }}
+                          animate={{ pathLength: 1 }}
+                          transition={{ delay: 0.5, duration: 0.5 }}
+                        />
+                      </motion.svg>
                     </div>
-
-                    {/* Proven outcomes */}
-                    <div className="grid md:grid-cols-2 gap-4 mb-5">
-                      {researchInsights.map((insight, i) => (
-                        <div key={i} className="bg-white/70 rounded-xl p-4">
-                          <div className={`text-3xl font-bold ${insight.color} mb-1`}>{insight.stat}</div>
-                          <div className="text-sm font-medium text-gray-900">{insight.title}</div>
-                          <div className="text-sm text-gray-600 mt-1">{insight.description}</div>
-                          <div className="text-xs text-gray-400 mt-2 italic">{insight.source}</div>
-                        </div>
-                      ))}
-                    </div>
-
-                    {/* The opportunity - forward-looking */}
-                    <div className="bg-gradient-to-r from-amber-50 to-orange-50 rounded-xl p-4 border border-amber-200 mb-5">
-                      <div className="flex items-center gap-2 mb-3">
-                        <span className="text-xl">{'⚡'}</span>
-                        <span className="font-medium text-amber-900">{opportunityCheck.title}</span>
-                      </div>
-                      <p className="text-sm text-amber-800 mb-2">{opportunityCheck.insight}</p>
-                      <p className="text-sm text-amber-700 mb-2">{opportunityCheck.example}</p>
-                      <p className="text-xs text-amber-600 font-medium">{opportunityCheck.key}</p>
-                    </div>
-
-                    {/* Where it works */}
-                    <div className="mb-4">
-                      <div className="text-sm font-medium text-purple-900 mb-3">Where AI automation is delivering real ROI:</div>
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
-                        {provenUseCases.map((uc, i) => (
-                          <div key={i} className="flex items-start gap-2 bg-white/60 rounded-lg p-2">
-                            <svg className="w-4 h-4 text-green-500 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                            </svg>
-                            <div>
-                              <div className="text-sm font-medium text-gray-900">{uc.name}</div>
-                              <div className="text-xs text-gray-500">{uc.outcome}</div>
-                            </div>
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-
-                    {/* What your report will do */}
-                    <div className="bg-white/80 rounded-xl p-4 border border-purple-100">
-                      <div className="flex items-center gap-2 mb-2">
-                        <svg className="w-4 h-4 text-primary-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z" />
-                        </svg>
-                        <span className="font-medium text-gray-900">Your Report Will Identify</span>
-                      </div>
-                      <p className="text-sm text-gray-600">
-                        The specific, focused use cases where {teamSizeFinding ? `your team of ${teamSizeFinding.value}` : 'your business'} can
-                        achieve real ROI - not vague "AI transformation" promises. With transparent assumptions and realistic timelines.
-                      </p>
-                    </div>
-                  </div>
-                )
-              })()}
-
-              {/* What full report includes */}
-              <div className="bg-white rounded-2xl p-6 border border-gray-200 mb-8">
-                <h3 className="font-semibold text-gray-900 mb-4">Your full report will include:</h3>
-                <div className="grid grid-cols-2 gap-3">
-                  <div className="flex items-center gap-2 p-2 text-sm text-gray-700">
-                    <svg className="w-5 h-5 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                    </svg>
-                    Detailed ROI calculations
-                  </div>
-                  <div className="flex items-center gap-2 p-2 text-sm text-gray-700">
-                    <svg className="w-5 h-5 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                    </svg>
-                    Vendor comparisons + pricing
-                  </div>
-                  <div className="flex items-center gap-2 p-2 text-sm text-gray-700">
-                    <svg className="w-5 h-5 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                    </svg>
-                    Implementation roadmap
-                  </div>
-                  <div className="flex items-center gap-2 p-2 text-sm text-gray-700">
-                    <svg className="w-5 h-5 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                    </svg>
-                    Risk assessment
-                  </div>
-                  <div className="flex items-center gap-2 p-2 text-sm text-gray-700">
-                    <svg className="w-5 h-5 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                    </svg>
-                    90-min AI workshop
-                  </div>
-                  <div className="flex items-center gap-2 p-2 text-sm text-gray-700">
-                    <svg className="w-5 h-5 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                    </svg>
-                    "Don't do this" warnings
-                  </div>
+                  </motion.div>
                 </div>
-              </div>
 
-              {/* Natural CTA - Continue to teaser */}
-              <div className="text-center">
-                <p className="text-gray-600 mb-2">
-                  Ready to see your AI Readiness Score?
-                </p>
-                <p className="text-sm text-gray-500 mb-6">
-                  Get your personalized score and preview findings
-                </p>
-                <button
-                  onClick={fetchTeaserReport}
-                  disabled={teaserLoading}
-                  className="px-8 py-4 bg-primary-600 text-white font-semibold rounded-xl hover:bg-primary-700 transition shadow-lg shadow-primary-600/25 text-lg flex items-center gap-3 mx-auto disabled:opacity-50"
+                <motion.h1
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.3 }}
+                  className="text-3xl sm:text-4xl font-bold text-gray-900 mb-4"
                 >
-                  {teaserLoading ? (
-                    <>
-                      <svg className="animate-spin w-5 h-5" fill="none" viewBox="0 0 24 24">
-                        <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                        <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                      </svg>
-                      Generating Your Score...
-                    </>
-                  ) : (
-                    <>
-                      See My AI Readiness Score
-                      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
-                      </svg>
-                    </>
-                  )}
-                </button>
+                  Great news, <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-600 to-teal-600">{formatCompanyName(companyName)}</span>!
+                </motion.h1>
+                <motion.p
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.4 }}
+                  className="text-lg text-gray-500 max-w-md mx-auto"
+                >
+                  We've gathered enough information to create your personalized AI opportunity analysis.
+                </motion.p>
               </div>
+
+              {/* Research Findings - Prominent Display */}
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.5 }}
+                className="bg-white/80 backdrop-blur-xl rounded-3xl p-6 shadow-xl shadow-gray-900/5 border border-white/50 mb-6"
+              >
+                {/* Header */}
+                <div className="flex items-center justify-between mb-6">
+                  <div className="flex items-center gap-3">
+                    <div className="w-10 h-10 bg-gradient-to-br from-purple-500 to-indigo-600 rounded-xl flex items-center justify-center shadow-md shadow-purple-500/20">
+                      <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4" />
+                      </svg>
+                    </div>
+                    <div>
+                      <h3 className="font-bold text-gray-900">What we discovered</h3>
+                      <p className="text-sm text-gray-500">{findings.length} insights gathered</p>
+                    </div>
+                  </div>
+                  <span className={`text-sm font-bold px-3 py-1 rounded-full ${
+                    knowledgeScore >= 60
+                      ? 'text-emerald-700 bg-emerald-100'
+                      : knowledgeScore >= 30
+                        ? 'text-amber-700 bg-amber-100'
+                        : 'text-orange-700 bg-orange-100'
+                  }`}>{knowledgeScore}% coverage</span>
+                </div>
+
+                {/* Findings Grid */}
+                <div className="space-y-2">
+                  {findings.map((finding, i) => (
+                    <motion.div
+                      key={i}
+                      initial={{ opacity: 0, x: -10 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      transition={{ delay: 0.6 + i * 0.05 }}
+                      className="flex items-start gap-3 p-3 rounded-xl bg-gray-50/80 hover:bg-gray-100/80 transition-colors"
+                    >
+                      <div className="flex-shrink-0 w-6 h-6 rounded-full bg-emerald-100 flex items-center justify-center mt-0.5">
+                        <svg className="w-3.5 h-3.5 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 13l4 4L19 7" />
+                        </svg>
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <div className="text-xs text-gray-400 uppercase tracking-wider font-medium mb-0.5">{finding.field}</div>
+                        <div className="text-sm font-medium text-gray-900">{formatValue(finding.value)}</div>
+                      </div>
+                    </motion.div>
+                  ))}
+                </div>
+
+                {/* Description if available */}
+                {description && (
+                  <div className="mt-4 pt-4 border-t border-gray-100">
+                    <div className="text-xs text-gray-400 uppercase tracking-wider font-medium mb-2">Company Overview</div>
+                    <p className="text-sm text-gray-600 leading-relaxed">{formatValue(description)}</p>
+                  </div>
+                )}
+              </motion.div>
+
+              {/* What happens next */}
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.6 }}
+                className="bg-gradient-to-br from-purple-500/5 via-indigo-500/5 to-purple-500/5 backdrop-blur-xl rounded-3xl p-6 border border-purple-200/50 mb-8"
+              >
+                <h3 className="font-bold text-gray-900 mb-5 flex items-center gap-3">
+                  <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-purple-500 to-indigo-600 flex items-center justify-center shadow-md shadow-purple-500/20">
+                    <svg className="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
+                    </svg>
+                  </div>
+                  What happens next
+                </h3>
+
+                <div className="space-y-3">
+                  {nextSteps.map((step, i) => (
+                    <motion.div
+                      key={step.num}
+                      initial={{ opacity: 0, x: -20 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      transition={{ delay: 0.7 + i * 0.1 }}
+                      className={`flex gap-4 p-4 rounded-2xl transition-all duration-300 ${
+                        step.active
+                          ? 'bg-white shadow-lg shadow-purple-500/10 ring-1 ring-purple-200'
+                          : 'bg-white/50'
+                      }`}
+                    >
+                      <div className={`flex-shrink-0 w-10 h-10 rounded-xl flex items-center justify-center font-bold text-sm transition-all ${
+                        step.active
+                          ? 'bg-gradient-to-br from-purple-500 to-indigo-600 text-white shadow-md shadow-purple-500/30'
+                          : 'bg-gray-100 text-gray-400'
+                      }`}>
+                        {step.num}
+                      </div>
+                      <div className="flex-1">
+                        <div className={`font-semibold mb-0.5 transition-colors ${step.active ? 'text-gray-900' : 'text-gray-400'}`}>
+                          {step.title}
+                        </div>
+                        <div className={`text-sm transition-colors ${step.active ? 'text-gray-600' : 'text-gray-400'}`}>
+                          {step.description}
+                        </div>
+                      </div>
+                      {step.active && (
+                        <motion.div
+                          animate={{ scale: [1, 1.1, 1] }}
+                          transition={{ duration: 2, repeat: Infinity }}
+                          className="flex-shrink-0 w-8 h-8 rounded-lg bg-purple-100 flex items-center justify-center"
+                        >
+                          <span className="text-lg">{step.icon}</span>
+                        </motion.div>
+                      )}
+                    </motion.div>
+                  ))}
+                </div>
+              </motion.div>
+
+              {/* Time estimate */}
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 0.9 }}
+                className="text-center mb-6"
+              >
+                <div className="inline-flex items-center gap-2 text-sm text-gray-500 bg-white/80 backdrop-blur px-4 py-2.5 rounded-full border border-gray-200/50 shadow-sm">
+                  <svg className="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  </svg>
+                  <span className="font-medium">Takes about 5-10 minutes</span>
+                </div>
+              </motion.div>
+
+              {/* Primary CTA - Go to AI Interview */}
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 1 }}
+                className="text-center"
+              >
+                <motion.button
+                  whileHover={{ scale: 1.02, y: -2 }}
+                  whileTap={{ scale: 0.98 }}
+                  onClick={() => {
+                    // Save session data for interview
+                    sessionStorage.setItem('quizSessionId', sessionId || '')
+                    sessionStorage.setItem('companyName', companyName)
+                    if (researchResult) {
+                      sessionStorage.setItem('companyProfile', JSON.stringify(researchResult.company_profile))
+                    }
+                    // Navigate to AI interview
+                    navigate(`/quiz/interview?session_id=${sessionId}`)
+                  }}
+                  className="group w-full sm:w-auto px-10 py-4 bg-gradient-to-r from-purple-600 to-indigo-600 text-white font-semibold rounded-2xl hover:shadow-xl hover:shadow-purple-500/30 transition-all duration-300 text-lg flex items-center justify-center gap-3 mx-auto"
+                >
+                  Start AI Interview
+                  <motion.svg
+                    className="w-5 h-5 transition-transform group-hover:translate-x-1"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                  </motion.svg>
+                </motion.button>
+
+                <motion.p
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ delay: 1.1 }}
+                  className="mt-4 text-sm text-gray-400 flex items-center justify-center gap-2"
+                >
+                  <span className="flex items-center gap-1">
+                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                    5-7 quick questions
+                  </span>
+                  <span className="text-gray-300">•</span>
+                  <span className="text-emerald-500 font-medium">Free</span>
+                  <span className="text-gray-300">•</span>
+                  <span>No payment required</span>
+                </motion.p>
+              </motion.div>
+
             </motion.div>
           </div>
         </div>

@@ -2,6 +2,62 @@
   "industry": "dental",
   "ai_opportunities": [
     {
+      "id": "ai-voice-receptionist",
+      "name": "AI Voice Receptionist & Call Handling",
+      "description": "AI phone system that answers calls 24/7, books appointments, answers FAQs, and handles after-hours inquiries",
+      "category": "growth",
+      "impact": {
+        "value_saved": {
+          "time_hours_per_week": 20,
+          "description": "Reduces front desk phone burden, handles after-hours calls"
+        },
+        "value_created": {
+          "description": "Capture calls that would go to voicemail, book appointments 24/7",
+          "potential_revenue_impact": "15-25% more appointments from captured leads"
+        }
+      },
+      "customer_value_score": 9,
+      "business_health_score": 9,
+      "implementation": {
+        "complexity": "medium",
+        "timeline_weeks": 3,
+        "required_data": ["Service types", "Insurance accepted", "Provider schedules", "Common FAQs"]
+      },
+      "options": {
+        "off_the_shelf": {
+          "tools": ["Smith.ai", "Ruby Receptionist", "Nexa"],
+          "cost_range": "€250-600/month",
+          "pros": ["Human + AI hybrid", "HIPAA compliant", "Immediate setup", "Professional"],
+          "cons": ["Per-call pricing adds up", "Less dental-specific"]
+        },
+        "best_in_class": {
+          "tools": ["Weave Phones", "RevenueWell Phone", "Mango Voice"],
+          "cost_range": "€200-500/month",
+          "pros": ["Dental-specific", "PM integration", "Call tracking", "AI features"],
+          "cons": ["May require phone system change"]
+        },
+        "custom_solution": {
+          "approach": "AI voice agent using Claude API + Twilio, integrated with dental PM system",
+          "cost_range": "€5,000-15,000 one-time + €150-300/month",
+          "pros": ["Fully customized for your practice", "Speaks your brand voice", "24/7 AI booking"],
+          "cons": ["Development required", "HIPAA compliance work", "Needs tuning"]
+        }
+      },
+      "roi_example": {
+        "scenario": "Dental practice missing 25% of calls, getting 20 after-hours calls/week",
+        "cost": "€400/month",
+        "value_created": "Capture 15 extra appointments/month × €250 avg = €3,750/month",
+        "roi_percentage": 837,
+        "payback_months": 0.5
+      },
+      "jevons_effect": {
+        "applies": true,
+        "mechanism": "24/7 booking + no missed calls → capture more patients → may need more hygienists/providers",
+        "demand_expansion_potential": "20% more patient capacity utilized"
+      },
+      "yc_reference": "Similar to Barti (eye care) which raised $12M Series A for AI receptionist + operating system"
+    },
+    {
       "id": "automated-patient-communication",
       "name": "Automated Patient Communication System",
       "description": "Two-way texting, automated reminders, and personalized recall campaigns",

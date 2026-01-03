@@ -73,7 +73,7 @@ export default function StackTab({ architecture }: StackTabProps) {
   const [viewMode, setViewMode] = useState<'saas' | 'diy'>('diy')
   const [selectedNode, setSelectedNode] = useState<ToolNode | null>(null)
 
-  if (!architecture) {
+  if (!architecture || !architecture.cost_comparison) {
     return (
       <div className="bg-white rounded-2xl p-8 text-center">
         <p className="text-gray-500">System architecture not available.</p>
@@ -81,7 +81,17 @@ export default function StackTab({ architecture }: StackTabProps) {
     )
   }
 
-  const { existing_tools, ai_layer, automations, cost_comparison } = architecture
+  const existing_tools = architecture.existing_tools || []
+  const ai_layer = architecture.ai_layer || []
+  const automations = architecture.automations || []
+  const cost_comparison = {
+    saas_route: architecture.cost_comparison.saas_route || { items: [], total_monthly: 0 },
+    diy_route: architecture.cost_comparison.diy_route || { items: [], total_monthly: 0 },
+    monthly_savings: architecture.cost_comparison.monthly_savings || 0,
+    savings_percentage: architecture.cost_comparison.savings_percentage || 0,
+    build_cost: architecture.cost_comparison.build_cost || 0,
+    breakeven_months: architecture.cost_comparison.breakeven_months || 0,
+  }
 
   const formatCurrency = (value: number) => {
     return new Intl.NumberFormat('de-DE', {

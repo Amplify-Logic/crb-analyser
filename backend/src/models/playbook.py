@@ -10,7 +10,7 @@ Enhanced with:
 """
 from datetime import datetime
 from typing import Optional, List, Literal
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, field_validator
 
 
 class TaskCRB(BaseModel):
@@ -18,6 +18,27 @@ class TaskCRB(BaseModel):
     cost: str = Field(..., description="Cost description, e.g., '€0 (free tier)'")
     risk: Literal["low", "medium", "high"] = "low"
     benefit: str = Field(..., description="Benefit description, e.g., 'Saves 2 hrs/week'")
+
+    @field_validator('risk', mode='before')
+    @classmethod
+    def extract_risk_level(cls, v):
+        """Extract just the risk level from strings like 'medium - pricing accuracy critical'."""
+        if isinstance(v, str):
+            v_lower = v.lower().strip()
+            if v_lower.startswith('high'):
+                return 'high'
+            elif v_lower.startswith('medium'):
+                return 'medium'
+            elif v_lower.startswith('low'):
+                return 'low'
+            # Try to find keywords anywhere in the string
+            if 'high' in v_lower:
+                return 'high'
+            elif 'medium' in v_lower:
+                return 'medium'
+            else:
+                return 'low'  # Default to low
+        return v
 
 
 class TaskResource(BaseModel):

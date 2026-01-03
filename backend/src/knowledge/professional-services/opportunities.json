@@ -2,6 +2,56 @@
   "industry": "professional-services",
   "opportunities": [
     {
+      "id": "ai-voice-receptionist",
+      "name": "AI Voice Receptionist & Client Intake",
+      "category": "client_experience",
+      "description": "AI phone system that answers calls 24/7, qualifies leads, books consultations, and captures intake information",
+      "typical_roi": {
+        "time_saved_hours_weekly": 15,
+        "revenue_increase_percentage": 20,
+        "payback_months": 2
+      },
+      "implementation_complexity": "medium",
+      "vendor_category": "phone_systems",
+      "quick_win": false,
+      "two_pillars": {
+        "customer_value": 8,
+        "business_health": 9
+      },
+      "options": {
+        "off_the_shelf": {
+          "tools": ["Smith.ai", "Ruby Receptionist", "Nexa"],
+          "cost_range": "€300-700/month",
+          "pros": ["Human + AI hybrid", "Professional handling", "Quick setup", "Lead qualification"],
+          "cons": ["Per-call pricing", "Less industry-specific"]
+        },
+        "best_in_class": {
+          "tools": ["Clio Grow + AI", "Lawmatics", "Intaker"],
+          "cost_range": "€200-500/month",
+          "pros": ["Legal/professional-specific", "CRM integration", "Conflict checking", "AI features"],
+          "cons": ["May require workflow changes"]
+        },
+        "custom_solution": {
+          "approach": "AI voice agent using Claude API + Twilio integrated with practice management",
+          "cost_range": "€8,000-20,000 one-time + €200-400/month",
+          "pros": ["Custom qualification logic", "Your intake process", "24/7 AI handling", "CRM integration"],
+          "cons": ["Development required", "Needs workflow design"]
+        }
+      },
+      "roi_example": {
+        "scenario": "Law firm missing 30% of calls, getting 15 new client inquiries/week",
+        "cost": "€450/month",
+        "value_created": "Capture 5 more qualified leads/month × €3,000 avg case = €15,000/month",
+        "roi_percentage": 3233
+      },
+      "jevons_effect": {
+        "applies": true,
+        "mechanism": "24/7 lead capture + qualification → more cases → more billable work → may need more associates",
+        "demand_expansion_potential": "30% more client capacity utilized"
+      },
+      "yc_reference": "Similar to MDHub (mental health) and Auto Ace (car dealerships) for AI receptionist"
+    },
+    {
       "id": "ai-time-capture",
       "name": "AI-Powered Time Capture",
       "category": "billing",
@@ -206,7 +256,16 @@
     "ai-time-capture",
     "client-intake-automation",
     "email-ai-assistant",
-    "billing-collections"
+    "billing-collections",
+    {
+      "id": "dormant-client-reactivation",
+      "name": "Dormant client reactivation campaign",
+      "time_to_implement": "1 day",
+      "cost": "€50-150/month",
+      "impact": "Re-engage 5-10 past clients per month, direct revenue from repeat business",
+      "how": "Export clients inactive 12-24 months, send AI-personalized outreach (regulatory updates, new services, check-in)",
+      "confidence": "high"
+    }
   ],
   "implementation_sequence": [
     {

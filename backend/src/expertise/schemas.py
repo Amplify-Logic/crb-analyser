@@ -158,6 +158,6 @@ class AnalysisRecord(BaseModel):
 
     # Execution metrics
     tools_used: Dict[str, int] = Field(default_factory=dict)  # tool_name: usage_count
-    token_usage: Dict[str, int] = Field(default_factory=dict)
+    token_usage: Dict[str, Any] = Field(default_factory=dict)  # Full token tracker output
     phases_completed: List[str] = Field(default_factory=list)
     errors_encountered: List[str] = Field(default_factory=list)

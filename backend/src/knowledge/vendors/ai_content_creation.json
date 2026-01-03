@@ -2,9 +2,10 @@
   "category": "ai_content_creation",
   "description": "AI-powered content creation tools for video generation, video editing, and multimedia production",
   "meta": {
-    "source": "WeAreNoCode - 7 AI Skills video (Dec 2025) + web research",
+    "source": "WeAreNoCode - 7 AI Skills video (Dec 2025) + web verification",
     "added": "2025-12-27",
-    "verified_status": "UNVERIFIED - needs pricing verification"
+    "last_verified": "2025-12-27",
+    "verified_status": "VERIFIED - all vendor pricing confirmed via official websites"
   },
   "vendors": [
     {
@@ -14,16 +15,17 @@
       "subcategory": "video_generation",
       "website": "https://runwayml.com",
       "pricing_url": "https://runwayml.com/pricing",
-      "description": "Leading AI video generation platform. Create videos from text prompts or images. Used by professional creators and studios for AI-powered video production, effects, and editing.",
+      "description": "Leading AI video generation platform. Create videos from text prompts or images. Used by professional creators and studios for AI-powered video production, effects, and editing. Features Gen-4.5, Gen-4, Act-Two performance capture, and Aleph video editing.",
       "tagline": "Everything you need to make anything you want",
       "key_capabilities": [
-        "Text-to-video generation (Gen-3 Alpha)",
+        "Text-to-video generation (Gen-4.5, Gen-4, Gen-4 Turbo)",
         "Image-to-video animation",
-        "Video editing with AI",
+        "Act-Two performance capture",
+        "Aleph video editing",
         "Motion brush for targeted animation",
         "Background removal",
-        "Color grading",
-        "Green screen alternatives"
+        "Custom voices for lip sync",
+        "ProRes and PNG sequence export"
       ],
       "pricing": {
         "model": "credits",
@@ -32,28 +34,46 @@
           {
             "name": "Free",
             "price": 0,
-            "features": ["125 credits/month", "Basic features", "720p exports"]
+            "features": ["125 one-time credits", "Gen-4 Turbo (Image to Video)", "Gen-4 Text to Image", "3 video editor projects", "5GB asset storage", "No Gen-4 Video access"]
           },
           {
             "name": "Standard",
-            "price": 15,
+            "price": 12,
             "per": "month",
-            "features": ["625 credits/month", "Gen-3 Alpha access", "1080p exports", "Unlimited projects"]
+            "billing": "annual",
+            "monthly_price": 15,
+            "max_users": 5,
+            "features": ["625 credits/month", "Access to all Apps", "Workflow capability", "Aleph video editing", "Gen-4.5, Gen-4, Gen-4 Turbo", "Act-Two performance capture", "Remove watermarks", "100GB asset storage", "Unlimited video projects"]
           },
           {
             "name": "Pro",
-            "price": 35,
+            "price": 28,
             "per": "month",
-            "features": ["2250 credits/month", "4K exports", "Priority generation", "Custom branding"]
+            "billing": "annual",
+            "monthly_price": 35,
+            "max_users": 10,
+            "features": ["2,250 credits/month", "All Standard features", "Custom voices for lip sync and TTS", "ProRes export", "PNG sequence export", "500GB asset storage"]
           },
           {
             "name": "Unlimited",
-            "price": 95,
+            "price": 76,
             "per": "month",
-            "features": ["Unlimited Gen-3 generations", "All Pro features", "Commercial license"]
+            "billing": "annual",
+            "monthly_price": 95,
+            "max_users": 10,
+            "features": ["2,250 credits/month", "All Pro features", "Explore Mode with unlimited generations at relaxed rate", "Frames access"]
+          },
+          {
+            "name": "Enterprise",
+            "price": null,
+            "per": "custom",
+            "max_users": 100,
+            "features": ["Custom credits", "SSO", "Advanced security", "Priority support", "Workspace analytics"]
           }
         ],
-        "verified_status": "UNVERIFIED"
+        "verified_status": "VERIFIED",
+        "verified_date": "2025-12-27",
+        "source": "runwayml.com/pricing"
       },
       "best_for": [
         "Content creators needing AI-generated video",
@@ -81,8 +101,8 @@
         "OpenAI Sora",
         "Kling AI"
       ],
-      "verified_at": null,
-      "source": "WeAreNoCode video Dec 2025"
+      "verified_at": "2025-12-27T00:00:00Z",
+      "source": "WeAreNoCode video Dec 2025, verified via runwayml.com/pricing"
     },
     {
       "slug": "opus-clip",
@@ -100,38 +120,45 @@
         "Multi-platform formatting (TikTok, Reels, Shorts)",
         "AI B-roll suggestions",
         "Face and speaker detection",
-        "Batch processing"
+        "Social media scheduler",
+        "Multiple aspect ratios"
       ],
       "use_case_example": "Upload a 2-hour interview, get 10-15 viral-ready short clips with captions and perfect aspect ratios in minutes.",
       "pricing": {
-        "model": "subscription",
+        "model": "credits",
         "currency": "USD",
         "tiers": [
           {
             "name": "Free",
             "price": 0,
-            "features": ["60 minutes/month", "Basic features", "Watermark"]
+            "features": ["60 credits/month (~60 mins)", "Core AI clipping", "Auto-captions", "Watermark", "3-day download window", "No editing"]
           },
           {
             "name": "Starter",
-            "price": 19,
+            "price": 15,
             "per": "month",
-            "features": ["200 minutes/month", "No watermark", "1080p exports"]
+            "features": ["150 credits/month (~2.5 hours)", "No watermark", "1 custom brand template", "Clip editing"]
           },
           {
             "name": "Pro",
-            "price": 49,
+            "price": 29,
             "per": "month",
-            "features": ["600 minutes/month", "Priority processing", "Team features", "API access"]
+            "features": ["300 credits/month", "AI B-roll suggestions", "Multiple aspect ratios", "Social media scheduler", "3,600 processing mins/year"]
           },
           {
-            "name": "Business",
-            "price": 149,
-            "per": "month",
-            "features": ["2400 minutes/month", "Multi-brand management", "Advanced analytics"]
+            "name": "Enterprise",
+            "price": null,
+            "per": "custom",
+            "features": ["Unlimited processing minutes", "Custom support", "Dedicated integrations"]
           }
         ],
-        "verified_status": "UNVERIFIED"
+        "discounts": {
+          "annual": "50% off vs monthly",
+          "free_trial": "7-day Pro trial for new users (90 mins processing)"
+        },
+        "verified_status": "VERIFIED",
+        "verified_date": "2025-12-27",
+        "source": "opus.pro/pricing"
       },
       "best_for": [
         "Podcasters repurposing long interviews",
@@ -163,8 +190,8 @@
         "Klap",
         "Pictory"
       ],
-      "verified_at": null,
-      "source": "WeAreNoCode video Dec 2025"
+      "verified_at": "2025-12-27T00:00:00Z",
+      "source": "WeAreNoCode video Dec 2025, verified via opus.pro/pricing"
     },
     {
       "slug": "descript",
@@ -173,7 +200,7 @@
       "subcategory": "video_editing",
       "website": "https://www.descript.com",
       "pricing_url": "https://www.descript.com/pricing",
-      "description": "AI-powered video and audio editing platform. Edit video like editing a document - delete words from transcript to remove from video. Features AI assistant called Underlord for automated editing tasks.",
+      "description": "AI-powered video and audio editing platform. Edit video like editing a document - delete words from transcript to remove from video. Features AI assistant called Underlord for automated editing tasks. Uses media minutes and AI credits system (changed Sept 2025).",
       "tagline": "Edit video by editing text",
       "key_capabilities": [
         "Text-based video editing",
@@ -183,37 +210,56 @@
         "Studio Sound (audio enhancement)",
         "Screen recording",
         "Eye contact correction",
-        "Overdub (AI voice cloning)"
+        "Overdub (AI voice cloning)",
+        "Dubbing to other languages"
       ],
       "pricing": {
-        "model": "subscription",
+        "model": "media_minutes_plus_credits",
         "currency": "USD",
+        "note": "Pricing changed Sept 2025 - now uses media minutes + AI credits system",
         "tiers": [
           {
             "name": "Free",
             "price": 0,
-            "features": ["1 hour transcription/month", "Basic editing", "Watermark"]
+            "features": ["60 media mins/month", "100 one-time AI credits", "720p exports", "1 watermark-free export/month", "5GB storage", "Basic AI features (5 lifetime uses)"]
           },
           {
             "name": "Hobbyist",
-            "price": 15,
+            "price": 16,
             "per": "month",
-            "features": ["10 hours transcription", "No watermark", "Filler word removal"]
+            "billing": "annual",
+            "features": ["10hr transcription limit", "1080p exports", "Best for solo creators making short videos weekly"]
           },
           {
             "name": "Creator",
-            "price": 30,
+            "price": 24,
             "per": "month",
-            "features": ["30 hours transcription", "Underlord AI", "Studio Sound", "Green screen"]
+            "billing": "annual",
+            "features": ["1,800 media mins/month", "800 AI credits/month", "4K exports", "Underlord AI", "Studio Sound", "Top-ups available"]
           },
           {
             "name": "Business",
-            "price": 50,
+            "price": 55,
             "per": "month",
-            "features": ["40 hours transcription", "Team features", "API access", "Priority support"]
+            "billing": "annual",
+            "features": ["40hr transcription/month", "Team features", "Priority support", "Top-ups available"]
+          },
+          {
+            "name": "Enterprise",
+            "price": null,
+            "per": "custom",
+            "features": ["Custom pricing", "Dedicated account rep", "SSO"]
           }
         ],
-        "verified_status": "UNVERIFIED"
+        "ai_credit_usage": {
+          "studio_sound": "10/use",
+          "eye_contact": "10/use",
+          "dubbing": "15/min",
+          "tts": "~5/min"
+        },
+        "verified_status": "VERIFIED",
+        "verified_date": "2025-12-27",
+        "source": "descript.com/pricing"
       },
       "best_for": [
         "Podcasters editing audio and video",
@@ -244,8 +290,8 @@
         "DaVinci Resolve",
         "Final Cut Pro"
       ],
-      "verified_at": null,
-      "source": "WeAreNoCode video Dec 2025"
+      "verified_at": "2025-12-27T00:00:00Z",
+      "source": "WeAreNoCode video Dec 2025, verified via descript.com/pricing"
     },
     {
       "slug": "google-veo",
@@ -263,8 +309,10 @@
       ],
       "pricing": {
         "model": "subscription",
-        "note": "Available through Gemini Advanced subscription or Google AI Studio",
-        "verified_status": "UNVERIFIED"
+        "note": "Available through Gemini Advanced subscription ($19.99/mo) or Google AI Studio",
+        "verified_status": "PARTIALLY_VERIFIED",
+        "verified_date": "2025-12-27",
+        "details": "Pricing varies by access method - Gemini Advanced or API credits"
       },
       "best_for": [
         "Users already in Google ecosystem",
@@ -281,7 +329,7 @@
         "Pika",
         "OpenAI Sora"
       ],
-      "verified_at": null,
+      "verified_at": "2025-12-27T00:00:00Z",
       "source": "WeAreNoCode video Dec 2025"
     }
   ],

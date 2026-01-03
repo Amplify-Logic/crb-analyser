@@ -2,6 +2,62 @@
   "industry": "veterinary",
   "ai_opportunities": [
     {
+      "id": "ai-voice-receptionist",
+      "name": "AI Voice Receptionist & Emergency Triage",
+      "description": "AI phone system that answers calls 24/7, books appointments, handles after-hours emergencies, and routes urgent cases",
+      "category": "growth",
+      "impact": {
+        "value_saved": {
+          "time_hours_per_week": 18,
+          "description": "Reduces front desk phone burden, handles after-hours and emergency calls"
+        },
+        "value_created": {
+          "description": "Capture emergency calls 24/7, book routine appointments automatically",
+          "potential_revenue_impact": "20-30% more appointments from captured leads and emergencies"
+        }
+      },
+      "customer_value_score": 10,
+      "business_health_score": 9,
+      "implementation": {
+        "complexity": "medium",
+        "timeline_weeks": 4,
+        "required_data": ["Service types", "Emergency protocols", "Provider schedules", "Triage decision tree"]
+      },
+      "options": {
+        "off_the_shelf": {
+          "tools": ["Smith.ai", "Ruby Receptionist", "PetDesk Phone"],
+          "cost_range": "€250-500/month",
+          "pros": ["Human + AI hybrid", "Professional handling", "Quick setup"],
+          "cons": ["Per-call pricing", "Less vet-specific triage"]
+        },
+        "best_in_class": {
+          "tools": ["Weave for Veterinary", "Otto by Rapport", "Digitail Phone"],
+          "cost_range": "€300-600/month",
+          "pros": ["Vet-specific", "PM integration", "Emergency routing", "AI features"],
+          "cons": ["May require phone system change", "Higher cost"]
+        },
+        "custom_solution": {
+          "approach": "AI voice agent using Claude API + Twilio with vet-specific triage protocols",
+          "cost_range": "€8,000-20,000 one-time + €200-400/month",
+          "pros": ["Custom triage logic", "Emergency escalation", "24/7 AI booking", "Your protocols"],
+          "cons": ["Significant development", "Needs careful triage design", "Liability considerations"]
+        }
+      },
+      "roi_example": {
+        "scenario": "Vet clinic missing 20% of calls, 10 after-hours emergency inquiries/week",
+        "cost": "€450/month",
+        "value_created": "Capture 8 emergencies + 12 routine appointments/month × €150 avg = €3,000/month",
+        "roi_percentage": 567,
+        "payback_months": 1
+      },
+      "jevons_effect": {
+        "applies": true,
+        "mechanism": "24/7 availability + emergency capture → more cases handled → may need more vets/techs",
+        "demand_expansion_potential": "20% more patient capacity utilized"
+      },
+      "yc_reference": "Similar to VetNeo (YC-backed) for veterinary AI and Aura AI for hotel reception"
+    },
+    {
       "id": "automated-client-communication",
       "name": "Automated Client Communication System",
       "description": "Two-way texting, appointment reminders, and wellness recall campaigns",
@@ -276,6 +332,14 @@
       "time_to_implement": "1 week",
       "expected_impact": "20-30% improvement in wellness visit compliance",
       "tools": ["PM automation", "Weave", "AllyDVM"]
+    },
+    {
+      "title": "Reactivate lapsed patients via SMS/email campaign",
+      "time_to_implement": "1 day",
+      "expected_impact": "Recover 10-20 lapsed patients per month, direct revenue",
+      "tools": ["Weave", "AllyDVM", "PM + Twilio"],
+      "how": "Export pets not seen in 12-24 months, send personalized wellness reminder with special offer",
+      "confidence": "high"
     }
   ],
   "anti_patterns": [

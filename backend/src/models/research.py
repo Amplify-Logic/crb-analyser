@@ -68,11 +68,28 @@ class ProductsServices(BaseModel):
     @field_validator('key_features', mode='before')
     @classmethod
     def parse_key_features(cls, v):
-        """Convert string to list if needed."""
+        """Convert string, dict, or nested lists to flat list of strings."""
+        if v is None:
+            return None
         if isinstance(v, str):
             # Split by comma or newline
             return [f.strip() for f in v.replace('\n', ',').split(',') if f.strip()]
-        return v
+        if isinstance(v, dict):
+            # LLM returned dict like {'feature_name': 'description'} - extract values
+            return list(v.values()) if v else None
+        if isinstance(v, list):
+            # Flatten nested lists - LLM sometimes returns [[feature1], [feature2]]
+            result = []
+            for item in v:
+                if isinstance(item, list):
+                    # Flatten: extract strings from nested list
+                    result.extend(str(x) for x in item if x)
+                elif isinstance(item, str):
+                    result.append(item)
+                elif item is not None:
+                    result.append(str(item))
+            return result if result else None
+        return None
 
 
 class TechStack(BaseModel):
@@ -116,7 +133,9 @@ class RecentActivity(BaseModel):
     @field_validator('social_presence', mode='before')
     @classmethod
     def parse_social_presence(cls, v):
-        """Convert string description to dict format."""
+        """Convert string, list, or dict to proper dict format with string values."""
+        if v is None:
+            return None
         if isinstance(v, str):
             # If it's a description, try to extract platforms mentioned
             result = {}
@@ -133,6 +152,30 @@ class RecentActivity(BaseModel):
             if not result:
                 result['notes'] = v
             return result
+        if isinstance(v, list):
+            # LLM returned list like [{'platform': 'LinkedIn', 'url': '...'}]
+            result = {}
+            for item in v:
+                if isinstance(item, dict):
+                    platform = item.get('platform', item.get('name', '')).lower()
+                    url = item.get('url', item.get('link', 'active'))
+                    if platform:
+                        result[platform] = str(url) if url else 'active'
+                elif isinstance(item, str):
+                    # Just a platform name
+                    result[item.lower()] = 'active'
+            return result if result else None
+        if isinstance(v, dict):
+            # Normalize dict values - LLM sometimes returns booleans instead of strings
+            result = {}
+            for key, val in v.items():
+                if isinstance(val, bool):
+                    result[key] = 'active' if val else 'inactive'
+                elif val is None:
+                    result[key] = 'unknown'
+                else:
+                    result[key] = str(val)
+            return result
         return v
 
 
@@ -147,6 +190,26 @@ class CompanyProfile(BaseModel):
     researched_at: datetime = Field(default_factory=datetime.utcnow)
     research_quality_score: int = Field(default=0, ge=0, le=100)  # Overall confidence
     sources_used: List[str] = Field(default_factory=list)
+
+    @field_validator('sources_used', mode='before')
+    @classmethod
+    def parse_sources_used(cls, v):
+        """Convert list of dicts to list of strings if needed."""
+        if v is None:
+            return []
+        if isinstance(v, list):
+            result = []
+            for item in v:
+                if isinstance(item, dict):
+                    # Extract URL or name from dict
+                    source = item.get('url', item.get('source', item.get('name', str(item))))
+                    result.append(str(source))
+                elif isinstance(item, str):
+                    result.append(item)
+                else:
+                    result.append(str(item))
+            return result
+        return v
 
     # Company data
     basics: CompanyBasics

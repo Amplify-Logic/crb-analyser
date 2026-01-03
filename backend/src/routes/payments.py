@@ -20,6 +20,7 @@ from src.config.supabase_client import get_async_supabase
 from src.middleware.auth import require_workspace, CurrentUser
 from src.services.report_service import generate_report_for_quiz, get_report
 from src.services.email import send_report_ready_email, send_payment_confirmation_email, send_welcome_email
+from src.services.brevo_service import get_brevo_service
 
 logger = logging.getLogger(__name__)
 
@@ -518,6 +519,15 @@ async def handle_guest_checkout_completed(session: dict):
             }).eq("id", quiz_session_id).execute()
 
             logger.info(f"Account created for quiz session {quiz_session_id}: user={account_data['user_id']}")
+
+            # Update Brevo to mark as paid customer (stops upsell sequence)
+            try:
+                brevo = get_brevo_service()
+                if brevo.is_configured and email:
+                    await brevo.mark_as_paid_customer(email)
+                    logger.info(f"Marked {email} as paid customer in Brevo")
+            except Exception as brevo_err:
+                logger.warning(f"Failed to update Brevo paid status: {brevo_err}")
 
             # Send welcome email with credentials
             if email:

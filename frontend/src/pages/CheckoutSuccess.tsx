@@ -6,6 +6,7 @@ export default function CheckoutSuccess() {
   const [searchParams] = useSearchParams()
   const navigate = useNavigate()
   const stripeSessionId = searchParams.get('session_id')
+  const quizSessionId = sessionStorage.getItem('quizSessionId')
   const selectedTier = sessionStorage.getItem('selectedTier') || 'report_only'
   const companyName = sessionStorage.getItem('companyName') || 'Your Company'
 
@@ -30,11 +31,10 @@ export default function CheckoutSuccess() {
         setIsVerified(true)
         setIsVerifying(false)
 
-        // Clear quiz session data since account is now created
-        sessionStorage.removeItem('quizSessionId')
+        // Keep quizSessionId for workshop access - only clear after workshop starts
         sessionStorage.removeItem('selectedTier')
         sessionStorage.removeItem('companyProfile')
-        // Keep companyName for display
+        // Keep companyName and quizSessionId for workshop
       } catch (err: unknown) {
         console.error('Verification error:', err)
         // Still show success - webhook handles the real verification
@@ -45,6 +45,14 @@ export default function CheckoutSuccess() {
 
     verifySession()
   }, [stripeSessionId])
+
+  const handleGoToWorkshop = () => {
+    if (quizSessionId) {
+      navigate(`/workshop?session_id=${quizSessionId}`)
+    } else {
+      navigate('/login')
+    }
+  }
 
   const handleGoToLogin = () => {
     navigate('/login')
@@ -168,13 +176,13 @@ export default function CheckoutSuccess() {
                     <div className="w-8 h-8 bg-primary-600 text-white rounded-full flex items-center justify-center font-semibold">
                       1
                     </div>
-                    <span className="text-gray-700">Check your email for login credentials</span>
+                    <span className="text-gray-700">Start your 90-minute personalized workshop</span>
                   </div>
                   <div className="flex items-center gap-3 text-sm">
                     <div className="w-8 h-8 bg-primary-100 text-primary-700 rounded-full flex items-center justify-center font-semibold">
                       2
                     </div>
-                    <span className="text-gray-700">Log in and complete the 90-minute workshop</span>
+                    <span className="text-gray-700">Deep-dive into your pain points with AI guidance</span>
                   </div>
                   <div className="flex items-center gap-3 text-sm">
                     <div className="w-8 h-8 bg-primary-100 text-primary-700 rounded-full flex items-center justify-center font-semibold">
@@ -191,19 +199,28 @@ export default function CheckoutSuccess() {
                 </div>
               </div>
 
-              {/* CTA Button */}
+              {/* CTA Button - Start Workshop */}
+              <button
+                onClick={handleGoToWorkshop}
+                className="w-full py-4 bg-primary-600 text-white font-semibold rounded-xl hover:bg-primary-700 transition shadow-lg shadow-primary-600/25 text-lg flex items-center justify-center gap-2 mb-4"
+              >
+                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+                Start Workshop Now
+              </button>
+
+              {/* Secondary: Login link */}
               <button
                 onClick={handleGoToLogin}
-                className="w-full py-4 bg-primary-600 text-white font-semibold rounded-xl hover:bg-primary-700 transition shadow-lg shadow-primary-600/25 text-lg flex items-center justify-center gap-2"
+                className="w-full py-3 text-gray-600 font-medium rounded-xl hover:bg-gray-100 transition text-sm"
               >
-                Go to Login
-                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
-                </svg>
+                Or log in to your dashboard
               </button>
 
               <p className="text-sm text-gray-500 mt-4">
-                Didn't receive the email? Check your spam folder or contact support.
+                Login credentials have also been sent to your email.
               </p>
             </div>
 

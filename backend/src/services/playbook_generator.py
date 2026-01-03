@@ -12,7 +12,7 @@ from datetime import datetime
 from typing import Dict, Any, List, Optional, Literal
 
 from anthropic import Anthropic
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, field_validator
 
 from src.config.settings import settings
 from src.config.model_routing import get_model_for_task
@@ -29,6 +29,27 @@ class TaskCRB(BaseModel):
     cost: str = Field(..., description="Cost description, e.g., '€0 (free tier)'")
     risk: Literal["low", "medium", "high"] = "low"
     benefit: str = Field(..., description="Benefit description, e.g., 'Saves 2 hrs/week'")
+
+    @field_validator('risk', mode='before')
+    @classmethod
+    def extract_risk_level(cls, v):
+        """Extract just the risk level from strings like 'medium - pricing accuracy critical'."""
+        if isinstance(v, str):
+            v_lower = v.lower().strip()
+            if v_lower.startswith('high'):
+                return 'high'
+            elif v_lower.startswith('medium'):
+                return 'medium'
+            elif v_lower.startswith('low'):
+                return 'low'
+            # Try to find keywords anywhere in the string
+            if 'high' in v_lower:
+                return 'high'
+            elif 'medium' in v_lower:
+                return 'medium'
+            else:
+                return 'low'  # Default to low
+        return v
 
 
 class PlaybookTask(BaseModel):
@@ -85,12 +106,28 @@ class PersonalizationContext(BaseModel):
     urgency: Literal["asap", "normal", "flexible"] = "normal"
 
 
+class ImmediateFirstStep(BaseModel):
+    """The ONE thing to do before reading further - creates momentum."""
+    action: str = Field(..., description="What to do, e.g., 'Create a Calendly account'")
+    url: Optional[str] = Field(None, description="Direct URL to start")
+    time_minutes: int = Field(15, description="Time to complete (5-30 min)")
+    outcome: str = Field(..., description="What they'll have after, e.g., 'A booking link ready to share'")
+    do_this_now: str = Field(
+        "Do this before reading the rest of the playbook.",
+        description="Instruction to act immediately"
+    )
+
+
 class Playbook(BaseModel):
     """Complete playbook for a recommendation option."""
     id: str
     recommendation_id: str
     option_type: Literal["off_the_shelf", "best_in_class", "custom_solution"]
     total_weeks: int
+    immediate_first_step: Optional[ImmediateFirstStep] = Field(
+        None,
+        description="The ONE thing to do right now before reading further"
+    )
     phases: List[Phase]
     personalization_context: PersonalizationContext
     created_at: datetime = Field(default_factory=datetime.utcnow)
@@ -292,13 +329,28 @@ Return ONLY valid JSON, no explanation."""
                 messages=[{"role": "user", "content": prompt}],
             )
 
-            content = response.content[0].text.strip()
+            content = response.content[0].text.strip() if response.content else ""
+
+            # Check for empty response
+            if not content:
+                logger.warning("Empty response from LLM for playbook generation")
+                raise ValueError("Empty response from LLM")
 
             # Clean and parse JSON
             if "```" in content:
                 match = re.search(r'```(?:json)?\s*([\s\S]*?)```', content)
                 if match:
-                    content = match.group(1)
+                    content = match.group(1).strip()
+
+            # Additional cleanup - find JSON object
+            if not content.startswith("{"):
+                # Try to find JSON object in response
+                json_match = re.search(r'\{[\s\S]*\}', content)
+                if json_match:
+                    content = json_match.group(0)
+                else:
+                    logger.warning(f"No JSON found in playbook response: {content[:200]}")
+                    raise ValueError("No valid JSON in response")
 
             data = json.loads(content)
 
@@ -350,11 +402,15 @@ Return ONLY valid JSON, no explanation."""
                     weeks=weeks,
                 ))
 
+            # Extract immediate first step from first task or generate one
+            immediate_step = self._extract_immediate_first_step(phases, option, option_type)
+
             return Playbook(
                 id=f"playbook-{uuid.uuid4().hex[:8]}",
                 recommendation_id=recommendation.get("id", ""),
                 option_type=option_type,
                 total_weeks=total_weeks,
+                immediate_first_step=immediate_step,
                 phases=phases,
                 personalization_context=context,
             )
@@ -362,3 +418,71 @@ Return ONLY valid JSON, no explanation."""
         except Exception as e:
             logger.error(f"Failed to generate playbook: {e}")
             raise
+
+    def _extract_immediate_first_step(
+        self,
+        phases: List[Phase],
+        option: Dict[str, Any],
+        option_type: str,
+    ) -> ImmediateFirstStep:
+        """Extract or generate the immediate first step for momentum."""
+        # Try to get from first task of first phase
+        if phases and phases[0].weeks and phases[0].weeks[0].tasks:
+            first_task = phases[0].weeks[0].tasks[0]
+            return ImmediateFirstStep(
+                action=first_task.title,
+                url=first_task.tools[0] if first_task.tools else None,
+                time_minutes=min(30, first_task.time_estimate_minutes),
+                outcome=first_task.crb.benefit,
+            )
+
+        # Generate from option data
+        vendor = option.get("vendor") or option.get("name", "")
+        matched = option.get("matched_vendor", {})
+        if matched.get("vendor"):
+            vendor = matched["vendor"]
+
+        # Common vendor URLs for quick lookup
+        vendor_urls = {
+            "calendly": "https://calendly.com/signup",
+            "acuity": "https://acuityscheduling.com/signup",
+            "hubspot": "https://app.hubspot.com/signup",
+            "zapier": "https://zapier.com/sign-up",
+            "make": "https://www.make.com/en/register",
+            "n8n": "https://n8n.io/get-started",
+            "slack": "https://slack.com/get-started",
+            "notion": "https://www.notion.so/signup",
+            "airtable": "https://airtable.com/signup",
+            "stripe": "https://dashboard.stripe.com/register",
+        }
+
+        vendor_lower = vendor.lower() if vendor else ""
+        url = None
+        for key, vendor_url in vendor_urls.items():
+            if key in vendor_lower:
+                url = vendor_url
+                break
+
+        if vendor:
+            return ImmediateFirstStep(
+                action=f"Create a free {vendor} account",
+                url=url,
+                time_minutes=10,
+                outcome=f"Access to {vendor} to start exploring the platform",
+            )
+
+        # Default by option type
+        if option_type == "custom_solution":
+            return ImmediateFirstStep(
+                action="Create a GitHub repository for your project",
+                url="https://github.com/new",
+                time_minutes=5,
+                outcome="A project home for your custom solution",
+            )
+        else:
+            return ImmediateFirstStep(
+                action="Document your current workflow in Notion",
+                url="https://www.notion.so/signup",
+                time_minutes=20,
+                outcome="A clear process map to guide implementation",
+            )

@@ -1,0 +1,258 @@
+{
+  "industry": "professional-services",
+  "display_name": "Professional Services",
+  "description": "Law firms, accounting firms, consulting, and other professional service businesses",
+  "questions": [
+    {
+      "id": "billable_hours_weekly",
+      "question": "How many billable hours does your team typically log per week?",
+      "input_type": "number",
+      "placeholder": "e.g., 200",
+      "target_categories": ["quantifiable_metrics", "operations"],
+      "expected_boosts": {"quantifiable_metrics": 25, "operations": 15},
+      "priority": 1,
+      "tags": ["revenue", "utilization"]
+    },
+    {
+      "id": "utilization_rate",
+      "question": "What's your team's average utilization rate (billable vs available hours)?",
+      "input_type": "select",
+      "options": [
+        {"value": "over_80", "label": "Over 80%"},
+        {"value": "70_80", "label": "70-80%"},
+        {"value": "60_70", "label": "60-70%"},
+        {"value": "50_60", "label": "50-60%"},
+        {"value": "under_50", "label": "Under 50%"},
+        {"value": "not_tracked", "label": "We don't track this"}
+      ],
+      "target_categories": ["quantifiable_metrics", "pain_points"],
+      "expected_boosts": {"quantifiable_metrics": 20, "pain_points": 10},
+      "priority": 1,
+      "tags": ["efficiency", "billing"],
+      "deep_dive_triggers": ["50_60", "under_50"]
+    },
+    {
+      "id": "time_tracking_method",
+      "question": "How do your professionals currently track their time?",
+      "input_type": "select",
+      "options": [
+        {"value": "manual_end_of_day", "label": "Manual entry at end of day"},
+        {"value": "manual_realtime", "label": "Manual entry in real-time"},
+        {"value": "automated_tools", "label": "Automated time capture tools"},
+        {"value": "billing_software", "label": "Built into our billing software"},
+        {"value": "mixed", "label": "Mix of methods"}
+      ],
+      "target_categories": ["operations", "tech_stack"],
+      "expected_boosts": {"operations": 15, "tech_stack": 15},
+      "priority": 2,
+      "tags": ["billing", "workflow"]
+    },
+    {
+      "id": "practice_management_software",
+      "question": "What practice management or billing software do you use?",
+      "input_type": "select",
+      "options": [
+        {"value": "clio", "label": "Clio"},
+        {"value": "mycase", "label": "MyCase"},
+        {"value": "smokeball", "label": "Smokeball"},
+        {"value": "qbo", "label": "QuickBooks Online"},
+        {"value": "xero", "label": "Xero"},
+        {"value": "karbon", "label": "Karbon"},
+        {"value": "other", "label": "Other"}
+      ],
+      "target_categories": ["tech_stack"],
+      "expected_boosts": {"tech_stack": 25},
+      "priority": 1,
+      "tags": ["software", "integration"]
+    },
+    {
+      "id": "new_client_inquiries",
+      "question": "How many new client inquiries do you receive per week?",
+      "input_type": "select",
+      "options": [
+        {"value": "under_5", "label": "Under 5"},
+        {"value": "5_15", "label": "5-15"},
+        {"value": "15_30", "label": "15-30"},
+        {"value": "30_50", "label": "30-50"},
+        {"value": "over_50", "label": "Over 50"}
+      ],
+      "target_categories": ["quantifiable_metrics", "industry_context"],
+      "expected_boosts": {"quantifiable_metrics": 15, "industry_context": 15},
+      "priority": 2,
+      "tags": ["leads", "volume"]
+    },
+    {
+      "id": "intake_process",
+      "question": "How do you currently handle new client intake and qualification?",
+      "input_type": "voice",
+      "target_categories": ["operations", "pain_points"],
+      "expected_boosts": {"operations": 20, "pain_points": 15},
+      "priority": 1,
+      "tags": ["sales", "onboarding"]
+    },
+    {
+      "id": "document_drafting_hours",
+      "question": "Approximately how many hours per week does your team spend drafting documents (contracts, letters, briefs)?",
+      "input_type": "select",
+      "options": [
+        {"value": "under_10", "label": "Under 10 hours"},
+        {"value": "10_20", "label": "10-20 hours"},
+        {"value": "20_40", "label": "20-40 hours"},
+        {"value": "over_40", "label": "Over 40 hours"}
+      ],
+      "target_categories": ["quantifiable_metrics", "operations"],
+      "expected_boosts": {"quantifiable_metrics": 15, "operations": 15},
+      "priority": 2,
+      "tags": ["documentation", "productivity"],
+      "deep_dive_triggers": ["20_40", "over_40"]
+    },
+    {
+      "id": "admin_support_ratio",
+      "question": "What's your ratio of administrative staff to professionals?",
+      "input_type": "select",
+      "options": [
+        {"value": "1_to_1", "label": "1 admin per professional"},
+        {"value": "1_to_2", "label": "1 admin per 2 professionals"},
+        {"value": "1_to_4", "label": "1 admin per 4+ professionals"},
+        {"value": "no_admin", "label": "No dedicated admin (professionals do it themselves)"}
+      ],
+      "target_categories": ["company_basics", "operations"],
+      "expected_boosts": {"company_basics": 15, "operations": 15},
+      "priority": 2,
+      "tags": ["staffing", "overhead"]
+    },
+    {
+      "id": "biggest_time_sink",
+      "question": "What administrative task takes the most time away from billable work?",
+      "input_type": "voice",
+      "target_categories": ["pain_points", "operations"],
+      "expected_boosts": {"pain_points": 25, "operations": 15},
+      "priority": 1,
+      "tags": ["bottleneck", "efficiency"]
+    },
+    {
+      "id": "client_communication_volume",
+      "question": "How many client emails and calls does your team handle per day?",
+      "input_type": "select",
+      "options": [
+        {"value": "under_20", "label": "Under 20"},
+        {"value": "20_50", "label": "20-50"},
+        {"value": "50_100", "label": "50-100"},
+        {"value": "over_100", "label": "Over 100"}
+      ],
+      "target_categories": ["quantifiable_metrics", "operations"],
+      "expected_boosts": {"quantifiable_metrics": 15, "operations": 10},
+      "priority": 3,
+      "tags": ["communication", "volume"]
+    },
+    {
+      "id": "realization_rate",
+      "question": "What percentage of billed time do you actually collect (realization rate)?",
+      "input_type": "select",
+      "options": [
+        {"value": "over_95", "label": "Over 95%"},
+        {"value": "90_95", "label": "90-95%"},
+        {"value": "80_90", "label": "80-90%"},
+        {"value": "under_80", "label": "Under 80%"},
+        {"value": "not_tracked", "label": "We don't track this"}
+      ],
+      "target_categories": ["quantifiable_metrics", "pain_points"],
+      "expected_boosts": {"quantifiable_metrics": 20, "pain_points": 10},
+      "priority": 2,
+      "tags": ["billing", "collections"],
+      "deep_dive_triggers": ["80_90", "under_80"]
+    },
+    {
+      "id": "growth_priority",
+      "question": "What's your main business priority for the next 12 months?",
+      "input_type": "select",
+      "options": [
+        {"value": "more_clients", "label": "Acquire more clients"},
+        {"value": "increase_rates", "label": "Increase billing rates"},
+        {"value": "efficiency", "label": "Improve operational efficiency"},
+        {"value": "hire", "label": "Hire more professionals"},
+        {"value": "reduce_overhead", "label": "Reduce overhead costs"},
+        {"value": "work_life", "label": "Better work-life balance"}
+      ],
+      "target_categories": ["goals_priorities"],
+      "expected_boosts": {"goals_priorities": 30},
+      "priority": 1,
+      "tags": ["strategy", "direction"]
+    },
+    {
+      "id": "ai_tools_interest",
+      "question": "Which AI capabilities interest you most for your practice?",
+      "input_type": "multi_select",
+      "options": [
+        {"value": "document_drafting", "label": "Drafting documents faster"},
+        {"value": "time_capture", "label": "Automatic time capture"},
+        {"value": "research", "label": "Legal/industry research"},
+        {"value": "client_intake", "label": "Client intake and qualification"},
+        {"value": "email", "label": "Email drafting and responses"},
+        {"value": "scheduling", "label": "Meeting scheduling"}
+      ],
+      "target_categories": ["goals_priorities", "buying_signals"],
+      "expected_boosts": {"goals_priorities": 15, "buying_signals": 15},
+      "priority": 2,
+      "tags": ["needs", "interests"]
+    },
+    {
+      "id": "budget_timeline",
+      "question": "If you found a solution that could significantly improve efficiency, when would you want to implement it?",
+      "input_type": "select",
+      "options": [
+        {"value": "immediately", "label": "As soon as possible"},
+        {"value": "3_months", "label": "Within 3 months"},
+        {"value": "6_months", "label": "Within 6 months"},
+        {"value": "next_year", "label": "Sometime next year"},
+        {"value": "just_exploring", "label": "Just exploring for now"}
+      ],
+      "target_categories": ["buying_signals"],
+      "expected_boosts": {"buying_signals": 25},
+      "priority": 3,
+      "tags": ["timeline", "urgency"]
+    }
+  ],
+  "woven_confirmation_templates": [
+    {
+      "id": "confirm_billing_software",
+      "condition": "tech_stack.practice_management",
+      "template": "How's {tech_stack.practice_management} working for your billing and time tracking?",
+      "target_categories": ["tech_stack", "pain_points"],
+      "expected_boosts": {"tech_stack": 10, "pain_points": 15}
+    },
+    {
+      "id": "confirm_team_size",
+      "condition": "company_basics.employee_count",
+      "template": "With a team of about {company_basics.employee_count}, how do you handle capacity planning?",
+      "target_categories": ["operations"],
+      "expected_boosts": {"operations": 15}
+    }
+  ],
+  "deep_dive_templates": [
+    {
+      "id": "utilization_deep_dive",
+      "trigger_question": "utilization_rate",
+      "trigger_values": ["50_60", "under_50"],
+      "template": "What do you think is preventing higher utilization - is it capacity, admin burden, or client flow?",
+      "target_categories": ["pain_points", "operations"],
+      "expected_boosts": {"pain_points": 20, "operations": 15}
+    },
+    {
+      "id": "realization_deep_dive",
+      "trigger_question": "realization_rate",
+      "trigger_values": ["80_90", "under_80"],
+      "template": "When you don't collect on billed time, is it client disputes, write-offs, or collections issues?",
+      "target_categories": ["pain_points", "operations"],
+      "expected_boosts": {"pain_points": 15, "operations": 10}
+    },
+    {
+      "id": "document_drafting_deep_dive",
+      "trigger_question": "document_drafting_hours",
+      "trigger_values": ["20_40", "over_40"],
+      "template": "That's significant drafting time. Are these mostly new documents or variations on templates?",
+      "target_categories": ["operations", "pain_points"],
+      "expected_boosts": {"operations": 15, "pain_points": 10}
+    }
+  ]
+}

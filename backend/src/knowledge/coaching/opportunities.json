@@ -2,6 +2,62 @@
   "industry": "coaching",
   "ai_opportunities": [
     {
+      "id": "ai-voice-assistant",
+      "name": "AI Scheduling & Discovery Call Assistant",
+      "description": "AI phone/voice system that handles scheduling calls, conducts initial discovery conversations, and qualifies leads 24/7",
+      "category": "growth",
+      "impact": {
+        "value_saved": {
+          "time_hours_per_week": 8,
+          "description": "Eliminates scheduling calls and initial discovery overhead"
+        },
+        "value_created": {
+          "description": "Capture leads 24/7, qualify prospects before your time investment",
+          "potential_revenue_impact": "20-30% more qualified leads in pipeline"
+        }
+      },
+      "customer_value_score": 8,
+      "business_health_score": 9,
+      "implementation": {
+        "complexity": "medium",
+        "timeline_weeks": 3,
+        "required_data": ["Discovery questions", "Qualification criteria", "Calendar availability", "Pricing packages"]
+      },
+      "options": {
+        "off_the_shelf": {
+          "tools": ["Smith.ai", "Ruby Receptionist", "Conversica"],
+          "cost_range": "€200-500/month",
+          "pros": ["Human + AI hybrid", "Professional handling", "Lead qualification"],
+          "cons": ["Per-call pricing", "Not coaching-specific"]
+        },
+        "best_in_class": {
+          "tools": ["Calendly + AI scheduling", "SavvyCal", "Close CRM with AI"],
+          "cost_range": "€50-200/month",
+          "pros": ["Scheduling-focused", "CRM integration", "Automated follow-up"],
+          "cons": ["No voice component", "Text-based only"]
+        },
+        "custom_solution": {
+          "approach": "AI voice agent using Claude API + Twilio for discovery calls, integrated with scheduling",
+          "cost_range": "€5,000-12,000 one-time + €100-250/month",
+          "pros": ["Your discovery process", "Qualification logic", "24/7 availability", "Your voice/brand"],
+          "cons": ["Development required", "Needs careful script design"]
+        }
+      },
+      "roi_example": {
+        "scenario": "Coach getting 20 inquiry calls/week, spending 30 min on each discovery call",
+        "cost": "€300/month",
+        "value_created": "Save 10 hours/week + capture 5 more leads/month × €5,000 avg package = €25,000/month potential",
+        "roi_percentage": 8233,
+        "payback_months": 0.1
+      },
+      "jevons_effect": {
+        "applies": true,
+        "mechanism": "24/7 lead qualification → more qualified prospects → more clients → may need to raise prices or add capacity",
+        "demand_expansion_potential": "25% more client capacity utilized"
+      },
+      "yc_reference": "Similar to Auto Ace (car dealerships) for AI booking and lead qualification"
+    },
+    {
       "id": "ai-session-notes",
       "name": "AI Session Notes & Insights",
       "description": "Automated transcription, summaries, and insight extraction from coaching sessions",

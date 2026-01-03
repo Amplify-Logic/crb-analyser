@@ -16,11 +16,13 @@ import ReportViewer from './pages/ReportViewer'
 import ReportProgress from './pages/ReportProgress'
 import Interview from './pages/Interview'
 import VoiceQuizInterview from './pages/VoiceQuizInterview'
+import AdaptiveQuiz from './pages/AdaptiveQuiz'
 import PreviewReport from './pages/PreviewReport'
 import Workshop from './pages/Workshop'
 import Terms from './pages/Terms'
 import Privacy from './pages/Privacy'
 import KnowledgeBase from './pages/admin/KnowledgeBase'
+import VendorAdmin from './pages/admin/VendorAdmin'
 
 // 404 page
 const NotFound = () => (
@@ -56,6 +58,11 @@ function App() {
       <Route path="/quiz/interview" element={
         <AnonymousRoute>
           <VoiceQuizInterview />
+        </AnonymousRoute>
+      } />
+      <Route path="/quiz/adaptive" element={
+        <AnonymousRoute>
+          <AdaptiveQuiz />
         </AnonymousRoute>
       } />
       <Route path="/quiz/preview" element={
@@ -137,6 +144,14 @@ function App() {
         element={
           <ProtectedRoute>
             <KnowledgeBase />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/admin/vendors"
+        element={
+          <ProtectedRoute>
+            <VendorAdmin />
           </ProtectedRoute>
         }
       />

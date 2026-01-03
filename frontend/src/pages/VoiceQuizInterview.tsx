@@ -31,35 +31,94 @@ interface QuizQuestion {
   id: number
   question: string
   topic: string
+  followUp?: string // Optional follow-up based on answer
 }
 
-const QUIZ_QUESTIONS: QuizQuestion[] = [
-  {
-    id: 1,
-    question: "Tell me about your business and what brought you here today.",
-    topic: "Introduction"
-  },
-  {
-    id: 2,
-    question: "What's the biggest operational challenge you're facing right now?",
-    topic: "Challenges"
-  },
-  {
-    id: 3,
-    question: "How much time does your team spend on repetitive tasks each week?",
-    topic: "Operations"
-  },
-  {
-    id: 4,
-    question: "What software tools does your team use daily?",
-    topic: "Technology"
-  },
-  {
-    id: 5,
-    question: "If you could automate one thing in your business, what would it be?",
-    topic: "Goals"
-  },
-]
+interface CompanyProfile {
+  basics?: { name?: { value: string }; description?: { value: string } }
+  industry?: { primary_industry?: { value: string }; business_model?: { value: string } }
+  size?: { employee_range?: { value: string }; employee_count?: { value: string } }
+}
+
+// Dynamic question generator based on company profile
+const generateQuestions = (profile: CompanyProfile | null, companyName: string): QuizQuestion[] => {
+  const industry = profile?.industry?.primary_industry?.value || ''
+  const teamSize = profile?.size?.employee_range?.value || profile?.size?.employee_count?.value || ''
+
+  // Base questions - personalized where possible
+  const questions: QuizQuestion[] = [
+    {
+      id: 1,
+      question: companyName
+        ? `I've done some research on ${companyName}. What brought you here today - what's the main thing you're hoping AI could help with?`
+        : "What brought you here today? What's the main thing you're hoping AI could help with?",
+      topic: "Goals"
+    },
+    {
+      id: 2,
+      question: teamSize
+        ? `With a team of ${teamSize}, what's the biggest bottleneck or time-sink that slows you down?`
+        : "What's the biggest bottleneck or time-sink that slows your team down?",
+      topic: "Challenges"
+    },
+    {
+      id: 3,
+      question: "Walk me through a typical week - where does most of your team's time go?",
+      topic: "Operations"
+    },
+    {
+      id: 4,
+      question: industry
+        ? `In ${industry}, what software tools are essential for your day-to-day operations?`
+        : "What software tools does your team rely on daily?",
+      topic: "Technology"
+    },
+    {
+      id: 5,
+      question: "If you could wave a magic wand and automate one thing tomorrow, what would have the biggest impact?",
+      topic: "Automation"
+    },
+  ]
+
+  return questions
+}
+
+// Smart acknowledgments based on answer content
+const getSmartAcknowledgment = (answer: string, topic: string): string => {
+  const lowerAnswer = answer.toLowerCase()
+
+  // Topic-specific acknowledgments
+  if (topic === 'Challenges' || topic === 'Goals') {
+    if (lowerAnswer.includes('time') || lowerAnswer.includes('hours') || lowerAnswer.includes('slow')) {
+      return "Time is definitely one of the biggest constraints I hear about."
+    }
+    if (lowerAnswer.includes('manual') || lowerAnswer.includes('repetitive')) {
+      return "Manual work is exactly the kind of thing AI excels at handling."
+    }
+    if (lowerAnswer.includes('customer') || lowerAnswer.includes('client') || lowerAnswer.includes('support')) {
+      return "Customer-facing processes are often great candidates for AI assistance."
+    }
+  }
+
+  if (topic === 'Technology') {
+    if (lowerAnswer.includes('spreadsheet') || lowerAnswer.includes('excel') || lowerAnswer.includes('google sheet')) {
+      return "Spreadsheets are a common starting point - there's usually a lot of room for automation there."
+    }
+    if (lowerAnswer.includes('crm') || lowerAnswer.includes('hubspot') || lowerAnswer.includes('salesforce')) {
+      return "Good, CRM data is valuable for AI-powered insights."
+    }
+  }
+
+  // Generic acknowledgments
+  const acknowledgments = [
+    "That's really helpful context.",
+    "I see, that makes sense.",
+    "Thanks for sharing that.",
+    "Got it, that's useful to know.",
+    "Interesting, I can see how that would be a priority.",
+  ]
+  return acknowledgments[Math.floor(Math.random() * acknowledgments.length)]
+}
 
 type Phase = 'intro' | 'conversation' | 'summary' | 'processing-upload' | 'complete'
 type InputMode = 'voice' | 'text' | 'upload'
@@ -88,20 +147,40 @@ export default function VoiceQuizInterview() {
 
   // Context
   const [companyName, setCompanyName] = useState('')
+  const [_companyProfile, setCompanyProfile] = useState<CompanyProfile | null>(null)
+  const [questions, setQuestions] = useState<QuizQuestion[]>([])
 
   // Refs
   const messagesEndRef = useRef<HTMLDivElement>(null)
   const textareaRef = useRef<HTMLTextAreaElement>(null)
   const audioRef = useRef<HTMLAudioElement | null>(null)
 
-  const currentQuestion = QUIZ_QUESTIONS[currentQuestionIndex]
-  const isLastQuestion = currentQuestionIndex >= QUIZ_QUESTIONS.length - 1
-  const progress = ((currentQuestionIndex + 1) / (QUIZ_QUESTIONS.length + 1)) * 100 // +1 for summary
+  const currentQuestion = questions[currentQuestionIndex]
+  const isLastQuestion = currentQuestionIndex >= questions.length - 1
+  const progress = questions.length > 0
+    ? ((currentQuestionIndex + 1) / (questions.length + 1)) * 100
+    : 0
 
-  // Load context
+  // Load context and generate personalized questions
   useEffect(() => {
     const name = sessionStorage.getItem('companyName')
+    const profileStr = sessionStorage.getItem('companyProfile')
+
     if (name) setCompanyName(name)
+
+    let profile: CompanyProfile | null = null
+    if (profileStr) {
+      try {
+        profile = JSON.parse(profileStr)
+        setCompanyProfile(profile)
+      } catch (e) {
+        console.warn('Failed to parse company profile:', e)
+      }
+    }
+
+    // Generate personalized questions
+    const generatedQuestions = generateQuestions(profile, name || '')
+    setQuestions(generatedQuestions)
   }, [])
 
   // Scroll to bottom
@@ -109,7 +188,7 @@ export default function VoiceQuizInterview() {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' })
   }, [messages])
 
-  // Speak text using TTS API
+  // Speak text using ElevenLabs TTS API
   const speakText = useCallback(async (text: string) => {
     try {
       setIsSpeaking(true)
@@ -117,7 +196,9 @@ export default function VoiceQuizInterview() {
       const response = await fetch(`${API_BASE_URL}/api/interview/tts`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ text, voice: 'aura-asteria-en' }),
+        // Uses ElevenLabs "Sarah" voice by default (conversational)
+        // Other options: 21m00Tcm4TlvDq8ikWAM (Rachel), TxGEqnHWrfWFTfGW9XjX (Josh)
+        body: JSON.stringify({ text }),
       })
 
       if (!response.ok) {
@@ -144,10 +225,14 @@ export default function VoiceQuizInterview() {
 
   // Start conversation with first question
   const startConversation = useCallback(async () => {
+    if (questions.length === 0) return
+
     setPhase('conversation')
 
-    const greeting = `Great! I've learned about ${companyName || 'your company'}. Let's have a quick conversation.`
-    const firstQuestion = QUIZ_QUESTIONS[0].question
+    const greeting = companyName
+      ? `Thanks for sharing about ${companyName}. I have a few quick questions to understand your situation better.`
+      : "Let's have a quick conversation to understand your business needs."
+    const firstQuestion = questions[0].question
 
     const greetingMessage: Message = {
       id: 'greeting-1',
@@ -159,7 +244,7 @@ export default function VoiceQuizInterview() {
 
     // Speak the greeting and question
     await speakText(`${greeting} ${firstQuestion}`)
-  }, [companyName, speakText])
+  }, [companyName, questions, speakText])
 
   // Handle voice recording
   const handleVoiceRecording = async (audioBlob: Blob) => {
@@ -246,7 +331,8 @@ export default function VoiceQuizInterview() {
       setIsProcessing(true)
 
       try {
-        const response = await fetch(`${API_BASE_URL}/api/interview/respond`, {
+        // Fire-and-forget: send message to backend for logging
+        void fetch(`${API_BASE_URL}/api/interview/respond`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
@@ -255,7 +341,7 @@ export default function VoiceQuizInterview() {
             context: {
               company_name: companyName,
               question_count: currentQuestionIndex,
-              topics_covered: QUIZ_QUESTIONS.slice(0, currentQuestionIndex + 1).map(q => q.topic),
+              topics_covered: questions.slice(0, currentQuestionIndex + 1).map(q => q.topic),
               is_quiz: true,
             },
           }),
@@ -265,17 +351,10 @@ export default function VoiceQuizInterview() {
         const nextIndex = currentQuestionIndex + 1
         setCurrentQuestionIndex(nextIndex)
 
-        const nextQuestion = QUIZ_QUESTIONS[nextIndex]
+        const nextQuestion = questions[nextIndex]
 
-        // Generate acknowledgment
-        const acknowledgments = [
-          "Got it, that's really helpful.",
-          "Thanks for sharing that.",
-          "Interesting, I understand.",
-          "That makes sense.",
-          "Great, thanks for explaining.",
-        ]
-        const ack = acknowledgments[Math.floor(Math.random() * acknowledgments.length)]
+        // Generate smart acknowledgment based on what they said
+        const ack = getSmartAcknowledgment(text, currentQuestion?.topic || '')
 
         const assistantMessage: Message = {
           id: `assistant-${Date.now()}`,
@@ -297,7 +376,7 @@ export default function VoiceQuizInterview() {
   }
 
   // Finish interview and go to preview
-  const finishInterview = async (finalAnswer?: string) => {
+  const finishInterview = async (_finalAnswer?: string) => {
     setIsProcessing(true)
 
     // Save all data
@@ -549,7 +628,7 @@ export default function VoiceQuizInterview() {
             </Link>
             <div className="flex items-center gap-4">
               <span className="text-sm text-gray-500">
-                {phase === 'summary' ? 'Final thoughts' : `Question ${currentQuestionIndex + 1} of ${QUIZ_QUESTIONS.length}`}
+                {phase === 'summary' ? 'Final thoughts' : `Question ${currentQuestionIndex + 1} of ${questions.length}`}
               </span>
               <button
                 onClick={skipToPreview}

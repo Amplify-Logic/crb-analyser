@@ -40,6 +40,45 @@ from src.models.research import (
 logger = logging.getLogger(__name__)
 
 
+def normalize_question_purpose(purpose_str: str) -> QuestionPurpose:
+    """Normalize purpose string to valid QuestionPurpose enum.
+
+    The LLM sometimes returns invalid values like 'goals' when it confuses
+    the 'section' field with the 'purpose' field. This maps them to valid values.
+    """
+    purpose_str = purpose_str.lower().strip() if purpose_str else "discover"
+
+    # Direct valid mappings
+    valid_purposes = {
+        "confirm": QuestionPurpose.CONFIRM,
+        "clarify": QuestionPurpose.CLARIFY,
+        "discover": QuestionPurpose.DISCOVER,
+        "deep_dive": QuestionPurpose.DEEP_DIVE,
+    }
+
+    if purpose_str in valid_purposes:
+        return valid_purposes[purpose_str]
+
+    # Map common LLM mistakes (section values used as purpose)
+    fallback_mappings = {
+        "goals": QuestionPurpose.DISCOVER,      # Goals = discovering what they want
+        "operations": QuestionPurpose.DISCOVER,  # Operations = discovering how they work
+        "technology": QuestionPurpose.CLARIFY,   # Tech = clarifying their stack
+        "challenges": QuestionPurpose.DISCOVER,  # Challenges = discovering pain points
+        "general": QuestionPurpose.DISCOVER,     # General = discovering info
+        "understand": QuestionPurpose.DISCOVER,  # Understand = discovering
+        "gauge": QuestionPurpose.CLARIFY,        # Gauge = clarifying readiness
+    }
+
+    if purpose_str in fallback_mappings:
+        logger.debug(f"Normalized invalid purpose '{purpose_str}' to '{fallback_mappings[purpose_str].value}'")
+        return fallback_mappings[purpose_str]
+
+    # Default to DISCOVER for any other unknown value
+    logger.warning(f"Unknown question purpose '{purpose_str}', defaulting to 'discover'")
+    return QuestionPurpose.DISCOVER
+
+
 class PreResearchAgent:
     """
     Pre-Research Agent
@@ -472,7 +511,7 @@ Generate 10-15 targeted questions. Focus on internal operations and pain points 
                     id=q.get("id", f"q_{i}"),
                     question=q.get("question", ""),
                     type=q.get("type", "text"),
-                    purpose=QuestionPurpose(q.get("purpose", "discover")),
+                    purpose=normalize_question_purpose(q.get("purpose", "discover")),
                     rationale=q.get("rationale", ""),
                     prefilled_value=q.get("prefilled_value"),
                     required=q.get("required", True),
@@ -524,15 +563,31 @@ Generate 10-15 targeted questions. Focus on internal operations and pain points 
                 lines.append(f"Business Model: {profile.industry.business_model.value}")
 
         if profile.products and profile.products.main_products:
-            products = [p.value for p in profile.products.main_products[:3]]
+            products = []
+            for p in profile.products.main_products[:3]:
+                if isinstance(p, dict):
+                    products.append(str(p.get('value', p)))
+                elif hasattr(p, 'value'):
+                    products.append(str(p.value))
+                else:
+                    products.append(str(p))
             lines.append(f"Products: {', '.join(products)}")
 
         if profile.tech_stack and profile.tech_stack.technologies_detected:
-            tech = [t.value for t in profile.tech_stack.technologies_detected[:5]]
+            tech = []
+            for t in profile.tech_stack.technologies_detected[:5]:
+                if isinstance(t, dict):
+                    tech.append(str(t.get('value', t)))
+                elif hasattr(t, 'value'):
+                    tech.append(str(t.value))
+                else:
+                    tech.append(str(t))
             lines.append(f"Tech Stack: {', '.join(tech)}")
 
         lines.append(f"\nResearch Quality Score: {profile.research_quality_score}/100")
-        lines.append(f"Sources Used: {', '.join(profile.sources_used)}")
+        # Ensure sources are strings (belt-and-suspenders safety)
+        sources = [str(s) if not isinstance(s, str) else s for s in profile.sources_used]
+        lines.append(f"Sources Used: {', '.join(sources)}")
 
         return "\n".join(lines)
 

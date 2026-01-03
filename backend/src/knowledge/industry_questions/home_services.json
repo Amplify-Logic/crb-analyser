@@ -1,0 +1,234 @@
+{
+  "industry": "home-services",
+  "display_name": "Home Services",
+  "description": "HVAC, plumbing, electrical, cleaning, landscaping, and other home service businesses",
+  "questions": [
+    {
+      "id": "technician_count",
+      "question": "How many service technicians do you have?",
+      "input_type": "number",
+      "placeholder": "e.g., 8",
+      "target_categories": ["company_basics", "quantifiable_metrics"],
+      "expected_boosts": {"company_basics": 20, "quantifiable_metrics": 15},
+      "priority": 1,
+      "tags": ["scale", "capacity"]
+    },
+    {
+      "id": "jobs_per_day",
+      "question": "On average, how many service calls does your team complete per day?",
+      "input_type": "number",
+      "placeholder": "e.g., 25",
+      "target_categories": ["quantifiable_metrics", "operations"],
+      "expected_boosts": {"quantifiable_metrics": 20, "operations": 15},
+      "priority": 1,
+      "tags": ["volume", "efficiency"]
+    },
+    {
+      "id": "scheduling_method",
+      "question": "How do you currently handle job scheduling and dispatch?",
+      "input_type": "select",
+      "options": [
+        {"value": "field_software", "label": "Field service software (ServiceTitan, Housecall Pro, etc.)"},
+        {"value": "crm", "label": "CRM with scheduling features"},
+        {"value": "spreadsheet", "label": "Spreadsheets and whiteboards"},
+        {"value": "phone", "label": "Phone and paper"},
+        {"value": "other", "label": "Other system"}
+      ],
+      "target_categories": ["tech_stack", "operations"],
+      "expected_boosts": {"tech_stack": 20, "operations": 15},
+      "priority": 1,
+      "tags": ["dispatch", "workflow"]
+    },
+    {
+      "id": "field_service_software",
+      "question": "What field service or job management software do you use?",
+      "input_type": "select",
+      "options": [
+        {"value": "servicetitan", "label": "ServiceTitan"},
+        {"value": "housecall", "label": "Housecall Pro"},
+        {"value": "jobber", "label": "Jobber"},
+        {"value": "servicem8", "label": "ServiceM8"},
+        {"value": "fieldedge", "label": "FieldEdge"},
+        {"value": "none", "label": "No specialized software"},
+        {"value": "other", "label": "Other"}
+      ],
+      "target_categories": ["tech_stack"],
+      "expected_boosts": {"tech_stack": 25},
+      "priority": 1,
+      "tags": ["software", "integration"]
+    },
+    {
+      "id": "missed_calls_daily",
+      "question": "How many customer calls go unanswered or to voicemail each day?",
+      "input_type": "select",
+      "options": [
+        {"value": "under_5", "label": "Under 5"},
+        {"value": "5_10", "label": "5-10"},
+        {"value": "10_20", "label": "10-20"},
+        {"value": "over_20", "label": "Over 20"},
+        {"value": "not_tracked", "label": "We don't track this"}
+      ],
+      "target_categories": ["pain_points", "quantifiable_metrics"],
+      "expected_boosts": {"pain_points": 20, "quantifiable_metrics": 15},
+      "priority": 1,
+      "tags": ["leads", "customer_service"],
+      "deep_dive_triggers": ["10_20", "over_20"]
+    },
+    {
+      "id": "dispatch_bottleneck",
+      "question": "What's the biggest challenge with scheduling and dispatch?",
+      "input_type": "voice",
+      "target_categories": ["pain_points", "operations"],
+      "expected_boosts": {"pain_points": 25, "operations": 20},
+      "priority": 1,
+      "tags": ["efficiency", "bottleneck"]
+    },
+    {
+      "id": "drive_time_percentage",
+      "question": "What percentage of technician time is spent driving vs. on jobs?",
+      "input_type": "select",
+      "options": [
+        {"value": "under_20", "label": "Under 20% driving"},
+        {"value": "20_30", "label": "20-30% driving"},
+        {"value": "30_40", "label": "30-40% driving"},
+        {"value": "over_40", "label": "Over 40% driving"},
+        {"value": "not_tracked", "label": "We don't track this"}
+      ],
+      "target_categories": ["operations", "quantifiable_metrics"],
+      "expected_boosts": {"operations": 15, "quantifiable_metrics": 15},
+      "priority": 2,
+      "tags": ["routing", "efficiency"],
+      "deep_dive_triggers": ["30_40", "over_40"]
+    },
+    {
+      "id": "callback_rate",
+      "question": "What's your approximate callback or rework rate?",
+      "input_type": "select",
+      "options": [
+        {"value": "under_2", "label": "Under 2%"},
+        {"value": "2_5", "label": "2-5%"},
+        {"value": "5_10", "label": "5-10%"},
+        {"value": "over_10", "label": "Over 10%"},
+        {"value": "not_tracked", "label": "We don't track this"}
+      ],
+      "target_categories": ["quantifiable_metrics", "pain_points"],
+      "expected_boosts": {"quantifiable_metrics": 15, "pain_points": 10},
+      "priority": 3,
+      "tags": ["quality", "training"]
+    },
+    {
+      "id": "invoice_payment_time",
+      "question": "How long does it typically take to get paid after a job is complete?",
+      "input_type": "select",
+      "options": [
+        {"value": "same_day", "label": "Same day (on-site payment)"},
+        {"value": "within_week", "label": "Within a week"},
+        {"value": "2_4_weeks", "label": "2-4 weeks"},
+        {"value": "over_month", "label": "Over a month"},
+        {"value": "varies", "label": "Varies widely"}
+      ],
+      "target_categories": ["operations", "pain_points"],
+      "expected_boosts": {"operations": 15, "pain_points": 10},
+      "priority": 2,
+      "tags": ["billing", "cashflow"]
+    },
+    {
+      "id": "service_area",
+      "question": "What's the radius of your service area?",
+      "input_type": "select",
+      "options": [
+        {"value": "under_15", "label": "Under 15 miles"},
+        {"value": "15_30", "label": "15-30 miles"},
+        {"value": "30_50", "label": "30-50 miles"},
+        {"value": "over_50", "label": "Over 50 miles"},
+        {"value": "multiple", "label": "Multiple service areas"}
+      ],
+      "target_categories": ["industry_context", "operations"],
+      "expected_boosts": {"industry_context": 15, "operations": 10},
+      "priority": 2,
+      "tags": ["geography", "logistics"]
+    },
+    {
+      "id": "growth_priority",
+      "question": "What's your main priority for the business over the next 12 months?",
+      "input_type": "select",
+      "options": [
+        {"value": "more_jobs", "label": "Get more jobs"},
+        {"value": "efficiency", "label": "Complete more jobs with current team"},
+        {"value": "hire", "label": "Hire more technicians"},
+        {"value": "expand", "label": "Expand service area"},
+        {"value": "reduce_overhead", "label": "Reduce overhead costs"},
+        {"value": "quality", "label": "Improve quality and reviews"}
+      ],
+      "target_categories": ["goals_priorities"],
+      "expected_boosts": {"goals_priorities": 30},
+      "priority": 1,
+      "tags": ["growth", "strategy"]
+    },
+    {
+      "id": "ai_readiness",
+      "question": "How would you describe your comfort level with technology?",
+      "input_type": "select",
+      "options": [
+        {"value": "early_adopter", "label": "I try new tools all the time"},
+        {"value": "comfortable", "label": "Comfortable with technology"},
+        {"value": "cautious", "label": "Cautious - prefer proven solutions"},
+        {"value": "minimal", "label": "Minimal tech use - prefer simple"}
+      ],
+      "target_categories": ["buying_signals", "tech_stack"],
+      "expected_boosts": {"buying_signals": 15, "tech_stack": 10},
+      "priority": 3,
+      "tags": ["adoption", "readiness"]
+    },
+    {
+      "id": "budget_timeline",
+      "question": "If you found a solution that could help complete 2-3 more jobs per day, when would you want to implement it?",
+      "input_type": "select",
+      "options": [
+        {"value": "immediately", "label": "As soon as possible"},
+        {"value": "3_months", "label": "Within 3 months"},
+        {"value": "6_months", "label": "Within 6 months"},
+        {"value": "next_year", "label": "Sometime next year"},
+        {"value": "just_exploring", "label": "Just exploring for now"}
+      ],
+      "target_categories": ["buying_signals"],
+      "expected_boosts": {"buying_signals": 25},
+      "priority": 3,
+      "tags": ["timeline", "urgency"]
+    }
+  ],
+  "woven_confirmation_templates": [
+    {
+      "id": "confirm_software",
+      "condition": "tech_stack.field_service",
+      "template": "How's {tech_stack.field_service} working for your dispatching and scheduling?",
+      "target_categories": ["tech_stack", "pain_points"],
+      "expected_boosts": {"tech_stack": 10, "pain_points": 15}
+    },
+    {
+      "id": "confirm_team_size",
+      "condition": "company_basics.technician_count",
+      "template": "With {company_basics.technician_count} technicians, what's the hardest part of keeping everyone busy and efficient?",
+      "target_categories": ["operations", "pain_points"],
+      "expected_boosts": {"operations": 15, "pain_points": 20}
+    }
+  ],
+  "deep_dive_templates": [
+    {
+      "id": "missed_calls_deep_dive",
+      "trigger_question": "missed_calls_daily",
+      "trigger_values": ["10_20", "over_20"],
+      "template": "That's a lot of missed opportunities. What typically happens to those calls - do you try to call back?",
+      "target_categories": ["operations", "pain_points"],
+      "expected_boosts": {"operations": 15, "pain_points": 15}
+    },
+    {
+      "id": "drive_time_deep_dive",
+      "trigger_question": "drive_time_percentage",
+      "trigger_values": ["30_40", "over_40"],
+      "template": "High drive time really eats into productivity. Is it geographic spread, or something about how jobs get scheduled?",
+      "target_categories": ["operations", "pain_points"],
+      "expected_boosts": {"operations": 15, "pain_points": 15}
+    }
+  ]
+}

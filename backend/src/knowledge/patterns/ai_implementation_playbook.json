@@ -3,14 +3,52 @@
     "title": "AI Implementation Playbook - What Actually Works",
     "purpose": "Distilled lessons from real implementations - shareable with clients",
     "source": "Internal experience + Q4 2025 research",
-    "last_updated": "2025-12-20"
+    "last_updated": "2025-12-27",
+    "verification_status": "VERIFIED",
+    "verification_sources": [
+      {
+        "name": "McKinsey State of AI 2025",
+        "url": "https://www.mckinsey.com/capabilities/quantumblack/our-insights/the-state-of-ai",
+        "accessed": "2025-12-27",
+        "stats_used": ["88% adoption", "6% AI high performers with EBIT impact"]
+      },
+      {
+        "name": "MIT NANDA - The GenAI Divide: State of AI in Business 2025",
+        "url": "https://mlq.ai/media/quarterly_decks/v0.1_State_of_AI_in_Business_2025_Report.pdf",
+        "accessed": "2025-12-27",
+        "stats_used": ["95% pilot failure rate", "67% vendor success vs 33% internal build"],
+        "caveat": "Based on 52 executive interviews, 153 leader surveys, 300 public AI deployments - directionally accurate"
+      }
+    ]
   },
 
   "the_reality": {
     "current_state": {
-      "adoption": "88% of organizations use AI in at least one function",
-      "success_rate": "Only 6% see measurable profit impact",
-      "failure_rate": "95% of AI pilots fail to deliver ROI"
+      "adoption": {
+        "stat": "88% of organizations use AI in at least one function",
+        "source": "McKinsey State of AI 2025",
+        "source_url": "https://www.mckinsey.com/capabilities/quantumblack/our-insights/the-state-of-ai",
+        "context": "Up from 78% in 2024, 72% in early 2024, ~50% for previous 6 years",
+        "verified": true,
+        "verified_date": "2025-12-27"
+      },
+      "success_rate": {
+        "stat": "Only 6% see measurable profit impact",
+        "source": "McKinsey State of AI 2025",
+        "source_url": "https://www.mckinsey.com/capabilities/quantumblack/our-insights/the-state-of-ai",
+        "context": "Only 6% qualify as 'AI high performers' achieving significant EBIT impact",
+        "verified": true,
+        "verified_date": "2025-12-27"
+      },
+      "failure_rate": {
+        "stat": "95% of AI pilots fail to deliver ROI",
+        "source": "MIT NANDA - The GenAI Divide: State of AI in Business 2025",
+        "source_url": "https://mlq.ai/media/quarterly_decks/v0.1_State_of_AI_in_Business_2025_Report.pdf",
+        "context": "95% of pilots delivered no measurable P&L impact within 6 months of deployment",
+        "caveat": "Self-reported directional data - measurement window is narrow (6 months)",
+        "verified": true,
+        "verified_date": "2025-12-27"
+      }
     },
     "why_most_fail": [
       "Vague 'AI transformation' scope without clear use cases",
@@ -179,12 +217,19 @@
       {
         "anti_pattern": "AI Transformation without scope",
         "failure_rate": "95%",
-        "why": "No clear use case, no success criteria, endless scope creep"
+        "why": "No clear use case, no success criteria, endless scope creep",
+        "source": "MIT NANDA - The GenAI Divide 2025",
+        "verified": true
       },
       {
         "anti_pattern": "Custom internal AI builds from scratch",
         "failure_rate": "67%",
-        "why": "Use vendor solutions with integrations instead - 2x success rate"
+        "success_comparison": "Internal builds: 33% success rate vs Vendor solutions: 67% success rate",
+        "why": "Use vendor solutions with integrations instead - 2x success rate",
+        "source": "MIT NANDA - The GenAI Divide 2025",
+        "source_url": "https://mlq.ai/media/quarterly_decks/v0.1_State_of_AI_in_Business_2025_Report.pdf",
+        "verified": true,
+        "verified_date": "2025-12-27"
       },
       {
         "anti_pattern": "Customer-facing AI without escalation",
@@ -611,9 +656,13 @@
         "description": "Building websites, landing pages, and small tools without being a developer",
         "applies_to": "Every department - marketing builds landing pages, ops builds internal tools",
         "stat_support": {
-          "stat": "60%+ of shipped software in 2026 will be AI generated or AI assisted",
-          "source": "Gartner and McKinsey",
-          "verified_status": "UNVERIFIED"
+          "stat": "75% of enterprise software engineers will use AI code assistants by 2028",
+          "original_claim": "60%+ of shipped software in 2026 will be AI generated or AI assisted - COULD NOT VERIFY",
+          "source": "Gartner",
+          "source_url": "https://www.gartner.com/en/newsroom/press-releases/2024-04-11-gartner-says-75-percent-of-enterprise-software-engineers-will-use-ai-code-assistants-by-2028",
+          "verified_status": "CORRECTED",
+          "verified_date": "2025-12-27",
+          "note": "Gartner predicts 75% will USE AI coding assistants, not that 60% of code will BE AI-generated"
         },
         "tools_by_level": {
           "no_technical_skills": ["Hostinger", "Base44"],
@@ -665,9 +714,15 @@
         "skill": "AI Automation",
         "description": "Automating repetitive tasks with if-this-then-that logic",
         "stat_support": {
-          "stat": "Repetitive tasks take 30-50% of entire work life",
-          "source": "Industry pattern",
-          "verified_status": "UNVERIFIED"
+          "stat": "45% of work activities could be automated; workers spend 25%+ of week on manual repetitive tasks",
+          "source": "McKinsey Global Institute + Smartsheet survey",
+          "source_urls": [
+            "https://www.mckinsey.com/mgi/overview/in-the-news/how-many-of-your-daily-tasks-could-be-automated",
+            "https://www.smartsheet.com/content-center/product-news/automation/workers-waste-quarter-work-week-manual-repetitive-tasks"
+          ],
+          "verified_status": "VERIFIED",
+          "verified_date": "2025-12-27",
+          "details": "McKinsey: 45% of employee time could be automated with current tech; 60% of occupations could have 30%+ automated; Smartsheet: 40%+ of workers spend 25%+ of week on repetitive tasks"
         },
         "key_principle": "If this, then that - triggers and actions connecting existing tools",
         "key_tools_by_technical_level": {
@@ -718,9 +773,15 @@
         "skill": "AI Decision Support",
         "description": "Using AI for better business decisions by feeding it context over time",
         "stat_support": {
-          "stat": "Executives using AI for decision-making make 30-50% faster decisions with more accuracy",
-          "source": "BCG and Deloitte",
-          "verified_status": "UNVERIFIED"
+          "stat": "32% reduction in decision-making time for executives using AI; 65% of executives make data-driven decisions faster with AI",
+          "sources": [
+            {"stat": "32% reduction in decision-making time", "source": "McKinsey"},
+            {"stat": "65% of executives make data-driven decisions faster", "source": "Gartner"}
+          ],
+          "original_claim": "30-50% faster decisions - directionally correct but range unverified",
+          "verified_status": "PARTIALLY_VERIFIED",
+          "verified_date": "2025-12-27",
+          "note": "McKinsey and Gartner confirm significant speed improvements, though exact range varies by study"
         },
         "key_concept": "AI + Memory - feed information over time so AI gets smarter about your specific context",
         "implementation": [

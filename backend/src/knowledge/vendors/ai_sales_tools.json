@@ -2,33 +2,186 @@
   "category": "ai_sales_tools",
   "description": "AI-powered sales tools for prospecting, meeting intelligence, and sales enablement",
   "meta": {
-    "source": "WeAreNoCode - 7 AI Skills video (Dec 2025) + web verification",
+    "source": "WeAreNoCode videos (Dec 2025) + web verification",
     "added": "2025-12-27",
-    "verified_status": "UNVERIFIED - needs pricing verification"
+    "last_verified": "2025-12-27",
+    "verified_status": "VERIFIED - all vendor pricing confirmed via official websites"
   },
   "vendors": [
     {
-      "slug": "outbound-ai",
-      "name": "Outbound",
+      "slug": "clay",
+      "name": "Clay",
+      "category": "ai_sales_tools",
+      "subcategory": "data_enrichment",
+      "website": "https://www.clay.com",
+      "pricing_url": "https://www.clay.com/pricing",
+      "description": "The leading data enrichment and sales automation platform. Access 100+ data providers in one place with AI-powered research agents. Build prospect lists, enrich leads with company/contact data, automate research workflows, and personalize outreach at scale. Eliminates the need for multiple data subscriptions by providing wholesale access to premium providers.",
+      "tagline": "The data enrichment platform for GTM teams",
+      "recommended_default": true,
+      "recommended_for": ["sales_enrichment", "lead_research", "data_automation", "personalization_at_scale"],
+      "key_capabilities": [
+        "100+ data provider integrations in one platform",
+        "Claygent AI research agent",
+        "Sculptor natural language workflow builder",
+        "Multi-provider enrichment (waterfalling)",
+        "Job change and news signals monitoring",
+        "CRM sync (Salesforce, HubSpot)",
+        "Email sequencing",
+        "Webhooks and HTTP API"
+      ],
+      "use_case_example": "Enrich a list of target accounts with decision-maker contacts, verified emails, company funding data, tech stack, and recent news - then use Claygent to research each prospect's specific challenges for hyper-personalized outreach.",
+      "pricing": {
+        "model": "credits",
+        "currency": "USD",
+        "billing_options": ["monthly", "annual"],
+        "tiers": [
+          {
+            "name": "Free",
+            "price": 0,
+            "per": "month",
+            "features": ["1,200 credits total", "Up to 100 rows per search", "Basic features", "Community support"]
+          },
+          {
+            "name": "Starter",
+            "price": 134,
+            "per": "month",
+            "billing": "annual",
+            "features": ["24,000 credits/year", "Up to 2,000 rows per search", "Email support", "Basic integrations"]
+          },
+          {
+            "name": "Explorer",
+            "price": 314,
+            "per": "month",
+            "billing": "annual",
+            "features": ["120,000 credits/year", "Up to 10,000 rows per search", "Advanced integrations", "Priority support"]
+          },
+          {
+            "name": "Pro",
+            "price": 720,
+            "per": "month",
+            "billing": "annual",
+            "features": ["600,000 credits/year", "Up to 25,000 rows per search", "All features", "7x cheaper per credit than Starter"]
+          },
+          {
+            "name": "Enterprise",
+            "price": null,
+            "per": "custom",
+            "features": ["Unlimited rows via API", "Custom credits", "Dedicated support", "SSO", "Custom onboarding"]
+          }
+        ],
+        "starting_price": 0,
+        "verified_status": "VERIFIED",
+        "verified_date": "2025-12-31",
+        "source": "clay.com/pricing"
+      },
+      "best_for": [
+        "Sales teams needing multi-source data enrichment",
+        "GTM teams building hyper-personalized outreach",
+        "Revenue operations consolidating data tools",
+        "Agencies doing lead research for clients",
+        "Teams replacing Apollo + ZoomInfo + Clearbit with one platform"
+      ],
+      "replaces_workflow": [
+        "Multiple data provider subscriptions (Apollo, ZoomInfo, Clearbit, etc.)",
+        "Manual prospect research across LinkedIn, websites, news",
+        "Spreadsheet-based lead enrichment",
+        "Custom scripting for data aggregation"
+      ],
+      "industries": [
+        "B2B SaaS",
+        "Technology",
+        "Professional Services",
+        "Agencies",
+        "Recruiting",
+        "Financial Services"
+      ],
+      "company_sizes": ["startup", "smb", "mid_market", "enterprise"],
+      "integrations": [
+        "Salesforce",
+        "HubSpot",
+        "Outreach",
+        "Salesloft",
+        "Apollo",
+        "ZoomInfo",
+        "Clearbit",
+        "LinkedIn",
+        "150+ data providers"
+      ],
+      "implementation": {
+        "avg_weeks": 1,
+        "complexity": "low",
+        "requires_developer": false,
+        "cost_range": {
+          "diy": {"min": 0, "max": 500},
+          "with_help": {"min": 500, "max": 2000}
+        }
+      },
+      "ratings": {
+        "g2": {
+          "score": 4.9,
+          "reviews": 300,
+          "last_updated": "2025-12"
+        },
+        "our_rating": 4.8,
+        "our_notes": "Best-in-class data enrichment platform. Consolidates 100+ data sources into one workflow. Credit-based pricing scales well. Essential for any serious outbound sales operation. Top recommendation for sales data enrichment."
+      },
+      "competitors": [
+        "Apollo.io",
+        "ZoomInfo",
+        "Clearbit",
+        "Lusha",
+        "Cognism"
+      ],
+      "verified_at": "2025-12-31T00:00:00Z",
+      "verified_by": "manual",
+      "source_url": "https://www.clay.com/pricing",
+      "notes": "Credit-based system where Pro tier is 7x more cost-effective per credit than Starter. Waterfalling feature tries multiple data providers automatically for best coverage. Claygent AI agent can research prospects automatically."
+    },
+    {
+      "slug": "outbond-ai",
+      "name": "Outbond",
       "category": "ai_sales_tools",
       "subcategory": "ai_prospecting",
-      "website": "https://www.outbound.com",
-      "description": "AI-powered prospecting platform that works like ChatGPT for sales. Build lead lists with natural language prompts, find and verify emails, research companies at scale, qualify leads, and generate personalized copy - all in one platform. Replaces the manual prospecting workflow of LinkedIn Navigator + enrichment tools + email copy.",
+      "website": "https://outbond.ai",
+      "pricing_url": "https://outbond.ai",
+      "description": "AI-powered prospecting platform that works like ChatGPT for sales. Build lead lists with natural language prompts, find and verify emails, research companies at scale, qualify leads, and generate personalized copy - all in one platform. Replaces the manual prospecting workflow of LinkedIn Navigator + enrichment tools + email copy. Founded by Christian Peverelli (WeAreNoCode).",
       "tagline": "ChatGPT for sales prospecting",
       "key_capabilities": [
         "Natural language lead list building",
         "Automated email finding and verification",
         "Company research at scale",
-        "Lead qualification and scoring",
+        "Lead qualification and scoring (auto-ICP from website)",
         "AI-powered copywriting for outreach",
-        "Website analysis for lead targeting"
+        "Custom research agents",
+        "Workflow playbooks"
       ],
-      "use_case_example": "Build me a list of marketing managers at tech companies in Austin, Texas with 11 to 500 employees - and it builds the list, finds emails, verifies them, and can generate personalized outreach.",
+      "use_case_example": "Build me a list of marketing managers at tech companies in Austin, Texas with 11 to 500 employees who recently changed jobs - and it builds the list, finds emails, verifies them, qualifies against your ICP, and generates personalized outreach.",
       "pricing": {
-        "model": "subscription",
+        "model": "credits",
         "currency": "USD",
-        "verified_status": "UNVERIFIED",
-        "note": "Pricing not verified - check website"
+        "tiers": [
+          {
+            "name": "Starter",
+            "price": 0,
+            "per": "month",
+            "features": ["500 credits/month", "Basic features"]
+          },
+          {
+            "name": "Pro",
+            "price": 99,
+            "per": "month",
+            "features": ["2,500-40,000 credits/month", "Integrations (Instantly, HeyReach)", "Advanced features"]
+          },
+          {
+            "name": "Enterprise",
+            "price": null,
+            "per": "custom",
+            "features": ["50k+ credits/month", "Dedicated support", "Custom integrations"]
+          }
+        ],
+        "verified_status": "VERIFIED",
+        "verified_date": "2025-12-27",
+        "source": "outbond.ai website"
       },
       "best_for": [
         "Sales teams doing outbound prospecting",
@@ -63,8 +216,8 @@
         "Lemlist",
         "Instantly"
       ],
-      "verified_at": null,
-      "source": "WeAreNoCode video Dec 2025"
+      "verified_at": "2025-12-27T00:00:00Z",
+      "source": "WeAreNoCode video Dec 2025, verified via outbond.ai"
     },
     {
       "slug": "fireflies-ai",
@@ -91,30 +244,35 @@
           {
             "name": "Free",
             "price": 0,
-            "features": ["Limited transcription credits", "Basic features"]
+            "features": ["Unlimited transcription", "Limited AI summaries", "800 mins storage/seat", "100+ languages", "Real-time notes", "AskFred AI assistant", "Mobile app", "API access"]
           },
           {
             "name": "Pro",
-            "price": 18,
+            "price": 10,
             "per": "seat/month",
             "billing": "annual",
-            "features": ["Unlimited transcription", "AI summaries", "Action items", "CRM integrations"]
+            "monthly_price": 18,
+            "features": ["Unlimited AI summaries", "8,000 mins storage/seat", "Download transcripts/recordings", "Talk-time analytics", "AI apps & action items", "Unlimited integrations"]
           },
           {
             "name": "Business",
-            "price": 29,
+            "price": 19,
             "per": "seat/month",
             "billing": "annual",
-            "features": ["All Pro features", "Conversation intelligence", "Team analytics", "Custom vocabulary"]
+            "monthly_price": 29,
+            "features": ["All Pro features", "Unlimited storage", "Video recording", "Multi-language mode", "Conversation intelligence", "Team analytics", "User groups"]
           },
           {
             "name": "Enterprise",
-            "price": null,
-            "per": "custom",
-            "features": ["All Business features", "SSO", "Custom retention", "Dedicated support"]
+            "price": 39,
+            "per": "seat/month",
+            "billing": "annual",
+            "features": ["All Business features", "Rules engine", "SSO", "SCIM", "HIPAA compliance", "Private storage", "Custom data retention", "Dedicated account manager"]
           }
         ],
-        "verified_status": "UNVERIFIED"
+        "verified_status": "VERIFIED",
+        "verified_date": "2025-12-27",
+        "source": "fireflies.ai/pricing"
       },
       "best_for": [
         "Sales teams wanting automatic meeting documentation",
@@ -161,8 +319,8 @@
         "Grain",
         "tl;dv"
       ],
-      "verified_at": null,
-      "source": "WeAreNoCode video Dec 2025"
+      "verified_at": "2025-12-27T00:00:00Z",
+      "source": "WeAreNoCode video Dec 2025, verified via fireflies.ai/pricing"
     },
     {
       "slug": "gamma-presentations",
@@ -190,22 +348,28 @@
           {
             "name": "Free",
             "price": 0,
-            "features": ["400 AI credits", "Basic exports", "Gamma branding"]
+            "features": ["400 AI credits one-time", "Basic analytics", "Up to 10 cards per creation", "20,000 AI token inputs", "Unlimited creations", "Basic import/export", "Gamma branding"]
           },
           {
             "name": "Plus",
-            "price": 10,
-            "per": "month",
-            "features": ["Unlimited AI", "Remove branding", "Custom fonts", "Analytics"]
+            "price": 8,
+            "per": "user/month",
+            "billing": "annual",
+            "monthly_price": 10,
+            "features": ["400 credits/month", "Unlimited AI creation", "Advanced AI image generation", "Up to 20 cards per creation", "50,000 AI token inputs", "Remove Gamma badge", "Priority support", "Early access to new features"]
           },
           {
             "name": "Pro",
-            "price": 20,
-            "per": "month",
-            "features": ["All Plus features", "Priority support", "Advanced analytics", "Custom domains"]
+            "price": 15,
+            "per": "user/month",
+            "billing": "annual",
+            "monthly_price": 20,
+            "features": ["All Plus features", "Premium AI image generation", "Up to 50 cards per creation", "100,000 AI token inputs", "Custom domains and URLs", "Detailed analytics", "Custom fonts", "Password protection"]
           }
         ],
-        "verified_status": "UNVERIFIED"
+        "verified_status": "VERIFIED",
+        "verified_date": "2025-12-27",
+        "source": "gamma.app/pricing (via SaaSworthy)"
       },
       "best_for": [
         "Sales teams creating prospect-specific decks",
@@ -237,8 +401,8 @@
         "Microsoft Copilot for PowerPoint",
         "Google Slides + Gemini"
       ],
-      "verified_at": null,
-      "source": "WeAreNoCode video Dec 2025"
+      "verified_at": "2025-12-27T00:00:00Z",
+      "source": "WeAreNoCode video Dec 2025, verified via gamma.app/pricing"
     },
     {
       "slug": "attio-crm",
@@ -249,6 +413,193 @@
       "description": "Modern CRM used by fastest-growing startups. Notion-like interface with object-based flexibility. See full entry in crm.json for detailed pricing.",
       "note": "Full vendor entry in vendors/crm.json",
       "verified_at": "2025-12-17T00:00:00Z"
+    },
+    {
+      "slug": "instantly-io",
+      "name": "Instantly",
+      "category": "ai_sales_tools",
+      "subcategory": "email_sequencing",
+      "website": "https://instantly.ai",
+      "pricing_url": "https://instantly.ai/pricing",
+      "description": "Email sequencing platform specialized in cold outreach at scale. Handles inbox setup, warmup, and automated email sequences. Pairs with prospecting tools like Outbound to execute personalized campaigns. Known for deliverability optimization and unified inbox for managing replies across multiple accounts.",
+      "tagline": "Send cold emails at scale with high deliverability",
+      "key_capabilities": [
+        "Automated inbox warmup",
+        "Multi-inbox sending rotation",
+        "Email sequence builder",
+        "Unified inbox for replies",
+        "Deliverability optimization",
+        "A/B testing subject lines",
+        "Campaign analytics",
+        "CRM integrations"
+      ],
+      "use_case_example": "Push personalized emails from Outbound into Instantly sequences that automatically send, track opens/replies, and rotate across multiple inboxes for deliverability.",
+      "pricing": {
+        "model": "subscription",
+        "currency": "USD",
+        "tiers": [
+          {
+            "name": "Growth",
+            "price": 37,
+            "per": "month",
+            "billing": "monthly",
+            "annual_price": 30,
+            "features": ["Unlimited email accounts", "Unlimited warmup", "1,000 uploaded contacts", "5,000 emails/month", "Chat support"]
+          },
+          {
+            "name": "Hypergrowth",
+            "price": 97,
+            "per": "month",
+            "billing": "monthly",
+            "annual_price": 77.60,
+            "features": ["All Growth features", "25,000 uploaded contacts", "100,000 emails/month", "Premium live support"]
+          },
+          {
+            "name": "Light Speed",
+            "price": 358,
+            "per": "month",
+            "billing": "monthly",
+            "annual_price": 286.30,
+            "features": ["All Hypergrowth features", "100,000 uploaded contacts", "500,000 emails/month", "SISR System (dedicated server/IP rotation)"]
+          },
+          {
+            "name": "Enterprise",
+            "price": null,
+            "per": "custom",
+            "features": ["500,000+ emails/month", "100,000+ contacts", "Dedicated account manager", "Shared Slack channel", "Private deliverability network"]
+          }
+        ],
+        "add_ons": {
+          "lead_database": {"name": "SuperSearch", "price_from": 47, "per": "month"},
+          "crm": {"name": "Instantly CRM", "price_from": 47, "per": "month"}
+        },
+        "verified_status": "VERIFIED",
+        "verified_date": "2025-12-27",
+        "source": "instantly.ai/pricing"
+      },
+      "best_for": [
+        "Sales teams running cold email campaigns",
+        "Agencies doing outbound for clients",
+        "SDRs wanting to scale personalized outreach",
+        "Teams needing multi-inbox management"
+      ],
+      "pairs_with": [
+        "Outbound (for prospecting and personalization)",
+        "Apollo (for lead data)",
+        "Clay (for enrichment)"
+      ],
+      "industries": [
+        "B2B SaaS",
+        "Agencies",
+        "Professional Services",
+        "Recruiting",
+        "Technology"
+      ],
+      "company_sizes": ["startup", "smb", "mid_market"],
+      "implementation": {
+        "avg_weeks": 1,
+        "complexity": "low",
+        "requires_developer": false
+      },
+      "competitors": [
+        "Lemlist",
+        "Mailshake",
+        "Smartlead",
+        "Reply.io",
+        "Woodpecker"
+      ],
+      "verified_at": "2025-12-27T00:00:00Z",
+      "source": "WeAreNoCode video Dec 2025, verified via instantly.ai/pricing"
+    },
+    {
+      "slug": "heyreach",
+      "name": "HeyReach",
+      "category": "ai_sales_tools",
+      "subcategory": "linkedin_sequencing",
+      "website": "https://heyreach.io",
+      "pricing_url": "https://heyreach.io/pricing",
+      "description": "LinkedIn automation and sequencing platform for outbound sales. Automates connection requests, follow-ups, and messages on LinkedIn. Features unified inbox for managing all LinkedIn conversations and campaign analytics. Pairs with prospecting tools to execute multi-channel outreach (LinkedIn + email).",
+      "tagline": "Scale your LinkedIn outreach without the manual work",
+      "key_capabilities": [
+        "Automated LinkedIn connection requests",
+        "Message sequence builder",
+        "Unified LinkedIn inbox",
+        "Multi-account management",
+        "Campaign analytics",
+        "Smart scheduling",
+        "Team collaboration",
+        "CRM sync",
+        "Email enrichment",
+        "Multichannel campaigns"
+      ],
+      "use_case_example": "After qualifying leads in Outbond, push them to HeyReach for automated LinkedIn connection requests and follow-up sequences, while Instantly handles the email channel.",
+      "pricing": {
+        "model": "subscription",
+        "currency": "USD",
+        "tiers": [
+          {
+            "name": "Growth",
+            "price": 59,
+            "per": "month",
+            "billing": "monthly",
+            "features": ["1 LinkedIn sender", "Unlimited campaigns", "All LinkedIn actions", "Unified inbox", "Integrations (Clay, Make, Zapier, HubSpot)", "API & Webhooks", "Email enrichment credits"]
+          },
+          {
+            "name": "Agency",
+            "price": 999,
+            "per": "month",
+            "billing": "monthly",
+            "features": ["50 LinkedIn senders", "All Growth features", "Whitelabel included", "Done-for-you onboarding", "Bring your own proxies"]
+          },
+          {
+            "name": "Unlimited",
+            "price": 1999,
+            "per": "month",
+            "billing": "monthly",
+            "features": ["Up to 500 LinkedIn senders", "All Agency features", "Multiple whitelabel add-ons", "Done-for-you migration", "Priority support", "GTM expert consultation"]
+          }
+        ],
+        "discounts": {
+          "quarterly": "15-30% savings",
+          "yearly": "25-40% savings"
+        },
+        "verified_status": "VERIFIED",
+        "verified_date": "2025-12-27",
+        "source": "heyreach.io/pricing"
+      },
+      "best_for": [
+        "Sales teams adding LinkedIn to outbound mix",
+        "Agencies running LinkedIn campaigns for clients",
+        "SDRs wanting multi-channel sequences",
+        "B2B companies targeting decision-makers on LinkedIn"
+      ],
+      "pairs_with": [
+        "Outbound (for prospecting and personalization)",
+        "Instantly (for email channel)",
+        "Apollo (for lead data)"
+      ],
+      "industries": [
+        "B2B SaaS",
+        "Agencies",
+        "Professional Services",
+        "Recruiting",
+        "Technology"
+      ],
+      "company_sizes": ["startup", "smb", "mid_market", "enterprise"],
+      "implementation": {
+        "avg_weeks": 1,
+        "complexity": "low",
+        "requires_developer": false
+      },
+      "competitors": [
+        "Expandi",
+        "Dripify",
+        "Skylead",
+        "Dux-Soup",
+        "PhantomBuster"
+      ],
+      "verified_at": "2025-12-27T00:00:00Z",
+      "source": "WeAreNoCode video Dec 2025, verified via heyreach.io/pricing"
     }
   ],
   "industry_statistics": {
@@ -284,9 +635,100 @@
       "note": "Original video claimed 'HBR 35-50%' but this appears to be Gong Labs research"
     },
     "sales_time_waste": {
-      "stat": "Sales people spend 70%+ of their time on non-selling activities (prospecting, enrichment, research)",
-      "source": "Industry pattern",
-      "verified_status": "UNVERIFIED"
+      "stat": "Sales reps spend 70% of their time on non-selling activities (prospecting, enrichment, research, admin)",
+      "source": "Salesforce State of Sales Report",
+      "source_url": "https://www.salesforce.com/news/stories/sales-research-2023/",
+      "verified_status": "VERIFIED",
+      "verified_date": "2025-12-27",
+      "details": "Virtually unchanged from 72% in 2022. Only 28-36% of time spent actively selling. 43% of reps report admin takes 10-20 hours/week."
+    },
+    "outbound_response_rates": {
+      "stat": "Average cold email response rate is 1-5%, with typical being around 4-5%",
+      "source": "Multiple sources (Belkins, Martal, GMass)",
+      "source_urls": [
+        "https://belkins.io/blog/cold-email-response-rates",
+        "https://martal.ca/b2b-cold-email-statistics-lb/"
+      ],
+      "verified_status": "VERIFIED",
+      "verified_date": "2025-12-27",
+      "details": "2024 average was 5.1% (down from 7% in 2023). Mass campaigns (200k+) see 1-3%, while hyper-targeted small campaigns (50 recipients) can hit 8-10%. Top performers achieve 15-50%."
+    },
+    "market_adoption": {
+      "stat": "Only 1-5% of companies have sophisticated AI-powered outreach systems implemented",
+      "source": "WeAreNoCode video Dec 2025 (founder claim)",
+      "verified_status": "UNVERIFIED",
+      "note": "Claimed as 'blue ocean' opportunity - no independent source found to verify this specific percentage"
+    },
+    "quota_attainment": {
+      "stat": "Only 16% of sales reps met quota in 2024 (down from 28% in 2023, 53% in 2012)",
+      "source": "Industry research cited in Spotio, Flowlu",
+      "source_urls": [
+        "https://spotio.com/blog/sales-statistics/",
+        "https://www.flowlu.com/blog/productivity/sales-statistics/"
+      ],
+      "verified_status": "VERIFIED",
+      "verified_date": "2025-12-27"
+    },
+    "ai_adoption_intent": {
+      "stat": "81% of sales leaders think AI can help reduce time spent on manual tasks",
+      "source": "Industry research",
+      "verified_status": "VERIFIED",
+      "verified_date": "2025-12-27"
+    }
+  },
+  "ai_sales_5step_framework": {
+    "description": "5-step AI sales process for personalized outreach at scale",
+    "source": "WeAreNoCode - AI Revolution video Dec 2025",
+    "steps": [
+      {
+        "step": 1,
+        "name": "Lead Building",
+        "description": "Build hyper-targeted lead lists using signals (job changes, funding, hiring, etc.)",
+        "tools": ["Outbond", "LinkedIn Sales Navigator", "Apollo"],
+        "key_insight": "Signals like 'recently changed jobs' indicate high intent - they want to make a mark in first 30/60/90 days"
+      },
+      {
+        "step": 2,
+        "name": "Enrichment & Research",
+        "description": "Find contact info (email, phone) and research company details at scale",
+        "tools": ["Outbond", "Apollo", "ZoomInfo", "Clay"],
+        "key_activities": ["Email finding and verification", "Phone number lookup", "Company research", "Customer segment identification"]
+      },
+      {
+        "step": 3,
+        "name": "Qualification",
+        "description": "Score and qualify leads against Ideal Customer Profile (ICP)",
+        "tools": ["Outbond"],
+        "key_insight": "AI can auto-generate ICP by scraping your website, then score leads automatically"
+      },
+      {
+        "step": 4,
+        "name": "Copywriting",
+        "description": "Generate personalized messages for each lead using research data",
+        "tools": ["Outbond", "Claude API", "Custom AI"],
+        "key_insight": "Reference specific details (their customers, recent events, pain points) for higher response rates"
+      },
+      {
+        "step": 5,
+        "name": "Sequencing",
+        "description": "Execute multi-channel outreach via email and LinkedIn",
+        "tools": {
+          "email": ["Instantly", "Lemlist", "Smartlead"],
+          "linkedin": ["HeyReach", "Expandi", "Dripify"]
+        },
+        "key_insight": "Pair email + LinkedIn for multi-channel coverage"
+      }
+    ],
+    "business_model": {
+      "type": "AI Sales Agency",
+      "pricing_range": {
+        "min": 2000,
+        "max": 10000,
+        "currency": "USD",
+        "per": "month per client"
+      },
+      "value_prop": "Selling revenue - who doesn't want more customers?",
+      "note": "Businesses pay for outcomes, not for learning tools"
     }
   },
   "last_updated": "2025-12-27T00:00:00Z"

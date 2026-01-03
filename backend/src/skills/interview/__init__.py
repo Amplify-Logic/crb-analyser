@@ -6,6 +6,7 @@ Skills for adaptive interview flow in CRB analysis.
 Available Skills:
 - FollowUpQuestionSkill: Generate adaptive follow-up questions
 - PainExtractionSkill: Extract structured pain points from transcript
+- InterviewConfidenceSkill: Calculate confidence scores and report readiness
 
 Usage:
     from src.skills import get_skill, SkillContext
@@ -40,8 +41,10 @@ Usage:
 
 from .followup import FollowUpQuestionSkill
 from .pain_extraction import PainExtractionSkill
+from .confidence import InterviewConfidenceSkill
 
 __all__ = [
     "FollowUpQuestionSkill",
     "PainExtractionSkill",
+    "InterviewConfidenceSkill",
 ]

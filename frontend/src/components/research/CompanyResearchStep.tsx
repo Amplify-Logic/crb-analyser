@@ -55,14 +55,13 @@ export default function CompanyResearchStep({ onComplete, initialData }: Company
 
     try {
       // Step 1: Create research record via POST
-      const token = localStorage.getItem('crb_auth_token')
+      // Auth uses HTTP-only cookies, sent automatically with credentials: 'include'
       const startResponse = await fetch(
         `${import.meta.env.VITE_API_BASE_URL}/api/research/start`,
         {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
-            ...(token && { Cookie: `crb_auth_token=${token}` }),
           },
           credentials: 'include',
           body: JSON.stringify({

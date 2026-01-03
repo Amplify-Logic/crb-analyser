@@ -2,9 +2,10 @@
   "category": "ai_agents",
   "description": "No-code and low-code platforms for building AI agents that can take autonomous actions",
   "meta": {
-    "source": "WeAreNoCode - 7 AI Skills video (Dec 2025) + web research",
+    "source": "WeAreNoCode - 7 AI Skills video (Dec 2025) + web verification",
     "added": "2025-12-27",
-    "verified_status": "UNVERIFIED - needs pricing verification"
+    "last_verified": "2025-12-27",
+    "verified_status": "VERIFIED - Lindy pricing confirmed"
   },
   "vendors": [
     {
@@ -33,28 +34,39 @@
         "Customer support triage"
       ],
       "pricing": {
-        "model": "subscription",
+        "model": "credits",
         "currency": "USD",
         "tiers": [
           {
             "name": "Free",
             "price": 0,
-            "features": ["Limited credits", "Basic agents", "Email support"]
+            "features": ["400 credits/month", "Up to 40 tasks", "1M-character knowledge base", "100+ integrations", "No credit card required"]
           },
           {
             "name": "Pro",
-            "price": 49,
+            "price": 29.99,
             "per": "month",
-            "features": ["More credits", "Priority support", "Advanced integrations"]
+            "features": ["3,000 credits", "Up to 1,500 tasks", "30 calls/month", "20M-character knowledge base", "4,000+ integrations", "1 concurrent call", "English-only support"],
+            "add_on": "Team members $19.99/mo each"
           },
           {
-            "name": "Team",
-            "price": null,
-            "per": "custom",
-            "features": ["Team collaboration", "Custom limits", "Enterprise security"]
+            "name": "Business",
+            "price": 199.99,
+            "per": "month",
+            "features": ["20,000 credits", "All Pro features", "Unlimited phone calls", "30+ supported languages", "50M-character knowledge base"]
           }
         ],
-        "verified_status": "UNVERIFIED"
+        "credit_info": {
+          "simple_tasks": "1 credit",
+          "advanced_models": "More credits (GPT-4o, Claude 3.5)",
+          "lighter_models": "Fewer credits (GPT-3.5, Mistral)",
+          "additional_credits": "$10 per 1,000",
+          "phone_calls": "$0.19/min with GPT-4o",
+          "pay_as_you_go": "$0.080 per credit"
+        },
+        "verified_status": "VERIFIED",
+        "verified_date": "2025-12-27",
+        "source": "lindy.ai/pricing (via multiple review sites)"
       },
       "best_for": [
         "Non-technical users wanting AI automation",
@@ -92,8 +104,8 @@
         "Crew AI",
         "n8n (with AI nodes)"
       ],
-      "verified_at": null,
-      "source": "WeAreNoCode video Dec 2025"
+      "verified_at": "2025-12-27T00:00:00Z",
+      "source": "WeAreNoCode video Dec 2025, verified via lindy.ai/pricing"
     },
     {
       "slug": "n8n-ai",
@@ -112,15 +124,15 @@
       "verified_at": "2025-12-17T00:00:00Z"
     },
     {
-      "slug": "outbound-agents",
-      "name": "Outbound (AI Research Agents)",
+      "slug": "outbond-agents",
+      "name": "Outbond (AI Research Agents)",
       "category": "ai_agents",
       "subcategory": "sales_research_agents",
-      "website": "https://www.outbound.com",
+      "website": "https://outbond.ai",
       "description": "AI agents for sales research and prospecting. Best for doing research about leads at scale. See full entry in ai_sales_tools.json.",
       "note": "Full vendor entry in vendors/ai_sales_tools.json",
       "use_case": "Research thousands of leads simultaneously - company info, decision makers, competitive intel",
-      "verified_at": null
+      "verified_at": "2025-12-27T00:00:00Z"
     }
   ],
   "agent_use_case_framework": {

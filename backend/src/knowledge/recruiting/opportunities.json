@@ -2,6 +2,62 @@
   "industry": "recruiting",
   "ai_opportunities": [
     {
+      "id": "ai-voice-client-intake",
+      "name": "AI Voice Agent for Client & Candidate Calls",
+      "description": "AI phone system that handles inbound client inquiries, qualifies new job orders, screens candidates, and schedules interviews 24/7",
+      "category": "growth",
+      "impact": {
+        "value_saved": {
+          "time_hours_per_week": 15,
+          "description": "Reduces phone time for initial inquiries and scheduling"
+        },
+        "value_created": {
+          "description": "Capture leads 24/7, qualify before recruiter time investment",
+          "potential_revenue_impact": "25-35% more qualified opportunities in pipeline"
+        }
+      },
+      "customer_value_score": 8,
+      "business_health_score": 10,
+      "implementation": {
+        "complexity": "medium",
+        "timeline_weeks": 4,
+        "required_data": ["Qualification questions", "Job order intake process", "Candidate screening scripts", "Calendar availability"]
+      },
+      "options": {
+        "off_the_shelf": {
+          "tools": ["Smith.ai", "Ruby Receptionist", "Nexa"],
+          "cost_range": "€300-600/month",
+          "pros": ["Human + AI hybrid", "Professional handling", "Lead qualification", "24/7 coverage"],
+          "cons": ["Per-call pricing", "Not recruiting-specific"]
+        },
+        "best_in_class": {
+          "tools": ["Paradox Voice", "TextUs Voice", "RingCentral AI"],
+          "cost_range": "€200-500/month",
+          "pros": ["ATS integration", "Call recording", "AI transcription", "Analytics"],
+          "cons": ["May lack deep AI qualification"]
+        },
+        "custom_solution": {
+          "approach": "AI voice agent using Claude API + Twilio for intake calls, integrated with ATS",
+          "cost_range": "€10,000-25,000 one-time + €200-500/month",
+          "pros": ["Your qualification process", "Custom scripts for clients vs candidates", "ATS integration", "24/7 AI"],
+          "cons": ["Significant development", "Needs call flow design"]
+        }
+      },
+      "roi_example": {
+        "scenario": "Agency getting 30 inbound calls/week, missing 40% outside hours",
+        "cost": "€500/month",
+        "value_created": "Capture 12 more leads/month → 2 more placements × €8,000 fee = €16,000/month",
+        "roi_percentage": 3100,
+        "payback_months": 0.1
+      },
+      "jevons_effect": {
+        "applies": true,
+        "mechanism": "24/7 lead capture → more job orders + candidates → more placements → may need more recruiters",
+        "demand_expansion_potential": "40% more placement capacity utilized"
+      },
+      "yc_reference": "Similar to Auto Ace (car dealerships) for AI voice booking and qualification"
+    },
+    {
       "id": "ai-candidate-matching",
       "name": "AI-Powered Candidate Matching",
       "description": "Intelligent matching of candidates to job requirements using AI/ML",
@@ -276,6 +332,14 @@
       "time_to_implement": "2 days",
       "expected_impact": "3x outreach volume with personalization",
       "tools": ["Gem", "Hireflow", "Expandi"]
+    },
+    {
+      "title": "Re-engage dormant candidates in ATS",
+      "time_to_implement": "1 day",
+      "expected_impact": "Activate 15-25 qualified candidates per month from existing database",
+      "tools": ["ATS bulk messaging", "Gem", "Make/Zapier + Twilio"],
+      "how": "Export candidates not contacted in 6-12 months, send AI-personalized message about new relevant roles",
+      "confidence": "high"
     }
   ],
   "anti_patterns": [

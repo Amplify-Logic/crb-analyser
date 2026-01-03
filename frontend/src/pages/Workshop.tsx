@@ -1,339 +1,281 @@
 /**
  * Workshop Page
  *
- * 90-minute deep voice interview after payment.
- * Structured sections with progress tracking and break functionality.
+ * Personalized 90-minute workshop with 3 phases:
+ * 1. Confirmation - Verify research findings and prioritize pain points
+ * 2. Deep-Dive - Adaptive questioning for each pain point with milestones
+ * 3. Synthesis - Final questions and transition to report generation
  */
 
-import { useState, useEffect, useRef, useCallback } from 'react'
+import { useState, useEffect } from 'react'
 import { Link, useNavigate, useSearchParams } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
-import VoiceRecorder from '../components/voice/VoiceRecorder'
+import {
+  WorkshopConfirmation,
+  WorkshopDeepDive,
+  WorkshopMilestone,
+  ConfirmationCard,
+} from '../components/workshop'
 import AudioUploader from '../components/voice/AudioUploader'
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8383'
 
-// ============================================================================
-// Types & Constants
-// ============================================================================
+// =============================================================================
+// Types
+// =============================================================================
 
-interface Message {
+type WorkshopPhase = 'loading' | 'welcome' | 'confirmation' | 'deepdive' | 'milestone' | 'synthesis' | 'complete'
+
+interface PainPoint {
   id: string
-  role: 'assistant' | 'user'
-  content: string
-  timestamp: Date
-  section?: string
+  label: string
 }
 
-interface WorkshopSection {
-  id: string
-  title: string
-  description: string
-  estimatedMinutes: number
-  topics: string[]
-  completed: boolean
+interface WorkshopState {
+  companyName: string
+  confirmationCards: ConfirmationCard[]
+  painPoints: PainPoint[]
+  detectedSignals: {
+    technical: boolean
+    budgetReady: boolean
+    decisionMaker: boolean
+  }
+  priorityOrder: string[]
+  currentPainPointIndex: number
+  milestonePainPointId: string | null
 }
 
-type InputMode = 'voice' | 'text'
-type WorkshopPhase = 'welcome' | 'active' | 'paused' | 'processing-upload' | 'complete'
-
-const WORKSHOP_SECTIONS: WorkshopSection[] = [
-  {
-    id: 'intro',
-    title: 'Introduction',
-    description: 'Confirm research findings and set the stage',
-    estimatedMinutes: 10,
-    topics: ['Company overview', 'Research validation', 'Goals for today'],
-    completed: false,
-  },
-  {
-    id: 'operations',
-    title: 'Operations',
-    description: 'Deep dive into day-to-day processes',
-    estimatedMinutes: 20,
-    topics: ['Daily workflows', 'Pain points', 'Time sinks', 'Manual tasks'],
-    completed: false,
-  },
-  {
-    id: 'technology',
-    title: 'Technology',
-    description: 'Current tools, integrations, and data',
-    estimatedMinutes: 15,
-    topics: ['Current tools', 'Integrations', 'Data sources', 'Technical debt'],
-    completed: false,
-  },
-  {
-    id: 'goals',
-    title: 'Goals & Vision',
-    description: 'What success looks like',
-    estimatedMinutes: 15,
-    topics: ['Business goals', 'Success metrics', 'Priorities', 'Timeline'],
-    completed: false,
-  },
-  {
-    id: 'budget',
-    title: 'Budget & Resources',
-    description: 'Investment capacity and constraints',
-    estimatedMinutes: 15,
-    topics: ['Budget range', 'Team capacity', 'Decision process', 'Constraints'],
-    completed: false,
-  },
-  {
-    id: 'wrapup',
-    title: 'Wrap-up',
-    description: 'Final thoughts and next steps',
-    estimatedMinutes: 15,
-    topics: ['Open questions', 'Priorities', 'Concerns', 'Excitement'],
-    completed: false,
-  },
-]
-
-// ============================================================================
+// =============================================================================
 // Component
-// ============================================================================
+// =============================================================================
 
 export default function Workshop() {
   const navigate = useNavigate()
   const [searchParams] = useSearchParams()
   const sessionId = searchParams.get('session_id') || sessionStorage.getItem('quizSessionId')
 
-  // Core state
-  const [phase, setPhase] = useState<WorkshopPhase>('welcome')
-  const [inputMode, setInputMode] = useState<InputMode>('voice')
-  const [messages, setMessages] = useState<Message[]>([])
-  const [currentInput, setCurrentInput] = useState('')
-  const [isProcessing, setIsProcessing] = useState(false)
-  const [showUploader, setShowUploader] = useState(false)
+  // Phase state
+  const [phase, setPhase] = useState<WorkshopPhase>('loading')
+  const [error, setError] = useState<string | null>(null)
 
   // Workshop state
-  const [sections, setSections] = useState<WorkshopSection[]>(WORKSHOP_SECTIONS)
-  const [currentSectionIndex, setCurrentSectionIndex] = useState(0)
-  const [startTime, setStartTime] = useState<Date | null>(null)
-  const [elapsedMinutes, setElapsedMinutes] = useState(0)
-  const [questionCount, setQuestionCount] = useState(0)
+  const [state, setState] = useState<WorkshopState>({
+    companyName: '',
+    confirmationCards: [],
+    painPoints: [],
+    detectedSignals: { technical: false, budgetReady: false, decisionMaker: false },
+    priorityOrder: [],
+    currentPainPointIndex: 0,
+    milestonePainPointId: null,
+  })
 
-  // Context
-  const [companyName, setCompanyName] = useState('')
+  // Upload modal
+  const [showUploader, setShowUploader] = useState(false)
 
-  // Refs
-  const messagesEndRef = useRef<HTMLDivElement>(null)
-  const textareaRef = useRef<HTMLTextAreaElement>(null)
-  const timerRef = useRef<NodeJS.Timeout | null>(null)
-
-  const currentSection = sections[currentSectionIndex]
-
-  // Load context from session storage
+  // Initialize workshop
   useEffect(() => {
-    const name = sessionStorage.getItem('companyName')
-    if (name) setCompanyName(name)
-  }, [])
-
-  // Timer for elapsed time
-  useEffect(() => {
-    if (phase === 'active' && startTime) {
-      timerRef.current = setInterval(() => {
-        const elapsed = Math.floor((Date.now() - startTime.getTime()) / 60000)
-        setElapsedMinutes(elapsed)
-      }, 60000)
+    if (!sessionId) {
+      navigate('/quiz')
+      return
     }
 
-    return () => {
-      if (timerRef.current) clearInterval(timerRef.current)
+    initializeWorkshop()
+  }, [sessionId])
+
+  const initializeWorkshop = async () => {
+    try {
+      // Try to get existing workshop state
+      const stateResponse = await fetch(`${API_BASE_URL}/api/workshop/state/${sessionId}`)
+
+      if (stateResponse.ok) {
+        const existingState = await stateResponse.json()
+
+        if (existingState.phase && existingState.phase !== 'confirmation') {
+          // Resume existing workshop
+          const workshopData = existingState.workshop_data || {}
+
+          setState(prev => ({
+            ...prev,
+            companyName: existingState.company_name,
+            priorityOrder: workshopData.deep_dive_order || [],
+            currentPainPointIndex: workshopData.current_deep_dive_index || 0,
+            painPoints: (workshopData.deep_dive_order || []).map((id: string, i: number) => ({
+              id,
+              label: `Pain Point ${i + 1}`,
+            })),
+          }))
+
+          setPhase(existingState.phase as WorkshopPhase)
+          return
+        }
+      }
+
+      // Start new workshop
+      setPhase('welcome')
+    } catch (err) {
+      console.error('Initialize error:', err)
+      setPhase('welcome')
     }
-  }, [phase, startTime])
+  }
 
-  // Scroll to bottom
-  useEffect(() => {
-    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' })
-  }, [messages])
-
-  // Calculate remaining time
-  const totalEstimatedMinutes = sections.reduce((sum, s) => sum + s.estimatedMinutes, 0)
-  const remainingMinutes = Math.max(0, totalEstimatedMinutes - elapsedMinutes)
-
-  // Start workshop
-  const startWorkshop = useCallback(() => {
-    setPhase('active')
-    setStartTime(new Date())
-
-    const greeting: Message = {
-      id: 'greeting-1',
-      role: 'assistant',
-      content: `Welcome to your CRB Workshop, ${companyName ? `I'm excited to dive deep into ${companyName}` : "I'm excited to learn more about your business"}.
-
-We'll cover 6 areas over the next 90 minutes:
-• Your operations and daily workflows
-• Current technology and tools
-• Goals and what success looks like
-• Budget and resource considerations
-
-**Let's start with the basics.** Can you give me a quick overview of what ${companyName || 'your company'} does and who your customers are?`,
-      timestamp: new Date(),
-      section: 'intro',
-    }
-    setMessages([greeting])
-  }, [companyName])
-
-  // Handle voice recording
-  const handleVoiceRecording = async (audioBlob: Blob) => {
-    setIsProcessing(true)
+  // Start workshop (called from welcome screen)
+  const startWorkshop = async () => {
+    setPhase('loading')
+    setError(null)
 
     try {
-      const formData = new FormData()
-      formData.append('audio', audioBlob, 'recording.webm')
-      if (sessionId) formData.append('session_id', sessionId)
-
-      const transcribeResponse = await fetch(`${API_BASE_URL}/api/interview/transcribe`, {
+      const response = await fetch(`${API_BASE_URL}/api/workshop/start`, {
         method: 'POST',
-        body: formData,
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ session_id: sessionId }),
       })
 
-      if (!transcribeResponse.ok) throw new Error('Transcription failed')
-
-      const { text } = await transcribeResponse.json()
-      if (text?.trim()) {
-        await processUserMessage(text)
-      } else {
-        setIsProcessing(false)
+      if (!response.ok) {
+        const err = await response.json()
+        throw new Error(err.detail || 'Failed to start workshop')
       }
-    } catch (err) {
-      console.error('Voice processing error:', err)
-      setIsProcessing(false)
+
+      const data = await response.json()
+
+      // Transform API response
+      const cards: ConfirmationCard[] = (data.confirmation_cards || []).map((card: any) => ({
+        category: card.category,
+        title: card.title,
+        items: card.items,
+        sourceCount: card.source_count,
+        editable: card.editable,
+      }))
+
+      const painPoints: PainPoint[] = (data.pain_points || []).map((pp: any) => ({
+        id: pp.id,
+        label: pp.label,
+      }))
+
+      setState(prev => ({
+        ...prev,
+        companyName: data.company_name,
+        confirmationCards: cards,
+        painPoints,
+        detectedSignals: {
+          technical: data.detected_signals?.technical || false,
+          budgetReady: data.detected_signals?.budget_ready || false,
+          decisionMaker: data.detected_signals?.decision_maker || false,
+        },
+      }))
+
+      setPhase('confirmation')
+    } catch (err: any) {
+      console.error('Start error:', err)
+      setError(err.message || 'Failed to start workshop')
+      setPhase('welcome')
     }
   }
 
-  // Handle text submit
-  const handleTextSubmit = async () => {
-    const text = currentInput.trim()
-    if (!text || isProcessing) return
-    setCurrentInput('')
-    await processUserMessage(text)
-  }
-
-  // Process user message
-  const processUserMessage = async (text: string) => {
-    const userMessage: Message = {
-      id: `user-${Date.now()}`,
-      role: 'user',
-      content: text,
-      timestamp: new Date(),
-      section: currentSection.id,
-    }
-    setMessages(prev => [...prev, userMessage])
-    setIsProcessing(true)
-
+  // Handle confirmation complete
+  const handleConfirmationComplete = async (data: {
+    ratings: Record<string, string>
+    corrections: any[]
+    priorityOrder: string[]
+  }) => {
     try {
-      const response = await fetch(`${API_BASE_URL}/api/interview/respond`, {
+      const response = await fetch(`${API_BASE_URL}/api/workshop/confirm`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           session_id: sessionId,
-          message: text,
-          context: {
-            company_name: companyName,
-            current_section: currentSection.id,
-            section_topics: currentSection.topics,
-            previous_messages: messages.slice(-8).map(m => ({
-              role: m.role,
-              content: m.content,
-            })),
-            question_count: questionCount,
-            is_workshop: true,
-            elapsed_minutes: elapsedMinutes,
-          },
+          ratings: data.ratings,
+          corrections: data.corrections,
+          priority_order: data.priorityOrder,
         }),
       })
 
-      if (!response.ok) throw new Error('Failed to get response')
+      if (!response.ok) throw new Error('Failed to save confirmation')
 
-      const data = await response.json()
+      // Update pain points based on priority order
+      const orderedPainPoints = data.priorityOrder.map((id, index) => {
+        const existing = state.painPoints.find(pp => pp.id === id)
+        return existing || { id, label: `Pain Point ${index + 1}` }
+      })
 
-      const assistantMessage: Message = {
-        id: `assistant-${Date.now()}`,
-        role: 'assistant',
-        content: data.response,
-        timestamp: new Date(),
-        section: currentSection.id,
-      }
-      setMessages(prev => [...prev, assistantMessage])
-      setQuestionCount(prev => prev + 1)
+      setState(prev => ({
+        ...prev,
+        priorityOrder: data.priorityOrder,
+        painPoints: orderedPainPoints,
+        currentPainPointIndex: 0,
+      }))
 
-      // Check for section transition (every ~5 questions or explicit signal)
-      if (data.section_complete || (questionCount > 0 && questionCount % 5 === 0)) {
-        if (currentSectionIndex < sections.length - 1) {
-          // Mark current section complete and move to next
-          setTimeout(() => {
-            advanceSection()
-          }, 2000)
-        }
-      }
-
-      // Check if workshop is complete
-      if (data.is_complete || currentSectionIndex >= sections.length - 1 && questionCount > 3) {
-        setTimeout(() => completeWorkshop(), 3000)
-      }
-
+      setPhase('deepdive')
     } catch (err) {
-      console.error('Message error:', err)
-      const fallback: Message = {
-        id: `assistant-${Date.now()}`,
-        role: 'assistant',
-        content: "Thanks for sharing that. Tell me more about this area of your business.",
-        timestamp: new Date(),
-      }
-      setMessages(prev => [...prev, fallback])
-    } finally {
-      setIsProcessing(false)
+      console.error('Confirm error:', err)
     }
   }
 
-  // Advance to next section
-  const advanceSection = () => {
-    setSections(prev =>
-      prev.map((s, i) => (i === currentSectionIndex ? { ...s, completed: true } : s))
-    )
+  // Handle milestone ready
+  const handleMilestoneReady = (painPointId: string) => {
+    setState(prev => ({
+      ...prev,
+      milestonePainPointId: painPointId,
+    }))
+    setPhase('milestone')
+  }
 
-    if (currentSectionIndex < sections.length - 1) {
-      const nextIndex = currentSectionIndex + 1
-      setCurrentSectionIndex(nextIndex)
-      setQuestionCount(0)
+  // Handle milestone continue
+  const handleMilestoneContinue = () => {
+    const nextIndex = state.currentPainPointIndex + 1
 
-      const nextSection = sections[nextIndex]
-      const transitionMessage: Message = {
-        id: `transition-${Date.now()}`,
-        role: 'assistant',
-        content: `Great progress! We've covered ${currentSection.title}.
-
-**Now let's talk about ${nextSection.title}** - ${nextSection.description.toLowerCase()}.
-
-${getOpeningQuestion(nextSection.id)}`,
-        timestamp: new Date(),
-        section: nextSection.id,
-      }
-      setMessages(prev => [...prev, transitionMessage])
+    if (nextIndex >= state.painPoints.length) {
+      // All pain points done, go to synthesis
+      setPhase('synthesis')
+    } else {
+      setState(prev => ({
+        ...prev,
+        currentPainPointIndex: nextIndex,
+        milestonePainPointId: null,
+      }))
+      setPhase('deepdive')
     }
   }
 
-  // Get opening question for each section
-  const getOpeningQuestion = (sectionId: string): string => {
-    const questions: Record<string, string> = {
-      operations: "Walk me through a typical day at your company. What are the main activities your team does?",
-      technology: "What tools and software does your team use daily? Any frustrations with your current setup?",
-      goals: "Looking ahead 12 months, what does success look like for your business?",
-      budget: "When it comes to investing in new tools or improvements, what's your typical decision-making process?",
-      wrapup: "We've covered a lot of ground. What questions do you have, or what did we miss?",
-    }
-    return questions[sectionId] || "What else should I know about this area?"
+  // Handle deep-dive complete
+  const handleDeepDiveComplete = () => {
+    setPhase('synthesis')
   }
 
-  // Handle audio upload
-  const handleAudioUpload = async (audioBlob: Blob, source: 'upload' | 'recording') => {
+  // Handle workshop complete
+  const handleComplete = async (finalAnswers: Record<string, any>) => {
+    setPhase('loading')
+
+    try {
+      const response = await fetch(`${API_BASE_URL}/api/workshop/complete`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          session_id: sessionId,
+          final_answers: finalAnswers,
+        }),
+      })
+
+      if (!response.ok) throw new Error('Failed to complete workshop')
+
+      setPhase('complete')
+
+      // Navigate to report after delay
+      setTimeout(() => {
+        navigate(`/report/${sessionId}/progress`)
+      }, 3000)
+    } catch (err) {
+      console.error('Complete error:', err)
+    }
+  }
+
+  // Handle audio upload (bypass workshop)
+  const handleAudioUpload = async (audioBlob: Blob) => {
     setShowUploader(false)
-    setPhase('processing-upload')
+    setPhase('loading')
 
     try {
       const formData = new FormData()
-      formData.append('audio', audioBlob, source === 'upload' ? 'upload.mp3' : 'recording.webm')
+      formData.append('audio', audioBlob, 'upload.mp3')
       if (sessionId) formData.append('session_id', sessionId)
 
       const response = await fetch(`${API_BASE_URL}/api/interview/transcribe`, {
@@ -343,66 +285,38 @@ ${getOpeningQuestion(nextSection.id)}`,
 
       if (!response.ok) throw new Error('Transcription failed')
 
-      const { text } = await response.json()
-      sessionStorage.setItem('workshopTranscript', text)
-
-      completeWorkshop()
+      // Complete workshop with uploaded audio
+      await handleComplete({ audio_upload: true })
     } catch (err) {
       console.error('Upload error:', err)
-      setPhase('active')
+      setPhase('welcome')
     }
   }
 
-  // Pause workshop
-  const pauseWorkshop = () => {
-    setPhase('paused')
-    // Save state to session storage
-    sessionStorage.setItem('workshopState', JSON.stringify({
-      messages,
-      currentSectionIndex,
-      questionCount,
-      elapsedMinutes,
-      sections,
-    }))
+  // ==========================================================================
+  // Render: Loading
+  // ==========================================================================
+
+  if (phase === 'loading') {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="text-center">
+          <motion.div
+            animate={{ rotate: 360 }}
+            transition={{ duration: 2, repeat: Infinity, ease: 'linear' }}
+            className="w-16 h-16 border-4 border-primary-600 border-t-transparent rounded-full mx-auto mb-6"
+          />
+          <h2 className="text-xl font-semibold text-gray-900 mb-2">
+            Preparing your workshop...
+          </h2>
+        </div>
+      </div>
+    )
   }
 
-  // Resume workshop
-  const resumeWorkshop = () => {
-    setPhase('active')
-    const resumeMessage: Message = {
-      id: `resume-${Date.now()}`,
-      role: 'assistant',
-      content: "Welcome back! Let's continue where we left off. What would you like to share next?",
-      timestamp: new Date(),
-    }
-    setMessages(prev => [...prev, resumeMessage])
-  }
-
-  // Complete workshop
-  const completeWorkshop = () => {
-    // Save all workshop data
-    sessionStorage.setItem('workshopMessages', JSON.stringify(messages))
-    sessionStorage.setItem('workshopCompleted', 'true')
-    sessionStorage.setItem('workshopDuration', String(elapsedMinutes))
-
-    setPhase('complete')
-
-    // Navigate to report progress after brief delay
-    setTimeout(() => {
-      navigate(`/report/${sessionId}/progress`)
-    }, 3000)
-  }
-
-  const handleKeyDown = (e: React.KeyboardEvent) => {
-    if (e.key === 'Enter' && !e.shiftKey) {
-      e.preventDefault()
-      handleTextSubmit()
-    }
-  }
-
-  // ============================================================================
+  // ==========================================================================
   // Render: Welcome
-  // ============================================================================
+  // ==========================================================================
 
   if (phase === 'welcome') {
     return (
@@ -429,27 +343,49 @@ ${getOpeningQuestion(nextSection.id)}`,
               </div>
 
               <h1 className="text-3xl font-bold text-gray-900 mb-4">
-                Your CRB Workshop
+                Your Personalized Workshop
               </h1>
               <p className="text-lg text-gray-600 mb-8">
-                A 90-minute deep dive into {companyName || 'your business'} to create your personalized AI implementation roadmap.
+                A 90-minute deep dive to create your AI implementation roadmap.
               </p>
 
-              {/* Workshop sections preview */}
+              {error && (
+                <div className="bg-red-50 text-red-700 px-4 py-3 rounded-lg mb-6">
+                  {error}
+                </div>
+              )}
+
+              {/* Workshop phases preview */}
               <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100 mb-8 text-left">
-                <h2 className="font-semibold text-gray-900 mb-4">What we'll cover:</h2>
-                <div className="grid gap-3">
-                  {sections.map((section, i) => (
-                    <div key={section.id} className="flex items-center gap-3">
-                      <div className="w-8 h-8 bg-gray-100 rounded-full flex items-center justify-center text-sm font-medium text-gray-600">
-                        {i + 1}
-                      </div>
-                      <div>
-                        <span className="font-medium text-gray-900">{section.title}</span>
-                        <span className="text-gray-500 text-sm ml-2">~{section.estimatedMinutes} min</span>
-                      </div>
+                <h2 className="font-semibold text-gray-900 mb-4">What we'll do:</h2>
+                <div className="space-y-4">
+                  <div className="flex items-start gap-3">
+                    <div className="w-8 h-8 bg-primary-100 rounded-full flex items-center justify-center text-sm font-medium text-primary-600">
+                      1
                     </div>
-                  ))}
+                    <div>
+                      <span className="font-medium text-gray-900">Confirm our research</span>
+                      <p className="text-sm text-gray-500">Verify what we know and prioritize your challenges</p>
+                    </div>
+                  </div>
+                  <div className="flex items-start gap-3">
+                    <div className="w-8 h-8 bg-primary-100 rounded-full flex items-center justify-center text-sm font-medium text-primary-600">
+                      2
+                    </div>
+                    <div>
+                      <span className="font-medium text-gray-900">Deep-dive each pain point</span>
+                      <p className="text-sm text-gray-500">Explore costs, attempts, and ideal outcomes</p>
+                    </div>
+                  </div>
+                  <div className="flex items-start gap-3">
+                    <div className="w-8 h-8 bg-primary-100 rounded-full flex items-center justify-center text-sm font-medium text-primary-600">
+                      3
+                    </div>
+                    <div>
+                      <span className="font-medium text-gray-900">Generate your roadmap</span>
+                      <p className="text-sm text-gray-500">Personalized recommendations with ROI</p>
+                    </div>
+                  </div>
                 </div>
               </div>
 
@@ -500,10 +436,10 @@ ${getOpeningQuestion(nextSection.id)}`,
                   Upload Meeting Recording
                 </h3>
                 <p className="text-gray-600 text-sm mb-6">
-                  Upload a recording of your discovery call or business discussion. Our AI will extract the key insights.
+                  Upload a recording of your discovery call. Our AI will extract the key insights.
                 </p>
                 <AudioUploader
-                  onAudioReady={handleAudioUpload}
+                  onAudioReady={(blob) => handleAudioUpload(blob)}
                   onCancel={() => setShowUploader(false)}
                   maxDurationMinutes={120}
                 />
@@ -515,62 +451,82 @@ ${getOpeningQuestion(nextSection.id)}`,
     )
   }
 
-  // ============================================================================
-  // Render: Processing Upload
-  // ============================================================================
+  // ==========================================================================
+  // Render: Confirmation (Phase 1)
+  // ==========================================================================
 
-  if (phase === 'processing-upload') {
+  if (phase === 'confirmation') {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <div className="text-center">
-          <motion.div
-            animate={{ rotate: 360 }}
-            transition={{ duration: 2, repeat: Infinity, ease: 'linear' }}
-            className="w-16 h-16 border-4 border-primary-600 border-t-transparent rounded-full mx-auto mb-6"
-          />
-          <h2 className="text-xl font-semibold text-gray-900 mb-2">Processing your recording...</h2>
-          <p className="text-gray-600">This may take a few minutes for longer recordings.</p>
-        </div>
-      </div>
+      <WorkshopConfirmation
+        companyName={state.companyName}
+        cards={state.confirmationCards}
+        painPoints={state.painPoints}
+        onComplete={handleConfirmationComplete}
+      />
     )
   }
 
-  // ============================================================================
-  // Render: Paused
-  // ============================================================================
+  // ==========================================================================
+  // Render: Deep-Dive (Phase 2)
+  // ==========================================================================
 
-  if (phase === 'paused') {
+  if (phase === 'deepdive') {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <div className="text-center max-w-md">
-          <div className="w-20 h-20 bg-yellow-100 rounded-full flex items-center justify-center mx-auto mb-6">
-            <svg className="w-10 h-10 text-yellow-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 9v6m4-6v6m7-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-            </svg>
+      <WorkshopDeepDive
+        sessionId={sessionId!}
+        companyName={state.companyName}
+        painPoints={state.painPoints}
+        currentPainPointIndex={state.currentPainPointIndex}
+        onMilestoneReady={handleMilestoneReady}
+        onComplete={handleDeepDiveComplete}
+      />
+    )
+  }
+
+  // ==========================================================================
+  // Render: Milestone
+  // ==========================================================================
+
+  if (phase === 'milestone' && state.milestonePainPointId) {
+    const currentPainPoint = state.painPoints.find(pp => pp.id === state.milestonePainPointId)
+    const isLast = state.currentPainPointIndex >= state.painPoints.length - 1
+
+    return (
+      <WorkshopMilestone
+        sessionId={sessionId!}
+        painPointId={state.milestonePainPointId}
+        painPointLabel={currentPainPoint?.label || 'Pain Point'}
+        isLastPainPoint={isLast}
+        onContinue={handleMilestoneContinue}
+        onEdit={() => setPhase('deepdive')}
+      />
+    )
+  }
+
+  // ==========================================================================
+  // Render: Synthesis (Phase 3)
+  // ==========================================================================
+
+  if (phase === 'synthesis') {
+    return (
+      <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white pb-32">
+        <div className="bg-white border-b border-gray-100">
+          <div className="max-w-3xl mx-auto px-4 py-6">
+            <h1 className="text-xl font-bold text-gray-900">Final Questions</h1>
+            <p className="text-sm text-gray-500">Just a few more details for your report</p>
           </div>
-          <h2 className="text-2xl font-bold text-gray-900 mb-2">Workshop Paused</h2>
-          <p className="text-gray-600 mb-6">
-            Take your time. Your progress has been saved and you can resume whenever you're ready.
-          </p>
-          <p className="text-sm text-gray-500 mb-8">
-            Completed: {currentSectionIndex} of {sections.length} sections
-            <br />
-            Time elapsed: {elapsedMinutes} minutes
-          </p>
-          <button
-            onClick={resumeWorkshop}
-            className="px-8 py-4 bg-primary-600 text-white font-semibold rounded-xl hover:bg-primary-700 transition"
-          >
-            Resume Workshop
-          </button>
+        </div>
+
+        <div className="max-w-3xl mx-auto px-4 py-8">
+          <SynthesisForm onComplete={handleComplete} />
         </div>
       </div>
     )
   }
 
-  // ============================================================================
+  // ==========================================================================
   // Render: Complete
-  // ============================================================================
+  // ==========================================================================
 
   if (phase === 'complete') {
     return (
@@ -586,234 +542,97 @@ ${getOpeningQuestion(nextSection.id)}`,
             </svg>
           </div>
           <h2 className="text-2xl font-bold text-gray-900 mb-2">Workshop Complete!</h2>
-          <p className="text-gray-600 mb-4">Thank you for sharing so much about your business.</p>
+          <p className="text-gray-600 mb-4">Thank you for the deep insights.</p>
           <div className="animate-pulse text-primary-600">Generating your personalized report...</div>
         </motion.div>
       </div>
     )
   }
 
-  // ============================================================================
-  // Render: Active Workshop
-  // ============================================================================
+  // Fallback
+  return null
+}
+
+// =============================================================================
+// Synthesis Form Component
+// =============================================================================
+
+interface SynthesisFormProps {
+  onComplete: (answers: Record<string, any>) => void
+}
+
+function SynthesisForm({ onComplete }: SynthesisFormProps) {
+  const [stakeholders, setStakeholders] = useState('')
+  const [timeline, setTimeline] = useState('')
+  const [additions, setAdditions] = useState('')
+  const [isSubmitting, setIsSubmitting] = useState(false)
+
+  const handleSubmit = () => {
+    setIsSubmitting(true)
+    onComplete({
+      stakeholders: stakeholders.split(',').map(s => s.trim()).filter(Boolean),
+      timeline,
+      additions: additions || null,
+    })
+  }
 
   return (
-    <div className="min-h-screen bg-gray-50 flex flex-col">
-      {/* Header */}
-      <nav className="fixed top-0 left-0 right-0 z-50 bg-white border-b border-gray-200">
-        <div className="max-w-4xl mx-auto px-4 py-3">
-          <div className="flex items-center justify-between mb-2">
-            <Link to="/" className="text-xl font-bold text-gray-900">
-              CRB<span className="text-primary-600">Analyser</span>
-            </Link>
-            <div className="flex items-center gap-4">
-              <span className="text-sm text-gray-500">
-                ⏱️ ~{remainingMinutes} min left
-              </span>
-            </div>
-          </div>
-
-          {/* Section progress */}
-          <div className="flex items-center gap-1">
-            {sections.map((section, i) => (
-              <div key={section.id} className="flex-1 flex items-center">
-                <div
-                  className={`h-1.5 flex-1 rounded-full transition-colors ${
-                    section.completed
-                      ? 'bg-green-500'
-                      : i === currentSectionIndex
-                      ? 'bg-primary-600'
-                      : 'bg-gray-200'
-                  }`}
-                />
-                {i < sections.length - 1 && <div className="w-1" />}
-              </div>
-            ))}
-          </div>
-          <div className="flex justify-between mt-1">
-            <span className="text-xs text-gray-500">{currentSection.title}</span>
-            <span className="text-xs text-gray-500">
-              {currentSectionIndex + 1}/{sections.length}
-            </span>
-          </div>
-        </div>
-      </nav>
-
-      {/* Messages */}
-      <div className="flex-1 pt-28 pb-48 px-4 overflow-y-auto">
-        <div className="max-w-2xl mx-auto space-y-4">
-          <AnimatePresence>
-            {messages.map((message) => (
-              <motion.div
-                key={message.id}
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                className={`flex ${message.role === 'user' ? 'justify-end' : 'justify-start'}`}
-              >
-                <div
-                  className={`max-w-[85%] rounded-2xl px-5 py-4 ${
-                    message.role === 'user'
-                      ? 'bg-primary-600 text-white'
-                      : 'bg-white border border-gray-200 text-gray-900'
-                  }`}
-                >
-                  {message.role === 'assistant' && (
-                    <div className="flex items-center gap-2 mb-2">
-                      <div className="w-6 h-6 bg-primary-100 rounded-full flex items-center justify-center">
-                        <svg className="w-4 h-4 text-primary-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
-                        </svg>
-                      </div>
-                      <span className="text-sm font-medium text-primary-600">CRB Analyst</span>
-                    </div>
-                  )}
-                  <div
-                    className="whitespace-pre-wrap"
-                    dangerouslySetInnerHTML={{
-                      __html: message.content.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
-                    }}
-                  />
-                </div>
-              </motion.div>
-            ))}
-          </AnimatePresence>
-
-          {isProcessing && (
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              className="flex justify-start"
-            >
-              <div className="bg-white border border-gray-200 rounded-2xl px-5 py-4">
-                <div className="flex items-center gap-2">
-                  <div className="w-2 h-2 bg-primary-600 rounded-full animate-bounce" style={{ animationDelay: '0ms' }} />
-                  <div className="w-2 h-2 bg-primary-600 rounded-full animate-bounce" style={{ animationDelay: '150ms' }} />
-                  <div className="w-2 h-2 bg-primary-600 rounded-full animate-bounce" style={{ animationDelay: '300ms' }} />
-                </div>
-              </div>
-            </motion.div>
-          )}
-
-          <div ref={messagesEndRef} />
-        </div>
+    <div className="space-y-6">
+      <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
+        <label className="block text-sm font-medium text-gray-900 mb-2">
+          Who else needs to be involved in this decision?
+        </label>
+        <input
+          type="text"
+          value={stakeholders}
+          onChange={(e) => setStakeholders(e.target.value)}
+          placeholder="e.g., CEO, CFO, IT Manager (comma separated)"
+          className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+        />
       </div>
 
-      {/* Input area */}
-      <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200">
-        <div className="max-w-2xl mx-auto px-4 py-4">
-          {/* Mode toggle and actions */}
-          <div className="flex justify-between items-center mb-4">
-            <div className="inline-flex bg-gray-100 rounded-lg p-1">
-              <button
-                onClick={() => setInputMode('voice')}
-                className={`px-4 py-1.5 rounded-md text-sm font-medium transition ${
-                  inputMode === 'voice' ? 'bg-white text-gray-900 shadow-sm' : 'text-gray-600'
-                }`}
-              >
-                Voice
-              </button>
-              <button
-                onClick={() => setInputMode('text')}
-                className={`px-4 py-1.5 rounded-md text-sm font-medium transition ${
-                  inputMode === 'text' ? 'bg-white text-gray-900 shadow-sm' : 'text-gray-600'
-                }`}
-              >
-                Type
-              </button>
-            </div>
-
-            <div className="flex items-center gap-3">
-              <button
-                onClick={pauseWorkshop}
-                className="text-sm text-gray-500 hover:text-gray-700 flex items-center gap-1"
-              >
-                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 9v6m4-6v6m7-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-                </svg>
-                Take a break
-              </button>
-              <button
-                onClick={() => setShowUploader(true)}
-                className="text-sm text-gray-500 hover:text-gray-700 flex items-center gap-1"
-              >
-                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
-                </svg>
-                Upload audio
-              </button>
-            </div>
-          </div>
-
-          {inputMode === 'voice' ? (
-            <div className="flex flex-col items-center">
-              <VoiceRecorder
-                onRecordingComplete={handleVoiceRecording}
-                size="medium"
-                disabled={isProcessing}
-              />
-            </div>
-          ) : (
-            <div className="flex gap-3">
-              <textarea
-                ref={textareaRef}
-                value={currentInput}
-                onChange={(e) => setCurrentInput(e.target.value)}
-                onKeyDown={handleKeyDown}
-                placeholder="Type your response..."
-                className="flex-1 px-4 py-3 border border-gray-200 rounded-xl resize-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
-                rows={2}
-                disabled={isProcessing}
-              />
-              <button
-                onClick={handleTextSubmit}
-                disabled={!currentInput.trim() || isProcessing}
-                className={`px-5 py-3 rounded-xl font-medium transition ${
-                  currentInput.trim() && !isProcessing
-                    ? 'bg-primary-600 text-white hover:bg-primary-700'
-                    : 'bg-gray-200 text-gray-400 cursor-not-allowed'
-                }`}
-              >
-                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
-                </svg>
-              </button>
-            </div>
-          )}
-        </div>
+      <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
+        <label className="block text-sm font-medium text-gray-900 mb-2">
+          What's your ideal timeline for making changes?
+        </label>
+        <select
+          value={timeline}
+          onChange={(e) => setTimeline(e.target.value)}
+          className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+        >
+          <option value="">Select timeline...</option>
+          <option value="immediate">Immediately (next 30 days)</option>
+          <option value="quarter">This quarter</option>
+          <option value="half">Next 6 months</option>
+          <option value="year">Within a year</option>
+          <option value="exploring">Just exploring options</option>
+        </select>
       </div>
 
-      {/* Upload modal */}
-      <AnimatePresence>
-        {showUploader && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50"
-            onClick={() => setShowUploader(false)}
-          >
-            <motion.div
-              initial={{ scale: 0.95 }}
-              animate={{ scale: 1 }}
-              exit={{ scale: 0.95 }}
-              className="bg-white rounded-2xl p-6 max-w-md w-full"
-              onClick={e => e.stopPropagation()}
-            >
-              <h3 className="text-lg font-semibold text-gray-900 mb-2">
-                Upload Recording
-              </h3>
-              <p className="text-gray-600 text-sm mb-6">
-                Have additional context from a call or meeting? Upload it here.
-              </p>
-              <AudioUploader
-                onAudioReady={handleAudioUpload}
-                onCancel={() => setShowUploader(false)}
-                maxDurationMinutes={120}
-              />
-            </motion.div>
-          </motion.div>
-        )}
-      </AnimatePresence>
+      <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
+        <label className="block text-sm font-medium text-gray-900 mb-2">
+          Anything else we should know?
+        </label>
+        <textarea
+          value={additions}
+          onChange={(e) => setAdditions(e.target.value)}
+          placeholder="Any additional context, concerns, or priorities..."
+          className="w-full px-4 py-3 border border-gray-200 rounded-xl resize-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+          rows={4}
+        />
+      </div>
+
+      <button
+        onClick={handleSubmit}
+        disabled={!timeline || isSubmitting}
+        className={`w-full px-6 py-4 rounded-xl font-semibold transition ${
+          timeline && !isSubmitting
+            ? 'bg-primary-600 text-white hover:bg-primary-700'
+            : 'bg-gray-200 text-gray-400 cursor-not-allowed'
+        }`}
+      >
+        {isSubmitting ? 'Generating Report...' : 'Generate My Report'}
+      </button>
     </div>
   )
 }

@@ -26,6 +26,9 @@ KNOWLEDGE_BASE_PATH = Path(__file__).parent
 
 VENDOR_CATEGORIES = [
     "ai_assistants",
+    "ai_agents",
+    "ai_content_creation",
+    "ai_sales_tools",
     "analytics",
     "automation",
     "crm",

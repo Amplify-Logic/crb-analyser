@@ -1,0 +1,497 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CRB Full Reports - Model Comparison</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        :root {
+            --claude: #D97706; --gpt: #10B981; --gemini: #3B82F6;
+            --bg: #0F172A; --card: #1E293B; --card-hover: #334155;
+            --text: #F8FAFC; --text-sec: #94A3B8; --text-muted: #64748B;
+            --border: #334155; --success: #22C55E; --warning: #EAB308; --danger: #EF4444;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Inter', -apple-system, sans-serif; background: var(--bg); color: var(--text); }
+        .container { max-width: 1200px; margin: 0 auto; padding: 1.5rem; }
+
+        /* Tabs */
+        .main-tabs { display: flex; gap: 0; margin-bottom: 0; border-bottom: 2px solid var(--border); }
+        .main-tab { flex: 1; padding: 1rem 1.5rem; background: var(--card); border: none; color: var(--text-sec); cursor: pointer; font-size: 1rem; font-weight: 600; transition: all 0.2s; border-radius: 0.75rem 0.75rem 0 0; margin-right: 2px; }
+        .main-tab:hover { background: var(--card-hover); color: var(--text); }
+        .main-tab.active { color: var(--text); border-bottom: 3px solid; margin-bottom: -2px; }
+        .main-tab.claude.active { background: rgba(217,119,6,0.15); border-color: var(--claude); }
+        .main-tab.gpt.active { background: rgba(16,185,129,0.15); border-color: var(--gpt); }
+        .main-tab.gemini.active { background: rgba(59,130,246,0.15); border-color: var(--gemini); }
+        .main-tab .badge { font-size: 0.7rem; padding: 0.2rem 0.5rem; border-radius: 1rem; margin-left: 0.5rem; }
+        .claude .badge { background: var(--claude); color: #000; }
+        .gpt .badge { background: var(--gpt); color: #000; }
+        .gemini .badge { background: var(--gemini); color: #fff; }
+
+        /* Report Panel */
+        .report-panel { display: none; background: var(--card); border-radius: 0 0 1rem 1rem; padding: 2rem; border: 1px solid var(--border); border-top: none; }
+        .report-panel.active { display: block; }
+
+        /* Executive Summary */
+        .exec-summary { margin-bottom: 2rem; }
+        .headline { font-size: 1.4rem; font-weight: 600; margin-bottom: 1rem; line-height: 1.4; padding: 1rem; background: var(--bg); border-radius: 0.75rem; border-left: 4px solid; }
+        .claude-panel .headline { border-color: var(--claude); }
+        .gpt-panel .headline { border-color: var(--gpt); }
+        .gemini-panel .headline { border-color: var(--gemini); }
+
+        .key-insight { background: var(--bg); padding: 1rem; border-radius: 0.75rem; margin-bottom: 1rem; }
+        .key-insight strong { color: var(--warning); }
+
+        .scores-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 1rem; margin-bottom: 1.5rem; }
+        .score-card { background: var(--bg); padding: 1rem; border-radius: 0.75rem; text-align: center; }
+        .score-card .value { font-size: 1.75rem; font-weight: 700; }
+        .score-card .label { font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; }
+
+        /* Top Opportunities */
+        .opportunities { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1rem; margin-bottom: 1.5rem; }
+        .opp-card { background: var(--bg); padding: 1rem; border-radius: 0.75rem; border-left: 3px solid var(--success); }
+        .opp-card h4 { font-size: 0.95rem; margin-bottom: 0.5rem; }
+        .opp-card .value { color: var(--success); font-weight: 700; font-size: 1.1rem; }
+
+        /* Not Recommended */
+        .not-rec-section { margin-bottom: 2rem; }
+        .not-rec-section h3 { color: var(--danger); margin-bottom: 1rem; }
+        .not-rec-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; }
+        .not-rec-card { background: var(--bg); padding: 1rem; border-radius: 0.75rem; border-left: 3px solid var(--danger); }
+        .not-rec-card h4 { font-size: 0.9rem; margin-bottom: 0.5rem; color: var(--danger); }
+        .not-rec-card p { font-size: 0.85rem; color: var(--text-sec); }
+
+        /* Findings */
+        .findings-section h3 { margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem; }
+        .findings-grid { display: grid; gap: 1rem; }
+        .finding { background: var(--bg); border-radius: 0.75rem; padding: 1.25rem; border: 1px solid var(--border); }
+        .finding.not-recommended { border-left: 4px solid var(--danger); }
+        .finding-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 0.75rem; gap: 1rem; }
+        .finding-title { font-size: 1rem; font-weight: 600; flex: 1; }
+        .finding-badges { display: flex; gap: 0.5rem; flex-shrink: 0; }
+        .badge-conf { padding: 0.2rem 0.6rem; border-radius: 0.25rem; font-size: 0.7rem; font-weight: 600; text-transform: uppercase; }
+        .badge-conf.high { background: rgba(34,197,94,0.2); color: var(--success); }
+        .badge-conf.medium { background: rgba(234,179,8,0.2); color: var(--warning); }
+        .badge-conf.low { background: rgba(239,68,68,0.2); color: var(--danger); }
+        .badge-cat { padding: 0.2rem 0.6rem; border-radius: 0.25rem; font-size: 0.65rem; background: var(--card); color: var(--text-muted); text-transform: uppercase; }
+        .finding-desc { font-size: 0.9rem; color: var(--text-sec); margin-bottom: 1rem; line-height: 1.5; }
+        .finding-current { font-size: 0.8rem; color: var(--text-muted); margin-bottom: 0.75rem; padding: 0.5rem; background: var(--card); border-radius: 0.5rem; }
+        .finding-sources { font-size: 0.75rem; color: var(--text-muted); margin-bottom: 1rem; }
+        .finding-sources li { margin-left: 1rem; margin-bottom: 0.25rem; }
+        .finding-metrics { display: flex; gap: 1.5rem; padding-top: 0.75rem; border-top: 1px solid var(--border); flex-wrap: wrap; }
+        .metric { text-align: center; min-width: 80px; }
+        .metric-val { font-size: 1.1rem; font-weight: 700; }
+        .metric-val.savings { color: var(--success); }
+        .metric-val.revenue { color: var(--gemini); }
+        .metric-label { font-size: 0.65rem; color: var(--text-muted); text-transform: uppercase; }
+
+        /* Vendor Section */
+        .vendor-rec { background: var(--card-hover); padding: 1rem; border-radius: 0.5rem; margin-top: 1rem; }
+        .vendor-rec h5 { font-size: 0.85rem; margin-bottom: 0.5rem; color: var(--text-sec); }
+        .vendor-table { width: 100%; font-size: 0.8rem; }
+        .vendor-table td { padding: 0.25rem 0.5rem; }
+        .vendor-name { font-weight: 600; }
+        .vendor-price { color: var(--success); }
+
+        /* Why Not / What Instead */
+        .why-not { background: rgba(239,68,68,0.1); padding: 0.75rem; border-radius: 0.5rem; margin-top: 0.75rem; }
+        .why-not strong { color: var(--danger); }
+        .what-instead { background: rgba(34,197,94,0.1); padding: 0.75rem; border-radius: 0.5rem; margin-top: 0.5rem; }
+        .what-instead strong { color: var(--success); }
+
+        /* Stats Bar */
+        .stats-bar { display: flex; gap: 2rem; padding: 1rem; background: var(--bg); border-radius: 0.75rem; margin-bottom: 1.5rem; flex-wrap: wrap; }
+        .stat-item { text-align: center; }
+        .stat-item .val { font-size: 1.25rem; font-weight: 700; }
+        .stat-item .lbl { font-size: 0.7rem; color: var(--text-muted); }
+
+        @media (max-width: 768px) {
+            .scores-grid { grid-template-columns: repeat(3, 1fr); }
+            .not-rec-grid { grid-template-columns: 1fr; }
+            .main-tab { padding: 0.75rem; font-size: 0.85rem; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 style="text-align:center; margin: 1.5rem 0; font-size: 1.75rem;">📊 CRB Full Reports Comparison</h1>
+        <p style="text-align:center; color: var(--text-sec); margin-bottom: 1.5rem;">ComfortAir HVAC Services • €2M Revenue • 25 Employees</p>
+
+        <div class="main-tabs">
+            <button class="main-tab claude active" onclick="showReport('claude')">Claude Opus 4.5<span class="badge">$0.64</span></button>
+            <button class="main-tab gpt" onclick="showReport('gpt')">GPT-5.2<span class="badge">$0.04</span></button>
+            <button class="main-tab gemini" onclick="showReport('gemini')">Gemini 3 Pro<span class="badge">$0.02</span></button>
+        </div>
+
+        <!-- CLAUDE OPUS REPORT -->
+        <div id="claude-report" class="report-panel claude-panel active">
+            <div class="stats-bar">
+                <div class="stat-item"><div class="val">149.6s</div><div class="lbl">Time</div></div>
+                <div class="stat-item"><div class="val">8,192</div><div class="lbl">Tokens</div></div>
+                <div class="stat-item"><div class="val">11</div><div class="lbl">Findings</div></div>
+                <div class="stat-item"><div class="val" style="color:var(--success)">64%</div><div class="lbl">HIGH Conf</div></div>
+                <div class="stat-item"><div class="val">27%</div><div class="lbl">MEDIUM</div></div>
+                <div class="stat-item"><div class="val" style="color:var(--danger)">9%</div><div class="lbl">LOW</div></div>
+            </div>
+
+            <div class="exec-summary">
+                <div class="headline">"ComfortAir is leaving €180K-€320K annually on the table through missed calls, inefficient scheduling, and manual processes—but has strong fundamentals and team readiness to capture this value within 6 months."</div>
+                <div class="key-insight"><strong>💡 Key Insight:</strong> With 25% missed calls (10-15 daily) and 2-4 hour lead response times, ComfortAir is losing an estimated €91K-€182K in potential revenue annually. Combined with technicians operating at 67% of industry revenue benchmarks, the path to €4M revenue runs through technology—not additional office headcount.</div>
+
+                <div class="scores-grid">
+                    <div class="score-card"><div class="value">62</div><div class="label">AI Readiness</div></div>
+                    <div class="score-card"><div class="value">6</div><div class="label">Customer Value</div></div>
+                    <div class="score-card"><div class="value">7</div><div class="label">Business Health</div></div>
+                    <div class="score-card"><div class="value" style="color:var(--success)">€180K</div><div class="label">Min Value</div></div>
+                    <div class="score-card"><div class="value" style="color:var(--success)">€320K</div><div class="label">Max Value</div></div>
+                </div>
+
+                <h3 style="margin-bottom:1rem">🚀 Top Opportunities</h3>
+                <div class="opportunities">
+                    <div class="opp-card"><h4>AI-Powered Call Handling & Lead Capture</h4><div class="value">€91K-€182K/year</div><div style="font-size:0.8rem;color:var(--text-muted)">Low effort • 2-4 weeks</div></div>
+                    <div class="opp-card"><h4>Intelligent Route Optimization & Scheduling</h4><div class="value">€35K-€60K/year</div><div style="font-size:0.8rem;color:var(--text-muted)">Medium effort • 6-8 weeks</div></div>
+                    <div class="opp-card"><h4>Automated Customer Communication Hub</h4><div class="value">€25K-€40K/year</div><div style="font-size:0.8rem;color:var(--text-muted)">Low effort • 2-3 weeks</div></div>
+                    <div class="opp-card"><h4>FSM Platform Migration</h4><div class="value">€30K-€45K/year</div><div style="font-size:0.8rem;color:var(--text-muted)">High effort • 8-12 weeks</div></div>
+                </div>
+            </div>
+
+            <div class="not-rec-section">
+                <h3>⛔ Not Recommended</h3>
+                <div class="not-rec-grid">
+                    <div class="not-rec-card"><h4>ServiceTitan Implementation</h4><p>€15K-€25K annual cost exceeds budget. 4-6 month timeline. Mid-market FSM delivers 90% at 40% cost.</p></div>
+                    <div class="not-rec-card"><h4>Custom AI Chatbot Development</h4><p>Building bespoke AI with €5K-15K budget is impractical. Off-the-shelf solutions offer proven functionality.</p></div>
+                    <div class="not-rec-card"><h4>Full Office Automation Before Core Systems</h4><p>Revenue leakage from missed leads dwarfs admin time savings. Fix lead capture first.</p></div>
+                </div>
+            </div>
+
+            <div class="findings-section">
+                <h3>📋 All Findings (11)</h3>
+                <div class="findings-grid">
+                    <div class="finding">
+                        <div class="finding-header"><div class="finding-title">Critical Revenue Leakage from Missed Calls</div><div class="finding-badges"><span class="badge-conf high">HIGH</span><span class="badge-cat">Growth</span></div></div>
+                        <p class="finding-desc">With 40-60 daily calls and 25% missed call rate, ComfortAir is missing 10-15 calls daily. At average job value of €350 and 45% close rate, this represents €1,575-€2,362 in potential daily revenue, or €91K-€182K annually. Industry data shows AI call handling captures 85%+ of after-hours leads vs 0% with voicemail.</p>
+                        <div class="finding-current">📍 Based on: missed_call_percentage: 25%, call_volume_daily: 40-60, lead_response_time: 2-4 hours</div>
+                        <ul class="finding-sources"><li>ServiceTitan 2023 Industry Report - leads contacted within 5 minutes are 21x more likely to convert</li><li>Callingly 2024 Study - AI call handling captures 85%+ of after-hours leads</li></ul>
+                        <div class="finding-metrics"><div class="metric"><div class="metric-val revenue">€91K-182K</div><div class="metric-label">Revenue Potential</div></div><div class="metric"><div class="metric-val">9/10</div><div class="metric-label">Customer</div></div><div class="metric"><div class="metric-val">10/10</div><div class="metric-label">Business</div></div></div>
+                        <div class="vendor-rec"><h5>Recommended Vendors:</h5><table class="vendor-table"><tr><td class="vendor-name">ServiceTitan Phones Pro</td><td class="vendor-price">€150-250/mo</td><td>Deep FSM integration, AI transcription</td></tr><tr><td class="vendor-name">Smith.ai</td><td class="vendor-price">€300-500/mo</td><td>24/7 live + AI hybrid, bilingual</td></tr><tr><td class="vendor-name">Podium AI</td><td class="vendor-price">€200-400/mo</td><td>Text-first, review management included</td></tr></table></div>
+                    </div>
+
+                    <div class="finding">
+                        <div class="finding-header"><div class="finding-title">Technician Revenue Significantly Below Industry Benchmark</div><div class="finding-badges"><span class="badge-conf high">HIGH</span><span class="badge-cat">Efficiency</span></div></div>
+                        <p class="finding-desc">At €2M revenue with 15 technicians, ComfortAir generates €133,333 per technician—67% of the €200,000 industry median. This €1M annual gap stems from scheduling inefficiencies, poor route optimization, and excessive windshield time.</p>
+                        <div class="finding-current">📍 Based on: scheduling_pain: Technicians often double-booked, route planning is guesswork</div>
+                        <ul class="finding-sources"><li>ACHR News 2024 - median revenue per HVAC technician €200,000</li><li>Coolfront 2023 Study - FSM software improves dispatch efficiency from 55% to 65-75%</li></ul>
+                        <div class="finding-metrics"><div class="metric"><div class="metric-val savings">€25K</div><div class="metric-label">Annual Savings</div></div><div class="metric"><div class="metric-val revenue">€100K-200K</div><div class="metric-label">Revenue</div></div><div class="metric"><div class="metric-val">15 hrs</div><div class="metric-label">Hours/Week</div></div></div>
+                        <div class="vendor-rec"><h5>Recommended Vendors:</h5><table class="vendor-table"><tr><td class="vendor-name">Housecall Pro</td><td class="vendor-price">€150-350/mo</td><td>Easy implementation, GPS tracking, within budget</td></tr><tr><td class="vendor-name">Jobber</td><td class="vendor-price">€100-250/mo</td><td>Excellent route optimization, client hub</td></tr><tr><td class="vendor-name">FieldEdge</td><td class="vendor-price">€200-400/mo</td><td>HVAC-specific, QuickBooks integration</td></tr></table></div>
+                    </div>
+
+                    <div class="finding">
+                        <div class="finding-header"><div class="finding-title">25 Hours Weekly Admin Time Drain</div><div class="finding-badges"><span class="badge-conf high">HIGH</span><span class="badge-cat">Efficiency</span></div></div>
+                        <p class="finding-desc">The stated 25 hours weekly on manual scheduling and callbacks represents €21,000-€31,000 in annual labor cost. Industry benchmarks show FSM software reduces admin time from 2.5 hours/day to 1 hour—a 60% reduction.</p>
+                        <div class="finding-current">📍 Based on: hours_wasted_weekly: 25, biggest_time_waste: Manually scheduling technicians</div>
+                        <div class="finding-metrics"><div class="metric"><div class="metric-val savings">€21K</div><div class="metric-label">Annual Savings</div></div><div class="metric"><div class="metric-val">15 hrs</div><div class="metric-label">Hours/Week</div></div><div class="metric"><div class="metric-val">6/10</div><div class="metric-label">Customer</div></div></div>
+                    </div>
+
+                    <div class="finding">
+                        <div class="finding-header"><div class="finding-title">Customer Communication Overload Crushing Office Staff</div><div class="finding-badges"><span class="badge-conf high">HIGH</span><span class="badge-cat">Customer Experience</span></div></div>
+                        <p class="finding-desc">With 15-25 daily jobs and no automated ETA system, each job generates 2-3 'Where's my tech?' calls. Automated ETA updates via text reduce inbound calls by 60-70% while improving CSAT scores by 15-25%.</p>
+                        <div class="finding-current">📍 Based on: Communication pain: Customers call repeatedly asking for ETA, office staff overwhelmed</div>
+                        <div class="finding-metrics"><div class="metric"><div class="metric-val savings">€18K</div><div class="metric-label">Annual Savings</div></div><div class="metric"><div class="metric-val revenue">€15K-30K</div><div class="metric-label">Revenue</div></div><div class="metric"><div class="metric-val">10/10</div><div class="metric-label">Customer</div></div></div>
+                    </div>
+
+                    <div class="finding">
+                        <div class="finding-header"><div class="finding-title">Low Repeat Customer Rate Signals Relationship Gap</div><div class="finding-badges"><span class="badge-conf medium">MEDIUM</span><span class="badge-cat">Growth</span></div></div>
+                        <p class="finding-desc">35% repeat customer rate is below the 50-60% HVAC industry benchmark. With membership customers worth €3,000-€10,000 lifetime vs €200-€500 one-time, each 5% improvement in retention could represent €50K-€100K in lifetime value.</p>
+                        <div class="finding-current">📍 Based on: repeat_customer_rate: 35%, review_collection: rarely</div>
+                        <div class="finding-metrics"><div class="metric"><div class="metric-val revenue">€50K-100K</div><div class="metric-label">Revenue Potential</div></div><div class="metric"><div class="metric-val">8/10</div><div class="metric-label">Customer</div></div></div>
+                    </div>
+
+                    <div class="finding">
+                        <div class="finding-header"><div class="finding-title">Review Collection Gap Limiting Organic Growth</div><div class="finding-badges"><span class="badge-conf medium">MEDIUM</span><span class="badge-cat">Growth</span></div></div>
+                        <p class="finding-desc">With 'rarely' collected reviews and 3,750-6,250 annual jobs, ComfortAir likely generates <50 reviews annually. Automated review collection achieves 15 reviews per 100 jobs—a 7.5x improvement.</p>
+                        <div class="finding-metrics"><div class="metric"><div class="metric-val revenue">€25K-50K</div><div class="metric-label">Revenue Potential</div></div><div class="metric"><div class="metric-val">7/10</div><div class="metric-label">Customer</div></div></div>
+                    </div>
+
+                    <div class="finding">
+                        <div class="finding-header"><div class="finding-title">Slow Quote Process Bleeding Conversions</div><div class="finding-badges"><span class="badge-conf medium">MEDIUM</span><span class="badge-cat">Efficiency</span></div></div>
+                        <p class="finding-desc">20-30 minute quote creation combined with 45% close rate. Good-better-best pricing increases average ticket 20-40%. A 5% close rate improvement equals €65K-€109K additional revenue.</p>
+                        <div class="finding-metrics"><div class="metric"><div class="metric-val savings">€8K</div><div class="metric-label">Annual Savings</div></div><div class="metric"><div class="metric-val revenue">€65K-109K</div><div class="metric-label">Revenue</div></div></div>
+                    </div>
+
+                    <div class="finding">
+                        <div class="finding-header"><div class="finding-title">Cash Flow Delayed by Manual Invoicing</div><div class="finding-badges"><span class="badge-conf high">HIGH</span><span class="badge-cat">Efficiency</span></div></div>
+                        <p class="finding-desc">30-45 day payment collection on manual invoices creates €150K-€250K in constantly outstanding receivables. Automated invoicing reduces collection time by 70%—from 37 days to 11 days.</p>
+                        <div class="finding-metrics"><div class="metric"><div class="metric-val savings">€12K</div><div class="metric-label">Annual Savings</div></div><div class="metric"><div class="metric-val revenue">€10K-20K</div><div class="metric-label">Revenue</div></div></div>
+                    </div>
+
+                    <div class="finding not-recommended">
+                        <div class="finding-header"><div class="finding-title">⛔ ServiceTitan Implementation Would Be Premature</div><div class="finding-badges"><span class="badge-conf high">HIGH</span><span class="badge-cat">Risk</span></div></div>
+                        <p class="finding-desc">Despite ServiceTitan being the industry leader, at €2M revenue with 15 technicians and a €5K-15K budget, implementation would be inadvisable. ServiceTitan costs €15K-€25K annually, requires 4-6 month implementation.</p>
+                        <div class="why-not"><strong>Why Not:</strong> ServiceTitan's €15K-25K annual cost exceeds budget by 50-100%, implementation timeline risks missing seasonal windows, and complexity misaligned with team's 6/10 tech comfort level.</div>
+                        <div class="what-instead"><strong>What Instead:</strong> Implement Housecall Pro or Jobber at €2K-5K annually. Revisit ServiceTitan at 25+ technicians or €5M+ revenue.</div>
+                    </div>
+
+                    <div class="finding not-recommended">
+                        <div class="finding-header"><div class="finding-title">⛔ Custom AI Chatbot Development Would Waste Budget</div><div class="finding-badges"><span class="badge-conf high">HIGH</span><span class="badge-cat">Risk</span></div></div>
+                        <p class="finding-desc">Building custom AI solutions within a €5K-15K budget is impractical. Custom chatbot development costs €15K-€50K minimum, requires ongoing maintenance.</p>
+                        <div class="why-not"><strong>Why Not:</strong> Custom AI development requires specialized talent, extensive training data, ongoing maintenance, and typically fails to outperform industry-specific solutions.</div>
+                        <div class="what-instead"><strong>What Instead:</strong> Use ChatGPT/Claude for internal tasks while deploying proven AI solutions: Smith.ai for call handling, Housecall Pro for scheduling. Total cost: €3K-8K annually.</div>
+                    </div>
+
+                    <div class="finding not-recommended">
+                        <div class="finding-header"><div class="finding-title">⛔ Prioritizing Back-Office Automation Before Revenue Systems</div><div class="finding-badges"><span class="badge-conf medium">MEDIUM</span><span class="badge-cat">Risk</span></div></div>
+                        <p class="finding-desc">The €91K-182K annual revenue leakage from missed calls and leads dwarfs the €12K-21K savings from back-office efficiency.</p>
+                        <div class="why-not"><strong>Why Not:</strong> Solving 'office staff overwhelmed' by automating invoicing before fixing lead capture would optimize a secondary bottleneck while the primary revenue leak continues.</div>
+                        <div class="what-instead"><strong>What Instead:</strong> Fix lead capture and scheduling first, then automate back-office.</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- GPT-5.2 REPORT -->
+        <div id="gpt-report" class="report-panel gpt-panel">
+            <div class="stats-bar">
+                <div class="stat-item"><div class="val">24.3s</div><div class="lbl">Time</div></div>
+                <div class="stat-item"><div class="val">2,926</div><div class="lbl">Tokens</div></div>
+                <div class="stat-item"><div class="val">10</div><div class="lbl">Findings</div></div>
+                <div class="stat-item"><div class="val" style="color:var(--success)">30%</div><div class="lbl">HIGH Conf</div></div>
+                <div class="stat-item"><div class="val">50%</div><div class="lbl">MEDIUM</div></div>
+                <div class="stat-item"><div class="val" style="color:var(--danger)">20%</div><div class="lbl">LOW</div></div>
+            </div>
+
+            <div class="exec-summary">
+                <div class="headline">"ComfortAir can unlock significant growth and efficiency by fixing scheduling and customer response with affordable AI-first FSM tools."</div>
+                <div class="key-insight"><strong>💡 Key Insight:</strong> The biggest ROI comes from eliminating missed calls and manual scheduling, which currently suppress revenue and overload office staff.</div>
+
+                <div class="scores-grid">
+                    <div class="score-card"><div class="value">68</div><div class="label">AI Readiness</div></div>
+                    <div class="score-card"><div class="value">8</div><div class="label">Customer Value</div></div>
+                    <div class="score-card"><div class="value">7</div><div class="label">Business Health</div></div>
+                    <div class="score-card"><div class="value" style="color:var(--success)">€90K</div><div class="label">Min Value</div></div>
+                    <div class="score-card"><div class="value" style="color:var(--success)">€180K</div><div class="label">Max Value</div></div>
+                </div>
+
+                <h3 style="margin-bottom:1rem">🚀 Top Opportunities</h3>
+                <div class="opportunities">
+                    <div class="opp-card"><h4>AI Call Handling + Lead Capture</h4><div class="value">€40K-70K/year</div></div>
+                    <div class="opp-card"><h4>FSM with Automated Scheduling & Routing</h4><div class="value">€30K-50K/year</div></div>
+                    <div class="opp-card"><h4>Automated Invoicing & Payments</h4><div class="value">€20K-35K/year</div></div>
+                </div>
+            </div>
+
+            <div class="not-rec-section">
+                <h3>⛔ Not Recommended</h3>
+                <div class="not-rec-grid">
+                    <div class="not-rec-card"><h4>Building Custom AI Scheduling</h4><p>High cost, long timeline. Off-the-shelf FSM tools already solve 80% of needs.</p></div>
+                    <div class="not-rec-card"><h4>AI Chatbots Without Call Handling</h4><p>Phone calls are the dominant lead source; chat alone won't fix missed revenue.</p></div>
+                    <div class="not-rec-card"><h4>Rolling Out AI to Technicians First</h4><p>Office bottlenecks create more ROI than technician-facing AI at this stage.</p></div>
+                </div>
+            </div>
+
+            <div class="findings-section">
+                <h3>📋 All Findings (10)</h3>
+                <div class="findings-grid">
+                    <div class="finding">
+                        <div class="finding-header"><div class="finding-title">High Revenue Loss from Missed Calls and Slow Lead Response</div><div class="finding-badges"><span class="badge-conf high">HIGH</span><span class="badge-cat">Growth</span></div></div>
+                        <p class="finding-desc">ComfortAir misses ~25% of 40-60 daily calls (10-15 calls/day). With an average job value of €350 and a conservative 30% conversion rate, this represents €38K-57K in lost annual revenue.</p>
+                        <div class="finding-current">📍 Based on: missed_call_percentage: 25%, call_volume_daily: 40-60, lead_response_time: 2-4 hours</div>
+                        <div class="finding-metrics"><div class="metric"><div class="metric-val revenue">€50K</div><div class="metric-label">Revenue Potential</div></div><div class="metric"><div class="metric-val">6 hrs</div><div class="metric-label">Hours/Week</div></div><div class="metric"><div class="metric-val">9/10</div><div class="metric-label">Customer</div></div></div>
+                    </div>
+
+                    <div class="finding">
+                        <div class="finding-header"><div class="finding-title">Manual Scheduling Reduces Technician Utilization</div><div class="finding-badges"><span class="badge-conf high">HIGH</span><span class="badge-cat">Efficiency</span></div></div>
+                        <p class="finding-desc">Technicians are frequently double-booked and routes are not optimized. Dispatch efficiency is likely ~55%, below the 65-75% benchmark achievable with FSM software, equivalent to losing 1-2 technician-days per week.</p>
+                        <div class="finding-metrics"><div class="metric"><div class="metric-val savings">€25K</div><div class="metric-label">Annual Savings</div></div><div class="metric"><div class="metric-val revenue">€30K</div><div class="metric-label">Revenue</div></div><div class="metric"><div class="metric-val">10 hrs</div><div class="metric-label">Hours/Week</div></div></div>
+                    </div>
+
+                    <div class="finding">
+                        <div class="finding-header"><div class="finding-title">Excessive Admin Time Spent on Manual Coordination</div><div class="finding-badges"><span class="badge-conf medium">MEDIUM</span><span class="badge-cat">Efficiency</span></div></div>
+                        <p class="finding-desc">Office staff waste ~25 hours/week manually scheduling and handling callbacks. FSM automation can reduce admin time from ~2.5 hours/day to ~1 hour/day per staff member.</p>
+                        <div class="finding-metrics"><div class="metric"><div class="metric-val savings">€20K</div><div class="metric-label">Annual Savings</div></div><div class="metric"><div class="metric-val revenue">€10K</div><div class="metric-label">Revenue</div></div><div class="metric"><div class="metric-val">15 hrs</div><div class="metric-label">Hours/Week</div></div></div>
+                    </div>
+
+                    <div class="finding">
+                        <div class="finding-header"><div class="finding-title">Slow Invoicing and Payment Collection Hurt Cash Flow</div><div class="finding-badges"><span class="badge-conf medium">MEDIUM</span><span class="badge-cat">Efficiency</span></div></div>
+                        <p class="finding-desc">Manual invoicing results in 30-45 day payment cycles. Automated invoicing can reduce collection time by ~70%, improving cash flow and reducing follow-up work.</p>
+                        <div class="finding-metrics"><div class="metric"><div class="metric-val savings">€15K</div><div class="metric-label">Annual Savings</div></div><div class="metric"><div class="metric-val">5 hrs</div><div class="metric-label">Hours/Week</div></div></div>
+                    </div>
+
+                    <div class="finding">
+                        <div class="finding-header"><div class="finding-title">Underutilized Pricing Strategy Limits Average Ticket Size</div><div class="finding-badges"><span class="badge-conf medium">MEDIUM</span><span class="badge-cat">Growth</span></div></div>
+                        <p class="finding-desc">Quotes take 20-30 minutes and likely use single-price offers. Good-better-best pricing can increase average ticket by 20-40%, or €70-140 per job.</p>
+                        <div class="finding-metrics"><div class="metric"><div class="metric-val savings">€5K</div><div class="metric-label">Annual Savings</div></div><div class="metric"><div class="metric-val revenue">€40K</div><div class="metric-label">Revenue</div></div></div>
+                    </div>
+
+                    <div class="finding">
+                        <div class="finding-header"><div class="finding-title">Low Repeat Customer Rate Due to Lack of Follow-up Automation</div><div class="finding-badges"><span class="badge-conf medium">MEDIUM</span><span class="badge-cat">Customer Experience</span></div></div>
+                        <p class="finding-desc">Repeat customer rate is 35%, below what membership and automated follow-up programs achieve. Membership customers have €3,000-€10,000 lifetime value vs €200-€500 one-off.</p>
+                        <div class="finding-metrics"><div class="metric"><div class="metric-val revenue">€30K</div><div class="metric-label">Revenue Potential</div></div><div class="metric"><div class="metric-val">9/10</div><div class="metric-label">Customer</div></div></div>
+                    </div>
+
+                    <div class="finding">
+                        <div class="finding-header"><div class="finding-title">Minimal Online Reviews Weaken Trust and Conversion</div><div class="finding-badges"><span class="badge-conf low">LOW</span><span class="badge-cat">Customer Experience</span></div></div>
+                        <p class="finding-desc">Reviews are rarely collected. Automated review requests can raise review volume from ~2 to ~15 per 100 jobs, improving close rates.</p>
+                        <div class="finding-metrics"><div class="metric"><div class="metric-val revenue">€15K</div><div class="metric-label">Revenue Potential</div></div><div class="metric"><div class="metric-val">8/10</div><div class="metric-label">Customer</div></div></div>
+                    </div>
+
+                    <div class="finding not-recommended">
+                        <div class="finding-header"><div class="finding-title">⛔ Custom-built AI Scheduling is Not Cost-effective</div><div class="finding-badges"><span class="badge-conf high">HIGH</span><span class="badge-cat">Risk</span></div></div>
+                        <p class="finding-desc">Building custom AI scheduling would exceed €30K and 6-12 months, far beyond budget and timeline.</p>
+                        <div class="why-not"><strong>Why Not:</strong> Too expensive and risky compared to proven FSM platforms.</div>
+                        <div class="what-instead"><strong>What Instead:</strong> Adopt Jobber or Housecall Pro with built-in AI routing.</div>
+                    </div>
+
+                    <div class="finding not-recommended">
+                        <div class="finding-header"><div class="finding-title">⛔ Chat-only AI Without Phone Coverage is Ineffective</div><div class="finding-badges"><span class="badge-conf medium">MEDIUM</span><span class="badge-cat">Risk</span></div></div>
+                        <p class="finding-desc">Most HVAC leads come via phone. AI chat alone does not address the 25% missed-call issue.</p>
+                        <div class="why-not"><strong>Why Not:</strong> Does not solve primary lead loss channel.</div>
+                        <div class="what-instead"><strong>What Instead:</strong> Use AI call answering like Smith.ai or Aircall AI.</div>
+                    </div>
+
+                    <div class="finding not-recommended">
+                        <div class="finding-header"><div class="finding-title">⛔ Technician-facing AI Tools Too Early</div><div class="finding-badges"><span class="badge-conf low">LOW</span><span class="badge-cat">Risk</span></div></div>
+                        <p class="finding-desc">Technicians are not the bottleneck; office workflows are. Early technician AI adds complexity without ROI.</p>
+                        <div class="why-not"><strong>Why Not:</strong> Low adoption risk and limited short-term benefit.</div>
+                        <div class="what-instead"><strong>What Instead:</strong> Fix scheduling, dispatch, and customer comms first.</div>
+                    </div>
+                </div>
+            </div>
+
+            <div style="margin-top:2rem">
+                <h3 style="margin-bottom:1rem">🛒 Vendor Recommendations</h3>
+                <div class="opportunities">
+                    <div class="opp-card" style="border-color:var(--gpt)"><h4>Jobber</h4><div class="value">€150-300/mo</div><div style="font-size:0.8rem;color:var(--text-sec)">FSM, scheduling, invoicing, reminders</div></div>
+                    <div class="opp-card" style="border-color:var(--gpt)"><h4>Housecall Pro</h4><div class="value">€200-350/mo</div><div style="font-size:0.8rem;color:var(--text-sec)">FSM + payments + memberships</div></div>
+                    <div class="opp-card" style="border-color:var(--gpt)"><h4>Smith.ai</h4><div class="value">€250-600/mo</div><div style="font-size:0.8rem;color:var(--text-sec)">AI + human call answering</div></div>
+                    <div class="opp-card" style="border-color:var(--gpt)"><h4>Podium</h4><div class="value">€300+/mo</div><div style="font-size:0.8rem;color:var(--text-sec)">Reviews and customer messaging</div></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- GEMINI 3 PRO REPORT -->
+        <div id="gemini-report" class="report-panel gemini-panel">
+            <div class="stats-bar">
+                <div class="stat-item"><div class="val">46.7s</div><div class="lbl">Time</div></div>
+                <div class="stat-item"><div class="val">3,625</div><div class="lbl">Tokens</div></div>
+                <div class="stat-item"><div class="val">10</div><div class="lbl">Findings</div></div>
+                <div class="stat-item"><div class="val" style="color:var(--success)">60%</div><div class="lbl">HIGH Conf</div></div>
+                <div class="stat-item"><div class="val">30%</div><div class="lbl">MEDIUM</div></div>
+                <div class="stat-item"><div class="val" style="color:var(--danger)">10%</div><div class="lbl">LOW</div></div>
+            </div>
+
+            <div class="exec-summary">
+                <div class="headline">"ComfortAir is leaking €100k+ annually through missed calls and manual scheduling, but is primed for rapid modernization."</div>
+                <div class="key-insight"><strong>💡 Key Insight:</strong> Your office-to-technician ratio (1:1.5) is dangerously inefficient compared to the industry standard (1:3), primarily due to the lack of Field Service Management (FSM) software.</div>
+
+                <div class="scores-grid">
+                    <div class="score-card"><div class="value">65</div><div class="label">AI Readiness</div></div>
+                    <div class="score-card"><div class="value">8</div><div class="label">Customer Value</div></div>
+                    <div class="score-card"><div class="value">7</div><div class="label">Business Health</div></div>
+                    <div class="score-card"><div class="value" style="color:var(--success)">€95K</div><div class="label">Min Value</div></div>
+                    <div class="score-card"><div class="value" style="color:var(--success)">€180K</div><div class="label">Max Value</div></div>
+                </div>
+
+                <h3 style="margin-bottom:1rem">🚀 Top Opportunities</h3>
+                <div class="opportunities">
+                    <div class="opp-card"><h4>Recovering Missed Revenue (AI Call Handling)</h4><div class="value">€78K-95K/year</div></div>
+                    <div class="opp-card"><h4>Admin Efficiency (FSM Implementation)</h4><div class="value">€30K+ labor savings</div></div>
+                </div>
+            </div>
+
+            <div class="not-rec-section">
+                <h3>⛔ Not Recommended</h3>
+                <div class="not-rec-grid">
+                    <div class="not-rec-card"><h4>Custom App Development</h4><p>High cost (€50k+) with low ROI compared to off-the-shelf FSM.</p></div>
+                    <div class="not-rec-card"><h4>Enterprise-grade ServiceTitan</h4><p>Too complex/expensive for current maturity level; will stall implementation.</p></div>
+                    <div class="not-rec-card"><h4>Full AI Diagnostic Chatbot</h4><p>Liability risk and technology immaturity for technical HVAC diagnosis.</p></div>
+                </div>
+            </div>
+
+            <div class="findings-section">
+                <h3>📋 All Findings (10)</h3>
+                <div class="findings-grid">
+                    <div class="finding">
+                        <div class="finding-header"><div class="finding-title">Transition from Google Calendar to Specialized FSM Software</div><div class="finding-badges"><span class="badge-conf high">HIGH</span><span class="badge-cat">Efficiency</span></div></div>
+                        <p class="finding-desc">Moving from 'Basic Google Calendar + spreadsheets' to a dedicated FSM platform is the single highest ROI action available. Office staff is bloated (10 staff for 15 techs) because of manual data entry.</p>
+                        <div class="finding-current">📍 Based on: biggest_time_waste is manual scheduling, 25 hours wasted weekly</div>
+                        <div class="finding-metrics"><div class="metric"><div class="metric-val savings">€32.5K</div><div class="metric-label">Annual Savings</div></div><div class="metric"><div class="metric-val">25 hrs</div><div class="metric-label">Hours/Week</div></div><div class="metric"><div class="metric-val">10/10</div><div class="metric-label">Business</div></div></div>
+                        <div class="vendor-rec"><h5>Recommended:</h5> <span class="vendor-name">Jobber or Housecall Pro</span> • <span class="vendor-price">€300-500/month</span> • Perfect fit for 11-50 size</div>
+                    </div>
+
+                    <div class="finding">
+                        <div class="finding-header"><div class="finding-title">AI After-Hours & Overflow Call Handling</div><div class="finding-badges"><span class="badge-conf high">HIGH</span><span class="badge-cat">Growth</span></div></div>
+                        <p class="finding-desc">Missing 25% of 40-60 daily calls. Even conservatively assuming 10% of those missed calls are viable leads, you are losing ~5 jobs per week. An AI voice assistant ensures 100% capture rate.</p>
+                        <div class="finding-current">📍 Based on: 25% missed call rate, leads go cold, manual follow-up</div>
+                        <div class="finding-metrics"><div class="metric"><div class="metric-val revenue">€78,750</div><div class="metric-label">Revenue Potential</div></div><div class="metric"><div class="metric-val">9/10</div><div class="metric-label">Customer</div></div><div class="metric"><div class="metric-val">9/10</div><div class="metric-label">Business</div></div></div>
+                        <div class="vendor-rec"><h5>Recommended:</h5> <span class="vendor-name">Smith.ai or ZyraTalk</span> • <span class="vendor-price">€300-600/month</span> • 24/7 coverage</div>
+                    </div>
+
+                    <div class="finding">
+                        <div class="finding-header"><div class="finding-title">Automated Review Generation</div><div class="finding-badges"><span class="badge-conf medium">MEDIUM</span><span class="badge-cat">Growth</span></div></div>
+                        <p class="finding-desc">Collecting reviews 'rarely' hurts local SEO and lead cost. Automating via SMS immediately after job closes can increase review volume by 500%+.</p>
+                        <div class="finding-metrics"><div class="metric"><div class="metric-val revenue">€20K</div><div class="metric-label">Revenue Potential</div></div><div class="metric"><div class="metric-val">2 hrs</div><div class="metric-label">Hours/Week</div></div></div>
+                        <div class="vendor-rec"><h5>Recommended:</h5> <span class="vendor-name">NiceJob</span> • <span class="vendor-price">€175/month</span> • Integrates with Jobber</div>
+                    </div>
+
+                    <div class="finding">
+                        <div class="finding-header"><div class="finding-title">Automated 'Uber-Style' Customer Notifications</div><div class="finding-badges"><span class="badge-conf medium">MEDIUM</span><span class="badge-cat">Customer Experience</span></div></div>
+                        <p class="finding-desc">Office staff overwhelmed by ETA calls. Automated SMS ('Technician is en route') drastically reduces inbound call volume and improves satisfaction.</p>
+                        <div class="finding-metrics"><div class="metric"><div class="metric-val savings">€5K</div><div class="metric-label">Annual Savings</div></div><div class="metric"><div class="metric-val">5 hrs</div><div class="metric-label">Hours/Week</div></div><div class="metric"><div class="metric-val">10/10</div><div class="metric-label">Customer</div></div></div>
+                        <div class="vendor-rec"><h5>Recommended:</h5> Included in FSM (Jobber/Housecall Pro) • <span class="vendor-price">€0 extra</span></div>
+                    </div>
+
+                    <div class="finding">
+                        <div class="finding-header"><div class="finding-title">Instant Invoicing & Payment Links</div><div class="finding-badges"><span class="badge-conf high">HIGH</span><span class="badge-cat">Efficiency</span></div></div>
+                        <p class="finding-desc">Waiting 30-45 days for payment creates cash flow gaps. Technicians should generate invoices on-site, allowing instant payment via credit card link.</p>
+                        <div class="finding-metrics"><div class="metric"><div class="metric-val">4 hrs</div><div class="metric-label">Hours/Week</div></div><div class="metric"><div class="metric-val">9/10</div><div class="metric-label">Business</div></div></div>
+                        <div class="vendor-rec"><h5>Recommended:</h5> Jobber Payments • <span class="vendor-price">Transaction fees only</span> • Reduces DSO from 45 to <5 days</div>
+                    </div>
+
+                    <div class="finding">
+                        <div class="finding-header"><div class="finding-title">Good-Better-Best Proposal Templates</div><div class="finding-badges"><span class="badge-conf low">LOW</span><span class="badge-cat">Growth</span></div></div>
+                        <p class="finding-desc">Moving to pre-built digital templates with G-B-B options increases average ticket size by psychological anchoring. From €350 to €400 across 3000 jobs/yr.</p>
+                        <div class="finding-metrics"><div class="metric"><div class="metric-val revenue">€40K</div><div class="metric-label">Revenue Potential</div></div><div class="metric"><div class="metric-val">8/10</div><div class="metric-label">Business</div></div></div>
+                    </div>
+
+                    <div class="finding">
+                        <div class="finding-header"><div class="finding-title">Route Optimization AI</div><div class="finding-badges"><span class="badge-conf medium">MEDIUM</span><span class="badge-cat">Efficiency</span></div></div>
+                        <p class="finding-desc">With 50-mile service area and 'guesswork' planning, burning fuel and time. AI routing clusters jobs geographically to minimize drive time.</p>
+                        <div class="finding-metrics"><div class="metric"><div class="metric-val savings">€8K</div><div class="metric-label">Annual Savings</div></div><div class="metric"><div class="metric-val">7/10</div><div class="metric-label">Business</div></div></div>
+                    </div>
+
+                    <div class="finding not-recommended">
+                        <div class="finding-header"><div class="finding-title">⛔ Custom App Development</div><div class="finding-badges"><span class="badge-conf high">HIGH</span><span class="badge-cat">Risk</span></div></div>
+                        <p class="finding-desc">Building a custom app with your €5k-15k budget.</p>
+                        <div class="why-not"><strong>Why Not:</strong> Custom development costs €50k+ and requires ongoing maintenance. Your budget is €15k.</div>
+                        <div class="what-instead"><strong>What Instead:</strong> Use off-the-shelf FSM (Jobber/Housecall Pro) which offers 95% of needed features for €300/mo.</div>
+                    </div>
+
+                    <div class="finding not-recommended">
+                        <div class="finding-header"><div class="finding-title">⛔ Enterprise FSM (ServiceTitan)</div><div class="finding-badges"><span class="badge-conf high">HIGH</span><span class="badge-cat">Risk</span></div></div>
+                        <p class="finding-desc">Implementing ServiceTitan immediately.</p>
+                        <div class="why-not"><strong>Why Not:</strong> ServiceTitan is excellent but expensive (€30k+ first year) and complex. Jumping from paper to ServiceTitan usually fails due to 'culture shock'.</div>
+                        <div class="what-instead"><strong>What Instead:</strong> Start with Jobber or Housecall Pro for 2 years, then upgrade when revenue hits €4M.</div>
+                    </div>
+
+                    <div class="finding not-recommended">
+                        <div class="finding-header"><div class="finding-title">⛔ AI Technical Diagnostic Chatbot</div><div class="finding-badges"><span class="badge-conf high">HIGH</span><span class="badge-cat">Risk</span></div></div>
+                        <p class="finding-desc">Using AI to diagnose HVAC issues for customers automatically.</p>
+                        <div class="why-not"><strong>Why Not:</strong> AI hallucinations can lead to safety risks (gas/electric) and liability. Technology is not ready for unmonitored technical advice.</div>
+                        <div class="what-instead"><strong>What Instead:</strong> Use AI to schedule the appointment, let the certified technician do the diagnosis.</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function showReport(model) {
+            document.querySelectorAll('.report-panel').forEach(p => p.classList.remove('active'));
+            document.querySelectorAll('.main-tab').forEach(t => t.classList.remove('active'));
+            document.getElementById(model + '-report').classList.add('active');
+            document.querySelector('.main-tab.' + model).classList.add('active');
+        }
+    </script>
+</body>
+</html>

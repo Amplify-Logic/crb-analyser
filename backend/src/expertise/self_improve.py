@@ -68,25 +68,35 @@ class SelfImproveService:
         Returns:
             Summary of what was learned
         """
-        logger.info(f"Learning from analysis {audit_id} for {industry}")
+        logger.info(f"[EXPERTISE] Learning from analysis {audit_id} for {industry}")
 
         # Step 1: Create and save the analysis record
+        logger.info(f"[EXPERTISE] Step 1: Creating analysis record...")
         record = self._create_analysis_record(
             audit_id, industry, company_size, context, execution_metrics
         )
         self.store.save_analysis_record(record)
+        logger.info(f"[EXPERTISE] Step 1 complete: Analysis record saved")
 
         # Step 2: Update industry expertise
+        logger.info(f"[EXPERTISE] Step 2: Updating industry expertise...")
         industry_updates = self._update_industry_expertise(record)
+        logger.info(f"[EXPERTISE] Step 2 complete: Industry updates = {industry_updates}")
 
         # Step 3: Update vendor expertise
+        logger.info(f"[EXPERTISE] Step 3: Updating vendor expertise...")
         vendor_updates = self._update_vendor_expertise(record)
+        logger.info(f"[EXPERTISE] Step 3 complete: Vendor updates = {vendor_updates}")
 
         # Step 4: Update execution expertise
+        logger.info(f"[EXPERTISE] Step 4: Updating execution expertise...")
         execution_updates = self._update_execution_expertise(record)
+        logger.info(f"[EXPERTISE] Step 4 complete: Execution updates = {execution_updates}")
 
         # Step 5: Optional LLM reflection for deeper insights
+        logger.info(f"[EXPERTISE] Step 5: Starting LLM reflection (this may be slow - uses Anthropic API)...")
         reflection = await self._reflect_on_analysis(record)
+        logger.info(f"[EXPERTISE] Step 5 complete: LLM reflection done")
 
         return {
             "audit_id": audit_id,
@@ -314,8 +324,11 @@ class SelfImproveService:
         Uses a small model to minimize cost.
         """
         try:
+            logger.info(f"[EXPERTISE-REFLECT] Starting LLM reflection for {record.audit_id}...")
+
             # Get current expertise for context
             expertise = self.store.get_industry_expertise(record.industry)
+            logger.info(f"[EXPERTISE-REFLECT] Got industry expertise, building prompt...")
 
             prompt = f"""You are analyzing a completed CRB (Cost/Risk/Benefit) analysis to extract learnings.
 
@@ -334,19 +347,151 @@ CURRENT EXPERTISE (analyses so far: {expertise.total_analyses}):
 What is ONE key insight from this analysis that should inform future {record.industry} analyses?
 Be specific and actionable. One sentence only."""
 
+            logger.info(f"[EXPERTISE-REFLECT] Calling Anthropic API (claude-haiku-4-5-20251001)...")
             response = self.client.messages.create(
-                model="claude-3-haiku-20240307",  # Fast, cheap model for reflection
+                model="claude-haiku-4-5-20251001",  # Fast, cheap model for reflection
                 max_tokens=150,
                 messages=[{"role": "user", "content": prompt}],
             )
+            logger.info(f"[EXPERTISE-REFLECT] API call complete, processing response...")
 
             insight = response.content[0].text.strip()
-            logger.info(f"LLM reflection for {record.audit_id}: {insight}")
+            logger.info(f"[EXPERTISE-REFLECT] LLM reflection for {record.audit_id}: {insight}")
             return insight
 
         except Exception as e:
-            logger.warning(f"LLM reflection failed (non-critical): {e}")
+            logger.warning(f"[EXPERTISE-REFLECT] LLM reflection failed (non-critical): {e}")
             return None
+
+    async def learn_from_feedback(
+        self,
+        report_id: str,
+        industry: str,
+        feedback: Dict[str, Any],
+    ) -> Dict[str, Any]:
+        """
+        Learn from human feedback on a generated report.
+
+        This is the Signal Loop (SIL) in action - using human QA
+        to improve the expertise system.
+
+        Args:
+            report_id: The report that was reviewed
+            industry: Industry of the report
+            feedback: The feedback dict from ReportFeedback model
+
+        Returns:
+            Summary of what was learned from feedback
+        """
+        logger.info(f"Learning from feedback for report {report_id} ({industry})")
+
+        expertise = self.store.get_industry_expertise(industry)
+        updates = {
+            "anti_patterns_added": 0,
+            "patterns_reinforced": 0,
+            "patterns_demoted": 0,
+            "missing_items_noted": 0,
+        }
+
+        # Process finding feedback
+        for finding_fb in feedback.get("findings_feedback", []):
+            rating = finding_fb.get("rating", "okay")
+            finding_id = finding_fb.get("finding_id", "")
+
+            if rating == "excellent":
+                # Reinforce this as an effective pattern
+                updates["patterns_reinforced"] += 1
+            elif rating in ("poor", "wrong"):
+                # Add to anti-patterns
+                anti_pattern = f"Finding '{finding_id}' was rated {rating} - review accuracy"
+                if anti_pattern not in expertise.anti_patterns:
+                    expertise.anti_patterns.append(anti_pattern)
+                    updates["anti_patterns_added"] += 1
+
+        # Process recommendation feedback
+        for rec_fb in feedback.get("recommendations_feedback", []):
+            rating = rec_fb.get("rating", "okay")
+            rec_id = rec_fb.get("recommendation_id", "")
+
+            if rating == "excellent":
+                # Reinforce in effective_patterns
+                for pattern in expertise.effective_patterns:
+                    if rec_id in pattern.recommendation:
+                        pattern.frequency += 5  # Boost significantly
+                        updates["patterns_reinforced"] += 1
+                        break
+            elif rating in ("poor", "wrong"):
+                # Demote or add to anti-patterns
+                anti_pattern = f"Recommendation '{rec_id}' rated {rating} - reconsider for {industry}"
+                if anti_pattern not in expertise.anti_patterns:
+                    expertise.anti_patterns.append(anti_pattern)
+                    updates["anti_patterns_added"] += 1
+
+                # Demote in effective_patterns
+                for pattern in expertise.effective_patterns:
+                    if rec_id in pattern.recommendation:
+                        pattern.frequency = max(0, pattern.frequency - 3)
+                        updates["patterns_demoted"] += 1
+                        break
+
+        # Process missing findings - these are pain points we should look for
+        for missing in feedback.get("missing_findings", []):
+            if missing and missing not in expertise.pain_points:
+                expertise.pain_points[missing] = PainPointPattern(
+                    name=missing,
+                    frequency=1,
+                    avg_impact="medium",
+                    typical_causes=["Identified as missing in QA review"],
+                )
+                updates["missing_items_noted"] += 1
+
+        # Process missing recommendations - patterns to add
+        for missing in feedback.get("missing_recommendations", []):
+            if missing:
+                pattern = RecommendationPattern(
+                    pattern=f"Missing recommendation for {industry}",
+                    recommendation=missing,
+                    context={"source": "QA feedback", "report_id": report_id},
+                )
+                expertise.effective_patterns.append(pattern)
+                updates["missing_items_noted"] += 1
+
+        # Add any explicit anti-patterns from notes
+        for anti in feedback.get("industry_anti_patterns", []):
+            if anti and anti not in expertise.anti_patterns:
+                expertise.anti_patterns.append(anti)
+                updates["anti_patterns_added"] += 1
+
+        # Add any explicit patterns from notes
+        for pattern_note in feedback.get("industry_patterns_observed", []):
+            if pattern_note:
+                pattern = RecommendationPattern(
+                    pattern=pattern_note,
+                    recommendation=f"Pattern observed in {industry}",
+                    context={"source": "QA feedback", "report_id": report_id},
+                )
+                expertise.effective_patterns.append(pattern)
+                updates["patterns_reinforced"] += 1
+
+        # Keep lists bounded
+        if len(expertise.anti_patterns) > 100:
+            expertise.anti_patterns = expertise.anti_patterns[-100:]
+        if len(expertise.effective_patterns) > 100:
+            expertise.effective_patterns = sorted(
+                expertise.effective_patterns,
+                key=lambda p: p.frequency,
+                reverse=True
+            )[:100]
+
+        # Save updated expertise
+        self.store.save_industry_expertise(expertise)
+
+        logger.info(f"Feedback learning complete: {updates}")
+        return {
+            "report_id": report_id,
+            "industry": industry,
+            "updates": updates,
+        }
 
     def get_expertise_summary(self, industry: str) -> Dict[str, Any]:
         """Get a summary of current expertise for display/debugging."""

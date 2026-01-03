@@ -20,6 +20,7 @@ from src.config.system_prompt import get_full_system_prompt
 from src.tools.tool_registry import TOOL_DEFINITIONS, execute_tool
 from src.knowledge import get_industry_context, get_quick_wins, get_not_recommended
 from src.expertise import get_expertise_store, get_self_improve_service
+from src.services.retrieval_service import get_retrieval_service
 
 logger = logging.getLogger(__name__)
 
@@ -130,6 +131,48 @@ Complete analysis before making any recommendations.
                 logger.info(f"Loaded knowledge for {industry}: {industry_knowledge.get('opportunity_count', 0)} opportunities")
             else:
                 logger.warning(f"No specific knowledge for industry: {industry}")
+
+            # Semantic search for relevant context based on intake responses
+            yield {"phase": "init", "step": "Retrieving relevant knowledge...", "progress": 4}
+            try:
+                retrieval_service = await get_retrieval_service()
+
+                # Build search query from intake pain points
+                intake_responses = intake.get("responses", {})
+                pain_points = intake_responses.get("pain_points", "")
+                current_tools = intake_responses.get("current_tools", "")
+                goals = intake_responses.get("goals", "")
+
+                # Combine into search query
+                search_query = f"{pain_points} {current_tools} {goals}".strip()
+
+                if search_query:
+                    semantic_context = await retrieval_service.get_relevant_context(
+                        query=search_query,
+                        industry=industry,
+                        vendors_limit=5,
+                        opportunities_limit=5,
+                        case_studies_limit=3,
+                        patterns_limit=3
+                    )
+
+                    self.context["semantic_context"] = semantic_context.model_dump()
+                    self.context["semantic_context_prompt"] = semantic_context.to_prompt_context()
+
+                    logger.info(
+                        f"Retrieved semantic context: {semantic_context.total_results} results "
+                        f"in {semantic_context.search_time_ms:.1f}ms"
+                    )
+                else:
+                    self.context["semantic_context"] = {}
+                    self.context["semantic_context_prompt"] = ""
+                    logger.info("No intake responses for semantic search")
+
+            except Exception as e:
+                # Semantic search is non-critical - continue without it
+                logger.warning(f"Semantic search failed (non-critical): {e}")
+                self.context["semantic_context"] = {}
+                self.context["semantic_context_prompt"] = ""
 
             # Load agent expertise (self-improving mental model)
             yield {"phase": "init", "step": "Loading agent expertise...", "progress": 4}
@@ -497,10 +540,20 @@ EFFECTIVE RECOMMENDATIONS we've made for similar companies:
 {json.dumps([{'pattern': p.get('pattern', ''), 'recommendation': p.get('recommendation', '')} for p in top_patterns], indent=2)}
 """
 
+        # Semantic context from vector search
+        semantic_prompt = self.context.get("semantic_context_prompt", "")
+        if semantic_prompt:
+            semantic_prompt = f"""
+═══════════════════════════════════════════════════════════════════════════════
+RETRIEVED KNOWLEDGE (semantically matched to client's pain points)
+═══════════════════════════════════════════════════════════════════════════════
+{semantic_prompt}
+"""
+
         return f"""Phase 1: Discovery
 
 Analyze the following intake responses from {client.get('name', 'the client')}, a {client.get('company_size', '')} company in the {client.get('industry', '')} industry.
-{industry_context}{expertise_context}
+{industry_context}{expertise_context}{semantic_prompt}
 INTAKE RESPONSES:
 {intake}
 

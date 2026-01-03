@@ -13,6 +13,20 @@ import { useState, useMemo, useRef } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 
 // ============================================================================
+// Helpers
+// ============================================================================
+
+/** Format option_type to proper display name */
+function formatOptionType(optionType: string): string {
+  const displayNames: Record<string, string> = {
+    'off_the_shelf': 'Off-the-Shelf',
+    'best_in_class': 'Best-in-Class',
+    'custom_solution': 'Custom Solution',
+  }
+  return displayNames[optionType] || optionType.replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase())
+}
+
+// ============================================================================
 // Types
 // ============================================================================
 
@@ -25,14 +39,16 @@ interface TaskCRB {
 interface PlaybookTask {
   id: string
   title: string
-  description: string
-  time_estimate_minutes: number
-  difficulty: 'easy' | 'medium' | 'hard'
-  executor: 'owner' | 'team' | 'hire_out'
-  tools: string[]
+  description?: string
+  time_estimate_minutes?: number
+  hours?: number  // Alternative time field
+  difficulty?: 'easy' | 'medium' | 'hard'
+  executor?: 'owner' | 'team' | 'hire_out'
+  owner?: string  // Alternative executor field
+  tools?: string[]
   tutorial_hint?: string
-  crb: TaskCRB
-  completed: boolean
+  crb?: TaskCRB
+  completed?: boolean
   // Enhanced fields
   success_criteria?: string[]
   common_pitfalls?: string[]
@@ -58,12 +74,15 @@ interface PhaseCRBSummary {
 }
 
 interface Phase {
-  phase_number: number
-  title: string
-  duration_weeks: number
-  outcome: string
-  crb_summary: PhaseCRBSummary
-  weeks: Week[]
+  phase_number?: number
+  title?: string
+  name?: string  // Alternative to title in simpler format
+  duration_weeks?: number
+  outcome?: string
+  crb_summary?: PhaseCRBSummary
+  weeks?: Week[]  // Complex format with weeks
+  tasks?: PlaybookTask[]  // Simple format with tasks directly on phase
+  week?: number  // Simple format: which week this phase is
 }
 
 interface Playbook {
@@ -104,9 +123,17 @@ function TimelineRoadmap({
   onPhaseClick: (phaseNumber: number) => void
   activePhase: number | null
 }) {
+  // Helper to get tasks from phase (handles both data structures)
+  const getTasksFromPhase = (phase: Phase) => {
+    if (phase.weeks && Array.isArray(phase.weeks)) {
+      return phase.weeks.flatMap(w => w.tasks || [])
+    }
+    return phase.tasks || []
+  }
+
   // Calculate phase progress
   const phaseProgress = phases.map(phase => {
-    const allTasks = phase.weeks.flatMap(w => w.tasks)
+    const allTasks = getTasksFromPhase(phase)
     const completed = allTasks.filter(t => completedTasks.has(t.id)).length
     return { total: allTasks.length, completed, percent: allTasks.length ? Math.round((completed / allTasks.length) * 100) : 0 }
   })
@@ -138,14 +165,15 @@ function TimelineRoadmap({
           {/* Phase nodes */}
           <div className="relative flex justify-between">
             {phases.map((phase, i) => {
+              const phaseNum = phase.phase_number ?? i + 1
               const progress = phaseProgress[i]
               const isComplete = progress.percent === 100
-              const isActive = activePhase === phase.phase_number
+              const isActive = activePhase === phaseNum
 
               return (
                 <button
-                  key={phase.phase_number}
-                  onClick={() => onPhaseClick(phase.phase_number)}
+                  key={phaseNum}
+                  onClick={() => onPhaseClick(phaseNum)}
                   className="flex flex-col items-center group"
                 >
                   <div
@@ -164,7 +192,7 @@ function TimelineRoadmap({
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
                       </svg>
                     ) : (
-                      phase.phase_number
+                      phaseNum
                     )}
                   </div>
 
@@ -187,17 +215,18 @@ function TimelineRoadmap({
       {/* Mobile timeline */}
       <div className="md:hidden space-y-3">
         {phases.map((phase, i) => {
+          const phaseNum = phase.phase_number ?? i + 1
           const progress = phaseProgress[i]
           const isComplete = progress.percent === 100
 
           return (
             <motion.button
-              key={phase.phase_number}
-              onClick={() => onPhaseClick(phase.phase_number)}
+              key={phaseNum}
+              onClick={() => onPhaseClick(phaseNum)}
               whileHover={{ scale: 1.01 }}
               whileTap={{ scale: 0.99 }}
               className={`w-full flex items-center gap-4 p-4 rounded-2xl transition-all ${
-                activePhase === phase.phase_number
+                activePhase === phaseNum
                   ? 'bg-primary-50 dark:bg-primary-900/20 border-2 border-primary-300 dark:border-primary-600 shadow-sm'
                   : 'bg-gray-50 dark:bg-gray-800/50 border-2 border-transparent hover:border-gray-200 dark:hover:border-gray-700'
               }`}
@@ -211,7 +240,7 @@ function TimelineRoadmap({
                     : 'bg-gray-200 dark:bg-gray-700 text-gray-500 dark:text-gray-400'
                 }`}
               >
-                {isComplete ? '✓' : phase.phase_number}
+                {isComplete ? '✓' : phaseNum}
               </div>
 
               <div className="flex-1 text-left">
@@ -343,13 +372,19 @@ function TaskCard({
               <span className={`font-medium ${isCompleted ? 'line-through text-gray-400' : 'text-gray-900'}`}>
                 {task.title}
               </span>
-              <span className="text-xs text-gray-400">{formatTime(task.time_estimate_minutes)}</span>
-              <span className={`text-xs px-2 py-0.5 rounded ${difficultyConfig[task.difficulty].bg} ${difficultyConfig[task.difficulty].text}`}>
-                {difficultyConfig[task.difficulty].label}
-              </span>
-              <span className="text-xs px-2 py-0.5 rounded bg-gray-100 text-gray-600">
-                {executorConfig[task.executor].icon} {executorConfig[task.executor].label}
-              </span>
+              {task.time_estimate_minutes && (
+                <span className="text-xs text-gray-400">{formatTime(task.time_estimate_minutes)}</span>
+              )}
+              {task.difficulty && (
+                <span className={`text-xs px-2 py-0.5 rounded ${difficultyConfig[task.difficulty].bg} ${difficultyConfig[task.difficulty].text}`}>
+                  {difficultyConfig[task.difficulty].label}
+                </span>
+              )}
+              {task.executor && (
+                <span className="text-xs px-2 py-0.5 rounded bg-gray-100 text-gray-600">
+                  {executorConfig[task.executor].icon} {executorConfig[task.executor].label}
+                </span>
+              )}
             </div>
 
             {task.description && (
@@ -357,13 +392,15 @@ function TaskCard({
             )}
 
             {/* CRB mini-display */}
-            <div className="flex gap-4 text-xs">
-              <span className="text-gray-500">💰 {task.crb.cost}</span>
-              <span className={riskConfig[task.crb.risk].text}>
-                ⚠️ {task.crb.risk} risk
-              </span>
-              <span className="text-green-600">✨ {task.crb.benefit}</span>
-            </div>
+            {task.crb && (
+              <div className="flex gap-4 text-xs">
+                <span className="text-gray-500">💰 {task.crb.cost}</span>
+                <span className={riskConfig[task.crb.risk].text}>
+                  ⚠️ {task.crb.risk} risk
+                </span>
+                <span className="text-green-600">✨ {task.crb.benefit}</span>
+              </div>
+            )}
 
             {/* Blocked indicator with dependency details */}
             {isBlocked && blockedBy && blockedBy.length > 0 && (
@@ -536,7 +573,10 @@ function PhaseCard({
   expanded: boolean
   onToggleExpand: () => void
 }) {
-  const allTasks = phase.weeks.flatMap(w => w.tasks)
+  // Handle both data structures (phases.weeks.tasks or phases.tasks)
+  const allTasks = (phase.weeks && Array.isArray(phase.weeks))
+    ? phase.weeks.flatMap(w => w.tasks || [])
+    : (phase.tasks || [])
   const completedCount = allTasks.filter(t => completedTasks.has(t.id)).length
   const progressPercent = allTasks.length ? Math.round((completedCount / allTasks.length) * 100) : 0
   const isComplete = progressPercent === 100
@@ -604,13 +644,15 @@ function PhaseCard({
             </div>
 
             {/* Phase CRB summary */}
-            <div className="flex gap-4 mt-3 ml-13 text-sm">
-              <span className="text-gray-600">💰 {phase.crb_summary.total_cost}</span>
-              <span className="text-gray-600">⏱️ {phase.crb_summary.setup_hours}h</span>
-              <span className="text-primary-600 font-medium">
-                CRB: {phase.crb_summary.crb_score}/10
-              </span>
-            </div>
+            {phase.crb_summary && (
+              <div className="flex gap-4 mt-3 ml-13 text-sm">
+                <span className="text-gray-600">💰 {phase.crb_summary.total_cost}</span>
+                <span className="text-gray-600">⏱️ {phase.crb_summary.setup_hours}h</span>
+                <span className="text-primary-600 font-medium">
+                  CRB: {phase.crb_summary.crb_score}/10
+                </span>
+              </div>
+            )}
           </div>
 
           <motion.svg
@@ -635,46 +677,81 @@ function PhaseCard({
             className="overflow-hidden border-t print:border-t-0"
           >
             <div className="p-6 space-y-6">
-              {phase.weeks.map(week => {
-                const weekCompleted = week.tasks.filter(t => completedTasks.has(t.id)).length
+              {/* Handle both data structures: weeks array or direct tasks */}
+              {phase.weeks && Array.isArray(phase.weeks) ? (
+                // Structure with weeks
+                phase.weeks.map(week => {
+                  const weekTasks = week.tasks || []
+                  const weekCompleted = weekTasks.filter(t => completedTasks.has(t.id)).length
 
-                return (
-                  <div key={week.week_number}>
-                    <div className="flex items-center justify-between mb-3">
-                      <h5 className="font-semibold text-gray-900">
-                        Week {week.week_number}: {week.theme}
-                      </h5>
-                      <span className="text-xs px-2 py-1 rounded bg-gray-100 text-gray-600">
-                        {weekCompleted}/{week.tasks.length} complete
-                      </span>
-                    </div>
+                  return (
+                    <div key={week.week_number}>
+                      <div className="flex items-center justify-between mb-3">
+                        <h5 className="font-semibold text-gray-900">
+                          Week {week.week_number}: {week.theme}
+                        </h5>
+                        <span className="text-xs px-2 py-1 rounded bg-gray-100 text-gray-600">
+                          {weekCompleted}/{weekTasks.length} complete
+                        </span>
+                      </div>
 
-                    <div className="space-y-3">
-                      {week.tasks.map(task => {
-                        const blockedBy = getBlockedBy(task)
-                        return (
-                          <TaskCard
-                            key={task.id}
-                            task={task}
-                            isCompleted={completedTasks.has(task.id)}
-                            onToggle={() => onTaskToggle(task.id)}
-                            isBlocked={blockedBy.length > 0}
-                            blockedBy={blockedBy}
-                            isCriticalPath={criticalPathTasks.has(task.id)}
-                          />
-                        )
-                      })}
-                    </div>
+                      <div className="space-y-3">
+                        {weekTasks.map(task => {
+                          const blockedBy = getBlockedBy(task)
+                          return (
+                            <TaskCard
+                              key={task.id}
+                              task={task}
+                              isCompleted={completedTasks.has(task.id)}
+                              onToggle={() => onTaskToggle(task.id)}
+                              isBlocked={blockedBy.length > 0}
+                              blockedBy={blockedBy}
+                              isCriticalPath={criticalPathTasks.has(task.id)}
+                            />
+                          )
+                        })}
+                      </div>
 
-                    {/* Week checkpoint */}
-                    <div className="mt-4 p-3 bg-primary-50 rounded-lg border border-primary-100">
-                      <p className="text-sm text-primary-700">
-                        <span className="font-medium">🎯 Checkpoint:</span> {week.checkpoint}
-                      </p>
+                      {/* Week checkpoint */}
+                      {week.checkpoint && (
+                        <div className="mt-4 p-3 bg-primary-50 rounded-lg border border-primary-100">
+                          <p className="text-sm text-primary-700">
+                            <span className="font-medium">🎯 Checkpoint:</span> {week.checkpoint}
+                          </p>
+                        </div>
+                      )}
                     </div>
+                  )
+                })
+              ) : (
+                // Simple structure with tasks directly on phase
+                <div>
+                  <div className="flex items-center justify-between mb-3">
+                    <h5 className="font-semibold text-gray-900">
+                      {phase.name}
+                    </h5>
+                    <span className="text-xs px-2 py-1 rounded bg-gray-100 text-gray-600">
+                      {allTasks.filter(t => completedTasks.has(t.id)).length}/{allTasks.length} complete
+                    </span>
                   </div>
-                )
-              })}
+                  <div className="space-y-3">
+                    {allTasks.map(task => {
+                      const blockedBy = getBlockedBy(task)
+                      return (
+                        <TaskCard
+                          key={task.id}
+                          task={task}
+                          isCompleted={completedTasks.has(task.id)}
+                          onToggle={() => onTaskToggle(task.id)}
+                          isBlocked={blockedBy.length > 0}
+                          blockedBy={blockedBy}
+                          isCriticalPath={criticalPathTasks.has(task.id)}
+                        />
+                      )
+                    })}
+                  </div>
+                </div>
+              )}
             </div>
           </motion.div>
         )}
@@ -738,8 +815,18 @@ export default function PlaybookTab({
   }
   const completedTasks = getCompletedTasksSet()
 
-  // Calculate totals
-  const allTasks = useMemo(() => playbook.phases.flatMap(p => p.weeks.flatMap(w => w.tasks)), [playbook])
+  // Calculate totals - handle both data structures (phases.weeks.tasks or phases.tasks)
+  const allTasks = useMemo(() => {
+    if (!playbook?.phases) return []
+    return playbook.phases.flatMap(p => {
+      // If phase has weeks array, use that
+      if (p.weeks && Array.isArray(p.weeks)) {
+        return p.weeks.flatMap(w => w.tasks || [])
+      }
+      // Otherwise tasks are directly on the phase
+      return p.tasks || []
+    })
+  }, [playbook])
   const completedCount = allTasks.filter(t => completedTasks.has(t.id) || t.completed).length
   const progressPercent = Math.round((completedCount / allTasks.length) * 100)
 
@@ -775,18 +862,31 @@ export default function PlaybookTab({
   }
 
   const handleExportChecklist = () => {
-    let checklist = `# ${playbook.option_type.replace('_', ' ').replace(/\b\w/g, c => c.toUpperCase())} Implementation Checklist\n\n`
+    let checklist = `# ${formatOptionType(playbook.option_type || 'implementation')} Checklist\n\n`
     checklist += `Total: ${allTasks.length} tasks | Completed: ${completedCount}\n\n`
 
-    for (const phase of playbook.phases) {
-      checklist += `## Phase ${phase.phase_number}: ${phase.title}\n\n`
+    for (const phase of playbook.phases || []) {
+      checklist += `## Phase ${phase.phase_number || ''}: ${phase.title || phase.name || ''}\n\n`
 
-      for (const week of phase.weeks) {
-        checklist += `### Week ${week.week_number}: ${week.theme}\n\n`
+      // Handle both data structures
+      if (phase.weeks && Array.isArray(phase.weeks)) {
+        for (const week of phase.weeks) {
+          checklist += `### Week ${week.week_number}: ${week.theme}\n\n`
 
-        for (const task of week.tasks) {
+          for (const task of week.tasks || []) {
+            const checked = completedTasks.has(task.id) ? 'x' : ' '
+            checklist += `- [${checked}] ${task.title} (${task.time_estimate_minutes || task.hours || '?'}min, ${task.difficulty || 'medium'})\n`
+            if (task.description) {
+              checklist += `  - ${task.description}\n`
+            }
+          }
+          checklist += '\n'
+        }
+      } else {
+        // Tasks directly on phase
+        for (const task of phase.tasks || []) {
           const checked = completedTasks.has(task.id) ? 'x' : ' '
-          checklist += `- [${checked}] ${task.title} (${task.time_estimate_minutes}min, ${task.difficulty})\n`
+          checklist += `- [${checked}] ${task.title} (${task.time_estimate_minutes || task.hours || '?'}min, ${task.difficulty || 'medium'})\n`
           if (task.description) {
             checklist += `  - ${task.description}\n`
           }
@@ -824,7 +924,7 @@ export default function PlaybookTab({
                     : 'bg-white border border-gray-200 hover:bg-gray-50 text-gray-700'
                 }`}
               >
-                {pb.option_type.replace('_', ' ').replace(/\b\w/g, c => c.toUpperCase())}
+                {formatOptionType(pb.option_type)}
               </button>
             ))}
           </div>
@@ -950,18 +1050,21 @@ export default function PlaybookTab({
       {/* Full Phases (hidden in quick mode) */}
       {viewMode === 'full' && (
         <div className="space-y-4">
-          {playbook.phases.map((phase) => (
-            <PhaseCard
-              key={phase.phase_number}
-              phase={phase}
-              completedTasks={completedTasks}
-              onTaskToggle={handleTaskToggle}
-              expanded={expandedPhase === phase.phase_number}
-              onToggleExpand={() => setExpandedPhase(
-                expandedPhase === phase.phase_number ? null : phase.phase_number
-              )}
-            />
-          ))}
+          {playbook.phases.map((phase, idx) => {
+            const phaseNum = phase.phase_number ?? idx + 1
+            return (
+              <PhaseCard
+                key={phaseNum}
+                phase={phase}
+                completedTasks={completedTasks}
+                onTaskToggle={handleTaskToggle}
+                expanded={expandedPhase === phaseNum}
+                onToggleExpand={() => setExpandedPhase(
+                  expandedPhase === phaseNum ? null : phaseNum
+                )}
+              />
+            )
+          })}
         </div>
       )}
 

@@ -1,0 +1,499 @@
+{
+  "id": "45476f6d-265b-499e-80d3-f5384e69f1dd",
+  "quiz_session_id": "1a54da17-2709-4686-af62-6f3b30201235",
+  "audit_id": null,
+  "tier": "full",
+  "status": "generating",
+  "executive_summary": {
+    "key_insight": "ComfortAir is leaving \u20ac75K-150K annually on the table through missed after-hours leads, inefficient scheduling, and manual processes that a proper field service management platform would solve\u2014most of this doesn't require AI, just better software.",
+    "report_date": "December 25, 2025",
+    "not_recommended": [
+      {
+        "title": "AI Chatbot for Complex HVAC Diagnostics",
+        "reason": "Your service calls require licensed technician assessment; AI cannot safely diagnose HVAC issues remotely, and customers expect human expertise for \u20ac350+ service calls"
+      },
+      {
+        "title": "Building Custom AI Solutions In-House",
+        "reason": "With 10 office staff and \u20ac2M revenue, you lack the technical capacity; proven FSM platforms like ServiceTitan or Housecall Pro already solve your core problems at fraction of custom development cost"
+      },
+      {
+        "title": "Replacing Office Staff with AI Immediately",
+        "reason": "Your 25% missed call rate and scheduling chaos indicate process problems, not headcount problems; fix the systems first, then reassess staffing needs"
+      }
+    ],
+    "top_opportunities": [
+      {
+        "title": "Field Service Management Platform Implementation",
+        "time_horizon": "short",
+        "value_potential": "\u20ac30K-50K annually"
+      },
+      {
+        "title": "After-Hours Lead Capture & Auto-Response",
+        "time_horizon": "short",
+        "value_potential": "\u20ac25K-40K annually"
+      },
+      {
+        "title": "Automated Customer ETA & Status Updates",
+        "time_horizon": "short",
+        "value_potential": "\u20ac15K-25K annually"
+      },
+      {
+        "title": "Route Optimization for 15 Technicians",
+        "time_horizon": "mid",
+        "value_potential": "\u20ac20K-35K annually"
+      },
+      {
+        "title": "Automated Review Collection Post-Service",
+        "time_horizon": "mid",
+        "value_potential": "\u20ac10K-20K annually"
+      }
+    ],
+    "ai_readiness_score": 65,
+    "customer_value_score": 8,
+    "business_health_score": 7,
+    "total_value_potential": {
+      "max": 150000,
+      "min": 75000,
+      "projection_years": 3
+    },
+    "recommended_investment": {
+      "year_1_max": 15000,
+      "year_1_min": 8000
+    }
+  },
+  "value_summary": {},
+  "findings": [
+    {
+      "id": "finding-001",
+      "title": "After-Hours Call Capture System",
+      "sources": [
+        "Based on your answer: 'Miss calls after hours, leads go cold before we can respond'",
+        "Based on your answer: '25% missed call percentage'",
+        "Based on your answer: '40-60 calls daily'",
+        "Industry benchmark: AI call handling captures 85%+ of after-hours leads vs 0% with voicemail (ServiceTitan Industry Report, 2024)"
+      ],
+      "why_not": null,
+      "category": "growth",
+      "confidence": "high",
+      "description": "You're missing an estimated 25% of daily calls, with specific pain around after-hours leads going cold. With 40-60 calls daily, this represents 10-15 missed opportunities per day. AI call answering can capture these leads 24/7 and book appointments automatically.",
+      "value_saved": {
+        "hourly_rate": 50,
+        "annual_savings": 20800,
+        "hours_per_week": 8
+      },
+      "time_horizon": "short",
+      "what_instead": null,
+      "current_state": "Based on your answer: 'Miss calls after hours, leads go cold before we can respond' and '25% missed call percentage'",
+      "value_created": {
+        "description": "Capturing 25% of currently missed calls at \u20ac350 average job value. Conservative estimate: 5 additional jobs per week.",
+        "potential_revenue": 91000
+      },
+      "is_not_recommended": false,
+      "customer_value_score": 9,
+      "business_health_score": 9
+    },
+    {
+      "id": "finding-002",
+      "title": "AI-Powered Scheduling & Route Optimization",
+      "sources": [
+        "Based on your answer: 'Technicians often double-booked, customers wait too long, route planning is guesswork'",
+        "Based on your answer: '25 hours wasted weekly' on manual scheduling",
+        "Based on your answer: '15 technicians' across '50-mile service area'",
+        "Industry benchmark: FSM software improves dispatch efficiency from 55% average to 65-75% (FSM industry data)"
+      ],
+      "why_not": null,
+      "category": "efficiency",
+      "confidence": "high",
+      "description": "Manual scheduling with Google Calendar and spreadsheets is causing double-bookings and inefficient routing for 15 technicians across a 50-mile service area. AI scheduling can eliminate double-bookings and optimize routes to fit 1-2 more jobs per tech per day.",
+      "value_saved": {
+        "hourly_rate": 50,
+        "annual_savings": 65000,
+        "hours_per_week": 25
+      },
+      "time_horizon": "short",
+      "what_instead": null,
+      "current_state": "Based on your answer: 'Technicians often double-booked, customers wait too long, route planning is guesswork' using 'Basic Google Calendar + spreadsheets'",
+      "value_created": {
+        "description": "1.5 additional jobs per day \u00d7 15 technicians \u00d7 \u20ac350 \u00d7 22 working days = significant revenue increase through capacity utilization",
+        "potential_revenue": 173250
+      },
+      "is_not_recommended": false,
+      "customer_value_score": 8,
+      "business_health_score": 10
+    },
+    {
+      "id": "finding-003",
+      "title": "Automated Customer ETA & Status Updates",
+      "sources": [
+        "Based on your answer: 'Customers call repeatedly asking for ETA, office staff overwhelmed with calls'",
+        "Based on your answer: '10 office staff' handling these calls",
+        "Industry benchmark: Automated reminders reduce no-show rate from 15% average to 8% (Housecall Pro data, 2024)",
+        "Industry benchmark: Review automation increases reviews from 2 to 15 per 100 jobs (Podium/Birdeye data, 2024)"
+      ],
+      "why_not": null,
+      "category": "customer_experience",
+      "confidence": "high",
+      "description": "Office staff overwhelmed with customers calling repeatedly for ETAs. Automated SMS updates on technician location and arrival time would eliminate most of these calls while improving customer experience.",
+      "value_saved": {
+        "hourly_rate": 50,
+        "annual_savings": 39000,
+        "hours_per_week": 15
+      },
+      "time_horizon": "short",
+      "what_instead": null,
+      "current_state": "Based on your answer: 'Customers call repeatedly asking for ETA, office staff overwhelmed with calls'",
+      "value_created": {
+        "description": "Reduced customer frustration leads to better reviews and repeat business. Companies with automated updates see 3x review generation and 50% reduction in no-shows.",
+        "potential_revenue": 25000
+      },
+      "is_not_recommended": false,
+      "customer_value_score": 9,
+      "business_health_score": 8
+    },
+    {
+      "id": "finding-004",
+      "title": "Lead Response Time Acceleration",
+      "sources": [
+        "Based on your answer: 'Lead response time 2-4 hours'",
+        "Based on your answer: '45% quote to close rate'",
+        "Industry benchmark: Leads contacted within 5 minutes are 21x more likely to convert (InsideSales.com research)",
+        "Based on your answer: '40-60 calls daily'"
+      ],
+      "why_not": null,
+      "category": "growth",
+      "confidence": "high",
+      "description": "Current 2-4 hour lead response time is allowing competitors to capture your leads. Industry data shows leads contacted within 5 minutes are 21x more likely to convert. AI-assisted immediate response can dramatically improve conversion.",
+      "value_saved": {
+        "hourly_rate": 50,
+        "annual_savings": 13000,
+        "hours_per_week": 5
+      },
+      "time_horizon": "short",
+      "what_instead": null,
+      "current_state": "Based on your answer: 'Lead response time 2-4 hours'",
+      "value_created": {
+        "description": "Improving response from 2-4 hours to under 5 minutes could double conversion rate on inbound leads. With 40-60 daily calls and 45% close rate, even 10% improvement is significant.",
+        "potential_revenue": 65000
+      },
+      "is_not_recommended": false,
+      "customer_value_score": 8,
+      "business_health_score": 9
+    },
+    {
+      "id": "finding-005",
+      "title": "Digital Quote Generation with Options",
+      "sources": [
+        "Based on your answer: 'Quote creation time 20-30 minutes'",
+        "Based on your answer: '\u20ac350 average job value'",
+        "Based on your answer: '45% quote to close rate'",
+        "Industry benchmark: Good-better-best pricing increases average ticket by 20-40% (ServiceTitan benchmarks, 2024)"
+      ],
+      "why_not": null,
+      "category": "efficiency",
+      "confidence": "medium",
+      "description": "Current 20-30 minute quote creation time is inefficient. AI-assisted quoting with good-better-best options can reduce quote time by 75% while increasing average ticket value by 20-40% through professional option presentation.",
+      "value_saved": {
+        "hourly_rate": 50,
+        "annual_savings": 20800,
+        "hours_per_week": 8
+      },
+      "time_horizon": "mid",
+      "what_instead": null,
+      "current_state": "Based on your answer: 'Quote creation time 20-30 minutes'",
+      "value_created": {
+        "description": "At \u20ac350 average job value with 15-25 jobs/day, a 25% ticket increase on 40% of jobs could generate substantial additional revenue.",
+        "potential_revenue": 95000
+      },
+      "is_not_recommended": false,
+      "customer_value_score": 7,
+      "business_health_score": 9
+    },
+    {
+      "id": "finding-006",
+      "title": "Service Agreement & Membership Program",
+      "sources": [
+        "Based on your answer: '35% repeat customer rate'",
+        "Industry benchmark: Good companies achieve 40%+ repeat rate, membership programs achieve 85% retention (Industry benchmarks)",
+        "Industry benchmark: Membership customer lifetime value \u20ac3,000-\u20ac10,000 vs \u20ac200-\u20ac500 one-time (Nexstar/Service Nation Alliance data)",
+        "Based on your answer: 'rarely' for review collection indicating limited ongoing customer engagement"
+      ],
+      "why_not": null,
+      "category": "growth",
+      "confidence": "medium",
+      "description": "With only 35% repeat customer rate vs 40%+ industry benchmark for good companies, there's significant opportunity for a membership program. Automated maintenance agreements create predictable recurring revenue and increase customer lifetime value by 3-5x.",
+      "value_saved": {
+        "hourly_rate": 50,
+        "annual_savings": 7800,
+        "hours_per_week": 3
+      },
+      "time_horizon": "mid",
+      "what_instead": null,
+      "current_state": "Based on your answer: '35% repeat customer rate' with 'rarely' collecting reviews",
+      "value_created": {
+        "description": "Converting 15% of customers to \u20ac30/month membership creates recurring revenue. Membership customers spend 2-3x more on additional services.",
+        "potential_revenue": 120000
+      },
+      "is_not_recommended": false,
+      "customer_value_score": 8,
+      "business_health_score": 10
+    },
+    {
+      "id": "finding-007",
+      "title": "Automated Invoice & Payment Collection",
+      "sources": [
+        "Based on your answer: 'Manual' invoicing method",
+        "Based on your answer: '30-45 day' payment collection",
+        "Industry benchmark: Automated invoicing reduces collection time by 70% (FSM vendor case studies, 2024)",
+        "Calculated: \u20ac2M annual revenue \u00f7 365 \u00d7 (37.5 - 10 days) = \u20ac150K working capital improvement"
+      ],
+      "why_not": null,
+      "category": "efficiency",
+      "confidence": "high",
+      "description": "Manual invoicing with 30-45 day payment collection is tying up working capital. Automated invoicing with integrated payment links typically reduces collection time to 7-14 days and frees up administrative time.",
+      "value_saved": {
+        "hourly_rate": 50,
+        "annual_savings": 26000,
+        "hours_per_week": 10
+      },
+      "time_horizon": "short",
+      "what_instead": null,
+      "current_state": "Based on your answer: 'Manual' invoicing method with '30-45 day' payment collection",
+      "value_created": {
+        "description": "Reducing collection from 37.5 days average to 10 days on \u20ac2M revenue improves cash flow by approximately \u20ac150K in working capital. Better cash position enables growth without additional financing.",
+        "potential_revenue": 15000
+      },
+      "is_not_recommended": false,
+      "customer_value_score": 7,
+      "business_health_score": 8
+    },
+    {
+      "id": "finding-008",
+      "title": "Automated Review Generation System",
+      "sources": [
+        "Based on your answer: 'rarely' for review collection",
+        "Based on your answer: '15-25 jobs per day'",
+        "Industry benchmark: Without automation 2 reviews per 100 jobs, with automation 15 reviews per 100 jobs (Podium/Birdeye data, 2024)",
+        "Industry research: Each star rating improvement increases revenue 5-9% (Harvard Business School research)"
+      ],
+      "why_not": null,
+      "category": "growth",
+      "confidence": "high",
+      "description": "You 'rarely' collect reviews despite completing 15-25 jobs daily. Automated review requests typically increase review generation from 2% to 15% of jobs, significantly improving local search visibility and conversion.",
+      "value_saved": {
+        "hourly_rate": 50,
+        "annual_savings": 5200,
+        "hours_per_week": 2
+      },
+      "time_horizon": "short",
+      "what_instead": null,
+      "current_state": "Based on your answer: 'rarely' for review collection",
+      "value_created": {
+        "description": "At 20 jobs/day \u00d7 22 days \u00d7 12 months = 5,280 annual jobs. Moving from 2% to 15% review rate = 685 additional reviews/year. Each 1-star improvement typically increases revenue 5-9%.",
+        "potential_revenue": 40000
+      },
+      "is_not_recommended": false,
+      "customer_value_score": 8,
+      "business_health_score": 8
+    },
+    {
+      "id": "finding-009",
+      "title": "Technician Performance Analytics Dashboard",
+      "sources": [
+        "Calculated: \u20ac2M revenue \u00f7 15 technicians = \u20ac133,333 per technician",
+        "Industry benchmark: HVAC revenue per technician median \u20ac200,000 (ACCA/PHCC Industry Reports, 2024)",
+        "Based on your answer: 'Want to grow from \u20ac2M to \u20ac4M in next 2 years without doubling office staff'",
+        "Industry benchmark: Dispatch efficiency average 55%, good 65%, excellent 75% (FSM industry data)"
+      ],
+      "why_not": null,
+      "category": "efficiency",
+      "confidence": "medium",
+      "description": "With 15 technicians and goal to grow from \u20ac2M to \u20ac4M without doubling staff, you need visibility into technician productivity. Your current revenue per technician is below industry benchmarks, indicating optimization opportunity.",
+      "value_saved": {
+        "hourly_rate": 50,
+        "annual_savings": 13000,
+        "hours_per_week": 5
+      },
+      "time_horizon": "mid",
+      "what_instead": null,
+      "current_state": "Calculated: \u20ac2M revenue \u00f7 15 technicians = \u20ac133,333 per tech vs industry median \u20ac200,000",
+      "value_created": {
+        "description": "Improving technician utilization from current ~67% of benchmark to 90% through visibility and optimization could add \u20ac500K+ in capacity without adding headcount.",
+        "potential_revenue": 200000
+      },
+      "is_not_recommended": false,
+      "customer_value_score": 6,
+      "business_health_score": 9
+    },
+    {
+      "id": "finding-010",
+      "title": "Eliminate Paper Forms with Mobile Field Service",
+      "sources": [
+        "Based on your answer: 'paper_forms' in current tools list",
+        "Based on your answer: 'Manual' invoicing method",
+        "Industry benchmark: Time on admin average 2.5 hours/day reduces to 1 hour with FSM software (Home services industry survey, 2024)",
+        "Industry pattern: HVAC businesses with digital forms report 70% reduction in billing disputes"
+      ],
+      "why_not": null,
+      "category": "efficiency",
+      "confidence": "high",
+      "description": "Paper forms create data entry delays, errors, and lost information. Mobile digital forms with photo capture improve data quality, speed up invoicing, and create better documentation for customer history.",
+      "value_saved": {
+        "hourly_rate": 50,
+        "annual_savings": 31200,
+        "hours_per_week": 12
+      },
+      "time_horizon": "short",
+      "what_instead": null,
+      "current_state": "Based on your answer: 'paper_forms' in current tools",
+      "value_created": {
+        "description": "Digital documentation improves warranty claim success, reduces disputes, and enables better upselling through equipment history tracking.",
+        "potential_revenue": 25000
+      },
+      "is_not_recommended": false,
+      "customer_value_score": 7,
+      "business_health_score": 8
+    },
+    {
+      "id": "finding-011",
+      "title": "Integrated Field Service Management Platform",
+      "sources": [
+        "Based on your answer: Current tools 'quickbooks, google_calendar, excel, paper_forms'",
+        "Based on your answer: 'Basic' FSM software usage rating",
+        "Industry benchmark: 45% of home services use FSM software, 30% still paper-based (Capterra SMB Survey, 2024)",
+        "Industry benchmark: FSM automation saves 1.5 hours/day per employee (Home services industry survey, 2024)"
+      ],
+      "why_not": null,
+      "category": "efficiency",
+      "confidence": "high",
+      "description": "Current tool fragmentation (QuickBooks + Google Calendar + Excel + paper) creates data silos and manual handoffs. An integrated FSM platform would unify scheduling, dispatch, invoicing, and customer management.",
+      "value_saved": {
+        "hourly_rate": 50,
+        "annual_savings": 52000,
+        "hours_per_week": 20
+      },
+      "time_horizon": "short",
+      "what_instead": null,
+      "current_state": "Based on your answer: Current tools are 'quickbooks, google_calendar, excel, paper_forms' - no integrated FSM",
+      "value_created": {
+        "description": "Integration eliminates duplicate data entry, reduces errors, and enables automation across the customer journey. Foundation for all other AI/automation improvements.",
+        "potential_revenue": 50000
+      },
+      "is_not_recommended": false,
+      "customer_value_score": 7,
+      "business_health_score": 9
+    },
+    {
+      "id": "finding-012",
+      "title": "Customer Self-Service Booking Portal",
+      "sources": [
+        "Based on your answer: 'Customers call repeatedly asking for ETA, office staff overwhelmed with calls'",
+        "Based on your answer: '40-60 calls daily'",
+        "Industry pattern: Home services businesses report 15-25% of bookings shift to online when portal available",
+        "Industry benchmark: Call booking rate average 60%, good 75% - online reduces lost opportunities"
+      ],
+      "why_not": null,
+      "category": "customer_experience",
+      "confidence": "medium",
+      "description": "With office staff overwhelmed by calls, a customer-facing booking portal allows customers to schedule routine appointments online, freeing staff for complex inquiries and reducing friction for customers.",
+      "value_saved": {
+        "hourly_rate": 50,
+        "annual_savings": 26000,
+        "hours_per_week": 10
+      },
+      "time_horizon": "mid",
+      "what_instead": null,
+      "current_state": "Based on your answer: 'Customers call repeatedly' and 'office staff overwhelmed with calls'",
+      "value_created": {
+        "description": "24/7 booking availability captures leads outside business hours. Reduces booking friction for customers who prefer digital interaction.",
+        "potential_revenue": 35000
+      },
+      "is_not_recommended": false,
+      "customer_value_score": 8,
+      "business_health_score": 7
+    },
+    {
+      "id": "finding-not-001",
+      "title": "Full AI Replacement of Office Staff",
+      "sources": [
+        "Based on your answer: 'Want to grow from \u20ac2M to \u20ac4M' - growth requires human judgment for complex situations",
+        "Industry data: HVAC operations involve complex technical discussions that current AI cannot reliably handle",
+        "Based on your answer: '40-60 calls daily' with varied complexity levels requiring human escalation",
+        "Industry pattern: Home services with full AI replacement report 30-50% customer satisfaction decline"
+      ],
+      "why_not": "Complete AI replacement of office staff would risk customer relationships, mishandle complex technical inquiries, and create liability issues for HVAC operations. Your customers expect human expertise when discussing heating/cooling issues in their homes.",
+      "category": "risk",
+      "confidence": "high",
+      "description": "Given your growth goals and current pain points, it might seem appealing to use AI to replace office staff entirely. However, with 10 office staff supporting complex HVAC operations, complete AI replacement would create significant service quality and customer relationship risks.",
+      "value_saved": null,
+      "time_horizon": "long",
+      "what_instead": "Implement AI-assisted tools that handle routine tasks (appointment confirmations, ETAs, simple FAQs) while freeing staff for complex customer interactions, technical consultations, and relationship building. Target 30-40% task automation, not staff elimination.",
+      "current_state": "Based on your answer: '10 office staff' supporting '15 technicians' and '40-60 calls daily'",
+      "value_created": null,
+      "is_not_recommended": true,
+      "customer_value_score": 3,
+      "business_health_score": 4
+    },
+    {
+      "id": "finding-not-002",
+      "title": "Enterprise-Grade ServiceTitan Implementation",
+      "sources": [
+        "Based on your answer: AI budget '\u20ac5,000-15,000' - ServiceTitan alone would consume \u20ac36,000-90,000/year",
+        "Based on your answer: Current tools are 'Basic Google Calendar + spreadsheets' - massive change management required",
+        "Based on your answer: Timeline preference '3-6 months' - enterprise implementation typically takes 6-12 months",
+        "Industry benchmark: ServiceTitan costs \u20ac200-500/month per technician for full feature set"
+      ],
+      "why_not": "At \u20ac200-500/month per technician, ServiceTitan would cost \u20ac36,000-90,000 annually - well beyond your \u20ac5,000-15,000 budget. Additionally, jumping from spreadsheets to enterprise software creates high implementation risk and change management burden.",
+      "category": "efficiency",
+      "confidence": "high",
+      "description": "While ServiceTitan is excellent software, implementing their full enterprise suite immediately would be over-engineered for your current state. At \u20ac200-500/month per technician (\u20ac3,000-7,500/month total), it exceeds your budget and requires significant organizational change.",
+      "value_saved": null,
+      "time_horizon": "short",
+      "what_instead": "Start with mid-tier FSM software like Housecall Pro (\u20ac50-200/month) or Jobber to establish digital foundations. Once processes are mature (12-18 months), evaluate enterprise options. This staged approach fits your budget and reduces risk.",
+      "current_state": "Based on your answer: Budget '\u20ac5,000-15,000' for AI implementation, currently using 'Basic Google Calendar + spreadsheets'",
+      "value_created": null,
+      "is_not_recommended": true,
+      "customer_value_score": 7,
+      "business_health_score": 4
+    },
+    {
+      "id": "finding-not-003",
+      "title": "Custom AI Development from Scratch",
+      "sources": [
+        "Based on your answer: AI tools used 'chatgpt_basic' - indicates early-stage AI maturity",
+        "Based on your answer: Timeline preference '3-6 months' - custom development typically takes 6-12+ months",
+        "Based on your answer: AI budget '\u20ac5,000-15,000' - custom development for one feature often exceeds this",
+        "Industry benchmark: 95% of enterprise AI pilots fail to deliver ROI (MIT 2025) - custom projects have higher failure rates than proven solutions"
+      ],
+      "why_not": "Custom AI development for scheduling, voice, or analytics would cost \u20ac30,000-100,000+, take 12+ months, and carry significant technical and adoption risk. Your budget and timeline don't support this, and proven solutions already exist.",
+      "category": "efficiency",
+      "confidence": "high",
+      "description": "Building custom AI solutions (scheduling algorithms, voice agents, predictive maintenance) from scratch would be costly, time-consuming, and risky given that proven off-the-shelf solutions exist for most of your needs.",
+      "value_saved": null,
+      "time_horizon": "long",
+      "what_instead": "Leverage off-the-shelf FSM platforms with built-in AI features (Housecall Pro, Jobber, or ServiceM8 for your size). Use integration tools like Zapier/Make to connect systems. Reserve custom development for truly unique needs that emerge after 18-24 months of digital operations.",
+      "current_state": "Based on your answer: 'chatgpt_basic' usage indicates early AI exploration stage",
+      "value_created": null,
+      "is_not_recommended": true,
+      "customer_value_score": 6,
+      "business_health_score": 3
+    }
+  ],
+  "recommendations": [],
+  "roadmap": {},
+  "methodology_notes": {},
+  "pdf_url": null,
+  "pdf_generated_at": null,
+  "generation_started_at": "2025-12-25T00:12:22.549667+00:00",
+  "generation_completed_at": null,
+  "error_message": null,
+  "agent_context": {},
+  "created_at": "2025-12-25T00:12:22.832193+00:00",
+  "updated_at": "2025-12-25T00:18:10.473013+00:00",
+  "industry_insights": null,
+  "error_at": null,
+  "playbooks": null,
+  "system_architecture": null,
+  "assumption_log": {},
+  "partial_data": {},
+  "token_usage": {}
+}

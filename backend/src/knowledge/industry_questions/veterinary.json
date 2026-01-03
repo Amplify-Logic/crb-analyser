@@ -1,0 +1,235 @@
+{
+  "industry": "veterinary",
+  "display_name": "Veterinary Practice",
+  "description": "Veterinary clinics, animal hospitals, and specialty animal care facilities",
+  "questions": [
+    {
+      "id": "patient_volume_weekly",
+      "question": "How many patients does your practice see per week?",
+      "input_type": "number",
+      "placeholder": "e.g., 200",
+      "target_categories": ["quantifiable_metrics", "industry_context"],
+      "expected_boosts": {"quantifiable_metrics": 20, "industry_context": 15},
+      "priority": 1,
+      "tags": ["volume", "capacity"]
+    },
+    {
+      "id": "veterinarian_count",
+      "question": "How many veterinarians work at your practice?",
+      "input_type": "number",
+      "placeholder": "e.g., 3",
+      "target_categories": ["company_basics", "quantifiable_metrics"],
+      "expected_boosts": {"company_basics": 20, "quantifiable_metrics": 10},
+      "priority": 1,
+      "tags": ["staffing", "capacity"]
+    },
+    {
+      "id": "after_hours_emergencies",
+      "question": "How do you handle after-hours emergencies?",
+      "input_type": "select",
+      "options": [
+        {"value": "24_7_own", "label": "We offer 24/7 care ourselves"},
+        {"value": "on_call", "label": "On-call veterinarian"},
+        {"value": "emergency_referral", "label": "Refer to emergency hospital"},
+        {"value": "voicemail", "label": "Voicemail with callback next day"},
+        {"value": "none", "label": "No after-hours service"}
+      ],
+      "target_categories": ["operations", "industry_context"],
+      "expected_boosts": {"operations": 20, "industry_context": 15},
+      "priority": 1,
+      "tags": ["emergency", "service_level"]
+    },
+    {
+      "id": "missed_calls_weekly",
+      "question": "Approximately how many patient calls go unanswered or to voicemail each week?",
+      "input_type": "select",
+      "options": [
+        {"value": "under_10", "label": "Under 10"},
+        {"value": "10_25", "label": "10-25"},
+        {"value": "25_50", "label": "25-50"},
+        {"value": "over_50", "label": "Over 50"},
+        {"value": "not_tracked", "label": "We don't track this"}
+      ],
+      "target_categories": ["pain_points", "quantifiable_metrics"],
+      "expected_boosts": {"pain_points": 20, "quantifiable_metrics": 15},
+      "priority": 1,
+      "tags": ["missed_calls", "front_desk"],
+      "deep_dive_triggers": ["25_50", "over_50"]
+    },
+    {
+      "id": "practice_management_system",
+      "question": "What practice management software do you use?",
+      "input_type": "select",
+      "options": [
+        {"value": "avimark", "label": "AVImark"},
+        {"value": "ezyvet", "label": "ezyVet"},
+        {"value": "cornerstone", "label": "Cornerstone"},
+        {"value": "vettersoftware", "label": "VetterSoftware"},
+        {"value": "digitail", "label": "Digitail"},
+        {"value": "covetrus", "label": "Covetrus Pulse"},
+        {"value": "other", "label": "Other"}
+      ],
+      "target_categories": ["tech_stack"],
+      "expected_boosts": {"tech_stack": 25},
+      "priority": 1,
+      "tags": ["software", "integration"]
+    },
+    {
+      "id": "no_show_rate",
+      "question": "What's your approximate appointment no-show rate?",
+      "input_type": "select",
+      "options": [
+        {"value": "under_5", "label": "Under 5%"},
+        {"value": "5_10", "label": "5-10%"},
+        {"value": "10_15", "label": "10-15%"},
+        {"value": "over_15", "label": "Over 15%"},
+        {"value": "not_tracked", "label": "We don't track this"}
+      ],
+      "target_categories": ["pain_points", "quantifiable_metrics"],
+      "expected_boosts": {"pain_points": 15, "quantifiable_metrics": 15},
+      "priority": 2,
+      "tags": ["scheduling", "revenue"],
+      "deep_dive_triggers": ["10_15", "over_15"]
+    },
+    {
+      "id": "front_desk_burden",
+      "question": "What's the most time-consuming task for your front desk staff?",
+      "input_type": "voice",
+      "target_categories": ["pain_points", "operations"],
+      "expected_boosts": {"pain_points": 25, "operations": 20},
+      "priority": 1,
+      "tags": ["admin", "bottleneck"]
+    },
+    {
+      "id": "client_communication",
+      "question": "How do you handle appointment reminders and client follow-ups?",
+      "input_type": "select",
+      "options": [
+        {"value": "automated", "label": "Automated texts/emails"},
+        {"value": "manual_calls", "label": "Manual phone calls"},
+        {"value": "pm_builtin", "label": "Built into our PM system"},
+        {"value": "mixed", "label": "Mix of methods"},
+        {"value": "minimal", "label": "Minimal follow-up"}
+      ],
+      "target_categories": ["operations", "tech_stack"],
+      "expected_boosts": {"operations": 15, "tech_stack": 15},
+      "priority": 2,
+      "tags": ["communication", "automation"]
+    },
+    {
+      "id": "prescription_refill_time",
+      "question": "How much time does your team spend on prescription refill requests daily?",
+      "input_type": "select",
+      "options": [
+        {"value": "under_30min", "label": "Under 30 minutes"},
+        {"value": "30_60min", "label": "30-60 minutes"},
+        {"value": "1_2hours", "label": "1-2 hours"},
+        {"value": "over_2hours", "label": "Over 2 hours"}
+      ],
+      "target_categories": ["operations", "pain_points"],
+      "expected_boosts": {"operations": 15, "pain_points": 10},
+      "priority": 3,
+      "tags": ["pharmacy", "workflow"]
+    },
+    {
+      "id": "specialty_services",
+      "question": "Which specialty services does your practice offer?",
+      "input_type": "multi_select",
+      "options": [
+        {"value": "surgery", "label": "Surgery"},
+        {"value": "dental", "label": "Dental"},
+        {"value": "diagnostics", "label": "Advanced diagnostics (ultrasound, X-ray)"},
+        {"value": "grooming", "label": "Grooming"},
+        {"value": "boarding", "label": "Boarding"},
+        {"value": "emergency", "label": "Emergency care"},
+        {"value": "exotic", "label": "Exotic animals"}
+      ],
+      "target_categories": ["industry_context", "operations"],
+      "expected_boosts": {"industry_context": 20, "operations": 10},
+      "priority": 2,
+      "tags": ["services", "offerings"]
+    },
+    {
+      "id": "growth_priority",
+      "question": "What's your main priority for the practice over the next 12 months?",
+      "input_type": "select",
+      "options": [
+        {"value": "more_patients", "label": "Attract more patients"},
+        {"value": "efficiency", "label": "Improve operational efficiency"},
+        {"value": "services", "label": "Expand services offered"},
+        {"value": "staff", "label": "Reduce staff burnout"},
+        {"value": "revenue", "label": "Increase revenue per patient"},
+        {"value": "quality", "label": "Improve quality of care"}
+      ],
+      "target_categories": ["goals_priorities"],
+      "expected_boosts": {"goals_priorities": 30},
+      "priority": 1,
+      "tags": ["growth", "strategy"]
+    },
+    {
+      "id": "ai_readiness",
+      "question": "How would you describe your practice's experience with AI or automation tools?",
+      "input_type": "select",
+      "options": [
+        {"value": "none", "label": "Haven't tried any yet"},
+        {"value": "exploring", "label": "Exploring options"},
+        {"value": "some", "label": "Using a few automated tools"},
+        {"value": "advanced", "label": "Already using AI for several tasks"}
+      ],
+      "target_categories": ["buying_signals", "tech_stack"],
+      "expected_boosts": {"buying_signals": 15, "tech_stack": 10},
+      "priority": 3,
+      "tags": ["readiness", "adoption"]
+    },
+    {
+      "id": "budget_timeline",
+      "question": "If you found a solution that could save significant time or improve patient care, when would you want to implement it?",
+      "input_type": "select",
+      "options": [
+        {"value": "immediately", "label": "As soon as possible"},
+        {"value": "3_months", "label": "Within 3 months"},
+        {"value": "6_months", "label": "Within 6 months"},
+        {"value": "next_year", "label": "Sometime next year"},
+        {"value": "just_exploring", "label": "Just exploring for now"}
+      ],
+      "target_categories": ["buying_signals"],
+      "expected_boosts": {"buying_signals": 25},
+      "priority": 3,
+      "tags": ["timeline", "urgency"]
+    }
+  ],
+  "woven_confirmation_templates": [
+    {
+      "id": "confirm_pm_system",
+      "condition": "tech_stack.practice_management",
+      "template": "How's {tech_stack.practice_management} working for your patient records and scheduling?",
+      "target_categories": ["tech_stack", "pain_points"],
+      "expected_boosts": {"tech_stack": 10, "pain_points": 15}
+    },
+    {
+      "id": "confirm_locations",
+      "condition": "company_basics.locations",
+      "template": "Running {company_basics.locations} locations is complex. What's the biggest coordination challenge across sites?",
+      "target_categories": ["operations", "pain_points"],
+      "expected_boosts": {"operations": 15, "pain_points": 20}
+    }
+  ],
+  "deep_dive_templates": [
+    {
+      "id": "missed_calls_deep_dive",
+      "trigger_question": "missed_calls_weekly",
+      "trigger_values": ["25_50", "over_50"],
+      "template": "That's a lot of missed calls. Are these mostly new patient inquiries, existing clients, or emergencies?",
+      "target_categories": ["operations", "pain_points"],
+      "expected_boosts": {"operations": 15, "pain_points": 15}
+    },
+    {
+      "id": "no_show_deep_dive",
+      "trigger_question": "no_show_rate",
+      "trigger_values": ["10_15", "over_15"],
+      "template": "No-shows really hurt scheduling. What happens when a patient doesn't show - how does your team handle it?",
+      "target_categories": ["operations", "pain_points"],
+      "expected_boosts": {"operations": 15, "pain_points": 15}
+    }
+  ]
+}

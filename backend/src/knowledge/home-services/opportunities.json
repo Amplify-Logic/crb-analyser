@@ -277,6 +277,14 @@
       "time_to_implement": "2 hours",
       "cost": "€20-50/month",
       "impact": "Capture 20-30% of missed calls"
+    },
+    {
+      "name": "Reactivate past customers via SMS/email campaign",
+      "time_to_implement": "1 day",
+      "cost": "€50-100/month",
+      "impact": "Recover 8-15 dormant customers per month, direct revenue",
+      "how": "Export customers inactive 6-18 months, send AI-personalized offer (seasonal tune-up, membership discount)",
+      "confidence": "high"
     }
   ],
   "not_recommended": [

@@ -107,7 +107,12 @@ class FindingGenerationSkill(LLMSkill[List[Dict[str, Any]]]):
         knowledge = context.knowledge or {}
 
         # Get opportunities and benchmarks from knowledge
-        opportunities = knowledge.get("opportunities", [])
+        opportunities_data = knowledge.get("opportunities", {})
+        # Handle both dict (with ai_opportunities key) and list formats
+        if isinstance(opportunities_data, dict):
+            opportunities = opportunities_data.get("ai_opportunities", [])
+        else:
+            opportunities = opportunities_data if isinstance(opportunities_data, list) else []
         benchmarks = knowledge.get("benchmarks", {})
 
         # Build expertise context for calibration

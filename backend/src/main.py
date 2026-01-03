@@ -114,6 +114,11 @@ from src.routes import (
     playbook_router,
     expertise_router,
     validation_router,
+    knowledge_admin_router,
+    admin_qa_router,
+    dev_feedback_router,
+    admin_vendors_router,
+    workshop_router,
 )
 
 # Health routes (no prefix - routes define their own paths)
@@ -133,6 +138,11 @@ app.include_router(interview_router, prefix="/api/interview", tags=["Interview"]
 app.include_router(playbook_router, prefix="/api/playbook", tags=["Playbook"])
 app.include_router(expertise_router, tags=["Expertise"])  # Agent self-improvement
 app.include_router(validation_router, prefix="/api/validation", tags=["Validation"])  # Assumption validation before report
+app.include_router(knowledge_admin_router, prefix="/api/admin/knowledge", tags=["Knowledge Admin"])  # Knowledge base management
+app.include_router(admin_qa_router, prefix="/api/admin/qa", tags=["QA Review"])  # Human QA review workflow
+app.include_router(dev_feedback_router, prefix="/api/dev", tags=["Dev Feedback"])  # Dev mode feedback & context
+app.include_router(admin_vendors_router, prefix="/api/admin", tags=["Vendor Admin"])  # Vendor database management
+app.include_router(workshop_router, prefix="/api/workshop", tags=["Workshop"])  # 90-minute personalized workshop
 
 
 # ============================================================================

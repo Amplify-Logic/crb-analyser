@@ -1,0 +1,234 @@
+{
+  "meta": {
+    "title": "Vertical AI SaaS Examples - Niche Operating Systems",
+    "purpose": "Reference examples of companies that became 'the operating system' for their niche",
+    "source": "YC startups, video 'The Boring AI Niches Making Millionaires in 2026' (Ben, 2025)",
+    "last_updated": "2025-12-26",
+    "key_insight": "AI turns previously 'too small' niches into massive opportunities by increasing LTV 10-15x over traditional SaaS"
+  },
+
+  "why_vertical_ai_saas_works": {
+    "the_math": {
+      "traditional_saas": {
+        "example": "Eye care clinic CRM",
+        "typical_price": "€100/month",
+        "market_size": "19,000 clinics in US",
+        "total_addressable_market": "€22.8M/year",
+        "verdict": "Too small for VCs or serious software business"
+      },
+      "ai_saas": {
+        "example": "Barti - AI operating system for eye care clinics",
+        "price": "€1,500/month (15x traditional)",
+        "why_higher_price": "Replaces labor (admin, booking, patient communication), not just provides tools",
+        "total_addressable_market": "€342M/year",
+        "verdict": "Now attractive for VCs - Barti raised $12M Series A (Dec 2025)"
+      }
+    },
+    "two_factors": [
+      {
+        "factor": "LTV Increase (10-15x)",
+        "explanation": "AI can replace labor, not just provide tools. Businesses can spend far more on software that eliminates headcount or frees capacity.",
+        "example": "€100/mo for CRM → €1,500/mo for AI that handles calls, booking, patient communication"
+      },
+      {
+        "factor": "CAC Decrease",
+        "explanation": "AI marketing/sales tools reduce customer acquisition cost. Voice agents qualify leads, AI does personalized outreach at scale.",
+        "example": "Clay for mass personalized outreach, AI chatbots for onboarding, voice agents for qualification"
+      }
+    ],
+    "third_factor_jevons_effect": {
+      "explanation": "When AI increases efficiency, costs drop, demand often INCREASES, leading to more revenue capacity",
+      "example": "AI radiology → cheaper scans → more people get scans → MORE radiologists needed",
+      "link_to_roi_model": "See backend/src/models/roi_calculator.py - DemandExpansionScenario"
+    }
+  },
+
+  "yc_backed_examples": [
+    {
+      "company": "Barti",
+      "niche": "Eye care clinics",
+      "description": "AI operating system for optometry practices - automates patient intake, appointment booking, follow-ups, doctor admin",
+      "pricing": "~$1,500/month",
+      "funding": "$12M Series A (December 2025)",
+      "category": "Healthcare - Specialty",
+      "url": "https://www.barti.com",
+      "key_lesson": "Full vertical stack commands 15x price of point solution"
+    },
+    {
+      "company": "Nautilus",
+      "niche": "Car washes",
+      "description": "AI software for car wash businesses - handles memberships, payments, marketing automations, customer management",
+      "pricing": "Undisclosed",
+      "funding": "YC-backed",
+      "category": "Local Services - Automotive",
+      "url": "https://www.nautiluscarwash.com",
+      "key_lesson": "Even 'boring' niches like car washes have tech-underserved markets"
+    },
+    {
+      "company": "VetNeo",
+      "niche": "Veterinary clinics",
+      "description": "AI that automates notes and admin for veterinary doctors, replacing manual documentation",
+      "pricing": "Undisclosed",
+      "funding": "YC-backed",
+      "category": "Healthcare - Veterinary",
+      "key_lesson": "Admin burden is massive pain point for service professionals"
+    },
+    {
+      "company": "MDHub",
+      "niche": "Mental health clinics",
+      "description": "AI front desk and admin automation for mental health practices",
+      "pricing": "Undisclosed",
+      "funding": "YC-backed",
+      "category": "Healthcare - Mental Health",
+      "key_lesson": "Healthcare verticals have complex compliance needs that justify vertical solutions"
+    },
+    {
+      "company": "Auto Ace",
+      "niche": "Car dealerships",
+      "description": "AI voice agent that automatically books appointments for car dealerships",
+      "pricing": "Undisclosed",
+      "funding": "YC-backed",
+      "category": "Local Services - Automotive",
+      "key_lesson": "Voice AI is highest-ROI entry point for many local services"
+    },
+    {
+      "company": "Cohesive",
+      "niche": "Janitorial, landscaping, roofing, flooring",
+      "description": "Lead generation automation platform for trade businesses",
+      "pricing": "Undisclosed",
+      "funding": "YC-backed",
+      "category": "Local Services - Trades",
+      "key_lesson": "Small businesses couldn't afford marketing agencies - AI makes it accessible"
+    },
+    {
+      "company": "ProSpa",
+      "niche": "Home service professionals",
+      "description": "Operations platform for home service businesses with pre-built AI automations",
+      "pricing": "Undisclosed",
+      "funding": "YC-backed",
+      "category": "Local Services - General",
+      "key_lesson": "Vertical stack beats horizontal FSM for specific industries"
+    }
+  ],
+
+  "non_yc_examples": [
+    {
+      "company": "Aura AI",
+      "niche": "Hotels (Germany)",
+      "description": "AI receptionist that manages calls and reservations for hotels",
+      "founder": "Yonas (community member)",
+      "pricing": "Undisclosed",
+      "category": "Hospitality",
+      "geography": "Germany (localized)",
+      "key_lesson": "Geographic focus + language specialization = defensible niche"
+    },
+    {
+      "company": "ServiceTitan",
+      "niche": "Home services (HVAC, plumbing, electrical)",
+      "description": "Vertical SaaS that became THE operating system for home services",
+      "pricing": "€200-500/month per technician",
+      "status": "Public company (IPO 2024)",
+      "category": "Local Services - Home",
+      "key_lesson": "First mover in vertical can become dominant platform"
+    }
+  ],
+
+  "the_evolution_path": {
+    "description": "How to go from AI agency to vertical AI SaaS",
+    "stages": [
+      {
+        "stage": 1,
+        "name": "Function-Specific AI",
+        "description": "Solve one high-ROI problem for a niche (e.g., AI voice answering)",
+        "example": "Auto Ace - just AI booking for car dealerships",
+        "revenue_model": "Per-client custom builds or productized service",
+        "focus": "Learn the industry, find the pain"
+      },
+      {
+        "stage": 2,
+        "name": "Integrated Workflows",
+        "description": "Connect multiple functions with pre-built automations",
+        "example": "AI booking + automated follow-ups + review requests",
+        "revenue_model": "Monthly subscription, higher price point",
+        "focus": "Reduce manual touchpoints, increase stickiness"
+      },
+      {
+        "stage": 3,
+        "name": "Vertical Operating System",
+        "description": "Become THE platform for the niche - CRM, operations, marketing, AI all in one",
+        "example": "Barti, Nautilus, ServiceTitan",
+        "revenue_model": "€500-2,000+/month per location",
+        "focus": "Own the data, own the relationship, become indispensable"
+      }
+    ],
+    "time_to_platform": "Unlike traditional SaaS (5-10 years), AI-native companies can reach Stage 3 in 1-2 years"
+  },
+
+  "our_target_industries_vertical_potential": {
+    "home-services": {
+      "current_dominant": "ServiceTitan, Housecall Pro",
+      "ai_opportunity": "AI-native challenger with better automation from day one",
+      "recommendation_for_clients": "Use ServiceTitan OR build custom if you want competitive advantage"
+    },
+    "dental": {
+      "current_dominant": "Dentrix, Open Dental, Curve Dental",
+      "ai_opportunity": "AI patient communication, scheduling optimization, treatment planning",
+      "recommendation_for_clients": "Layer AI on existing PM OR recommend AI-native entrants"
+    },
+    "veterinary": {
+      "current_dominant": "eVetPractice, Cornerstone, Shepherd",
+      "ai_opportunity": "AI for notes (VetNeo), patient communication, triage",
+      "recommendation_for_clients": "Watch VetNeo and similar AI-native solutions"
+    },
+    "professional-services": {
+      "current_dominant": "Clio (legal), Practice Ignition (accounting)",
+      "ai_opportunity": "AI document generation, client intake, billing automation",
+      "recommendation_for_clients": "Significant custom opportunity - many still use spreadsheets"
+    },
+    "recruiting": {
+      "current_dominant": "Bullhorn, JobAdder, Loxo",
+      "ai_opportunity": "AI candidate screening, outreach, scheduling",
+      "recommendation_for_clients": "High automation potential - AI can 10x throughput"
+    },
+    "coaching": {
+      "current_dominant": "CoachAccountable, Satori, Practice",
+      "ai_opportunity": "AI session prep, client progress tracking, automated follow-ups",
+      "recommendation_for_clients": "Underserved market - custom builds often better than off-shelf"
+    }
+  },
+
+  "when_to_recommend_vertical_play": {
+    "recommend_building_platform_when": [
+      "Client is an agency looking to productize",
+      "Client serves a very specific niche with no good software",
+      "Client has competitive advantage aspirations, not just efficiency",
+      "Client has technical capability or resources to build",
+      "Client's niche has <50,000 potential customers (too small for big players)"
+    ],
+    "recommend_using_existing_when": [
+      "Good vertical solution already exists (ServiceTitan for home services)",
+      "Client needs speed to value over competitive advantage",
+      "Client lacks technical resources",
+      "Client's primary goal is efficiency, not differentiation"
+    ]
+  },
+
+  "key_metrics_for_vertical_ai_saas": {
+    "pricing_power": {
+      "traditional_saas": "€50-200/month",
+      "ai_saas_entry": "€200-500/month",
+      "ai_operating_system": "€500-2,000/month",
+      "multiplier": "10-15x over traditional"
+    },
+    "market_size_threshold": {
+      "traditional_saas_minimum": "100,000+ potential customers",
+      "ai_saas_viable": "10,000-30,000 potential customers",
+      "rationale": "Higher LTV makes smaller markets viable"
+    },
+    "time_to_value": {
+      "traditional_saas_build": "2-5 years to product-market fit",
+      "ai_native_build": "6-18 months with AI coding tools",
+      "rationale": "Claude Code, Cursor, etc. dramatically reduce build time"
+    }
+  }
+}

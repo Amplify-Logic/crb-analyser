@@ -1,0 +1,230 @@
+{
+  "industry": "coaching",
+  "display_name": "Coaching & Consulting",
+  "description": "Life coaches, executive coaches, business consultants, and solo practitioners",
+  "questions": [
+    {
+      "id": "client_count",
+      "question": "How many active coaching clients do you currently work with?",
+      "input_type": "select",
+      "options": [
+        {"value": "1_5", "label": "1-5 clients"},
+        {"value": "6_10", "label": "6-10 clients"},
+        {"value": "11_20", "label": "11-20 clients"},
+        {"value": "21_50", "label": "21-50 clients"},
+        {"value": "over_50", "label": "Over 50 clients"}
+      ],
+      "target_categories": ["quantifiable_metrics", "industry_context"],
+      "expected_boosts": {"quantifiable_metrics": 20, "industry_context": 15},
+      "priority": 1,
+      "tags": ["scale", "capacity"]
+    },
+    {
+      "id": "session_frequency",
+      "question": "How many coaching sessions do you conduct per week on average?",
+      "input_type": "number",
+      "placeholder": "e.g., 15",
+      "target_categories": ["quantifiable_metrics", "operations"],
+      "expected_boosts": {"quantifiable_metrics": 20, "operations": 10},
+      "priority": 1,
+      "tags": ["volume", "workload"]
+    },
+    {
+      "id": "session_notes_time",
+      "question": "How much time do you spend on session notes and documentation per week?",
+      "input_type": "select",
+      "options": [
+        {"value": "under_2", "label": "Under 2 hours"},
+        {"value": "2_5", "label": "2-5 hours"},
+        {"value": "5_10", "label": "5-10 hours"},
+        {"value": "over_10", "label": "Over 10 hours"},
+        {"value": "no_notes", "label": "I don't take detailed notes"}
+      ],
+      "target_categories": ["pain_points", "operations"],
+      "expected_boosts": {"pain_points": 20, "operations": 15},
+      "priority": 1,
+      "tags": ["admin", "documentation"],
+      "deep_dive_triggers": ["5_10", "over_10"]
+    },
+    {
+      "id": "scheduling_method",
+      "question": "How do clients book sessions with you?",
+      "input_type": "select",
+      "options": [
+        {"value": "calendly", "label": "Calendly or similar booking tool"},
+        {"value": "acuity", "label": "Acuity Scheduling"},
+        {"value": "email_back_forth", "label": "Email back-and-forth"},
+        {"value": "coaching_platform", "label": "Built into my coaching platform"},
+        {"value": "manual", "label": "I schedule manually"}
+      ],
+      "target_categories": ["tech_stack", "operations"],
+      "expected_boosts": {"tech_stack": 20, "operations": 10},
+      "priority": 2,
+      "tags": ["booking", "automation"]
+    },
+    {
+      "id": "discovery_calls_weekly",
+      "question": "How many discovery calls with potential clients do you do per week?",
+      "input_type": "select",
+      "options": [
+        {"value": "0_2", "label": "0-2"},
+        {"value": "3_5", "label": "3-5"},
+        {"value": "6_10", "label": "6-10"},
+        {"value": "over_10", "label": "Over 10"}
+      ],
+      "target_categories": ["quantifiable_metrics", "operations"],
+      "expected_boosts": {"quantifiable_metrics": 15, "operations": 15},
+      "priority": 2,
+      "tags": ["sales", "leads"]
+    },
+    {
+      "id": "lead_qualification",
+      "question": "How do you currently qualify whether a potential client is a good fit?",
+      "input_type": "voice",
+      "target_categories": ["operations", "pain_points"],
+      "expected_boosts": {"operations": 20, "pain_points": 15},
+      "priority": 1,
+      "tags": ["sales", "intake"]
+    },
+    {
+      "id": "coaching_platform",
+      "question": "What platform do you use to manage your coaching business?",
+      "input_type": "select",
+      "options": [
+        {"value": "practice_better", "label": "Practice Better"},
+        {"value": "honeybook", "label": "HoneyBook"},
+        {"value": "dubsado", "label": "Dubsado"},
+        {"value": "notion", "label": "Notion or similar"},
+        {"value": "spreadsheets", "label": "Spreadsheets"},
+        {"value": "no_system", "label": "No formal system"},
+        {"value": "other", "label": "Other"}
+      ],
+      "target_categories": ["tech_stack"],
+      "expected_boosts": {"tech_stack": 25},
+      "priority": 1,
+      "tags": ["software", "crm"]
+    },
+    {
+      "id": "biggest_bottleneck",
+      "question": "What's the biggest bottleneck that prevents you from taking on more clients?",
+      "input_type": "voice",
+      "target_categories": ["pain_points", "operations"],
+      "expected_boosts": {"pain_points": 25, "operations": 15},
+      "priority": 1,
+      "tags": ["growth", "capacity"]
+    },
+    {
+      "id": "no_show_rate",
+      "question": "What percentage of scheduled sessions are cancelled or no-shows?",
+      "input_type": "select",
+      "options": [
+        {"value": "under_5", "label": "Under 5%"},
+        {"value": "5_10", "label": "5-10%"},
+        {"value": "10_20", "label": "10-20%"},
+        {"value": "over_20", "label": "Over 20%"}
+      ],
+      "target_categories": ["pain_points", "quantifiable_metrics"],
+      "expected_boosts": {"pain_points": 15, "quantifiable_metrics": 15},
+      "priority": 2,
+      "tags": ["reliability", "revenue"],
+      "deep_dive_triggers": ["10_20", "over_20"]
+    },
+    {
+      "id": "content_creation_hours",
+      "question": "How many hours per week do you spend creating content (courses, worksheets, marketing)?",
+      "input_type": "select",
+      "options": [
+        {"value": "under_2", "label": "Under 2 hours"},
+        {"value": "2_5", "label": "2-5 hours"},
+        {"value": "5_10", "label": "5-10 hours"},
+        {"value": "over_10", "label": "Over 10 hours"}
+      ],
+      "target_categories": ["operations", "quantifiable_metrics"],
+      "expected_boosts": {"operations": 15, "quantifiable_metrics": 10},
+      "priority": 3,
+      "tags": ["marketing", "creation"]
+    },
+    {
+      "id": "revenue_goal",
+      "question": "What's your main revenue goal for the next 12 months?",
+      "input_type": "select",
+      "options": [
+        {"value": "double", "label": "Double my revenue"},
+        {"value": "50_percent", "label": "Grow 50%"},
+        {"value": "maintain", "label": "Maintain current level with less work"},
+        {"value": "passive", "label": "Add passive income streams"},
+        {"value": "group", "label": "Move to more group/scalable programs"}
+      ],
+      "target_categories": ["goals_priorities"],
+      "expected_boosts": {"goals_priorities": 30},
+      "priority": 1,
+      "tags": ["growth", "strategy"]
+    },
+    {
+      "id": "ai_interest",
+      "question": "Which AI capabilities would be most valuable for your practice?",
+      "input_type": "multi_select",
+      "options": [
+        {"value": "session_notes", "label": "Automatic session notes"},
+        {"value": "discovery_calls", "label": "AI discovery call screening"},
+        {"value": "content_creation", "label": "Content creation assistance"},
+        {"value": "client_tracking", "label": "Progress tracking and insights"},
+        {"value": "scheduling", "label": "Smart scheduling"},
+        {"value": "email", "label": "Email drafting and follow-ups"}
+      ],
+      "target_categories": ["goals_priorities", "buying_signals"],
+      "expected_boosts": {"goals_priorities": 15, "buying_signals": 15},
+      "priority": 2,
+      "tags": ["needs", "interests"]
+    },
+    {
+      "id": "budget_timeline",
+      "question": "If you found a solution that could save you 5+ hours per week, when would you want to implement it?",
+      "input_type": "select",
+      "options": [
+        {"value": "immediately", "label": "As soon as possible"},
+        {"value": "3_months", "label": "Within 3 months"},
+        {"value": "6_months", "label": "Within 6 months"},
+        {"value": "just_exploring", "label": "Just exploring for now"}
+      ],
+      "target_categories": ["buying_signals"],
+      "expected_boosts": {"buying_signals": 25},
+      "priority": 3,
+      "tags": ["timeline", "urgency"]
+    }
+  ],
+  "woven_confirmation_templates": [
+    {
+      "id": "confirm_platform",
+      "condition": "tech_stack.coaching_platform",
+      "template": "How's {tech_stack.coaching_platform} working for managing your clients?",
+      "target_categories": ["tech_stack", "pain_points"],
+      "expected_boosts": {"tech_stack": 10, "pain_points": 15}
+    },
+    {
+      "id": "confirm_specialty",
+      "condition": "industry_context.specialty",
+      "template": "As a {industry_context.specialty} coach, what's the most challenging part of your client work?",
+      "target_categories": ["pain_points", "industry_context"],
+      "expected_boosts": {"pain_points": 20, "industry_context": 10}
+    }
+  ],
+  "deep_dive_templates": [
+    {
+      "id": "notes_deep_dive",
+      "trigger_question": "session_notes_time",
+      "trigger_values": ["5_10", "over_10"],
+      "template": "That's a lot of documentation time. Walk me through what you're capturing - is it for your reference, client progress, or regulatory requirements?",
+      "target_categories": ["operations", "pain_points"],
+      "expected_boosts": {"operations": 15, "pain_points": 15}
+    },
+    {
+      "id": "no_show_deep_dive",
+      "trigger_question": "no_show_rate",
+      "trigger_values": ["10_20", "over_20"],
+      "template": "Cancellations can really hurt a coaching practice. What's usually the reason - scheduling conflicts, commitment issues, or something else?",
+      "target_categories": ["pain_points", "operations"],
+      "expected_boosts": {"pain_points": 15, "operations": 10}
+    }
+  ]
+}

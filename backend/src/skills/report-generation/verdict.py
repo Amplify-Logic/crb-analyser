@@ -18,14 +18,15 @@ This skill:
 
 Output Schema:
 {
-    "recommendation": "go|caution|wait|no",
+    "recommendation": "proceed|proceed_cautiously|wait|not_recommended",
     "headline": "Short punchy headline",
     "subheadline": "Supporting context",
     "reasoning": ["Reason 1", "Reason 2", "Reason 3"],
     "confidence": "high|medium|low",
-    "color": "green|yellow|orange|red",
-    "next_steps": ["Step 1", "Step 2", "Step 3"],
-    "prerequisites": ["If any", "Before proceeding"]
+    "color": "green|yellow|orange|gray",
+    "when_to_revisit": "Specific timing for re-evaluation",
+    "recommended_approach": ["Step 1", "Step 2", "Step 3"],
+    "what_to_do_instead": ["If wait/not_recommended: alternative actions"]
 }
 """
 
@@ -76,27 +77,35 @@ class VerdictSkill(LLMSkill[Dict[str, Any]]):
     requires_llm = True
     requires_expertise = False  # Works without, but better with
 
-    # Verdict templates
+    # Verdict templates - keys match internal codes, values used for frontend
     VERDICT_TEMPLATES = {
         "go": {
+            "recommendation": "proceed",
             "color": "green",
             "headline": "Go For It",
             "subheadline": "Strong fundamentals for AI adoption",
+            "when_to_revisit": "Quarterly check-ins to measure progress and adjust",
         },
         "caution": {
+            "recommendation": "proceed_cautiously",
             "color": "yellow",
             "headline": "Proceed with Caution",
             "subheadline": "Good potential, but watch for risks",
+            "when_to_revisit": "Re-evaluate after your first AI pilot (3-6 months)",
         },
         "wait": {
+            "recommendation": "wait",
             "color": "orange",
             "headline": "Wait and Prepare",
             "subheadline": "Address prerequisites before investing",
+            "when_to_revisit": "Check back in 6-12 months after addressing prerequisites",
         },
         "no": {
-            "color": "red",
+            "recommendation": "not_recommended",
+            "color": "gray",
             "headline": "Not Recommended Now",
             "subheadline": "Focus on other priorities first",
+            "when_to_revisit": "Revisit AI in 12-18 months after standardizing core processes",
         },
     }
 
@@ -284,25 +293,25 @@ TOP FINDINGS:
 INITIAL ASSESSMENT: {initial_verdict.upper()}
 
 ═══════════════════════════════════════════════════════════════════════════════
-VERDICT OPTIONS
+VERDICT OPTIONS (use these exact values for recommendation field)
 ═══════════════════════════════════════════════════════════════════════════════
 
-GO (Green): Proceed with confidence
+proceed (Green): Proceed with confidence
 - AI readiness 70+, both scores 7+
 - Clear ROI, minimal risks
 - Strong fundamentals
 
-CAUTION (Yellow): Proceed carefully
+proceed_cautiously (Yellow): Proceed carefully
 - AI readiness 50-69, scores 5-7
 - Good potential but watch risks
 - Some gaps to address
 
-WAIT (Orange): Prepare first
+wait (Orange): Prepare first
 - AI readiness 30-49, scores 4-6
 - Significant prerequisites needed
 - Focus on foundation
 
-NO (Red): Not recommended now
+not_recommended (Gray): Not recommended now
 - AI readiness below 30, low scores
 - Major gaps or risks
 - Better alternatives exist
@@ -311,7 +320,7 @@ NO (Red): Not recommended now
 
 Generate a JSON verdict:
 {{
-    "recommendation": "go|caution|wait|no",
+    "recommendation": "proceed|proceed_cautiously|wait|not_recommended",
     "headline": "<short punchy headline - max 5 words>",
     "subheadline": "<supporting context - max 10 words>",
     "reasoning": [
@@ -320,14 +329,15 @@ Generate a JSON verdict:
         "<key reason 3>"
     ],
     "confidence": "high|medium|low",
-    "next_steps": [
+    "when_to_revisit": "<specific timing for re-evaluation, e.g. 'Quarterly check-ins' or 'In 6-12 months after...')>",
+    "recommended_approach": [
         "<immediate action 1>",
         "<immediate action 2>",
         "<immediate action 3>"
     ],
-    "prerequisites": [
-        "<if wait/no: what needs to happen first>",
-        "<if wait/no: another prerequisite>"
+    "what_to_do_instead": [
+        "<if wait/not_recommended: what to focus on first>",
+        "<if wait/not_recommended: another alternative>"
     ]
 }}
 
@@ -345,16 +355,33 @@ Return ONLY the JSON."""
                 system=self._get_system_prompt(),
             )
 
-            # Add color based on recommendation
-            recommendation = response.get("recommendation", initial_verdict)
-            template = self.VERDICT_TEMPLATES.get(recommendation, self.VERDICT_TEMPLATES["caution"])
-            response["color"] = template["color"]
+            # Map internal verdict codes to frontend values if needed
+            llm_recommendation = response.get("recommendation", initial_verdict)
+            # Handle case where LLM might return internal code like "go" instead of "proceed"
+            internal_to_frontend = {
+                "go": "proceed",
+                "caution": "proceed_cautiously",
+                "no": "not_recommended",
+                "wait": "wait",
+            }
+            if llm_recommendation in internal_to_frontend:
+                response["recommendation"] = internal_to_frontend[llm_recommendation]
+            elif llm_recommendation not in ("proceed", "proceed_cautiously", "wait", "not_recommended"):
+                # Unknown value, map from initial_verdict
+                template = self.VERDICT_TEMPLATES.get(initial_verdict, self.VERDICT_TEMPLATES["caution"])
+                response["recommendation"] = template["recommendation"]
 
-            # Ensure headline/subheadline if missing
+            # Get template based on internal code for defaults
+            template = self.VERDICT_TEMPLATES.get(initial_verdict, self.VERDICT_TEMPLATES["caution"])
+
+            # Ensure all required fields are present
+            response["color"] = response.get("color") or template["color"]
             if not response.get("headline"):
                 response["headline"] = template["headline"]
             if not response.get("subheadline"):
                 response["subheadline"] = template["subheadline"]
+            if not response.get("when_to_revisit"):
+                response["when_to_revisit"] = template["when_to_revisit"]
 
             return response
 
@@ -412,14 +439,15 @@ Always explain WHY, not just WHAT."""
         template = self.VERDICT_TEMPLATES.get(initial_verdict, self.VERDICT_TEMPLATES["caution"])
 
         return {
-            "recommendation": initial_verdict,
+            "recommendation": template["recommendation"],
             "headline": template["headline"],
             "subheadline": template["subheadline"],
             "reasoning": ["Based on overall assessment scores"],
             "confidence": "low",
             "color": template["color"],
-            "next_steps": ["Review findings for specific actions"],
-            "prerequisites": [],
+            "when_to_revisit": template["when_to_revisit"],
+            "recommended_approach": ["Review findings for specific actions"],
+            "what_to_do_instead": [],
         }
 
 

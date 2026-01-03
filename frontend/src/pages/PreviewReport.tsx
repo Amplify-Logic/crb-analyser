@@ -49,6 +49,7 @@ export default function PreviewReport() {
   const [previewData, setPreviewData] = useState<PreviewData | null>(null)
   const [companyName, setCompanyName] = useState('')
   const [error, setError] = useState<string | null>(null)
+  const [devShowAll, setDevShowAll] = useState(false) // DEV: toggle to show all findings
 
   useEffect(() => {
     generatePreview()
@@ -72,7 +73,38 @@ export default function PreviewReport() {
       const answers = answersStr ? JSON.parse(answersStr) : {}
       const messages = messagesStr ? JSON.parse(messagesStr) : []
 
-      // Try to get preview from backend
+      // DEV MODE: Use dev endpoint if we have stored profile data (from skip button)
+      const isDev = searchParams.get('dev') === 'true' || import.meta.env.DEV
+      if (isDev && companyProfileStr) {
+        try {
+          const response = await fetch(`${API_BASE_URL}/api/quiz/dev/preview`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              company_profile: companyProfile,
+              quiz_answers: answers,
+              interview_messages: messages,
+            }),
+          })
+
+          if (response.ok) {
+            const data = await response.json()
+            setPreviewData(data)
+            if (data.company_name) setCompanyName(data.company_name)
+            sessionStorage.setItem('quizResults', JSON.stringify({
+              score: data.score,
+              opportunities: data.opportunities,
+              industryInsight: data.industryInsight,
+            }))
+            setIsLoading(false)
+            return
+          }
+        } catch (err) {
+          console.warn('Dev preview endpoint failed:', err)
+        }
+      }
+
+      // Try to get preview from backend with session
       try {
         const response = await fetch(`${API_BASE_URL}/api/quiz/sessions/${sessionId}/preview`, {
           method: 'POST',
@@ -100,62 +132,157 @@ export default function PreviewReport() {
         console.warn('Backend preview failed, using local generation:', err)
       }
 
-      // Fallback: Generate preview locally based on available data
+      // Fallback: Generate personalized preview based on available data
       const industry = companyProfile?.industry?.primary_industry?.value || 'your industry'
       const teamSize = companyProfile?.size?.employee_range?.value || 'your team'
 
-      // Generate realistic opportunities based on common patterns
-      const opportunities: Opportunity[] = [
-        {
+      // Analyze interview answers to personalize opportunities
+      const allAnswers = Object.values(answers).join(' ').toLowerCase()
+      const allMessages = messages.map((m: { content: string }) => m.content).join(' ').toLowerCase()
+      const combinedText = `${allAnswers} ${allMessages}`
+
+      // Detect pain points mentioned in interview
+      const painPoints = {
+        customerSupport: /customer|support|ticket|inquiry|complaint|respond/i.test(combinedText),
+        documents: /document|invoice|contract|paperwork|form|data entry/i.test(combinedText),
+        content: /content|writing|draft|proposal|marketing|email/i.test(combinedText),
+        meetings: /meeting|call|transcript|notes|summary/i.test(combinedText),
+        sales: /sales|lead|prospect|crm|pipeline|outreach/i.test(combinedText),
+        scheduling: /schedule|appointment|calendar|booking/i.test(combinedText),
+        reporting: /report|analytics|dashboard|metric/i.test(combinedText),
+        manual: /manual|repetitive|copy.paste|tedious|slow/i.test(combinedText),
+      }
+
+      // Generate personalized opportunities based on detected pain points
+      const opportunities: Opportunity[] = []
+
+      // Always show top 2 opportunities based on what they mentioned
+      if (painPoints.customerSupport || painPoints.manual) {
+        opportunities.push({
           title: 'Customer Support Automation',
-          description: 'AI-powered chatbot and ticket routing could handle 60%+ of routine inquiries.',
+          description: 'AI-powered chatbot and ticket routing to handle 60%+ of routine inquiries automatically.',
           potential: 'High',
           timeToValue: '2-4 weeks',
           blurred: false,
-        },
-        {
+        })
+      }
+
+      if (painPoints.documents || painPoints.manual) {
+        opportunities.push({
           title: 'Document Processing',
-          description: 'Automate data extraction from invoices, contracts, and forms.',
+          description: 'Automate data extraction from invoices, contracts, and forms - reducing manual entry by 80%.',
           potential: 'High',
           timeToValue: '1-2 weeks',
-          blurred: false,
-        },
-        {
+          blurred: opportunities.length >= 2,
+        })
+      }
+
+      if (painPoints.content) {
+        opportunities.push({
           title: 'Content Creation Pipeline',
-          description: `AI-assisted drafting for marketing, proposals, and ${industry} documentation.`,
-          potential: 'Medium',
+          description: `AI-assisted drafting for marketing, proposals, and ${industry} documentation - 70% faster first drafts.`,
+          potential: 'High',
           timeToValue: '1 week',
-          blurred: true,
-        },
-        {
+          blurred: opportunities.length >= 2,
+        })
+      }
+
+      if (painPoints.meetings) {
+        opportunities.push({
           title: 'Meeting Intelligence',
-          description: 'Automatic transcription, summaries, and action item extraction.',
+          description: 'Automatic transcription, summaries, and action item extraction - save 4+ hours/week.',
           potential: 'Medium',
           timeToValue: '1-2 days',
-          blurred: true,
-        },
-        {
+          blurred: opportunities.length >= 2,
+        })
+      }
+
+      if (painPoints.sales) {
+        opportunities.push({
           title: 'Sales Intelligence',
-          description: 'Lead scoring and personalized outreach recommendations.',
+          description: 'Lead scoring and personalized outreach recommendations to boost conversion rates.',
           potential: 'High',
           timeToValue: '2-3 weeks',
-          blurred: true,
-        },
+          blurred: opportunities.length >= 2,
+        })
+      }
+
+      if (painPoints.scheduling) {
+        opportunities.push({
+          title: 'Smart Scheduling',
+          description: 'AI-powered appointment booking and calendar management to eliminate back-and-forth.',
+          potential: 'Medium',
+          timeToValue: '1 week',
+          blurred: opportunities.length >= 2,
+        })
+      }
+
+      if (painPoints.reporting) {
+        opportunities.push({
+          title: 'Automated Reporting',
+          description: 'Generate reports and dashboards automatically from your data sources.',
+          potential: 'Medium',
+          timeToValue: '2-3 weeks',
+          blurred: opportunities.length >= 2,
+        })
+      }
+
+      // Fill in with generic opportunities if we don't have enough
+      const defaultOpportunities: Opportunity[] = [
+        { title: 'Customer Support Automation', description: 'AI chatbot for routine inquiries.', potential: 'High', timeToValue: '2-4 weeks', blurred: false },
+        { title: 'Document Processing', description: 'Extract data from documents automatically.', potential: 'High', timeToValue: '1-2 weeks', blurred: false },
+        { title: 'Content Creation Pipeline', description: 'AI-assisted drafting and editing.', potential: 'Medium', timeToValue: '1 week', blurred: true },
+        { title: 'Meeting Intelligence', description: 'Transcription and summaries.', potential: 'Medium', timeToValue: '1-2 days', blurred: true },
+        { title: 'Workflow Automation', description: 'Connect your tools and automate handoffs.', potential: 'High', timeToValue: '2-3 weeks', blurred: true },
       ]
 
-      // Calculate a score based on available data
+      while (opportunities.length < 5) {
+        const missing = defaultOpportunities.find(d => !opportunities.some(o => o.title === d.title))
+        if (missing) {
+          opportunities.push({ ...missing, blurred: opportunities.length >= 2 })
+        } else {
+          break
+        }
+      }
+
+      // Calculate a score based on available data and detected pain points
       const hasProfile = Object.keys(companyProfile).length > 0
       const hasAnswers = Object.keys(answers).length > 0
       const hasMessages = messages.length > 0
-      const baseScore = 45 + (hasProfile ? 15 : 0) + (hasAnswers ? 20 : 0) + (hasMessages ? 10 : 0)
-      const score = Math.min(95, baseScore + Math.floor(Math.random() * 10))
+      const painPointCount = Object.values(painPoints).filter(Boolean).length
+
+      const baseScore = 40 + (hasProfile ? 15 : 0) + (hasAnswers ? 15 : 0) + (hasMessages ? 10 : 0) + (painPointCount * 3)
+      const score = Math.min(92, baseScore + Math.floor(Math.random() * 5))
+
+      // Generate personalized insight
+      const detectedAreas = Object.entries(painPoints)
+        .filter(([_, detected]) => detected)
+        .map(([area]) => area)
+        .slice(0, 2)
+
+      const areaLabels: Record<string, string> = {
+        customerSupport: 'customer support',
+        documents: 'document processing',
+        content: 'content creation',
+        meetings: 'meeting management',
+        sales: 'sales processes',
+        scheduling: 'scheduling',
+        reporting: 'reporting',
+        manual: 'manual tasks',
+      }
+
+      const focusAreas = detectedAreas.map(a => areaLabels[a] || a).join(' and ')
 
       const preview: PreviewData = {
         score,
         opportunities,
-        industryInsight: `Based on Q4 2025 research, ${industry} businesses are seeing 30-50% efficiency gains from targeted AI automation. Companies with ${teamSize} are ideal candidates for quick-win implementations.`,
-        topRecommendation: 'Start with customer support automation - it has the highest ROI and fastest time to value for most businesses.',
-        estimatedSavings: '€15,000 - €45,000/year',
+        industryInsight: focusAreas
+          ? `Based on your interview, ${focusAreas} are clear areas for AI automation. ${industry} businesses typically see 30-50% efficiency gains when they start with focused implementations.`
+          : `Based on Q4 2025 research, ${industry} businesses are seeing 30-50% efficiency gains from targeted AI automation. Companies with ${teamSize} are ideal candidates for quick-win implementations.`,
+        topRecommendation: opportunities[0]
+          ? `Start with ${opportunities[0].title.toLowerCase()} - it addresses the challenges you mentioned and has the fastest time to value.`
+          : 'Start with customer support automation - it has the highest ROI and fastest time to value for most businesses.',
+        estimatedSavings: score >= 70 ? '€25,000 - €75,000/year' : score >= 50 ? '€15,000 - €45,000/year' : '€10,000 - €30,000/year',
       }
 
       setPreviewData(preview)
@@ -235,7 +362,22 @@ export default function PreviewReport() {
           <Link to="/" className="text-xl font-bold text-gray-900">
             CRB<span className="text-primary-600">Analyser</span>
           </Link>
-          <span className="text-sm text-gray-500">Preview Report</span>
+          <div className="flex items-center gap-4">
+            {/* DEV MODE toggle */}
+            {import.meta.env.DEV && (
+              <button
+                onClick={() => setDevShowAll(!devShowAll)}
+                className={`px-3 py-1 text-xs font-medium rounded-full transition ${
+                  devShowAll
+                    ? 'bg-yellow-500 text-white'
+                    : 'bg-yellow-100 text-yellow-800 hover:bg-yellow-200'
+                }`}
+              >
+                {devShowAll ? '🔓 All Visible' : '🔒 Normal View'}
+              </button>
+            )}
+            <span className="text-sm text-gray-500">Preview Report</span>
+          </div>
         </div>
       </nav>
 
@@ -324,10 +466,10 @@ export default function PreviewReport() {
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ delay: 0.4 + index * 0.1 }}
                   className={`bg-white rounded-xl p-5 border border-gray-100 shadow-sm ${
-                    opp.blurred ? 'relative overflow-hidden' : ''
+                    opp.blurred && !devShowAll ? 'relative overflow-hidden' : ''
                   }`}
                 >
-                  {opp.blurred && (
+                  {opp.blurred && !devShowAll && (
                     <div className="absolute inset-0 backdrop-blur-sm bg-white/60 flex items-center justify-center z-10">
                       <div className="text-center">
                         <svg className="w-8 h-8 text-gray-400 mx-auto mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">

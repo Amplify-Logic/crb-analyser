@@ -1,0 +1,1233 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CRB Model Comparison - Claude vs GPT vs Gemini</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        :root {
+            --claude-color: #D97706;
+            --gpt-color: #10B981;
+            --gemini-color: #3B82F6;
+            --bg-dark: #0F172A;
+            --bg-card: #1E293B;
+            --bg-card-hover: #334155;
+            --text-primary: #F8FAFC;
+            --text-secondary: #94A3B8;
+            --text-muted: #64748B;
+            --border-color: #334155;
+            --success: #22C55E;
+            --warning: #EAB308;
+            --danger: #EF4444;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: var(--bg-dark);
+            color: var(--text-primary);
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        /* Header */
+        .header {
+            text-align: center;
+            margin-bottom: 3rem;
+            padding: 2rem;
+            background: linear-gradient(135deg, var(--bg-card) 0%, #0F172A 100%);
+            border-radius: 1.5rem;
+            border: 1px solid var(--border-color);
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            background: linear-gradient(135deg, #F8FAFC 0%, #94A3B8 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .header p {
+            color: var(--text-secondary);
+            font-size: 1.1rem;
+        }
+
+        .company-badge {
+            display: inline-block;
+            background: var(--bg-card-hover);
+            padding: 0.5rem 1rem;
+            border-radius: 2rem;
+            margin-top: 1rem;
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+
+        /* Model Cards Grid */
+        .models-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1.5rem;
+            margin-bottom: 3rem;
+        }
+
+        @media (max-width: 1024px) {
+            .models-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .model-card {
+            background: var(--bg-card);
+            border-radius: 1.25rem;
+            padding: 1.5rem;
+            border: 2px solid var(--border-color);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .model-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+        }
+
+        .model-card.claude::before { background: var(--claude-color); }
+        .model-card.gpt::before { background: var(--gpt-color); }
+        .model-card.gemini::before { background: var(--gemini-color); }
+
+        .model-card:hover {
+            border-color: var(--text-muted);
+            transform: translateY(-4px);
+        }
+
+        .model-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .model-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+
+        .claude .model-icon { background: rgba(217, 119, 6, 0.2); color: var(--claude-color); }
+        .gpt .model-icon { background: rgba(16, 185, 129, 0.2); color: var(--gpt-color); }
+        .gemini .model-icon { background: rgba(59, 130, 246, 0.2); color: var(--gemini-color); }
+
+        .model-name {
+            font-size: 1.25rem;
+            font-weight: 600;
+        }
+
+        .model-version {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+        }
+
+        .model-stats {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 0.75rem;
+            margin-bottom: 1rem;
+        }
+
+        .stat-box {
+            background: var(--bg-dark);
+            padding: 0.75rem;
+            border-radius: 0.75rem;
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 1.25rem;
+            font-weight: 700;
+        }
+
+        .stat-label {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .headline-box {
+            background: var(--bg-dark);
+            padding: 1rem;
+            border-radius: 0.75rem;
+            margin-bottom: 1rem;
+            border-left: 3px solid;
+        }
+
+        .claude .headline-box { border-color: var(--claude-color); }
+        .gpt .headline-box { border-color: var(--gpt-color); }
+        .gemini .headline-box { border-color: var(--gemini-color); }
+
+        .headline-box p {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            font-style: italic;
+        }
+
+        .key-insight {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            margin-top: 0.5rem;
+        }
+
+        .key-insight strong {
+            color: var(--text-secondary);
+        }
+
+        /* Scores */
+        .scores-row {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .score-pill {
+            flex: 1;
+            background: var(--bg-dark);
+            padding: 0.5rem;
+            border-radius: 0.5rem;
+            text-align: center;
+        }
+
+        .score-pill .value {
+            font-size: 1.1rem;
+            font-weight: 700;
+        }
+
+        .score-pill .label {
+            font-size: 0.65rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+        }
+
+        /* Winner Badge */
+        .winner-badge {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: var(--success);
+            color: #000;
+            padding: 0.25rem 0.75rem;
+            border-radius: 1rem;
+            font-size: 0.7rem;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+
+        /* Charts Section */
+        .charts-section {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1.5rem;
+            margin-bottom: 3rem;
+        }
+
+        @media (max-width: 900px) {
+            .charts-section {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .chart-card {
+            background: var(--bg-card);
+            border-radius: 1.25rem;
+            padding: 1.5rem;
+            border: 1px solid var(--border-color);
+        }
+
+        .chart-card h3 {
+            font-size: 1rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            color: var(--text-secondary);
+        }
+
+        .chart-container {
+            position: relative;
+            height: 250px;
+        }
+
+        /* Findings Section */
+        .findings-section {
+            margin-bottom: 3rem;
+        }
+
+        .section-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 1.5rem;
+        }
+
+        .section-header h2 {
+            font-size: 1.5rem;
+            font-weight: 600;
+        }
+
+        .tabs {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .tab {
+            padding: 0.5rem 1rem;
+            border-radius: 0.5rem;
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            color: var(--text-secondary);
+            cursor: pointer;
+            transition: all 0.2s;
+            font-size: 0.9rem;
+        }
+
+        .tab:hover, .tab.active {
+            background: var(--bg-card-hover);
+            color: var(--text-primary);
+        }
+
+        .tab.active.claude { border-color: var(--claude-color); }
+        .tab.active.gpt { border-color: var(--gpt-color); }
+        .tab.active.gemini { border-color: var(--gemini-color); }
+
+        .findings-grid {
+            display: none;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 1rem;
+        }
+
+        .findings-grid.active {
+            display: grid;
+        }
+
+        .finding-card {
+            background: var(--bg-card);
+            border-radius: 1rem;
+            padding: 1.25rem;
+            border: 1px solid var(--border-color);
+        }
+
+        .finding-header {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            margin-bottom: 0.75rem;
+        }
+
+        .finding-title {
+            font-size: 0.95rem;
+            font-weight: 600;
+            flex: 1;
+        }
+
+        .confidence-badge {
+            padding: 0.25rem 0.5rem;
+            border-radius: 0.25rem;
+            font-size: 0.7rem;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .confidence-badge.high { background: rgba(34, 197, 94, 0.2); color: var(--success); }
+        .confidence-badge.medium { background: rgba(234, 179, 8, 0.2); color: var(--warning); }
+        .confidence-badge.low { background: rgba(239, 68, 68, 0.2); color: var(--danger); }
+
+        .finding-category {
+            display: inline-block;
+            padding: 0.2rem 0.5rem;
+            background: var(--bg-dark);
+            border-radius: 0.25rem;
+            font-size: 0.7rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            margin-bottom: 0.5rem;
+        }
+
+        .finding-description {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            margin-bottom: 0.75rem;
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .finding-metrics {
+            display: flex;
+            gap: 1rem;
+            padding-top: 0.75rem;
+            border-top: 1px solid var(--border-color);
+        }
+
+        .metric {
+            text-align: center;
+        }
+
+        .metric-value {
+            font-size: 1rem;
+            font-weight: 700;
+        }
+
+        .metric-value.savings { color: var(--success); }
+        .metric-value.revenue { color: var(--gemini-color); }
+
+        .metric-label {
+            font-size: 0.65rem;
+            color: var(--text-muted);
+        }
+
+        .not-recommended {
+            border-left: 3px solid var(--danger);
+        }
+
+        .not-recommended .finding-title::before {
+            content: '⛔ ';
+        }
+
+        /* Comparison Table */
+        .comparison-section {
+            margin-bottom: 3rem;
+        }
+
+        .comparison-table {
+            width: 100%;
+            background: var(--bg-card);
+            border-radius: 1rem;
+            overflow: hidden;
+            border: 1px solid var(--border-color);
+        }
+
+        .comparison-table th,
+        .comparison-table td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .comparison-table th {
+            background: var(--bg-dark);
+            font-weight: 600;
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+        }
+
+        .comparison-table td {
+            font-size: 0.9rem;
+        }
+
+        .comparison-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .comparison-table .model-col {
+            font-weight: 600;
+        }
+
+        .comparison-table .claude-col { color: var(--claude-color); }
+        .comparison-table .gpt-col { color: var(--gpt-color); }
+        .comparison-table .gemini-col { color: var(--gemini-color); }
+
+        .winner-cell {
+            background: rgba(34, 197, 94, 0.1);
+        }
+
+        /* Vendors Section */
+        .vendors-section {
+            margin-bottom: 3rem;
+        }
+
+        .vendors-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 1rem;
+        }
+
+        .vendor-card {
+            background: var(--bg-card);
+            border-radius: 1rem;
+            padding: 1.25rem;
+            border: 1px solid var(--border-color);
+        }
+
+        .vendor-name {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 0.25rem;
+        }
+
+        .vendor-usecase {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            margin-bottom: 0.75rem;
+        }
+
+        .vendor-pricing {
+            display: inline-block;
+            background: var(--bg-dark);
+            padding: 0.25rem 0.75rem;
+            border-radius: 1rem;
+            font-size: 0.85rem;
+            color: var(--success);
+            font-weight: 600;
+        }
+
+        .vendor-mentions {
+            display: flex;
+            gap: 0.5rem;
+            margin-top: 0.75rem;
+        }
+
+        .mention-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+        }
+
+        .mention-dot.claude { background: var(--claude-color); }
+        .mention-dot.gpt { background: var(--gpt-color); }
+        .mention-dot.gemini { background: var(--gemini-color); }
+
+        /* Footer */
+        .footer {
+            text-align: center;
+            padding: 2rem;
+            color: var(--text-muted);
+            font-size: 0.85rem;
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .model-card, .chart-card, .finding-card, .vendor-card {
+            animation: fadeIn 0.5s ease-out;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header class="header">
+            <h1>🤖 CRB Model Comparison</h1>
+            <p>Comparing Claude Opus 4.5, GPT-5.2, and Gemini 3 Pro for AI Business Analysis</p>
+            <div class="company-badge">📍 ComfortAir HVAC Services • €2M Revenue • 25 Employees</div>
+        </header>
+
+        <!-- Model Cards -->
+        <div class="models-grid">
+            <!-- Claude Opus -->
+            <div class="model-card claude">
+                <span class="winner-badge">Quality Winner</span>
+                <div class="model-header">
+                    <div class="model-icon">C</div>
+                    <div>
+                        <div class="model-name">Claude Opus 4.5</div>
+                        <div class="model-version">claude-opus-4-5-20251101</div>
+                    </div>
+                </div>
+                <div class="model-stats">
+                    <div class="stat-box">
+                        <div class="stat-value">149.6s</div>
+                        <div class="stat-label">Time</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-value">$0.64</div>
+                        <div class="stat-label">Cost</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-value">8,192</div>
+                        <div class="stat-label">Tokens</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-value">11</div>
+                        <div class="stat-label">Findings</div>
+                    </div>
+                </div>
+                <div class="scores-row">
+                    <div class="score-pill">
+                        <div class="value">62</div>
+                        <div class="label">AI Ready</div>
+                    </div>
+                    <div class="score-pill">
+                        <div class="value">6</div>
+                        <div class="label">Customer</div>
+                    </div>
+                    <div class="score-pill">
+                        <div class="value">7</div>
+                        <div class="label">Business</div>
+                    </div>
+                </div>
+                <div class="headline-box">
+                    <p>"ComfortAir is leaving €180K-€320K annually on the table through missed calls, inefficient scheduling, and manual processes."</p>
+                    <div class="key-insight"><strong>Key Insight:</strong> Revenue per tech €133K vs €200K benchmark</div>
+                </div>
+            </div>
+
+            <!-- GPT-5.2 -->
+            <div class="model-card gpt">
+                <span class="winner-badge" style="background: var(--gpt-color);">Best Balance</span>
+                <div class="model-header">
+                    <div class="model-icon">G</div>
+                    <div>
+                        <div class="model-name">GPT-5.2</div>
+                        <div class="model-version">gpt-5.2-chat-latest</div>
+                    </div>
+                </div>
+                <div class="model-stats">
+                    <div class="stat-box">
+                        <div class="stat-value">24.3s</div>
+                        <div class="stat-label">Time</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-value">$0.04</div>
+                        <div class="stat-label">Cost</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-value">2,926</div>
+                        <div class="stat-label">Tokens</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-value">10</div>
+                        <div class="stat-label">Findings</div>
+                    </div>
+                </div>
+                <div class="scores-row">
+                    <div class="score-pill">
+                        <div class="value">68</div>
+                        <div class="label">AI Ready</div>
+                    </div>
+                    <div class="score-pill">
+                        <div class="value">8</div>
+                        <div class="label">Customer</div>
+                    </div>
+                    <div class="score-pill">
+                        <div class="value">7</div>
+                        <div class="label">Business</div>
+                    </div>
+                </div>
+                <div class="headline-box">
+                    <p>"ComfortAir can unlock significant growth and efficiency by fixing scheduling and customer response with affordable AI-first FSM tools."</p>
+                    <div class="key-insight"><strong>Key Insight:</strong> Eliminate missed calls and manual scheduling</div>
+                </div>
+            </div>
+
+            <!-- Gemini 3 Pro -->
+            <div class="model-card gemini">
+                <span class="winner-badge" style="background: var(--gemini-color);">Cost Winner</span>
+                <div class="model-header">
+                    <div class="model-icon">G</div>
+                    <div>
+                        <div class="model-name">Gemini 3 Pro</div>
+                        <div class="model-version">gemini-3-pro-preview</div>
+                    </div>
+                </div>
+                <div class="model-stats">
+                    <div class="stat-box">
+                        <div class="stat-value">46.7s</div>
+                        <div class="stat-label">Time</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-value">$0.02</div>
+                        <div class="stat-label">Cost</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-value">3,625</div>
+                        <div class="stat-label">Tokens</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-value">10</div>
+                        <div class="stat-label">Findings</div>
+                    </div>
+                </div>
+                <div class="scores-row">
+                    <div class="score-pill">
+                        <div class="value">65</div>
+                        <div class="label">AI Ready</div>
+                    </div>
+                    <div class="score-pill">
+                        <div class="value">8</div>
+                        <div class="label">Customer</div>
+                    </div>
+                    <div class="score-pill">
+                        <div class="value">7</div>
+                        <div class="label">Business</div>
+                    </div>
+                </div>
+                <div class="headline-box">
+                    <p>"ComfortAir is leaking €100k+ annually through missed calls and manual scheduling, but is primed for rapid modernization."</p>
+                    <div class="key-insight"><strong>Key Insight:</strong> Office-to-tech ratio 1:1.5 vs 1:3 standard</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Charts Section -->
+        <div class="charts-section">
+            <div class="chart-card">
+                <h3>📊 Value Potential Comparison (€)</h3>
+                <div class="chart-container">
+                    <canvas id="valueChart"></canvas>
+                </div>
+            </div>
+            <div class="chart-card">
+                <h3>⏱️ Performance Metrics</h3>
+                <div class="chart-container">
+                    <canvas id="performanceChart"></canvas>
+                </div>
+            </div>
+            <div class="chart-card">
+                <h3>🎯 Confidence Distribution</h3>
+                <div class="chart-container">
+                    <canvas id="confidenceChart"></canvas>
+                </div>
+            </div>
+            <div class="chart-card">
+                <h3>💰 Cost per Finding ($)</h3>
+                <div class="chart-container">
+                    <canvas id="costChart"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <!-- Findings Section -->
+        <section class="findings-section">
+            <div class="section-header">
+                <h2>📋 Key Findings by Model</h2>
+                <div class="tabs">
+                    <button class="tab claude active" onclick="showFindings('claude')">Claude Opus</button>
+                    <button class="tab gpt" onclick="showFindings('gpt')">GPT-5.2</button>
+                    <button class="tab gemini" onclick="showFindings('gemini')">Gemini 3 Pro</button>
+                </div>
+            </div>
+
+            <!-- Claude Findings -->
+            <div id="claude-findings" class="findings-grid active">
+                <div class="finding-card">
+                    <div class="finding-header">
+                        <div class="finding-title">Critical Revenue Leakage from Missed Calls</div>
+                        <span class="confidence-badge high">HIGH</span>
+                    </div>
+                    <span class="finding-category">Growth</span>
+                    <p class="finding-description">With 40-60 daily calls and 25% missed call rate, ComfortAir is missing 10-15 calls daily, representing €91K-€182K annually.</p>
+                    <div class="finding-metrics">
+                        <div class="metric">
+                            <div class="metric-value revenue">€91K-182K</div>
+                            <div class="metric-label">Revenue Potential</div>
+                        </div>
+                        <div class="metric">
+                            <div class="metric-value">9/10</div>
+                            <div class="metric-label">Customer</div>
+                        </div>
+                        <div class="metric">
+                            <div class="metric-value">10/10</div>
+                            <div class="metric-label">Business</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="finding-card">
+                    <div class="finding-header">
+                        <div class="finding-title">Technician Revenue Below Industry Benchmark</div>
+                        <span class="confidence-badge high">HIGH</span>
+                    </div>
+                    <span class="finding-category">Efficiency</span>
+                    <p class="finding-description">€133,333 per technician vs €200,000 industry median. This €1M annual gap stems from scheduling inefficiencies.</p>
+                    <div class="finding-metrics">
+                        <div class="metric">
+                            <div class="metric-value savings">€25K</div>
+                            <div class="metric-label">Annual Savings</div>
+                        </div>
+                        <div class="metric">
+                            <div class="metric-value revenue">€100K-200K</div>
+                            <div class="metric-label">Revenue</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="finding-card">
+                    <div class="finding-header">
+                        <div class="finding-title">25 Hours Weekly Admin Time Drain</div>
+                        <span class="confidence-badge high">HIGH</span>
+                    </div>
+                    <span class="finding-category">Efficiency</span>
+                    <p class="finding-description">25 hours weekly on manual scheduling represents €21,000-€31,000 in annual labor cost. FSM can reduce by 60%.</p>
+                    <div class="finding-metrics">
+                        <div class="metric">
+                            <div class="metric-value savings">€21K</div>
+                            <div class="metric-label">Annual Savings</div>
+                        </div>
+                        <div class="metric">
+                            <div class="metric-value">15 hrs</div>
+                            <div class="metric-label">Hours/Week</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="finding-card not-recommended">
+                    <div class="finding-header">
+                        <div class="finding-title">ServiceTitan Implementation</div>
+                        <span class="confidence-badge high">HIGH</span>
+                    </div>
+                    <span class="finding-category">Risk</span>
+                    <p class="finding-description">€15K-25K annual cost exceeds budget. Use Housecall Pro or Jobber at €2K-5K annually instead.</p>
+                    <div class="finding-metrics">
+                        <div class="metric">
+                            <div class="metric-value savings">€10K+</div>
+                            <div class="metric-label">Avoided Cost</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- GPT Findings -->
+            <div id="gpt-findings" class="findings-grid">
+                <div class="finding-card">
+                    <div class="finding-header">
+                        <div class="finding-title">High Revenue Loss from Missed Calls</div>
+                        <span class="confidence-badge high">HIGH</span>
+                    </div>
+                    <span class="finding-category">Growth</span>
+                    <p class="finding-description">Missing ~25% of 40-60 daily calls represents €38K-57K in lost annual revenue. AI call handling can capture 85%+.</p>
+                    <div class="finding-metrics">
+                        <div class="metric">
+                            <div class="metric-value revenue">€50K</div>
+                            <div class="metric-label">Revenue Potential</div>
+                        </div>
+                        <div class="metric">
+                            <div class="metric-value">9/10</div>
+                            <div class="metric-label">Customer</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="finding-card">
+                    <div class="finding-header">
+                        <div class="finding-title">Manual Scheduling Reduces Utilization</div>
+                        <span class="confidence-badge high">HIGH</span>
+                    </div>
+                    <span class="finding-category">Efficiency</span>
+                    <p class="finding-description">Dispatch efficiency ~55%, below 65-75% benchmark. Equivalent to losing 1-2 technician-days per week.</p>
+                    <div class="finding-metrics">
+                        <div class="metric">
+                            <div class="metric-value savings">€25K</div>
+                            <div class="metric-label">Annual Savings</div>
+                        </div>
+                        <div class="metric">
+                            <div class="metric-value revenue">€30K</div>
+                            <div class="metric-label">Revenue</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="finding-card">
+                    <div class="finding-header">
+                        <div class="finding-title">Low Repeat Customer Rate</div>
+                        <span class="confidence-badge medium">MEDIUM</span>
+                    </div>
+                    <span class="finding-category">Customer Experience</span>
+                    <p class="finding-description">35% repeat rate below benchmark. Membership CLV €3,000-€10,000 vs one-off €200-€500.</p>
+                    <div class="finding-metrics">
+                        <div class="metric">
+                            <div class="metric-value revenue">€30K</div>
+                            <div class="metric-label">Revenue Potential</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="finding-card not-recommended">
+                    <div class="finding-header">
+                        <div class="finding-title">Custom-built AI Scheduling</div>
+                        <span class="confidence-badge high">HIGH</span>
+                    </div>
+                    <span class="finding-category">Risk</span>
+                    <p class="finding-description">Too expensive and risky compared to proven FSM platforms. Adopt Jobber or Housecall Pro instead.</p>
+                    <div class="finding-metrics">
+                        <div class="metric">
+                            <div class="metric-value savings">€30K</div>
+                            <div class="metric-label">Avoided Cost</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Gemini Findings -->
+            <div id="gemini-findings" class="findings-grid">
+                <div class="finding-card">
+                    <div class="finding-header">
+                        <div class="finding-title">Transition to Specialized FSM Software</div>
+                        <span class="confidence-badge high">HIGH</span>
+                    </div>
+                    <span class="finding-category">Efficiency</span>
+                    <p class="finding-description">Office staff bloated (10 staff for 15 techs) due to manual data entry. FSM is highest ROI action.</p>
+                    <div class="finding-metrics">
+                        <div class="metric">
+                            <div class="metric-value savings">€32.5K</div>
+                            <div class="metric-label">Annual Savings</div>
+                        </div>
+                        <div class="metric">
+                            <div class="metric-value">25 hrs</div>
+                            <div class="metric-label">Hours/Week</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="finding-card">
+                    <div class="finding-header">
+                        <div class="finding-title">AI After-Hours Call Handling</div>
+                        <span class="confidence-badge high">HIGH</span>
+                    </div>
+                    <span class="finding-category">Growth</span>
+                    <p class="finding-description">Missing 25% of calls = ~5 lost jobs per week. AI voice ensures 100% capture rate.</p>
+                    <div class="finding-metrics">
+                        <div class="metric">
+                            <div class="metric-value revenue">€78.75K</div>
+                            <div class="metric-label">Revenue Potential</div>
+                        </div>
+                        <div class="metric">
+                            <div class="metric-value">9/10</div>
+                            <div class="metric-label">Customer</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="finding-card">
+                    <div class="finding-header">
+                        <div class="finding-title">Good-Better-Best Proposals</div>
+                        <span class="confidence-badge low">LOW</span>
+                    </div>
+                    <span class="finding-category">Growth</span>
+                    <p class="finding-description">Template pricing increases avg ticket by 20-40%. From €350 to €400 across 3000 jobs.</p>
+                    <div class="finding-metrics">
+                        <div class="metric">
+                            <div class="metric-value revenue">€40K</div>
+                            <div class="metric-label">Revenue Potential</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="finding-card not-recommended">
+                    <div class="finding-header">
+                        <div class="finding-title">AI Technical Diagnostic Chatbot</div>
+                        <span class="confidence-badge high">HIGH</span>
+                    </div>
+                    <span class="finding-category">Risk</span>
+                    <p class="finding-description">AI hallucinations = safety risks (gas/electric) and liability. Let certified techs diagnose.</p>
+                    <div class="finding-metrics">
+                        <div class="metric">
+                            <div class="metric-value">⚠️</div>
+                            <div class="metric-label">Safety Risk</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Comparison Table -->
+        <section class="comparison-section">
+            <h2 style="margin-bottom: 1rem;">📊 Detailed Comparison</h2>
+            <table class="comparison-table">
+                <thead>
+                    <tr>
+                        <th>Metric</th>
+                        <th class="claude-col">Claude Opus 4.5</th>
+                        <th class="gpt-col">GPT-5.2</th>
+                        <th class="gemini-col">Gemini 3 Pro</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Response Time</td>
+                        <td>149.57s</td>
+                        <td class="winner-cell">24.28s ⚡</td>
+                        <td>46.72s</td>
+                    </tr>
+                    <tr>
+                        <td>Cost per Request</td>
+                        <td>$0.64</td>
+                        <td>$0.04</td>
+                        <td class="winner-cell">$0.02 💰</td>
+                    </tr>
+                    <tr>
+                        <td>Output Tokens</td>
+                        <td class="winner-cell">8,192 📝</td>
+                        <td>2,926</td>
+                        <td>3,625</td>
+                    </tr>
+                    <tr>
+                        <td>Value Potential (Max)</td>
+                        <td class="winner-cell">€320,000 🏆</td>
+                        <td>€180,000</td>
+                        <td>€180,000</td>
+                    </tr>
+                    <tr>
+                        <td>HIGH Confidence %</td>
+                        <td class="winner-cell">64% 🎯</td>
+                        <td>30%</td>
+                        <td>60%</td>
+                    </tr>
+                    <tr>
+                        <td>Source Citations</td>
+                        <td class="winner-cell">Detailed (named) ✓</td>
+                        <td>Basic</td>
+                        <td>Good</td>
+                    </tr>
+                    <tr>
+                        <td>Vendor Details</td>
+                        <td class="winner-cell">Pros/Cons tables ✓</td>
+                        <td>Good</td>
+                        <td>Bundled features</td>
+                    </tr>
+                    <tr>
+                        <td>Unique Insight</td>
+                        <td>Revenue per tech benchmark</td>
+                        <td>Budget-aware recs</td>
+                        <td>Office ratio insight</td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+
+        <!-- Vendors Section -->
+        <section class="vendors-section">
+            <h2 style="margin-bottom: 1rem;">🛒 Recommended Vendors (All Models)</h2>
+            <div class="vendors-grid">
+                <div class="vendor-card">
+                    <div class="vendor-name">Housecall Pro</div>
+                    <div class="vendor-usecase">FSM, scheduling, invoicing, customer notifications</div>
+                    <span class="vendor-pricing">€150-350/month</span>
+                    <div class="vendor-mentions">
+                        <div class="mention-dot claude" title="Recommended by Claude"></div>
+                        <div class="mention-dot gpt" title="Recommended by GPT"></div>
+                        <div class="mention-dot gemini" title="Recommended by Gemini"></div>
+                    </div>
+                </div>
+                <div class="vendor-card">
+                    <div class="vendor-name">Jobber</div>
+                    <div class="vendor-usecase">FSM + route optimization</div>
+                    <span class="vendor-pricing">€100-300/month</span>
+                    <div class="vendor-mentions">
+                        <div class="mention-dot claude" title="Recommended by Claude"></div>
+                        <div class="mention-dot gpt" title="Recommended by GPT"></div>
+                        <div class="mention-dot gemini" title="Recommended by Gemini"></div>
+                    </div>
+                </div>
+                <div class="vendor-card">
+                    <div class="vendor-name">Smith.ai</div>
+                    <div class="vendor-usecase">AI + human call answering, 24/7</div>
+                    <span class="vendor-pricing">€300-600/month</span>
+                    <div class="vendor-mentions">
+                        <div class="mention-dot claude" title="Recommended by Claude"></div>
+                        <div class="mention-dot gpt" title="Recommended by GPT"></div>
+                        <div class="mention-dot gemini" title="Recommended by Gemini"></div>
+                    </div>
+                </div>
+                <div class="vendor-card">
+                    <div class="vendor-name">Podium</div>
+                    <div class="vendor-usecase">Reviews, messaging, reputation</div>
+                    <span class="vendor-pricing">€200-400/month</span>
+                    <div class="vendor-mentions">
+                        <div class="mention-dot claude" title="Recommended by Claude"></div>
+                        <div class="mention-dot gpt" title="Recommended by GPT"></div>
+                    </div>
+                </div>
+                <div class="vendor-card">
+                    <div class="vendor-name">NiceJob</div>
+                    <div class="vendor-usecase">Review automation</div>
+                    <span class="vendor-pricing">€75-175/month</span>
+                    <div class="vendor-mentions">
+                        <div class="mention-dot claude" title="Recommended by Claude"></div>
+                        <div class="mention-dot gemini" title="Recommended by Gemini"></div>
+                    </div>
+                </div>
+                <div class="vendor-card">
+                    <div class="vendor-name">FieldEdge</div>
+                    <div class="vendor-usecase">HVAC-specific FSM</div>
+                    <span class="vendor-pricing">€200-400/month</span>
+                    <div class="vendor-mentions">
+                        <div class="mention-dot claude" title="Recommended by Claude"></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <p>Generated December 25, 2025 • CRB Analyser Model Comparison</p>
+            <p style="margin-top: 0.5rem;">Claude Opus 4.5 • GPT-5.2 • Gemini 3 Pro Preview</p>
+        </footer>
+    </div>
+
+    <script>
+        // Chart.js configuration
+        Chart.defaults.color = '#94A3B8';
+        Chart.defaults.borderColor = '#334155';
+
+        // Value Potential Chart
+        new Chart(document.getElementById('valueChart'), {
+            type: 'bar',
+            data: {
+                labels: ['Claude Opus', 'GPT-5.2', 'Gemini 3 Pro'],
+                datasets: [{
+                    label: 'Minimum',
+                    data: [180000, 90000, 95000],
+                    backgroundColor: 'rgba(148, 163, 184, 0.5)',
+                    borderColor: '#94A3B8',
+                    borderWidth: 1
+                }, {
+                    label: 'Maximum',
+                    data: [320000, 180000, 180000],
+                    backgroundColor: ['rgba(217, 119, 6, 0.7)', 'rgba(16, 185, 129, 0.7)', 'rgba(59, 130, 246, 0.7)'],
+                    borderColor: ['#D97706', '#10B981', '#3B82F6'],
+                    borderWidth: 2
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { position: 'bottom' }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        ticks: {
+                            callback: value => '€' + value.toLocaleString()
+                        }
+                    }
+                }
+            }
+        });
+
+        // Performance Chart (Radar)
+        new Chart(document.getElementById('performanceChart'), {
+            type: 'radar',
+            data: {
+                labels: ['Speed', 'Cost Efficiency', 'Detail', 'Accuracy', 'Practicality'],
+                datasets: [{
+                    label: 'Claude Opus',
+                    data: [30, 40, 100, 95, 85],
+                    borderColor: '#D97706',
+                    backgroundColor: 'rgba(217, 119, 6, 0.1)',
+                    borderWidth: 2
+                }, {
+                    label: 'GPT-5.2',
+                    data: [100, 85, 60, 80, 90],
+                    borderColor: '#10B981',
+                    backgroundColor: 'rgba(16, 185, 129, 0.1)',
+                    borderWidth: 2
+                }, {
+                    label: 'Gemini 3 Pro',
+                    data: [70, 100, 70, 75, 85],
+                    borderColor: '#3B82F6',
+                    backgroundColor: 'rgba(59, 130, 246, 0.1)',
+                    borderWidth: 2
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { position: 'bottom' }
+                },
+                scales: {
+                    r: {
+                        beginAtZero: true,
+                        max: 100,
+                        ticks: { display: false }
+                    }
+                }
+            }
+        });
+
+        // Confidence Distribution Chart
+        new Chart(document.getElementById('confidenceChart'), {
+            type: 'doughnut',
+            data: {
+                labels: ['HIGH', 'MEDIUM', 'LOW'],
+                datasets: [{
+                    label: 'Claude',
+                    data: [64, 27, 9],
+                    backgroundColor: ['#22C55E', '#EAB308', '#EF4444'],
+                    borderWidth: 0
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { position: 'bottom' },
+                    title: { display: true, text: 'Claude Opus (avg across models)' }
+                }
+            }
+        });
+
+        // Cost per Finding Chart
+        new Chart(document.getElementById('costChart'), {
+            type: 'bar',
+            data: {
+                labels: ['Claude Opus', 'GPT-5.2', 'Gemini 3 Pro'],
+                datasets: [{
+                    label: 'Cost per Finding',
+                    data: [0.058, 0.004, 0.002],
+                    backgroundColor: ['rgba(217, 119, 6, 0.7)', 'rgba(16, 185, 129, 0.7)', 'rgba(59, 130, 246, 0.7)'],
+                    borderColor: ['#D97706', '#10B981', '#3B82F6'],
+                    borderWidth: 2
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { display: false }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        ticks: {
+                            callback: value => '$' + value.toFixed(3)
+                        }
+                    }
+                }
+            }
+        });
+
+        // Tab switching function
+        function showFindings(model) {
+            // Hide all findings
+            document.querySelectorAll('.findings-grid').forEach(el => {
+                el.classList.remove('active');
+            });
+            // Remove active from all tabs
+            document.querySelectorAll('.tab').forEach(el => {
+                el.classList.remove('active');
+            });
+            // Show selected findings
+            document.getElementById(model + '-findings').classList.add('active');
+            // Mark tab as active
+            document.querySelector('.tab.' + model).classList.add('active');
+        }
+    </script>
+</body>
+</html>

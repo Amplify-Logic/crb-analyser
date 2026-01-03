@@ -1,0 +1,274 @@
+{
+  "industry": "dental",
+  "display_name": "Dental Practice",
+  "questions": [
+    {
+      "id": "patient_volume_weekly",
+      "question": "How many patients does your practice see per week?",
+      "input_type": "number",
+      "placeholder": "e.g., 150",
+      "target_categories": ["quantifiable_metrics", "industry_context"],
+      "expected_boosts": {"quantifiable_metrics": 20, "industry_context": 15},
+      "priority": 1,
+      "tags": ["volume", "capacity"]
+    },
+    {
+      "id": "no_show_rate",
+      "question": "What's your approximate patient no-show rate?",
+      "input_type": "select",
+      "options": [
+        {"value": "under_5", "label": "Under 5%"},
+        {"value": "5_10", "label": "5-10%"},
+        {"value": "10_20", "label": "10-20%"},
+        {"value": "20_30", "label": "20-30%"},
+        {"value": "over_30", "label": "Over 30%"}
+      ],
+      "target_categories": ["pain_points", "quantifiable_metrics"],
+      "expected_boosts": {"pain_points": 15, "quantifiable_metrics": 15},
+      "priority": 2,
+      "tags": ["scheduling", "revenue_loss"],
+      "deep_dive_triggers": ["20_30", "over_30"]
+    },
+    {
+      "id": "scheduling_method",
+      "question": "How do patients currently book appointments?",
+      "input_type": "multi_select",
+      "options": [
+        {"value": "phone", "label": "Phone calls"},
+        {"value": "online_portal", "label": "Online patient portal"},
+        {"value": "third_party", "label": "Third-party booking (ZocDoc, etc.)"},
+        {"value": "walk_in", "label": "Walk-ins"},
+        {"value": "email", "label": "Email requests"}
+      ],
+      "target_categories": ["operations", "tech_stack"],
+      "expected_boosts": {"operations": 15, "tech_stack": 10},
+      "priority": 2,
+      "tags": ["booking", "patient_acquisition"]
+    },
+    {
+      "id": "insurance_verification",
+      "question": "How do you currently handle insurance verification and claims?",
+      "input_type": "voice",
+      "target_categories": ["operations", "pain_points"],
+      "expected_boosts": {"operations": 20, "pain_points": 15},
+      "priority": 3,
+      "tags": ["billing", "admin"]
+    },
+    {
+      "id": "practice_locations",
+      "question": "How many practice locations do you operate?",
+      "input_type": "select",
+      "options": [
+        {"value": "1", "label": "1 location"},
+        {"value": "2_3", "label": "2-3 locations"},
+        {"value": "4_10", "label": "4-10 locations"},
+        {"value": "more_than_10", "label": "More than 10 locations"}
+      ],
+      "target_categories": ["company_basics", "operations"],
+      "expected_boosts": {"company_basics": 15, "operations": 10},
+      "priority": 1,
+      "tags": ["scale", "coordination"]
+    },
+    {
+      "id": "front_desk_staff",
+      "question": "How many front desk staff handle patient calls and scheduling?",
+      "input_type": "number",
+      "placeholder": "e.g., 3",
+      "target_categories": ["company_basics", "quantifiable_metrics"],
+      "expected_boosts": {"company_basics": 10, "quantifiable_metrics": 15},
+      "priority": 2,
+      "tags": ["staffing", "capacity"]
+    },
+    {
+      "id": "after_hours_calls",
+      "question": "Approximately how many patient calls go to voicemail after hours each week?",
+      "input_type": "select",
+      "options": [
+        {"value": "under_10", "label": "Under 10"},
+        {"value": "10_25", "label": "10-25"},
+        {"value": "25_50", "label": "25-50"},
+        {"value": "over_50", "label": "Over 50"},
+        {"value": "not_tracked", "label": "We don't track this"}
+      ],
+      "target_categories": ["pain_points", "quantifiable_metrics"],
+      "expected_boosts": {"pain_points": 20, "quantifiable_metrics": 15},
+      "priority": 2,
+      "tags": ["missed_calls", "lead_capture"],
+      "deep_dive_triggers": ["25_50", "over_50"]
+    },
+    {
+      "id": "practice_management_system",
+      "question": "What practice management system do you use?",
+      "input_type": "select",
+      "options": [
+        {"value": "dentrix", "label": "Dentrix"},
+        {"value": "eaglesoft", "label": "Eaglesoft"},
+        {"value": "open_dental", "label": "Open Dental"},
+        {"value": "curve", "label": "Curve Dental"},
+        {"value": "denticon", "label": "Denticon"},
+        {"value": "other", "label": "Other"}
+      ],
+      "target_categories": ["tech_stack"],
+      "expected_boosts": {"tech_stack": 25},
+      "priority": 1,
+      "tags": ["software", "integration"]
+    },
+    {
+      "id": "patient_communication_tools",
+      "question": "What tools do you use for patient reminders and communication?",
+      "input_type": "multi_select",
+      "options": [
+        {"value": "weave", "label": "Weave"},
+        {"value": "solutionreach", "label": "Solutionreach"},
+        {"value": "lighthouse", "label": "Lighthouse 360"},
+        {"value": "revenuewell", "label": "RevenueWell"},
+        {"value": "builtin_pm", "label": "Built into our PM system"},
+        {"value": "manual", "label": "Manual phone calls"},
+        {"value": "none", "label": "No automated system"}
+      ],
+      "target_categories": ["tech_stack", "operations"],
+      "expected_boosts": {"tech_stack": 15, "operations": 10},
+      "priority": 2,
+      "tags": ["communication", "automation"]
+    },
+    {
+      "id": "biggest_admin_challenge",
+      "question": "What's the most time-consuming administrative task for your staff?",
+      "input_type": "voice",
+      "target_categories": ["pain_points", "operations"],
+      "expected_boosts": {"pain_points": 25, "operations": 15},
+      "priority": 1,
+      "tags": ["bottleneck", "efficiency"]
+    },
+    {
+      "id": "recall_compliance",
+      "question": "What percentage of patients return for their 6-month checkups as scheduled?",
+      "input_type": "select",
+      "options": [
+        {"value": "over_80", "label": "Over 80%"},
+        {"value": "60_80", "label": "60-80%"},
+        {"value": "40_60", "label": "40-60%"},
+        {"value": "under_40", "label": "Under 40%"},
+        {"value": "not_tracked", "label": "We don't track this"}
+      ],
+      "target_categories": ["quantifiable_metrics", "pain_points"],
+      "expected_boosts": {"quantifiable_metrics": 15, "pain_points": 10},
+      "priority": 3,
+      "tags": ["retention", "hygiene"]
+    },
+    {
+      "id": "growth_priority",
+      "question": "What's your main priority for the practice over the next 12 months?",
+      "input_type": "select",
+      "options": [
+        {"value": "more_patients", "label": "Attract more new patients"},
+        {"value": "efficiency", "label": "Improve operational efficiency"},
+        {"value": "case_acceptance", "label": "Increase case acceptance rates"},
+        {"value": "reduce_costs", "label": "Reduce overhead costs"},
+        {"value": "expand", "label": "Expand to new locations"},
+        {"value": "quality_of_life", "label": "Better work-life balance for team"}
+      ],
+      "target_categories": ["goals_priorities"],
+      "expected_boosts": {"goals_priorities": 30},
+      "priority": 1,
+      "tags": ["strategy", "direction"]
+    },
+    {
+      "id": "case_acceptance_rate",
+      "question": "What's your approximate treatment case acceptance rate?",
+      "input_type": "select",
+      "options": [
+        {"value": "over_80", "label": "Over 80%"},
+        {"value": "60_80", "label": "60-80%"},
+        {"value": "40_60", "label": "40-60%"},
+        {"value": "under_40", "label": "Under 40%"},
+        {"value": "not_tracked", "label": "We don't track this"}
+      ],
+      "target_categories": ["quantifiable_metrics", "pain_points"],
+      "expected_boosts": {"quantifiable_metrics": 20, "pain_points": 10},
+      "priority": 2,
+      "tags": ["revenue", "patient_education"],
+      "deep_dive_triggers": ["40_60", "under_40"]
+    },
+    {
+      "id": "ai_readiness",
+      "question": "How would you describe your practice's experience with AI or automation tools?",
+      "input_type": "select",
+      "options": [
+        {"value": "none", "label": "Haven't tried any yet"},
+        {"value": "exploring", "label": "Exploring options"},
+        {"value": "some", "label": "Using a few automated tools"},
+        {"value": "advanced", "label": "Already using AI for several tasks"}
+      ],
+      "target_categories": ["buying_signals", "tech_stack"],
+      "expected_boosts": {"buying_signals": 15, "tech_stack": 10},
+      "priority": 3,
+      "tags": ["readiness", "adoption"]
+    },
+    {
+      "id": "budget_timeline",
+      "question": "If you found a solution that could save significant time or grow revenue, when would you want to implement it?",
+      "input_type": "select",
+      "options": [
+        {"value": "immediately", "label": "As soon as possible"},
+        {"value": "3_months", "label": "Within 3 months"},
+        {"value": "6_months", "label": "Within 6 months"},
+        {"value": "next_year", "label": "Sometime next year"},
+        {"value": "just_exploring", "label": "Just exploring for now"}
+      ],
+      "target_categories": ["buying_signals"],
+      "expected_boosts": {"buying_signals": 25},
+      "priority": 3,
+      "tags": ["timeline", "urgency"]
+    }
+  ],
+  "woven_confirmation_templates": [
+    {
+      "id": "confirm_pm_system",
+      "condition": "tech_stack.practice_management",
+      "template": "How's {tech_stack.practice_management} working for your scheduling and patient records?",
+      "target_categories": ["tech_stack", "pain_points"],
+      "expected_boosts": {"tech_stack": 10, "pain_points": 15}
+    },
+    {
+      "id": "confirm_locations",
+      "condition": "company_basics.locations",
+      "template": "Running {company_basics.locations} locations is no small feat. What's the biggest coordination challenge across sites?",
+      "target_categories": ["operations", "pain_points"],
+      "expected_boosts": {"operations": 15, "pain_points": 20}
+    },
+    {
+      "id": "confirm_employee_count",
+      "condition": "company_basics.employee_count",
+      "template": "With a team of about {company_basics.employee_count}, how do you handle scheduling and coverage?",
+      "target_categories": ["operations"],
+      "expected_boosts": {"operations": 15}
+    }
+  ],
+  "deep_dive_templates": [
+    {
+      "id": "no_show_deep_dive",
+      "trigger_question": "no_show_rate",
+      "trigger_values": ["20_30", "over_30"],
+      "template": "That's a common challenge. Walk me through what happens when a patient doesn't show - how does your team currently handle it?",
+      "target_categories": ["operations", "pain_points"],
+      "expected_boosts": {"operations": 15, "pain_points": 15}
+    },
+    {
+      "id": "missed_calls_deep_dive",
+      "trigger_question": "after_hours_calls",
+      "trigger_values": ["25_50", "over_50"],
+      "template": "That's a lot of potential patients reaching out. What happens to those calls - do you try to follow up the next day?",
+      "target_categories": ["operations", "pain_points", "quantifiable_metrics"],
+      "expected_boosts": {"operations": 10, "pain_points": 15, "quantifiable_metrics": 10}
+    },
+    {
+      "id": "case_acceptance_deep_dive",
+      "trigger_question": "case_acceptance_rate",
+      "trigger_values": ["40_60", "under_40"],
+      "template": "When patients decline treatment, what's usually the reason - cost concerns, fear, or something else?",
+      "target_categories": ["pain_points", "industry_context"],
+      "expected_boosts": {"pain_points": 15, "industry_context": 10}
+    }
+  ]
+}

@@ -7,6 +7,13 @@ This provides a conversational interface to gather detailed business context.
 Skills Integration:
 - FollowUpQuestionSkill: Generates adaptive follow-up questions
 - PainExtractionSkill: Extracts structured pain points from transcript
+- InterviewConfidenceSkill: Calculates readiness for report generation
+
+Confidence Framework:
+- Tracks topic coverage, depth, specificity, actionability per topic
+- Calculates overall readiness score with quality multipliers
+- Determines when interview is ready for report generation
+- Triggers automatic report generation when thresholds met
 """
 
 import logging
@@ -25,6 +32,10 @@ from src.services.transcription_service import transcription_service
 from src.skills import get_skill, SkillContext
 from src.expertise import get_expertise_store
 from src.knowledge import normalize_industry
+from src.models.interview_confidence import (
+    ReadinessLevel,
+    ReportStatus,
+)
 
 logger = logging.getLogger(__name__)
 
@@ -576,21 +587,28 @@ async def transcribe_interview_audio(
 
 class TTSRequest(BaseModel):
     text: str
-    voice: str = "aura-asteria-en"
+    voice_id: Optional[str] = None  # ElevenLabs voice ID (uses default if not provided)
 
 
 @router.post("/tts")
 async def text_to_speech(request: TTSRequest):
     """
-    Convert text to speech using Deepgram TTS.
+    Convert text to speech using ElevenLabs TTS.
     Returns audio as base64-encoded data.
+
+    Popular voice IDs:
+    - EXAVITQu4vr4xnSDxMaL: Sarah (conversational) - DEFAULT
+    - 21m00Tcm4TlvDq8ikWAM: Rachel (calm, professional)
+    - AZnzlk1XvdvUeBnXmlld: Domi (engaging, friendly)
+    - MF3mGyEYCl7XYWbV9V6O: Elli (friendly, warm)
+    - TxGEqnHWrfWFTfGW9XjX: Josh (deep, authoritative)
     """
     import base64
 
     try:
         audio_data = await transcription_service.text_to_speech(
             request.text,
-            request.voice
+            request.voice_id
         )
 
         # Return as base64 for easy frontend consumption
@@ -613,4 +631,310 @@ async def text_to_speech(request: TTSRequest):
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail="Failed to generate speech"
+        )
+
+
+# ============================================================================
+# Confidence Framework Endpoints
+# ============================================================================
+
+class ConfidenceRequest(BaseModel):
+    """Request to calculate interview confidence."""
+    session_id: str
+    messages: Optional[List[dict]] = None  # If not provided, loads from DB
+
+
+class TriggerReportRequest(BaseModel):
+    """Request to trigger report generation."""
+    session_id: str
+    force: bool = False  # Override confidence checks
+
+
+@router.get("/confidence/{session_id}")
+async def get_interview_confidence(session_id: str):
+    """
+    Calculate and return current interview confidence scores.
+
+    This endpoint analyzes the interview transcript and returns:
+    - Per-topic confidence scores (coverage, depth, specificity, actionability)
+    - Quality indicators (pain points, quantified impacts, etc.)
+    - Overall readiness score
+    - Trigger decision (ready for report or needs more exploration)
+    """
+    try:
+        supabase = await get_async_supabase()
+
+        # Get session data
+        session_result = await supabase.table("quiz_sessions").select("*").eq(
+            "id", session_id
+        ).single().execute()
+
+        if not session_result.data:
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail="Session not found"
+            )
+
+        session = session_result.data
+        interview_data = session.get("interview_data", {})
+        messages = interview_data.get("messages", [])
+
+        if not messages:
+            return {
+                "session_id": session_id,
+                "has_messages": False,
+                "readiness": {
+                    "level": "insufficient",
+                    "final_score": 0.0,
+                    "is_ready_for_report": False,
+                },
+                "message": "No interview messages found. Start the interview to build confidence.",
+            }
+
+        # Get company profile and industry
+        company_profile = session.get("company_profile", {})
+        answers = session.get("answers", {})
+        industry = answers.get("industry", "general")
+
+        # Run confidence skill
+        client = get_anthropic_client()
+        skill = get_skill("interview-confidence", client=client)
+
+        if not skill:
+            raise HTTPException(
+                status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
+                detail="Confidence skill not available"
+            )
+
+        expertise_store = get_expertise_store()
+        normalized_industry = normalize_industry(industry)
+        expertise = expertise_store.get_expertise(normalized_industry)
+
+        skill_context = SkillContext(
+            industry=normalized_industry,
+            expertise=expertise,
+            metadata={
+                "session_id": session_id,
+                "messages": messages,
+                "company_profile": company_profile,
+            }
+        )
+
+        result = await skill.run(skill_context)
+
+        if not result.success:
+            raise HTTPException(
+                status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+                detail=f"Confidence calculation failed: {result.error}"
+            )
+
+        # Store confidence data in session
+        await supabase.table("quiz_sessions").update({
+            "interview_data": {
+                **interview_data,
+                "confidence": result.data,
+                "confidence_calculated_at": datetime.utcnow().isoformat(),
+            },
+            "updated_at": datetime.utcnow().isoformat(),
+        }).eq("id", session_id).execute()
+
+        return {
+            "session_id": session_id,
+            "has_messages": True,
+            "message_count": len(messages),
+            **result.data,
+        }
+
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"Confidence calculation error: {e}")
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail="Failed to calculate confidence"
+        )
+
+
+@router.post("/trigger-report")
+async def trigger_report_generation(request: TriggerReportRequest):
+    """
+    Trigger report generation if interview is ready.
+
+    This endpoint:
+    1. Calculates current confidence (if not cached)
+    2. Checks if readiness thresholds are met
+    3. If ready (or force=True), triggers report generation
+    4. Updates session status to 'generating'
+
+    The actual report generation happens asynchronously.
+    Use /api/reports/stream/{session_id} to monitor progress.
+    """
+    try:
+        supabase = await get_async_supabase()
+
+        # Get session data
+        session_result = await supabase.table("quiz_sessions").select("*").eq(
+            "id", request.session_id
+        ).single().execute()
+
+        if not session_result.data:
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail="Session not found"
+            )
+
+        session = session_result.data
+        interview_data = session.get("interview_data", {})
+        messages = interview_data.get("messages", [])
+
+        if not messages:
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail="No interview data available. Complete the interview first."
+            )
+
+        # Check if we have recent confidence data (within last 5 minutes)
+        confidence_data = interview_data.get("confidence")
+        confidence_timestamp = interview_data.get("confidence_calculated_at")
+
+        should_recalculate = True
+        if confidence_data and confidence_timestamp:
+            calc_time = datetime.fromisoformat(confidence_timestamp.replace("Z", "+00:00"))
+            age_seconds = (datetime.utcnow() - calc_time.replace(tzinfo=None)).total_seconds()
+            should_recalculate = age_seconds > 300  # 5 minutes
+
+        # Recalculate confidence if needed
+        if should_recalculate:
+            company_profile = session.get("company_profile", {})
+            answers = session.get("answers", {})
+            industry = answers.get("industry", "general")
+
+            client = get_anthropic_client()
+            skill = get_skill("interview-confidence", client=client)
+
+            if skill:
+                expertise_store = get_expertise_store()
+                normalized_industry = normalize_industry(industry)
+                expertise = expertise_store.get_expertise(normalized_industry)
+
+                skill_context = SkillContext(
+                    industry=normalized_industry,
+                    expertise=expertise,
+                    metadata={
+                        "session_id": request.session_id,
+                        "messages": messages,
+                        "company_profile": company_profile,
+                    }
+                )
+
+                result = await skill.run(skill_context)
+                if result.success:
+                    confidence_data = result.data
+
+        # Check readiness
+        overall_readiness = confidence_data.get("overall_readiness", {}) if confidence_data else {}
+        is_ready = overall_readiness.get("is_ready_for_report", False)
+        readiness_level = overall_readiness.get("level", "insufficient")
+
+        if not is_ready and not request.force:
+            return {
+                "triggered": False,
+                "reason": "Interview not ready for report generation",
+                "readiness": {
+                    "level": readiness_level,
+                    "score": overall_readiness.get("final_score", 0),
+                    "hard_gates": overall_readiness.get("hard_gates", {}),
+                    "improvement_suggestions": overall_readiness.get("improvement_suggestions", []),
+                },
+                "message": "Continue the interview to improve confidence, or set force=true to proceed anyway.",
+            }
+
+        # Update session status to generating
+        await supabase.table("quiz_sessions").update({
+            "status": ReportStatus.GENERATING.value,
+            "report_triggered_at": datetime.utcnow().isoformat(),
+            "interview_data": {
+                **interview_data,
+                "confidence": confidence_data,
+                "confidence_calculated_at": datetime.utcnow().isoformat(),
+                "report_triggered": True,
+                "forced": request.force,
+            },
+            "updated_at": datetime.utcnow().isoformat(),
+        }).eq("id", request.session_id).execute()
+
+        logger.info(
+            f"Report generation triggered for session {request.session_id} "
+            f"(readiness={readiness_level}, forced={request.force})"
+        )
+
+        return {
+            "triggered": True,
+            "session_id": request.session_id,
+            "readiness": {
+                "level": readiness_level,
+                "score": overall_readiness.get("final_score", 0),
+            },
+            "forced": request.force,
+            "next_step": f"Monitor progress at /api/reports/stream/{request.session_id}",
+            "message": "Report generation has been triggered. It will be available for QA review within 2-5 minutes.",
+        }
+
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"Trigger report error: {e}")
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail="Failed to trigger report generation"
+        )
+
+
+@router.get("/readiness-summary/{session_id}")
+async def get_readiness_summary(session_id: str):
+    """
+    Get a quick summary of interview readiness without full recalculation.
+
+    Useful for UI to show progress indicators.
+    """
+    try:
+        supabase = await get_async_supabase()
+
+        session_result = await supabase.table("quiz_sessions").select(
+            "interview_data, status"
+        ).eq("id", session_id).single().execute()
+
+        if not session_result.data:
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail="Session not found"
+            )
+
+        session = session_result.data
+        interview_data = session.get("interview_data", {})
+        messages = interview_data.get("messages", [])
+        confidence = interview_data.get("confidence", {})
+        overall = confidence.get("overall_readiness", {})
+
+        return {
+            "session_id": session_id,
+            "status": session.get("status"),
+            "message_count": len(messages),
+            "topics_covered": interview_data.get("topics_covered", []),
+            "readiness": {
+                "level": overall.get("level", "insufficient"),
+                "score": overall.get("final_score", 0),
+                "is_ready": overall.get("is_ready_for_report", False),
+            },
+            "last_calculated": interview_data.get("confidence_calculated_at"),
+            "suggestions": overall.get("improvement_suggestions", [])[:3],
+        }
+
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"Readiness summary error: {e}")
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail="Failed to get readiness summary"
         )

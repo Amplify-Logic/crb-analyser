@@ -1,7 +1,7 @@
 # Vendor Database Redesign - Handoff Document
 
 **Date:** 2025-12-31
-**Status:** Phase 1-2 Complete, Phase 3-6 Pending
+**Status:** Phase 1-4 Complete, Phase 5-6 Pending
 **Design Doc:** `docs/plans/2025-12-31-vendor-database-redesign.md`
 
 ## Overview
@@ -79,58 +79,74 @@ USE_SUPABASE_VENDORS=true  # Default, uses Supabase
 USE_SUPABASE_VENDORS=false # Fallback to JSON files
 ```
 
-## Remaining Phases
+### Phase 3: Admin UI - Core ✅
 
-### Phase 3: Admin UI - Core (Estimated: 4-5 hours)
+**Files Created:**
+- `backend/src/routes/admin_vendors.py` - Admin API routes
+- `frontend/src/pages/admin/VendorAdmin.tsx` - Admin UI page
 
-**Goal:** Internal team can view, search, and edit vendors
-
-**Backend Routes to Create:**
+**Backend Routes Implemented:**
 ```
-GET    /api/admin/vendors          - List with pagination, search, filters
-GET    /api/admin/vendors/:slug    - Get single vendor
-PUT    /api/admin/vendors/:slug    - Update vendor
-POST   /api/admin/vendors          - Create vendor
-DELETE /api/admin/vendors/:slug    - Soft delete (set status=deprecated)
-GET    /api/admin/vendors/categories - List categories with counts
-GET    /api/admin/vendors/audit    - Audit log with filters
-```
-
-**Frontend Pages to Create:**
-```
-/admin/vendors           - Main vendor list (protected)
-/admin/vendors/:slug     - Edit vendor form
-/admin/vendors/audit     - Audit log viewer
-```
-
-**UI Features:**
-- Paginated list with search (name, description)
-- Filter by: category, industry, status, company_size
-- Edit modal with all vendor fields
-- Actions: Edit, View JSON, Mark Stale, Deprecate
-
-**Auth Protection:**
-- Use existing Supabase Auth
-- Whitelist emails in RLS or check in middleware
-
-### Phase 4: Admin UI - Industry Tiers (Estimated: 2-3 hours)
-
-**Goal:** Manage industry-specific vendor rankings
-
-**Backend Routes:**
-```
-GET    /api/admin/vendors/industries/:industry/tiers - Get tier list
-POST   /api/admin/vendors/industries/:industry/tiers - Set vendor tier
-DELETE /api/admin/vendors/industries/:industry/tiers/:vendor_id - Remove
-PUT    /api/admin/vendors/industries/:industry/tiers/reorder - Reorder
+GET    /api/admin/vendors              - List with pagination, search, filters
+GET    /api/admin/vendors/:slug        - Get single vendor with tier assignments
+PUT    /api/admin/vendors/:slug        - Update vendor
+POST   /api/admin/vendors              - Create vendor
+DELETE /api/admin/vendors/:slug        - Soft delete (set status=deprecated)
+POST   /api/admin/vendors/:slug/verify - Mark vendor as verified
+GET    /api/admin/vendors/categories   - List categories with counts
+GET    /api/admin/vendors/industries   - List supported industries
+GET    /api/admin/vendors/stats        - Vendor database statistics
+GET    /api/admin/vendors/stale        - List vendors not verified in X days
+GET    /api/admin/vendors/audit        - Audit log with filters
+GET    /api/admin/vendors/industries/:industry/tiers - Get tier list for industry
+POST   /api/admin/vendors/industries/:industry/tiers/:vendor_id - Set vendor tier
+DELETE /api/admin/vendors/industries/:industry/tiers/:vendor_id - Remove from tier
 ```
 
-**Frontend:**
+**Frontend Features:**
+- Paginated vendor list with search (name, description, tagline)
+- Filter by: category, industry, status
+- Vendor editor with full field editing (2-column layout)
+- Statistics view with:
+  - Total vendors, active, stale, deprecated counts
+  - Vendors by category breakdown
+  - Industry tier assignment counts
+- Mark vendor as verified action
+- Create new vendor form
+- Soft delete (deprecate) functionality
+- All changes logged to audit trail
+
+**Frontend Route:**
+```
+/admin/vendors - Protected route, requires auth
+```
+
+**Registration:**
+- Routes registered in `backend/src/routes/__init__.py`
+- Router included in `backend/src/main.py` with prefix `/api/admin`
+- React route added to `frontend/src/App.tsx`
+
+### Phase 4: Admin UI - Industry Tiers ✅
+
+**Goal:** Visual tier management UI
+
+**Features Implemented:**
+- Industry Tiers tab in sidebar navigation
 - Industry selector dropdown
 - Three-column tier view (Tier 1 / Tier 2 / Tier 3)
-- Drag-and-drop between tiers
-- Add vendor to tier from search
-- Edit boost_score per vendor
+- Color-coded columns (green/blue/gray) with boost labels
+- Search vendors to add to tiers
+- Move vendors between tiers with quick buttons (→ T1, → T2, → T3)
+- Edit modal for tier assignment with:
+  - Tier selection
+  - Extra boost score (0-50)
+  - Notes field
+- Remove vendor from tier
+- Auto-refresh after changes
+
+**Component:** `IndustryTierManager` in `VendorAdmin.tsx`
+
+## Remaining Phases
 
 ### Phase 5: Claude Code Integration (Estimated: 1-2 hours)
 
@@ -187,41 +203,43 @@ search_vendors_semantic(
 | `backend/supabase/migrations/012_vendor_database.sql` | Full Supabase schema |
 | `backend/src/scripts/migrate_vendors_to_supabase.py` | JSON → Supabase migration |
 | `backend/src/services/vendor_service.py` | Vendor CRUD + tier methods |
+| `backend/src/routes/admin_vendors.py` | Admin API routes |
+| `frontend/src/pages/admin/VendorAdmin.tsx` | Admin UI page |
 | `backend/src/skills/analysis/vendor_matching.py` | Agent vendor matching |
 | `backend/src/config/settings.py` | `USE_SUPABASE_VENDORS` setting |
 | `backend/src/knowledge/__init__.py` | JSON fallback functions |
 | `docs/plans/2025-12-31-vendor-database-redesign.md` | Full design document |
 
-## Testing the Current Implementation
+## Testing the Admin UI
 
-**Verify Supabase Data:**
-```sql
--- Check vendor count
-SELECT COUNT(*) FROM vendors;  -- Should be 80
-
--- Check tier assignments
-SELECT industry, COUNT(*) FROM industry_vendor_tiers GROUP BY industry;
-
--- Check a specific vendor
-SELECT name, category, recommended_default, industries
-FROM vendors WHERE slug = 'forethought';
+**Access URL:**
 ```
+http://localhost:5174/admin/vendors
+```
+(Requires being logged in)
 
-**Test Vendor Matching:**
-```python
-# In Python REPL
-import asyncio
-from src.services.vendor_service import vendor_service
+**Test Checklist:**
+- [ ] Load vendor list
+- [ ] Search vendors
+- [ ] Filter by category
+- [ ] Filter by industry
+- [ ] View vendor details
+- [ ] Edit vendor
+- [ ] Create new vendor
+- [ ] Mark vendor as verified
+- [ ] View statistics
+- [ ] Check audit log
 
-async def test():
-    vendors = await vendor_service.get_vendors_with_tier_boost(
-        industry="dental",
-        finding_tags=["website_chat"]
-    )
-    for v in vendors[:5]:
-        print(f"{v['name']}: tier={v.get('_tier')}, boost={v.get('_tier_boost')}, score={v.get('_recommendation_score')}")
+**Backend Test:**
+```bash
+cd backend
+source venv/bin/activate
+uvicorn src.main:app --reload --port 8383
 
-asyncio.run(test())
+# Test endpoints
+curl http://localhost:8383/api/admin/vendors | jq
+curl http://localhost:8383/api/admin/vendors/stats | jq
+curl http://localhost:8383/api/admin/vendors/categories | jq
 ```
 
 ## Important Decisions Made
@@ -248,12 +266,14 @@ asyncio.run(test())
 ```
 486184d feat(vendors): add Supabase vendor database with migration
 db14049 feat(vendors): add Supabase vendor queries with industry tier boosts
+[pending] feat(vendors): add admin UI for vendor database management
 ```
 
 ## Next Session Starting Point
 
-Start with **Phase 3: Admin UI - Core**:
-1. Create backend routes in `backend/src/routes/admin_vendors.py`
-2. Register in `main.py`
-3. Create React pages in `frontend/src/pages/admin/`
-4. Add route protection for admin access
+Start with **Phase 5: Claude Code Integration**:
+1. Add vendor management section to CLAUDE.md
+2. Create `backend/src/scripts/vendor_cli.py` for CLI operations
+3. Test add/update/refresh workflows
+
+Or proceed with **Phase 6: Semantic Search** if embeddings are higher priority.

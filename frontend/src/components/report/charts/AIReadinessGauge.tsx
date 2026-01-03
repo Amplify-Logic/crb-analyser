@@ -5,19 +5,16 @@ interface AIReadinessGaugeProps {
   score: number
   size?: 'sm' | 'md' | 'lg'
   animated?: boolean
-  showGlow?: boolean
 }
 
 export default function AIReadinessGauge({
   score,
   size = 'md',
-  animated = true,
-  showGlow = true
+  animated = true
 }: AIReadinessGaugeProps) {
   const [isVisible, setIsVisible] = useState(false)
   const containerRef = useRef<HTMLDivElement>(null)
 
-  // Spring animation for smooth score counting
   const springScore = useSpring(0, {
     stiffness: 50,
     damping: 20,
@@ -27,7 +24,6 @@ export default function AIReadinessGauge({
   const displayScore = useTransform(springScore, (value) => Math.round(value))
   const [currentScore, setCurrentScore] = useState(0)
 
-  // Observe visibility for animation trigger
   useEffect(() => {
     const observer = new IntersectionObserver(
       ([entry]) => {
@@ -45,7 +41,6 @@ export default function AIReadinessGauge({
     return () => observer.disconnect()
   }, [])
 
-  // Animate score when visible
   useEffect(() => {
     if (isVisible && animated) {
       springScore.set(score)
@@ -54,7 +49,6 @@ export default function AIReadinessGauge({
     }
   }, [isVisible, score, animated, springScore])
 
-  // Subscribe to spring value changes
   useEffect(() => {
     const unsubscribe = displayScore.on('change', (value) => {
       setCurrentScore(value)
@@ -62,69 +56,27 @@ export default function AIReadinessGauge({
     return unsubscribe
   }, [displayScore])
 
-  // Color based on score with gradient support
-  const getColors = (score: number) => {
-    if (score >= 70) return {
-      primary: '#22c55e',
-      secondary: '#16a34a',
-      glow: 'rgba(34, 197, 94, 0.3)',
-      bg: 'from-green-500/10 to-emerald-500/5'
-    }
-    if (score >= 50) return {
-      primary: '#eab308',
-      secondary: '#ca8a04',
-      glow: 'rgba(234, 179, 8, 0.3)',
-      bg: 'from-yellow-500/10 to-amber-500/5'
-    }
-    if (score >= 35) return {
-      primary: '#f97316',
-      secondary: '#ea580c',
-      glow: 'rgba(249, 115, 22, 0.3)',
-      bg: 'from-orange-500/10 to-amber-500/5'
-    }
-    return {
-      primary: '#ef4444',
-      secondary: '#dc2626',
-      glow: 'rgba(239, 68, 68, 0.3)',
-      bg: 'from-red-500/10 to-rose-500/5'
-    }
+  const getColor = (score: number) => {
+    if (score >= 70) return '#10b981' // emerald-500
+    if (score >= 50) return '#f59e0b' // amber-500
+    if (score >= 35) return '#f97316' // orange-500
+    return '#ef4444' // red-500
   }
 
   const getLabel = (score: number) => {
-    if (score >= 70) return { text: 'AI Ready', emoji: '🚀' }
-    if (score >= 50) return { text: 'Moderate', emoji: '📈' }
-    if (score >= 35) return { text: 'Developing', emoji: '🌱' }
-    return { text: 'Early Stage', emoji: '🔍' }
+    if (score >= 70) return 'AI Ready'
+    if (score >= 50) return 'Moderate'
+    if (score >= 35) return 'Developing'
+    return 'Early Stage'
   }
 
-  const colors = getColors(currentScore)
+  const color = getColor(currentScore)
   const label = getLabel(currentScore)
 
   const dimensions = {
-    sm: {
-      width: 140,
-      height: 85,
-      strokeWidth: 10,
-      fontSize: 28,
-      labelSize: 11,
-      radius: 50
-    },
-    md: {
-      width: 200,
-      height: 115,
-      strokeWidth: 14,
-      fontSize: 42,
-      labelSize: 13,
-      radius: 70
-    },
-    lg: {
-      width: 280,
-      height: 155,
-      strokeWidth: 18,
-      fontSize: 56,
-      labelSize: 15,
-      radius: 100
-    }
+    sm: { width: 140, height: 85, strokeWidth: 8, fontSize: 28, radius: 50 },
+    md: { width: 180, height: 100, strokeWidth: 10, fontSize: 36, radius: 65 },
+    lg: { width: 240, height: 130, strokeWidth: 12, fontSize: 48, radius: 90 }
   }
 
   const dim = dimensions[size]
@@ -132,78 +84,19 @@ export default function AIReadinessGauge({
   const strokeDashoffset = circumference - (currentScore / 100) * circumference
 
   return (
-    <div
-      ref={containerRef}
-      className="flex flex-col items-center"
-    >
-      {/* Gauge Container */}
+    <div ref={containerRef} className="flex flex-col items-center">
       <motion.div
-        initial={{ opacity: 0, scale: 0.9, y: 10 }}
-        animate={{ opacity: 1, scale: 1, y: 0 }}
-        transition={{ duration: 0.6, ease: [0.25, 0.46, 0.45, 0.94] }}
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 0.4 }}
         className="relative"
         style={{ width: dim.width, height: dim.height }}
       >
-        {/* Outer glow ring effect */}
-        {showGlow && (
-          <motion.div
-            className="absolute -inset-4 rounded-full"
-            style={{
-              background: `radial-gradient(ellipse at center, ${colors.glow}, transparent 60%)`,
-              filter: 'blur(20px)'
-            }}
-            animate={{
-              opacity: [0.3, 0.6, 0.3],
-              scale: [0.95, 1.05, 0.95],
-            }}
-            transition={{
-              duration: 3,
-              repeat: Infinity,
-              ease: 'easeInOut'
-            }}
-          />
-        )}
-
-        {/* Inner ambient glow */}
-        {showGlow && (
-          <motion.div
-            className="absolute inset-0 rounded-full blur-xl"
-            style={{
-              background: `radial-gradient(ellipse at center bottom, ${colors.glow}, transparent 70%)`,
-              transform: 'translateY(10%)'
-            }}
-            animate={{
-              opacity: [0.5, 0.8, 0.5],
-            }}
-            transition={{
-              duration: 2.5,
-              repeat: Infinity,
-              ease: 'easeInOut',
-              delay: 0.5
-            }}
-          />
-        )}
-
-        {/* SVG Gauge */}
         <svg
           width={dim.width}
           height={dim.height}
           viewBox={`0 0 ${dim.width} ${dim.height}`}
-          className="relative z-10"
         >
-          <defs>
-            {/* Gradient for the arc */}
-            <linearGradient id={`gauge-gradient-${size}`} x1="0%" y1="0%" x2="100%" y2="0%">
-              <stop offset="0%" stopColor={colors.secondary} />
-              <stop offset="100%" stopColor={colors.primary} />
-            </linearGradient>
-
-            {/* Shadow filter */}
-            <filter id={`gauge-shadow-${size}`} x="-20%" y="-20%" width="140%" height="140%">
-              <feDropShadow dx="0" dy="2" stdDeviation="3" floodColor={colors.primary} floodOpacity="0.3"/>
-            </filter>
-          </defs>
-
           {/* Background arc */}
           <path
             d={`M ${dim.width * 0.1} ${dim.height - 5}
@@ -215,23 +108,18 @@ export default function AIReadinessGauge({
             className="dark:stroke-gray-700"
           />
 
-          {/* Foreground arc with animation */}
+          {/* Foreground arc */}
           <motion.path
             d={`M ${dim.width * 0.1} ${dim.height - 5}
                 A ${dim.radius} ${dim.radius} 0 0 1 ${dim.width * 0.9} ${dim.height - 5}`}
             fill="none"
-            stroke={`url(#gauge-gradient-${size})`}
+            stroke={color}
             strokeWidth={dim.strokeWidth}
             strokeLinecap="round"
-            filter={`url(#gauge-shadow-${size})`}
             strokeDasharray={circumference}
             initial={{ strokeDashoffset: circumference }}
             animate={{ strokeDashoffset }}
-            transition={{
-              duration: 1.5,
-              ease: [0.25, 0.46, 0.45, 0.94],
-              delay: 0.2
-            }}
+            transition={{ duration: 1, ease: [0.25, 0.46, 0.45, 0.94] }}
           />
 
           {/* Tick marks */}
@@ -239,8 +127,8 @@ export default function AIReadinessGauge({
             const angle = (tick / 100) * Math.PI
             const x1 = dim.width / 2 - (dim.radius - dim.strokeWidth) * Math.cos(angle)
             const y1 = dim.height - 5 - (dim.radius - dim.strokeWidth) * Math.sin(angle)
-            const x2 = dim.width / 2 - (dim.radius - dim.strokeWidth - 8) * Math.cos(angle)
-            const y2 = dim.height - 5 - (dim.radius - dim.strokeWidth - 8) * Math.sin(angle)
+            const x2 = dim.width / 2 - (dim.radius - dim.strokeWidth - 6) * Math.cos(angle)
+            const y2 = dim.height - 5 - (dim.radius - dim.strokeWidth - 6) * Math.sin(angle)
 
             return (
               <line
@@ -250,7 +138,7 @@ export default function AIReadinessGauge({
                 x2={x2}
                 y2={y2}
                 stroke="#9ca3af"
-                strokeWidth={1.5}
+                strokeWidth={1}
                 className="dark:stroke-gray-600"
               />
             )
@@ -260,78 +148,32 @@ export default function AIReadinessGauge({
         {/* Score Display */}
         <div
           className="absolute inset-0 flex flex-col items-center justify-end"
-          style={{ paddingBottom: dim.height * 0.08 }}
+          style={{ paddingBottom: dim.height * 0.05 }}
         >
-          <motion.div
-            initial={{ opacity: 0, scale: 0.8, y: 10 }}
-            animate={{ opacity: 1, scale: 1, y: 0 }}
-            transition={{ delay: 0.5, duration: 0.6, ease: [0.25, 0.46, 0.45, 0.94] }}
-            className="relative"
+          <motion.span
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.3 }}
+            className="font-semibold tabular-nums text-gray-900 dark:text-white"
+            style={{ fontSize: dim.fontSize }}
           >
-            {/* Score number with gradient */}
-            <span
-              className="font-bold tabular-nums tracking-tight relative"
-              style={{
-                fontSize: dim.fontSize,
-                background: `linear-gradient(135deg, ${colors.primary} 0%, ${colors.secondary} 100%)`,
-                WebkitBackgroundClip: 'text',
-                WebkitTextFillColor: 'transparent',
-                backgroundClip: 'text',
-                textShadow: 'none',
-                filter: `drop-shadow(0 2px 8px ${colors.glow})`
-              }}
-            >
-              {currentScore}
-            </span>
-            {/* Subtle shine effect on the number */}
-            <motion.div
-              className="absolute inset-0 pointer-events-none"
-              style={{
-                background: 'linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.15) 50%, transparent 100%)',
-                backgroundSize: '200% 100%'
-              }}
-              animate={{
-                backgroundPosition: ['200% 0', '-200% 0']
-              }}
-              transition={{
-                duration: 3,
-                repeat: Infinity,
-                repeatDelay: 5,
-                ease: 'easeInOut'
-              }}
-            />
-          </motion.div>
+            {currentScore}
+          </motion.span>
         </div>
       </motion.div>
 
-      {/* Label with premium badge style */}
+      {/* Label */}
       <motion.div
-        initial={{ opacity: 0, y: 8, scale: 0.95 }}
-        animate={{ opacity: 1, y: 0, scale: 1 }}
-        transition={{ delay: 0.9, duration: 0.5, ease: [0.25, 0.46, 0.45, 0.94] }}
-        whileHover={{ scale: 1.03, y: -1 }}
-        className={`
-          mt-3 px-5 py-2 rounded-full
-          bg-gradient-to-r ${colors.bg}
-          border border-gray-200/50 dark:border-gray-700/50
-          backdrop-blur-md
-          shadow-card
-          cursor-default
-          transition-shadow duration-300
-          hover:shadow-card-hover
-        `}
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 0.5 }}
+        className="mt-2 px-3 py-1 rounded-full bg-gray-100 dark:bg-gray-700"
       >
         <span
-          className="font-semibold text-gray-700 dark:text-gray-300 flex items-center gap-2"
-          style={{ fontSize: dim.labelSize }}
+          className="text-sm font-medium"
+          style={{ color }}
         >
-          <motion.span
-            animate={{ scale: [1, 1.15, 1] }}
-            transition={{ duration: 2, repeat: Infinity, repeatDelay: 3 }}
-          >
-            {label.emoji}
-          </motion.span>
-          <span className="tracking-wide">{label.text}</span>
+          {label}
         </span>
       </motion.div>
     </div>

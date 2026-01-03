@@ -81,8 +81,9 @@ async def get_public_report(report_id: str):
                 detail="Report not found"
             )
 
-        # Only return completed reports
-        if report.get("status") != "completed":
+        # Only return completed/viewable reports
+        viewable_statuses = ["completed", "qa_pending", "released"]
+        if report.get("status") not in viewable_statuses:
             return {
                 "status": report.get("status"),
                 "message": "Report is being generated. Please check back shortly.",
@@ -99,6 +100,15 @@ async def get_public_report(report_id: str):
             "roadmap": report.get("roadmap"),
             "methodology_notes": report.get("methodology_notes"),
             "created_at": report.get("created_at"),
+            # Enhanced report data
+            "playbooks": report.get("playbooks", []),
+            "system_architecture": report.get("system_architecture", {}),
+            "industry_insights": report.get("industry_insights", {}),
+            # Transparency / Accuracy data
+            "math_validation": report.get("math_validation", {}),
+            "assumption_log": report.get("assumption_log", {}),
+            # RAG retrieval data (for debugging/verification)
+            "semantic_retrieval": report.get("semantic_retrieval", {}),
         }
 
     except HTTPException:

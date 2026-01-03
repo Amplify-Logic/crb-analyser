@@ -1132,7 +1132,172 @@
       "verified_by": "manual",
       "source_url": "https://www.ada.cx/pricing",
       "notes": "Estimated starting price ~$60,000/year or ~$5,000/month based on third-party sources. Actual pricing requires custom quote based on ticket volume and agent count. No free plan or trial. Voice AI launched in Spring 2025. Users report some AI limitations and integration issues despite high ratings."
+    },
+    {
+      "slug": "forethought",
+      "name": "Forethought",
+      "category": "customer_support",
+      "subcategory": "ai_agent_platform",
+      "website": "https://forethought.ai",
+      "pricing_url": "https://forethought.ai/pricing",
+      "description": "Enterprise AI agent platform that delivers autonomous customer support across chat, email, voice, and API channels. Multi-agent system with Solve (resolution), Triage (classification), Assist (copilot), and Discover (insights) agents. Trained on your ticket history and help center to answer based on your policies. Excellent for website chat that follows company-specific guidelines.",
+      "tagline": "Autonomous AI agents for customer support",
+      "recommended_default": true,
+      "recommended_for": ["website_chat", "policy_based_support", "ticket_deflection"],
+      "pricing": {
+        "model": "usage_based",
+        "currency": "USD",
+        "billing_options": ["annual"],
+        "annual_discount_percent": null,
+        "tiers": [
+          {
+            "name": "Solve",
+            "price": null,
+            "per": "resolution",
+            "billing": "usage_based",
+            "features": [
+              "Omnichannel AI resolution (chat, email, voice)",
+              "Trained on your ticket history",
+              "Help center content integration",
+              "Policy-based responses",
+              "24/7 autonomous support",
+              "Headless API deployment",
+              "Multi-language support"
+            ],
+            "limits": null
+          },
+          {
+            "name": "Triage",
+            "price": null,
+            "per": "ticket",
+            "billing": "usage_based",
+            "features": [
+              "Automated ticket classification",
+              "Custom priority models",
+              "Intent detection",
+              "Smart routing",
+              "Sentiment analysis",
+              "Escalation automation"
+            ],
+            "limits": null
+          },
+          {
+            "name": "Assist",
+            "price": null,
+            "per": "agent/month",
+            "billing": "monthly",
+            "features": [
+              "Real-time AI copilot for agents",
+              "Response suggestions",
+              "Knowledge surfacing",
+              "Workflow automation",
+              "In-helpdesk integration"
+            ],
+            "limits": null
+          },
+          {
+            "name": "Discover",
+            "price": null,
+            "per": "custom",
+            "billing": "annual",
+            "features": [
+              "AI-surfaced insights",
+              "Knowledge gap identification",
+              "Actionable recommendations",
+              "Performance analytics",
+              "Trend detection"
+            ],
+            "limits": null
+          }
+        ],
+        "starting_price": null,
+        "custom_pricing": true,
+        "free_trial_days": null,
+        "free_tier": false,
+        "startup_discount": null
+      },
+      "best_for": [
+        "Companies wanting AI chat that follows company policies",
+        "Website customer support automation",
+        "Organizations with existing help center content",
+        "Teams needing ticket deflection at scale",
+        "Businesses wanting autonomous resolution without custom development",
+        "Multi-channel support operations (chat + email + voice)"
+      ],
+      "industries": [
+        "SaaS",
+        "E-commerce",
+        "Financial Services",
+        "Technology",
+        "Retail",
+        "Healthcare"
+      ],
+      "company_sizes": [
+        "smb",
+        "mid_market",
+        "enterprise"
+      ],
+      "avoid_if": [
+        "Very small team with low ticket volume",
+        "Need transparent self-serve pricing",
+        "Want free trial before commitment",
+        "Require on-premise deployment"
+      ],
+      "implementation": {
+        "avg_weeks": 4,
+        "complexity": "medium",
+        "requires_developer": false,
+        "cost_range": {
+          "diy": {
+            "min": 1000,
+            "max": 5000
+          },
+          "with_help": {
+            "min": 5000,
+            "max": 15000
+          },
+          "full_service": {
+            "min": 15000,
+            "max": 50000
+          }
+        }
+      },
+      "ratings": {
+        "g2": {
+          "score": 4.5,
+          "reviews": 100,
+          "last_updated": "2025-12"
+        },
+        "our_rating": 4.7,
+        "our_notes": "Excellent for policy-based website chat. Multi-agent architecture provides comprehensive coverage. Trains on your existing content so responses align with company guidelines. Reported 15x ROI, 55% reduction in first response time, up to 98% resolution rate. Top recommendation for standard website CS automation."
+      },
+      "integrations": [
+        "Zendesk",
+        "Salesforce",
+        "Freshdesk",
+        "Intercom",
+        "Slack",
+        "Kustomer",
+        "Helpshift",
+        "API available"
+      ],
+      "api": {
+        "available": true,
+        "type": "REST",
+        "documentation": "https://forethought.ai/developers"
+      },
+      "competitors": [
+        "Ada",
+        "Intercom Fin",
+        "Zendesk AI",
+        "Ultimate.ai",
+        "Tidio AI"
+      ],
+      "verified_at": "2025-12-31T00:00:00Z",
+      "verified_by": "manual",
+      "source_url": "https://forethought.ai",
+      "notes": "Multi-agent platform with autonomous reasoning. Solve handles resolutions, Triage classifies tickets, Assist helps human agents, Discover surfaces insights. Enterprise security and compliance. No public pricing - requires demo/quote. Highly recommended for website chat that needs to follow assigned policies."
     }
   ],
-  "last_updated": "2025-12-17T00:00:00Z"
+  "last_updated": "2025-12-31T00:00:00Z"
 }

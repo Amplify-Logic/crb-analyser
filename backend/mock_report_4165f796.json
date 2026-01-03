@@ -1,0 +1,3106 @@
+{
+  "id": "9fca9305-87c7-4b69-8a50-c086a2e1f840",
+  "quiz_session_id": "4165f796-fcd9-4d08-b091-a910c96fefcc",
+  "audit_id": null,
+  "tier": "full",
+  "status": "completed",
+  "executive_summary": {
+    "verdict": {
+      "color": "yellow",
+      "headline": "Proceed with Caution",
+      "reasoning": [
+        "AI readiness score of 65 shows solid foundation",
+        "Projected value of \u20ac6,861,002-\u20ac12,605,547 justifies exploration",
+        "However, we identified 1 high-risk factors to manage",
+        "Start with quick wins to build confidence"
+      ],
+      "confidence": "medium",
+      "subheadline": "Opportunity exists, but manage the risks",
+      "recommendation": "proceed_cautiously",
+      "when_to_revisit": "Re-evaluate after your first AI pilot (3-6 months)",
+      "industry_context": "Start with quick wins to build confidence",
+      "recommended_approach": [
+        "Start with ONE high-ROI, low-risk recommendation",
+        "Set clear success metrics before starting",
+        "Budget for iteration - first attempt rarely perfect",
+        "Have a rollback plan for each implementation"
+      ]
+    },
+    "key_insight": "ComfortAir has strong fundamentals but is bleeding revenue through poor scheduling and communication systems that frustrate customers and waste 25+ hours weekly.",
+    "report_date": "December 24, 2025",
+    "not_recommended": [
+      {
+        "title": "Advanced AI Analytics Platform",
+        "reason": "Company lacks data infrastructure and processes to support advanced analytics - would be expensive shelf-ware"
+      },
+      {
+        "title": "Custom AI Development",
+        "reason": "Off-the-shelf solutions exist for all identified needs at fraction of custom development cost"
+      }
+    ],
+    "top_opportunities": [
+      {
+        "title": "Field Service Management Platform",
+        "time_horizon": "short",
+        "value_potential": "\u20ac45K-75K"
+      },
+      {
+        "title": "AI-Powered Customer Communication Hub",
+        "time_horizon": "short",
+        "value_potential": "\u20ac35K-55K"
+      },
+      {
+        "title": "Automated Lead Response System",
+        "time_horizon": "mid",
+        "value_potential": "\u20ac40K-65K"
+      },
+      {
+        "title": "Route Optimization & Scheduling AI",
+        "time_horizon": "mid",
+        "value_potential": "\u20ac30K-50K"
+      }
+    ],
+    "ai_readiness_score": 65,
+    "customer_value_score": 8,
+    "business_health_score": 7,
+    "total_value_potential": {
+      "max": 320000,
+      "min": 180000,
+      "projection_years": 3
+    },
+    "recommended_investment": {
+      "year_1_max": 14000,
+      "year_1_min": 8500
+    }
+  },
+  "value_summary": {
+    "total": {
+      "max": 12605547,
+      "min": 6861002
+    },
+    "value_saved": {
+      "subtotal": {
+        "max": 572520,
+        "min": 381680
+      },
+      "hourly_rate": 50,
+      "hours_per_week": 183.5,
+      "hours_per_week_raw": 188,
+      "time_savings_annual": 477100,
+      "time_savings_annual_raw": 488800
+    },
+    "value_created": {
+      "subtotal": {
+        "max": 12033027,
+        "min": 6479322
+      },
+      "from_findings": 4740350,
+      "from_findings_raw": 4925000,
+      "from_recommendations": 4515825,
+      "from_recommendations_raw": 4753500
+    },
+    "confidence_note": "Values are confidence-adjusted: HIGH=100%, MEDIUM=85%, LOW=70%",
+    "projection_years": 3,
+    "confidence_adjustment_applied": true
+  },
+  "findings": [
+    {
+      "id": "finding-001",
+      "title": "25% of Calls Going to Voicemail After Hours",
+      "sources": [
+        "Based on your answer: 'Miss calls after hours, leads go cold before we can respond'",
+        "You reported '25%' missed call percentage",
+        "Calculated: 50 daily calls \u00d7 25% missed \u00d7 \u20ac350 avg job \u00d7 45% close rate \u00d7 365 days = \u20ac91,000 annual lost revenue"
+      ],
+      "why_not": null,
+      "category": "growth",
+      "confidence": "high",
+      "description": "Missing quarter of potential revenue from calls outside business hours, with leads going cold before follow-up",
+      "value_saved": {
+        "hourly_rate": 50,
+        "annual_savings": 26000,
+        "hours_per_week": 10
+      },
+      "time_horizon": "short",
+      "what_instead": null,
+      "current_state": "No after-hours call handling system in place",
+      "value_created": {
+        "description": "Capture missed calls that become lost revenue opportunities",
+        "potential_revenue": 91000
+      },
+      "is_not_recommended": false,
+      "customer_value_score": 9,
+      "business_health_score": 8
+    },
+    {
+      "id": "finding-002",
+      "title": "Manual Scheduling Causing Double-Bookings",
+      "sources": [
+        "Based on your answer: 'Technicians often double-booked, customers wait too long, route planning is guesswork'",
+        "You identified 'Manually scheduling technicians' as biggest time waste",
+        "You reported wasting '25' hours weekly on scheduling",
+        "Calculated: 15 techs \u00d7 1 extra job/day \u00d7 \u20ac350 \u00d7 22 days/month \u00d7 12 months = \u20ac1,155,000 potential"
+      ],
+      "why_not": null,
+      "category": "efficiency",
+      "confidence": "high",
+      "description": "Current Google Calendar and spreadsheet system creating technician conflicts and poor route planning",
+      "value_saved": {
+        "hourly_rate": 50,
+        "annual_savings": 65000,
+        "hours_per_week": 25
+      },
+      "time_horizon": "short",
+      "what_instead": null,
+      "current_state": "Using basic Google Calendar plus spreadsheets for scheduling 15 technicians",
+      "value_created": {
+        "description": "Better route optimization could fit 1-2 additional jobs per technician daily",
+        "potential_revenue": 273000
+      },
+      "is_not_recommended": false,
+      "customer_value_score": 8,
+      "business_health_score": 9
+    },
+    {
+      "id": "finding-003",
+      "title": "Low Revenue Per Technician vs Industry",
+      "sources": [
+        "Calculated: \u20ac2M revenue \u00f7 15 technicians = \u20ac133,000 per tech",
+        "Industry benchmark: HVAC median is \u20ac200,000 per technician (ACCA/PHCC Industry Reports, 2024)",
+        "Gap analysis: (\u20ac200k - \u20ac133k) \u00d7 15 techs = \u20ac1,005,000 potential"
+      ],
+      "why_not": null,
+      "category": "efficiency",
+      "confidence": "high",
+      "description": "Current revenue per technician significantly below industry median, indicating efficiency opportunity",
+      "value_saved": {
+        "hourly_rate": 50,
+        "annual_savings": 0,
+        "hours_per_week": 0
+      },
+      "time_horizon": "mid",
+      "what_instead": null,
+      "current_state": "Generating approximately \u20ac133,000 per technician annually",
+      "value_created": {
+        "description": "Reaching industry median would add \u20ac1M+ in annual revenue",
+        "potential_revenue": 1005000
+      },
+      "is_not_recommended": false,
+      "customer_value_score": 7,
+      "business_health_score": 9
+    },
+    {
+      "id": "finding-004",
+      "title": "Customer Communication Overwhelming Office Staff",
+      "sources": [
+        "Based on your answer: 'Customers call repeatedly asking for ETA, office staff overwhelmed with calls'",
+        "You have 10 office staff handling customer communications manually",
+        "Industry data: Automated communication reduces inbound calls by 60%"
+      ],
+      "why_not": null,
+      "category": "efficiency",
+      "confidence": "high",
+      "description": "Reactive communication model causing staff burnout and poor customer experience",
+      "value_saved": {
+        "hourly_rate": 50,
+        "annual_savings": 52000,
+        "hours_per_week": 20
+      },
+      "time_horizon": "short",
+      "what_instead": null,
+      "current_state": "Manual customer follow-up and constant callback handling",
+      "value_created": {
+        "description": "Proactive communication reduces complaints and improves satisfaction",
+        "potential_revenue": 78000
+      },
+      "is_not_recommended": false,
+      "customer_value_score": 8,
+      "business_health_score": 8
+    },
+    {
+      "id": "finding-005",
+      "title": "Slow Lead Response Time Hurting Conversion",
+      "sources": [
+        "Based on your answer: lead response time is '2-4 hours'",
+        "Industry benchmark: Response within 5 minutes increases booking rate by 400%",
+        "Harvard Business Review: Lead response time study shows dramatic conversion drops after first hour"
+      ],
+      "why_not": null,
+      "category": "growth",
+      "confidence": "high",
+      "description": "2-4 hour response time significantly below best practices, reducing booking rates",
+      "value_saved": {
+        "hourly_rate": 50,
+        "annual_savings": 13000,
+        "hours_per_week": 5
+      },
+      "time_horizon": "short",
+      "what_instead": null,
+      "current_state": "Responding to leads within 2-4 hours during business hours only",
+      "value_created": {
+        "description": "Faster response significantly improves booking conversion rates",
+        "potential_revenue": 156000
+      },
+      "is_not_recommended": false,
+      "customer_value_score": 8,
+      "business_health_score": 8
+    },
+    {
+      "id": "finding-006",
+      "title": "Manual Quote Creation Taking Too Long",
+      "sources": [
+        "Based on your answer: quote creation takes '20-30 minutes'",
+        "With 15-25 jobs daily, this equals 6-12 hours daily on quote creation",
+        "Industry benchmark: Digital quoting reduces time by 70% and increases average ticket 20-30%"
+      ],
+      "why_not": null,
+      "category": "efficiency",
+      "confidence": "high",
+      "description": "20-30 minute quote creation time slowing sales process and reducing technician productivity",
+      "value_saved": {
+        "hourly_rate": 50,
+        "annual_savings": 20800,
+        "hours_per_week": 8
+      },
+      "time_horizon": "short",
+      "what_instead": null,
+      "current_state": "Technicians spend 20-30 minutes creating quotes manually",
+      "value_created": {
+        "description": "Faster quotes enable more jobs per day and better customer experience",
+        "potential_revenue": 91000
+      },
+      "is_not_recommended": false,
+      "customer_value_score": 7,
+      "business_health_score": 8
+    },
+    {
+      "id": "finding-007",
+      "title": "Low Repeat Customer Rate vs Industry",
+      "sources": [
+        "Based on your answer: repeat customer rate is '35%'",
+        "Industry benchmark: Good companies achieve 40%+ repeat rate (Industry benchmarks)",
+        "You answered review collection happens 'rarely'",
+        "Customer lifetime value increases 3-5x with systematic follow-up"
+      ],
+      "why_not": null,
+      "category": "growth",
+      "confidence": "medium",
+      "description": "35% repeat rate below industry good practice, missing customer lifetime value opportunity",
+      "value_saved": {
+        "hourly_rate": 50,
+        "annual_savings": 7800,
+        "hours_per_week": 3
+      },
+      "time_horizon": "mid",
+      "what_instead": null,
+      "current_state": "Rarely collecting reviews, manual follow-up process",
+      "value_created": {
+        "description": "Increasing repeat rate to 50% would significantly boost revenue",
+        "potential_revenue": 234000
+      },
+      "is_not_recommended": false,
+      "customer_value_score": 8,
+      "business_health_score": 9
+    },
+    {
+      "id": "finding-008",
+      "title": "Manual Invoicing Slowing Payment Collection",
+      "sources": [
+        "Based on your answer: invoicing method is 'manual'",
+        "You reported payment collection takes '30-45' days",
+        "Industry benchmark: Automated invoicing reduces collection time by 15-25 days"
+      ],
+      "why_not": null,
+      "category": "efficiency",
+      "confidence": "medium",
+      "description": "Manual invoicing process contributing to 30-45 day payment cycles, impacting cash flow",
+      "value_saved": {
+        "hourly_rate": 50,
+        "annual_savings": 26000,
+        "hours_per_week": 10
+      },
+      "time_horizon": "short",
+      "what_instead": null,
+      "current_state": "Creating and sending all invoices manually",
+      "value_created": {
+        "description": "Faster invoicing and payment processing improves cash flow",
+        "potential_revenue": 52000
+      },
+      "is_not_recommended": false,
+      "customer_value_score": 6,
+      "business_health_score": 8
+    },
+    {
+      "id": "finding-009",
+      "title": "No Recurring Revenue Stream Established",
+      "sources": [
+        "No mention of recurring revenue or maintenance agreements in responses",
+        "HVAC industry average: 30-40% of revenue from maintenance agreements",
+        "Customer lifetime value increases 3-5x with membership programs"
+      ],
+      "why_not": null,
+      "category": "growth",
+      "confidence": "medium",
+      "description": "Missing maintenance agreement opportunity that could provide predictable revenue and customer retention",
+      "value_saved": {
+        "hourly_rate": 50,
+        "annual_savings": 5200,
+        "hours_per_week": 2
+      },
+      "time_horizon": "mid",
+      "what_instead": null,
+      "current_state": "No formal maintenance agreement or membership program",
+      "value_created": {
+        "description": "Maintenance agreements provide recurring revenue and increase customer lifetime value",
+        "potential_revenue": 360000
+      },
+      "is_not_recommended": false,
+      "customer_value_score": 9,
+      "business_health_score": 10
+    },
+    {
+      "id": "finding-010",
+      "title": "Technician Efficiency Below Optimal",
+      "sources": [
+        "Calculated: 15-25 jobs \u00f7 15 techs = 1.0-1.7 jobs per tech daily",
+        "Industry benchmark: Target is 4-8 service jobs per tech daily, median 6 (ServiceTitan benchmarks, 2024)",
+        "Your service area of 50 miles suggests route optimization opportunity"
+      ],
+      "why_not": null,
+      "category": "efficiency",
+      "confidence": "medium",
+      "description": "Current job volume suggests room for improvement in technician productivity and scheduling efficiency",
+      "value_saved": {
+        "hourly_rate": 50,
+        "annual_savings": 39000,
+        "hours_per_week": 15
+      },
+      "time_horizon": "mid",
+      "what_instead": null,
+      "current_state": "15-25 jobs daily across 15 technicians (1.0-1.7 jobs per tech per day)",
+      "value_created": {
+        "description": "Optimizing to industry target of 6 jobs per tech daily would dramatically increase capacity",
+        "potential_revenue": 468000
+      },
+      "is_not_recommended": false,
+      "customer_value_score": 7,
+      "business_health_score": 8
+    },
+    {
+      "id": "finding-011",
+      "title": "Quote Conversion Rate Below Industry Average",
+      "sources": [
+        "Based on your answer: quote to close rate is '45%'",
+        "Industry benchmark: Good companies achieve 60%+ quote conversion",
+        "Better sales processes and option presentation typically improve conversion 10-20%"
+      ],
+      "why_not": null,
+      "category": "growth",
+      "confidence": "medium",
+      "description": "45% quote-to-close rate indicates opportunity for better sales processes and option presentation",
+      "value_saved": {
+        "hourly_rate": 50,
+        "annual_savings": 0,
+        "hours_per_week": 0
+      },
+      "time_horizon": "mid",
+      "what_instead": null,
+      "current_state": "Converting 45% of quotes to closed sales",
+      "value_created": {
+        "description": "Improving conversion rate to 60% industry good practice",
+        "potential_revenue": 117000
+      },
+      "is_not_recommended": false,
+      "customer_value_score": 8,
+      "business_health_score": 8
+    },
+    {
+      "id": "finding-012",
+      "title": "Growth Goal Requires Operational Efficiency Gains",
+      "sources": [
+        "Based on your answer: 'Want to grow from \u20ac2M to \u20ac4M in next 2 years without doubling office staff'",
+        "Current manual processes in scheduling, communication, and invoicing",
+        "Industry data: 2x revenue growth typically requires 50%+ efficiency improvement"
+      ],
+      "why_not": null,
+      "category": "efficiency",
+      "confidence": "high",
+      "description": "Doubling revenue without doubling staff requires significant process automation and efficiency improvements",
+      "value_saved": {
+        "hourly_rate": 50,
+        "annual_savings": 104000,
+        "hours_per_week": 40
+      },
+      "time_horizon": "long",
+      "what_instead": null,
+      "current_state": "Manual processes limiting scalability",
+      "value_created": {
+        "description": "Achieving efficiency gains necessary for growth targets",
+        "potential_revenue": 2000000
+      },
+      "is_not_recommended": false,
+      "customer_value_score": 7,
+      "business_health_score": 9
+    },
+    {
+      "id": "finding-not-001",
+      "title": "Implementing Complex AI-Powered Predictive Maintenance",
+      "sources": [
+        "ROI studies show 60%+ failure rate for complex IoT implementations in SMBs",
+        "Cost typically \u20ac50,000-200,000 with 18+ month implementation"
+      ],
+      "why_not": "Too complex and expensive for current business size. High failure rate, requires extensive customer equipment access, and doesn't address your primary pain points of scheduling and communication.",
+      "category": "efficiency",
+      "confidence": "high",
+      "description": "Advanced IoT sensors and AI prediction for equipment failure before customers call",
+      "value_saved": {
+        "hourly_rate": 50,
+        "annual_savings": 0,
+        "hours_per_week": 0
+      },
+      "time_horizon": "long",
+      "what_instead": "Focus on basic scheduling automation and customer communication first. Consider predictive maintenance after reaching \u20ac5M+ revenue and solving fundamental operational issues.",
+      "current_state": "No current predictive capabilities",
+      "value_created": {
+        "description": "Would theoretically predict failures before they happen",
+        "potential_revenue": 0
+      },
+      "is_not_recommended": true,
+      "customer_value_score": 4,
+      "business_health_score": 3
+    },
+    {
+      "id": "finding-not-002",
+      "title": "Full Custom Software Development Platform",
+      "sources": [
+        "Custom software development costs \u20ac200,000-500,000+ for FSM functionality",
+        "18-36 month development timeline delays benefits",
+        "80% of custom business software projects fail or significantly overrun"
+      ],
+      "why_not": "Massive cost and time investment with high failure risk. Would delay addressing urgent operational issues by 2+ years. Proven FSM solutions available for fraction of cost.",
+      "category": "efficiency",
+      "confidence": "high",
+      "description": "Building proprietary FSM software from scratch instead of using proven solutions",
+      "value_saved": {
+        "hourly_rate": 50,
+        "annual_savings": 0,
+        "hours_per_week": 0
+      },
+      "time_horizon": "long",
+      "what_instead": "Implement proven FSM solution like ServiceTitan, Housecall Pro, or Jobber. Can always customize later once core operations are optimized.",
+      "current_state": "Using basic tools that need upgrading",
+      "value_created": {
+        "description": "Would provide exactly customized solution",
+        "potential_revenue": 0
+      },
+      "is_not_recommended": true,
+      "customer_value_score": 5,
+      "business_health_score": 2
+    },
+    {
+      "id": "finding-not-003",
+      "title": "Replacing All Human Customer Service with AI",
+      "sources": [
+        "Studies show 40-60% customer satisfaction drop with full AI replacement",
+        "HVAC customers expect human connection for complex technical issues",
+        "Your comfort with technology is 7/10, but customers may be less comfortable"
+      ],
+      "why_not": "Customer satisfaction typically drops 40-60% with full AI replacement. HVAC services are high-touch, trust-based relationships. Emergency situations require human empathy and complex problem-solving.",
+      "category": "customer_experience",
+      "confidence": "high",
+      "description": "Implementing fully automated AI chatbots and phone systems with no human backup",
+      "value_saved": {
+        "hourly_rate": 50,
+        "annual_savings": 130000,
+        "hours_per_week": 50
+      },
+      "time_horizon": "short",
+      "what_instead": "Implement AI-assisted human service: AI handles initial triage, appointment booking, and simple questions. Humans handle technical issues, emergencies, and relationship building.",
+      "current_state": "Human-handled customer service",
+      "value_created": {
+        "description": "Would reduce labor costs significantly",
+        "potential_revenue": 0
+      },
+      "is_not_recommended": true,
+      "customer_value_score": 3,
+      "business_health_score": 4
+    }
+  ],
+  "recommendations": [
+    {
+      "id": "rec-001",
+      "title": "Implement 24/7 Call Handling System",
+      "options": {
+        "best_in_class": {
+          "cons": [
+            "Premium pricing",
+            "Per-call costs can escalate"
+          ],
+          "name": "Smith.ai Pro + FSM Integration",
+          "pros": [
+            "24/7 human+AI hybrid",
+            "Direct booking integration",
+            "Excellent customer service"
+          ],
+          "vendor": "Smith.ai",
+          "monthly_cost": 1530,
+          "implementation_cost": 3000,
+          "implementation_weeks": 4
+        },
+        "off_the_shelf": {
+          "cons": [
+            "Higher ongoing costs",
+            "Limited to business hours expansion only"
+          ],
+          "name": "Ruby Receptionist + Basic Booking",
+          "pros": [
+            "Human touch maintained",
+            "Proven reliability",
+            "Quick setup"
+          ],
+          "vendor": "Ruby",
+          "monthly_cost": 680,
+          "implementation_cost": 1000,
+          "implementation_weeks": 2
+        },
+        "custom_solution": {
+          "cons": [
+            "Higher upfront investment",
+            "Requires maintenance"
+          ],
+          "pros": [
+            "Perfect fit for your needs",
+            "Competitive advantage",
+            "Full control"
+          ],
+          "approach": "Build AI-powered phone system using Claude for call handling, integrated with your existing booking system. Handles FAQs, booking, and escalates complex issues.",
+          "key_apis": [
+            {
+              "docs": "https://docs.anthropic.com",
+              "name": "Deepgram Nova-2",
+              "pricing": {
+                "currency": "USD",
+                "per_minute": 0.0043
+              },
+              "purpose": "Core AI processing"
+            },
+            {
+              "docs": "https://supabase.com/docs",
+              "name": "Supabase",
+              "pricing": {
+                "pro": "$25/month",
+                "free_tier": true
+              },
+              "purpose": "Database + Auth"
+            },
+            {
+              "docs": "https://vercel.com/docs",
+              "name": "Vercel",
+              "pricing": {
+                "pro": "$20/month",
+                "free_tier": true
+              },
+              "purpose": "Frontend hosting"
+            }
+          ],
+          "timeline": {
+            "experienced_developer": "40-80 hours",
+            "learning_while_building": "80-160 hours"
+          },
+          "use_case": "voice_transcription",
+          "resources": {
+            "tutorials": [
+              "Build a voice transcription with Claude - anthropic.com/cookbook",
+              "Deploying AI apps to Vercel - vercel.com/guides"
+            ],
+            "communities": [
+              "Anthropic Discord - discord.gg/anthropic",
+              "r/ClaudeAI - reddit.com/r/ClaudeAI"
+            ],
+            "documentation": [
+              "https://docs.anthropic.com - Claude API documentation",
+              "https://github.com/anthropics/anthropic-cookbook - Code examples",
+              "https://cursor.com/docs - Cursor IDE setup"
+            ]
+          },
+          "build_tools": [
+            "Claude Sonnet 4",
+            "Cursor",
+            "Vercel",
+            "Supabase",
+            "Twilio Voice API"
+          ],
+          "estimated_cost": {
+            "max": 15000,
+            "min": 8000
+          },
+          "skills_required": [
+            "Python/TypeScript",
+            "Twilio API integration",
+            "Voice interface design"
+          ],
+          "recommended_stack": {
+            "ide": "Cursor with Claude integration",
+            "backend": "Railway (Python/FastAPI or Node.js)",
+            "database": "Supabase (PostgreSQL + Auth)",
+            "frontend": "Vercel (React/Next.js)",
+            "vector_db": "Pinecone or Supabase pgvector (if RAG needed)"
+          },
+          "dev_hours_estimate": "80-120 hours",
+          "implementation_steps": [
+            "1. Set up development environment (Cursor + Claude API key)",
+            "2. Create project scaffolding (Next.js/FastAPI template)",
+            "3. Implement core AI integration with Claude API",
+            "4. Build user interface for interaction",
+            "5. Add authentication with Supabase",
+            "6. Deploy to Vercel (frontend) and Railway (backend)",
+            "7. Test with real users and iterate"
+          ],
+          "implementation_weeks": 6,
+          "model_recommendation": "Claude Sonnet 4 because it excels at conversational AI and following complex booking instructions while maintaining professional tone",
+          "monthly_running_cost": 200
+        }
+      },
+      "priority": "high",
+      "finding_id": "finding-001",
+      "assumptions": [
+        "25% of 50 daily calls = 12.5 after-hours calls per day missed",
+        "45% booking rate on captured calls at \u20ac350 average job value",
+        "Smith.ai captures 80% of after-hours opportunities that would otherwise be lost"
+      ],
+      "description": "Deploy automated call answering and booking system to capture the 25% of calls currently going to voicemail after hours, preventing \u20ac91,000 in lost revenue annually.",
+      "crb_analysis": {
+        "cost": {
+          "total": 39200,
+          "mid_term": {
+            "software": 9360,
+            "maintenance": 2000
+          },
+          "long_term": {
+            "software": 18720,
+            "upgrades": 3000
+          },
+          "short_term": {
+            "software": 3120,
+            "training": 1000,
+            "implementation": 2000
+          }
+        },
+        "risk": [
+          {
+            "impact": 15000,
+            "mitigation": "Start with human+AI hybrid, extensive testing before full deployment",
+            "description": "AI booking system makes errors or frustrates customers",
+            "probability": "medium",
+            "time_horizon": "short"
+          },
+          {
+            "impact": 5000,
+            "mitigation": "Choose provider with 99.9% uptime SLA and backup systems",
+            "description": "System downtime during peak hours",
+            "probability": "low",
+            "time_horizon": "mid"
+          }
+        ],
+        "benefit": {
+          "total": 439000,
+          "mid_term": {
+            "value_saved": 26000,
+            "value_created": 91000
+          },
+          "long_term": {
+            "value_saved": 52000,
+            "value_created": 182000
+          },
+          "short_term": {
+            "value_saved": 13000,
+            "value_created": 75000
+          }
+        }
+      },
+      "payback_months": 4,
+      "roi_percentage": 280,
+      "why_it_matters": {
+        "customer_value": "Customers can book appointments instantly 24/7, no more waiting until business hours or losing jobs to competitors who answer first",
+        "business_health": "Captures \u20ac91,000 in currently lost revenue with minimal ongoing costs, dramatically improving lead conversion"
+      },
+      "our_recommendation": "best_in_class",
+      "recommendation_rationale": "For your \u20ac2M revenue business with 50 daily calls, Smith.ai provides the perfect balance. You get immediate 24/7 coverage with human oversight for complex HVAC issues, while AI handles routine booking. The \u20ac1,530/month cost is easily justified by capturing even 10% of the \u20ac91,000 in lost revenue."
+    },
+    {
+      "id": "rec-002",
+      "title": "Deploy Intelligent Scheduling and Dispatch System",
+      "options": {
+        "best_in_class": {
+          "cons": [
+            "Expensive",
+            "Complex implementation",
+            "Steep learning curve"
+          ],
+          "name": "ServiceTitan Works",
+          "pros": [
+            "Industry-leading FSM",
+            "Advanced AI scheduling",
+            "Comprehensive reporting",
+            "Built for contractors your size"
+          ],
+          "vendor": "ServiceTitan",
+          "monthly_cost": 4500,
+          "implementation_cost": 25000,
+          "implementation_weeks": 12
+        },
+        "off_the_shelf": {
+          "cons": [
+            "Limited advanced dispatch features",
+            "Less HVAC-specific functionality"
+          ],
+          "name": "Housecall Pro Max",
+          "pros": [
+            "Easy to learn",
+            "Good mobile app",
+            "Reasonable pricing"
+          ],
+          "vendor": "Housecall Pro",
+          "monthly_cost": 299,
+          "implementation_cost": 3000,
+          "implementation_weeks": 4
+        },
+        "custom_solution": {
+          "cons": [
+            "Higher upfront investment",
+            "Requires maintenance"
+          ],
+          "pros": [
+            "Perfect fit for your needs",
+            "Competitive advantage",
+            "Full control"
+          ],
+          "approach": "Build intelligent dispatch system using AI for optimal routing and scheduling, integrated with your existing systems. Real-time technician tracking and customer updates.",
+          "key_apis": [
+            {
+              "docs": "https://docs.anthropic.com",
+              "name": "Claude Haiku 3.5 (claude-3-5-haiku-20241022)",
+              "pricing": {
+                "currency": "USD",
+                "input_per_1m_tokens": 0.8,
+                "output_per_1m_tokens": 4.0
+              },
+              "purpose": "Core AI processing"
+            },
+            {
+              "docs": "https://supabase.com/docs",
+              "name": "Supabase",
+              "pricing": {
+                "pro": "$25/month",
+                "free_tier": true
+              },
+              "purpose": "Database + Auth"
+            },
+            {
+              "docs": "https://vercel.com/docs",
+              "name": "Vercel",
+              "pricing": {
+                "pro": "$20/month",
+                "free_tier": true
+              },
+              "purpose": "Frontend hosting"
+            }
+          ],
+          "timeline": {
+            "experienced_developer": "40-80 hours",
+            "learning_while_building": "80-160 hours"
+          },
+          "use_case": "automation",
+          "resources": {
+            "tutorials": [
+              "Build a automation with Claude - anthropic.com/cookbook",
+              "Deploying AI apps to Vercel - vercel.com/guides"
+            ],
+            "communities": [
+              "Anthropic Discord - discord.gg/anthropic",
+              "r/ClaudeAI - reddit.com/r/ClaudeAI"
+            ],
+            "documentation": [
+              "https://docs.anthropic.com - Claude API documentation",
+              "https://github.com/anthropics/anthropic-cookbook - Code examples",
+              "https://cursor.com/docs - Cursor IDE setup"
+            ]
+          },
+          "build_tools": [
+            "Claude Sonnet 4",
+            "Cursor",
+            "Vercel",
+            "Supabase",
+            "Google Maps API"
+          ],
+          "estimated_cost": {
+            "max": 40000,
+            "min": 25000
+          },
+          "skills_required": [
+            "Full-stack development",
+            "Map integration",
+            "Real-time systems",
+            "Mobile app development"
+          ],
+          "recommended_stack": {
+            "ide": "Cursor with Claude integration",
+            "backend": "Railway (Python/FastAPI or Node.js)",
+            "database": "Supabase (PostgreSQL + Auth)",
+            "frontend": "Vercel (React/Next.js)",
+            "vector_db": "Pinecone or Supabase pgvector (if RAG needed)"
+          },
+          "dev_hours_estimate": "300-500 hours",
+          "implementation_steps": [
+            "1. Set up development environment (Cursor + Claude API key)",
+            "2. Create project scaffolding (Next.js/FastAPI template)",
+            "3. Implement core AI integration with Claude API",
+            "4. Build user interface for interaction",
+            "5. Add authentication with Supabase",
+            "6. Deploy to Vercel (frontend) and Railway (backend)",
+            "7. Test with real users and iterate"
+          ],
+          "implementation_weeks": 16,
+          "model_recommendation": "Claude Sonnet 4 because it can handle complex scheduling logic, route optimization, and natural language scheduling requests from customers",
+          "monthly_running_cost": 500
+        }
+      },
+      "priority": "high",
+      "finding_id": "finding-002",
+      "assumptions": [
+        "Each technician adds 1 job per day on average through better scheduling = 15 \u00d7 22 \u00d7 12 = 3,960 additional jobs annually",
+        "Average job value \u20ac350 \u00d7 3,960 jobs = \u20ac1,386,000 potential revenue",
+        "Conservative estimate: achieve 20% of potential = \u20ac277,200 additional annual revenue",
+        "Current 25 hours weekly \u00d7 \u20ac50/hour = \u20ac65,000 annual admin savings"
+      ],
+      "description": "Replace manual Google Calendar scheduling with AI-powered field service management to eliminate double-bookings, optimize routes, and add 1-2 jobs per technician daily.",
+      "crb_analysis": {
+        "cost": {
+          "total": 98840,
+          "mid_term": {
+            "software": 18252,
+            "maintenance": 8000
+          },
+          "long_term": {
+            "software": 36504,
+            "upgrades": 10000
+          },
+          "short_term": {
+            "software": 6084,
+            "training": 5000,
+            "implementation": 15000
+          }
+        },
+        "risk": [
+          {
+            "impact": 25000,
+            "mitigation": "Extensive training, gradual rollout, involve technicians in selection process",
+            "description": "Technicians resist new system, productivity drops during transition",
+            "probability": "medium",
+            "time_horizon": "short"
+          },
+          {
+            "impact": 10000,
+            "mitigation": "Professional data migration service, parallel systems during transition",
+            "description": "Data migration issues from current spreadsheet system",
+            "probability": "medium",
+            "time_horizon": "short"
+          },
+          {
+            "impact": 15000,
+            "mitigation": "Choose FSM with proven QuickBooks integration, professional setup",
+            "description": "Integration failures with existing QuickBooks/systems",
+            "probability": "low",
+            "time_horizon": "mid"
+          }
+        ],
+        "benefit": {
+          "total": 1183000,
+          "mid_term": {
+            "value_saved": 65000,
+            "value_created": 273000
+          },
+          "long_term": {
+            "value_saved": 130000,
+            "value_created": 546000
+          },
+          "short_term": {
+            "value_saved": 32500,
+            "value_created": 136500
+          }
+        }
+      },
+      "payback_months": 9,
+      "roi_percentage": 195,
+      "why_it_matters": {
+        "customer_value": "Reliable appointment times, faster service, technicians arrive when promised with proper preparation",
+        "business_health": "Saves 25 hours weekly of admin time while adding \u20ac273,000+ in annual revenue through better utilization"
+      },
+      "our_recommendation": "best_in_class",
+      "recommendation_rationale": "At \u20ac2M revenue with 15 technicians, you're at the perfect size for ServiceTitan. Yes, it's expensive, but the ROI is compelling - even capturing just 0.5 additional jobs per technician daily pays for the system. The advanced AI scheduling and dispatch optimization will directly address your biggest operational pain point."
+    },
+    {
+      "id": "rec-003",
+      "title": "Implement Rapid Lead Response System",
+      "options": {
+        "best_in_class": {
+          "cons": [
+            "Complex setup",
+            "May overlap with FSM features"
+          ],
+          "name": "Birdeye Growth + Lead Response",
+          "pros": [
+            "Comprehensive lead management",
+            "AI-powered responses",
+            "Strong analytics"
+          ],
+          "vendor": "Birdeye",
+          "monthly_cost": 399,
+          "implementation_cost": 8000,
+          "implementation_weeks": 6
+        },
+        "off_the_shelf": {
+          "cons": [
+            "Limited AI automation",
+            "Expensive for features received"
+          ],
+          "name": "Podium Essentials + Webchat",
+          "pros": [
+            "Unified inbox",
+            "Webchat and text",
+            "Easy setup"
+          ],
+          "vendor": "Podium",
+          "monthly_cost": 249,
+          "implementation_cost": 2000,
+          "implementation_weeks": 3
+        },
+        "custom_solution": {
+          "cons": [
+            "Higher upfront investment",
+            "Requires maintenance"
+          ],
+          "pros": [
+            "Perfect fit for your needs",
+            "Competitive advantage",
+            "Full control"
+          ],
+          "approach": "Build intelligent lead response system that instantly qualifies leads, provides initial quotes, books appointments, and escalates to humans when needed. Integrates with your existing phone and web systems.",
+          "key_apis": [
+            {
+              "docs": "https://docs.anthropic.com",
+              "name": "Claude Haiku 3.5 (claude-3-5-haiku-20241022)",
+              "pricing": {
+                "currency": "USD",
+                "input_per_1m_tokens": 0.8,
+                "output_per_1m_tokens": 4.0
+              },
+              "purpose": "Core AI processing"
+            },
+            {
+              "docs": "https://supabase.com/docs",
+              "name": "Supabase",
+              "pricing": {
+                "pro": "$25/month",
+                "free_tier": true
+              },
+              "purpose": "Database + Auth"
+            },
+            {
+              "docs": "https://vercel.com/docs",
+              "name": "Vercel",
+              "pricing": {
+                "pro": "$20/month",
+                "free_tier": true
+              },
+              "purpose": "Frontend hosting"
+            }
+          ],
+          "timeline": {
+            "experienced_developer": "40-80 hours",
+            "learning_while_building": "80-160 hours"
+          },
+          "use_case": "automation",
+          "resources": {
+            "tutorials": [
+              "Build a automation with Claude - anthropic.com/cookbook",
+              "Deploying AI apps to Vercel - vercel.com/guides"
+            ],
+            "communities": [
+              "Anthropic Discord - discord.gg/anthropic",
+              "r/ClaudeAI - reddit.com/r/ClaudeAI"
+            ],
+            "documentation": [
+              "https://docs.anthropic.com - Claude API documentation",
+              "https://github.com/anthropics/anthropic-cookbook - Code examples",
+              "https://cursor.com/docs - Cursor IDE setup"
+            ]
+          },
+          "build_tools": [
+            "Claude Sonnet 4",
+            "Cursor",
+            "Vercel",
+            "Supabase",
+            "Twilio",
+            "Zapier"
+          ],
+          "estimated_cost": {
+            "max": 20000,
+            "min": 12000
+          },
+          "skills_required": [
+            "Conversational AI design",
+            "CRM integration",
+            "Multi-channel communication"
+          ],
+          "recommended_stack": {
+            "ide": "Cursor with Claude integration",
+            "backend": "Railway (Python/FastAPI or Node.js)",
+            "database": "Supabase (PostgreSQL + Auth)",
+            "frontend": "Vercel (React/Next.js)",
+            "vector_db": "Pinecone or Supabase pgvector (if RAG needed)"
+          },
+          "dev_hours_estimate": "120-180 hours",
+          "implementation_steps": [
+            "1. Set up development environment (Cursor + Claude API key)",
+            "2. Create project scaffolding (Next.js/FastAPI template)",
+            "3. Implement core AI integration with Claude API",
+            "4. Build user interface for interaction",
+            "5. Add authentication with Supabase",
+            "6. Deploy to Vercel (frontend) and Railway (backend)",
+            "7. Test with real users and iterate"
+          ],
+          "implementation_weeks": 8,
+          "model_recommendation": "Claude Sonnet 4 because it excels at customer service conversations, can handle complex HVAC scenarios, and maintains professional tone while gathering lead information",
+          "monthly_running_cost": 150
+        }
+      },
+      "priority": "high",
+      "finding_id": "finding-005",
+      "assumptions": [
+        "Current lead volume: 200 leads/month with 25% booking rate = 50 bookings",
+        "5-minute response time increases booking rate to 40% (Harvard Business Review data)",
+        "Additional 30 bookings/month \u00d7 \u20ac350 average \u00d7 12 months = \u20ac126,000 additional revenue",
+        "Plus reduced admin time: 5 hours/week \u00d7 \u20ac50/hour = \u20ac13,000 annual savings"
+      ],
+      "description": "Deploy automated lead qualification and instant response system to reduce response time from 2-4 hours to under 5 minutes, improving booking conversion by 400%.",
+      "crb_analysis": {
+        "cost": {
+          "total": 44880,
+          "mid_term": {
+            "software": 8964,
+            "maintenance": 3000
+          },
+          "long_term": {
+            "software": 17928,
+            "upgrades": 5000
+          },
+          "short_term": {
+            "software": 2988,
+            "training": 2000,
+            "implementation": 5000
+          }
+        },
+        "risk": [
+          {
+            "impact": 10000,
+            "mitigation": "Extensive testing, human oversight for complex queries, clear escalation paths",
+            "description": "AI provides incorrect information or quotes to leads",
+            "probability": "medium",
+            "time_horizon": "short"
+          },
+          {
+            "impact": 5000,
+            "mitigation": "Position as initial response that connects them quickly to humans",
+            "description": "Customers prefer human interaction for HVAC issues",
+            "probability": "low",
+            "time_horizon": "mid"
+          }
+        ],
+        "benefit": {
+          "total": 591500,
+          "mid_term": {
+            "value_saved": 13000,
+            "value_created": 156000
+          },
+          "long_term": {
+            "value_saved": 26000,
+            "value_created": 312000
+          },
+          "short_term": {
+            "value_saved": 6500,
+            "value_created": 78000
+          }
+        }
+      },
+      "payback_months": 2,
+      "roi_percentage": 650,
+      "why_it_matters": {
+        "customer_value": "Immediate response when customers need HVAC service, especially during emergencies or urgent situations",
+        "business_health": "Captures \u20ac156,000 in additional revenue by dramatically improving lead-to-booking conversion rates"
+      },
+      "our_recommendation": "custom_solution",
+      "recommendation_rationale": "Your business has specific HVAC knowledge and pricing that generic tools can't match. A custom solution can instantly provide accurate quotes based on your actual pricing, integrate perfectly with your existing systems, and give you a significant competitive advantage. The \u20ac12,000-20,000 investment pays for itself in the first month of improved conversions."
+    },
+    {
+      "id": "rec-004",
+      "title": "Deploy Automated Customer Communication System",
+      "options": {
+        "best_in_class": {
+          "cons": [
+            "Expensive",
+            "Annual contract required"
+          ],
+          "name": "Podium Standard + Automation",
+          "pros": [
+            "Advanced automation",
+            "Multi-channel communication",
+            "Strong reputation features"
+          ],
+          "vendor": "Podium",
+          "monthly_cost": 449,
+          "implementation_cost": 5000,
+          "implementation_weeks": 4
+        },
+        "off_the_shelf": {
+          "cons": [
+            "Limited customization",
+            "Basic automation only"
+          ],
+          "name": "Broadly Standard",
+          "pros": [
+            "Simple setup",
+            "Good value",
+            "Includes webchat"
+          ],
+          "vendor": "Broadly",
+          "monthly_cost": 249,
+          "implementation_cost": 1500,
+          "implementation_weeks": 2
+        },
+        "custom_solution": {
+          "cons": [
+            "Higher upfront investment",
+            "Requires maintenance"
+          ],
+          "pros": [
+            "Perfect fit for your needs",
+            "Competitive advantage",
+            "Full control"
+          ],
+          "approach": "Build intelligent communication system that sends personalized updates via SMS, email, and voice calls based on job status, integrates with scheduling system for real-time updates.",
+          "key_apis": [
+            {
+              "docs": "https://docs.anthropic.com",
+              "name": "Claude Haiku 3.5 or GPT-4o-mini",
+              "pricing": {
+                "currency": "USD",
+                "input_per_1m_tokens": 0.8,
+                "output_per_1m_tokens": 4.0
+              },
+              "purpose": "Core AI processing"
+            },
+            {
+              "docs": "https://supabase.com/docs",
+              "name": "Supabase",
+              "pricing": {
+                "pro": "$25/month",
+                "free_tier": true
+              },
+              "purpose": "Database + Auth"
+            },
+            {
+              "docs": "https://vercel.com/docs",
+              "name": "Vercel",
+              "pricing": {
+                "pro": "$20/month",
+                "free_tier": true
+              },
+              "purpose": "Frontend hosting"
+            }
+          ],
+          "timeline": {
+            "experienced_developer": "40-80 hours",
+            "learning_while_building": "80-160 hours"
+          },
+          "use_case": "email_assistant",
+          "resources": {
+            "tutorials": [
+              "Build a email assistant with Claude - anthropic.com/cookbook",
+              "Deploying AI apps to Vercel - vercel.com/guides"
+            ],
+            "communities": [
+              "Anthropic Discord - discord.gg/anthropic",
+              "r/ClaudeAI - reddit.com/r/ClaudeAI"
+            ],
+            "documentation": [
+              "https://docs.anthropic.com - Claude API documentation",
+              "https://github.com/anthropics/anthropic-cookbook - Code examples",
+              "https://cursor.com/docs - Cursor IDE setup"
+            ]
+          },
+          "build_tools": [
+            "Claude Haiku 3.5",
+            "Cursor",
+            "Vercel",
+            "Supabase",
+            "Twilio",
+            "SendGrid"
+          ],
+          "estimated_cost": {
+            "max": 15000,
+            "min": 8000
+          },
+          "skills_required": [
+            "Multi-channel communication APIs",
+            "Workflow automation",
+            "Template systems"
+          ],
+          "recommended_stack": {
+            "ide": "Cursor with Claude integration",
+            "backend": "Railway (Python/FastAPI or Node.js)",
+            "database": "Supabase (PostgreSQL + Auth)",
+            "frontend": "Vercel (React/Next.js)",
+            "vector_db": "Pinecone or Supabase pgvector (if RAG needed)"
+          },
+          "dev_hours_estimate": "80-120 hours",
+          "implementation_steps": [
+            "1. Set up development environment (Cursor + Claude API key)",
+            "2. Create project scaffolding (Next.js/FastAPI template)",
+            "3. Implement core AI integration with Claude API",
+            "4. Build user interface for interaction",
+            "5. Add authentication with Supabase",
+            "6. Deploy to Vercel (frontend) and Railway (backend)",
+            "7. Test with real users and iterate"
+          ],
+          "implementation_weeks": 6,
+          "model_recommendation": "Claude Haiku 3.5 because it's fast and cost-effective for generating personalized customer communications at scale while maintaining quality",
+          "monthly_running_cost": 100
+        }
+      },
+      "priority": "medium",
+      "finding_id": "finding-004",
+      "assumptions": [
+        "20 hours/week staff time savings \u00d7 \u20ac50/hour = \u20ac52,000 annual value",
+        "60% reduction in inbound calls improves customer satisfaction and enables staff to focus on revenue-generating activities",
+        "Improved customer experience leads to 5% increase in repeat business = \u20ac100,000 \u00d7 5% = \u20ac5,000 additional revenue"
+      ],
+      "description": "Implement proactive customer updates and automated communication workflows to reduce inbound calls by 60% and improve customer satisfaction.",
+      "crb_analysis": {
+        "cost": {
+          "total": 27440,
+          "mid_term": {
+            "software": 5382,
+            "maintenance": 2000
+          },
+          "long_term": {
+            "software": 10764,
+            "upgrades": 3000
+          },
+          "short_term": {
+            "software": 1794,
+            "training": 1500,
+            "implementation": 3000
+          }
+        },
+        "risk": [
+          {
+            "impact": 8000,
+            "mitigation": "Personalize templates, test thoroughly, maintain human oversight",
+            "description": "Automated messages feel impersonal or contain errors",
+            "probability": "medium",
+            "time_horizon": "short"
+          },
+          {
+            "impact": 5000,
+            "mitigation": "Choose solution with proven FSM integrations",
+            "description": "Integration issues with existing scheduling system",
+            "probability": "low",
+            "time_horizon": "short"
+          }
+        ],
+        "benefit": {
+          "total": 455000,
+          "mid_term": {
+            "value_saved": 52000,
+            "value_created": 78000
+          },
+          "long_term": {
+            "value_saved": 104000,
+            "value_created": 156000
+          },
+          "short_term": {
+            "value_saved": 26000,
+            "value_created": 39000
+          }
+        }
+      },
+      "payback_months": 2,
+      "roi_percentage": 485,
+      "why_it_matters": {
+        "customer_value": "Customers receive proactive updates about technician arrival, service status, and completion without having to call",
+        "business_health": "Saves 20 hours weekly of staff time while improving customer experience and reducing operational stress"
+      },
+      "our_recommendation": "best_in_class",
+      "recommendation_rationale": "Podium provides excellent ROI for your business size. The \u20ac449/month investment is easily justified by saving 20 hours/week of staff time (\u20ac52,000/year value). The multi-channel approach works well for HVAC customers who may prefer different communication methods, and the reputation management features add additional value."
+    },
+    {
+      "id": "rec-005",
+      "title": "Implement Revenue Optimization System",
+      "options": {
+        "best_in_class": {
+          "cons": [
+            "Expensive",
+            "Requires cultural change management"
+          ],
+          "name": "ServiceTitan Performance + Coaching",
+          "pros": [
+            "Comprehensive performance analytics",
+            "Built-in coaching tools",
+            "Industry benchmarking"
+          ],
+          "vendor": "ServiceTitan",
+          "monthly_cost": 800,
+          "implementation_cost": 15000,
+          "implementation_weeks": 8
+        },
+        "off_the_shelf": {
+          "cons": [
+            "Less detailed than specialized solutions",
+            "Limited HVAC-specific metrics"
+          ],
+          "name": "Jobber Grow + Performance Dashboard",
+          "pros": [
+            "Clean reporting interface",
+            "Easy technician buy-in",
+            "Reasonable cost"
+          ],
+          "vendor": "Jobber",
+          "monthly_cost": 349,
+          "implementation_cost": 5000,
+          "implementation_weeks": 6
+        },
+        "custom_solution": {
+          "cons": [
+            "Higher upfront investment",
+            "Requires maintenance"
+          ],
+          "pros": [
+            "Perfect fit for your needs",
+            "Competitive advantage",
+            "Full control"
+          ],
+          "approach": "Build performance analytics platform that tracks key metrics, provides coaching insights, and gamifies improvement. Integrates with your existing systems to provide real-time performance feedback.",
+          "key_apis": [
+            {
+              "docs": "https://docs.anthropic.com",
+              "name": "Claude Haiku 3.5 (claude-3-5-haiku-20241022)",
+              "pricing": {
+                "currency": "USD",
+                "input_per_1m_tokens": 0.8,
+                "output_per_1m_tokens": 4.0
+              },
+              "purpose": "Core AI processing"
+            },
+            {
+              "docs": "https://supabase.com/docs",
+              "name": "Supabase",
+              "pricing": {
+                "pro": "$25/month",
+                "free_tier": true
+              },
+              "purpose": "Database + Auth"
+            },
+            {
+              "docs": "https://vercel.com/docs",
+              "name": "Vercel",
+              "pricing": {
+                "pro": "$20/month",
+                "free_tier": true
+              },
+              "purpose": "Frontend hosting"
+            }
+          ],
+          "timeline": {
+            "experienced_developer": "40-80 hours",
+            "learning_while_building": "80-160 hours"
+          },
+          "use_case": "automation",
+          "resources": {
+            "tutorials": [
+              "Build a automation with Claude - anthropic.com/cookbook",
+              "Deploying AI apps to Vercel - vercel.com/guides"
+            ],
+            "communities": [
+              "Anthropic Discord - discord.gg/anthropic",
+              "r/ClaudeAI - reddit.com/r/ClaudeAI"
+            ],
+            "documentation": [
+              "https://docs.anthropic.com - Claude API documentation",
+              "https://github.com/anthropics/anthropic-cookbook - Code examples",
+              "https://cursor.com/docs - Cursor IDE setup"
+            ]
+          },
+          "build_tools": [
+            "Gemini 2.5 Pro",
+            "Cursor",
+            "Vercel",
+            "Supabase",
+            "Chart.js"
+          ],
+          "estimated_cost": {
+            "max": 35000,
+            "min": 20000
+          },
+          "skills_required": [
+            "Data analytics",
+            "Dashboard development",
+            "Performance metrics",
+            "Mobile app development"
+          ],
+          "recommended_stack": {
+            "ide": "Cursor with Claude integration",
+            "backend": "Railway (Python/FastAPI or Node.js)",
+            "database": "Supabase (PostgreSQL + Auth)",
+            "frontend": "Vercel (React/Next.js)",
+            "vector_db": "Pinecone or Supabase pgvector (if RAG needed)"
+          },
+          "dev_hours_estimate": "200-350 hours",
+          "implementation_steps": [
+            "1. Set up development environment (Cursor + Claude API key)",
+            "2. Create project scaffolding (Next.js/FastAPI template)",
+            "3. Implement core AI integration with Claude API",
+            "4. Build user interface for interaction",
+            "5. Add authentication with Supabase",
+            "6. Deploy to Vercel (frontend) and Railway (backend)",
+            "7. Test with real users and iterate"
+          ],
+          "implementation_weeks": 12,
+          "model_recommendation": "Gemini 2.5 Pro because its 2M token context window can analyze large datasets to identify performance patterns and provide actionable insights",
+          "monthly_running_cost": 300
+        }
+      },
+      "priority": "medium",
+      "finding_id": "finding-003",
+      "assumptions": [
+        "Industry median revenue per technician: \u20ac200,000 vs current \u20ac133,000 = \u20ac67,000 gap per technician",
+        "Conservative improvement: achieve 50% of gap = \u20ac33,500 per technician",
+        "15 technicians \u00d7 \u20ac33,500 = \u20ac502,500 additional annual revenue in first year",
+        "Full implementation over 3 years could achieve complete gap closure = \u20ac1,005,000 additional revenue"
+      ],
+      "description": "Deploy comprehensive performance tracking and technician productivity system to bridge the gap between current \u20ac133k and industry median \u20ac200k revenue per technician.",
+      "crb_analysis": {
+        "cost": {
+          "total": 99000,
+          "mid_term": {
+            "software": 16200,
+            "maintenance": 12000
+          },
+          "long_term": {
+            "software": 32400,
+            "upgrades": 15000
+          },
+          "short_term": {
+            "software": 5400,
+            "training": 8000,
+            "implementation": 10000
+          }
+        },
+        "risk": [
+          {
+            "impact": 50000,
+            "mitigation": "Position as coaching tool, involve techs in goal-setting, provide clear benefits",
+            "description": "Technicians resist performance tracking as micromanagement",
+            "probability": "high",
+            "time_horizon": "short"
+          },
+          {
+            "impact": 25000,
+            "mitigation": "Combine tracking with coaching program and process improvements",
+            "description": "Data shows problems but doesn't provide solutions",
+            "probability": "medium",
+            "time_horizon": "mid"
+          }
+        ],
+        "benefit": {
+          "total": 1805000,
+          "mid_term": {
+            "value_saved": 30000,
+            "value_created": 500000
+          },
+          "long_term": {
+            "value_saved": 60000,
+            "value_created": 1000000
+          },
+          "short_term": {
+            "value_saved": 15000,
+            "value_created": 200000
+          }
+        }
+      },
+      "payback_months": 1,
+      "roi_percentage": 1820,
+      "why_it_matters": {
+        "customer_value": "More efficient technicians provide faster, more professional service with better first-time fix rates",
+        "business_health": "Reaching industry median performance would add \u20ac1M+ in annual revenue without adding headcount"
+      },
+      "our_recommendation": "best_in_class",
+      "recommendation_rationale": "This is a major cultural and operational change that requires proven systems and expertise. ServiceTitan's performance management tools are battle-tested with contractors your size. The \u20ac800/month cost is negligible compared to the potential \u20ac1M+ revenue increase. Their coaching methodology and benchmarking data will be crucial for successful implementation."
+    },
+    {
+      "id": "rec-006",
+      "title": "Deploy Customer Experience Automation Hub",
+      "options": {
+        "best_in_class": {
+          "cons": [
+            "Expensive for features needed",
+            "Requires cultural adoption"
+          ],
+          "name": "HubSpot Service Hub + Workflows",
+          "pros": [
+            "Comprehensive CX platform",
+            "Advanced automation",
+            "Great reporting"
+          ],
+          "vendor": "HubSpot",
+          "monthly_cost": 450,
+          "implementation_cost": 8000,
+          "implementation_weeks": 6
+        },
+        "off_the_shelf": {
+          "cons": [
+            "Can get complex",
+            "Limited customer experience focus"
+          ],
+          "name": "Zapier Professional + Templates",
+          "pros": [
+            "Connects everything",
+            "No-code setup",
+            "Extensive integrations"
+          ],
+          "vendor": "Zapier",
+          "monthly_cost": 173,
+          "implementation_cost": 3000,
+          "implementation_weeks": 4
+        },
+        "custom_solution": {
+          "cons": [
+            "Higher upfront investment",
+            "Requires maintenance"
+          ],
+          "pros": [
+            "Perfect fit for your needs",
+            "Competitive advantage",
+            "Full control"
+          ],
+          "approach": "Build intelligent customer experience automation that learns from interactions, personalizes communications, and optimizes touchpoints based on customer behavior and preferences.",
+          "key_apis": [
+            {
+              "docs": "https://docs.anthropic.com",
+              "name": "Claude Haiku 3.5 (claude-3-5-haiku-20241022)",
+              "pricing": {
+                "currency": "USD",
+                "input_per_1m_tokens": 0.8,
+                "output_per_1m_tokens": 4.0
+              },
+              "purpose": "Core AI processing"
+            },
+            {
+              "docs": "https://supabase.com/docs",
+              "name": "Supabase",
+              "pricing": {
+                "pro": "$25/month",
+                "free_tier": true
+              },
+              "purpose": "Database + Auth"
+            },
+            {
+              "docs": "https://vercel.com/docs",
+              "name": "Vercel",
+              "pricing": {
+                "pro": "$20/month",
+                "free_tier": true
+              },
+              "purpose": "Frontend hosting"
+            }
+          ],
+          "timeline": {
+            "experienced_developer": "40-80 hours",
+            "learning_while_building": "80-160 hours"
+          },
+          "use_case": "automation",
+          "resources": {
+            "tutorials": [
+              "Build a automation with Claude - anthropic.com/cookbook",
+              "Deploying AI apps to Vercel - vercel.com/guides"
+            ],
+            "communities": [
+              "Anthropic Discord - discord.gg/anthropic",
+              "r/ClaudeAI - reddit.com/r/ClaudeAI"
+            ],
+            "documentation": [
+              "https://docs.anthropic.com - Claude API documentation",
+              "https://github.com/anthropics/anthropic-cookbook - Code examples",
+              "https://cursor.com/docs - Cursor IDE setup"
+            ]
+          },
+          "build_tools": [
+            "Claude Haiku 3.5",
+            "Cursor",
+            "Vercel",
+            "Supabase",
+            "Zapier",
+            "Twilio"
+          ],
+          "estimated_cost": {
+            "max": 18000,
+            "min": 10000
+          },
+          "skills_required": [
+            "Workflow automation",
+            "Customer journey design",
+            "Multi-channel integration"
+          ],
+          "recommended_stack": {
+            "ide": "Cursor with Claude integration",
+            "backend": "Railway (Python/FastAPI or Node.js)",
+            "database": "Supabase (PostgreSQL + Auth)",
+            "frontend": "Vercel (React/Next.js)",
+            "vector_db": "Pinecone or Supabase pgvector (if RAG needed)"
+          },
+          "dev_hours_estimate": "100-160 hours",
+          "implementation_steps": [
+            "1. Set up development environment (Cursor + Claude API key)",
+            "2. Create project scaffolding (Next.js/FastAPI template)",
+            "3. Implement core AI integration with Claude API",
+            "4. Build user interface for interaction",
+            "5. Add authentication with Supabase",
+            "6. Deploy to Vercel (frontend) and Railway (backend)",
+            "7. Test with real users and iterate"
+          ],
+          "implementation_weeks": 8,
+          "model_recommendation": "Claude Haiku 3.5 because it's perfect for high-volume, personalized customer communications while maintaining consistency and quality at low cost",
+          "monthly_running_cost": 120
+        }
+      },
+      "priority": "low",
+      "finding_id": "finding-004",
+      "assumptions": [
+        "Automation saves 10 hours/week of manual follow-up work = \u20ac26,000 annual value",
+        "Improved customer experience increases repeat business by 3% = \u20ac60,000 additional revenue",
+        "Better review collection improves online reputation, leading to 2% increase in new customers"
+      ],
+      "description": "Create comprehensive automated workflow system that handles appointment confirmations, service updates, follow-ups, and review requests without manual intervention.",
+      "crb_analysis": {
+        "cost": {
+          "total": 33760,
+          "mid_term": {
+            "software": 6228,
+            "maintenance": 3000
+          },
+          "long_term": {
+            "software": 12456,
+            "upgrades": 4000
+          },
+          "short_term": {
+            "software": 2076,
+            "training": 2000,
+            "implementation": 4000
+          }
+        },
+        "risk": [
+          {
+            "impact": 12000,
+            "mitigation": "Maintain human touchpoints for complex issues, personalize automated messages",
+            "description": "Over-automation makes customer experience feel robotic",
+            "probability": "medium",
+            "time_horizon": "short"
+          },
+          {
+            "impact": 8000,
+            "mitigation": "Phase implementation, use proven integration platforms",
+            "description": "Integration complexity with multiple existing systems",
+            "probability": "medium",
+            "time_horizon": "short"
+          }
+        ],
+        "benefit": {
+          "total": 280000,
+          "mid_term": {
+            "value_saved": 30000,
+            "value_created": 50000
+          },
+          "long_term": {
+            "value_saved": 60000,
+            "value_created": 100000
+          },
+          "short_term": {
+            "value_saved": 15000,
+            "value_created": 25000
+          }
+        }
+      },
+      "payback_months": 3,
+      "roi_percentage": 320,
+      "why_it_matters": {
+        "customer_value": "Seamless, professional experience from booking to completion with proactive communication and easy feedback submission",
+        "business_health": "Eliminates repetitive admin work while improving customer satisfaction scores and online reputation"
+      },
+      "our_recommendation": "off_the_shelf",
+      "recommendation_rationale": "For this use case, Zapier provides excellent value and flexibility. You can start simple and build complexity over time. The \u20ac173/month cost is very reasonable for the time savings, and you can connect all your existing tools without major platform changes. Perfect for testing automation concepts before investing in more complex solutions."
+    }
+  ],
+  "roadmap": {
+    "mid_term": [
+      {
+        "title": "Deploy ServiceTitan Intelligent Scheduling System",
+        "timeline": "Month 3-6",
+        "description": "Full implementation of ServiceTitan Works with professional data migration, technician training, and route optimization. Include performance dashboard setup.",
+        "expected_outcome": "1-2 additional jobs per technician daily, elimination of double-bookings, \u20ac23,000+ monthly revenue increase",
+        "related_recommendation_id": "rec-002"
+      },
+      {
+        "title": "Launch Advanced Customer Communication Hub",
+        "timeline": "Month 4-6",
+        "description": "Upgrade from Zapier to Podium Standard with advanced automation, multi-channel messaging, and reputation management integration.",
+        "expected_outcome": "Proactive customer updates, 20 hours/week staff time savings, improved online reviews and ratings",
+        "related_recommendation_id": "rec-004"
+      },
+      {
+        "title": "Optimize Lead Response System",
+        "timeline": "Month 5-7",
+        "description": "Enhance custom lead system with advanced HVAC-specific knowledge base, pricing optimization, and integration with ServiceTitan for seamless booking.",
+        "expected_outcome": "50% lead conversion rate, instant accurate quotes, competitive advantage in emergency response",
+        "related_recommendation_id": "rec-003"
+      }
+    ],
+    "long_term": [
+      {
+        "title": "Implement Comprehensive Performance Management System",
+        "timeline": "Month 12-18",
+        "description": "Deploy ServiceTitan Performance + Coaching with full technician buy-in, goal-setting workshops, and performance improvement plans. Include gamification elements.",
+        "expected_outcome": "Revenue per technician increases from \u20ac133k to \u20ac180k+, \u20ac750,000+ annual revenue improvement, industry-leading productivity metrics",
+        "related_recommendation_id": "rec-005"
+      },
+      {
+        "title": "Establish Predictive Maintenance and Customer Intelligence",
+        "timeline": "Month 15-18",
+        "description": "Build AI system that analyzes service history to predict equipment failures, recommend preventive maintenance, and identify upselling opportunities.",
+        "expected_outcome": "30% increase in maintenance contracts, reduced emergency calls, \u20ac200,000+ recurring revenue growth",
+        "related_recommendation_id": "rec-005"
+      },
+      {
+        "title": "Scale Automation Infrastructure",
+        "timeline": "Month 16-20",
+        "description": "Integrate all systems into unified customer experience platform, implement advanced analytics, and prepare for geographic expansion or franchise opportunities.",
+        "expected_outcome": "Fully automated operations capable of handling 3x current volume, documented processes for scaling, market leadership position",
+        "related_recommendation_id": "rec-006"
+      }
+    ],
+    "short_term": [
+      {
+        "title": "Deploy 24/7 Call Handling System",
+        "timeline": "Week 1-4",
+        "description": "Implement Smith.ai Pro + FSM Integration to capture after-hours calls. Start with 2-week trial, then full deployment with human+AI hybrid approach.",
+        "expected_outcome": "Capturing 80% of after-hours calls, adding \u20ac7,500+ monthly revenue, zero missed opportunities during nights/weekends",
+        "related_recommendation_id": "rec-001"
+      },
+      {
+        "title": "Launch Rapid Lead Response System",
+        "timeline": "Week 2-8",
+        "description": "Build custom AI lead qualification system using Claude Sonnet 4. Deploy web chat, email auto-response, and instant quote generation for common HVAC services.",
+        "expected_outcome": "Sub-5-minute response times, 40% lead conversion rate (up from 25%), additional \u20ac10,500+ monthly revenue",
+        "related_recommendation_id": "rec-003"
+      },
+      {
+        "title": "Implement Basic Customer Communication Automation",
+        "timeline": "Week 3-6",
+        "description": "Deploy Zapier workflows for appointment confirmations, service updates, and follow-ups. Connect existing calendar and phone systems.",
+        "expected_outcome": "60% reduction in customer inquiry calls, 10 hours/week staff time savings, improved customer satisfaction scores",
+        "related_recommendation_id": "rec-006"
+      }
+    ]
+  },
+  "methodology_notes": {
+    "assumptions": [
+      "Hourly rate assumed at \u20ac50 unless specified",
+      "3-year projection period for ROI calculations",
+      "All estimates include \u00b120% uncertainty range",
+      "Vendor pricing as of report generation date"
+    ],
+    "limitations": [
+      "Estimates based on self-reported data",
+      "Actual implementation results may vary",
+      "Market conditions may affect vendor availability/pricing",
+      "Recommendations should be validated with actual business data"
+    ],
+    "data_sources": [
+      "Quiz responses provided by business owner",
+      "Industry benchmarks from our knowledge base",
+      "Vendor pricing data (verified where possible)",
+      "AI/automation adoption studies"
+    ],
+    "confidence_notes": "Findings marked as 'high' confidence have multiple supporting data points. 'Medium' confidence items are based on industry patterns. 'Low' confidence items are estimates requiring validation.",
+    "confidence_adjusted_roi": {
+      "factors": {
+        "low": "70% of estimated value",
+        "high": "100% of estimated value",
+        "medium": "85% of estimated value"
+      },
+      "rationale": "This adjustment provides more realistic projections by weighting estimates based on the strength of supporting evidence.",
+      "explanation": "ROI estimates are confidence-adjusted to reflect uncertainty"
+    },
+    "industry_benchmarks_used": [
+      "financial",
+      "operational",
+      "ai_adoption",
+      "customer_metrics",
+      "staffing"
+    ]
+  },
+  "pdf_url": null,
+  "pdf_generated_at": null,
+  "generation_started_at": "2025-12-24T16:41:47.406186+00:00",
+  "generation_completed_at": "2025-12-24T16:50:31.925371+00:00",
+  "error_message": null,
+  "agent_context": {},
+  "created_at": "2025-12-24T16:41:47.540535+00:00",
+  "updated_at": "2025-12-24T16:50:32.158437+00:00",
+  "industry_insights": {
+    "industry": "home-services",
+    "social_proof": [
+      {
+        "quote": "Started with email automation, now AI handles half our admin work.",
+        "outcome": "50% less admin",
+        "industry": "home-services",
+        "company_description": "Small business, 5 employees"
+      }
+    ],
+    "adoption_stats": [
+      {
+        "crb": {
+          "risk_level": "low",
+          "typical_cost": "\u20ac20-50/mo",
+          "typical_benefit": "5 hrs/wk saved"
+        },
+        "capability": "Email automation",
+        "average_outcome": "5 hrs/week saved",
+        "adoption_percentage": 55
+      },
+      {
+        "crb": {
+          "risk_level": "low",
+          "typical_cost": "\u20ac30-100/mo",
+          "typical_benefit": "80% faster docs"
+        },
+        "capability": "Document processing",
+        "average_outcome": "80% faster processing",
+        "adoption_percentage": 35
+      },
+      {
+        "crb": {
+          "risk_level": "low",
+          "typical_cost": "\u20ac10-30/mo",
+          "typical_benefit": "100% capture"
+        },
+        "capability": "Meeting transcription",
+        "average_outcome": "No more note-taking",
+        "adoption_percentage": 42
+      },
+      {
+        "crb": {
+          "risk_level": "medium",
+          "typical_cost": "\u20ac50-150/mo",
+          "typical_benefit": "24/7 support"
+        },
+        "capability": "Customer support",
+        "average_outcome": "24/7 availability",
+        "adoption_percentage": 30
+      }
+    ],
+    "opportunity_map": {
+      "growing": [
+        "Customer support AI",
+        "Content generation",
+        "Data analysis"
+      ],
+      "best_fit": "growing",
+      "emerging": [
+        "Voice interfaces",
+        "Autonomous agents",
+        "Predictive analytics"
+      ],
+      "rationale": "Solid foundation - focus on proven, high-impact areas",
+      "established": [
+        "Email automation",
+        "Transcription",
+        "Document processing"
+      ]
+    },
+    "industry_display_name": "General Business"
+  },
+  "error_at": null,
+  "playbooks": [
+    {
+      "id": "playbook-c302cd5c",
+      "phases": [
+        {
+          "title": "Smith.ai Setup & Integration Planning",
+          "weeks": [
+            {
+              "tasks": [
+                {
+                  "id": "task-1-1-1",
+                  "crb": {
+                    "cost": "\u20ac0 (consultation)",
+                    "risk": "low",
+                    "benefit": "Budget-appropriate pricing"
+                  },
+                  "title": "Contact Smith.ai for custom pricing",
+                  "tools": [
+                    "Smith.ai"
+                  ],
+                  "executor": "owner",
+                  "completed": false,
+                  "difficulty": "easy",
+                  "description": "Request solo business pricing under \u20ac500/month, emphasize lower volume needs",
+                  "completed_at": null,
+                  "tutorial_hint": "Ask about startup discounts and lower-tier plans",
+                  "time_estimate_minutes": 45
+                },
+                {
+                  "id": "task-1-1-2",
+                  "crb": {
+                    "cost": "\u20ac0",
+                    "risk": "low",
+                    "benefit": "Clear integration requirements"
+                  },
+                  "title": "Document current call handling process",
+                  "tools": [
+                    "excel"
+                  ],
+                  "executor": "owner",
+                  "completed": false,
+                  "difficulty": "easy",
+                  "description": "Map out how you currently handle calls, appointment booking, and customer info collection",
+                  "completed_at": null,
+                  "tutorial_hint": "Include typical call types, peak hours, and current pain points",
+                  "time_estimate_minutes": 60
+                },
+                {
+                  "id": "task-1-1-3",
+                  "crb": {
+                    "cost": "\u20ac0",
+                    "risk": "medium",
+                    "benefit": "Seamless data flow"
+                  },
+                  "title": "Audit QuickBooks customer data structure",
+                  "tools": [
+                    "quickbooks"
+                  ],
+                  "executor": "owner",
+                  "completed": false,
+                  "difficulty": "medium",
+                  "description": "Review customer fields and data format for Smith.ai integration",
+                  "completed_at": null,
+                  "tutorial_hint": "Check customer fields: name, phone, address, service history",
+                  "time_estimate_minutes": 30
+                },
+                {
+                  "id": "task-1-1-4",
+                  "crb": {
+                    "cost": "\u20ac0",
+                    "risk": "low",
+                    "benefit": "Consistent customer experience"
+                  },
+                  "title": "Create call scripts template",
+                  "tools": [
+                    "excel"
+                  ],
+                  "executor": "owner",
+                  "completed": false,
+                  "difficulty": "medium",
+                  "description": "Draft scripts for common scenarios: new bookings, emergencies, follow-ups",
+                  "completed_at": null,
+                  "tutorial_hint": "Include your business personality and key qualifying questions",
+                  "time_estimate_minutes": 90
+                }
+              ],
+              "theme": "Account Setup & Planning",
+              "checkpoint": "Pricing confirmed under budget, current process documented",
+              "week_number": 1
+            },
+            {
+              "tasks": [
+                {
+                  "id": "task-1-2-1",
+                  "crb": {
+                    "cost": "\u20ac450 setup",
+                    "risk": "low",
+                    "benefit": "24/7 call coverage activated"
+                  },
+                  "title": "Sign up for Smith.ai reduced plan",
+                  "tools": [
+                    "Smith.ai"
+                  ],
+                  "executor": "owner",
+                  "completed": false,
+                  "difficulty": "easy",
+                  "description": "Complete onboarding with negotiated pricing, configure basic business details",
+                  "completed_at": null,
+                  "tutorial_hint": "Use business banking details for setup",
+                  "time_estimate_minutes": 45
+                },
+                {
+                  "id": "task-1-2-2",
+                  "crb": {
+                    "cost": "\u20ac0",
+                    "risk": "medium",
+                    "benefit": "Controlled handoff process"
+                  },
+                  "title": "Configure call routing rules",
+                  "tools": [
+                    "Smith.ai"
+                  ],
+                  "executor": "owner",
+                  "completed": false,
+                  "difficulty": "medium",
+                  "description": "Set up when calls go to Smith.ai vs. forwarded to you (emergencies, existing clients)",
+                  "completed_at": null,
+                  "tutorial_hint": "Start conservative - route only new inquiries initially",
+                  "time_estimate_minutes": 60
+                },
+                {
+                  "id": "task-1-2-3",
+                  "crb": {
+                    "cost": "\u20ac0",
+                    "risk": "low",
+                    "benefit": "Professional, consistent messaging"
+                  },
+                  "title": "Upload call scripts to Smith.ai",
+                  "tools": [
+                    "Smith.ai",
+                    "excel"
+                  ],
+                  "executor": "owner",
+                  "completed": false,
+                  "difficulty": "medium",
+                  "description": "Input your custom scripts into Smith.ai system for agent training",
+                  "completed_at": null,
+                  "tutorial_hint": "Include pricing ranges and service area boundaries",
+                  "time_estimate_minutes": 75
+                },
+                {
+                  "id": "task-1-2-4",
+                  "crb": {
+                    "cost": "\u20ac0",
+                    "risk": "low",
+                    "benefit": "Quality assurance before launch"
+                  },
+                  "title": "Test call flow with personal phone",
+                  "tools": [
+                    "Smith.ai"
+                  ],
+                  "executor": "owner",
+                  "completed": false,
+                  "difficulty": "easy",
+                  "description": "Call your business number to experience the Smith.ai process firsthand",
+                  "completed_at": null,
+                  "tutorial_hint": "Test during different times to check routing rules",
+                  "time_estimate_minutes": 30
+                }
+              ],
+              "theme": "Technical Setup",
+              "checkpoint": "Smith.ai handling test calls successfully",
+              "week_number": 2
+            }
+          ],
+          "outcome": "Smith.ai configured with basic call handling and QuickBooks integration ready",
+          "crb_summary": {
+            "risks": [
+              "Budget overrun",
+              "Integration complexity"
+            ],
+            "benefits": [
+              "24/7 availability",
+              "Professional call handling"
+            ],
+            "crb_score": 7.2,
+            "total_cost": "\u20ac450",
+            "setup_hours": 12,
+            "monthly_cost": "\u20ac150/mo (reduced plan)"
+          },
+          "phase_number": 1,
+          "duration_weeks": 2
+        },
+        {
+          "title": "Calendar & CRM Integration",
+          "weeks": [
+            {
+              "tasks": [
+                {
+                  "id": "task-2-3-1",
+                  "crb": {
+                    "cost": "\u20ac0",
+                    "risk": "medium",
+                    "benefit": "Real-time scheduling"
+                  },
+                  "title": "Connect Google Calendar to Smith.ai",
+                  "tools": [
+                    "Smith.ai",
+                    "google_calendar"
+                  ],
+                  "executor": "owner",
+                  "completed": false,
+                  "difficulty": "medium",
+                  "description": "Integrate calendar for real-time availability checking during calls",
+                  "completed_at": null,
+                  "tutorial_hint": "Create dedicated calendar for Smith.ai bookings",
+                  "time_estimate_minutes": 45
+                },
+                {
+                  "id": "task-2-3-2",
+                  "crb": {
+                    "cost": "\u20ac0",
+                    "risk": "low",
+                    "benefit": "Prevents overbooking"
+                  },
+                  "title": "Set up availability windows",
+                  "tools": [
+                    "Smith.ai",
+                    "google_calendar"
+                  ],
+                  "executor": "owner",
+                  "completed": false,
+                  "difficulty": "easy",
+                  "description": "Configure your working hours, buffer times, and blocked periods",
+                  "completed_at": null,
+                  "tutorial_hint": "Include travel time between appointments",
+                  "time_estimate_minutes": 60
+                },
+                {
+                  "id": "task-2-3-3",
+                  "crb": {
+                    "cost": "\u20ac0",
+                    "risk": "low",
+                    "benefit": "Accurate time blocking"
+                  },
+                  "title": "Create appointment types in Smith.ai",
+                  "tools": [
+                    "Smith.ai"
+                  ],
+                  "executor": "owner",
+                  "completed": false,
+                  "difficulty": "medium",
+                  "description": "Define service categories with durations and pricing for booking agents",
+                  "completed_at": null,
+                  "tutorial_hint": "Start with 3-4 main service types",
+                  "time_estimate_minutes": 75
+                },
+                {
+                  "id": "task-2-3-4",
+                  "crb": {
+                    "cost": "\u20ac0",
+                    "risk": "low",
+                    "benefit": "Validated booking process"
+                  },
+                  "title": "Test booking flow end-to-end",
+                  "tools": [
+                    "Smith.ai",
+                    "google_calendar"
+                  ],
+                  "executor": "owner",
+                  "completed": false,
+                  "difficulty": "easy",
+                  "description": "Have a friend call to book an appointment, verify calendar entry",
+                  "completed_at": null,
+                  "tutorial_hint": "Check confirmation emails and calendar details",
+                  "time_estimate_minutes": 45
+                }
+              ],
+              "theme": "Calendar Integration",
+              "checkpoint": "Appointments booking automatically to Google Calendar",
+              "week_number": 3
+            },
+            {
+              "tasks": [
+                {
+                  "id": "task-2-4-1",
+                  "crb": {
+                    "cost": "\u20ac25/mo (Zapier)",
+                    "risk": "high",
+                    "benefit": "Automated customer creation"
+                  },
+                  "title": "Set up Zapier for Smith.ai-QuickBooks connection",
+                  "tools": [
+                    "Zapier",
+                    "Smith.ai",
+                    "quickbooks"
+                  ],
+                  "executor": "owner",
+                  "completed": false,
+                  "difficulty": "hard",
+                  "description": "Create Zapier account and connect Smith.ai to QuickBooks for customer data sync",
+                  "completed_at": null,
+                  "tutorial_hint": "Use QuickBooks Simple Start plan for Zapier compatibility",
+                  "time_estimate_minutes": 90
+                },
+                {
+                  "id": "task-2-4-2",
+                  "crb": {
+                    "cost": "\u20ac0",
+                    "risk": "medium",
+                    "benefit": "Eliminate double data entry"
+                  },
+                  "title": "Configure customer creation automation",
+                  "tools": [
+                    "Zapier",
+                    "quickbooks"
+                  ],
+                  "executor": "owner",
+                  "completed": false,
+                  "difficulty": "hard",
+                  "description": "Set up Zap to create QuickBooks customers from Smith.ai call data",
+                  "completed_at": null,
+                  "tutorial_hint": "Map phone, address, and service needs to QuickBooks fields",
+                  "time_estimate_minutes": 75
+                },
+                {
+                  "id": "task-2-4-3",
+                  "crb": {
+                    "cost": "\u20ac0",
+                    "risk": "low",
+                    "benefit": "Verified data accuracy"
+                  },
+                  "title": "Test customer data flow",
+                  "tools": [
+                    "Smith.ai",
+                    "quickbooks",
+                    "Zapier"
+                  ],
+                  "executor": "owner",
+                  "completed": false,
+                  "difficulty": "medium",
+                  "description": "Process test call through Smith.ai, verify customer appears in QuickBooks",
+                  "completed_at": null,
+                  "tutorial_hint": "Check all customer fields populate correctly",
+                  "time_estimate_minutes": 30
+                },
+                {
+                  "id": "task-2-4-4",
+                  "crb": {
+                    "cost": "\u20ac0",
+                    "risk": "low",
+                    "benefit": "Consistent customer records"
+                  },
+                  "title": "Create call summary template",
+                  "tools": [
+                    "quickbooks"
+                  ],
+                  "executor": "owner",
+                  "completed": false,
+                  "difficulty": "easy",
+                  "description": "Design format for Smith.ai call notes to transfer to QuickBooks",
+                  "completed_at": null,
+                  "tutorial_hint": "Include service requested, urgency, and follow-up needed",
+                  "time_estimate_minutes": 45
+                }
+              ],
+              "theme": "QuickBooks Integration",
+              "checkpoint": "Customer data flowing automatically from calls to QuickBooks",
+              "week_number": 4
+            },
+            {
+              "tasks": [
+                {
+                  "id": "task-2-5-1",
+                  "crb": {
+                    "cost": "\u20ac0",
+                    "risk": "low",
+                    "benefit": "Professional digital presence"
+                  },
+                  "title": "Set up Google Forms for estimates",
+                  "tools": [
+                    "Google Forms",
+                    "Smith.ai"
+                  ],
+                  "executor": "owner",
+                  "completed": false,
+                  "difficulty": "medium",
+                  "description": "Create digital forms to replace paper forms, integrate with Smith.ai workflow",
+                  "completed_at": null,
+                  "tutorial_hint": "Mirror your current paper form structure",
+                  "time_estimate_minutes": 90
+                },
+                {
+                  "id": "task-2-5-2",
+                  "crb": {
+                    "cost": "\u20ac0",
+                    "risk": "medium",
+                    "benefit": "Faster quote turnaround"
+                  },
+                  "title": "Configure form auto-send via Smith.ai",
+                  "tools": [
+                    "Smith.ai",
+                    "Google Forms"
+                  ],
+                  "executor": "owner",
+                  "completed": false,
+                  "difficulty": "medium",
+                  "description": "Set up Smith.ai agents to email forms after qualifying calls",
+                  "completed_at": null,
+                  "tutorial_hint": "Create conditional sending based on service type",
+                  "time_estimate_minutes": 60
+                },
+                {
+                  "id": "task-2-5-3",
+                  "crb": {
+                    "cost": "\u20ac0",
+                    "risk": "medium",
+                    "benefit": "Complete customer picture"
+                  },
+                  "title": "Connect form responses to QuickBooks",
+                  "tools": [
+                    "Zapier",
+                    "Google Forms",
+                    "quickbooks"
+                  ],
+                  "executor": "owner",
+                  "completed": false,
+                  "difficulty": "hard",
+                  "description": "Use Zapier to send form data to QuickBooks customer notes",
+                  "completed_at": null,
+                  "tutorial_hint": "Append to existing customer record rather than create new",
+                  "time_estimate_minutes": 75
+                },
+                {
+                  "id": "task-2-5-4",
+                  "crb": {
+                    "cost": "\u20ac0",
+                    "risk": "low",
+                    "benefit": "End-to-end validation"
+                  },
+                  "title": "Test complete workflow",
+                  "tools": [
+                    "Smith.ai",
+                    "Google Forms",
+                    "quickbooks",
+                    "google_calendar"
+                  ],
+                  "executor": "owner",
+                  "completed": false,
+                  "difficulty": "medium",
+                  "description": "Full test: call \u2192 booking \u2192 form \u2192 QuickBooks update",
+                  "completed_at": null,
+                  "tutorial_hint": "Use different service types to test all paths",
+                  "time_estimate_minutes": 45
+                }
+              ],
+              "theme": "Digital Forms Integration",
+              "checkpoint": "Complete digital workflow from call to customer record",
+              "week_number": 5
+            }
+          ],
+          "outcome": "Seamless booking flow from Smith.ai to Google Calendar and QuickBooks",
+          "crb_summary": {
+            "risks": [
+              "Integration bugs",
+              "Double bookings"
+            ],
+            "benefits": [
+              "Automated scheduling",
+              "Real-time availability"
+            ],
+            "crb_score": 8.8,
+            "total_cost": "\u20ac150",
+            "setup_hours": 15,
+            "monthly_cost": "\u20ac150/mo"
+          },
+          "phase_number": 2,
+          "duration_weeks": 3
+        },
+        {
+          "title": "Optimization & Advanced Features",
+          "weeks": [
+            {
+              "tasks": [
+                {
+                  "id": "task-3-6-1",
+                  "crb": {
+                    "cost": "\u20ac0",
+                    "risk": "low",
+                    "benefit": "Marketing ROI visibility"
+                  },
+                  "title": "Set up Google Analytics for call tracking",
+                  "tools": [
+                    "Google Analytics",
+                    "Smith.ai"
+                  ],
+                  "executor": "owner",
+                  "completed": false,
+                  "difficulty": "medium",
+                  "description": "Track call sources and conversion rates from different marketing channels",
+                  "completed_at": null,
+                  "tutorial_hint": "Use UTM parameters for tracking call sources",
+                  "time_estimate_minutes": 60
+                },
+                {
+                  "id": "task-3-6-2",
+                  "crb": {
+                    "cost": "\u20ac0",
+                    "risk": "low",
+                    "benefit": "Service quality monitoring"
+                  },
+                  "title": "Create Smith.ai performance dashboard",
+                  "tools": [
+                    "Smith.ai",
+                    "excel"
+                  ],
+                  "executor": "owner",
+                  "completed": false,
+                  "difficulty": "easy",
+                  "description": "Set up weekly reporting on call volume, booking rates, and customer satisfaction",
+                  "completed_at": null,
+                  "tutorial_hint": "Focus on booking conversion rate and call handling time",
+                  "time_estimate_minutes": 45
+                },
+                {
+                  "id": "task-3-6-3",
+                  "crb": {
+                    "cost": "\u20ac0",
+                    "risk": "low",
+                    "benefit": "Data-driven improvements"
+                  },
+                  "title": "Analyze first month of call data",
+                  "tools": [
+                    "Smith.ai",
+                    "excel"
+                  ],
+                  "executor": "owner",
+                  "completed": false,
+                  "difficulty": "medium",
+                  "description": "Review call patterns, peak times, and identify optimization opportunities",
+                  "completed_at": null,
+                  "tutorial_hint": "Look for patterns in no-shows and cancellations",
+                  "time_estimate_minutes": 90
+                },
+                {
+                  "id": "task-3-6-4",
+                  "crb": {
+                    "cost": "\u20ac0",
+                    "risk": "low",
+                    "benefit": "Higher conversion rates"
+                  },
+                  "title": "Optimize call routing based on data",
+                  "tools": [
+                    "Smith.ai"
+                  ],
+                  "executor": "owner",
+                  "completed": false,
+                  "difficulty": "medium",
+                  "description": "Adjust Smith.ai routing rules based on performance insights",
+                  "completed_at": null,
+                  "tutorial_hint": "Route high-value calls directly to you during peak productivity hours",
+                  "time_estimate_minutes": 45
+                }
+              ],
+              "theme": "Performance Tracking",
+              "checkpoint": "Performance metrics tracking and first optimization complete",
+              "week_number": 6
+            },
+            {
+              "tasks": [
+                {
+                  "id": "task-3-7-1",
+                  "crb": {
+                    "cost": "\u20ac0",
+                    "risk": "low",
+                    "benefit": "Increased customer engagement"
+                  },
+                  "title": "Set up email automation in Smith.ai",
+                  "tools": [
+                    "Smith.ai"
+                  ],
+                  "executor": "owner",
+                  "completed": false,
+                  "difficulty": "medium",
+                  "description": "Configure automatic follow-up emails for different call outcomes",
+                  "completed_at": null,
+                  "tutorial_hint": "Create sequences for: quote sent, appointment confirmed, no-show",
+                  "time_estimate_minutes": 75
+                },
+                {
+                  "id": "task-3-7-2",
+                  "crb": {
+                    "cost": "\u20ac0.10 per SMS",
+                    "risk": "low",
+                    "benefit": "Reduced no-shows"
+                  },
+                  "title": "Create SMS follow-up workflows",
+                  "tools": [
+                    "Smith.ai"
+                  ],
+                  "executor": "owner",
+                  "completed": false,
+                  "difficulty": "medium",
+                  "description": "Set up text reminders for appointments and follow-ups for quotes",
+                  "completed_at": null,
+                  "tutorial_hint": "Send appointment reminders 24 hours before service",
+                  "time_estimate_minutes": 60
+                },
+                {
+                  "id": "task-3-7-3",
+                  "crb": {
+                    "cost": "\u20ac0",
+                    "risk": "low",
+                    "benefit": "Customer feedback and reviews"
+                  },
+                  "title": "Design customer satisfaction survey",
+                  "tools": [
+                    "Google Forms",
+                    "Smith.ai"
+                  ],
+                  "executor": "owner",
+                  "completed": false,
+                  "difficulty": "easy",
+                  "description": "Create post-service survey to send automatically after job completion",
+                  "completed_at": null,
+                  "tutorial_hint": "Keep to 3-4 questions max for higher response rates",
+                  "time_estimate_minutes": 45
+                },
+                {
+                  "id": "task-3-7-4",
+                  "crb": {
+                    "cost": "\u20ac0",
+                    "risk": "low",
+                    "benefit": "Smooth customer experience"
+                  },
+                  "title": "Test all follow-up sequences",
+                  "tools": [
+                    "Smith.ai",
+                    "Google Forms"
+                  ],
+                  "executor": "owner",
+                  "completed": false,
+                  "difficulty": "easy",
+                  "description": "Run through each automated sequence with test data",
+                  "completed_at": null,
+                  "tutorial_hint": "Use your personal phone/email for testing",
+                  "time_estimate_minutes": 60
+                }
+              ],
+              "theme": "Automated Follow-ups",
+              "checkpoint": "Automated follow-up sequences active and tested",
+              "week_number": 7
+            },
+            {
+              "tasks": [
+                {
+                  "id": "task-3-8-1",
+                  "crb": {
+                    "cost": "\u20ac0",
+                    "risk": "low",
+                    "benefit": "Cost reduction insights"
+                  },
+                  "title": "Analyze per-call costs vs. value",
+                  "tools": [
+                    "Smith.ai",
+                    "quickbooks",
+                    "excel"
+                  ],
+                  "executor": "owner",
+                  "completed": false,
+                  "difficulty": "medium",
+                  "description": "Calculate ROI per call type and identify cost-saving opportunities",
+                  "completed_at": null,
+                  "tutorial_hint": "Focus on high-volume, low-value call types for optimization",
+                  "time_estimate_minutes": 90
+                },
+                {
+                  "id": "task-3-8-2",
+                  "crb": {
+                    "cost": "\u20ac0",
+                    "risk": "low",
+                    "benefit": "Reduced call volume"
+                  },
+                  "title": "Implement FAQ self-service options",
+                  "tools": [
+                    "Website",
+                    "Smith.ai"
+                  ],
+                  "executor": "owner",
+                  "completed": false,
+                  "difficulty": "medium",
+                  "description": "Add website FAQ and automated responses for common questions",
+                  "completed_at": null,
+                  "tutorial_hint": "Use Google Sites for quick FAQ page creation",
+                  "time_estimate_minutes": 120
+                },
+                {
+                  "id": "task-3-8-3",
+                  "crb": {
+                    "cost": "\u20ac0",
+                    "risk": "low",
+                    "benefit": "Monthly cost reduction"
+                  },
+                  "title": "Optimize Smith.ai plan based on usage",
+                  "tools": [
+                    "Smith.ai"
+                  ],
+                  "executor": "owner",
+                  "completed": false,
+                  "difficulty": "easy",
+                  "description": "Review usage patterns and adjust plan if possible to stay under budget",
+                  "completed_at": null,
+                  "tutorial_hint": "Look for off-peak hour discounts or volume adjustments",
+                  "time_estimate_minutes": 45
+                },
+                {
+                  "id": "task-3-8-4",
+                  "crb": {
+                    "cost": "\u20ac0",
+                    "risk": "low",
+                    "benefit": "Budget control"
+                  },
+                  "title": "Set up cost alerts and monitoring",
+                  "tools": [
+                    "Smith.ai"
+                  ],
+                  "executor": "owner",
+                  "completed": false,
+                  "difficulty": "easy",
+                  "description": "Configure alerts when monthly costs approach budget limits",
+                  "completed_at": null,
+                  "tutorial_hint": "Set alert at 80% of monthly budget",
+                  "time_estimate_minutes": 30
+                }
+              ],
+              "theme": "Cost Optimization",
+              "checkpoint": "Optimized costs and monitoring in place",
+              "week_number": 8
+            }
+          ],
+          "outcome": "Refined system with analytics, automated follow-ups, and cost optimization",
+          "crb_summary": {
+            "risks": [
+              "Feature complexity",
+              "Cost creep"
+            ],
+            "benefits": [
+              "Automated follow-ups",
+              "Data insights",
+              "Improved conversion"
+            ],
+            "crb_score": 9.1,
+            "total_cost": "\u20ac75",
+            "setup_hours": 10,
+            "monthly_cost": "\u20ac175/mo"
+          },
+          "phase_number": 3,
+          "duration_weeks": 3
+        },
+        {
+          "title": "Advanced Automation & Scale Preparation",
+          "weeks": [
+            {
+              "tasks": [
+                {
+                  "id": "task-4-9-1",
+                  "crb": {
+                    "cost": "\u20ac0",
+                    "risk": "medium",
+                    "benefit": "Better capacity planning"
+                  },
+                  "title": "Set up predictive scheduling in Google Calendar",
+                  "tools": [
+                    "google_calendar",
+                    "excel"
+                  ],
+                  "executor": "owner",
+                  "completed": false,
+                  "difficulty": "hard",
+                  "description": "Use historical data to predict busy periods and block time accordingly",
+                  "completed_at": null,
+                  "tutorial_hint": "Analyze seasonal patterns and weather correlations",
+                  "time_estimate_minutes": 75
+                },
+                {
+                  "id": "task-4-9-2",
+                  "crb": {
+                    "cost": "\u20ac0",
+                    "risk": "low",
+                    "benefit": "Customer prioritization insights"
+                  },
+                  "title": "Create customer lifetime value tracking",
+                  "tools": [
+                    "quickbooks",
+                    "excel"
+                  ],
+                  "executor": "owner",
+                  "completed": false,
+                  "difficulty": "hard",
+                  "description": "Set up system to track repeat customers and their total value over time",
+                  "completed_at": null,
+                  "tutorial_hint": "Focus on identifying high-value customer patterns",
+                  "time_estimate_minutes": 90
+                },
+                {
+                  "id": "task-4-9-3",
+                  "crb": {
+                    "cost": "\u20ac0",
+                    "risk": "medium",
+                    "benefit": "Revenue optimization"
+                  },
+                  "title": "Implement dynamic pricing alerts",
+                  "tools": [
+                    "Smith.ai",
+                    "google_calendar"
+                  ],
+                  "executor": "owner",
+                  "completed": false,
+                  "difficulty": "medium",
+                  "description": "Set up notifications for high-demand periods to consider premium pricing",
+                  "completed_at": null,
+                  "tutorial_hint": "Base on booking velocity and calendar density",
+                  "time_estimate_minutes": 60
+                },
+                {
+                  "id": "task-4-9-4",
+                  "crb": {
+                    "cost": "\u20ac0",
+                    "risk": "low",
+                    "benefit": "Repeat business generation"
+                  },
+                  "title": "Set up proactive customer outreach",
+                  "tools": [
+                    "quickbooks",
+                    "Smith.ai"
+                  ],
+                  "executor": "owner",
+                  "completed": false,
+                  "difficulty": "medium",
+                  "description": "Create system to reach out to past customers during their typical service cycles",
+                  "completed_at": null,
+                  "tutorial_hint": "Track service intervals and create reminder schedules",
+                  "time_estimate_minutes": 75
+                }
+              ],
+              "theme": "Predictive Analytics",
+              "checkpoint": "Predictive systems active and generating insights",
+              "week_number": 9
+            },
+            {
+              "tasks": [
+                {
+                  "id": "task-4-10-1",
+                  "crb": {
+                    "cost": "\u20ac0",
+                    "risk": "low",
+                    "benefit": "System reliability assurance"
+                  },
+                  "title": "Complete system performance audit",
+                  "tools": [
+                    "Smith.ai",
+                    "quickbooks",
+                    "google_calendar",
+                    "excel"
+                  ],
+                  "executor": "owner",
+                  "completed": false,
+                  "difficulty": "medium",
+                  "description": "Comprehensive review of all integrations, costs, and performance metrics",
+                  "completed_at": null,
+                  "tutorial_hint": "Document all workflows and create troubleshooting guide",
+                  "time_estimate_minutes": 120
+                },
+                {
+                  "id": "task-4-10-2",
+                  "crb": {
+                    "cost": "\u20ac0",
+                    "risk": "low",
+                    "benefit": "Future growth preparation"
+                  },
+                  "title": "Create growth scalability plan",
+                  "tools": [
+                    "excel"
+                  ],
+                  "executor": "owner",
+                  "completed": false,
+                  "difficulty": "medium",
+                  "description": "Document how to scale the system when ready to hire employees",
+                  "completed_at": null,
+                  "tutorial_hint": "Plan for team access, training materials, and role definitions",
+                  "time_estimate_minutes": 90
+                },
+                {
+                  "id": "task-4-10-3",
+                  "crb": {
+                    "cost": "\u20ac0",
+                    "risk": "low",
+                    "benefit": "Continuous optimization"
+                  },
+                  "title": "Set up quarterly system review schedule",
+                  "tools": [
+                    "google_calendar"
+                  ],
+                  "executor": "owner",
+                  "completed": false,
+                  "difficulty": "easy",
+                  "description": "Create recurring calendar events for system optimization and cost review",
+                  "completed_at": null,
+                  "tutorial_hint": "Schedule reviews at end of each quarter",
+                  "time_estimate_minutes": 30
+                },
+                {
+                  "id": "task-4-10-4",
+                  "crb": {
+                    "cost": "\u20ac0",
+                    "risk": "low",
+                    "benefit": "Clear success measurement"
+                  },
+                  "title": "Document ROI and create success metrics",
+                  "tools": [
+                    "excel",
+                    "quickbooks"
+                  ],
+                  "executor": "owner",
+                  "completed": false,
+                  "difficulty": "medium",
+                  "description": "Calculate total ROI and establish ongoing KPIs for system success",
+                  "completed_at": null,
+                  "tutorial_hint": "Track: time saved, revenue increase, customer satisfaction",
+                  "time_estimate_minutes": 75
+                }
+              ],
+              "theme": "System Optimization & Future Planning",
+              "checkpoint": "Complete system audit and future roadmap established",
+              "week_number": 10
+            }
+          ],
+          "outcome": "AI-powered insights, predictive scheduling, and system ready for business growth",
+          "crb_summary": {
+            "risks": [
+              "Over-automation",
+              "System complexity"
+            ],
+            "benefits": [
+              "Predictive insights",
+              "Proactive scheduling",
+              "Growth readiness"
+            ],
+            "crb_score": 8.9,
+            "total_cost": "\u20ac50",
+            "setup_hours": 8,
+            "monthly_cost": "\u20ac200/mo"
+          },
+          "phase_number": 4,
+          "duration_weeks": 2
+        }
+      ],
+      "created_at": "2025-12-24T16:47:06.697352",
+      "option_type": "best_in_class",
+      "total_weeks": 10,
+      "recommendation_id": "rec-001",
+      "personalization_context": {
+        "urgency": "normal",
+        "industry": "home-services",
+        "team_size": "solo",
+        "budget_monthly": 500,
+        "existing_tools": [
+          "quickbooks",
+          "google_calendar",
+          "excel",
+          "paper_forms"
+        ],
+        "technical_level": 3,
+        "primary_pain_point": ""
+      }
+    }
+  ],
+  "system_architecture": {
+    "ai_layer": [
+      {
+        "id": "ai-claude",
+        "crb": {
+          "cost": "~\u20ac50/mo at typical usage",
+          "risk": "API dependency",
+          "powers": [
+            "Lead scoring",
+            "Content generation",
+            "Support responses"
+          ],
+          "benefit": "Powers all AI automations",
+          "risk_level": "low"
+        },
+        "icon": "brain",
+        "name": "Claude Sonnet 4.5",
+        "category": "ai_brain",
+        "position": {
+          "x": 200,
+          "y": 0,
+          "column": "ai_layer"
+        },
+        "is_existing": false,
+        "monthly_cost": 50.0,
+        "one_time_cost": 0
+      },
+      {
+        "id": "ai-automation",
+        "crb": {
+          "cost": "\u20ac20/mo",
+          "risk": "Workflow complexity",
+          "powers": [
+            "Workflows",
+            "Triggers",
+            "Scheduling"
+          ],
+          "benefit": "Connects all tools",
+          "risk_level": "low"
+        },
+        "icon": "zap",
+        "name": "Make.com",
+        "category": "automation",
+        "position": {
+          "x": 200,
+          "y": 100,
+          "column": "ai_layer"
+        },
+        "is_existing": false,
+        "monthly_cost": 20.0,
+        "one_time_cost": 0
+      }
+    ],
+    "report_id": "",
+    "automations": [
+      {
+        "id": "auto-0",
+        "name": "Implement 24/7 Call Handling S",
+        "action": "Deploy automated call answering and booking system",
+        "trigger": "When implement occurs",
+        "tools_used": [
+          "claude",
+          "make"
+        ],
+        "output_type": "action"
+      },
+      {
+        "id": "auto-1",
+        "name": "Deploy Intelligent Scheduling ",
+        "action": "Replace manual Google Calendar scheduling with AI-",
+        "trigger": "When deploy occurs",
+        "tools_used": [
+          "claude",
+          "make"
+        ],
+        "output_type": "action"
+      },
+      {
+        "id": "auto-2",
+        "name": "Implement Rapid Lead Response ",
+        "action": "Deploy automated lead qualification and instant re",
+        "trigger": "When implement occurs",
+        "tools_used": [
+          "claude",
+          "make"
+        ],
+        "output_type": "action"
+      },
+      {
+        "id": "auto-3",
+        "name": "Deploy Automated Customer Comm",
+        "action": "Implement proactive customer updates and automated",
+        "trigger": "When deploy occurs",
+        "tools_used": [
+          "claude",
+          "make"
+        ],
+        "output_type": "action"
+      },
+      {
+        "id": "auto-4",
+        "name": "Implement Revenue Optimization",
+        "action": "Deploy comprehensive performance tracking and tech",
+        "trigger": "When implement occurs",
+        "tools_used": [
+          "claude",
+          "make"
+        ],
+        "output_type": "action"
+      }
+    ],
+    "connections": [
+      {
+        "id": "conn-ai-0",
+        "to_node": "auto-0",
+        "data_flow": "AI processing",
+        "from_node": "ai-claude",
+        "integration_type": "api"
+      },
+      {
+        "id": "conn-ai-1",
+        "to_node": "auto-1",
+        "data_flow": "AI processing",
+        "from_node": "ai-claude",
+        "integration_type": "api"
+      },
+      {
+        "id": "conn-ai-2",
+        "to_node": "auto-2",
+        "data_flow": "AI processing",
+        "from_node": "ai-claude",
+        "integration_type": "api"
+      }
+    ],
+    "existing_tools": [],
+    "cost_comparison": {
+      "diy_route": {
+        "items": [
+          {
+            "name": "Claude Sonnet 4.5",
+            "category": "diy",
+            "monthly_cost": 50.0,
+            "one_time_cost": 0
+          },
+          {
+            "name": "Make.com",
+            "category": "diy",
+            "monthly_cost": 20.0,
+            "one_time_cost": 0
+          },
+          {
+            "name": "Supabase",
+            "category": "diy",
+            "monthly_cost": 0.0,
+            "one_time_cost": 0
+          },
+          {
+            "name": "Vercel",
+            "category": "diy",
+            "monthly_cost": 0.0,
+            "one_time_cost": 0
+          }
+        ],
+        "total_monthly": 70.0,
+        "total_one_time": 2400.0
+      },
+      "build_cost": 2400.0,
+      "saas_route": {
+        "items": [
+          {
+            "name": "Multiple SaaS tools",
+            "category": "saas",
+            "monthly_cost": 400.0,
+            "one_time_cost": 0
+          }
+        ],
+        "total_monthly": 400.0,
+        "total_one_time": 0
+      },
+      "monthly_savings": 330.0,
+      "breakeven_months": 7.3,
+      "savings_percentage": 82.5
+    }
+  },
+  "assumption_log": {},
+  "partial_data": {}
+}

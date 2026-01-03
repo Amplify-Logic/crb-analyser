@@ -119,10 +119,23 @@ class ThreeOptionsSkill(LLMSkill[Dict[str, Any]]):
                 recoverable=False
             )
 
-        # Get vendor data
+        # Get vendor data - handle nested vendor_categories structure
         vendors = []
         if context.knowledge:
-            vendors = context.knowledge.get("vendors", [])
+            vendor_data = context.knowledge.get("vendors", {})
+            if isinstance(vendor_data, dict):
+                # Extract vendors from vendor_categories structure
+                vendor_categories = vendor_data.get("vendor_categories", [])
+                for cat in vendor_categories:
+                    if isinstance(cat, dict):
+                        cat_vendors = cat.get("vendors", [])
+                        # Add category info to each vendor
+                        for v in cat_vendors:
+                            if isinstance(v, dict):
+                                v["categories"] = [cat.get("category", "general")]
+                                vendors.append(v)
+            elif isinstance(vendor_data, list):
+                vendors = [v for v in vendor_data if isinstance(v, dict)]
 
         # Get company context
         company_context = {
