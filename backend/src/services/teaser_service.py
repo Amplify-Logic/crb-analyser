@@ -1,114 +1,253 @@
 """
-Teaser Report Service
+Teaser Report Service - Insights-First Approach
 
-Generates the free teaser report using Claude Haiku 4.5 for REAL insights:
-- AI Readiness Score (calculated from profile)
-- 2-3 full findings from AI analysis
-- Remaining findings (titles only, blurred)
+Generates the free teaser report with DIAGNOSTIC INSIGHTS (not recommendations):
+- AI Readiness Score (calculated from quiz inputs)
+- User reflections (what they told us - verbatim)
+- Industry benchmarks (from Supabase KB with verified sources only)
+- Opportunity areas (categories, not specific solutions)
 
-NOW GROUNDED IN KNOWLEDGE BASE:
-- Industry benchmarks for accurate scoring
-- RAG retrieval for relevant opportunities
-- Real vendor pricing from KB
-- Verified ROI patterns from case studies
+NO AI GENERATION - only verified data from Supabase knowledge_embeddings.
+This prevents contradictions with full report after workshop.
+
+See: docs/plans/2026-01-03-insights-first-teaser-design.md
 """
 
-import json
 import logging
 from typing import Dict, Any, List, Optional
 from datetime import datetime
+from dateutil.relativedelta import relativedelta
 
-from src.config.llm_client import get_llm_client
-from src.knowledge import (
-    get_industry_context,
-    get_relevant_opportunities,
-    get_vendor_recommendations,
-    get_benchmarks_for_metrics,
-    normalize_industry,
-)
+from src.config.supabase_client import get_async_supabase
+from src.knowledge import normalize_industry
 
 logger = logging.getLogger(__name__)
 
-# Haiku 4.5 for fast, cost-effective teaser generation
-TEASER_MODEL = "claude-haiku-4-5-20251001"
+# Category labels for opportunity areas
+CATEGORY_LABELS = {
+    "customer_communication": "Customer Communication",
+    "document_processing": "Document & Data Handling",
+    "scheduling": "Scheduling & Coordination",
+    "reporting": "Reporting & Analytics",
+    "sales_pipeline": "Sales & Lead Management",
+    "onboarding": "Client Onboarding",
+    "operations": "Operations & Workflow",
+    "billing": "Billing & Invoicing",
+    "marketing": "Marketing & Outreach",
+}
 
 
-def _safe_list_slice(data: Any, key: str, limit: int) -> List[Any]:
-    """Safely get a list from dict and slice it."""
-    if isinstance(data, dict):
-        items = data.get(key, [])
-        if isinstance(items, list):
-            return items[:limit]
-    elif isinstance(data, list):
-        return data[:limit]
-    return []
+def _is_stale(verified_date: str, months: int = 18) -> bool:
+    """Check if a verified_date is older than the specified months."""
+    try:
+        # Parse YYYY-MM format
+        if len(verified_date) == 7:  # YYYY-MM
+            year, month = verified_date.split("-")
+            check_date = datetime(int(year), int(month), 1)
+        else:  # YYYY-MM-DD
+            check_date = datetime.fromisoformat(verified_date.replace("Z", ""))
+
+        cutoff = datetime.now() - relativedelta(months=months)
+        return check_date < cutoff
+    except (ValueError, AttributeError):
+        return True  # If we can't parse, consider it stale
 
 
-def _load_kb_context(industry: str) -> Dict[str, Any]:
+async def _get_verified_benchmarks_from_supabase(industry: str) -> List[Dict[str, Any]]:
     """
-    Load Knowledge Base context for grounded teaser generation.
+    Get verified benchmarks from Supabase knowledge_embeddings table.
 
-    Returns industry-specific:
-    - Benchmarks with sources
-    - Opportunities with ROI data
-    - Vendor recommendations with pricing
+    Only returns benchmarks with:
+    - metadata.source.name (required)
+    - metadata.source.verified_date (required, within 18 months)
     """
-    # Get industry context
-    industry_context = get_industry_context(industry)
-    is_supported = industry_context.get("is_supported", False)
+    try:
+        supabase = await get_async_supabase()
 
-    # Get opportunities
-    opportunities = get_relevant_opportunities(industry) or []
+        result = await supabase.table("knowledge_embeddings").select(
+            "content_id, title, content, metadata"
+        ).eq("content_type", "benchmark").eq("industry", industry).execute()
 
-    # Get vendors
-    vendors = get_vendor_recommendations(industry) or []
+        verified = []
+        for row in result.data or []:
+            metadata = row.get("metadata", {})
+            source = metadata.get("source", {})
 
-    # Get benchmarks
-    benchmarks = get_benchmarks_for_metrics(industry) or {}
+            # STRICT: Must have source name
+            if not source.get("name"):
+                logger.debug(f"Skipping benchmark without source name: {row.get('content_id')}")
+                continue
 
-    # Format opportunities for prompt
-    formatted_opportunities = []
-    for opp in opportunities[:5]:  # Top 5 for teaser
-        formatted_opportunities.append({
-            "title": opp.get("title", opp.get("id", "Opportunity")),
-            "description": opp.get("description", ""),
-            "category": opp.get("category", "efficiency"),
-            "roi_potential": opp.get("roi_potential", {}),
-            "quick_win": opp.get("quick_win", False),
+            # STRICT: Must have verified date
+            verified_date = source.get("verified_date")
+            if not verified_date:
+                logger.debug(f"Skipping benchmark without verified_date: {row.get('content_id')}")
+                continue
+
+            # STRICT: Must not be stale
+            if _is_stale(verified_date, months=18):
+                logger.warning(f"Skipping stale benchmark: {row.get('content_id')} (verified: {verified_date})")
+                continue
+
+            verified.append({
+                "metric": row.get("title", metadata.get("metric_name", "Unknown")),
+                "value": metadata.get("value", row.get("content", "")[:100]),
+                "source": {
+                    "name": source["name"],
+                    "url": source.get("url"),
+                    "verified_date": verified_date,
+                },
+                "relevance": metadata.get("relevance_template"),
+            })
+
+        logger.info(f"Found {len(verified)} verified benchmarks for {industry}")
+        return verified[:5]  # Limit to 5 benchmarks for teaser
+
+    except Exception as e:
+        logger.error(f"Failed to get benchmarks from Supabase: {e}")
+        return []
+
+
+async def _get_opportunity_categories_from_supabase(
+    industry: str,
+    pain_points: List[str]
+) -> List[Dict[str, Any]]:
+    """
+    Map user pain points to opportunity categories from Supabase.
+
+    Returns categories (not specific recommendations).
+    """
+    try:
+        supabase = await get_async_supabase()
+
+        # Get opportunities for this industry
+        result = await supabase.table("knowledge_embeddings").select(
+            "content_id, title, metadata"
+        ).eq("content_type", "opportunity").eq("industry", industry).execute()
+
+        # Build category map from opportunities
+        categories: Dict[str, Dict[str, Any]] = {}
+        for row in result.data or []:
+            metadata = row.get("metadata", {})
+            category = metadata.get("category")
+            keywords = metadata.get("keywords", [])
+
+            if not category:
+                continue
+
+            if category not in categories:
+                categories[category] = {
+                    "category": category,
+                    "label": CATEGORY_LABELS.get(category, category.replace("_", " ").title()),
+                    "keywords": set(keywords),
+                    "matched_pain_points": [],
+                    "in_full_report": metadata.get("in_full_report", [
+                        "Specific automation tools with pricing",
+                        "ROI calculation for your situation",
+                        "Implementation timeline"
+                    ]),
+                }
+            else:
+                # Merge keywords
+                categories[category]["keywords"].update(keywords)
+
+        # Match pain points to categories
+        for pain in pain_points:
+            pain_lower = pain.lower()
+            for cat_id, cat_data in categories.items():
+                for keyword in cat_data["keywords"]:
+                    if keyword.lower() in pain_lower or pain_lower in keyword.lower():
+                        if pain not in cat_data["matched_pain_points"]:
+                            cat_data["matched_pain_points"].append(pain)
+                        break
+
+        # Sort by number of matches, return top 3
+        matched = [c for c in categories.values() if c["matched_pain_points"]]
+        matched.sort(key=lambda c: len(c["matched_pain_points"]), reverse=True)
+
+        result_categories = []
+        for i, cat in enumerate(matched[:3]):
+            result_categories.append({
+                "category": cat["category"],
+                "label": cat["label"],
+                "potential": "high" if i < 2 else "medium",
+                "matched_because": f"You mentioned: {', '.join(cat['matched_pain_points'][:2])}",
+                "in_full_report": cat["in_full_report"][:3],
+            })
+
+        logger.info(f"Matched {len(result_categories)} opportunity categories for {industry}")
+        return result_categories
+
+    except Exception as e:
+        logger.error(f"Failed to get opportunity categories from Supabase: {e}")
+        return []
+
+
+def _extract_user_reflections(
+    quiz_answers: Dict[str, Any],
+    company_profile: Dict[str, Any]
+) -> List[Dict[str, Any]]:
+    """
+    Extract user reflections from quiz answers - what they told us.
+
+    These are verbatim or close paraphrases of their inputs.
+    Cannot be "wrong" - we're just reflecting their words back.
+    """
+    reflections = []
+
+    # Pain points - most important
+    pain_points = quiz_answers.get("pain_points", [])
+    if isinstance(pain_points, str):
+        pain_points = [pain_points]
+    if pain_points:
+        for pain in pain_points[:3]:  # Max 3 pain points
+            reflections.append({
+                "type": "pain_point",
+                "what_you_told_us": f"'{pain}' is consuming significant time",
+                "source": "quiz_response",
+            })
+
+    # Goals if provided
+    goals = quiz_answers.get("goals", quiz_answers.get("goals_priorities", []))
+    if isinstance(goals, str):
+        goals = [goals]
+    if goals:
+        reflections.append({
+            "type": "goal",
+            "what_you_told_us": f"Your priority: {goals[0] if goals else 'improving efficiency'}",
+            "source": "quiz_response",
         })
 
-    # Format vendors for prompt
-    formatted_vendors = []
-    for vendor in vendors[:8]:  # Top 8 for teaser
-        pricing = vendor.get("pricing", {})
-        formatted_vendors.append({
-            "name": vendor.get("name", ""),
-            "category": vendor.get("category", ""),
-            "starting_price": pricing.get("starting_at", "Contact for pricing"),
-            "best_for": vendor.get("best_for", []),
+    # Current tools/tech stack
+    tech_stack = company_profile.get("tech_stack", {})
+    technologies = tech_stack.get("technologies_detected", [])
+    if technologies:
+        tech_names = []
+        for t in technologies[:5]:
+            if isinstance(t, dict):
+                tech_names.append(t.get("value", str(t)))
+            else:
+                tech_names.append(str(t))
+        if tech_names:
+            reflections.append({
+                "type": "current_state",
+                "what_you_told_us": f"Currently using: {', '.join(tech_names)}",
+                "source": "company_research",
+            })
+
+    # Company size context
+    size = company_profile.get("size", {})
+    employee_range = size.get("employee_range", {})
+    if isinstance(employee_range, dict):
+        employee_range = employee_range.get("value", "")
+    if employee_range:
+        reflections.append({
+            "type": "current_state",
+            "what_you_told_us": f"Team size: {employee_range} employees",
+            "source": "quiz_response",
         })
 
-    # Extract key benchmarks for AI readiness
-    ai_adoption = benchmarks.get("ai_adoption", {})
-    operational = benchmarks.get("operational", {})
-
-    return {
-        "industry": industry,
-        "is_supported": is_supported,
-        "opportunities": formatted_opportunities,
-        "opportunities_count": len(opportunities),
-        "vendors": formatted_vendors,
-        "vendors_count": len(vendors),
-        "benchmarks": {
-            "ai_adoption_rate": ai_adoption.get("current_adoption", {}).get("percentage", 35),
-            "productivity_gains": ai_adoption.get("productivity_gains_reported", {}),
-            "operational": operational,
-        },
-        "industry_context": {
-            "processes": _safe_list_slice(industry_context.get("processes", {}), "common_processes", 3),
-            "common_pain_points": _safe_list_slice(industry_context.get("processes", {}), "common_pain_points", 5),
-        }
-    }
+    return reflections[:5]  # Max 5 reflections
 
 
 async def generate_teaser_report(
@@ -117,57 +256,101 @@ async def generate_teaser_report(
     interview_data: Optional[Dict[str, Any]] = None,
 ) -> Dict[str, Any]:
     """
-    Generate a teaser report using Claude Haiku 4.5.
+    Generate insights-first teaser report.
 
-    NOW GROUNDED IN KNOWLEDGE BASE:
-    - Loads industry-specific benchmarks
-    - Gets relevant opportunities from KB
-    - Includes real vendor pricing
+    NO AI GENERATION - only verified data from Supabase.
+    Returns diagnostic insights that cannot contradict the full report.
+
+    Output schema:
+    - ai_readiness: Score + breakdown (calculated from inputs)
+    - diagnostics: User reflections + industry benchmarks (with sources)
+    - opportunity_areas: Categories only (not specific recommendations)
+    - next_steps: Workshop info + what full report includes
     """
+    # Ensure we have valid dicts
+    company_profile = company_profile or {}
+    quiz_answers = quiz_answers or {}
+
     # Extract and normalize industry
     industry_obj = company_profile.get("industry", {})
     raw_industry = industry_obj.get("primary_industry", {}).get("value", "")
     industry = normalize_industry(raw_industry) if raw_industry else "professional-services"
 
-    # Load Knowledge Base context
-    kb_context = _load_kb_context(industry)
-    logger.info(f"Teaser KB loaded: {kb_context['opportunities_count']} opportunities, {kb_context['vendors_count']} vendors")
-
-    # Calculate AI Readiness Score (now with industry benchmarks)
-    score_data = _calculate_ai_readiness_score(company_profile, quiz_answers, kb_context)
-
-    # Generate REAL findings using Claude Haiku + KB context
-    try:
-        findings = await _generate_ai_findings(company_profile, quiz_answers, interview_data, kb_context)
-    except Exception as e:
-        logger.error(f"AI findings generation failed: {e}")
-        # Fallback to basic findings if AI fails
-        findings = _generate_fallback_findings(company_profile, quiz_answers, kb_context)
-
-    # Split into revealed and blurred
-    revealed_findings = findings[:2]  # First 2 are full detail
-    blurred_findings = [
-        {
-            "title": f["title"],
-            "category": f.get("category", "opportunity"),
-            "blurred": True
-        }
-        for f in findings[2:6]  # Next 4 are blurred previews
-    ]
-
     company_name = _extract_company_name(company_profile)
-    industry = company_profile.get("industry", {}).get("primary_industry", {}).get("value", "General")
+    industry_display = industry_obj.get("primary_industry", {}).get("value", industry.replace("-", " ").title())
+
+    # Calculate AI Readiness Score (from quiz inputs - diagnostic)
+    score_data = _calculate_ai_readiness_score(company_profile, quiz_answers)
+
+    # Extract user reflections (what they told us - verbatim)
+    user_reflections = _extract_user_reflections(quiz_answers, company_profile)
+
+    # Get verified benchmarks from Supabase (with sources)
+    industry_benchmarks = await _get_verified_benchmarks_from_supabase(industry)
+
+    # Get pain points for category mapping
+    pain_points = quiz_answers.get("pain_points", [])
+    if isinstance(pain_points, str):
+        pain_points = [pain_points]
+
+    # Map pain points to opportunity categories (not specific recommendations)
+    opportunity_areas = await _get_opportunity_categories_from_supabase(industry, pain_points)
+
+    logger.info(
+        f"Teaser generated for {company_name}: "
+        f"score={score_data['score']}, "
+        f"reflections={len(user_reflections)}, "
+        f"benchmarks={len(industry_benchmarks)}, "
+        f"opportunity_areas={len(opportunity_areas)}"
+    )
 
     return {
+        # Metadata
+        "generated_at": datetime.utcnow().isoformat(),
+        "company_name": company_name,
+        "industry": industry_display,
+        "industry_slug": industry,
+
+        # Section 1: AI Readiness Score (diagnostic)
+        "ai_readiness": {
+            "score": score_data["score"],
+            "breakdown": score_data["breakdown"],
+            "interpretation": _get_score_interpretation(score_data["score"]),
+        },
+
+        # Section 2: Diagnostics (verified data only)
+        "diagnostics": {
+            "user_reflections": user_reflections,
+            "industry_benchmarks": industry_benchmarks,
+        },
+
+        # Section 3: Opportunity Areas (categories, not prescriptions)
+        "opportunity_areas": opportunity_areas,
+
+        # Section 4: What's Next (workshop + full report)
+        "next_steps": {
+            "workshop": {
+                "what_it_is": "AI-powered deep-dive conversation",
+                "duration": "~90 minutes (can pause/resume)",
+                "phases": [
+                    {"name": "Confirmation", "description": "Verify our research about your business"},
+                    {"name": "Deep-Dive", "description": "Explore your pain points in detail"},
+                    {"name": "Synthesis", "description": "Prioritize opportunities for your report"},
+                ],
+                "outcome": "Validated priorities and personalized findings",
+            },
+            "full_report_includes": [
+                {"icon": "📊", "title": "Prioritized Findings", "description": "10-15 opportunities ranked by impact"},
+                {"icon": "💰", "title": "ROI Calculations", "description": "Specific estimates for your situation"},
+                {"icon": "🛠️", "title": "Vendor Recommendations", "description": "3 options per finding with pricing"},
+                {"icon": "📋", "title": "Implementation Roadmap", "description": "Week-by-week action plan"},
+            ],
+        },
+
+        # Legacy fields for backward compatibility (will be deprecated)
         "ai_readiness_score": score_data["score"],
         "score_breakdown": score_data["breakdown"],
         "score_interpretation": _get_score_interpretation(score_data["score"]),
-        "revealed_findings": revealed_findings,
-        "blurred_findings": blurred_findings,
-        "total_findings_available": max(len(findings), 8),  # Promise at least 8 in full report
-        "company_name": company_name,
-        "industry": industry,
-        "generated_at": datetime.utcnow().isoformat(),
     }
 
 
@@ -177,7 +360,7 @@ def generate_teaser_report_sync(
     quiz_answers: Dict[str, Any],
     interview_data: Optional[Dict[str, Any]] = None,
 ) -> Dict[str, Any]:
-    """Sync version that runs the AI generation."""
+    """Sync version for routes that don't use async."""
     import asyncio
 
     # Check if we're already in an async context
@@ -196,326 +379,6 @@ def generate_teaser_report_sync(
         return asyncio.run(generate_teaser_report(company_profile, quiz_answers, interview_data))
 
 
-async def _generate_ai_findings(
-    company_profile: Dict[str, Any],
-    quiz_answers: Dict[str, Any],
-    interview_data: Optional[Dict[str, Any]] = None,
-    kb_context: Optional[Dict[str, Any]] = None,
-) -> List[Dict[str, Any]]:
-    """
-    Generate real findings using Claude Haiku 4.5.
-
-    NOW GROUNDED IN KB:
-    - Uses industry-specific opportunities from KB
-    - Cites real vendor pricing
-    - References verified benchmarks
-    """
-    kb_context = kb_context or {}
-    # Ensure we have valid dicts
-    company_profile = company_profile or {}
-    quiz_answers = quiz_answers or {}
-    interview_data = interview_data or {}
-
-    # Build context from available data
-    company_name = _extract_company_name(company_profile)
-
-    industry_obj = company_profile.get("industry") or {}
-    industry = (industry_obj.get("primary_industry") or {}).get("value", "")
-    business_model = (industry_obj.get("business_model") or {}).get("value", "")
-
-    size_obj = company_profile.get("size") or {}
-    employee_range = (size_obj.get("employee_range") or {}).get("value", "")
-
-    basics_obj = company_profile.get("basics") or {}
-    description = (basics_obj.get("description") or {}).get("value", "")
-
-    # Tech stack
-    tech_stack = company_profile.get("tech_stack") or {}
-    technologies = tech_stack.get("technologies_detected") or []
-    if not isinstance(technologies, list):
-        technologies = []
-    tech_list = [t.get("value", t) if isinstance(t, dict) else str(t) for t in technologies[:10]]
-
-    # Pain points from quiz
-    pain_points = quiz_answers.get("pain_points") or []
-    if isinstance(pain_points, str):
-        pain_points = [pain_points]
-    if not isinstance(pain_points, list):
-        pain_points = []
-
-    # Interview insights if available
-    interview_summary = ""
-    messages = interview_data.get("messages") or []
-    answers = interview_data.get("answers") or {}
-    if messages and isinstance(messages, list):
-        # Extract key points from interview
-        user_messages = [m.get("content", "") for m in messages if isinstance(m, dict) and m.get("role") == "user"]
-        interview_summary = " | ".join(user_messages[-5:])  # Last 5 user responses
-    if answers:
-        interview_summary += f" | Priorities: {answers}"
-
-    # Format KB data for prompt
-    kb_opportunities = kb_context.get("opportunities", [])
-    kb_vendors = kb_context.get("vendors", [])
-    kb_benchmarks = kb_context.get("benchmarks", {})
-
-    opportunities_text = "\n".join([
-        f"- {opp['title']}: {opp['description'][:100]}..." if opp.get('description') else f"- {opp['title']}"
-        for opp in kb_opportunities[:5]
-    ]) if kb_opportunities else "No specific opportunities in KB"
-
-    vendors_text = "\n".join([
-        f"- {v['name']} ({v['category']}): {v['starting_price']}"
-        for v in kb_vendors[:6]
-    ]) if kb_vendors else "No specific vendors in KB"
-
-    ai_adoption_rate = kb_benchmarks.get("ai_adoption_rate", 35)
-
-    # Build the prompt with KB grounding
-    system_prompt = """You are an AI business analyst for CRB Analyser, specializing in identifying automation and AI opportunities for businesses.
-
-Your task: Analyze the company information and generate 6 SPECIFIC, ACTIONABLE findings.
-
-CRITICAL RULES:
-1. Be SPECIFIC to this exact company - reference their industry, size, tools, and stated pain points
-2. USE THE PROVIDED KNOWLEDGE BASE DATA - cite specific vendors, benchmarks, and opportunities
-3. Each finding must feel like it was written specifically for THIS company
-4. Include realistic ROI estimates based on the INDUSTRY BENCHMARKS PROVIDED
-5. The first 2 findings should be your strongest, most impactful recommendations
-6. Reference REAL vendors with REAL pricing from the vendor list
-
-Output JSON array with exactly 6 findings in this format:
-[
-  {
-    "title": "Specific finding title mentioning their context",
-    "category": "efficiency|customer|operations|technology|analytics|growth",
-    "summary": "2-3 sentences explaining the specific opportunity and why it matters for THIS company. CITE specific benchmarks or vendors.",
-    "impact": "high|medium|low",
-    "roi_estimate": {"min": 5000, "max": 25000, "currency": "EUR", "timeframe": "annual"},
-    "quick_win": true/false,
-    "vendor_recommendation": "Name of vendor from list (optional)",
-    "source": "What KB data supports this (benchmark, opportunity, etc.)"
-  }
-]"""
-
-    user_prompt = f"""Analyze this company and generate 6 specific AI/automation opportunities:
-
-COMPANY: {company_name}
-INDUSTRY: {industry}
-BUSINESS MODEL: {business_model}
-SIZE: {employee_range} employees
-DESCRIPTION: {description}
-
-CURRENT TECH STACK: {', '.join(tech_list) if tech_list else 'Not detected'}
-
-STATED PAIN POINTS: {', '.join(pain_points) if pain_points else 'Not specified'}
-
-INTERVIEW INSIGHTS: {interview_summary if interview_summary else 'No interview data'}
-
-═══════════════════════════════════════════════════════════════════════════════
-KNOWLEDGE BASE DATA (USE THIS FOR GROUNDED RECOMMENDATIONS)
-═══════════════════════════════════════════════════════════════════════════════
-
-INDUSTRY BENCHMARK: {ai_adoption_rate}% of {industry} businesses currently use AI
-Productivity gains reported: {kb_benchmarks.get('productivity_gains', 'varies by use case')}
-
-VERIFIED OPPORTUNITIES FOR {industry.upper()}:
-{opportunities_text}
-
-RECOMMENDED VENDORS WITH PRICING:
-{vendors_text}
-
-═══════════════════════════════════════════════════════════════════════════════
-
-Generate 6 findings that are SPECIFIC to {company_name}.
-- Reference their actual situation, tools, and challenges
-- CITE vendors and benchmarks from the knowledge base above
-- Use REAL pricing from the vendor list
-- No generic advice - ground everything in the KB data"""
-
-    try:
-        client = get_llm_client("anthropic")
-        response = client.generate(
-            model=TEASER_MODEL,
-            system=system_prompt,
-            messages=[{"role": "user", "content": user_prompt}],
-            max_tokens=2000,
-            temperature=0.7,
-        )
-
-        content = response.get("content", "")
-        logger.info(f"Haiku teaser response tokens: {response.get('output_tokens', 0)}")
-
-        # Parse JSON from response
-        findings = _parse_findings_json(content)
-
-        if findings and len(findings) >= 2:
-            return findings
-        else:
-            logger.warning("AI returned insufficient findings, using fallback")
-            return _generate_fallback_findings(company_profile, quiz_answers, kb_context)
-
-    except Exception as e:
-        logger.error(f"Haiku API call failed: {e}")
-        raise
-
-
-def _parse_findings_json(content: str) -> List[Dict[str, Any]]:
-    """Parse JSON findings from AI response."""
-    try:
-        # Try direct JSON parse
-        return json.loads(content)
-    except json.JSONDecodeError:
-        pass
-
-    # Try to extract JSON array from response
-    import re
-    json_match = re.search(r'\[[\s\S]*\]', content)
-    if json_match:
-        try:
-            return json.loads(json_match.group())
-        except json.JSONDecodeError:
-            pass
-
-    logger.warning(f"Could not parse findings JSON from: {content[:200]}...")
-    return []
-
-
-def _generate_fallback_findings(
-    company_profile: Dict[str, Any],
-    quiz_answers: Dict[str, Any],
-    kb_context: Optional[Dict[str, Any]] = None,
-) -> List[Dict[str, Any]]:
-    """
-    Fallback findings if AI fails - still uses KB data for grounding.
-
-    NOW USES KB:
-    - References real opportunities from knowledge base
-    - Uses actual vendor names and pricing
-    - Cites industry benchmarks
-    """
-    kb_context = kb_context or {}
-    findings = []
-    company_name = _extract_company_name(company_profile)
-    industry = company_profile.get("industry", {}).get("primary_industry", {}).get("value", "your industry")
-
-    # Get KB data for grounded fallback
-    kb_opportunities = kb_context.get("opportunities", [])
-    kb_vendors = kb_context.get("vendors", [])
-    kb_benchmarks = kb_context.get("benchmarks", {})
-    ai_adoption_rate = kb_benchmarks.get("ai_adoption_rate", 35)
-
-    # Use KB opportunities if available - much more grounded than hardcoded
-    if kb_opportunities:
-        for i, opp in enumerate(kb_opportunities[:3]):
-            roi_potential = opp.get("roi_potential", {})
-            findings.append({
-                "title": opp.get("title", f"AI Opportunity {i+1}"),
-                "category": opp.get("category", "efficiency"),
-                "summary": f"{opp.get('description', '')} For {industry} businesses like {company_name}, {ai_adoption_rate}% already use AI for this.",
-                "impact": "high" if i == 0 else "medium",
-                "roi_estimate": {
-                    "min": roi_potential.get("min_annual_savings", 10000),
-                    "max": roi_potential.get("max_annual_savings", 40000),
-                    "currency": "EUR",
-                    "timeframe": "annual"
-                },
-                "quick_win": opp.get("quick_win", i == 0),
-                "source": "Knowledge Base",
-            })
-
-    # Use actual pain points if we don't have enough KB opportunities
-    pain_points = quiz_answers.get("pain_points", [])
-    if len(findings) < 2 and pain_points and isinstance(pain_points, list) and len(pain_points) > 0:
-        first_pain = pain_points[0] if isinstance(pain_points[0], str) else str(pain_points[0])
-
-        # Find a matching vendor from KB
-        vendor_rec = kb_vendors[0]["name"] if kb_vendors else "automation tools"
-
-        findings.append({
-            "title": f"High-Priority: Address '{first_pain}' with AI Automation",
-            "category": "efficiency",
-            "summary": f"Based on your input, '{first_pain}' is consuming significant time. For {industry} companies like {company_name}, solutions like {vendor_rec} typically reduce time spent by 40-60%. {ai_adoption_rate}% of your peers already use AI here.",
-            "impact": "high",
-            "roi_estimate": {"min": 15000, "max": 45000, "currency": "EUR", "timeframe": "annual"},
-            "quick_win": True,
-            "vendor_recommendation": vendor_rec,
-            "source": "User pain points + KB benchmarks",
-        })
-
-        if len(pain_points) > 1:
-            second_pain = pain_points[1] if isinstance(pain_points[1], str) else str(pain_points[1])
-            findings.append({
-                "title": f"Secondary Opportunity: Streamline '{second_pain}'",
-                "category": "operations",
-                "summary": f"Your second challenge '{second_pain}' often connects to the first. Addressing both creates compound efficiency gains.",
-                "impact": "medium",
-                "roi_estimate": {"min": 8000, "max": 25000, "currency": "EUR", "timeframe": "annual"},
-                "quick_win": False,
-                "source": "User pain points",
-            })
-
-    # Tech integration opportunity using KB vendors
-    tech = company_profile.get("tech_stack", {})
-    tech_list = tech.get("technologies_detected", [])
-    if len(findings) < 4 and tech_list and len(tech_list) > 0:
-        first_tech = tech_list[0]
-        if isinstance(first_tech, dict):
-            first_tech = first_tech.get("value", "your systems")
-
-        # Recommend integration vendor from KB
-        integration_vendor = next(
-            (v["name"] for v in kb_vendors if "integration" in v.get("category", "").lower() or "automation" in v.get("category", "").lower()),
-            "n8n or Make"
-        )
-
-        findings.append({
-            "title": f"Integration Potential: Connect {first_tech} with AI Layer",
-            "category": "technology",
-            "summary": f"Your use of {first_tech} creates an opportunity for AI-powered automation via {integration_vendor}. Many {industry} businesses achieve 25-35% efficiency gains by adding intelligent automation to existing tools.",
-            "impact": "medium",
-            "roi_estimate": {"min": 10000, "max": 30000, "currency": "EUR", "timeframe": "annual"},
-            "vendor_recommendation": integration_vendor,
-            "source": "Tech stack + KB vendors",
-        })
-
-    # Fill remaining slots with KB opportunities or generic but grounded options
-    remaining_kb = kb_opportunities[3:6] if len(kb_opportunities) > 3 else []
-    for opp in remaining_kb:
-        if len(findings) >= 6:
-            break
-        roi_potential = opp.get("roi_potential", {})
-        findings.append({
-            "title": opp.get("title", "AI Opportunity"),
-            "category": opp.get("category", "efficiency"),
-            "summary": opp.get("description", "")[:150] + "..." if opp.get("description") else "",
-            "impact": "medium",
-            "roi_estimate": {
-                "min": roi_potential.get("min_annual_savings", 5000),
-                "max": roi_potential.get("max_annual_savings", 20000),
-                "currency": "EUR",
-                "timeframe": "annual"
-            },
-            "source": "Knowledge Base",
-        })
-
-    # Final fallback with industry context
-    generic_remaining = [
-        {"title": f"Customer Communication Automation for {industry}", "category": "customer", "summary": f"Automate client communications - {ai_adoption_rate}% of {industry} businesses already do this."},
-        {"title": f"Data-Driven Decision Making for {company_name}", "category": "analytics", "summary": "Turn operational data into actionable insights."},
-        {"title": "Workflow Bottleneck Elimination", "category": "operations", "summary": "Identify and automate repetitive bottlenecks."},
-        {"title": "Competitive Advantage Through AI Adoption", "category": "growth", "summary": f"Stay ahead as {ai_adoption_rate}% of peers adopt AI."},
-    ]
-
-    while len(findings) < 6:
-        if generic_remaining:
-            findings.append(generic_remaining.pop(0))
-        else:
-            break
-
-    return findings
-
-
 def _extract_company_name(company_profile: Dict[str, Any]) -> str:
     """Extract company name from profile."""
     basics = company_profile.get("basics", {})
@@ -528,19 +391,16 @@ def _extract_company_name(company_profile: Dict[str, Any]) -> str:
 def _calculate_ai_readiness_score(
     company_profile: Dict[str, Any],
     quiz_answers: Dict[str, Any],
-    kb_context: Optional[Dict[str, Any]] = None,
 ) -> Dict[str, Any]:
     """
     Calculate AI readiness score with breakdown.
 
-    NOW USES KB BENCHMARKS:
-    - Industry AI adoption rate for comparison
-    - Productivity gains data for context
+    Purely diagnostic - based on quiz inputs only.
+    Does not use KB or make predictions.
     """
     # Ensure we have valid dicts
     company_profile = company_profile or {}
     quiz_answers = quiz_answers or {}
-    kb_context = kb_context or {}
 
     breakdown = {}
 
