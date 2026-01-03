@@ -74,9 +74,12 @@ Stripe Checkout → Full Report Access
 created → in_progress → completed → payment_pending → paid
 ```
 
-### Report Tiers
-- **Quick ($49)**: Sonnet-generated, 5-7 findings, basic recommendations
-- **Full ($199)**: Opus-generated, 10+ findings, detailed playbook, vendor matching
+### Pricing Tiers (EUR)
+| Tier | Price | Model | Includes |
+|------|-------|-------|----------|
+| **CRB Report** | €147 | Sonnet | Self-service analysis, interactive report |
+| **Report + Call** | €497 | Opus | + 60-min strategy call, priority support |
+| **Sprint** | €1,997 | Opus | + 2-week implementation help, 3x calls |
 
 ---
 
@@ -353,9 +356,15 @@ class MySkill(LLMSkill[MyOutputModel]):
         return await self._call_llm(prompt, MyOutputModel)
 ```
 
+### Skill Types
+| Type | Use Case |
+|------|----------|
+| `LLMSkill` | Needs Claude API (generation, analysis) |
+| `SyncSkill` | Pure logic, no async (validators, formatters) |
+| `BaseSkill` | Custom async logic (API calls, DB queries) |
+
 ### Key Patterns
 - Skills return Pydantic models (type-safe outputs)
-- Use `LLMSkill` for AI-powered skills, `SyncSkill` for pure logic
 - Skills are discovered automatically via `registry.py`
 - Test skills in `tests/skills/test_<skill_name>.py`
 
