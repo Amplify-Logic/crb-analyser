@@ -330,24 +330,25 @@ def map_pain_points_to_categories(pain_points: list[str]) -> list[dict]:
 ```python
 # BEFORE: generate_teaser_report returns findings
 async def generate_teaser_report(...) -> Dict[str, Any]:
-    findings = await _generate_ai_findings(...)  # ← AI-generated
+    findings = await _generate_ai_findings(...)  # ← AI-generated via Haiku
     return {
         "revealed_findings": findings[:2],
         "blurred_findings": findings[2:6],
         ...
     }
 
-# AFTER: generate_teaser_report returns insights
+# AFTER: generate_teaser_report returns insights (NO AI generation)
 async def generate_teaser_report(...) -> Dict[str, Any]:
     # User reflections - verbatim from quiz
     user_reflections = _extract_user_reflections(quiz_answers)
 
-    # Industry benchmarks - KB only, validated
-    industry_benchmarks = _get_validated_benchmarks(industry)
+    # Industry benchmarks - FROM SUPABASE with verified sources
+    industry_benchmarks = await _get_verified_benchmarks_from_supabase(industry)
 
-    # Opportunity areas - category mapping, not AI generation
-    opportunity_areas = _map_pain_points_to_categories(
-        quiz_answers.get("pain_points", [])
+    # Opportunity areas - category mapping from Supabase opportunities
+    opportunity_areas = await _map_pain_points_to_opportunity_categories(
+        quiz_answers.get("pain_points", []),
+        industry
     )
 
     return {
@@ -361,78 +362,279 @@ async def generate_teaser_report(...) -> Dict[str, Any]:
     }
 ```
 
+### New Functions (Query Supabase)
+
+```python
+async def _get_verified_benchmarks_from_supabase(industry: str) -> List[Dict]:
+    """
+    Get verified benchmarks from knowledge_embeddings table.
+    Only returns benchmarks with source.name and source.verified_date.
+    """
+    supabase = await get_async_supabase()
+
+    result = await supabase.table("knowledge_embeddings").select(
+        "content_id, title, content, metadata"
+    ).eq("content_type", "benchmark").eq("industry", industry).execute()
+
+    verified = []
+    for row in result.data or []:
+        metadata = row.get("metadata", {})
+        source = metadata.get("source", {})
+
+        # STRICT: Must have verified source
+        if not source.get("name") or not source.get("verified_date"):
+            continue
+
+        # STRICT: Must be fresh (within 18 months)
+        if _is_stale(source["verified_date"], months=18):
+            logger.warning(f"Skipping stale benchmark: {row['content_id']}")
+            continue
+
+        verified.append({
+            "metric": row["title"],
+            "value": metadata.get("value", row["content"]),
+            "source": {
+                "name": source["name"],
+                "url": source.get("url"),
+                "verified_date": source["verified_date"],
+            },
+            "relevance": metadata.get("relevance_template"),
+        })
+
+    return verified
+
+
+async def _map_pain_points_to_opportunity_categories(
+    pain_points: List[str],
+    industry: str
+) -> List[Dict]:
+    """
+    Map user pain points to opportunity categories from Supabase.
+    Returns categories (not specific recommendations).
+    """
+    supabase = await get_async_supabase()
+
+    # Get opportunities for this industry
+    result = await supabase.table("knowledge_embeddings").select(
+        "content_id, title, metadata"
+    ).eq("content_type", "opportunity").eq("industry", industry).execute()
+
+    # Build category map from opportunities
+    categories = {}
+    for row in result.data or []:
+        metadata = row.get("metadata", {})
+        category = metadata.get("category")
+        keywords = metadata.get("keywords", [])
+
+        if not category:
+            continue
+
+        if category not in categories:
+            categories[category] = {
+                "category": category,
+                "label": _category_label(category),
+                "keywords": keywords,
+                "matched_pain_points": [],
+                "in_full_report": metadata.get("in_full_report", []),
+            }
+        else:
+            # Merge keywords
+            categories[category]["keywords"].extend(keywords)
+
+    # Match pain points to categories
+    for pain in pain_points:
+        pain_lower = pain.lower()
+        for cat_id, cat_data in categories.items():
+            for keyword in cat_data["keywords"]:
+                if keyword.lower() in pain_lower:
+                    if pain not in cat_data["matched_pain_points"]:
+                        cat_data["matched_pain_points"].append(pain)
+                    break
+
+    # Sort by number of matches, return top 3
+    matched = [c for c in categories.values() if c["matched_pain_points"]]
+    matched.sort(key=lambda c: len(c["matched_pain_points"]), reverse=True)
+
+    result = []
+    for i, cat in enumerate(matched[:3]):
+        result.append({
+            "category": cat["category"],
+            "label": cat["label"],
+            "potential": "high" if i < 2 else "medium",
+            "matched_because": f"You mentioned: {', '.join(cat['matched_pain_points'][:2])}",
+            "in_full_report": cat["in_full_report"],
+        })
+
+    return result
+```
+
 ### Remove These Functions
 
 - `_generate_ai_findings()` - No longer needed for teaser
 - `_generate_fallback_findings()` - No longer needed
-- Haiku API call for finding generation
+- `_load_kb_context()` - Replaced by Supabase queries
+- Haiku API call for finding generation - **No more LLM calls in teaser**
 
 ### Keep These Functions
 
-- `_calculate_ai_readiness_score()` - Still diagnostic/useful
-- `_load_kb_context()` - Needed for benchmarks
+- `_calculate_ai_readiness_score()` - Still diagnostic/useful (calculated from quiz inputs)
 - `_get_score_interpretation()` - Keep but make less prescriptive
+- `_extract_company_name()` - Still needed
 
 ---
 
 ## Prerequisites Before Implementation
 
-### 1. KB Benchmark Data Required
+### 1. KB Benchmark Data Required (Supabase)
 
-Each industry needs `benchmarks.json` with verified sources:
+Benchmarks are stored in the `knowledge_embeddings` table with `content_type='benchmark'`.
 
-```json
-// backend/src/knowledge/dental/benchmarks.json
-{
-  "ai_adoption": {
-    "metric": "AI adoption in dental practices",
-    "value": "34% currently use AI-powered tools",
+**Required structure in metadata JSONB:**
+
+```sql
+-- Insert benchmark into knowledge_embeddings
+INSERT INTO knowledge_embeddings (
+  content_type,
+  content_id,
+  industry,
+  title,
+  content,
+  metadata
+) VALUES (
+  'benchmark',
+  'dental-ai-adoption-2024',
+  'dental',
+  'AI Adoption in Dental Practices',
+  '34% of dental practices currently use AI-powered tools for scheduling, patient communication, or administrative tasks.',
+  '{
+    "metric": "ai_adoption_rate",
+    "value": "34%",
+    "value_numeric": 34,
     "source": {
       "name": "ADA Health Policy Institute Technology Survey",
       "url": "https://ada.org/resources/research/health-policy-institute",
-      "verified_date": "2024-09"
-    }
-  },
-  "time_savings": {
-    "metric": "Admin time reduction with automation",
-    "value": "Practices report 25-40% reduction in admin hours",
-    "source": {
-      "name": "Dental Economics Practice Management Study",
-      "verified_date": "2024-06"
-    }
-  }
-}
+      "verified_date": "2024-09",
+      "verified_by": "lars"
+    },
+    "relevance_template": "Your practice is among the {remaining}% with untapped AI potential"
+  }'
+);
 ```
 
-### 2. Opportunity Categories in KB
+**Querying benchmarks for teaser:**
 
-Each industry needs `opportunities.json` with category mappings:
+```python
+async def get_verified_benchmarks(industry: str) -> List[Dict]:
+    """Get verified benchmarks from Supabase."""
+    supabase = await get_async_supabase()
 
-```json
-// backend/src/knowledge/dental/opportunities.json
-{
-  "categories": [
-    {
-      "id": "customer_communication",
-      "label": "Patient Communication",
-      "keywords": ["follow-up", "reminders", "recalls", "confirmations"],
-      "in_full_report": [
-        "Specific automation tools with pricing",
-        "ROI calculation based on your patient volume",
-        "Implementation timeline"
-      ]
-    }
-  ]
-}
+    result = await supabase.table("knowledge_embeddings").select(
+        "content_id, title, content, metadata"
+    ).eq(
+        "content_type", "benchmark"
+    ).eq(
+        "industry", industry
+    ).execute()
+
+    # Filter to only include benchmarks with verified sources
+    verified = []
+    for row in result.data or []:
+        metadata = row.get("metadata", {})
+        source = metadata.get("source", {})
+
+        # Must have source name and verified_date
+        if source.get("name") and source.get("verified_date"):
+            # Check freshness (within 18 months)
+            if not is_stale(source["verified_date"], months=18):
+                verified.append({
+                    "metric": metadata.get("metric"),
+                    "value": metadata.get("value"),
+                    "source": source,
+                    "relevance": metadata.get("relevance_template"),
+                })
+
+    return verified
 ```
 
-### 3. Industries Needing KB Data
+### 2. Opportunity Categories (Supabase)
 
-| Industry | benchmarks.json | opportunities.json | Status |
-|----------|-----------------|-------------------|--------|
-| dental | Needed | Needed | TODO |
-| professional-services | Needed | Needed | TODO |
-| home-services | Needed | Needed | TODO |
+Opportunities are stored in `knowledge_embeddings` with `content_type='opportunity'`.
+
+**Required structure in metadata JSONB:**
+
+```sql
+INSERT INTO knowledge_embeddings (
+  content_type,
+  content_id,
+  industry,
+  title,
+  content,
+  metadata
+) VALUES (
+  'opportunity',
+  'dental-patient-communication',
+  'dental',
+  'Patient Communication Automation',
+  'Automate patient follow-up, appointment reminders, and recall notifications...',
+  '{
+    "category": "customer_communication",
+    "keywords": ["follow-up", "reminders", "recalls", "confirmations", "patient"],
+    "in_full_report": [
+      "Specific automation tools with pricing",
+      "ROI calculation based on your patient volume",
+      "Implementation timeline"
+    ],
+    "business_health_score": 8,
+    "customer_value_score": 9
+  }'
+);
+```
+
+### 3. Current Data Status
+
+Check what benchmark data exists:
+
+```sql
+-- Count benchmarks per industry
+SELECT industry, COUNT(*) as benchmark_count
+FROM knowledge_embeddings
+WHERE content_type = 'benchmark'
+  AND metadata->'source'->>'verified_date' IS NOT NULL
+GROUP BY industry;
+```
+
+| Industry | Verified Benchmarks | Status |
+|----------|---------------------|--------|
+| dental | ? | Check Supabase |
+| professional-services | ? | Check Supabase |
+| home-services | ? | Check Supabase |
+
+### 4. Data Population Task
+
+Before implementing, run this audit:
+
+```bash
+# Check existing benchmark data
+python -c "
+from src.config.supabase_client import get_async_supabase
+import asyncio
+
+async def audit():
+    supabase = await get_async_supabase()
+    result = await supabase.table('knowledge_embeddings').select(
+        'industry, content_id, metadata'
+    ).eq('content_type', 'benchmark').execute()
+
+    for row in result.data or []:
+        source = row.get('metadata', {}).get('source', {})
+        verified = '✓' if source.get('verified_date') else '✗'
+        print(f'{verified} {row[\"industry\"]}: {row[\"content_id\"]}')
+        if source.get('name'):
+            print(f'   Source: {source[\"name\"]}')
+
+asyncio.run(audit())
+"
+```
 
 ---
 
