@@ -33,15 +33,50 @@ brew services start redis
 
 ```
 Frontend (React)           Backend (FastAPI)
-├── Landing/Dashboard      ├── /api/auth, clients, audits
-├── Intake Wizard          ├── /api/findings, reports
-├── Progress/Report View   ├── /api/vendors, payments
-└── Settings               └── /api/health
+├── Landing                ├── /api/auth, clients, audits
+├── Quiz Flow (anonymous)  ├── /api/quiz, interview, workshop
+├── Report Preview/Viewer  ├── /api/reports, payments
+├── Dashboard (auth'd)     ├── /api/vendors, expertise
+└── Admin (vendors, KB)    └── /api/admin_*, health
 
 CRB Agent: Discovery → Research → Analysis → Modeling → Report
 
-Data: Supabase (clients, audits, findings) + Redis (cache) + Vendor KB (moat)
+Skills System: analysis/, interview/, workshop/, report-generation/
+
+Data: Supabase (quiz_sessions, reports, vendors) + Redis (cache) + Knowledge Base
 ```
+
+---
+
+## Quiz Flow (Main Conversion Path)
+
+The anonymous quiz is the primary user acquisition funnel.
+
+```
+Landing → Quiz (5-7 questions) → [Optional: Voice Interview]
+    ↓
+AI Readiness Score + Report Teaser
+    ↓
+Stripe Checkout → Full Report Access
+```
+
+### Key Components
+
+| Component | Purpose |
+|-----------|---------|
+| `Quiz.tsx` | Multi-step wizard with progress tracking |
+| `quiz.py` | Backend routes, session management |
+| `quiz_engine.py` | Adaptive question selection, confidence scoring |
+| `teaser_service.py` | Generate report preview before payment |
+
+### Quiz Session States
+```
+created → in_progress → completed → payment_pending → paid
+```
+
+### Report Tiers
+- **Quick ($49)**: Sonnet-generated, 5-7 findings, basic recommendations
+- **Full ($199)**: Opus-generated, 10+ findings, detailed playbook, vendor matching
 
 ---
 
@@ -189,17 +224,30 @@ async def test_get_vendor_caches_result(mock_supabase, mock_redis):
 
 | Area | File |
 |------|------|
-| Config | `backend/src/config/settings.py` |
-| Auth | `backend/src/middleware/auth.py` |
-| Agent | `backend/src/agents/crb_agent.py` |
-| Tools | `backend/src/tools/tool_registry.py` |
-| ROI | `backend/src/services/roi_calculator.py` |
+| **Config** | |
+| Settings | `backend/src/config/settings.py` |
+| Model Routing | `backend/src/config/model_routing.py` |
+| **Core Services** | |
 | Reports | `backend/src/services/report_service.py` |
-| PDF | `backend/src/services/report_generator.py` |
+| Quiz Engine | `backend/src/services/quiz_engine.py` |
+| Teaser | `backend/src/services/teaser_service.py` |
+| Token Analytics | `backend/src/services/token_analytics.py` |
+| **Skills** | |
+| Base | `backend/src/skills/base.py` |
+| Registry | `backend/src/skills/registry.py` |
+| Vendor Matching | `backend/src/skills/analysis/vendor_matching.py` |
+| Quick Wins | `backend/src/skills/analysis/quick_win_identifier.py` |
+| **Routes** | |
+| Quiz | `backend/src/routes/quiz.py` |
+| Interview | `backend/src/routes/interview.py` |
+| Workshop | `backend/src/routes/workshop.py` |
+| **Knowledge** | |
+| Knowledge Base | `backend/src/knowledge/__init__.py` |
 | Expertise | `backend/src/expertise/__init__.py` |
-| Knowledge | `backend/src/knowledge/__init__.py` |
-| Auth (FE) | `frontend/src/contexts/AuthContext.tsx` |
-| API Client | `frontend/src/services/apiClient.ts` |
+| **Frontend** | |
+| Auth Context | `frontend/src/contexts/AuthContext.tsx` |
+| Quiz Page | `frontend/src/pages/Quiz.tsx` |
+| Report Viewer | `frontend/src/pages/ReportViewer.tsx` |
 
 ---
 
@@ -266,26 +314,110 @@ async def stream_progress(id: str):
 
 ---
 
+## Skills System
+
+Skills are modular, testable units of AI-powered logic. They replace inline prompts with structured, reusable components.
+
+### Structure
+```
+backend/src/skills/
+├── base.py                    # BaseSkill, LLMSkill, SyncSkill classes
+├── registry.py                # Skill discovery and registration
+├── analysis/                  # Finding analysis
+│   ├── vendor_matching.py     # Match findings to vendors
+│   ├── quick_win_identifier.py
+│   └── math_validator.py      # Validate ROI calculations
+├── interview/                 # Voice interview
+│   └── confidence.py          # Track interview confidence
+├── workshop/                  # 90-minute workshop
+│   ├── question_skill.py      # Generate contextual questions
+│   ├── milestone_skill.py     # Track workshop milestones
+│   └── signal_detector.py     # Detect buying signals
+└── report-generation/         # Report sections
+    ├── exec_summary.py
+    ├── finding_generation.py
+    ├── three_options.py       # Generate 3 options per finding
+    └── verdict.py             # Go/No-Go recommendation
+```
+
+### Creating a Skill
+```python
+from src.skills.base import LLMSkill
+
+class MySkill(LLMSkill[MyOutputModel]):
+    name = "my-skill"
+    description = "What this skill does"
+
+    async def execute(self, context: SkillContext) -> MyOutputModel:
+        prompt = self._build_prompt(context)
+        return await self._call_llm(prompt, MyOutputModel)
+```
+
+### Key Patterns
+- Skills return Pydantic models (type-safe outputs)
+- Use `LLMSkill` for AI-powered skills, `SyncSkill` for pure logic
+- Skills are discovered automatically via `registry.py`
+- Test skills in `tests/skills/test_<skill_name>.py`
+
+---
+
 ## Database Schema
 
 ```
-workspace → clients → audits → findings → recommendations
-                            → reports
-vendor_catalog, industry_benchmarks  -- Our moat
+# Core Flow
+quiz_sessions → reports → findings, recommendations, playbook
+     ↓
+  payments (Stripe)
+
+# Vendor System (Supabase)
+vendors ← industry_vendor_tiers (T1/T2/T3 per industry)
+    ↓
+vendor_audit_log
+
+# Knowledge (Vector)
+knowledge_embeddings (pgvector for RAG)
+
+# Legacy (being deprecated)
+workspace → clients → audits
 ```
+
+### Key Tables
+
+| Table | Purpose |
+|-------|---------|
+| `quiz_sessions` | Anonymous quiz responses, industry, scores |
+| `reports` | Generated reports with token_usage, generation trace |
+| `vendors` | Vendor catalog with pricing, features, ratings |
+| `industry_vendor_tiers` | Which vendors are T1/T2/T3 for each industry |
+| `knowledge_embeddings` | Vector embeddings for RAG retrieval |
 
 ---
 
 ## Frontend Routes
 
 ```
-/                   Landing
+# Public
+/                   Landing page
 /login, /signup     Auth
+/terms, /privacy    Legal pages
+
+# Anonymous Quiz Flow (main conversion path)
+/quiz               Multi-step quiz wizard
+/quiz/interview     Voice interview (optional)
+/quiz/adaptive      Adaptive follow-up questions
+/quiz/preview       Report teaser before payment
+/checkout           Stripe checkout
+/checkout/success   Post-payment redirect
+
+# Authenticated
 /dashboard          List audits
-/new-audit          Start audit
-/intake/:id         Questionnaire
-/audit/:id          Detail, progress, findings, report
-/settings           Account, billing
+/report/:id         Full report viewer
+/interview          90-minute workshop
+/workshop           Workshop facilitation
+
+# Admin (requires auth)
+/admin/vendors      Vendor database management
+/admin/knowledge    Knowledge base editor
 ```
 
 ---
@@ -303,10 +435,13 @@ STRIPE_WEBHOOK_SECRET=
 
 # Backend (optional)
 REDIS_URL=redis://localhost:6379
-BRAVE_API_KEY=
-TAVILY_API_KEY=
-SENDGRID_API_KEY=
-LOGFIRE_TOKEN=
+BRAVE_API_KEY=              # Web search
+TAVILY_API_KEY=             # Alternative search
+BREVO_API_KEY=              # Email service
+OPENAI_API_KEY=             # For embeddings/GPT
+GOOGLE_AI_API_KEY=          # Gemini models
+DEEPSEEK_API_KEY=           # Budget model option
+LOGFIRE_TOKEN=              # Observability
 
 # Frontend
 VITE_API_BASE_URL=http://localhost:8383
@@ -338,20 +473,48 @@ redis-cli GET "key_name"
 
 ---
 
-## Approved Models (Dec 2025)
+## Model Routing (Jan 2026)
 
-| Model | ID | Use |
-|-------|-----|-----|
-| Haiku 4.5 | `claude-haiku-4-5-20251001` | Fast tasks, research |
-| Sonnet 4.5 | `claude-sonnet-4-5-20250929` | Analysis, reasoning |
-| Opus 4.5 | `claude-opus-4-5-20251101` | Complex tasks, reports |
-| Gemini 3 Flash | `gemini-3-flash-preview` | Fast, cost-effective |
-| Gemini 3 Pro | `gemini-3-pro-preview` | Quality, reasoning |
+Models are routed by task type using `backend/src/config/model_routing.py`.
+
+### Model Tiers
+
+| Tier | Claude | Gemini | Use Case |
+|------|--------|--------|----------|
+| Fast | `claude-haiku-4-5-20251001` | `gemini-3-flash-preview` | Extraction, validation, classification |
+| Balanced | `claude-sonnet-4-5-20250929` | - | Generation tasks (quick tier) |
+| Premium | `claude-opus-4-5-20251101` | `gemini-3-pro-preview` | Complex analysis, full tier reports |
+
+### Task Routing
+
+```python
+# Fast tasks (Haiku)
+"parse_quiz_responses", "extract_industry", "validate_json", "classify_finding"
+
+# Premium tasks (Opus) - full tier only
+"generate_executive_summary", "generate_findings", "synthesize_report"
+
+# Quick tier overrides → Sonnet instead of Opus for cost savings
+```
+
+### Usage
+```python
+from src.config.model_routing import get_model_for_task, CLAUDE_MODELS
+
+model = get_model_for_task("generate_findings", tier="quick")  # Returns Sonnet
+model = get_model_for_task("generate_findings", tier="full")   # Returns Opus
+```
+
+### Token Tracking
+```python
+from src.config.model_routing import TokenTracker
+
+tracker = TokenTracker()
+tracker.add_usage("task_name", model_id, input_tokens, output_tokens)
+summary = tracker.get_summary()  # Includes cost estimate
+```
 
 **DO NOT use:** `claude-3-5-*`, `gemini-2.0-*`, `gemini-1.5-*`
-
-> ⚠️ **VERIFY MODEL IDs:** Check `backend/src/config/model_routing.py` for actual IDs in use.
-> Some code may still use older IDs like `claude-3-5-haiku-20241022`. Consolidate before production.
 
 ---
 
@@ -497,9 +660,18 @@ python -m backend.src.scripts.vendor_cli list-stale
 ### Location
 ```
 backend/supabase/migrations/
-├── 001_initial_schema.sql
-├── 002_add_findings.sql
-└── ...
+├── 001_initial_schema.sql      # Core tables
+├── 002_company_research.sql    # Research data
+├── 003_quiz_sessions.sql       # Anonymous quiz
+├── 004_reports.sql             # Report storage
+├── 007_add_missing_report_columns.sql
+├── 008_vector_embeddings.sql   # pgvector for RAG
+├── 009_anonymous_flow.sql      # Anonymous user support
+├── 010_update_report_status_constraint.sql
+├── 011_add_generation_trace.sql
+├── 012_vendor_database.sql     # Vendor tables
+├── 013_adaptive_quiz.sql       # Adaptive quiz confidence
+└── 014_workshop_columns.sql    # Workshop support
 ```
 
 ### Create Migration
