@@ -78,34 +78,35 @@ class VerdictSkill(LLMSkill[Dict[str, Any]]):
     requires_expertise = False  # Works without, but better with
 
     # Verdict templates - keys match internal codes, values used for frontend
+    # NOTE: Subheadlines are defaults - LLM should generate specific ones with metrics
     VERDICT_TEMPLATES = {
         "go": {
             "recommendation": "proceed",
             "color": "green",
             "headline": "Go For It",
-            "subheadline": "Strong fundamentals for AI adoption",
-            "when_to_revisit": "Quarterly check-ins to measure progress and adjust",
+            "subheadline": "Clear ROI path with manageable risk",  # No buzzwords
+            "when_to_revisit": "Quarterly check-ins to measure progress",
         },
         "caution": {
             "recommendation": "proceed_cautiously",
             "color": "yellow",
             "headline": "Proceed with Caution",
-            "subheadline": "Good potential, but watch for risks",
-            "when_to_revisit": "Re-evaluate after your first AI pilot (3-6 months)",
+            "subheadline": "ROI potential exists, monitor risks closely",  # Specific
+            "when_to_revisit": "Re-evaluate after first pilot (3-6 months)",
         },
         "wait": {
             "recommendation": "wait",
             "color": "orange",
             "headline": "Wait and Prepare",
-            "subheadline": "Address prerequisites before investing",
-            "when_to_revisit": "Check back in 6-12 months after addressing prerequisites",
+            "subheadline": "Address data/process gaps before investing",  # Specific
+            "when_to_revisit": "Re-evaluate in 6-12 months after prerequisites done",
         },
         "no": {
             "recommendation": "not_recommended",
             "color": "gray",
             "headline": "Not Recommended Now",
-            "subheadline": "Focus on other priorities first",
-            "when_to_revisit": "Revisit AI in 12-18 months after standardizing core processes",
+            "subheadline": "Current gaps make ROI unlikely",  # Honest
+            "when_to_revisit": "Revisit in 12-18 months after core process improvements",
         },
     }
 
@@ -321,31 +322,46 @@ not_recommended (Gray): Not recommended now
 Generate a JSON verdict:
 {{
     "recommendation": "proceed|proceed_cautiously|wait|not_recommended",
-    "headline": "<short punchy headline - max 5 words>",
-    "subheadline": "<supporting context - max 10 words>",
+    "headline": "<short punchy headline - max 5 words, NO buzzwords>",
+    "subheadline": "<supporting context with specific metric - max 12 words. Example: 'ROI of 280% with 6-month payback on 3 findings'>",
     "reasoning": [
-        "<key reason 1>",
-        "<key reason 2>",
-        "<key reason 3>"
+        "<reason 1 - MUST include specific metric: 'ROI calculation: €X savings at Y% confidence'>",
+        "<reason 2 - MUST reference finding: 'Finding #3 (no-show reduction) alone justifies investment'>",
+        "<reason 3 - MUST cite quiz data: 'Tech comfort rated HIGH (Quiz Q8) supports adoption'>"
     ],
     "confidence": "high|medium|low",
-    "when_to_revisit": "<specific timing for re-evaluation, e.g. 'Quarterly check-ins' or 'In 6-12 months after...')>",
+    "when_to_revisit": "<specific timing with trigger: 'After implementing Finding #1 (est. 4 weeks)' or 'In 6 months after CRM data cleanup'>",
     "recommended_approach": [
-        "<immediate action 1>",
-        "<immediate action 2>",
-        "<immediate action 3>"
+        "<action 1 - MUST be specific: 'Start with Finding #2: set up n8n webhook for appointment reminders'>",
+        "<action 2 - specific next step>",
+        "<action 3 - specific next step>"
     ],
     "what_to_do_instead": [
-        "<if wait/not_recommended: what to focus on first>",
-        "<if wait/not_recommended: another alternative>"
+        "<REQUIRED if wait/not_recommended: specific action with finding ref: 'Address Finding #7 data quality first'>",
+        "<REQUIRED if wait/not_recommended: another specific alternative>"
     ]
 }}
 
-Be HONEST:
-- Don't recommend GO if there are significant gaps
-- Don't recommend NO unless there are real blockers
-- Make reasoning specific to THIS company's situation
-- Next steps should be actionable and prioritized
+═══════════════════════════════════════════════════════════════════════════════
+STRICT REQUIREMENTS - Your output is INVALID if violated:
+═══════════════════════════════════════════════════════════════════════════════
+
+1. Each "reasoning" item MUST contain a specific number (€, %, hours) OR finding reference
+2. "subheadline" MUST contain a specific metric, NOT buzzwords
+3. If recommendation is "wait" or "not_recommended":
+   - MUST provide at least 2 specific alternatives in "what_to_do_instead"
+   - Each alternative MUST reference a finding or quiz answer
+4. "recommended_approach" items MUST be actionable (start with verb, reference specific tool/finding)
+5. NEVER use: "strong foundations", "well-positioned", "significant opportunity"
+
+═══════════════════════════════════════════════════════════════════════════════
+VALIDATION BEFORE OUTPUT
+═══════════════════════════════════════════════════════════════════════════════
+Before returning, verify:
+- [ ] Each reasoning item has a number or finding reference
+- [ ] Subheadline contains a metric (€, %, or count)
+- [ ] No banned buzzwords anywhere in output
+- [ ] If wait/not_recommended: at least 2 specific alternatives provided
 
 Return ONLY the JSON."""
 
@@ -397,19 +413,48 @@ Return ONLY the JSON."""
 
 Your role is to synthesize all analysis into a clear, honest recommendation.
 
-Key principles:
-1. HONEST: Don't oversell or undersell - match verdict to evidence
-2. SPECIFIC: Reasoning should reference actual findings
-3. ACTIONABLE: Next steps should be clear and prioritized
-4. CONTEXTUAL: Consider company size, budget, and tech comfort
-5. BALANCED: Acknowledge both opportunities and risks
+═══════════════════════════════════════════════════════════════════════════════
+BANNED LANGUAGE - Using any of these INVALIDATES your output:
+═══════════════════════════════════════════════════════════════════════════════
+- "well-positioned", "strong foundations", "significant opportunity"
+- "leverage", "optimize", "streamline", "transform"
+- "best practice", "industry-leading", "robust"
 
-Never recommend GO if:
+INSTEAD OF: "Strong foundations for AI adoption"
+USE: "Your 4/5 API openness score enables automation without software replacement"
+
+═══════════════════════════════════════════════════════════════════════════════
+KEY PRINCIPLES
+═══════════════════════════════════════════════════════════════════════════════
+1. EVIDENCE-BASED: Every reason must cite specific metrics or findings
+2. SPECIFIC NUMBERS: Reasoning must include €, %, hours, or finding references
+3. ACTIONABLE: Next steps must be concrete with specific first actions
+4. CONTEXTUAL: Consider company size, budget, and tech comfort
+5. BALANCED: Acknowledge both opportunities AND risks
+
+═══════════════════════════════════════════════════════════════════════════════
+REASONING REQUIREMENTS - STRICTLY ENFORCED
+═══════════════════════════════════════════════════════════════════════════════
+Each reason in the "reasoning" array MUST contain at least ONE of:
+- A specific number (€, %, hours)
+- A reference to a specific finding by title or ID
+- A quote or paraphrase from quiz answers
+
+INVALID: "Clear ROI opportunity with strong potential"
+VALID: "€35K annual savings ÷ €10K year-1 investment = 350% ROI (Findings #1-3)"
+
+INVALID: "Team shows readiness to adopt AI"
+VALID: "Quiz Q8: Tech comfort rated 'high' + 'eager to try new tools' = strong adoption likelihood"
+
+═══════════════════════════════════════════════════════════════════════════════
+VERDICT RULES - NEVER VIOLATE
+═══════════════════════════════════════════════════════════════════════════════
+NEVER recommend "proceed" (GO) if:
 - AI readiness is below 70
 - Either pillar score is below 6
-- More than 30% of findings are not recommended
+- More than 30% of findings are "not recommended"
 
-Always explain WHY, not just WHAT."""
+ALWAYS explain WHY, not just WHAT."""
 
     def _calibrate_verdict(
         self,

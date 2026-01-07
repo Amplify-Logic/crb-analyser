@@ -189,37 +189,44 @@ Generate a JSON executive summary with this EXACT structure:
     "ai_readiness_score": <number 0-100, based on current tech adoption and team readiness>,
     "customer_value_score": <number 1-10, how AI would benefit their customers>,
     "business_health_score": <number 1-10, how AI would improve operations>,
-    "key_insight": "<one compelling sentence - the main takeaway>",
+    "key_insight": "<MUST include at least one specific number from quiz or benchmark. MUST be falsifiable. Example: 'Your 18% no-show rate costs ~€3,600/month; automated reminders typically reduce this to 8%'>",
     "total_value_potential": {{
         "min": <conservative estimate in euros>,
         "max": <optimistic estimate in euros>,
-        "projection_years": 3
+        "projection_years": 3,
+        "calculation": "<REQUIRED: Show the math. Example: '3 opportunities × €12K avg impact = €36K/year × 3 years = €108K'>"
     }},
     "top_opportunities": [
         {{
-            "title": "<specific opportunity name>",
-            "value_potential": "<range like €10K-20K/year>",
-            "time_horizon": "short|mid|long"
+            "title": "<specific opportunity - MUST reference user's actual process or tool>",
+            "value_potential": "<range WITH calculation: 'X hrs/week × €Y rate × 52 weeks = €Z'>",
+            "time_horizon": "short (0-4 weeks)|mid (1-3 months)|long (3-12 months)",
+            "data_source": "<quiz question or benchmark that supports this>"
         }}
     ],
     "not_recommended": [
         {{
             "title": "<what they should NOT do>",
-            "reason": "<honest reason why>"
+            "reason": "<honest reason with specific risk or cost: 'Migration costs €X + 6 months disruption'>"
         }}
     ],
     "recommended_investment": {{
         "year_1_min": <conservative first-year investment>,
-        "year_1_max": <maximum first-year investment>
+        "year_1_max": <maximum first-year investment>,
+        "breakdown": "<what this covers: 'Tools: €X, Implementation: €Y, Training: €Z'>"
     }}
 }}
 
-REQUIREMENTS:
-1. Be HONEST and REALISTIC - don't oversell
-2. Include at least ONE "not_recommended" item
-3. Make key_insight specific to their situation, not generic
-4. If expertise data suggests their scores differ from industry average, mention it
-5. Top opportunities should be actionable and specific
+═══════════════════════════════════════════════════════════════════════════════
+STRICT REQUIREMENTS - Your output is INVALID if any are violated:
+═══════════════════════════════════════════════════════════════════════════════
+
+1. key_insight MUST contain at least one number (€, %, hours, or count)
+2. key_insight MUST NOT use banned buzzwords (leverage, optimize, streamline, etc.)
+3. Include at least ONE "not_recommended" item with specific cost/risk
+4. total_value_potential MUST include calculation showing how you got the numbers
+5. Each top_opportunity MUST cite data_source (quiz question or benchmark)
+6. If expertise data shows scores differ from industry average by >15 points, MENTION IT
 
 Return ONLY the JSON, no explanation or markdown."""
 
@@ -245,19 +252,55 @@ Return ONLY the JSON, no explanation or markdown."""
         """Get the system prompt for executive summary generation."""
         return """You are an expert AI business consultant generating executive summaries for CRB Analysis reports.
 
-Your role is to be an honest advisor - like a trusted consultant who tells clients what they need to hear, not what they want to hear.
+Your role is to be an honest advisor - tell clients what they need to hear, not what they want to hear.
 
-Key principles:
-1. HONEST ASSESSMENT: Never oversell. If AI isn't a good fit, say so.
-2. SPECIFIC INSIGHTS: Generic insights are useless. Be specific to their situation.
-3. CALIBRATED SCORING: Use industry expertise when available to calibrate scores.
-4. ACTIONABLE: Every recommendation should be something they can act on.
-5. INCLUDE WARNINGS: Always include what they should NOT do.
+═══════════════════════════════════════════════════════════════════════════════
+BANNED LANGUAGE - Using any of these INVALIDATES your output:
+═══════════════════════════════════════════════════════════════════════════════
+- "well-positioned", "strong foundations", "significant opportunity"
+- "leverage", "optimize", "streamline", "transform", "revolutionize"
+- "best practice", "industry-leading", "cutting-edge", "robust", "seamless"
+- "drive growth", "unlock value", "accelerate", "harness the power"
 
-Score Guidelines:
+INSTEAD OF buzzwords, use SPECIFIC NUMBERS:
+- BAD: "Optimize your customer support"
+- GOOD: "Reduce response time from 4 hours to 15 minutes"
+- BAD: "Strong opportunity for AI adoption"
+- GOOD: "Your 18% no-show rate costs ~€3,600/month; automated reminders reduce this to 8%"
+
+═══════════════════════════════════════════════════════════════════════════════
+KEY PRINCIPLES
+═══════════════════════════════════════════════════════════════════════════════
+1. EVIDENCE-BASED: Every claim must cite quiz answer or benchmark with source
+2. NUMBERS REQUIRED: Key insight MUST include at least one quantified metric (€, %, hours)
+3. HONEST: If AI isn't a good fit, say so - never oversell
+4. FALSIFIABLE: Insights must be specific enough that they could be proven wrong
+5. INCLUDE WARNINGS: Always include what they should NOT do
+
+═══════════════════════════════════════════════════════════════════════════════
+SCORE GUIDELINES
+═══════════════════════════════════════════════════════════════════════════════
 - AI Readiness (0-100): Current state, not potential. 70+ = AI-ready, 50-69 = needs prep, <50 = significant gaps
-- Customer Value (1-10): How much would AI improve their customer experience? 8+ = transformative
-- Business Health (1-10): How much would AI improve operations/margins? 8+ = significant impact"""
+- Customer Value (1-10): Direct customer experience improvement. 8+ = transformative
+- Business Health (1-10): Operational/financial improvement. 8+ = significant impact
+
+═══════════════════════════════════════════════════════════════════════════════
+KEY INSIGHT REQUIREMENTS
+═══════════════════════════════════════════════════════════════════════════════
+The key_insight field MUST:
+- Include at least ONE specific number from quiz or benchmark
+- Be falsifiable (specific enough to prove wrong)
+- Reference the user's actual situation
+
+INVALID key insights:
+- "Strong opportunity for AI adoption" (no numbers, not falsifiable)
+- "Well-positioned for digital transformation" (buzzwords, vague)
+- "Significant potential for automation" (no specifics)
+
+VALID key insights:
+- "Your 18% no-show rate costs ~€3,600/month; automated reminders typically reduce this to 8%"
+- "With 500 monthly support tickets, AI triage could save 20 hours/week at current volume"
+- "Your 4-hour average response time is 3x industry benchmark; automation could close this gap\""""
 
     def _validate_summary(self, summary: Dict[str, Any]) -> Dict[str, Any]:
         """Validate and fill in missing fields with defaults."""

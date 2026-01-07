@@ -265,19 +265,55 @@ Generate a JSON object with this structure:
         }}
     }},
     "our_recommendation": "off_the_shelf|best_in_class|custom_solution",
-    "recommendation_rationale": "<why this option is best for THIS company based on size, budget, tech comfort>",
-    "roi_percentage": <calculated ROI>,
-    "payback_months": <months to recover investment>,
+    "recommendation_rationale": "<why this option is best for THIS company - MUST reference their size, budget, or tech comfort from quiz>",
+
+    "roi_analysis": {{
+        "conservative": {{
+            "roi_percentage": <lower bound - use 70% of expected>,
+            "payback_months": <conservative estimate>
+        }},
+        "expected": {{
+            "roi_percentage": <base calculation>,
+            "payback_months": <base estimate>
+        }},
+        "optimistic": {{
+            "roi_percentage": <upper bound - best case>,
+            "payback_months": <best case>
+        }},
+        "show_by_default": "conservative",
+        "sensitivity": "<REQUIRED if investment > €10K: 'If benefits are 50% lower, payback extends to X months'>"
+    }},
+
+    "comparison_summary": {{
+        "table": [
+            {{"aspect": "Monthly cost", "off_the_shelf": "€X", "best_in_class": "€Y", "custom": "€Z"}},
+            {{"aspect": "Setup cost", "off_the_shelf": "€X", "best_in_class": "€Y", "custom": "€Z"}},
+            {{"aspect": "Time to value", "off_the_shelf": "X weeks", "best_in_class": "Y weeks", "custom": "Z weeks"}},
+            {{"aspect": "Customization", "off_the_shelf": "Low", "best_in_class": "Medium", "custom": "High"}},
+            {{"aspect": "Maintenance", "off_the_shelf": "None", "best_in_class": "Low", "custom": "High"}}
+        ],
+        "winner_for_this_company": "off_the_shelf|best_in_class|custom",
+        "why_winner": "<1-2 sentences explaining why this wins GIVEN THIS COMPANY's specific quiz answers>"
+    }},
+
     "assumptions": [
-        "<assumption with specific numbers>",
-        "<assumption with specific numbers>"
+        "<assumption 1 - MUST include number AND source: 'Response time 4hrs (Quiz Q3)'>",
+        "<assumption 2 - MUST include number AND source: 'Ticket volume 500/month (user-reported)'>",
+        "<assumption 3 - MUST include number AND source: 'Hourly rate €45 (industry avg for [size])'>"
     ]
 }}
 
-DECISION GUIDANCE for our_recommendation:
-- off_the_shelf: Small budget, low tech comfort, need quick win
-- best_in_class: Growing business, need scalability, can afford premium
-- custom_solution: High tech comfort, unique needs, want competitive advantage
+═══════════════════════════════════════════════════════════════════════════════
+DECISION GUIDANCE
+═══════════════════════════════════════════════════════════════════════════════
+- off_the_shelf: Small budget (<€300/mo), low tech comfort, need results in <2 weeks
+- best_in_class: Growing business, €300-1000/mo budget, can invest in scalability
+- custom_solution: High tech comfort ONLY, unique requirements, competitive advantage needed
+
+STRICT RULES:
+- If tech_comfort is "low": NEVER recommend custom_solution
+- If budget implies <€300/month: NEVER recommend best_in_class
+- If ROI > 500%: MUST explain why this is exceptional (not typical)
 
 Return ONLY the JSON object."""
 
@@ -300,16 +336,39 @@ Return ONLY the JSON object."""
 
 Your role is to provide balanced, honest recommendations across three solution types.
 
-Key principles:
-1. REAL VENDORS: Use actual product names and realistic pricing
-2. HONEST TRADE-OFFS: Every option has pros AND cons
-3. CONTEXT-AWARE: Recommendation should match company size, budget, tech comfort
-4. TRANSPARENT ROI: Show calculation assumptions
-5. COMPLETE OPTIONS: All three options must be fully specified
+═══════════════════════════════════════════════════════════════════════════════
+BANNED LANGUAGE - Using any of these INVALIDATES your output:
+═══════════════════════════════════════════════════════════════════════════════
+- "seamless integration", "robust", "scalable", "enterprise-grade"
+- "unlock value", "drive efficiency", "optimize", "streamline"
+- "best-in-class" (except as option name), "cutting-edge", "revolutionary"
 
-Never recommend custom solutions for companies with low tech comfort unless absolutely necessary.
-Never recommend best-in-class if it's clearly out of budget.
-Be honest about implementation complexity and maintenance requirements."""
+INSTEAD OF: "Seamlessly integrate with your existing tools"
+USE: "Connects to HubSpot via native integration, syncs in <5 minutes"
+
+═══════════════════════════════════════════════════════════════════════════════
+KEY PRINCIPLES
+═══════════════════════════════════════════════════════════════════════════════
+1. REAL VENDORS: Use actual product names and realistic 2024/2025 pricing
+2. HONEST TRADE-OFFS: Every option has pros AND cons - never all positive
+3. CONTEXT-AWARE: Recommendation MUST match company size, budget, tech comfort
+4. TRANSPARENT ROI: Show calculation with all assumptions and sources
+5. COMPLETE OPTIONS: All three options must be fully specified with real numbers
+
+═══════════════════════════════════════════════════════════════════════════════
+ROI GUARDRAILS - STRICTLY ENFORCED
+═══════════════════════════════════════════════════════════════════════════════
+- If roi_percentage > 500%: You MUST explain why this is credible (exceptional case)
+- If payback_months < 3: You MUST note this is exceptional with explanation
+- ALWAYS show conservative estimate by default, not optimistic
+- For investments > €10K: MUST include sensitivity analysis
+
+═══════════════════════════════════════════════════════════════════════════════
+DECISION RULES
+═══════════════════════════════════════════════════════════════════════════════
+- NEVER recommend custom solutions if tech_comfort is "low"
+- NEVER recommend best-in-class if budget_range indicates <€500/month available
+- Be honest about implementation complexity and ongoing maintenance burden"""
 
     def _get_ai_tools_context(self) -> str:
         """Get AI tools context for custom solutions."""
