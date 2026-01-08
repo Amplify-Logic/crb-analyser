@@ -10,6 +10,12 @@
 
 **CRB Analyser** delivers AI-powered Cost/Risk/Benefit analysis for businesses considering AI implementation. We help passion-driven service professionals get clarity on AI opportunities without expensive consultants.
 
+### Core Promise
+
+> "The analysis makes the best option obvious."
+
+We don't just list pros and cons. Our CRB framework scores every option across multiple dimensions so the right choice emerges clearly - with confidence levels and trade-offs explicitly stated.
+
 ---
 
 ## Three Options Model (3O)
@@ -33,19 +39,88 @@ When recommending Option C, include:
 
 ---
 
-## Two Pillars Assessment (2P)
+## CRB Framework (Core Methodology)
 
-Each finding is scored on two dimensions:
+The Cost-Risk-Benefit framework analyzes every opportunity across **10 dimensions** to make the best option obvious.
 
-| Pillar | Question | Score |
-|--------|----------|-------|
-| **Customer Value** | How does this help their customers? | 1-10 |
-| **Business Health** | How does this strengthen the business? | 1-10 |
+### The Six Dimensions of Cost
 
-### Prioritization Matrix
-- High on both → **Urgent** (do first)
-- High on one → **Important** (do soon)
-- Low on both → **Deprioritize** (do later or never)
+Cost is NOT just money. We analyze what the customer will actually spend:
+
+| Dimension | What We Measure | Customer Question |
+|-----------|-----------------|-------------------|
+| **Financial** | Subscription, setup, hidden fees | "What will this cost me per month/year?" |
+| **Time** | Implementation, learning curve, maintenance | "How long until I see value? How much ongoing effort?" |
+| **Opportunity** | What they can't do if they do this | "What else could I spend this budget/time on?" |
+| **Complexity** | Systems touched, training needed | "How much will this disrupt my business?" |
+| **Risk** | What could go wrong, reversibility | "What if it doesn't work? Can I undo this?" |
+| **Brand/Trust** | Customer perception, team morale | "Will my customers/team notice? For better or worse?" |
+
+### The Four Dimensions of Benefit
+
+| Dimension | What We Measure | Customer Question |
+|-----------|-----------------|-------------------|
+| **Financial** | Revenue increase, cost savings | "How much will I save or earn?" |
+| **Time** | Hours freed, speed improvements | "How much time do I get back?" |
+| **Strategic** | Market position, competitive edge | "Does this help me stand out or grow?" |
+| **Quality** | Customer experience, team satisfaction | "Will my customers and team be happier?" |
+
+### Risk Analysis
+
+Every recommendation includes explicit risk assessment:
+
+| Risk Type | What Could Go Wrong | How We Address It |
+|-----------|---------------------|-------------------|
+| **Implementation** | Tool doesn't work as expected | Recommend pilots, phased rollout |
+| **Adoption** | Team doesn't use it | Flag training needs, change management |
+| **Vendor** | Company disappears, prices spike | Note vendor stability, exit strategies |
+| **Security** | Data exposure, compliance issues | Flag security concerns, certifications |
+| **Integration** | Breaks existing systems | Identify integration complexity |
+
+### Scoring & Comparison
+
+Each option receives a **NET SCORE** that makes comparison objective:
+
+```
+NET SCORE = Benefit Score - Cost Score - (Risk Score ÷ 10)
+```
+
+The comparison summary shows:
+- **Winner** with clear reasoning
+- **Trade-offs** of the recommended option
+- **When to choose alternatives** (e.g., "Choose Option B if budget is not a constraint")
+
+### Prioritization Output
+
+Findings are prioritized by combining scores with business impact:
+
+| Priority | Criteria | Action |
+|----------|----------|--------|
+| **Quick Win** | High benefit, low cost, low risk | Do this week |
+| **Strategic** | High benefit, medium cost/risk | Plan for next quarter |
+| **Consider** | Medium benefit, varies | Evaluate when capacity allows |
+| **Defer** | Low benefit or high risk | Revisit in 6-12 months |
+
+---
+
+## Connect vs Replace Strategy
+
+For every automation opportunity, we present two paths:
+
+| Strategy | When We Recommend | Example |
+|----------|-------------------|---------|
+| **Connect** | Current tools work well, just need automation | "Keep Dentrix, add n8n for appointment reminders" |
+| **Replace** | Current tools are fundamentally limiting | "Move from spreadsheets to HubSpot CRM" |
+
+### Decision Factors We Analyze
+
+| Factor | Favors Connect | Favors Replace |
+|--------|----------------|----------------|
+| Current tool quality | Works well | Fundamentally broken |
+| Team size | Large (change is risky) | Small (can adapt quickly) |
+| Data complexity | High (migration risk) | Low (easy to move) |
+| Budget | Limited | Available for investment |
+| Technical capability | Low | Has dev resources |
 
 ---
 
@@ -53,25 +128,39 @@ Each finding is scored on two dimensions:
 
 ### Confidence Levels
 
+Every estimate in the report - financial, time, or otherwise - carries a confidence level:
+
 | Level | Distribution | Factor | Criteria |
 |-------|-------------|--------|----------|
-| HIGH | ~30% | 1.0 | Quiz directly mentions issue, multiple data points, user-provided numbers |
+| HIGH | ~30% | 1.0 | Quiz directly mentions issue, user-provided numbers, verified benchmark |
 | MEDIUM | ~50% | 0.85 | Quiz implies issue, industry pattern likely applies, one strong data point |
 | LOW | ~20% | 0.70 | Industry pattern suggests possibility, significant assumptions required |
 
+### Applying Confidence to All Dimensions
+
+Confidence applies to every CRB dimension, not just financial:
+
+| Dimension | HIGH Example | LOW Example |
+|-----------|--------------|-------------|
+| **Financial** | "Save €2,400/month" (user said €60/hr × 40hrs) | "Save €1,200-€2,400/month" (industry average) |
+| **Time** | "Save 10 hrs/week" (user specified tasks) | "Save 5-15 hrs/week" (typical for industry) |
+| **Risk** | "Low risk - team already uses similar tool" | "Medium risk - adoption uncertain" |
+
 ### ROI Calculation
 ```python
-adjusted_roi = base_roi * confidence_factor
-# HIGH:   10000 * 1.0  = 10000
-# MEDIUM: 10000 * 0.85 = 8500
-# LOW:    10000 * 0.70 = 7000
+adjusted_estimate = base_estimate * confidence_factor
+# HIGH:   €10,000 * 1.0  = €10,000
+# MEDIUM: €10,000 * 0.85 = €8,500
+# LOW:    €10,000 * 0.70 = €7,000
 ```
 
 ### Display Rules
-- Always show "**Estimated** ROI" - never claim certainty
-- Show confidence level visibly
-- List key assumptions
-- If everything is HIGH confidence, we're not being honest about uncertainty
+- Always show "**Estimated**" - never claim certainty
+- Show confidence level visibly next to every number
+- List key assumptions explicitly
+- Use ranges for LOW confidence: "€1,200-€1,800/month"
+- If everything is HIGH confidence, we're being dishonest about uncertainty
+- Source every benchmark (industry report, verified vendor pricing, user input)
 
 ---
 
@@ -212,10 +301,14 @@ Analysis #1000: Competitors can't catch up
 
 | Short | Meaning |
 |-------|---------|
-| 3O | Three Options model |
-| 2P | Two Pillars (Customer Value + Business Health) |
+| CRB | Cost-Risk-Benefit (the core framework) |
+| 3O | Three Options model (Off-the-Shelf, Best-in-Class, Custom) |
+| 6C | Six Costs (Financial, Time, Opportunity, Complexity, Risk, Brand) |
+| 4B | Four Benefits (Financial, Time, Strategic, Quality) |
+| C/R | Connect vs Replace strategy |
 | ROI-CA | ROI Confidence-Adjusted |
 | KB | Knowledge Base |
 | PM | Practice Management software |
 | FSM | Field Service Management software |
 | DSO | Dental Service Organization |
+| QW | Quick Win (high benefit, low cost/risk) |
