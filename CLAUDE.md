@@ -83,6 +83,185 @@ created → in_progress → completed → payment_pending → paid
 
 ---
 
+## CRB Analysis Framework
+
+The Cost-Risk-Benefit framework is the core analytical methodology. **The analysis must make the best option obvious** - not just list pros/cons.
+
+### The Six Dimensions of Cost
+
+Cost is NOT just money. Analyze all six dimensions:
+
+| Dimension | What to Measure | Questions to Ask |
+|-----------|-----------------|------------------|
+| **Financial** | Direct €, indirect €, ongoing € | Subscription? Implementation? Hidden fees? |
+| **Time** | Hours to implement, learn, maintain | Time to value? Learning curve? Ongoing drain? |
+| **Opportunity** | What you can't do if you do this | What else could this budget/time fund? |
+| **Complexity** | Mental load, integration difficulty | How many systems touched? Training needed? |
+| **Risk** | What could go wrong, reversibility | What if it fails? How hard to undo? |
+| **Brand/Trust** | Customer perception, team morale | Will customers notice? Will team resist? |
+
+### The Four Dimensions of Benefit
+
+| Dimension | What to Measure | Questions to Ask |
+|-----------|-----------------|------------------|
+| **Financial** | Revenue increase, cost savings | How much saved/earned? When does ROI hit? |
+| **Time** | Hours freed, speed improvements | Hours/week saved? How much faster? |
+| **Strategic** | Market position, competitive edge | Does this differentiate? Does it compound? |
+| **Quality** | Customer experience, team satisfaction | Will customers notice? Will team be happier? |
+
+### Risk Categories
+
+| Risk Type | Key Question | Mitigation |
+|-----------|--------------|------------|
+| **Implementation** | Will this actually work? | Pilot first, phased rollout |
+| **Adoption** | Will the team use it? | Training, change management |
+| **Vendor** | Will they exist in 2 years? | Exit strategy, data portability |
+| **Security** | What data is exposed? | Audit, compliance check |
+| **Integration** | Will it break existing systems? | Sandbox testing |
+
+### Scoring System
+
+Each option gets scored to make comparison objective:
+
+```
+Option A: [Tool Name]
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+COSTS                          Score (1-5, lower = better)
+├── Financial: €X/month        ██░░░ 2
+├── Time to Value: X weeks     ███░░ 3
+├── Complexity: X integrations ██░░░ 2
+├── Risk: [description]        █░░░░ 1
+├── Opportunity: [trade-off]   ██░░░ 2
+└── Brand Impact: [effect]     █░░░░ 1
+                      COST SCORE: 11/30
+
+BENEFITS                       Score (1-5, higher = better)
+├── Financial: €X saved/month  ████░ 4
+├── Time: X hrs/week freed     █████ 5
+├── Strategic: [advantage]     ███░░ 3
+└── Quality: [improvement]     ████░ 4
+                   BENEFIT SCORE: 16/20
+
+RISK SCORE: (Probability × Impact, summed)  9/30
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+NET SCORE: Benefit - Cost - (Risk÷10) = +4.1
+CONFIDENCE: MEDIUM
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+```
+
+### Making the Answer Obvious
+
+The comparison summary must make the winner clear:
+
+```
+COMPARISON SUMMARY
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Option A: HubSpot Free         NET: +4.1  ◀━━ RECOMMENDED
+Option B: Salesforce           NET: +1.2
+Option C: Custom Build         NET: -2.3
+
+WHY OPTION A WINS:
+✓ Lowest time-to-value (2 weeks vs 8 weeks)
+✓ Free tier covers current needs
+✓ Team already familiar with interface
+
+WHAT YOU'RE TRADING OFF:
+△ Less customization than Option C
+△ May outgrow free tier in 12-18 months
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+```
+
+### Connect vs Replace Strategy
+
+When recommending automation, always present both paths:
+
+| Strategy | When to Recommend | Example |
+|----------|-------------------|---------|
+| **Connect** (Integrate) | Current tools are good, just need automation | Keep Dentrix, add n8n for reminders |
+| **Replace** (Migrate) | Current tools are fundamentally broken | Move from spreadsheets to HubSpot |
+
+**Decision Factors:**
+- Current tool quality → Good = Connect, Broken = Replace
+- Team size → Large = Connect (change risk), Small = Replace (can adapt)
+- Data complexity → High = Connect (migration risk), Low = Replace
+- Budget → Limited = Connect, Available = Replace
+
+---
+
+## Report Quality Standards
+
+### Anti-Slop Rules
+
+The report is worthless if it sounds like generic AI output.
+
+❌ **NEVER use these phrases:**
+| Banned Phrase | Replace With |
+|---------------|--------------|
+| "Streamline operations" | "Reduce invoice processing from 4 hours to 30 minutes" |
+| "Enhance efficiency" | "Save €2,400/month on manual data entry" |
+| "Leverage AI capabilities" | "Use Claude to draft client emails (€15/month)" |
+| "Transform your business" | "Free up 10 hours/week for billable work" |
+| "Unlock potential" | "Increase capacity from 40 to 55 clients/month" |
+| "Optimize workflows" | "Cut appointment scheduling from 15 to 2 minutes" |
+| "Drive growth" | "Add €4,200/month revenue with automated follow-ups" |
+
+### Specificity Requirements
+
+Every claim needs backing:
+- **ROI figures**: Source + calculation + confidence level
+- **Vendor recommendations**: Pricing verified within 90 days
+- **Benchmarks**: Source URL + date + industry specificity
+- **Time estimates**: Based on similar implementations, not guesses
+- **Ranges over false precision**: "€1,200-€1,800/month" not "€1,547/month"
+
+### Teaser vs Full Report
+
+| Element | Teaser (Free) | Full Report (€147+) |
+|---------|---------------|---------------------|
+| AI Readiness Score | ✅ Full | ✅ Full |
+| Top 3 Opportunities | Headlines only | Full CRB analysis |
+| Vendor Recommendations | "We found 5 tools" | Names + pricing + comparison |
+| Implementation Roadmap | ❌ | ✅ with timeline |
+| Quick Wins | Count only | Detailed steps |
+| ROI Calculations | Total only | Per-finding breakdown |
+
+---
+
+## Quality Assurance
+
+### Before Shipping Report Changes
+
+```bash
+# Run these checks before any report generation PR
+- [ ] Generate reports for 3 different industries
+- [ ] Search output for banned phrases (grep -i "streamline\|leverage\|enhance")
+- [ ] Verify all ROI figures have confidence levels
+- [ ] Check vendor pricing is < 90 days old
+- [ ] Confirm benchmarks have sources
+```
+
+### Report Review Checklist
+
+- [ ] Would a dentist/plumber/lawyer understand this without jargon?
+- [ ] Are recommendations actionable THIS WEEK?
+- [ ] Does every number have a source or confidence level?
+- [ ] Is the €147 price clearly justified by the value shown?
+- [ ] Does the best option emerge obviously from the analysis?
+
+### Common Quality Issues
+
+| Issue | How to Detect | How to Fix |
+|-------|---------------|------------|
+| Generic findings | Search for "improve", "enhance", "optimize" | Replace with specific metrics |
+| Unverified benchmarks | `verified_date` missing or > 6 months | Update from source or mark UNVERIFIED |
+| Stale vendor pricing | `verified_at` > 90 days | Run vendor refresh |
+| Missing confidence | ROI without HIGH/MED/LOW | Add confidence scoring |
+| Unclear winner | All options look equal | Sharpen the scoring, highlight trade-offs |
+
+---
+
 ## Development Rules
 
 ### Code Quality
@@ -230,20 +409,29 @@ async def test_get_vendor_caches_result(mock_supabase, mock_redis):
 | **Config** | |
 | Settings | `backend/src/config/settings.py` |
 | Model Routing | `backend/src/config/model_routing.py` |
+| Existing Stack | `backend/src/config/existing_stack.py` |
 | **Core Services** | |
 | Reports | `backend/src/services/report_service.py` |
 | Quiz Engine | `backend/src/services/quiz_engine.py` |
 | Teaser | `backend/src/services/teaser_service.py` |
 | Token Analytics | `backend/src/services/token_analytics.py` |
+| Vendor Service | `backend/src/services/vendor_service.py` |
+| Software Research | `backend/src/services/software_research_service.py` |
 | **Skills** | |
 | Base | `backend/src/skills/base.py` |
 | Registry | `backend/src/skills/registry.py` |
 | Vendor Matching | `backend/src/skills/analysis/vendor_matching.py` |
 | Quick Wins | `backend/src/skills/analysis/quick_win_identifier.py` |
+| Automation Summary | `backend/src/skills/report-generation/automation_summary.py` |
+| **Research Agents** | |
+| Discover | `backend/src/agents/research/discover.py` |
+| Refresh | `backend/src/agents/research/refresh.py` |
+| CLI | `backend/src/agents/research/cli.py` |
 | **Routes** | |
 | Quiz | `backend/src/routes/quiz.py` |
 | Interview | `backend/src/routes/interview.py` |
 | Workshop | `backend/src/routes/workshop.py` |
+| Admin Research | `backend/src/routes/admin_research.py` |
 | **Knowledge** | |
 | Knowledge Base | `backend/src/knowledge/__init__.py` |
 | Expertise | `backend/src/expertise/__init__.py` |
@@ -251,6 +439,8 @@ async def test_get_vendor_caches_result(mock_supabase, mock_redis):
 | Auth Context | `frontend/src/contexts/AuthContext.tsx` |
 | Quiz Page | `frontend/src/pages/Quiz.tsx` |
 | Report Viewer | `frontend/src/pages/ReportViewer.tsx` |
+| Vendor Admin | `frontend/src/pages/admin/VendorAdmin.tsx` |
+| Automation Roadmap | `frontend/src/components/report/AutomationRoadmap.tsx` |
 
 ---
 
@@ -664,6 +854,74 @@ python -m backend.src.scripts.vendor_cli list-stale
 
 ---
 
+## Research Agent System
+
+Automated vendor discovery and data refresh to keep the knowledge base current.
+
+### Architecture
+
+```
+backend/src/agents/research/
+├── __init__.py
+├── cli.py              # Command-line interface
+├── discover.py         # Find new vendors for an industry
+├── refresh.py          # Update existing vendor data
+├── schemas.py          # Pydantic models for research data
+└── sources/
+    ├── __init__.py
+    ├── vendor_site.py  # Scrape vendor websites
+    └── web_search.py   # Search for vendor info
+```
+
+### Usage
+
+```bash
+# Discover vendors for an industry
+python -m backend.src.agents.research.cli discover --industry dental
+
+# Refresh stale vendors (not verified in X days)
+python -m backend.src.agents.research.cli refresh --stale-days 90
+
+# Refresh a specific vendor
+python -m backend.src.agents.research.cli refresh --vendor hubspot
+```
+
+### Adding New Industries
+
+1. Run discovery: `python -m backend.src.agents.research.cli discover --industry {slug}`
+2. Review output in `vendor_audit_output.json`
+3. Approve/reject in admin UI (`/admin/vendors`)
+4. Set tier rankings (T1/T2/T3) for approved vendors
+5. Verify pricing manually for T1 vendors
+
+### Data Flow
+
+```
+Discovery Agent
+    ↓
+Searches web for "{industry} software tools"
+    ↓
+Extracts vendor info (name, website, pricing, features)
+    ↓
+Validates against existing vendors (dedup)
+    ↓
+Creates pending entries in Supabase
+    ↓
+Admin reviews and approves
+    ↓
+Vendor available in recommendations
+```
+
+### Refresh Cadence
+
+| Vendor Tier | Refresh Frequency | Manual Verification |
+|-------------|-------------------|---------------------|
+| T1 (primary) | Weekly | Monthly |
+| T2 (secondary) | Bi-weekly | Quarterly |
+| T3 (alternatives) | Monthly | As needed |
+
+---
+
 ## Database Migrations
 
 ### Location
@@ -680,7 +938,10 @@ backend/supabase/migrations/
 ├── 011_add_generation_trace.sql
 ├── 012_vendor_database.sql     # Vendor tables
 ├── 013_adaptive_quiz.sql       # Adaptive quiz confidence
-└── 014_workshop_columns.sql    # Workshop support
+├── 014_workshop_columns.sql    # Workshop support
+├── 015_vendor_api_openness.sql # Vendor API/integration scores
+├── 016_existing_stack.sql      # User's current tech stack
+└── 017_automation_summary.sql  # Automation roadmap data
 ```
 
 ### Create Migration
