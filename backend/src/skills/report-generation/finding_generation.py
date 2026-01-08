@@ -34,6 +34,17 @@ from src.models.finding_paths import (
     calculate_verdict,
     get_verdict_reasoning,
 )
+from src.models.crb import (
+    CostBreakdown,
+    RiskAssessment,
+    BenefitQuantification,
+    CRBAnalysis,
+    ImplementationCostDIY,
+    ImplementationCostProfessional,
+    MonthlyCostItem,
+    MonthlyCostBreakdown,
+    HiddenCosts,
+)
 
 logger = logging.getLogger(__name__)
 
@@ -687,6 +698,89 @@ CONNECT VS REPLACE GUIDANCE
 
         return findings
 
+    def _parse_cost_breakdown(self, cost_data: Dict[str, Any]) -> Dict[str, Any]:
+        """Parse CRB cost breakdown from LLM output."""
+        result = {}
+
+        # Implementation DIY
+        if cost_data.get("implementation_diy"):
+            diy = cost_data["implementation_diy"]
+            result["implementation_diy"] = {
+                "hours": diy.get("hours", 0),
+                "hourly_rate": diy.get("hourly_rate", 50),
+                "total": diy.get("total", diy.get("hours", 0) * diy.get("hourly_rate", 50)),
+                "description": diy.get("description", ""),
+            }
+
+        # Implementation Professional
+        if cost_data.get("implementation_professional"):
+            pro = cost_data["implementation_professional"]
+            result["implementation_professional"] = {
+                "estimate": pro.get("estimate", 0),
+                "source": pro.get("source", ""),
+            }
+
+        # Monthly ongoing
+        if cost_data.get("monthly_ongoing"):
+            monthly = cost_data["monthly_ongoing"]
+            breakdown = []
+            for item in monthly.get("breakdown", []):
+                if isinstance(item, dict):
+                    breakdown.append({
+                        "item": item.get("item", ""),
+                        "cost": item.get("cost", 0),
+                    })
+            result["monthly_ongoing"] = {
+                "breakdown": breakdown,
+                "total": monthly.get("total", sum(i["cost"] for i in breakdown)),
+            }
+
+        # Hidden costs
+        if cost_data.get("hidden"):
+            hidden = cost_data["hidden"]
+            result["hidden"] = {
+                "training_hours": hidden.get("training_hours", 0),
+                "productivity_dip_weeks": hidden.get("productivity_dip_weeks", 0),
+            }
+
+        return result
+
+    def _parse_replace_cost(self, cost_data: Dict[str, Any]) -> Dict[str, Any]:
+        """Parse CRB cost for Replace path."""
+        return {
+            "monthly": cost_data.get("monthly", 0),
+            "setup_one_time": cost_data.get("setup_one_time", 0),
+            "migration_estimate": cost_data.get("migration_estimate", 0),
+        }
+
+    def _parse_risk_assessment(self, risk_data: Dict[str, Any]) -> Dict[str, Any]:
+        """Parse CRB risk assessment from LLM output."""
+        return {
+            "implementation_score": max(1, min(5, risk_data.get("implementation_score", 3))),
+            "implementation_reason": risk_data.get("implementation_reason", ""),
+            "dependency_risk": risk_data.get("dependency_risk", ""),
+            "reversal_difficulty": risk_data.get("reversal_difficulty", "Medium"),
+        }
+
+    def _parse_replace_risk(self, risk_data: Dict[str, Any]) -> Dict[str, Any]:
+        """Parse CRB risk for Replace path."""
+        return {
+            "implementation_score": max(1, min(5, risk_data.get("implementation_score", 3))),
+            "migration_complexity": risk_data.get("migration_complexity", "Medium"),
+            "vendor_lock_in": risk_data.get("vendor_lock_in", ""),
+        }
+
+    def _parse_benefit(self, benefit_data: Dict[str, Any]) -> Dict[str, Any]:
+        """Parse CRB benefit quantification from LLM output."""
+        return {
+            "primary_metric": benefit_data.get("primary_metric", ""),
+            "baseline": benefit_data.get("baseline", ""),
+            "target": benefit_data.get("target", ""),
+            "monthly_value": benefit_data.get("monthly_value", 0),
+            "calculation": benefit_data.get("calculation", ""),
+            "expected_improvement": benefit_data.get("expected_improvement", ""),
+        }
+
     def _validate_findings(
         self,
         findings: List[Dict[str, Any]]
@@ -753,10 +847,10 @@ CONNECT VS REPLACE GUIDANCE
             validated_finding["verdict"] = finding.get("verdict", "EITHER")
             validated_finding["verdict_reasoning"] = finding.get("verdict_reasoning", "")
 
-            # Handle connect_path
+            # Handle connect_path with CRB structure
             if finding.get("connect_path") and isinstance(finding["connect_path"], dict):
                 cp = finding["connect_path"]
-                validated_finding["connect_path"] = {
+                validated_connect = {
                     "integration_flow": cp.get("integration_flow", ""),
                     "flow_steps": cp.get("flow_steps", []),
                     "what_it_does": cp.get("what_it_does", ""),
@@ -767,22 +861,42 @@ CONNECT VS REPLACE GUIDANCE
                     "prerequisites": cp.get("prerequisites", []),
                     "limitations": cp.get("limitations"),
                 }
+
+                # Parse CRB structure if present
+                if cp.get("cost") and isinstance(cp["cost"], dict):
+                    validated_connect["cost"] = self._parse_cost_breakdown(cp["cost"])
+                if cp.get("risk") and isinstance(cp["risk"], dict):
+                    validated_connect["risk"] = self._parse_risk_assessment(cp["risk"])
+                if cp.get("benefit") and isinstance(cp["benefit"], dict):
+                    validated_connect["benefit"] = self._parse_benefit(cp["benefit"])
+
+                validated_finding["connect_path"] = validated_connect
             else:
                 validated_finding["connect_path"] = None
 
-            # Handle replace_path
+            # Handle replace_path with CRB structure
             if finding.get("replace_path") and isinstance(finding["replace_path"], dict):
                 rp = finding["replace_path"]
-                validated_finding["replace_path"] = {
+                validated_replace = {
                     "vendor_slug": rp.get("vendor_slug", ""),
                     "vendor_name": rp.get("vendor_name", ""),
                     "vendor_description": rp.get("vendor_description", ""),
                     "monthly_cost": rp.get("monthly_cost", 0),
                     "setup_effort_weeks": rp.get("setup_effort_weeks", 0),
                     "requires_migration": rp.get("requires_migration", True),
-                    "trade_offs": rp.get("trade_offs", []),
-                    "benefits": rp.get("benefits", []),
+                    "trade_offs": rp.get("trade_offs", rp.get("trade_offs_vs_connect", [])),
+                    "benefits": rp.get("benefits", rp.get("benefits_vs_connect", [])),
                 }
+
+                # Parse CRB structure if present
+                if rp.get("cost") and isinstance(rp["cost"], dict):
+                    validated_replace["cost"] = self._parse_replace_cost(rp["cost"])
+                if rp.get("risk") and isinstance(rp["risk"], dict):
+                    validated_replace["risk"] = self._parse_replace_risk(rp["risk"])
+                if rp.get("benefit") and isinstance(rp["benefit"], dict):
+                    validated_replace["benefit"] = self._parse_benefit(rp["benefit"])
+
+                validated_finding["replace_path"] = validated_replace
             else:
                 validated_finding["replace_path"] = None
 

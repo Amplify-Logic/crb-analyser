@@ -119,6 +119,31 @@ from .workshop import (
     WorkshopConfidence,
     DepthDimensions,
 )
+from .crb import (
+    ImplementationCostDIY,
+    ImplementationCostProfessional,
+    MonthlyCostItem,
+    MonthlyCostBreakdown,
+    HiddenCosts,
+    CostBreakdown as PathCostBreakdown,
+    RiskAssessment as PathRiskAssessment,
+    BenefitQuantification,
+    ROIAnalysis,
+    CRBAnalysis as PathCRBAnalysis,
+    estimate_implementation_cost,
+    calculate_benefit,
+    calculate_roi,
+    assess_risk,
+)
+from .finding_paths import (
+    StackItem,
+    ConnectPath,
+    ReplacePath,
+    WhyReplaceReasoning,
+    FindingWithPaths,
+    calculate_verdict,
+    get_verdict_reasoning,
+)
 
 __all__ = [
     # Auth
@@ -223,4 +248,27 @@ __all__ = [
     "WorkshopData",
     "WorkshopConfidence",
     "DepthDimensions",
+    # CRB Framework (Path-level - detailed analysis)
+    "ImplementationCostDIY",
+    "ImplementationCostProfessional",
+    "MonthlyCostItem",
+    "MonthlyCostBreakdown",
+    "HiddenCosts",
+    "PathCostBreakdown",
+    "PathRiskAssessment",
+    "BenefitQuantification",
+    "ROIAnalysis",
+    "PathCRBAnalysis",
+    "estimate_implementation_cost",
+    "calculate_benefit",
+    "calculate_roi",
+    "assess_risk",
+    # Finding Paths (Connect vs Replace)
+    "StackItem",
+    "ConnectPath",
+    "ReplacePath",
+    "WhyReplaceReasoning",
+    "FindingWithPaths",
+    "calculate_verdict",
+    "get_verdict_reasoning",
 ]
