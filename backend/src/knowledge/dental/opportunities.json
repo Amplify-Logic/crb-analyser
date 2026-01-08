@@ -46,9 +46,13 @@
       "roi_example": {
         "scenario": "Dental practice missing 25% of calls, getting 20 after-hours calls/week",
         "cost": "€400/month",
-        "value_created": "Capture 15 extra appointments/month × €250 avg = €3,750/month",
-        "roi_percentage": 837,
-        "payback_months": 0.5
+        "value_created": "Capture additional appointments from missed/after-hours calls",
+        "roi_analysis": {
+          "conservative": {"roi_percentage": 200, "payback_months": 4, "note": "5 extra appointments/month"},
+          "expected": {"roi_percentage": 400, "payback_months": 2, "note": "10 extra appointments/month"},
+          "optimistic": {"roi_percentage": 600, "payback_months": 1, "note": "15 extra appointments/month"}
+        },
+        "assumptions": "Not all captured calls convert to appointments; assumes €200-250 avg appointment value"
       },
       "jevons_effect": {
         "applies": true,
@@ -102,9 +106,13 @@
       "roi_example": {
         "scenario": "Practice with 200 appointments/month, 18% no-show rate",
         "cost": "€400/month",
-        "savings": "Reduce no-shows by 50% = 18 more appointments × €200 avg = €3,600/month",
-        "roi_percentage": 800,
-        "payback_months": 0.5
+        "value_created": "Reduce no-shows through automated reminders and confirmations",
+        "roi_analysis": {
+          "conservative": {"roi_percentage": 200, "payback_months": 3, "note": "20% no-show reduction"},
+          "expected": {"roi_percentage": 350, "payback_months": 2, "note": "35% no-show reduction"},
+          "optimistic": {"roi_percentage": 500, "payback_months": 1.5, "note": "50% no-show reduction"}
+        },
+        "assumptions": "No-show reduction varies by patient demographics; some slots may not be refillable"
       }
     },
     {
@@ -152,9 +160,13 @@
       "roi_example": {
         "scenario": "Practice verifying 50 patients/week manually (30 min each)",
         "cost": "€350/month",
-        "savings": "25 hours/week × €25/hour = €2,500/month saved",
-        "roi_percentage": 614,
-        "payback_months": 1
+        "value_created": "Reduce manual verification time and improve claim accuracy",
+        "roi_analysis": {
+          "conservative": {"roi_percentage": 200, "payback_months": 3, "note": "10 hrs/week saved"},
+          "expected": {"roi_percentage": 350, "payback_months": 2, "note": "18 hrs/week saved"},
+          "optimistic": {"roi_percentage": 500, "payback_months": 1, "note": "25 hrs/week saved"}
+        },
+        "assumptions": "Savings depend on current manual process efficiency; not all verifications automate equally"
       }
     },
     {
@@ -202,10 +214,13 @@
       "roi_example": {
         "scenario": "Practice receiving 50 scheduling calls/week",
         "cost": "€350/month",
-        "savings": "15 appointments booked online/week × €200 avg production = €12,000/month potential",
-        "value_created": "After-hours booking captures new patients who would go elsewhere",
-        "roi_percentage": 500,
-        "payback_months": 1
+        "value_created": "Reduce phone scheduling burden and capture after-hours bookings",
+        "roi_analysis": {
+          "conservative": {"roi_percentage": 150, "payback_months": 4, "note": "5 online bookings/week"},
+          "expected": {"roi_percentage": 300, "payback_months": 2, "note": "10 online bookings/week"},
+          "optimistic": {"roi_percentage": 450, "payback_months": 1, "note": "15 online bookings/week"}
+        },
+        "assumptions": "Online booking adoption varies; some patients prefer phone; requires staff training"
       }
     },
     {
@@ -253,9 +268,13 @@
       "roi_example": {
         "scenario": "Practice with €50K/month production, 40% treatment acceptance",
         "cost": "€500/month",
-        "value_created": "Increase acceptance to 50% = €12,500/month additional treatment",
-        "roi_percentage": 2400,
-        "payback_months": 0.5
+        "value_created": "Improve case acceptance through better visual communication",
+        "roi_analysis": {
+          "conservative": {"roi_percentage": 200, "payback_months": 4, "note": "3% acceptance increase"},
+          "expected": {"roi_percentage": 400, "payback_months": 2, "note": "5% acceptance increase"},
+          "optimistic": {"roi_percentage": 700, "payback_months": 1, "note": "8% acceptance increase"}
+        },
+        "assumptions": "Case acceptance improvement varies; requires consistent use by all providers; results take time"
       }
     },
     {
@@ -303,9 +322,13 @@
       "roi_example": {
         "scenario": "10 patients/month declining €2,000+ treatment due to cost",
         "cost": "3% average transaction fee",
-        "value_created": "Convert 5 patients = €10,000 revenue, €300 fee = €9,700 net gain",
-        "roi_percentage": 3100,
-        "payback_months": 0.5
+        "value_created": "Convert cost-declined patients through financing options",
+        "roi_analysis": {
+          "conservative": {"roi_percentage": 300, "payback_months": 1, "note": "2 patients/month converted"},
+          "expected": {"roi_percentage": 600, "payback_months": 1, "note": "4 patients/month converted"},
+          "optimistic": {"roi_percentage": 900, "payback_months": 0.5, "note": "6 patients/month converted"}
+        },
+        "assumptions": "Conversion varies by patient demographics; transaction fees reduce margin; some patients may default"
       }
     },
     {
@@ -353,9 +376,13 @@
       "roi_example": {
         "scenario": "Practice currently getting 2 reviews/month",
         "cost": "€300/month",
-        "value_created": "Increase to 15 reviews/month = higher ranking = 5 new patients × €1,000 lifetime value",
-        "roi_percentage": 1500,
-        "payback_months": 1
+        "value_created": "Improve online reputation and visibility through consistent review generation",
+        "roi_analysis": {
+          "conservative": {"roi_percentage": 150, "payback_months": 6, "note": "5 reviews/month, 1 new patient"},
+          "expected": {"roi_percentage": 300, "payback_months": 3, "note": "10 reviews/month, 2-3 new patients"},
+          "optimistic": {"roi_percentage": 500, "payback_months": 2, "note": "15 reviews/month, 5 new patients"}
+        },
+        "assumptions": "Attribution from reviews to new patients is indirect; results compound over time; competitive market affects impact"
       }
     }
   ],

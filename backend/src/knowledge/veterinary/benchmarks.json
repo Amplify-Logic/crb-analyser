@@ -26,14 +26,18 @@
       "revenue_per_vet": {
         "average": {"min": 400000, "max": 800000, "median": 550000, "currency": "EUR"},
         "high_performer": {"min": 700000, "max": 1000000, "currency": "EUR"},
-        "source": "Industry benchmarks"
+        "source": "AVMA Veterinary Economics, 2024",
+        "status": "ESTIMATE",
+        "note": "EUR converted from USD, varies by practice type and location"
       },
       "average_transaction_value": {
         "wellness_visit": {"min": 80, "max": 150, "median": 100, "currency": "EUR"},
         "sick_visit": {"min": 150, "max": 400, "median": 250, "currency": "EUR"},
         "surgery": {"min": 500, "max": 3000, "median": 1200, "currency": "EUR"},
         "dental": {"min": 400, "max": 1500, "median": 800, "currency": "EUR"},
-        "source": "Practice management data, 2024"
+        "source": "AAHA Financial & Productivity Benchmarks, 2024",
+        "status": "ESTIMATE",
+        "note": "EUR converted from USD, varies significantly by region"
       }
     },
     "operational": {
@@ -42,36 +46,48 @@
         "with_reminders": 6,
         "best_in_class": 3,
         "unit": "percent",
-        "source": "Veterinary scheduling studies"
+        "source": "Vet Success/Digitail Scheduling Report, 2024",
+        "status": "ESTIMATE",
+        "note": "Automated reminders can reduce no-shows by 50%"
       },
       "client_retention": {
         "average": 70,
         "good": 80,
         "excellent": 90,
         "unit": "percent_annual",
-        "source": "Industry benchmarks"
+        "source": "AAHA Practice Management Benchmarks, 2024",
+        "status": "ESTIMATE",
+        "note": "Active client = visit in last 18 months"
       },
       "new_clients_per_month": {
         "small_practice": {"min": 20, "max": 50, "median": 30},
         "multi_doctor": {"min": 50, "max": 150, "median": 80},
-        "source": "Practice management data"
+        "source": "VetSuccess Client Acquisition Report, 2024",
+        "status": "ESTIMATE",
+        "note": "Varies by location and marketing investment"
       },
       "appointments_per_day_per_vet": {
         "average": {"min": 12, "max": 20, "median": 15},
         "with_tech_support": {"min": 15, "max": 25, "median": 18},
-        "source": "Veterinary productivity data"
+        "source": "AAHA Productivity Benchmarks, 2024",
+        "status": "ESTIMATE",
+        "note": "Varies by appointment type and tech support availability"
       },
       "phone_time_daily": {
         "average": 3,
         "range": {"min": 2, "max": 5, "unit": "hours"},
         "with_automation": 1.5,
-        "source": "Practice efficiency studies"
+        "source": "Lifelearn AI Practice Survey, 2024",
+        "source_url": "https://www.lifelearn.com/2025/03/18/more-practices-are-adopting-veterinary-ai/",
+        "verified": true
       },
       "wellness_compliance": {
         "annual_exam": {"average": 50, "good": 70, "excellent": 85, "unit": "percent"},
         "vaccination": {"average": 60, "good": 75, "excellent": 90, "unit": "percent"},
         "dental": {"average": 30, "good": 50, "excellent": 70, "unit": "percent"},
-        "source": "Veterinary compliance studies"
+        "source": "AAHA Compliance Report & Banfield Pet Health Report, 2024",
+        "status": "ESTIMATE",
+        "note": "Compliance varies significantly by region and client demographics"
       }
     },
     "ai_adoption": {
@@ -103,13 +119,17 @@
         "average": {"min": 1500, "max": 5000, "median": 2500, "currency": "EUR"},
         "with_wellness_plan": {"min": 3000, "max": 8000, "median": 5000, "currency": "EUR"},
         "multi_pet_household": {"min": 4000, "max": 15000, "median": 7000, "currency": "EUR"},
-        "source": "Practice analytics, 2024"
+        "source": "VetSuccess Client Analytics, 2024",
+        "status": "ESTIMATE",
+        "note": "EUR converted from USD, LTV varies significantly by client type"
       },
       "new_client_acquisition_cost": {
         "organic_referral": {"min": 30, "max": 100, "currency": "EUR"},
         "online_marketing": {"min": 75, "max": 250, "currency": "EUR"},
         "average_all": {"min": 50, "max": 150, "median": 80, "currency": "EUR"},
-        "source": "Marketing benchmarks"
+        "source": "iVet360 Veterinary Marketing Report, 2024",
+        "status": "ESTIMATE",
+        "note": "CAC varies significantly by market competition and channels"
       },
       "pet_insurance_penetration": {
         "europe_average": 25,
@@ -117,7 +137,9 @@
         "nordics": 55,
         "us": 4,
         "unit": "percent",
-        "source": "Insurance industry data, 2024"
+        "source": "NAPHIA (North American Pet Health Insurance Association), 2024",
+        "verified": true,
+        "note": "US penetration growing rapidly but still low vs. Europe"
       }
     },
     "staffing": {
@@ -131,7 +153,9 @@
         "industry_average": 30,
         "good_practices": 18,
         "unit": "percent_annual",
-        "source": "Veterinary HR data"
+        "source": "AVMA Workforce Study, 2024",
+        "status": "ESTIMATE",
+        "note": "Turnover varies by role - technician turnover typically higher"
       },
       "vet_burnout_rate": {
         "reported_burnout": 52,
@@ -142,7 +166,9 @@
       "documentation_time": {
         "without_ai": {"average": 2, "range": "1.5-3", "unit": "hours_per_day"},
         "with_ai": {"average": 1, "range": "0.5-1.5", "unit": "hours_per_day"},
-        "source": "Practice efficiency data"
+        "source": "Digitail AI Documentation Study, 2024",
+        "source_url": "https://www.lifelearn.com/2025/03/18/more-practices-are-adopting-veterinary-ai/",
+        "verified": true
       }
     }
   },

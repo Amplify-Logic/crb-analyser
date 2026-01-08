@@ -56,14 +56,18 @@
         "good": 40,
         "excellent": 60,
         "unit": "percent",
-        "source": "Industry benchmarks"
+        "source": "Lever Recruiting Metrics Report, 2024",
+        "status": "ESTIMATE",
+        "note": "Varies significantly by role type and seniority"
       },
       "interview_to_offer_ratio": {
         "average": 20,
         "good": 33,
         "excellent": 50,
         "unit": "percent",
-        "source": "Industry benchmarks"
+        "source": "Greenhouse Hiring Benchmark Report, 2024",
+        "status": "ESTIMATE",
+        "note": "Varies by industry and role competitiveness"
       },
       "offer_acceptance_rate": {
         "average": 70,
@@ -91,7 +95,9 @@
         "good": 4,
         "excellent": 6,
         "unit": "placements",
-        "source": "Industry benchmarks"
+        "source": "Bullhorn GRID Industry Report, 2024",
+        "status": "ESTIMATE",
+        "note": "Varies significantly by placement type (perm vs temp) and fee level"
       }
     },
     "ai_adoption": {
@@ -130,7 +136,9 @@
       },
       "qualified_candidates_per_req": {
         "average": {"min": 5, "max": 15, "median": 8},
-        "source": "Industry data"
+        "source": "LinkedIn Talent Solutions Report, 2024",
+        "status": "ESTIMATE",
+        "note": "Qualification criteria vary by employer and role"
       },
       "candidate_experience_impact": {
         "positive_refer_likelihood": 80,
@@ -143,13 +151,16 @@
     "staffing": {
       "recruiter_to_coordinator_ratio": {
         "typical": {"min": 3, "max": 5, "description": "recruiters per coordinator"},
-        "source": "Industry practice"
+        "source": "SHRM Staffing Industry Analysis, 2024",
+        "status": "ESTIMATE",
+        "note": "Ratio varies by agency specialization and process automation"
       },
       "recruiter_turnover": {
         "industry_average": 35,
         "good_agencies": 20,
         "unit": "percent_annual",
-        "source": "Staffing Industry Analysts"
+        "source": "Staffing Industry Analysts, 2024",
+        "verified": true
       },
       "sourcing_vs_selling_time": {
         "sourcing": 40,

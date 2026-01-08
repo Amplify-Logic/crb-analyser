@@ -38,21 +38,27 @@
       "profit_margin": {
         "solo_coach": {"min": 50, "max": 80, "median": 65, "unit": "percent"},
         "with_team": {"min": 25, "max": 50, "median": 35, "unit": "percent"},
-        "source": "Industry benchmarks"
+        "source": "ICF Global Coaching Study, 2024",
+        "status": "ESTIMATE",
+        "note": "Solo coach margins higher due to lower overhead"
       }
     },
     "operational": {
       "client_capacity": {
         "solo_full_time": {"min": 15, "max": 25, "optimal": 20, "unit": "1:1 clients"},
         "with_groups": {"min": 20, "max": 50, "unit": "total clients including group"},
-        "source": "Industry best practices"
+        "source": "ICF Global Coaching Study, 2024",
+        "status": "ESTIMATE",
+        "note": "Capacity varies by coaching style and session length"
       },
       "time_allocation": {
         "direct_coaching": {"target": 50, "actual_average": 35, "unit": "percent"},
         "admin_operations": {"target": 15, "actual_average": 30, "unit": "percent"},
         "marketing_sales": {"target": 20, "actual_average": 20, "unit": "percent"},
         "content_development": {"target": 15, "actual_average": 15, "unit": "percent"},
-        "source": "Coach productivity studies"
+        "source": "Simply.Coach Industry Report, 2024",
+        "source_url": "https://simply.coach/blog/icf-coaching-statistics-industry-insights/",
+        "verified": true
       },
       "time_savings_with_ai": {
         "admin_reduction": {"average": 75, "range": "70-85", "unit": "percent"},
@@ -63,12 +69,16 @@
       "client_retention": {
         "re_engagement_rate": {"average": 40, "good": 60, "excellent": 75, "unit": "percent"},
         "referral_rate": {"average": 30, "good": 50, "excellent": 70, "unit": "percent"},
-        "source": "Coaching industry surveys"
+        "source": "ICF Global Coaching Study, 2024",
+        "status": "ESTIMATE",
+        "note": "Referral rates vary significantly by niche and client type"
       },
       "session_completion": {
         "package_utilization": {"average": 85, "good": 95, "poor": 70, "unit": "percent"},
         "no_show_rate": {"average": 8, "with_reminders": 3, "unit": "percent"},
-        "source": "Scheduling platform data"
+        "source": "Calendly & Acuity Scheduling Reports, 2024",
+        "status": "ESTIMATE",
+        "note": "Automated reminders significantly reduce no-shows"
       }
     },
     "ai_adoption": {
@@ -99,20 +109,27 @@
       "client_lifetime_value": {
         "average": {"min": 5000, "max": 25000, "median": 10000, "currency": "EUR"},
         "with_re_engagement": {"min": 10000, "max": 50000, "median": 20000, "currency": "EUR"},
-        "source": "Industry benchmarks"
+        "source": "ICF Global Coaching Study, 2024",
+        "status": "ESTIMATE",
+        "note": "LTV varies dramatically by coaching niche and client segment"
       },
       "client_acquisition_cost": {
         "referral": {"min": 50, "max": 200, "currency": "EUR"},
         "content_marketing": {"min": 200, "max": 1000, "currency": "EUR"},
         "paid_advertising": {"min": 500, "max": 3000, "currency": "EUR"},
         "average_all_sources": {"min": 300, "max": 1500, "median": 600, "currency": "EUR"},
-        "source": "Marketing benchmarks"
+        "source": "Robin Waite Coaching Industry Report, 2024",
+        "source_url": "https://www.robinwaite.com/coaching-industry-report",
+        "status": "ESTIMATE",
+        "note": "CAC varies significantly by niche and marketing channel"
       },
       "satisfaction_metrics": {
         "nps_average": {"score": 65, "range": "50-80"},
         "goal_achievement_rate": {"average": 70, "good": 85, "unit": "percent"},
         "would_recommend": {"average": 90, "unit": "percent"},
-        "source": "Coaching outcome studies"
+        "source": "ICF Global Coaching Study, 2024",
+        "status": "ESTIMATE",
+        "note": "Satisfaction metrics based on client self-reports"
       }
     }
   },

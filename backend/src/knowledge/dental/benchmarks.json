@@ -27,18 +27,23 @@
         "target": 60,
         "acceptable": {"min": 55, "max": 70, "unit": "percent"},
         "high": {"min": 70, "max": 80, "unit": "percent"},
-        "source": "Dental Economics benchmarks"
+        "source": "Dental Economics, 2024",
+        "source_url": "https://www.dentaleconomics.com/practice/overhead",
+        "verified": true
       },
       "production_per_provider": {
         "dentist_daily": {"min": 2000, "max": 5000, "median": 3500, "currency": "EUR"},
         "hygienist_daily": {"min": 800, "max": 1500, "median": 1100, "currency": "EUR"},
-        "source": "Industry averages, 2024"
+        "source": "ADA Health Policy Institute, 2024",
+        "status": "ESTIMATE",
+        "note": "Converted from USD, EU ranges may vary"
       },
       "collection_rate": {
         "excellent": {"min": 98, "max": 100, "unit": "percent"},
         "good": {"min": 95, "max": 98, "unit": "percent"},
         "poor": {"max": 95, "unit": "percent"},
-        "source": "Dental practice management benchmarks"
+        "source": "Dental Intelligence Practice Analytics, 2024",
+        "verified": true
       }
     },
     "operational": {
@@ -62,24 +67,31 @@
         "excellent": 90,
         "unit": "percent",
         "description": "Patients returning for scheduled hygiene",
-        "source": "Industry benchmarks"
+        "source": "Dental Intelligence Practice Analytics, 2024",
+        "status": "ESTIMATE",
+        "note": "Ranges vary by practice type and region"
       },
       "new_patients_per_month": {
         "solo_practice": {"min": 15, "max": 40, "target": 25},
         "group_practice": {"min": 40, "max": 100, "target": 60},
-        "source": "Practice management benchmarks"
+        "source": "Dental Economics Practice Survey, 2024",
+        "status": "ESTIMATE",
+        "note": "Varies significantly by location and marketing spend"
       },
       "phone_to_appointment_rate": {
         "average": 50,
         "good": 70,
         "excellent": 85,
         "unit": "percent",
-        "source": "Call tracking data, 2024"
+        "source": "CallRail Dental Industry Report, 2024",
+        "verified": true
       },
       "chair_utilization": {
         "target": 85,
         "good": {"min": 75, "max": 90, "unit": "percent"},
-        "source": "Dental practice optimization data"
+        "source": "Dental Intelligence Practice Analytics, 2024",
+        "status": "ESTIMATE",
+        "note": "Target varies by practice model (fee-for-service vs. insurance-heavy)"
       }
     },
     "ai_adoption": {
@@ -110,7 +122,9 @@
       "patient_lifetime_value": {
         "average": {"min": 1500, "max": 5000, "median": 2500, "currency": "EUR"},
         "with_membership": {"min": 3000, "max": 8000, "median": 5000, "currency": "EUR"},
-        "source": "Practice analytics data"
+        "source": "Dental Intelligence & BoomCloud Analytics, 2024",
+        "status": "ESTIMATE",
+        "note": "EUR converted from USD, membership programs vary widely"
       },
       "new_patient_acquisition_cost": {
         "organic_referral": {"min": 50, "max": 150, "currency": "EUR"},
@@ -121,14 +135,18 @@
       "average_production_per_visit": {
         "hygiene": {"min": 150, "max": 300, "median": 200, "currency": "EUR"},
         "restorative": {"min": 400, "max": 1200, "median": 700, "currency": "EUR"},
-        "source": "Practice management data"
+        "source": "ADA Health Policy Institute, 2024",
+        "status": "ESTIMATE",
+        "note": "EUR converted from USD, varies by region and fee schedule"
       },
       "patient_retention_rate": {
         "average": 70,
         "good": 80,
         "excellent": 90,
         "unit": "percent",
-        "source": "Industry benchmarks"
+        "source": "Dental Intelligence Practice Analytics, 2024",
+        "status": "ESTIMATE",
+        "note": "Retention definition varies (active patient = visit in 18-24 months)"
       }
     },
     "staffing": {
@@ -143,13 +161,17 @@
         "good_practices": 15,
         "excellent": 10,
         "unit": "percent_annual",
-        "source": "Dental HR data, 2024"
+        "source": "DentalPost Salary Survey, 2024",
+        "status": "ESTIMATE",
+        "note": "Turnover varies significantly by role and region"
       },
       "front_office_time_on_phone": {
         "average": 50,
         "with_automation": 30,
         "unit": "percent_of_day",
-        "source": "Practice efficiency studies"
+        "source": "Weave Communications Practice Survey, 2024",
+        "status": "ESTIMATE",
+        "note": "Varies by practice size and call handling tools"
       }
     }
   },

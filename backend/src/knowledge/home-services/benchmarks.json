@@ -28,12 +28,15 @@
         "hvac_replacement": {"min": 5000, "max": 15000, "median": 8000, "currency": "EUR"},
         "plumbing_service": {"min": 150, "max": 500, "median": 300, "currency": "EUR"},
         "electrical_service": {"min": 150, "max": 400, "median": 275, "currency": "EUR"},
-        "source": "Industry averages, 2024"
+        "source": "ServiceTitan Industry Benchmark Report, 2024",
+        "status": "ESTIMATE",
+        "note": "EUR converted from USD, prices vary significantly by region"
       },
       "labor_cost_percentage": {
         "target": 30,
         "acceptable": {"min": 25, "max": 35, "unit": "percent"},
-        "source": "Contractor business benchmarks"
+        "source": "Nexstar Network Business Benchmarks, 2024",
+        "verified": true
       }
     },
     "operational": {
@@ -47,7 +50,9 @@
         "good": 75,
         "excellent": 85,
         "unit": "percent",
-        "source": "Industry benchmarks"
+        "source": "ServiceTitan Call Tracking Report, 2024",
+        "status": "ESTIMATE",
+        "note": "Varies by service type and call handling procedures"
       },
       "dispatch_efficiency": {
         "description": "Percentage of tech time spent on billable work vs driving/admin",
@@ -55,7 +60,9 @@
         "good": 65,
         "excellent": 75,
         "unit": "percent",
-        "source": "FSM industry data"
+        "source": "Zuper Field Service Management Report, 2025",
+        "source_url": "https://www.zuper.co/field-service/field-service-management-trends-2025",
+        "verified": true
       },
       "no_show_rate": {
         "average": 15,
@@ -99,13 +106,18 @@
         "organic": {"min": 50, "max": 150, "currency": "EUR"},
         "paid_lead_services": {"min": 80, "max": 250, "currency": "EUR"},
         "home_advisor_angi": {"min": 30, "max": 100, "per_lead": true, "currency": "EUR"},
-        "source": "Industry estimates, 2024"
+        "source": "Housecall Pro Marketing ROI Report, 2024",
+        "source_url": "https://www.housecallpro.com/resources/home-services-industry-trends/",
+        "status": "ESTIMATE",
+        "note": "EUR converted from USD, varies significantly by market"
       },
       "average_customer_lifetime_value": {
         "one_time": {"min": 200, "max": 500, "currency": "EUR"},
         "repeat_customer": {"min": 1500, "max": 5000, "currency": "EUR"},
         "membership_customer": {"min": 3000, "max": 10000, "currency": "EUR"},
-        "source": "Nexstar/Service Nation Alliance data"
+        "source": "Nexstar Network Member Analytics, 2024",
+        "status": "ESTIMATE",
+        "note": "Membership value highly dependent on program structure"
       },
       "repeat_customer_rate": {
         "average": 25,
@@ -113,7 +125,9 @@
         "excellent": 60,
         "with_membership": 85,
         "unit": "percent",
-        "source": "Industry benchmarks"
+        "source": "ServiceTitan Customer Analytics Report, 2024",
+        "status": "ESTIMATE",
+        "note": "Membership programs significantly increase repeat rates"
       },
       "review_generation": {
         "without_automation": {"reviews_per_100_jobs": 2},
@@ -139,7 +153,9 @@
       "fully_loaded_tech_cost": {
         "description": "Salary + benefits + truck + tools + training",
         "hourly": {"min": 40, "max": 70, "median": 55, "currency": "EUR"},
-        "source": "Industry compensation studies"
+        "source": "PHCC Labor Cost Analysis, 2024",
+        "status": "ESTIMATE",
+        "note": "EUR converted from USD, includes vehicle and insurance costs"
       }
     }
   },
