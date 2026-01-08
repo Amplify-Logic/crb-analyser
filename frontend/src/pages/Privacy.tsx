@@ -7,7 +7,7 @@ export default function Privacy() {
       <nav className="fixed top-0 left-0 right-0 z-50 bg-white/80 backdrop-blur-md border-b border-gray-100">
         <div className="max-w-6xl mx-auto px-4 py-4 flex justify-between items-center">
           <Link to="/" className="text-xl font-bold text-gray-900">
-            CRB<span className="text-primary-600">Analyser</span>
+            Ready<span className="text-primary-600">Path</span>
           </Link>
           <Link
             to="/"
@@ -28,7 +28,7 @@ export default function Privacy() {
             <section>
               <h2 className="text-xl font-semibold text-gray-900 mb-3">1. Introduction</h2>
               <p className="text-gray-600 leading-relaxed">
-                CRB Analyser ("we", "our", or "us") respects your privacy and is committed to protecting your
+                Ready Path ("we", "our", or "us") respects your privacy and is committed to protecting your
                 personal data. This privacy policy explains how we collect, use, and safeguard your information
                 when you use our service.
               </p>
@@ -67,7 +67,7 @@ export default function Privacy() {
               <ul className="space-y-2 text-gray-600">
                 <li className="flex items-start gap-2">
                   <span className="text-primary-600 mt-1">-</span>
-                  Generate your personalized CRB analysis report
+                  Generate your personalized AI readiness report
                 </li>
                 <li className="flex items-start gap-2">
                   <span className="text-primary-600 mt-1">-</span>

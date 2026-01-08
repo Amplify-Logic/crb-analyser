@@ -174,7 +174,7 @@ export default function Intake() {
           <div className="flex items-center justify-between mb-3">
             <div>
               <h1 className="text-lg font-semibold text-gray-900">
-                {intakeData?.audit_title || 'CRB Intake'}
+                {intakeData?.audit_title || 'Assessment Intake'}
               </h1>
               <p className="text-sm text-gray-500">
                 {intakeData?.client_name}

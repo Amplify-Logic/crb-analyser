@@ -1,6 +1,14 @@
 """
 Observability configuration for CRB Analyser.
-Integrates Logfire for logging/tracing and Sentry for error tracking.
+Integrates Logfire, Sentry, and BetterStack for logging/tracing and error tracking.
+
+BetterStack provides:
+- Centralized log aggregation with SQL querying
+- Uptime monitoring
+- Incident management
+- Cost-effective alternative to Datadog (30x cheaper)
+
+See docs/OBSERVABILITY.md for usage guide.
 """
 
 import logging
@@ -11,6 +19,49 @@ from fastapi import FastAPI
 from src.config.settings import settings
 
 logger = logging.getLogger(__name__)
+
+
+def setup_betterstack() -> None:
+    """
+    Configure BetterStack for centralized logging.
+
+    BetterStack provides:
+    - Centralized log aggregation
+    - SQL-based log querying
+    - Uptime monitoring
+    - Alerting and incident management
+
+    All Python logging will be forwarded to BetterStack when configured.
+    """
+    if not settings.BETTERSTACK_SOURCE_TOKEN:
+        logger.info("BetterStack token not configured, skipping setup")
+        return
+
+    try:
+        from logtail import LogtailHandler
+
+        # Create the BetterStack handler
+        betterstack_handler = LogtailHandler(
+            source_token=settings.BETTERSTACK_SOURCE_TOKEN,
+            host=settings.BETTERSTACK_HOST,
+        )
+
+        # Set format to include structured data
+        betterstack_handler.setLevel(logging.INFO)
+
+        # Add to root logger so all loggers forward to BetterStack
+        root_logger = logging.getLogger()
+        root_logger.addHandler(betterstack_handler)
+
+        logger.info("BetterStack configured successfully")
+
+    except ImportError:
+        logger.warning(
+            "logtail-python package not installed, skipping BetterStack setup. "
+            "Install with: pip install logtail-python"
+        )
+    except Exception as e:
+        logger.error(f"Failed to configure BetterStack: {e}")
 
 
 def setup_logfire(app: FastAPI) -> None:
@@ -125,6 +176,7 @@ def _filter_health_checks(event, hint):
 
 def setup_observability(app: FastAPI) -> None:
     """Set up all observability tools."""
+    setup_betterstack()  # Set up logging first
     setup_logfire(app)
     setup_sentry(app)
 

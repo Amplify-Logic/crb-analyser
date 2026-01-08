@@ -51,7 +51,7 @@ export default function Login() {
         {/* Logo/Brand */}
         <div className="text-center mb-8">
           <Link to="/" className="inline-block">
-            <h1 className="text-3xl font-bold text-white">CRB Analyser</h1>
+            <h1 className="text-3xl font-bold text-white">Ready Path</h1>
           </Link>
           <p className="text-primary-200 mt-2">Sign in to your account</p>
         </div>

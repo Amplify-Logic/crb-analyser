@@ -233,6 +233,7 @@ class ReportGenerator:
             expertise=expertise,
             knowledge=self.context.get("industry_knowledge"),
             report_data=self.context,
+            existing_stack=self.context.get("existing_stack"),
         )
 
     def _call_claude(self, task: str, prompt: str, max_tokens: int = 4000) -> str:
@@ -437,6 +438,19 @@ class ReportGenerator:
             self.context["company_profile"] = quiz_data.get("company_profile", {})
             self.context["company_name"] = quiz_data.get("company_name", "")
             self.context["company_website"] = quiz_data.get("company_website", "")
+
+            # Load existing software stack (Phase 2C - Connect vs Replace)
+            self.context["existing_stack"] = quiz_data.get("existing_stack", [])
+            if self.context["existing_stack"]:
+                logger.info(
+                    f"Report input - Existing stack: {len(self.context['existing_stack'])} tools"
+                )
+                # Log tools with API scores
+                for tool in self.context["existing_stack"][:5]:
+                    api_score = tool.get("api_score", "?")
+                    logger.info(
+                        f"  - {tool.get('name', tool.get('slug', 'Unknown'))}: API score {api_score}/5"
+                    )
 
             # Log input data for debugging
             logger.info(f"Report input - Company: {self.context['company_name']}")
@@ -896,7 +910,15 @@ class ReportGenerator:
 
             yield {"phase": "insights", "step": "Industry insights complete", "progress": 92}
 
-            # Phase 6e: Generate post-report metadata (follow-up, upsell)
+            # Phase 6e: Generate automation summary (Connect vs Replace roadmap)
+            yield {"phase": "automation_summary", "step": "Building automation roadmap...", "progress": 93}
+
+            automation_summary = await self._generate_automation_summary(findings)
+            self._partial_data["automation_summary"] = automation_summary
+
+            yield {"phase": "automation_summary", "step": "Automation roadmap complete", "progress": 93}
+
+            # Phase 6f: Generate post-report metadata (follow-up, upsell)
             yield {"phase": "post_report", "step": "Preparing follow-up plan...", "progress": 93}
 
             post_report_data = await self._generate_post_report_metadata(
@@ -917,6 +939,7 @@ class ReportGenerator:
                     "playbooks": playbooks,
                     "system_architecture": system_architecture,
                     "industry_insights": industry_insights,
+                    "automation_summary": automation_summary,
                     "follow_up_schedule": post_report_data.get("follow_up_schedule", {}),
                     "upsell_analysis": post_report_data.get("upsell_analysis", {}),
                 }).eq("id", self.report_id).execute()
@@ -928,6 +951,7 @@ class ReportGenerator:
                             "playbooks": playbooks,
                             "system_architecture": system_architecture,
                             "industry_insights": industry_insights,
+                            "automation_summary": automation_summary,
                         }).eq("id", self.report_id).execute()
                     except Exception:
                         # Last resort - save nothing extra
@@ -2637,6 +2661,59 @@ Return ONLY the JSON."""
                 logger.debug(f"Industry benchmarking skipped: {e}")
 
         return result
+
+    async def _generate_automation_summary(
+        self,
+        findings: List[Dict[str, Any]],
+    ) -> Dict[str, Any]:
+        """
+        Generate automation summary (Connect vs Replace roadmap) from findings.
+
+        Uses the AutomationSummarySkill to aggregate automation opportunities
+        and build the "Your Automation Roadmap" section.
+
+        Args:
+            findings: List of findings with Connect/Replace paths
+
+        Returns:
+            AutomationSummary dict with stack assessment, opportunities, and next steps
+        """
+        try:
+            # Get the skill
+            automation_skill = get_skill("automation-summary")
+            if not automation_skill:
+                logger.warning("AutomationSummarySkill not found, returning empty summary")
+                return {}
+
+            # Build context with findings and existing stack
+            context = self._get_skill_context()
+            context.report_data = {"findings": findings}
+            context.metadata["tier"] = self.tier
+
+            # Execute the skill
+            result = await automation_skill.run(context)
+
+            if result.success:
+                # Convert Pydantic model to dict for JSON storage
+                summary_data = result.data
+                if hasattr(summary_data, "model_dump"):
+                    summary_dict = summary_data.model_dump()
+                else:
+                    summary_dict = dict(summary_data) if summary_data else {}
+
+                logger.info(
+                    f"Automation summary: {summary_dict.get('connect_count', 0)} Connect, "
+                    f"{summary_dict.get('replace_count', 0)} Replace opportunities, "
+                    f"total impact €{summary_dict.get('total_monthly_impact', 0)}/mo"
+                )
+                return summary_dict
+            else:
+                logger.warning(f"AutomationSummarySkill failed: {result.warnings}")
+                return {}
+
+        except Exception as e:
+            logger.warning(f"Automation summary generation failed: {e}")
+            return {}
 
     async def _generate_post_report_metadata(
         self,

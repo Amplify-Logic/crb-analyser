@@ -1,0 +1,56 @@
+{
+  "audit_id": "2ed3120e-d2a0-4513-9ef9-d02c75e0e953",
+  "timestamp": "2026-01-08T19:41:41.692649",
+  "industry": "general",
+  "company_size": "unknown",
+  "pain_points_found": [],
+  "processes_analyzed": [],
+  "recommendations_made": [],
+  "vendors_recommended": [],
+  "ai_readiness_score": 35,
+  "total_potential_savings": 84000.0,
+  "findings_count": 15,
+  "tools_used": {},
+  "token_usage": {
+    "usage": [
+      {
+        "task": "generate_findings",
+        "model": "claude-opus-4-5-20251101",
+        "input_tokens": 9187,
+        "output_tokens": 7135
+      },
+      {
+        "task": "generate_roadmap",
+        "model": "claude-opus-4-5-20251101",
+        "input_tokens": 21559,
+        "output_tokens": 1399
+      }
+    ],
+    "summary": {
+      "total_input_tokens": 30746,
+      "total_output_tokens": 8534,
+      "total_tokens": 39280,
+      "estimated_cost_usd": 0.3671,
+      "by_model": {
+        "claude-opus-4-5-20251101": {
+          "input": 30746,
+          "output": 8534,
+          "tasks": [
+            "generate_findings",
+            "generate_roadmap"
+          ],
+          "estimated_cost_usd": 0.3671
+        }
+      },
+      "task_count": 2
+    }
+  },
+  "phases_completed": [
+    "executive_summary",
+    "findings",
+    "playbook",
+    "architecture",
+    "insights"
+  ],
+  "errors_encountered": []
+}

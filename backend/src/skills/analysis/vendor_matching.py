@@ -166,6 +166,7 @@ class VendorMatchingSkill(LLMSkill[Dict[str, Any]]):
                 category=category,
                 industry=context.industry,
                 finding_tags=finding_tags,
+                company_context=company_context,
             )
         else:
             vendors = self._get_candidate_vendors(
@@ -257,16 +258,18 @@ class VendorMatchingSkill(LLMSkill[Dict[str, Any]]):
         category: Optional[str],
         industry: str,
         finding_tags: List[str],
+        company_context: Dict[str, Any],
     ) -> List[Dict[str, Any]]:
         """Get candidate vendors from Supabase with tier boosts."""
         try:
             normalized_industry = normalize_industry(industry)
 
-            # Get vendors with tier boosts applied
+            # Get vendors with tier boosts applied (includes budget filtering)
             vendors = await vendor_service.get_vendors_with_tier_boost(
                 industry=normalized_industry,
                 category=category,
                 finding_tags=finding_tags,
+                company_context=company_context,
             )
 
             if vendors:
@@ -282,6 +285,7 @@ class VendorMatchingSkill(LLMSkill[Dict[str, Any]]):
                     industry=normalized_industry,
                     category=None,
                     finding_tags=finding_tags,
+                    company_context=company_context,
                 )
 
             return vendors
@@ -439,6 +443,29 @@ class VendorMatchingSkill(LLMSkill[Dict[str, Any]]):
             if pricing.get("free_tier"):
                 score += 5
                 reasons.append("Free tier available")
+
+            # Budget-aware filtering
+            # Penalize expensive/enterprise vendors when company has limited budget
+            budget = company_context.get("budget", "moderate")
+            starting_price = pricing.get("starting_price")
+            is_custom_pricing = pricing.get("custom_pricing", False)
+
+            if budget == "low":
+                # Strong penalty for enterprise/custom pricing
+                if is_custom_pricing or starting_price is None:
+                    score -= 25
+                    limitations.append("Enterprise pricing (contact sales)")
+                elif starting_price and starting_price > 100:
+                    # Penalize vendors over $100/mo for budget-conscious
+                    penalty = min(20, int((starting_price - 100) / 25) * 5)
+                    score -= penalty
+                    if penalty >= 10:
+                        limitations.append(f"Higher cost (${starting_price}/mo)")
+            elif budget == "moderate":
+                # Light penalty for custom pricing only
+                if is_custom_pricing or starting_price is None:
+                    score -= 10
+                    limitations.append("Requires custom quote")
 
             # Check avoid_if conditions
             avoid_if = vendor.get("avoid_if", [])

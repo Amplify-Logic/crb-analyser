@@ -45,6 +45,10 @@ class SkillContext(BaseModel):
     # Report data (for report generation skills)
     report_data: Optional[Dict[str, Any]] = None
 
+    # Existing software stack (for Connect vs Replace)
+    # List of tools with API scores: [{"slug": "hubspot", "name": "HubSpot", "api_score": 4, ...}]
+    existing_stack: Optional[List[Dict[str, Any]]] = None
+
     # Additional context
     metadata: Dict[str, Any] = Field(default_factory=dict)
 

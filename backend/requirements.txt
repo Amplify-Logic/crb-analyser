@@ -36,6 +36,8 @@ sendgrid==6.11.0
 
 # Monitoring
 logfire==0.20.0
+logtail-python==0.3.1  # BetterStack log ingestion
+structlog==24.4.0  # Structured logging
 
 # PDF Generation
 weasyprint==62.3
@@ -51,6 +53,7 @@ apscheduler==3.10.4
 # Web Scraping
 beautifulsoup4==4.12.3
 lxml==5.1.0
+crawl4ai==0.4.247
 
 # Testing
 pytest==7.4.4

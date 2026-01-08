@@ -21,6 +21,7 @@ from .knowledge_admin import router as knowledge_admin_router
 from .admin_qa import router as admin_qa_router
 from .dev_feedback import router as dev_feedback_router
 from .admin_vendors import router as admin_vendors_router
+from .admin_research import router as admin_research_router
 from .workshop import router as workshop_router
 
 __all__ = [
@@ -43,5 +44,6 @@ __all__ = [
     "admin_qa_router",
     "dev_feedback_router",
     "admin_vendors_router",
+    "admin_research_router",
     "workshop_router",
 ]

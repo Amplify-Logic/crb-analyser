@@ -5,9 +5,47 @@ Pydantic models for vendor data.
 """
 
 from datetime import datetime
-from typing import Optional, List, Dict, Any
+from enum import IntEnum
+from typing import Optional, List, Dict, Any, Literal
 
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
+
+
+class ApiOpennessScore(IntEnum):
+    """
+    API Openness Score for vendor evaluation.
+
+    5 = Full REST API, webhooks, OAuth (Stripe, Twilio, HubSpot)
+    4 = Good API, some limitations (Salesforce, Zendesk)
+    3 = Basic API, limited endpoints (many dental PMS)
+    2 = Zapier/Make only, no direct API
+    1 = Closed system, no integrations
+    """
+    FULLY_OPEN = 5
+    GOOD_API = 4
+    BASIC_API = 3
+    INTEGRATION_ONLY = 2
+    CLOSED = 1
+
+
+class VendorApiIntegration(BaseModel):
+    """API and integration capabilities for a vendor."""
+    api_openness_score: Optional[int] = Field(
+        None,
+        ge=1,
+        le=5,
+        description="API openness rating 1-5 (5=fully open, 1=closed)"
+    )
+    api_available: bool = True
+    api_type: Optional[str] = None  # 'REST', 'GraphQL', 'SOAP'
+    api_docs_url: Optional[str] = None
+    has_webhooks: bool = False
+    has_oauth: bool = False
+    zapier_integration: bool = False
+    make_integration: bool = False
+    n8n_integration: bool = False
+    api_rate_limits: Optional[str] = None  # e.g., "1000/min"
+    custom_tool_examples: Optional[List[str]] = None
 
 
 class VendorPricingTier(BaseModel):
@@ -50,7 +88,18 @@ class VendorCreate(BaseModel):
     capterra_rating: Optional[float] = None
     our_rating: Optional[float] = None
     integrations: Optional[List[str]] = None
+    # API & Integration fields
     api_available: bool = True
+    api_openness_score: Optional[int] = Field(None, ge=1, le=5)
+    api_type: Optional[str] = None
+    api_docs_url: Optional[str] = None
+    has_webhooks: bool = False
+    has_oauth: bool = False
+    zapier_integration: bool = False
+    make_integration: bool = False
+    n8n_integration: bool = False
+    api_rate_limits: Optional[str] = None
+    custom_tool_examples: Optional[List[str]] = None
 
 
 class VendorUpdate(BaseModel):
@@ -73,8 +122,19 @@ class VendorUpdate(BaseModel):
     capterra_rating: Optional[float] = None
     our_rating: Optional[float] = None
     integrations: Optional[List[str]] = None
-    api_available: Optional[bool] = None
     auto_refresh_enabled: Optional[bool] = None
+    # API & Integration fields
+    api_available: Optional[bool] = None
+    api_openness_score: Optional[int] = Field(None, ge=1, le=5)
+    api_type: Optional[str] = None
+    api_docs_url: Optional[str] = None
+    has_webhooks: Optional[bool] = None
+    has_oauth: Optional[bool] = None
+    zapier_integration: Optional[bool] = None
+    make_integration: Optional[bool] = None
+    n8n_integration: Optional[bool] = None
+    api_rate_limits: Optional[str] = None
+    custom_tool_examples: Optional[List[str]] = None
 
 
 class VendorResponse(BaseModel):
@@ -99,9 +159,21 @@ class VendorResponse(BaseModel):
     capterra_rating: Optional[float] = None
     our_rating: Optional[float] = None
     integrations: Optional[List[str]] = None
-    api_available: bool = True
     pricing_verified_at: Optional[datetime] = None
     auto_refresh_enabled: bool = True
+    # API & Integration fields
+    api_available: bool = True
+    api_openness_score: Optional[int] = None
+    api_type: Optional[str] = None
+    api_docs_url: Optional[str] = None
+    has_webhooks: bool = False
+    has_oauth: bool = False
+    zapier_integration: bool = False
+    make_integration: bool = False
+    n8n_integration: bool = False
+    api_rate_limits: Optional[str] = None
+    custom_tool_examples: Optional[List[str]] = None
+    # Timestamps
     created_at: datetime
     updated_at: datetime
 

@@ -30,7 +30,7 @@ const TIERS: Tier[] = [
     id: 'professional',
     name: 'Professional Audit',
     price: 497,
-    description: 'Complete CRB analysis with actionable insights',
+    description: 'Complete AI readiness analysis with actionable insights',
     features: [
       'Full AI Readiness Score',
       '15-20 detailed findings',
@@ -115,7 +115,7 @@ export default function NewAuditV2() {
     <div className="min-h-screen bg-gray-50 py-12">
       <div className="max-w-3xl mx-auto px-4">
         <div className="mb-8">
-          <h1 className="text-3xl font-bold text-gray-900">New CRB Analysis</h1>
+          <h1 className="text-3xl font-bold text-gray-900">New AI Readiness Analysis</h1>
           <p className="text-gray-600 mt-2">
             Let's start by learning about your company
           </p>
@@ -285,7 +285,7 @@ export default function NewAuditV2() {
                   </>
                 ) : (
                   <>
-                    Start CRB Analysis
+                    Start Analysis
                     <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path
                         strokeLinecap="round"

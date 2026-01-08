@@ -20,6 +20,15 @@ TIER_BOOST = {
     3: 10,  # Alternative
 }
 
+# API openness boost scores (used in automation-first recommendations)
+API_OPENNESS_BOOST = {
+    5: 25,  # Full API + webhooks + OAuth
+    4: 15,  # Good API
+    3: 5,   # Basic API
+    2: 0,   # Zapier only
+    1: -10, # Closed system (penalize)
+}
+
 
 class VendorService:
     """Service for vendor CRUD and query operations."""
@@ -309,6 +318,8 @@ class VendorService:
         industry: str,
         category: Optional[str] = None,
         finding_tags: Optional[List[str]] = None,
+        company_context: Optional[Dict[str, Any]] = None,
+        prefer_automation: bool = True,
     ) -> List[Dict[str, Any]]:
         """
         Get vendors for an industry with tier boosts applied.
@@ -317,10 +328,13 @@ class VendorService:
             industry: Industry slug (e.g., 'dental', 'recruiting')
             category: Optional category filter
             finding_tags: Tags from finding for recommended_for matching
+            company_context: Optional dict with budget, employee_count, etc.
+            prefer_automation: If True, boost vendors with high API openness scores
 
         Returns:
-            Vendors with _tier_boost and _recommendation_score fields
+            Vendors with _tier_boost, _api_openness_boost, and _recommendation_score fields
         """
+        company_context = company_context or {}
         settings = get_settings()
 
         if not settings.USE_SUPABASE_VENDORS:
@@ -345,6 +359,8 @@ class VendorService:
             vendors = await self._apply_industry_boosts(vendors, industry)
 
             # Calculate recommendation scores
+            budget = company_context.get("budget", "moderate")
+
             for vendor in vendors:
                 score = vendor.get("_tier_boost", 0)
 
@@ -360,6 +376,46 @@ class VendorService:
                         if tag_normalized in recommended_for or tag in recommended_for:
                             score += 10
                             break
+
+                # API Openness scoring (automation-first approach)
+                api_openness = vendor.get("api_openness_score")
+                if prefer_automation and api_openness:
+                    api_boost = API_OPENNESS_BOOST.get(api_openness, 0)
+                    vendor["_api_openness_boost"] = api_boost
+                    score += api_boost
+
+                    # Extra boost for vendors with webhook + OAuth (full automation ready)
+                    if vendor.get("has_webhooks") and vendor.get("has_oauth"):
+                        score += 10
+                    # Boost for n8n/Make/Zapier integrations
+                    integration_count = sum([
+                        vendor.get("n8n_integration", False),
+                        vendor.get("make_integration", False),
+                        vendor.get("zapier_integration", False),
+                    ])
+                    if integration_count >= 2:
+                        score += 5
+                else:
+                    vendor["_api_openness_boost"] = 0
+
+                # Budget-aware filtering
+                # Penalize expensive/enterprise vendors when company has limited budget
+                pricing = vendor.get("pricing") or {}
+                starting_price = pricing.get("starting_price")
+                is_custom_pricing = pricing.get("custom_pricing", False)
+
+                if budget == "low":
+                    # Strong penalty for enterprise/custom pricing
+                    if is_custom_pricing or starting_price is None:
+                        score -= 25
+                    elif starting_price and starting_price > 100:
+                        # Penalize vendors over $100/mo for budget-conscious
+                        penalty = min(20, int((starting_price - 100) / 25) * 5)
+                        score -= penalty
+                elif budget == "moderate":
+                    # Light penalty for custom pricing only
+                    if is_custom_pricing or starting_price is None:
+                        score -= 10
 
                 vendor["_recommendation_score"] = score
 
@@ -513,6 +569,151 @@ class VendorService:
         except Exception as e:
             logger.error(f"Failed to remove vendor tier: {e}")
             return False
+
+    async def get_automation_ready_vendors(
+        self,
+        category: Optional[str] = None,
+        min_openness_score: int = 4,
+        require_webhooks: bool = False,
+        limit: int = 20,
+    ) -> List[Dict[str, Any]]:
+        """
+        Get vendors that are automation-ready (high API openness).
+
+        This is the automation-first approach: find vendors that can be
+        integrated with n8n, Make, Zapier, or custom Claude Code scripts.
+
+        Args:
+            category: Optional category filter
+            min_openness_score: Minimum API openness score (1-5, default 4)
+            require_webhooks: Only return vendors with webhook support
+            limit: Max results
+
+        Returns:
+            Vendors sorted by API capabilities
+        """
+        supabase = await get_async_supabase()
+
+        try:
+            query = supabase.table("vendors").select("*").eq("status", "active")
+
+            if category:
+                query = query.eq("category", category)
+
+            # Filter by API openness
+            query = query.gte("api_openness_score", min_openness_score)
+
+            if require_webhooks:
+                query = query.eq("has_webhooks", True)
+
+            query = query.order("api_openness_score", desc=True).limit(limit)
+
+            result = await query.execute()
+            vendors = result.data or []
+
+            # Add automation compatibility info
+            for vendor in vendors:
+                vendor["_automation_ready"] = True
+                vendor["_integration_platforms"] = []
+                if vendor.get("n8n_integration"):
+                    vendor["_integration_platforms"].append("n8n")
+                if vendor.get("make_integration"):
+                    vendor["_integration_platforms"].append("Make")
+                if vendor.get("zapier_integration"):
+                    vendor["_integration_platforms"].append("Zapier")
+
+            return vendors
+
+        except Exception as e:
+            logger.error(f"Failed to get automation-ready vendors: {e}")
+            return []
+
+    async def get_vendors_needing_api_audit(
+        self,
+        limit: int = 50,
+    ) -> List[Dict[str, Any]]:
+        """
+        Get vendors that don't have API openness scores yet.
+
+        Use this to identify vendors that need their API capabilities documented.
+        """
+        supabase = await get_async_supabase()
+
+        try:
+            result = await supabase.table("vendors").select(
+                "id, slug, name, category, website, api_available, api_docs_url"
+            ).eq("status", "active").is_("api_openness_score", "null").limit(
+                limit
+            ).execute()
+
+            return result.data or []
+
+        except Exception as e:
+            logger.error(f"Failed to get vendors needing API audit: {e}")
+            return []
+
+    async def update_vendor_api_info(
+        self,
+        slug: str,
+        api_openness_score: int,
+        has_webhooks: bool = False,
+        has_oauth: bool = False,
+        zapier_integration: bool = False,
+        make_integration: bool = False,
+        n8n_integration: bool = False,
+        api_rate_limits: Optional[str] = None,
+        custom_tool_examples: Optional[List[str]] = None,
+    ) -> Optional[Dict[str, Any]]:
+        """
+        Update a vendor's API and integration information.
+
+        Args:
+            slug: Vendor slug
+            api_openness_score: API openness rating (1-5)
+            has_webhooks: Supports webhooks
+            has_oauth: Supports OAuth
+            zapier_integration: Has Zapier integration
+            make_integration: Has Make integration
+            n8n_integration: Has n8n integration
+            api_rate_limits: Rate limit info (e.g., "1000/min")
+            custom_tool_examples: Examples of automations possible
+
+        Returns:
+            Updated vendor data or None
+        """
+        supabase = await get_async_supabase()
+
+        update_data = {
+            "api_openness_score": api_openness_score,
+            "has_webhooks": has_webhooks,
+            "has_oauth": has_oauth,
+            "zapier_integration": zapier_integration,
+            "make_integration": make_integration,
+            "n8n_integration": n8n_integration,
+            "updated_at": datetime.utcnow().isoformat(),
+        }
+
+        if api_rate_limits:
+            update_data["api_rate_limits"] = api_rate_limits
+
+        if custom_tool_examples:
+            update_data["custom_tool_examples"] = custom_tool_examples
+
+        try:
+            result = await supabase.table("vendors").update(update_data).eq(
+                "slug", slug
+            ).execute()
+
+            if result.data:
+                logger.info(
+                    f"Updated API info for {slug}: score={api_openness_score}"
+                )
+                return result.data[0]
+            return None
+
+        except Exception as e:
+            logger.error(f"Failed to update vendor API info for {slug}: {e}")
+            return None
 
     def _get_vendors_from_json_with_boost(
         self,

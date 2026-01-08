@@ -340,7 +340,7 @@ Let's start with the big picture: **What's the main challenge or opportunity tha
         <nav className="fixed top-0 left-0 right-0 z-50 bg-white/80 backdrop-blur-md border-b border-gray-100">
           <div className="max-w-6xl mx-auto px-4 py-4">
             <Link to="/" className="text-xl font-bold text-gray-900">
-              CRB<span className="text-primary-600">Analyser</span>
+              Ready<span className="text-primary-600">Path</span>
             </Link>
           </div>
         </nav>
@@ -363,7 +363,7 @@ Let's start with the big picture: **What's the main challenge or opportunity tha
 
               <p className="text-lg text-gray-600 mb-8">
                 Thank you for sharing so much valuable information about {context?.companyName}.
-                We now have everything we need to create your comprehensive CRB report.
+                We now have everything we need to create your comprehensive AI readiness report.
               </p>
 
               <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100 mb-8">
@@ -393,7 +393,7 @@ Let's start with the big picture: **What's the main challenge or opportunity tha
                     <div className="w-6 h-6 rounded-full bg-primary-200 text-primary-800 flex items-center justify-center flex-shrink-0 text-sm font-semibold">
                       2
                     </div>
-                    <span className="text-primary-800">We generate your personalized CRB report</span>
+                    <span className="text-primary-800">We generate your personalized AI readiness report</span>
                   </li>
                   <li className="flex gap-3">
                     <div className="w-6 h-6 rounded-full bg-primary-200 text-primary-800 flex items-center justify-center flex-shrink-0 text-sm font-semibold">
@@ -424,7 +424,7 @@ Let's start with the big picture: **What's the main challenge or opportunity tha
       <nav className="fixed top-0 left-0 right-0 z-50 bg-white/80 backdrop-blur-md border-b border-gray-100">
         <div className="max-w-4xl mx-auto px-4 py-3 flex items-center justify-between">
           <Link to="/" className="text-xl font-bold text-gray-900">
-            CRB<span className="text-primary-600">Analyser</span>
+            Ready<span className="text-primary-600">Path</span>
           </Link>
 
           {/* Progress indicator */}
@@ -478,7 +478,7 @@ Let's start with the big picture: **What's the main challenge or opportunity tha
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
                         </svg>
                       </div>
-                      <span className="text-sm font-medium text-primary-600">CRB Analyst</span>
+                      <span className="text-sm font-medium text-primary-600">Ready Path Analyst</span>
                     </div>
                   )}
                   <div

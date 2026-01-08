@@ -1,0 +1,20 @@
+{
+  "industry": "general",
+  "last_updated": "2026-01-08T19:41:41.696277",
+  "total_analyses": 1,
+  "confidence": "low",
+  "pain_points": {},
+  "processes": {},
+  "effective_patterns": [],
+  "anti_patterns": [],
+  "size_specific": {
+    "unknown": {
+      "count": 1,
+      "avg_readiness": 35.0,
+      "common_pain_points": []
+    }
+  },
+  "avg_ai_readiness": 35.0,
+  "avg_potential_savings": 84000.0,
+  "common_tech_stacks": []
+}

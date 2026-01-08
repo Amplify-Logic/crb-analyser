@@ -141,7 +141,7 @@ export default function ReportProgress() {
       <nav className="fixed top-0 left-0 right-0 z-50 bg-white/80 backdrop-blur-md border-b border-gray-100">
         <div className="max-w-6xl mx-auto px-4 py-4">
           <Link to="/" className="text-xl font-bold text-gray-900">
-            CRB<span className="text-primary-600">Analyser</span>
+            Ready<span className="text-primary-600">Path</span>
           </Link>
         </div>
       </nav>

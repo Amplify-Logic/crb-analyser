@@ -7,7 +7,7 @@ export default function Terms() {
       <nav className="fixed top-0 left-0 right-0 z-50 bg-white/80 backdrop-blur-md border-b border-gray-100">
         <div className="max-w-6xl mx-auto px-4 py-4 flex justify-between items-center">
           <Link to="/" className="text-xl font-bold text-gray-900">
-            CRB<span className="text-primary-600">Analyser</span>
+            Ready<span className="text-primary-600">Path</span>
           </Link>
           <Link
             to="/"
@@ -28,7 +28,7 @@ export default function Terms() {
             <section>
               <h2 className="text-xl font-semibold text-gray-900 mb-3">1. Agreement to Terms</h2>
               <p className="text-gray-600 leading-relaxed">
-                By accessing or using CRB Analyser ("the Service"), you agree to be bound by these Terms of Service.
+                By accessing or using Ready Path ("the Service"), you agree to be bound by these Terms of Service.
                 If you disagree with any part of these terms, you may not access the Service.
               </p>
             </section>
@@ -36,7 +36,7 @@ export default function Terms() {
             <section>
               <h2 className="text-xl font-semibold text-gray-900 mb-3">2. Description of Service</h2>
               <p className="text-gray-600 leading-relaxed">
-                CRB Analyser provides AI-powered business analysis and consulting reports. Our service includes:
+                Ready Path provides AI-powered business analysis and consulting reports. Our service includes:
               </p>
               <ul className="mt-3 space-y-2 text-gray-600">
                 <li className="flex items-start gap-2">
@@ -107,7 +107,7 @@ export default function Terms() {
             <section>
               <h2 className="text-xl font-semibold text-gray-900 mb-3">6. Intellectual Property</h2>
               <p className="text-gray-600 leading-relaxed">
-                The Service and its original content, features, and functionality are owned by CRB Analyser
+                The Service and its original content, features, and functionality are owned by Ready Path
                 and are protected by international copyright, trademark, and other intellectual property laws.
               </p>
               <p className="text-gray-600 leading-relaxed mt-3">
@@ -119,7 +119,7 @@ export default function Terms() {
             <section>
               <h2 className="text-xl font-semibold text-gray-900 mb-3">7. Limitation of Liability</h2>
               <p className="text-gray-600 leading-relaxed">
-                In no event shall CRB Analyser be liable for any indirect, incidental, special, consequential,
+                In no event shall Ready Path be liable for any indirect, incidental, special, consequential,
                 or punitive damages, including without limitation, loss of profits, data, use, or goodwill,
                 arising out of or in connection with your use of the Service.
               </p>

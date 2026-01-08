@@ -102,7 +102,7 @@ export default function CheckoutSuccess() {
       <nav className="fixed top-0 left-0 right-0 z-50 bg-white/80 backdrop-blur-md border-b border-gray-100">
         <div className="max-w-6xl mx-auto px-4 py-4 flex justify-between items-center">
           <Link to="/" className="text-xl font-bold text-gray-900">
-            CRB<span className="text-primary-600">Analyser</span>
+            Ready<span className="text-primary-600">Path</span>
           </Link>
         </div>
       </nav>
@@ -230,7 +230,7 @@ export default function CheckoutSuccess() {
                 Questions? We're here to help.
               </p>
               <a
-                href="mailto:support@crb-analyser.com"
+                href="mailto:support@readypath.ai"
                 className="text-primary-600 hover:text-primary-700 font-medium"
               >
                 Contact Support

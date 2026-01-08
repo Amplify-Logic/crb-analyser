@@ -15,7 +15,7 @@ interface QuizAnswer {
 
 const TIER_INFO = {
   ai: {
-    name: 'CRB Report',
+    name: 'Readiness Report',
     price: 147,
     description: 'Self-service analysis',
     features: [
@@ -27,7 +27,7 @@ const TIER_INFO = {
     ],
   },
   human: {
-    name: 'CRB Report + Strategy Call',
+    name: 'Readiness Report + Strategy Call',
     price: 497,
     description: 'Expert-guided analysis',
     features: [
@@ -128,7 +128,7 @@ export default function Checkout() {
       <nav className="fixed top-0 left-0 right-0 z-50 bg-white/80 backdrop-blur-md border-b border-gray-100">
         <div className="max-w-6xl mx-auto px-4 py-4 flex justify-between items-center">
           <Link to="/" className="text-xl font-bold text-gray-900">
-            CRB<span className="text-primary-600">Analyser</span>
+            Ready<span className="text-primary-600">Path</span>
           </Link>
           <div className="flex items-center gap-2 text-sm text-gray-500">
             <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">

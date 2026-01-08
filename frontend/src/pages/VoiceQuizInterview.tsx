@@ -458,7 +458,7 @@ export default function VoiceQuizInterview() {
         <nav className="fixed top-0 left-0 right-0 z-50 bg-white/80 backdrop-blur-md border-b border-gray-100">
           <div className="max-w-4xl mx-auto px-4 py-4 flex justify-between items-center">
             <Link to="/" className="text-xl font-bold text-gray-900">
-              CRB<span className="text-primary-600">Analyser</span>
+              Ready<span className="text-primary-600">Path</span>
             </Link>
             <span className="text-sm text-gray-500">~5 min interview</span>
           </div>
@@ -624,7 +624,7 @@ export default function VoiceQuizInterview() {
         <div className="max-w-4xl mx-auto px-4 py-3">
           <div className="flex items-center justify-between mb-2">
             <Link to="/" className="text-xl font-bold text-gray-900">
-              CRB<span className="text-primary-600">Analyser</span>
+              Ready<span className="text-primary-600">Path</span>
             </Link>
             <div className="flex items-center gap-4">
               <span className="text-sm text-gray-500">

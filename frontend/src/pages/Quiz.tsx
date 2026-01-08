@@ -151,6 +151,19 @@ interface ResearchFinding {
   source?: string
 }
 
+// Existing Stack Types (for Connect vs Replace feature)
+interface SoftwareOption {
+  slug: string
+  name: string
+  category: string
+}
+
+interface ExistingStackItem {
+  slug: string
+  source: 'selected' | 'free_text'
+  name?: string
+}
+
 interface DynamicQuestion {
   id: string
   question: string
@@ -857,6 +870,13 @@ export default function Quiz() {
   // Knowledge completeness
   const [knowledgeScore, setKnowledgeScore] = useState(0)
 
+  // Existing Stack State (Connect vs Replace feature)
+  const [softwareOptions, setSoftwareOptions] = useState<Record<string, SoftwareOption[]>>({})
+  const [softwareCategories, setSoftwareCategories] = useState<string[]>([])
+  const [selectedSoftware, setSelectedSoftware] = useState<Set<string>>(new Set())
+  const [otherSoftware, setOtherSoftware] = useState('')
+  const [existingStackSaved, setExistingStackSaved] = useState(false)
+
   // Teaser report state (TODO: implement teaser API when backend is ready)
   // Using void to suppress unused setter warning - will be used when teaser API is implemented
   const [teaserReport, setTeaserReport] = useState<TeaserReport | null>(null)
@@ -1059,6 +1079,73 @@ export default function Quiz() {
     initSession()
   }, [])
 
+  // Fetch software options when we have research results with an industry
+  useEffect(() => {
+    const fetchSoftwareOptions = async () => {
+      // Get industry from research results
+      const industry = researchResult?.company_profile?.industry?.primary_industry?.value
+      if (!industry) return
+
+      try {
+        const response = await fetch(
+          `${API_BASE_URL}/api/quiz/software-options?industry=${encodeURIComponent(industry)}`
+        )
+        if (response.ok) {
+          const data = await response.json()
+          setSoftwareOptions(data.options_by_category || {})
+          setSoftwareCategories(data.categories || [])
+        }
+      } catch (error) {
+        console.error('Failed to fetch software options:', error)
+      }
+    }
+
+    if (researchResult && phase === 'findings') {
+      fetchSoftwareOptions()
+    }
+  }, [researchResult, phase])
+
+  // Save existing stack to session
+  const saveExistingStack = useCallback(async () => {
+    if (!sessionId) return
+
+    const existingStack: ExistingStackItem[] = []
+
+    // Add selected software
+    selectedSoftware.forEach(slug => {
+      existingStack.push({ slug, source: 'selected' })
+    })
+
+    // Add other/custom software
+    if (otherSoftware.trim()) {
+      otherSoftware.split(',').forEach(name => {
+        const trimmed = name.trim()
+        if (trimmed) {
+          existingStack.push({
+            slug: trimmed.toLowerCase().replace(/\s+/g, '-'),
+            source: 'free_text',
+            name: trimmed
+          })
+        }
+      })
+    }
+
+    try {
+      const response = await fetch(`${API_BASE_URL}/api/quiz/sessions/${sessionId}`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ existing_stack: existingStack }),
+      })
+
+      if (response.ok) {
+        setExistingStackSaved(true)
+        console.log('Saved existing stack:', existingStack.length, 'tools')
+      }
+    } catch (error) {
+      console.error('Failed to save existing stack:', error)
+    }
+  }, [sessionId, selectedSoftware, otherSoftware])
+
   // ============================================================================
   // Research Functions
   // ============================================================================
@@ -1246,7 +1333,7 @@ export default function Quiz() {
         <nav className="fixed top-0 left-0 right-0 z-50 bg-white/80 backdrop-blur-md border-b border-gray-100">
           <div className="max-w-6xl mx-auto px-4 py-4">
             <Link to="/" className="text-xl font-bold text-gray-900">
-              CRB<span className="text-primary-600">Analyser</span>
+              Ready<span className="text-primary-600">Path</span>
             </Link>
           </div>
         </nav>
@@ -1616,7 +1703,7 @@ export default function Quiz() {
         <nav className="fixed top-0 left-0 right-0 z-50 bg-white/70 backdrop-blur-xl border-b border-white/50">
           <div className="max-w-6xl mx-auto px-4 py-4 flex justify-between items-center">
             <Link to="/" className="text-xl font-bold text-gray-900">
-              CRB<span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-600 to-indigo-600">Analyser</span>
+              Ready<span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-600 to-indigo-600">Path</span>
             </Link>
             <motion.div
               initial={{ opacity: 0, x: 20 }}
@@ -1824,6 +1911,107 @@ export default function Quiz() {
                 </div>
               </motion.div>
 
+              {/* Existing Stack Question - Connect vs Replace */}
+              {softwareCategories.length > 0 && (
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.7 }}
+                  className="bg-white/80 backdrop-blur-xl rounded-3xl p-6 shadow-xl shadow-gray-900/5 border border-white/50 mb-6"
+                >
+                  <div className="flex items-center gap-3 mb-4">
+                    <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-cyan-600 rounded-xl flex items-center justify-center shadow-md shadow-blue-500/20">
+                      <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 3v2m6-2v2M9 19v2m6-2v2M5 9H3m2 6H3m18-6h-2m2 6h-2M7 19h10a2 2 0 002-2V7a2 2 0 00-2-2H7a2 2 0 00-2 2v10a2 2 0 002 2zM9 9h6v6H9V9z" />
+                      </svg>
+                    </div>
+                    <div>
+                      <h3 className="font-bold text-gray-900">What software do you currently use?</h3>
+                      <p className="text-sm text-gray-500">We'll show you how to automate your existing tools</p>
+                    </div>
+                  </div>
+
+                  {/* Software Categories */}
+                  <div className="space-y-4 max-h-[400px] overflow-y-auto pr-2">
+                    {softwareCategories.map(category => (
+                      <div key={category}>
+                        <h4 className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2">
+                          {category}
+                        </h4>
+                        <div className="flex flex-wrap gap-2">
+                          {(softwareOptions[category] || []).map(option => {
+                            const isSelected = selectedSoftware.has(option.slug)
+                            return (
+                              <button
+                                key={option.slug}
+                                onClick={() => {
+                                  setSelectedSoftware(prev => {
+                                    const next = new Set(prev)
+                                    if (next.has(option.slug)) {
+                                      next.delete(option.slug)
+                                    } else {
+                                      next.add(option.slug)
+                                    }
+                                    return next
+                                  })
+                                  setExistingStackSaved(false)
+                                }}
+                                className={`px-3 py-1.5 text-sm rounded-lg border transition-all ${
+                                  isSelected
+                                    ? 'bg-blue-100 border-blue-300 text-blue-700 font-medium'
+                                    : 'bg-white border-gray-200 text-gray-700 hover:border-gray-300 hover:bg-gray-50'
+                                }`}
+                              >
+                                {isSelected && (
+                                  <span className="mr-1">✓</span>
+                                )}
+                                {option.name}
+                              </button>
+                            )
+                          })}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+
+                  {/* Other/Custom Software Input */}
+                  <div className="mt-4 pt-4 border-t border-gray-100">
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      Other software not listed?
+                    </label>
+                    <input
+                      type="text"
+                      value={otherSoftware}
+                      onChange={(e) => {
+                        setOtherSoftware(e.target.value)
+                        setExistingStackSaved(false)
+                      }}
+                      placeholder="e.g., CustomPMS, Internal Tool (comma-separated)"
+                      className="w-full px-3 py-2 text-sm border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    />
+                  </div>
+
+                  {/* Selection Summary */}
+                  {(selectedSoftware.size > 0 || otherSoftware.trim()) && (
+                    <div className="mt-4 p-3 bg-blue-50 rounded-xl">
+                      <div className="flex items-center justify-between">
+                        <span className="text-sm text-blue-700">
+                          <span className="font-semibold">{selectedSoftware.size + (otherSoftware.trim() ? otherSoftware.split(',').filter(s => s.trim()).length : 0)}</span> tools selected
+                        </span>
+                        {existingStackSaved && (
+                          <span className="text-xs text-green-600 flex items-center gap-1">
+                            <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                            </svg>
+                            Saved
+                          </span>
+                        )}
+                      </div>
+                    </div>
+                  )}
+                </motion.div>
+              )}
+
               {/* Time estimate */}
               <motion.div
                 initial={{ opacity: 0 }}
@@ -1849,7 +2037,11 @@ export default function Quiz() {
                 <motion.button
                   whileHover={{ scale: 1.02, y: -2 }}
                   whileTap={{ scale: 0.98 }}
-                  onClick={() => {
+                  onClick={async () => {
+                    // Save existing stack if user selected any tools
+                    if (selectedSoftware.size > 0 || otherSoftware.trim()) {
+                      await saveExistingStack()
+                    }
                     // Save session data for interview
                     sessionStorage.setItem('quizSessionId', sessionId || '')
                     sessionStorage.setItem('companyName', companyName)
@@ -1912,7 +2104,7 @@ export default function Quiz() {
         <nav className="fixed top-0 left-0 right-0 z-50 bg-white/80 backdrop-blur-md border-b border-gray-100">
           <div className="max-w-6xl mx-auto px-4 py-4">
             <Link to="/" className="text-xl font-bold text-gray-900">
-              CRB<span className="text-primary-600">Analyser</span>
+              Ready<span className="text-primary-600">Path</span>
             </Link>
           </div>
         </nav>
@@ -2071,7 +2263,7 @@ export default function Quiz() {
         <nav className="fixed top-0 left-0 right-0 z-50 bg-white/80 backdrop-blur-md border-b border-gray-100">
           <div className="max-w-6xl mx-auto px-4 py-4">
             <Link to="/" className="text-xl font-bold text-gray-900">
-              CRB<span className="text-primary-600">Analyser</span>
+              Ready<span className="text-primary-600">Path</span>
             </Link>
           </div>
         </nav>
@@ -2103,7 +2295,7 @@ export default function Quiz() {
                 >
                   <div className="text-center mb-6">
                     <div className="inline-block px-4 py-1 bg-gray-100 text-gray-700 rounded-full text-sm font-medium mb-4">
-                      CRB Report
+                      Readiness Report
                     </div>
                     <div className="flex items-baseline justify-center gap-2 mb-2">
                       <span className="text-4xl font-bold text-gray-900">€147</span>
@@ -2148,7 +2340,7 @@ export default function Quiz() {
 
                   <div className="text-center mb-6">
                     <div className="inline-block px-4 py-1 bg-primary-100 text-primary-700 rounded-full text-sm font-medium mb-4">
-                      CRB Report + Strategy Call
+                      Readiness Report + Strategy Call
                     </div>
                     <div className="flex items-baseline justify-center gap-2 mb-2">
                       <span className="text-4xl font-bold text-gray-900">€497</span>
@@ -2260,7 +2452,7 @@ export default function Quiz() {
         <nav className="fixed top-0 left-0 right-0 z-50 bg-white/80 backdrop-blur-md border-b border-gray-100">
           <div className="max-w-6xl mx-auto px-4 py-4">
             <Link to="/" className="text-xl font-bold text-gray-900">
-              CRB<span className="text-primary-600">Analyser</span>
+              Ready<span className="text-primary-600">Path</span>
             </Link>
           </div>
         </nav>
@@ -2348,7 +2540,7 @@ export default function Quiz() {
         <nav className="fixed top-0 left-0 right-0 z-50 bg-white/80 backdrop-blur-md border-b border-gray-100">
           <div className="max-w-6xl mx-auto px-4 py-4 flex justify-between items-center">
             <Link to="/" className="text-xl font-bold text-gray-900">
-              CRB<span className="text-primary-600">Analyser</span>
+              Ready<span className="text-primary-600">Path</span>
             </Link>
             <div className="text-sm text-gray-500">
               Question {currentQuestionIndex + 1} of {questions.length}
@@ -2562,7 +2754,7 @@ export default function Quiz() {
         <nav className="fixed top-0 left-0 right-0 z-50 bg-white/80 backdrop-blur-md border-b border-gray-100">
           <div className="max-w-6xl mx-auto px-4 py-4">
             <Link to="/" className="text-xl font-bold text-gray-900">
-              CRB<span className="text-primary-600">Analyser</span>
+              Ready<span className="text-primary-600">Path</span>
             </Link>
           </div>
         </nav>

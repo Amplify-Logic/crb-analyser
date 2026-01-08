@@ -8,6 +8,7 @@
 import { useState, useEffect, useCallback } from 'react'
 import { useSearchParams } from 'react-router-dom'
 import apiClient from '../../services/apiClient'
+import VendorResearchButtons from '../../components/admin/VendorResearchButtons'
 
 // Types
 interface Vendor {
@@ -47,13 +48,24 @@ interface Vendor {
   implementation_complexity?: string
   requires_developer?: boolean
   integrations?: string[]
-  api_available?: boolean
   key_capabilities?: string[]
   status?: string
   verified_at?: string
   verified_by?: string
   created_at?: string
   updated_at?: string
+  // API & Integration fields
+  api_available?: boolean
+  api_openness_score?: number  // 1-5 rating
+  api_type?: string  // REST, GraphQL, SOAP
+  api_docs_url?: string
+  has_webhooks?: boolean
+  has_oauth?: boolean
+  zapier_integration?: boolean
+  make_integration?: boolean
+  n8n_integration?: boolean
+  api_rate_limits?: string
+  custom_tool_examples?: string[]
 }
 
 interface Category {
@@ -187,6 +199,17 @@ function VendorList({
                 {vendor.our_rating && (
                   <span className="text-xs px-2 py-0.5 bg-yellow-50 text-yellow-700 rounded flex items-center gap-1">
                     ★ {vendor.our_rating.toFixed(1)}
+                  </span>
+                )}
+                {vendor.api_openness_score && (
+                  <span className={`text-xs px-2 py-0.5 rounded flex items-center gap-1 ${
+                    vendor.api_openness_score >= 4
+                      ? 'bg-green-50 text-green-700'
+                      : vendor.api_openness_score >= 3
+                        ? 'bg-blue-50 text-blue-700'
+                        : 'bg-gray-100 text-gray-600'
+                  }`}>
+                    API: {vendor.api_openness_score}/5
                   </span>
                 )}
               </div>
@@ -502,15 +525,6 @@ function VendorEditor({
             <label className="flex items-center gap-2">
               <input
                 type="checkbox"
-                checked={form.api_available || false}
-                onChange={(e) => handleChange('api_available', e.target.checked)}
-                className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
-              />
-              <span className="text-sm text-gray-700">API Available</span>
-            </label>
-            <label className="flex items-center gap-2">
-              <input
-                type="checkbox"
                 checked={form.requires_developer || false}
                 onChange={(e) => handleChange('requires_developer', e.target.checked)}
                 className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
@@ -540,6 +554,162 @@ function VendorEditor({
               <option value="needs_review">Needs Review</option>
               <option value="deprecated">Deprecated</option>
             </select>
+          </div>
+        </div>
+      </div>
+
+      {/* API & Integration Section */}
+      <div className="mt-6 pt-6 border-t border-gray-200">
+        <h3 className="text-lg font-medium text-gray-900 mb-4">API & Integration Capabilities</h3>
+        <p className="text-sm text-gray-500 mb-4">
+          Rate this vendor's API openness for automation-first recommendations.
+        </p>
+
+        <div className="grid grid-cols-2 gap-6">
+          {/* Left Column - API Info */}
+          <div className="space-y-4">
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                API Openness Score (1-5)
+              </label>
+              <select
+                value={form.api_openness_score || ''}
+                onChange={(e) => handleChange('api_openness_score', e.target.value ? parseInt(e.target.value) : undefined)}
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+              >
+                <option value="">Not rated</option>
+                <option value="5">5 - Full API + Webhooks + OAuth (Stripe, Twilio)</option>
+                <option value="4">4 - Good API, some limitations (Salesforce)</option>
+                <option value="3">3 - Basic API, limited endpoints</option>
+                <option value="2">2 - Zapier/Make only, no direct API</option>
+                <option value="1">1 - Closed system, no integrations</option>
+              </select>
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">API Type</label>
+              <select
+                value={form.api_type || ''}
+                onChange={(e) => handleChange('api_type', e.target.value || undefined)}
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+              >
+                <option value="">None / Unknown</option>
+                <option value="REST">REST</option>
+                <option value="GraphQL">GraphQL</option>
+                <option value="SOAP">SOAP</option>
+                <option value="gRPC">gRPC</option>
+              </select>
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">API Docs URL</label>
+              <input
+                type="url"
+                value={form.api_docs_url || ''}
+                onChange={(e) => handleChange('api_docs_url', e.target.value)}
+                placeholder="https://docs.example.com/api"
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+              />
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">API Rate Limits</label>
+              <input
+                type="text"
+                value={form.api_rate_limits || ''}
+                onChange={(e) => handleChange('api_rate_limits', e.target.value)}
+                placeholder="e.g., 1000/min, 100 req/hour"
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+              />
+            </div>
+          </div>
+
+          {/* Right Column - Integration Support */}
+          <div className="space-y-4">
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">API Capabilities</label>
+              <div className="space-y-2">
+                <label className="flex items-center gap-2">
+                  <input
+                    type="checkbox"
+                    checked={form.api_available || false}
+                    onChange={(e) => handleChange('api_available', e.target.checked)}
+                    className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                  />
+                  <span className="text-sm text-gray-700">API Available</span>
+                </label>
+                <label className="flex items-center gap-2">
+                  <input
+                    type="checkbox"
+                    checked={form.has_webhooks || false}
+                    onChange={(e) => handleChange('has_webhooks', e.target.checked)}
+                    className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                  />
+                  <span className="text-sm text-gray-700">Supports Webhooks</span>
+                </label>
+                <label className="flex items-center gap-2">
+                  <input
+                    type="checkbox"
+                    checked={form.has_oauth || false}
+                    onChange={(e) => handleChange('has_oauth', e.target.checked)}
+                    className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                  />
+                  <span className="text-sm text-gray-700">Supports OAuth</span>
+                </label>
+              </div>
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">Integration Platforms</label>
+              <div className="space-y-2">
+                <label className="flex items-center gap-2">
+                  <input
+                    type="checkbox"
+                    checked={form.zapier_integration || false}
+                    onChange={(e) => handleChange('zapier_integration', e.target.checked)}
+                    className="rounded border-gray-300 text-orange-500 focus:ring-orange-500"
+                  />
+                  <span className="text-sm text-gray-700">Zapier Integration</span>
+                </label>
+                <label className="flex items-center gap-2">
+                  <input
+                    type="checkbox"
+                    checked={form.make_integration || false}
+                    onChange={(e) => handleChange('make_integration', e.target.checked)}
+                    className="rounded border-gray-300 text-purple-600 focus:ring-purple-500"
+                  />
+                  <span className="text-sm text-gray-700">Make (Integromat) Integration</span>
+                </label>
+                <label className="flex items-center gap-2">
+                  <input
+                    type="checkbox"
+                    checked={form.n8n_integration || false}
+                    onChange={(e) => handleChange('n8n_integration', e.target.checked)}
+                    className="rounded border-gray-300 text-green-600 focus:ring-green-500"
+                  />
+                  <span className="text-sm text-gray-700">n8n Integration</span>
+                </label>
+              </div>
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                Custom Tool Examples (one per line)
+              </label>
+              <textarea
+                value={(form.custom_tool_examples || []).join('\n')}
+                onChange={(e) => {
+                  const examples = e.target.value.split('\n').filter(Boolean)
+                  handleChange('custom_tool_examples', examples.length > 0 ? examples : undefined)
+                }}
+                rows={3}
+                placeholder="AI-powered lead scoring&#10;Automated follow-up workflows&#10;Smart ticket routing"
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 text-sm"
+              />
+              <p className="text-xs text-gray-500 mt-1">
+                Examples of automations possible with this vendor's API
+              </p>
+            </div>
           </div>
         </div>
       </div>
@@ -1388,6 +1558,11 @@ export default function VendorAdmin() {
                       {useSemanticSearch ? '🔮 AI Search' : '🔍 Keyword'}
                     </button>
                   </div>
+                  <VendorResearchButtons
+                    category={searchParams.get('category') || undefined}
+                    industry={searchParams.get('industry') || undefined}
+                    onComplete={() => loadVendors()}
+                  />
                   <button
                     onClick={handleCreateNew}
                     className="px-4 py-2 bg-blue-600 text-white text-sm font-medium rounded-lg hover:bg-blue-700"

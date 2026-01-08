@@ -33,7 +33,7 @@ const TIERS: Tier[] = [
     id: 'professional',
     name: 'Professional Audit',
     price: 497,
-    description: 'Complete CRB analysis with actionable insights',
+    description: 'Complete AI readiness analysis with actionable insights',
     features: [
       'Full AI Readiness Score',
       '15-20 detailed findings',
@@ -139,7 +139,7 @@ export default function NewAudit() {
       const { data } = await apiClient.post<{ id: string }>('/api/audits', {
         client_id: selectedClient,
         tier: selectedTier,
-        title: `${client?.name} - CRB Audit`,
+        title: `${client?.name} - AI Readiness Audit`,
       })
 
       // Navigate to intake wizard

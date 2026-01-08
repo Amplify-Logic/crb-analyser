@@ -4,7 +4,7 @@ import { motion } from 'framer-motion'
 const VALUE_PROPS = [
   {
     title: 'We Tell You What to Skip',
-    description: "Most consultants recommend everything. We tell you what NOT to do—that's often more valuable than what to do.",
+    description: "Half of AI tools aren't worth your time. We'll tell you which half.",
     icon: (
       <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636" />
@@ -12,8 +12,8 @@ const VALUE_PROPS = [
     ),
   },
   {
-    title: 'Three Options, Not One',
-    description: 'For each recommendation: off-the-shelf SaaS, best-in-class solution, or custom build. Real pricing for all three.',
+    title: 'Real Prices, Not Ranges',
+    description: 'Actual vendor quotes. Actual implementation costs. No "it depends" handwaving.',
     icon: (
       <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M4 6h16M4 12h16M4 18h7" />
@@ -22,7 +22,7 @@ const VALUE_PROPS = [
   },
   {
     title: 'Week-by-Week Playbook',
-    description: 'Not just "what" but "how." Get an implementation timeline with specific tasks, vendors, and expected outcomes.',
+    description: 'Exactly what to do, when, and who to call. Not a "strategic framework."',
     icon: (
       <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4" />
@@ -34,27 +34,27 @@ const VALUE_PROPS = [
 const HOW_IT_WORKS = [
   {
     step: 1,
-    title: 'Take the free quiz',
-    description: 'See your AI readiness score and a preview of opportunities.',
+    title: 'Quick quiz',
+    description: 'Answer 7 questions. Get your AI readiness score.',
     time: '5 min',
   },
   {
     step: 2,
-    title: 'Complete the workshop',
-    description: 'Deep-dive questions about your operations. Better answers = better report.',
+    title: 'Deep dive',
+    description: 'Tell us how your business actually works. The more detail, the better your report.',
     time: '90 min',
   },
   {
     step: 3,
-    title: 'AI analyzes everything',
-    description: 'We research your industry, benchmark your operations, and build your report.',
+    title: 'We do the work',
+    description: 'AI analyzes your answers against industry data and vendor pricing.',
     time: '24-48 hrs',
   },
   {
     step: 4,
-    title: 'Get your interactive report',
-    description: 'Specific recommendations with real pricing, honest ROI, and clear next steps.',
-    time: 'Delivered',
+    title: 'Your roadmap',
+    description: 'Clear verdicts. Real numbers. Specific next steps.',
+    time: 'Done',
   },
 ]
 
@@ -86,23 +86,21 @@ const SAMPLE_FINDINGS = [
 ]
 
 const REPORT_FEATURES = [
-  'AI opportunities tailored to your business',
-  'Clear verdicts: Proceed, Caution, Wait, or Skip',
-  'Three options per recommendation (DIY, SaaS, Custom)',
-  'Live ROI calculator you can adjust',
-  'Real vendor pricing from our database',
-  'Implementation playbook with week-by-week tasks',
+  '10-15 AI opportunities analyzed for your business',
+  'Clear verdict on each: Go, Wait, or Skip',
+  '3 options per recommendation with real pricing',
+  'ROI calculator you can adjust',
+  'Week-by-week implementation playbook',
   'Shareable link for your team',
 ]
 
-const SPRINT_FEATURES = [
-  '3x 45-min implementation calls over 2 weeks',
-  'We help you set up your #1 AI recommendation',
-  'Async support via Slack/email during sprint',
-  'Vendor introductions where relevant',
-  'Troubleshooting when you get stuck',
-  'End-of-sprint review + next steps',
-]
+// Reserved for Sprint tier features (currently handled inline)
+// '3x 45-min implementation calls over 2 weeks',
+// 'We help you set up your #1 AI recommendation',
+// 'Async support via Slack/email during sprint',
+// 'Vendor introductions where relevant',
+// 'Troubleshooting when you get stuck',
+// 'End-of-sprint review + next steps',
 
 export default function Landing() {
   const navigate = useNavigate()
@@ -118,7 +116,7 @@ export default function Landing() {
       <nav className="fixed top-0 left-0 right-0 z-50 bg-white/80 backdrop-blur-md border-b border-gray-100">
         <div className="max-w-6xl mx-auto px-4 py-4 flex justify-between items-center">
           <Link to="/" className="text-xl font-bold text-gray-900">
-            CRB<span className="text-primary-600">Analyser</span>
+            Ready<span className="text-primary-600">Path</span>
           </Link>
           <div className="flex items-center gap-4">
             <Link to="/login" className="text-gray-600 hover:text-gray-900 transition hidden sm:block">
@@ -143,14 +141,14 @@ export default function Landing() {
             transition={{ duration: 0.5 }}
           >
             <div className="inline-block px-4 py-1.5 bg-amber-50 text-amber-700 rounded-full text-sm font-medium mb-6">
-              For service businesses tired of AI hype
+              No fluff. No vendor agenda. Just answers.
             </div>
             <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold text-gray-900 mb-6 leading-tight">
-              Find Out Which AI Tools
-              <span className="text-primary-600"> Are Worth It</span>
+              Should you invest in AI?
+              <span className="text-primary-600"> We'll tell you.</span>
             </h1>
             <p className="text-xl sm:text-2xl text-gray-600 mb-8 max-w-2xl mx-auto">
-              Get an honest analysis with clear verdicts: <span className="font-semibold text-emerald-600">Proceed</span>, <span className="font-semibold text-amber-600">Caution</span>, <span className="font-semibold text-orange-500">Wait</span>, or <span className="font-semibold text-gray-500">Skip</span>.
+              Get a report that tells you exactly which AI tools make sense for your business—and which ones don't. With real prices, real ROI, and a week-by-week implementation plan.
             </p>
 
             <div className="flex flex-col sm:flex-row gap-4 justify-center mb-6">
@@ -169,11 +167,11 @@ export default function Landing() {
               </Link>
             </div>
 
-            <p className="text-sm text-gray-500 mb-2">
-              5-min quiz is free • Full report from €147
+            <p className="text-sm text-gray-500 mb-3">
+              Free quiz → See your score → Decide if you want the full report (€147)
             </p>
             <p className="text-xs text-gray-400">
-              Built for dental, legal, home services, recruiting, and coaching businesses
+              Built for dental practices, law firms, home services, recruiting agencies, and coaching businesses.
             </p>
           </motion.div>
         </div>
@@ -207,14 +205,14 @@ export default function Landing() {
         <div className="max-w-3xl mx-auto">
           <div className="bg-yellow-50 border-2 border-yellow-200 rounded-2xl p-8">
             <h2 className="text-2xl font-bold text-yellow-900 mb-4">
-              Let's be honest upfront
+              Fair warning
             </h2>
             <div className="space-y-4 text-yellow-800">
               <p>
-                <strong>This isn't a magic 5-minute quiz.</strong> Our workshop takes 90 minutes because generic questions = generic answers = useless report.
+                <strong>This takes 90 minutes.</strong> Generic questions get generic answers. We ask real questions because we give real recommendations.
               </p>
               <p>
-                <strong>The quality of your report depends on the quality of your input.</strong> Rush through it, get a rushed report. Take it seriously, get insights worth 100x what you paid.
+                <strong>Garbage in, garbage out.</strong> Your report is only as good as your answers. If you want a magic AI solution in 5 minutes, we're not it.
               </p>
             </div>
           </div>
@@ -226,10 +224,10 @@ export default function Landing() {
         <div className="max-w-5xl mx-auto">
           <div className="text-center mb-12">
             <h2 className="text-3xl font-bold text-gray-900 mb-4">
-              What honest findings look like
+              What you actually get
             </h2>
             <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-              We don't just say "implement AI." We tell you specifically what makes sense, what doesn't, and why.
+              Not vague advice. Specific verdicts on specific opportunities—with the reasoning behind each one.
             </p>
           </div>
 
@@ -271,10 +269,10 @@ export default function Landing() {
         <div className="max-w-5xl mx-auto">
           <div className="text-center mb-16">
             <h2 className="text-3xl font-bold text-gray-900 mb-4">
-              How it works
+              The process
             </h2>
             <p className="text-lg text-gray-600">
-              From quick quiz to comprehensive roadmap
+              Four steps. One report. Zero guesswork.
             </p>
           </div>
 
@@ -308,10 +306,10 @@ export default function Landing() {
         <div className="max-w-5xl mx-auto">
           <div className="text-center mb-12">
             <h2 className="text-3xl font-bold text-gray-900 mb-4">
-              What's inside your report
+              Inside your report
             </h2>
             <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-              An interactive web report you can share with your team—not a static PDF.
+              An interactive report you can share with your team. Not a 50-page PDF that sits in a folder.
             </p>
           </div>
 
@@ -359,10 +357,10 @@ export default function Landing() {
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-12">
             <h2 className="text-3xl font-bold text-gray-900 mb-4">
-              Consultant-quality analysis, software pricing
+              Pricing
             </h2>
             <p className="text-lg text-gray-600">
-              Start with the report. Add guidance or hands-on help if you need it.
+              Consultants charge €15,000+ for this. We charge €147. Same depth. No agenda.
             </p>
           </div>
 
@@ -377,14 +375,14 @@ export default function Landing() {
             >
               <div className="text-center mb-6">
                 <div className="inline-block px-4 py-1 bg-gray-100 text-gray-700 rounded-full text-sm font-medium mb-4">
-                  CRB Report
+                  Readiness Report
                 </div>
                 <div className="flex items-baseline justify-center gap-2 mb-2">
                   <span className="text-4xl font-bold text-gray-900">€147</span>
                   <span className="text-gray-500">one-time</span>
                 </div>
                 <p className="text-gray-500 text-sm">
-                  Self-service analysis
+                  The full report. Do it yourself.
                 </p>
               </div>
 
@@ -429,7 +427,7 @@ export default function Landing() {
                   <span className="text-gray-500">one-time</span>
                 </div>
                 <p className="text-gray-500 text-sm">
-                  Expert-guided analysis
+                  Report + 1 hour to ask us anything.
                 </p>
               </div>
 
@@ -512,23 +510,20 @@ export default function Landing() {
       <section className="py-20 px-4 bg-gray-900">
         <div className="max-w-3xl mx-auto text-center">
           <h2 className="text-3xl font-bold text-white mb-4">
-            Stop guessing. Start knowing.
+            Ready to find out?
           </h2>
-          <p className="text-lg text-gray-400 mb-2">
-            Consultants charge €15,000+ for AI assessments. Ours costs €147.
-          </p>
-          <p className="text-gray-500 mb-8">
-            Same methodology. Same depth. No vendor agenda.
+          <p className="text-lg text-gray-400 mb-8">
+            Take the quiz. See your score. Then decide if you want the full report.
           </p>
           <button
             onClick={handleQuizStart}
             className="px-8 py-4 bg-white text-gray-900 font-semibold rounded-xl hover:bg-gray-100 transition text-lg"
           >
-            Take the Free Quiz
+            Start the Quiz
             <span className="ml-2">→</span>
           </button>
           <p className="text-sm text-gray-500 mt-4">
-            5 minutes. No credit card. See your AI readiness score instantly.
+            5 minutes. Free. No credit card.
           </p>
         </div>
       </section>
@@ -539,17 +534,17 @@ export default function Landing() {
           <div className="flex flex-col md:flex-row justify-between items-center gap-4">
             <div className="flex items-center gap-2">
               <span className="text-xl font-bold text-gray-900">
-                CRB<span className="text-primary-600">Analyser</span>
+                Ready<span className="text-primary-600">Path</span>
               </span>
             </div>
             <div className="flex gap-6 text-gray-600 text-sm">
               <Link to="/privacy" className="hover:text-gray-900 transition">Privacy</Link>
               <Link to="/terms" className="hover:text-gray-900 transition">Terms</Link>
-              <a href="mailto:hello@crb-analyser.com" className="hover:text-gray-900 transition">Contact</a>
+              <a href="mailto:hello@readypath.ai" className="hover:text-gray-900 transition">Contact</a>
             </div>
           </div>
           <div className="mt-6 pt-6 border-t border-gray-200 text-center text-sm text-gray-500">
-            © 2025 CRB Analyser. No BS, just clarity.
+            © 2025 Ready Path. No BS, just clarity.
           </div>
         </div>
       </footer>

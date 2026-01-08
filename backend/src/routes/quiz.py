@@ -45,6 +45,10 @@ from src.services.quiz_engine import (
     get_available_industries,
 )
 from src.models.research import CompanyProfile
+from src.services.software_research_service import (
+    research_session_stack,
+    software_research_service,
+)
 
 logger = logging.getLogger(__name__)
 
@@ -71,6 +75,13 @@ class CreateSessionResponse(BaseModel):
     created_at: str
 
 
+class ExistingStackItem(BaseModel):
+    """A software tool in the user's existing stack."""
+    slug: str  # Vendor slug or custom identifier
+    source: str  # "selected" or "free_text"
+    name: Optional[str] = None  # Display name (required for free_text)
+
+
 class QuizProgressUpdate(BaseModel):
     """Partial progress update for a quiz session."""
     current_section: Optional[int] = None
@@ -78,6 +89,7 @@ class QuizProgressUpdate(BaseModel):
     answers: Optional[Dict[str, Any]] = None
     email: Optional[EmailStr] = None  # For capturing real email after quiz preview
     industry: Optional[str] = None  # For market data collection
+    existing_stack: Optional[List[ExistingStackItem]] = None  # User's current software
 
 
 class QuizProgressResponse(BaseModel):
@@ -102,6 +114,7 @@ class SessionResponse(BaseModel):
     completion_percent: int
     created_at: str
     updated_at: str
+    existing_stack: Optional[List[Dict[str, Any]]] = None
 
 
 class ResumeResponse(BaseModel):
@@ -250,6 +263,7 @@ async def get_quiz_session(session_id: str):
             completion_percent=calculate_completion(answers, total_questions, session["tier"]),
             created_at=session["created_at"],
             updated_at=session.get("updated_at", session["created_at"]),
+            existing_stack=session.get("existing_stack"),
         )
 
     except HTTPException:
@@ -320,6 +334,13 @@ async def save_quiz_progress(session_id: str, progress: QuizProgressUpdate):
             # Store in answers under special key for tracking
             existing_answers["_detected_industry"] = progress.industry
             update_data["answers"] = existing_answers
+
+        # Update existing_stack if provided (for Connect vs Replace)
+        if progress.existing_stack is not None:
+            update_data["existing_stack"] = [
+                item.model_dump() for item in progress.existing_stack
+            ]
+            logger.info(f"Updated existing_stack for session {session_id}: {len(progress.existing_stack)} tools")
 
         # Update session
         result = await supabase.table("quiz_sessions").update(
@@ -415,13 +436,47 @@ async def complete_quiz_session(session_id: str):
         # Calculate preliminary results
         results = _calculate_preliminary_results(answers, industry)
 
-        # Update session
-        await supabase.table("quiz_sessions").update({
+        # Research unknown software in existing_stack (Phase 2B)
+        existing_stack = session.get("existing_stack", [])
+        researched_stack = None
+        if existing_stack:
+            # Check if any items are free_text (unknown software)
+            has_free_text = any(
+                item.get("source") == "free_text" for item in existing_stack
+            )
+            if has_free_text:
+                logger.info(
+                    f"Researching unknown software for session {session_id}"
+                )
+                try:
+                    researched_items = await research_session_stack(
+                        existing_stack, cache_results=True
+                    )
+                    # Convert to dicts for storage
+                    researched_stack = [
+                        item.model_dump() for item in researched_items
+                    ]
+                    logger.info(
+                        f"Research complete for {len(researched_items)} stack items"
+                    )
+                except Exception as e:
+                    logger.error(f"Stack research failed: {e}")
+                    # Continue without research - don't block completion
+
+        # Build update data
+        update_data = {
             "status": "pending_payment",
             "results": results,
             "completed_at": datetime.utcnow().isoformat(),
             "updated_at": datetime.utcnow().isoformat(),
-        }).eq("id", session_id).execute()
+        }
+        if researched_stack:
+            update_data["existing_stack"] = researched_stack
+
+        # Update session
+        await supabase.table("quiz_sessions").update(
+            update_data
+        ).eq("id", session_id).execute()
 
         logger.info(f"Quiz session {session_id} marked complete, ready for payment")
 
@@ -430,6 +485,7 @@ async def complete_quiz_session(session_id: str):
             "session_id": session_id,
             "status": "pending_payment",
             "results": results,
+            "existing_stack_researched": researched_stack is not None,
             "message": "Quiz complete. Proceed to checkout.",
         }
 
@@ -480,6 +536,7 @@ async def resume_quiz_session(email: str = Query(..., description="Email to look
                 completion_percent=calculate_completion(answers, total_questions),
                 created_at=session["created_at"],
                 updated_at=session.get("updated_at", session["created_at"]),
+                existing_stack=session.get("existing_stack"),
             )
         )
 
@@ -513,6 +570,154 @@ async def get_industry_questions(industry: str):
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail="Failed to get questionnaire"
+        )
+
+
+@router.get("/software-options")
+async def get_software_options(industry: Optional[str] = Query(None, description="Industry slug")):
+    """
+    Get software options for the existing stack question.
+
+    Returns industry-specific software plus cross-industry tools,
+    grouped by category for easy UI display.
+    """
+    from src.config.existing_stack import (
+        get_software_options_grouped,
+        get_all_categories,
+    )
+
+    grouped = get_software_options_grouped(industry)
+    categories = get_all_categories(industry)
+
+    return {
+        "industry": industry,
+        "categories": categories,
+        "options_by_category": grouped,
+        "total_options": sum(len(opts) for opts in grouped.values()),
+    }
+
+
+class ResearchSoftwareRequest(BaseModel):
+    """Request to research unknown software."""
+    name: str
+    context: Optional[str] = None  # e.g., industry, software type
+
+
+@router.post("/research-software")
+async def research_software(request: ResearchSoftwareRequest):
+    """
+    Research unknown software API capabilities.
+
+    Use this to research software not in our vendor database.
+    Returns estimated API openness score (1-5) and integration details.
+    """
+    try:
+        result = await software_research_service.research_unknown_software(
+            name=request.name,
+            context=request.context,
+            check_cache=True,
+        )
+
+        if not result.found:
+            return {
+                "success": False,
+                "name": result.name,
+                "error": result.error,
+            }
+
+        capabilities = result.capabilities
+        return {
+            "success": True,
+            "name": result.name,
+            "cached": result.cached,
+            "capabilities": {
+                "api_score": capabilities.estimated_api_score,
+                "has_api": capabilities.has_api,
+                "has_webhooks": capabilities.has_webhooks,
+                "has_zapier": capabilities.has_zapier,
+                "has_make": capabilities.has_make,
+                "has_oauth": capabilities.has_oauth,
+                "reasoning": capabilities.reasoning,
+                "confidence": capabilities.confidence,
+                "source_urls": capabilities.source_urls,
+            },
+        }
+
+    except Exception as e:
+        logger.error(f"Research software error: {e}")
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Failed to research software: {str(e)}"
+        )
+
+
+@router.post("/sessions/{session_id}/research-stack")
+async def research_session_existing_stack(session_id: str):
+    """
+    Research all free_text software in a session's existing stack.
+
+    Useful for re-running research if it failed during quiz completion,
+    or for running research before report generation.
+    """
+    try:
+        supabase = await get_async_supabase()
+
+        # Get session
+        result = await supabase.table("quiz_sessions").select(
+            "id, existing_stack"
+        ).eq("id", session_id).single().execute()
+
+        if not result.data:
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail="Session not found"
+            )
+
+        existing_stack = result.data.get("existing_stack", [])
+        if not existing_stack:
+            return {
+                "success": True,
+                "session_id": session_id,
+                "researched_count": 0,
+                "message": "No existing stack to research",
+            }
+
+        # Research the stack
+        researched_items = await research_session_stack(
+            existing_stack, cache_results=True
+        )
+
+        # Update session with researched stack
+        await supabase.table("quiz_sessions").update({
+            "existing_stack": [item.model_dump() for item in researched_items],
+            "updated_at": datetime.utcnow().isoformat(),
+        }).eq("id", session_id).execute()
+
+        # Count researched items
+        researched_count = sum(
+            1 for item in researched_items
+            if item.researched and item.api_score is not None
+        )
+
+        logger.info(
+            f"Researched {researched_count} stack items for session {session_id}"
+        )
+
+        return {
+            "success": True,
+            "session_id": session_id,
+            "researched_count": researched_count,
+            "total_items": len(researched_items),
+            "items": [item.model_dump() for item in researched_items],
+        }
+
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"Research stack error: {e}")
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail="Failed to research existing stack"
         )
 
 
@@ -929,42 +1134,17 @@ async def generate_dev_preview(request_data: DevPreviewRequest):
     try:
         interview_data = {"messages": request_data.interview_messages or []}
 
-        # Generate preview using teaser logic (AI-powered with Haiku 4.5)
+        # Generate preview using insights-first teaser (no AI generation)
         teaser = await generate_teaser_report(
             request_data.company_profile,
             request_data.quiz_answers or {},
             interview_data
         )
 
-        # Format for PreviewReport frontend
-        all_findings = teaser.get("revealed_findings", []) + teaser.get("blurred_findings", [])
-        preview_response = {
-            "score": teaser.get("ai_readiness_score", 65),
-            "score_breakdown": teaser.get("score_breakdown", {}),
-            "score_interpretation": teaser.get("score_interpretation", {}),
-            "opportunities": [
-                {
-                    "title": f.get("title", "Opportunity"),
-                    "description": f.get("summary", f.get("description", "")),
-                    "potential": f.get("impact", "medium").capitalize() if f.get("impact") else "Medium",
-                    "category": f.get("category", "efficiency"),
-                    "roi_estimate": f.get("roi_estimate"),
-                    "quick_win": f.get("quick_win", False),
-                    "blurred": f.get("blurred", False),
-                    "timeToValue": "2-4 weeks",
-                }
-                for f in all_findings
-            ],
-            "company_name": teaser.get("company_name", ""),
-            "industry": teaser.get("industry", ""),
-            "total_findings_available": teaser.get("total_findings_available", 8),
-            "industryInsight": f"Based on our AI analysis, {teaser.get('industry', 'your industry')} businesses like {teaser.get('company_name', 'yours')} typically see 30-50% efficiency gains from targeted automation.",
-            "topRecommendation": all_findings[0].get("title", "Start with process automation") if all_findings else "Start with process automation",
-            "estimatedSavings": "€15,000 - €45,000/year",
-        }
-
+        # Return new insights-first format directly
+        # PreviewReport.tsx expects: ai_readiness, diagnostics, opportunity_areas, next_steps
         logger.info(f"Generated DEV preview for {teaser.get('company_name', 'unknown')}")
-        return preview_response
+        return teaser
 
     except Exception as e:
         logger.error(f"Generate DEV preview error: {e}")
@@ -1012,34 +1192,13 @@ async def generate_session_preview(
             if request_data.get("interview_messages"):
                 interview_data["messages"] = request_data["interview_messages"]
 
-        # Generate preview using teaser logic (AI-powered with Haiku 4.5)
+        # Generate preview using insights-first teaser (no AI generation)
         teaser = await generate_teaser_report(company_profile, answers, interview_data)
 
-        # Format for PreviewReport frontend
-        all_findings = teaser.get("revealed_findings", []) + teaser.get("blurred_findings", [])
-        preview_response = {
-            "score": teaser.get("ai_readiness_score", 65),
-            "score_breakdown": teaser.get("score_breakdown", {}),
-            "score_interpretation": teaser.get("score_interpretation", {}),
-            "opportunities": [
-                {
-                    "title": f.get("title", "Opportunity"),
-                    "description": f.get("summary", f.get("description", "")),
-                    "potential": f.get("impact", "medium").capitalize(),
-                    "category": f.get("category", "efficiency"),
-                    "roi_estimate": f.get("roi_estimate"),
-                    "quick_win": f.get("quick_win", False),
-                    "blurred": f.get("blurred", i >= 2),
-                }
-                for i, f in enumerate(all_findings)
-            ],
-            "company_name": teaser.get("company_name", ""),
-            "industry": teaser.get("industry", ""),
-            "total_findings_available": teaser.get("total_findings_available", 8),
-        }
-
+        # Return new insights-first format directly
+        # PreviewReport.tsx expects: ai_readiness, diagnostics, opportunity_areas, next_steps
         logger.info(f"Generated preview for session {session_id}")
-        return preview_response
+        return teaser
 
     except HTTPException:
         raise

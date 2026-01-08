@@ -17,6 +17,37 @@ We target passion-driven service businesses because their pain is:
 
 ---
 
+## Product as Proof
+
+> "CRB is the thesis it sells."
+
+We don't just analyze whether companies should restructure around AI. We *are* the demonstration.
+
+**What this means:**
+
+| Old Model (Consulting Firm) | CRB Model |
+|-----------------------------|-----------|
+| Analysts researching industry | Knowledge base + AI |
+| Consultants conducting interviews | Adaptive quiz + voice interview |
+| Report writers drafting findings | AI-generated reports |
+| Account managers coordinating | Self-serve flow |
+| 6-week engagement, €15k+ | 15 minutes, €147 |
+
+**Structural discipline:**
+
+1. **Stay small longer than feels comfortable** - Headcount is not progress. Leverage is.
+2. **Hire for outcomes, not functions** - Only when AI is exhausted for a specific result.
+3. **No coordination overhead** - If you need meetings to align, you're already too big.
+4. **The €147 tier proves the model** - Enterprise-level analysis at SMB pricing only works with AI leverage.
+
+**The uncomfortable implication:**
+
+If CRB succeeds, it makes the same argument to its customers: you probably don't need that analyst, that researcher, that report writer. The product is a demonstration of its own thesis.
+
+This isn't positioning. It's identity.
+
+---
+
 ## The Four Loops
 
 ### 1. Balance Loop (BL)

@@ -1,8 +1,15 @@
 /**
- * PreviewReport Page
+ * PreviewReport Page - Insights-First Approach
  *
- * Shows a sales preview with genuine insights after the voice interview.
- * This is the "hook" that demonstrates value before payment.
+ * Shows diagnostic insights after quiz completion:
+ * - AI Readiness Score (diagnostic, from quiz inputs)
+ * - What You Told Us (user reflections - verbatim)
+ * - Industry Context (verified benchmarks with sources)
+ * - High-Potential Areas (categories, not recommendations)
+ * - What's Next (workshop + full report preview)
+ *
+ * NO SPECIFIC RECOMMENDATIONS - prevents contradictions with full report.
+ * See: docs/plans/2026-01-03-insights-first-teaser-design.md
  */
 
 import { useState, useEffect } from 'react'
@@ -11,33 +18,90 @@ import { motion } from 'framer-motion'
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8383'
 
-interface CompanyProfile {
-  basics?: {
-    name?: { value: string }
-    description?: { value: string }
-  }
-  industry?: {
-    primary_industry?: { value: string }
-  }
-  size?: {
-    employee_range?: { value: string }
-  }
+// New schema types
+interface ScoreBreakdown {
+  tech_maturity: { score: number; max: number; factors: string[] }
+  process_clarity: { score: number; max: number; factors: string[] }
+  data_readiness: { score: number; max: number; factors: string[] }
+  ai_experience: { score: number; max: number; factors: string[] }
 }
 
-interface Opportunity {
+interface ScoreInterpretation {
+  level: 'Early Stage' | 'Developing' | 'Good' | 'Excellent'
+  summary: string
+  recommendation: string
+}
+
+interface UserReflection {
+  type: 'pain_point' | 'goal' | 'current_state'
+  what_you_told_us: string
+  source: string
+}
+
+interface Benchmark {
+  metric: string
+  value: string
+  source: {
+    name: string
+    url?: string
+    verified_date: string
+  }
+  relevance?: string
+}
+
+interface OpportunityArea {
+  category: string
+  label: string
+  potential: 'high' | 'medium'
+  matched_because: string
+  in_full_report: string[]
+}
+
+interface WorkshopPhase {
+  name: string
+  description: string
+}
+
+interface ReportDeliverable {
+  icon: string
   title: string
   description: string
-  potential: 'High' | 'Medium' | 'Low'
-  timeToValue: string
-  blurred?: boolean
 }
 
-interface PreviewData {
-  score: number
-  opportunities: Opportunity[]
-  industryInsight: string
-  topRecommendation: string
-  estimatedSavings: string
+interface PersonalizedInsight {
+  headline: string
+  body: string
+}
+
+interface TeaserData {
+  generated_at: string
+  company_name: string
+  industry: string
+  industry_slug: string
+  personalized_insight?: PersonalizedInsight
+  ai_readiness: {
+    score: number
+    breakdown: ScoreBreakdown
+    interpretation: ScoreInterpretation
+  }
+  diagnostics: {
+    user_reflections: UserReflection[]
+    industry_benchmarks: Benchmark[]
+  }
+  opportunity_areas: OpportunityArea[]
+  next_steps: {
+    workshop: {
+      what_it_is: string
+      duration: string
+      phases: WorkshopPhase[]
+      outcome: string
+    }
+    full_report_includes: ReportDeliverable[]
+  }
+  // Legacy fields
+  ai_readiness_score?: number
+  score_breakdown?: ScoreBreakdown
+  score_interpretation?: ScoreInterpretation
 }
 
 export default function PreviewReport() {
@@ -46,10 +110,9 @@ export default function PreviewReport() {
   const sessionId = searchParams.get('session_id') || sessionStorage.getItem('quizSessionId')
 
   const [isLoading, setIsLoading] = useState(true)
-  const [previewData, setPreviewData] = useState<PreviewData | null>(null)
+  const [teaserData, setTeaserData] = useState<TeaserData | null>(null)
   const [companyName, setCompanyName] = useState('')
   const [error, setError] = useState<string | null>(null)
-  const [devShowAll, setDevShowAll] = useState(false) // DEV: toggle to show all findings
 
   useEffect(() => {
     generatePreview()
@@ -69,11 +132,11 @@ export default function PreviewReport() {
         setCompanyName(storedCompanyName)
       }
 
-      const companyProfile: CompanyProfile = companyProfileStr ? JSON.parse(companyProfileStr) : {}
+      const companyProfile = companyProfileStr ? JSON.parse(companyProfileStr) : {}
       const answers = answersStr ? JSON.parse(answersStr) : {}
       const messages = messagesStr ? JSON.parse(messagesStr) : []
 
-      // DEV MODE: Use dev endpoint if we have stored profile data (from skip button)
+      // DEV MODE: Use dev endpoint if available
       const isDev = searchParams.get('dev') === 'true' || import.meta.env.DEV
       if (isDev && companyProfileStr) {
         try {
@@ -89,13 +152,8 @@ export default function PreviewReport() {
 
           if (response.ok) {
             const data = await response.json()
-            setPreviewData(data)
+            setTeaserData(data)
             if (data.company_name) setCompanyName(data.company_name)
-            sessionStorage.setItem('quizResults', JSON.stringify({
-              score: data.score,
-              opportunities: data.opportunities,
-              industryInsight: data.industryInsight,
-            }))
             setIsLoading(false)
             return
           }
@@ -105,199 +163,32 @@ export default function PreviewReport() {
       }
 
       // Try to get preview from backend with session
-      try {
-        const response = await fetch(`${API_BASE_URL}/api/quiz/sessions/${sessionId}/preview`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            company_profile: companyProfile,
-            interview_answers: answers,
-            interview_messages: messages,
-          }),
-        })
+      if (sessionId) {
+        try {
+          const response = await fetch(`${API_BASE_URL}/api/quiz/sessions/${sessionId}/preview`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              company_profile: companyProfile,
+              interview_answers: answers,
+              interview_messages: messages,
+            }),
+          })
 
-        if (response.ok) {
-          const data = await response.json()
-          setPreviewData(data)
-          // Store for checkout
-          sessionStorage.setItem('quizResults', JSON.stringify({
-            score: data.score,
-            opportunities: data.opportunities,
-            industryInsight: data.industryInsight,
-          }))
-          setIsLoading(false)
-          return
-        }
-      } catch (err) {
-        console.warn('Backend preview failed, using local generation:', err)
-      }
-
-      // Fallback: Generate personalized preview based on available data
-      const industry = companyProfile?.industry?.primary_industry?.value || 'your industry'
-      const teamSize = companyProfile?.size?.employee_range?.value || 'your team'
-
-      // Analyze interview answers to personalize opportunities
-      const allAnswers = Object.values(answers).join(' ').toLowerCase()
-      const allMessages = messages.map((m: { content: string }) => m.content).join(' ').toLowerCase()
-      const combinedText = `${allAnswers} ${allMessages}`
-
-      // Detect pain points mentioned in interview
-      const painPoints = {
-        customerSupport: /customer|support|ticket|inquiry|complaint|respond/i.test(combinedText),
-        documents: /document|invoice|contract|paperwork|form|data entry/i.test(combinedText),
-        content: /content|writing|draft|proposal|marketing|email/i.test(combinedText),
-        meetings: /meeting|call|transcript|notes|summary/i.test(combinedText),
-        sales: /sales|lead|prospect|crm|pipeline|outreach/i.test(combinedText),
-        scheduling: /schedule|appointment|calendar|booking/i.test(combinedText),
-        reporting: /report|analytics|dashboard|metric/i.test(combinedText),
-        manual: /manual|repetitive|copy.paste|tedious|slow/i.test(combinedText),
-      }
-
-      // Generate personalized opportunities based on detected pain points
-      const opportunities: Opportunity[] = []
-
-      // Always show top 2 opportunities based on what they mentioned
-      if (painPoints.customerSupport || painPoints.manual) {
-        opportunities.push({
-          title: 'Customer Support Automation',
-          description: 'AI-powered chatbot and ticket routing to handle 60%+ of routine inquiries automatically.',
-          potential: 'High',
-          timeToValue: '2-4 weeks',
-          blurred: false,
-        })
-      }
-
-      if (painPoints.documents || painPoints.manual) {
-        opportunities.push({
-          title: 'Document Processing',
-          description: 'Automate data extraction from invoices, contracts, and forms - reducing manual entry by 80%.',
-          potential: 'High',
-          timeToValue: '1-2 weeks',
-          blurred: opportunities.length >= 2,
-        })
-      }
-
-      if (painPoints.content) {
-        opportunities.push({
-          title: 'Content Creation Pipeline',
-          description: `AI-assisted drafting for marketing, proposals, and ${industry} documentation - 70% faster first drafts.`,
-          potential: 'High',
-          timeToValue: '1 week',
-          blurred: opportunities.length >= 2,
-        })
-      }
-
-      if (painPoints.meetings) {
-        opportunities.push({
-          title: 'Meeting Intelligence',
-          description: 'Automatic transcription, summaries, and action item extraction - save 4+ hours/week.',
-          potential: 'Medium',
-          timeToValue: '1-2 days',
-          blurred: opportunities.length >= 2,
-        })
-      }
-
-      if (painPoints.sales) {
-        opportunities.push({
-          title: 'Sales Intelligence',
-          description: 'Lead scoring and personalized outreach recommendations to boost conversion rates.',
-          potential: 'High',
-          timeToValue: '2-3 weeks',
-          blurred: opportunities.length >= 2,
-        })
-      }
-
-      if (painPoints.scheduling) {
-        opportunities.push({
-          title: 'Smart Scheduling',
-          description: 'AI-powered appointment booking and calendar management to eliminate back-and-forth.',
-          potential: 'Medium',
-          timeToValue: '1 week',
-          blurred: opportunities.length >= 2,
-        })
-      }
-
-      if (painPoints.reporting) {
-        opportunities.push({
-          title: 'Automated Reporting',
-          description: 'Generate reports and dashboards automatically from your data sources.',
-          potential: 'Medium',
-          timeToValue: '2-3 weeks',
-          blurred: opportunities.length >= 2,
-        })
-      }
-
-      // Fill in with generic opportunities if we don't have enough
-      const defaultOpportunities: Opportunity[] = [
-        { title: 'Customer Support Automation', description: 'AI chatbot for routine inquiries.', potential: 'High', timeToValue: '2-4 weeks', blurred: false },
-        { title: 'Document Processing', description: 'Extract data from documents automatically.', potential: 'High', timeToValue: '1-2 weeks', blurred: false },
-        { title: 'Content Creation Pipeline', description: 'AI-assisted drafting and editing.', potential: 'Medium', timeToValue: '1 week', blurred: true },
-        { title: 'Meeting Intelligence', description: 'Transcription and summaries.', potential: 'Medium', timeToValue: '1-2 days', blurred: true },
-        { title: 'Workflow Automation', description: 'Connect your tools and automate handoffs.', potential: 'High', timeToValue: '2-3 weeks', blurred: true },
-      ]
-
-      while (opportunities.length < 5) {
-        const missing = defaultOpportunities.find(d => !opportunities.some(o => o.title === d.title))
-        if (missing) {
-          opportunities.push({ ...missing, blurred: opportunities.length >= 2 })
-        } else {
-          break
+          if (response.ok) {
+            const data = await response.json()
+            setTeaserData(data)
+            if (data.company_name) setCompanyName(data.company_name)
+            setIsLoading(false)
+            return
+          }
+        } catch (err) {
+          console.warn('Backend preview failed:', err)
         }
       }
 
-      // Calculate a score based on available data and detected pain points
-      const hasProfile = Object.keys(companyProfile).length > 0
-      const hasAnswers = Object.keys(answers).length > 0
-      const hasMessages = messages.length > 0
-      const painPointCount = Object.values(painPoints).filter(Boolean).length
-
-      const baseScore = 40 + (hasProfile ? 15 : 0) + (hasAnswers ? 15 : 0) + (hasMessages ? 10 : 0) + (painPointCount * 3)
-      const score = Math.min(92, baseScore + Math.floor(Math.random() * 5))
-
-      // Generate personalized insight
-      const detectedAreas = Object.entries(painPoints)
-        .filter(([_, detected]) => detected)
-        .map(([area]) => area)
-        .slice(0, 2)
-
-      const areaLabels: Record<string, string> = {
-        customerSupport: 'customer support',
-        documents: 'document processing',
-        content: 'content creation',
-        meetings: 'meeting management',
-        sales: 'sales processes',
-        scheduling: 'scheduling',
-        reporting: 'reporting',
-        manual: 'manual tasks',
-      }
-
-      const focusAreas = detectedAreas.map(a => areaLabels[a] || a).join(' and ')
-
-      const preview: PreviewData = {
-        score,
-        opportunities,
-        industryInsight: focusAreas
-          ? `Based on your interview, ${focusAreas} are clear areas for AI automation. ${industry} businesses typically see 30-50% efficiency gains when they start with focused implementations.`
-          : `Based on Q4 2025 research, ${industry} businesses are seeing 30-50% efficiency gains from targeted AI automation. Companies with ${teamSize} are ideal candidates for quick-win implementations.`,
-        topRecommendation: opportunities[0]
-          ? `Start with ${opportunities[0].title.toLowerCase()} - it addresses the challenges you mentioned and has the fastest time to value.`
-          : 'Start with customer support automation - it has the highest ROI and fastest time to value for most businesses.',
-        estimatedSavings: score >= 70 ? '€25,000 - €75,000/year' : score >= 50 ? '€15,000 - €45,000/year' : '€10,000 - €30,000/year',
-      }
-
-      setPreviewData(preview)
-
-      // Store for checkout
-      sessionStorage.setItem('quizResults', JSON.stringify({
-        score: preview.score,
-        opportunities: preview.opportunities.map(o => ({
-          title: o.title,
-          potential: o.potential,
-          preview: !o.blurred,
-        })),
-        industryInsight: preview.industryInsight,
-      }))
-
+      // Fallback: Show minimal data if backend unavailable
+      setError('Unable to generate preview. Please try again.')
       setIsLoading(false)
     } catch (err) {
       console.error('Preview generation error:', err)
@@ -308,6 +199,15 @@ export default function PreviewReport() {
 
   const handleGetFullReport = () => {
     navigate(`/checkout?tier=ai`)
+  }
+
+  const getScoreColor = (level: string) => {
+    switch (level) {
+      case 'Excellent': return 'from-green-500 to-emerald-600'
+      case 'Good': return 'from-primary-500 to-purple-600'
+      case 'Developing': return 'from-amber-500 to-orange-600'
+      default: return 'from-gray-500 to-gray-600'
+    }
   }
 
   if (isLoading) {
@@ -330,19 +230,19 @@ export default function PreviewReport() {
               </svg>
             </div>
           </div>
-          <h2 className="text-xl font-semibold text-gray-900 mb-2">Generating Your Preview...</h2>
-          <p className="text-gray-600">Analyzing your responses and finding opportunities</p>
+          <h2 className="text-xl font-semibold text-gray-900 mb-2">Generating Your Insights...</h2>
+          <p className="text-gray-600">Analyzing your responses</p>
         </motion.div>
       </div>
     )
   }
 
-  if (error) {
+  if (error || !teaserData) {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center px-4">
         <div className="text-center">
           <h2 className="text-xl font-semibold text-gray-900 mb-4">Something went wrong</h2>
-          <p className="text-gray-600 mb-6">{error}</p>
+          <p className="text-gray-600 mb-6">{error || 'Unable to load preview'}</p>
           <button
             onClick={() => navigate('/quiz')}
             className="px-6 py-3 bg-primary-600 text-white rounded-xl hover:bg-primary-700"
@@ -354,30 +254,17 @@ export default function PreviewReport() {
     )
   }
 
+  const { ai_readiness, diagnostics, opportunity_areas, next_steps } = teaserData
+
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Navigation */}
       <nav className="fixed top-0 left-0 right-0 z-50 bg-white/80 backdrop-blur-md border-b border-gray-100">
         <div className="max-w-6xl mx-auto px-4 py-4 flex justify-between items-center">
           <Link to="/" className="text-xl font-bold text-gray-900">
-            CRB<span className="text-primary-600">Analyser</span>
+            Ready<span className="text-primary-600">Path</span>
           </Link>
-          <div className="flex items-center gap-4">
-            {/* DEV MODE toggle */}
-            {import.meta.env.DEV && (
-              <button
-                onClick={() => setDevShowAll(!devShowAll)}
-                className={`px-3 py-1 text-xs font-medium rounded-full transition ${
-                  devShowAll
-                    ? 'bg-yellow-500 text-white'
-                    : 'bg-yellow-100 text-yellow-800 hover:bg-yellow-200'
-                }`}
-              >
-                {devShowAll ? '🔓 All Visible' : '🔒 Normal View'}
-              </button>
-            )}
-            <span className="text-sm text-gray-500">Preview Report</span>
-          </div>
+          <span className="text-sm text-gray-500">Your AI Readiness Insights</span>
         </div>
       </nav>
 
@@ -396,153 +283,255 @@ export default function PreviewReport() {
               Analysis Complete
             </div>
             <h1 className="text-3xl font-bold text-gray-900 mb-2">
-              {companyName ? `${companyName}'s AI Opportunity Preview` : 'Your AI Opportunity Preview'}
+              {companyName ? `${companyName}'s AI Readiness Insights` : 'Your AI Readiness Insights'}
             </h1>
             <p className="text-gray-600">
-              Based on our research and your responses, here's what we found.
+              Here's what we learned from your responses. The workshop will dive deeper.
             </p>
           </motion.div>
 
-          {/* Score Card */}
+          {/* AI Readiness Score Card */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.1 }}
-            className="bg-gradient-to-r from-primary-600 to-purple-600 rounded-2xl p-8 text-white mb-8"
+            className={`bg-gradient-to-r ${getScoreColor(ai_readiness.interpretation.level)} rounded-2xl p-8 text-white mb-8`}
           >
             <div className="flex flex-col md:flex-row items-center justify-between gap-6">
               <div>
                 <h2 className="text-lg font-medium opacity-90 mb-1">AI Readiness Score</h2>
-                <div className="text-6xl font-bold">{previewData?.score}</div>
-                <p className="text-sm opacity-75 mt-2">
-                  {previewData && previewData.score >= 70
-                    ? 'Excellent! High potential for AI automation'
-                    : previewData && previewData.score >= 50
-                    ? 'Good foundation for AI implementation'
-                    : 'Several opportunities identified'}
-                </p>
+                <div className="text-6xl font-bold">{ai_readiness.score}</div>
+                <p className="text-lg opacity-90 mt-2">{ai_readiness.interpretation.level}</p>
+                <p className="text-sm opacity-75 mt-1">{ai_readiness.interpretation.summary}</p>
               </div>
-              <div className="bg-white/20 rounded-xl p-6 backdrop-blur-sm">
-                <div className="text-sm font-medium opacity-90 mb-1">Estimated Annual Savings</div>
-                <div className="text-3xl font-bold">{previewData?.estimatedSavings}</div>
-                <div className="text-xs opacity-75 mt-1">Based on industry benchmarks</div>
+              <div className="bg-white/20 rounded-xl p-6 backdrop-blur-sm w-full md:w-auto">
+                <div className="text-sm font-medium opacity-90 mb-3">Score Breakdown</div>
+                <div className="space-y-2">
+                  {Object.entries(ai_readiness.breakdown).map(([key, data]) => (
+                    <div key={key} className="flex items-center justify-between gap-4">
+                      <span className="text-sm opacity-90 capitalize">{key.replace('_', ' ')}</span>
+                      <div className="flex items-center gap-2">
+                        <div className="w-20 h-2 bg-white/30 rounded-full overflow-hidden">
+                          <div
+                            className="h-full bg-white rounded-full"
+                            style={{ width: `${(data.score / data.max) * 100}%` }}
+                          />
+                        </div>
+                        <span className="text-sm font-medium w-10 text-right">{data.score}/{data.max}</span>
+                      </div>
+                    </div>
+                  ))}
+                </div>
               </div>
             </div>
           </motion.div>
 
-          {/* Industry Insight */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.2 }}
-            className="bg-purple-50 rounded-2xl p-6 border border-purple-100 mb-8"
-          >
-            <div className="flex items-start gap-3">
-              <div className="w-10 h-10 bg-purple-100 rounded-xl flex items-center justify-center flex-shrink-0">
-                <svg className="w-5 h-5 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                </svg>
+          {/* Personalized Insight */}
+          {teaserData.personalized_insight && (
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.15 }}
+              className="bg-gradient-to-r from-amber-50 to-orange-50 rounded-2xl p-6 border border-amber-200 mb-8"
+            >
+              <div className="flex items-start gap-4">
+                <div className="w-12 h-12 rounded-xl bg-amber-100 flex items-center justify-center flex-shrink-0">
+                  <span className="text-2xl">💡</span>
+                </div>
+                <div>
+                  <h2 className="text-lg font-semibold text-amber-900 mb-2">
+                    {teaserData.personalized_insight.headline}
+                  </h2>
+                  <p className="text-amber-800 leading-relaxed">
+                    {teaserData.personalized_insight.body}
+                  </p>
+                </div>
               </div>
-              <div>
-                <h3 className="font-semibold text-purple-900 mb-1">Industry Insight</h3>
-                <p className="text-purple-800">{previewData?.industryInsight}</p>
-              </div>
-            </div>
-          </motion.div>
+            </motion.div>
+          )}
 
-          {/* Opportunities */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.3 }}
-            className="mb-8"
-          >
-            <h2 className="text-xl font-semibold text-gray-900 mb-4">AI Opportunities Identified</h2>
-            <div className="space-y-4">
-              {previewData?.opportunities.map((opp, index) => (
-                <motion.div
-                  key={index}
-                  initial={{ opacity: 0, x: -20 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ delay: 0.4 + index * 0.1 }}
-                  className={`bg-white rounded-xl p-5 border border-gray-100 shadow-sm ${
-                    opp.blurred && !devShowAll ? 'relative overflow-hidden' : ''
-                  }`}
-                >
-                  {opp.blurred && !devShowAll && (
-                    <div className="absolute inset-0 backdrop-blur-sm bg-white/60 flex items-center justify-center z-10">
-                      <div className="text-center">
-                        <svg className="w-8 h-8 text-gray-400 mx-auto mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
-                        </svg>
-                        <span className="text-sm text-gray-500">Unlock in full report</span>
-                      </div>
+          {/* What You Told Us */}
+          {diagnostics.user_reflections.length > 0 && (
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.2 }}
+              className="bg-white rounded-2xl p-6 border border-gray-200 mb-8"
+            >
+              <h2 className="text-xl font-semibold text-gray-900 mb-4 flex items-center gap-2">
+                <span className="text-2xl">💬</span>
+                What You Told Us
+              </h2>
+              <div className="space-y-3">
+                {diagnostics.user_reflections.map((reflection, index) => (
+                  <div key={index} className="flex items-start gap-3 p-3 bg-gray-50 rounded-xl">
+                    <div className={`w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0 ${
+                      reflection.type === 'pain_point' ? 'bg-red-100 text-red-600' :
+                      reflection.type === 'goal' ? 'bg-green-100 text-green-600' :
+                      'bg-blue-100 text-blue-600'
+                    }`}>
+                      {reflection.type === 'pain_point' ? '🎯' :
+                       reflection.type === 'goal' ? '🚀' : '💼'}
                     </div>
-                  )}
-                  <div className="flex items-start justify-between gap-4">
-                    <div className="flex-1">
-                      <div className="flex items-center gap-2 mb-2">
-                        <h3 className="font-semibold text-gray-900">{opp.title}</h3>
-                        <span className={`px-2 py-0.5 rounded-full text-xs font-medium ${
-                          opp.potential === 'High' ? 'bg-green-100 text-green-700' :
-                          opp.potential === 'Medium' ? 'bg-yellow-100 text-yellow-700' :
-                          'bg-gray-100 text-gray-700'
-                        }`}>
-                          {opp.potential} Potential
-                        </span>
-                      </div>
-                      <p className="text-gray-600 text-sm">{opp.description}</p>
-                    </div>
-                    <div className="text-right">
-                      <div className="text-xs text-gray-500">Time to value</div>
-                      <div className="text-sm font-medium text-gray-900">{opp.timeToValue}</div>
+                    <div>
+                      <p className="text-gray-800">{reflection.what_you_told_us}</p>
+                      <p className="text-xs text-gray-500 mt-1">
+                        Source: {reflection.source.replace('_', ' ')}
+                      </p>
                     </div>
                   </div>
-                </motion.div>
-              ))}
-            </div>
-          </motion.div>
+                ))}
+              </div>
+            </motion.div>
+          )}
 
-          {/* Top Recommendation */}
+          {/* Industry Context (Benchmarks) */}
+          {diagnostics.industry_benchmarks.length > 0 && (
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.3 }}
+              className="bg-purple-50 rounded-2xl p-6 border border-purple-100 mb-8"
+            >
+              <h2 className="text-xl font-semibold text-purple-900 mb-4 flex items-center gap-2">
+                <span className="text-2xl">📊</span>
+                Industry Context
+              </h2>
+              <div className="space-y-4">
+                {diagnostics.industry_benchmarks.map((benchmark, index) => (
+                  <div key={index} className="bg-white rounded-xl p-4">
+                    <div className="flex items-start justify-between gap-4">
+                      <div>
+                        <h3 className="font-medium text-gray-900">{benchmark.metric}</h3>
+                        <p className="text-2xl font-bold text-purple-600 mt-1">{benchmark.value}</p>
+                        {benchmark.relevance && (
+                          <p className="text-sm text-gray-600 mt-2">{benchmark.relevance}</p>
+                        )}
+                      </div>
+                      <div className="text-right">
+                        <p className="text-xs text-gray-500">Source</p>
+                        {benchmark.source.url ? (
+                          <a
+                            href={benchmark.source.url}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="text-sm text-purple-600 hover:underline"
+                          >
+                            {benchmark.source.name}
+                          </a>
+                        ) : (
+                          <p className="text-sm text-gray-700">{benchmark.source.name}</p>
+                        )}
+                        <p className="text-xs text-gray-400 mt-1">
+                          Verified: {benchmark.source.verified_date}
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </motion.div>
+          )}
+
+          {/* High-Potential Areas */}
+          {opportunity_areas.length > 0 && (
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.4 }}
+              className="bg-white rounded-2xl p-6 border border-gray-200 mb-8"
+            >
+              <h2 className="text-xl font-semibold text-gray-900 mb-4 flex items-center gap-2">
+                <span className="text-2xl">🎯</span>
+                High-Potential Areas
+              </h2>
+              <p className="text-gray-600 mb-4">
+                Based on what you shared, these areas show opportunity. The workshop will validate and prioritize.
+              </p>
+              <div className="space-y-4">
+                {opportunity_areas.map((area, index) => (
+                  <div key={index} className="border border-gray-100 rounded-xl p-4">
+                    <div className="flex items-start justify-between gap-4 mb-3">
+                      <div>
+                        <div className="flex items-center gap-2">
+                          <h3 className="font-semibold text-gray-900">{area.label}</h3>
+                          <span className={`px-2 py-0.5 rounded-full text-xs font-medium ${
+                            area.potential === 'high' ? 'bg-green-100 text-green-700' : 'bg-yellow-100 text-yellow-700'
+                          }`}>
+                            {area.potential === 'high' ? 'High' : 'Medium'} Potential
+                          </span>
+                        </div>
+                        <p className="text-sm text-gray-600 mt-1">{area.matched_because}</p>
+                      </div>
+                    </div>
+                    <div className="bg-gray-50 rounded-lg p-3">
+                      <p className="text-xs font-medium text-gray-500 mb-2">Full report will reveal:</p>
+                      <ul className="space-y-1">
+                        {area.in_full_report.map((item, i) => (
+                          <li key={i} className="text-sm text-gray-700 flex items-center gap-2">
+                            <svg className="w-4 h-4 text-primary-500 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4" />
+                            </svg>
+                            {item}
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </motion.div>
+          )}
+
+          {/* What's Next: Workshop */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.8 }}
+            transition={{ delay: 0.5 }}
             className="bg-gradient-to-r from-amber-50 to-orange-50 rounded-2xl p-6 border border-amber-200 mb-8"
           >
-            <div className="flex items-start gap-3">
-              <span className="text-2xl">💡</span>
-              <div>
-                <h3 className="font-semibold text-amber-900 mb-1">Top Recommendation</h3>
-                <p className="text-amber-800">{previewData?.topRecommendation}</p>
-              </div>
+            <h2 className="text-xl font-semibold text-amber-900 mb-4 flex items-center gap-2">
+              <span className="text-2xl">🎓</span>
+              What Happens Next: {next_steps.workshop.what_it_is}
+            </h2>
+            <p className="text-amber-800 mb-4">
+              Duration: {next_steps.workshop.duration}
+            </p>
+            <div className="grid md:grid-cols-3 gap-4 mb-4">
+              {next_steps.workshop.phases.map((phase, index) => (
+                <div key={index} className="bg-white rounded-xl p-4">
+                  <div className="flex items-center gap-2 mb-2">
+                    <div className="w-6 h-6 bg-amber-100 rounded-full flex items-center justify-center text-amber-700 text-sm font-bold">
+                      {index + 1}
+                    </div>
+                    <h3 className="font-semibold text-gray-900">{phase.name}</h3>
+                  </div>
+                  <p className="text-sm text-gray-600">{phase.description}</p>
+                </div>
+              ))}
             </div>
+            <p className="text-amber-700 font-medium">
+              Outcome: {next_steps.workshop.outcome}
+            </p>
           </motion.div>
 
-          {/* What's in the full report */}
+          {/* What's in the Full Report */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.9 }}
+            transition={{ delay: 0.6 }}
             className="bg-white rounded-2xl p-8 border border-gray-200 mb-8"
           >
             <h2 className="text-xl font-semibold text-gray-900 mb-6 text-center">
-              What's in Your Full Report
+              What Your Full Report Includes
             </h2>
-            <div className="grid md:grid-cols-3 gap-6">
-              {[
-                { icon: '📊', title: 'Detailed ROI Analysis', desc: 'Transparent calculations with assumptions' },
-                { icon: '🛠️', title: 'Vendor Comparisons', desc: 'Real pricing from top AI tools' },
-                { icon: '📋', title: 'Implementation Roadmap', desc: 'Step-by-step action plan' },
-                { icon: '⚠️', title: 'Risk Assessment', desc: 'What to watch out for' },
-                { icon: '🚫', title: '"Don\'t Do This"', desc: 'Common mistakes to avoid' },
-                { icon: '🎯', title: 'Priority Matrix', desc: 'Where to start first' },
-              ].map((item, i) => (
-                <div key={i} className="flex items-start gap-3">
+            <div className="grid md:grid-cols-2 gap-4">
+              {next_steps.full_report_includes.map((item, i) => (
+                <div key={i} className="flex items-start gap-3 p-4 bg-gray-50 rounded-xl">
                   <span className="text-2xl">{item.icon}</span>
                   <div>
                     <div className="font-medium text-gray-900">{item.title}</div>
-                    <div className="text-sm text-gray-500">{item.desc}</div>
+                    <div className="text-sm text-gray-500">{item.description}</div>
                   </div>
                 </div>
               ))}
@@ -553,17 +542,17 @@ export default function PreviewReport() {
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 1 }}
+            transition={{ delay: 0.7 }}
             className="bg-white rounded-2xl p-8 border-2 border-primary-200 text-center"
           >
             <div className="text-4xl font-bold text-gray-900 mb-2">€147</div>
-            <p className="text-gray-500 mb-6">One-time payment • Includes 90-min AI Workshop</p>
+            <p className="text-gray-500 mb-6">Workshop + Full Personalized Report</p>
 
             <button
               onClick={handleGetFullReport}
               className="w-full max-w-md py-4 bg-primary-600 text-white font-semibold rounded-xl hover:bg-primary-700 transition shadow-lg shadow-primary-600/25 text-lg"
             >
-              Get Your Full Report →
+              Start Your Workshop →
             </button>
 
             <p className="text-sm text-gray-500 mt-4">

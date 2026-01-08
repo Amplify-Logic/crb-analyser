@@ -207,7 +207,10 @@ def load_industry_benchmarks(industry: str) -> List[EmbeddingContent]:
 
     data = load_json_file(file_path)
 
-    # Industry overview
+    # Get top-level verified date for source attribution
+    verified_date = data.get("verified_date", data.get("last_updated", "2024-01"))
+
+    # Handle legacy format: industry_overview + key_metrics
     if data.get("industry_overview"):
         overview = data["industry_overview"]
         content = json.dumps(overview, indent=2)
@@ -221,7 +224,6 @@ def load_industry_benchmarks(industry: str) -> List[EmbeddingContent]:
             source_file=f"{industry}/benchmarks.json"
         ))
 
-    # Key metrics
     for metric in data.get("key_metrics", []):
         content = f"{metric.get('description', '')}\nValue: {metric.get('value')}\nSource: {metric.get('source', 'Unknown')}"
         items.append(EmbeddingContent(
@@ -233,6 +235,54 @@ def load_industry_benchmarks(industry: str) -> List[EmbeddingContent]:
             metadata=metric,
             source_file=f"{industry}/benchmarks.json"
         ))
+
+    # Handle current format: benchmarks.{category}.{metric}
+    benchmarks = data.get("benchmarks", {})
+    for category, metrics in benchmarks.items():
+        if not isinstance(metrics, dict):
+            continue
+
+        for metric_name, metric_data in metrics.items():
+            if not isinstance(metric_data, dict):
+                continue
+
+            # Extract source from metric data
+            source = metric_data.get("source", f"{industry.title()} industry data")
+
+            # Build value description
+            value_parts = []
+            for key, val in metric_data.items():
+                if key == "source":
+                    continue
+                if isinstance(val, dict):
+                    # Handle ranges like {min: 30, max: 45, unit: "percent"}
+                    if "min" in val and "max" in val:
+                        unit = val.get("unit", "")
+                        value_parts.append(f"{key}: {val['min']}-{val['max']}{' ' + unit if unit else ''}")
+                    elif "value" in val:
+                        value_parts.append(f"{key}: {val['value']}")
+                else:
+                    value_parts.append(f"{key}: {val}")
+
+            value_str = "; ".join(value_parts) if value_parts else str(metric_data)
+            content = f"{metric_name.replace('_', ' ').title()}\nValue: {value_str}\nSource: {source}"
+
+            items.append(EmbeddingContent(
+                content_type="benchmark",
+                content_id=f"{industry}-{category}-{metric_name}",
+                industry=industry,
+                title=f"{industry.replace('-', ' ').title()}: {metric_name.replace('_', ' ').title()}",
+                content=content,
+                metadata={
+                    "category": category,
+                    "metric_name": metric_name,
+                    "source": source,
+                    "verified_date": verified_date,
+                    "value": value_str,
+                    **metric_data,
+                },
+                source_file=f"{industry}/benchmarks.json"
+            ))
 
     logger.info(f"Loaded {len(items)} benchmarks for {industry}")
     return items

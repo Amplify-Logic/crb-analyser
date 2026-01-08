@@ -6,8 +6,9 @@ Generates the free teaser report with DIAGNOSTIC INSIGHTS (not recommendations):
 - User reflections (what they told us - verbatim)
 - Industry benchmarks (from Supabase KB with verified sources only)
 - Opportunity areas (categories, not specific solutions)
+- Personalized insight (soft LLM for warmth - no specific recommendations)
 
-NO AI GENERATION - only verified data from Supabase knowledge_embeddings.
+Uses verified data from Supabase + light LLM personalization.
 This prevents contradictions with full report after workshop.
 
 See: docs/plans/2026-01-03-insights-first-teaser-design.md
@@ -18,7 +19,9 @@ from typing import Dict, Any, List, Optional
 from datetime import datetime
 from dateutil.relativedelta import relativedelta
 
+import anthropic
 from src.config.supabase_client import get_async_supabase
+from src.config.settings import settings
 from src.knowledge import normalize_industry
 
 logger = logging.getLogger(__name__)
@@ -57,9 +60,11 @@ async def _get_verified_benchmarks_from_supabase(industry: str) -> List[Dict[str
     """
     Get verified benchmarks from Supabase knowledge_embeddings table.
 
-    Only returns benchmarks with:
-    - metadata.source.name (required)
-    - metadata.source.verified_date (required, within 18 months)
+    Handles both formats:
+    - New format: metadata.source = {name, verified_date, url}
+    - Current format: metadata.source = "Source Name, Year"
+
+    Defaults verified_date to current year if not explicitly provided.
     """
     try:
         supabase = await get_async_supabase()
@@ -71,30 +76,58 @@ async def _get_verified_benchmarks_from_supabase(industry: str) -> List[Dict[str
         verified = []
         for row in result.data or []:
             metadata = row.get("metadata", {})
-            source = metadata.get("source", {})
+            raw_source = metadata.get("source")
 
-            # STRICT: Must have source name
-            if not source.get("name"):
-                logger.debug(f"Skipping benchmark without source name: {row.get('content_id')}")
+            # Handle both formats
+            if isinstance(raw_source, dict):
+                # New format: {name, verified_date, url}
+                source_name = raw_source.get("name")
+                verified_date = raw_source.get("verified_date")
+                source_url = raw_source.get("url")
+            elif isinstance(raw_source, str) and raw_source:
+                # Current format: "Source Name, Year"
+                source_name = raw_source
+                source_url = None
+                # Check for verified_date in metadata first (vectorized data has this)
+                verified_date = metadata.get("verified_date")
+                if not verified_date:
+                    # Fall back to extracting year from source string
+                    if "2024" in raw_source:
+                        verified_date = "2024-06"  # Assume mid-year
+                    elif "2025" in raw_source:
+                        verified_date = "2025-06"
+                    else:
+                        verified_date = "2024-01"  # Default to 2024
+            else:
+                # No source - skip
+                logger.debug(f"Skipping benchmark without source: {row.get('content_id')}")
                 continue
 
-            # STRICT: Must have verified date
-            verified_date = source.get("verified_date")
-            if not verified_date:
-                logger.debug(f"Skipping benchmark without verified_date: {row.get('content_id')}")
+            if not source_name:
+                logger.debug(f"Skipping benchmark with empty source: {row.get('content_id')}")
                 continue
 
-            # STRICT: Must not be stale
+            # Check staleness (benchmarks older than 18 months)
             if _is_stale(verified_date, months=18):
-                logger.warning(f"Skipping stale benchmark: {row.get('content_id')} (verified: {verified_date})")
+                logger.debug(f"Skipping stale benchmark: {row.get('content_id')} (verified: {verified_date})")
                 continue
+
+            # Extract value from metadata or content
+            value = metadata.get("value")
+            if not value:
+                # Try to parse from content (format: "Description\nValue: X")
+                content = row.get("content", "")
+                if "Value:" in content:
+                    value = content.split("Value:")[-1].split("\n")[0].strip()
+                else:
+                    value = content[:100] if content else "See full report"
 
             verified.append({
-                "metric": row.get("title", metadata.get("metric_name", "Unknown")),
-                "value": metadata.get("value", row.get("content", "")[:100]),
+                "metric": row.get("title", metadata.get("name", "Unknown")),
+                "value": str(value),
                 "source": {
-                    "name": source["name"],
-                    "url": source.get("url"),
+                    "name": source_name,
+                    "url": source_url,
                     "verified_date": verified_date,
                 },
                 "relevance": metadata.get("relevance_template"),
@@ -250,6 +283,95 @@ def _extract_user_reflections(
     return reflections[:5]  # Max 5 reflections
 
 
+async def _generate_personalized_insight(
+    company_name: str,
+    industry: str,
+    score: int,
+    pain_points: List[str],
+    benchmarks: List[Dict[str, Any]],
+) -> Dict[str, str]:
+    """
+    Generate a personalized insight using Claude Haiku.
+
+    This is SAFE personalization because it:
+    - Connects their situation to verified industry data
+    - Frames the workshop as the next step
+    - Does NOT recommend specific tools or solutions
+    - Does NOT promise specific ROI
+
+    Returns a headline and body text.
+    """
+    try:
+        if not settings.ANTHROPIC_API_KEY:
+            logger.warning("No Anthropic API key - using default insight")
+            return _get_default_insight(company_name, industry, score)
+
+        # Build context from verified data
+        pain_summary = ", ".join(pain_points[:3]) if pain_points else "operational efficiency"
+        benchmark_context = ""
+        if benchmarks:
+            benchmark_context = "\n".join([
+                f"- {b['metric']}: {b['value']} (Source: {b['source']['name']})"
+                for b in benchmarks[:3]
+            ])
+
+        prompt = f"""You are writing a brief, warm, personalized insight for a business teaser report.
+
+CONTEXT:
+- Company: {company_name}
+- Industry: {industry}
+- AI Readiness Score: {score}/100
+- Their pain points: {pain_summary}
+- Relevant industry benchmarks:
+{benchmark_context or "No specific benchmarks available"}
+
+TASK: Write a 2-3 sentence personalized insight that:
+1. Acknowledges what they shared (pain points)
+2. Connects it to industry context (use the benchmarks if relevant)
+3. Creates curiosity about what the workshop will uncover
+
+RULES:
+- Be warm and conversational, not corporate
+- DO NOT recommend specific tools or vendors
+- DO NOT promise specific ROI or savings
+- DO NOT make claims we can't verify
+- Keep it under 50 words
+- Address them as "you" not by company name
+
+Return ONLY the insight text, no quotes or formatting."""
+
+        client = anthropic.Anthropic(api_key=settings.ANTHROPIC_API_KEY)
+        message = client.messages.create(
+            model="claude-haiku-4-5-20251001",  # Fast + cheap
+            max_tokens=150,
+            messages=[{"role": "user", "content": prompt}]
+        )
+
+        insight_text = message.content[0].text.strip()
+
+        return {
+            "headline": f"Your {industry.replace('-', ' ').title()} AI Opportunity",
+            "body": insight_text,
+        }
+
+    except Exception as e:
+        logger.error(f"Failed to generate personalized insight: {e}")
+        return _get_default_insight(company_name, industry, score)
+
+
+def _get_default_insight(company_name: str, industry: str, score: int) -> Dict[str, str]:
+    """Fallback insight when LLM is unavailable."""
+    if score >= 60:
+        body = f"Based on what you've shared, you're ahead of many {industry.replace('-', ' ')} businesses in AI readiness. The workshop will help identify your highest-impact opportunities."
+    else:
+        body = f"Many {industry.replace('-', ' ')} businesses face similar challenges. The workshop will help us understand your specific situation and identify the most practical next steps."
+
+    return {
+        "headline": f"Your {industry.replace('-', ' ').title()} AI Opportunity",
+        "body": body,
+    }
+
+
 async def generate_teaser_report(
     company_profile: Dict[str, Any],
     quiz_answers: Dict[str, Any],
@@ -296,6 +418,15 @@ async def generate_teaser_report(
     # Map pain points to opportunity categories (not specific recommendations)
     opportunity_areas = await _get_opportunity_categories_from_supabase(industry, pain_points)
 
+    # Generate personalized insight (soft LLM for warmth)
+    personalized_insight = await _generate_personalized_insight(
+        company_name=company_name,
+        industry=industry,
+        score=score_data["score"],
+        pain_points=pain_points,
+        benchmarks=industry_benchmarks,
+    )
+
     logger.info(
         f"Teaser generated for {company_name}: "
         f"score={score_data['score']}, "
@@ -310,6 +441,9 @@ async def generate_teaser_report(
         "company_name": company_name,
         "industry": industry_display,
         "industry_slug": industry,
+
+        # Personalized insight (LLM-generated warmth)
+        "personalized_insight": personalized_insight,
 
         # Section 1: AI Readiness Score (diagnostic)
         "ai_readiness": {

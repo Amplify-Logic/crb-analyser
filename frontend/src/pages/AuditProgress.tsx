@@ -44,7 +44,7 @@ const PHASE_INFO: Record<string, { title: string; description: string; icon: str
   },
   report: {
     title: 'Report Generation',
-    description: 'Creating your comprehensive CRB report',
+    description: 'Creating your comprehensive AI readiness report',
     icon: '5',
   },
 }

@@ -83,8 +83,8 @@ class Settings(BaseSettings):
 
     # Text-to-Speech (ElevenLabs)
     ELEVENLABS_API_KEY: Optional[str] = None
-    ELEVENLABS_VOICE_ID: str = "21m00Tcm4TlvDq8ikWAM"  # "Rachel" - calm, professional voice
-    ELEVENLABS_MODEL_ID: str = "eleven_flash_v2_5"  # Fast, low-latency model
+    ELEVENLABS_VOICE_ID: str = "EXAVITQu4vr4xnSDxMaL"  # "Sarah" - conversational, natural voice
+    ELEVENLABS_MODEL_ID: str = "eleven_multilingual_v2"  # High quality, emotional speech
 
     # Payments (Stripe) - Fixed naming to match .env.production
     STRIPE_SECRET_KEY: str = ""
@@ -106,6 +106,8 @@ class Settings(BaseSettings):
     # Monitoring
     LOGFIRE_TOKEN: Optional[str] = None
     SENTRY_DSN: Optional[str] = None
+    BETTERSTACK_SOURCE_TOKEN: Optional[str] = None
+    BETTERSTACK_HOST: str = "https://in.logs.betterstack.com"
     LANGFUSE_PUBLIC_KEY: Optional[str] = None
     LANGFUSE_SECRET_KEY: Optional[str] = None
     LANGFUSE_HOST: str = "https://cloud.langfuse.com"

@@ -92,7 +92,7 @@ export default function Dashboard() {
           <div className="flex justify-between items-center h-16">
             <div className="flex items-center">
               <Link to="/dashboard" className="text-xl font-bold text-primary-600">
-                CRB Analyser
+                Ready Path
               </Link>
             </div>
             <div className="flex items-center gap-4">
@@ -120,7 +120,7 @@ export default function Dashboard() {
             Welcome back{user?.full_name ? `, ${user.full_name.split(' ')[0]}` : ''}
           </h1>
           <p className="text-gray-600 mt-1">
-            Here's an overview of your CRB audits.
+            Here's an overview of your AI readiness reports.
           </p>
         </div>
 
@@ -191,7 +191,7 @@ export default function Dashboard() {
               </div>
               <h3 className="text-lg font-medium text-gray-900 mb-2">No audits yet</h3>
               <p className="text-gray-600 mb-6">
-                Start your first CRB analysis to discover AI opportunities for your business.
+                Start your first analysis to discover AI opportunities for your business.
               </p>
               <Link
                 to="/new-audit"
