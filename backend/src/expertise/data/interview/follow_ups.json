@@ -1,0 +1,58 @@
+{
+  "signals": {
+    "pain_intensity": {
+      "patterns": ["nightmare", "killing us", "hours every day", "hate", "worst", "impossible", "drowning"],
+      "follow_ups": [
+        "That sounds really frustrating. Can you give me a recent example?",
+        "When that happens, what's the ripple effect on your team?",
+        "How long has this been going on?"
+      ]
+    },
+    "manual_work": {
+      "patterns": ["spreadsheet", "excel", "by hand", "copy paste", "manually", "paper", "write it down", "type it in"],
+      "follow_ups": [
+        "How long has it been that way? Has anyone tried to fix it before?",
+        "Who on your team spends the most time on that?",
+        "What would happen if that person was sick for a week?"
+      ]
+    },
+    "customer_impact": {
+      "patterns": ["clients complain", "lose customers", "reputation", "reviews", "angry", "waiting", "callback"],
+      "follow_ups": [
+        "When was the last time that actually cost you business?",
+        "How do customers usually find out about those issues?",
+        "What do you tell customers when that happens?"
+      ]
+    },
+    "growth_blocker": {
+      "patterns": ["can't scale", "hire more", "keeping up", "capacity", "bottleneck", "can't grow", "maxed out"],
+      "follow_ups": [
+        "What breaks first when you get busy?",
+        "If you doubled your business tomorrow, what would fail?",
+        "How many more jobs could you handle if this wasn't an issue?"
+      ]
+    },
+    "tech_frustration": {
+      "patterns": ["doesn't integrate", "old system", "clunky", "doesn't talk to", "manual entry", "two systems"],
+      "follow_ups": [
+        "What else does that need to talk to?",
+        "How did you end up with that setup?",
+        "What's the workaround your team uses?"
+      ]
+    },
+    "vague_answer": {
+      "patterns": [],
+      "min_words": 5,
+      "follow_ups": [
+        "Let me ask that differently - what did you do yesterday that felt like a waste of time?",
+        "Can you walk me through a specific example from the last week?",
+        "What would your team say is the biggest headache?"
+      ]
+    }
+  },
+  "anchor_questions": {
+    "problem": "What's the one thing in your business that costs you the most time or money right now?",
+    "process": "Walk me through how that works today - what happens step by step?",
+    "priority": "If we could fix that in the next 90 days, what would that be worth to your business?"
+  }
+}
