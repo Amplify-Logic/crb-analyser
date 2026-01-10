@@ -20,6 +20,9 @@ CONVERSATION_STAGES = [
     "stakeholders",      # Who else is involved?
 ]
 
+# Followup stage is special - used after milestone feedback
+FOLLOWUP_STAGE = "followup"
+
 
 class WorkshopQuestionSkill(LLMSkill[Dict[str, Any]]):
     """
@@ -64,6 +67,8 @@ class WorkshopQuestionSkill(LLMSkill[Dict[str, Any]]):
         signals = metadata.get("signals", {})
         previous = metadata.get("previous_messages", [])
         company_name = metadata.get("company_name", "your company")
+        data_gaps = metadata.get("data_gaps", [])
+        user_notes = metadata.get("user_notes")
 
         # Build the prompt
         prompt = self._build_prompt(
@@ -73,6 +78,8 @@ class WorkshopQuestionSkill(LLMSkill[Dict[str, Any]]):
             previous=previous,
             company_name=company_name,
             industry=context.industry,
+            data_gaps=data_gaps,
+            user_notes=user_notes,
         )
 
         system = self._get_system_prompt(signals)
@@ -83,8 +90,15 @@ class WorkshopQuestionSkill(LLMSkill[Dict[str, Any]]):
         question = question.strip().strip('"').strip("'")
 
         # Determine next stage
-        stage_idx = CONVERSATION_STAGES.index(stage) if stage in CONVERSATION_STAGES else 0
-        next_stage = CONVERSATION_STAGES[stage_idx + 1] if stage_idx < len(CONVERSATION_STAGES) - 1 else "complete"
+        if stage == FOLLOWUP_STAGE:
+            # Followup mode: check if we have enough info now
+            followup_count = metadata.get("followup_count", 0)
+            next_stage = "complete" if followup_count >= 2 else FOLLOWUP_STAGE
+        elif stage in CONVERSATION_STAGES:
+            stage_idx = CONVERSATION_STAGES.index(stage)
+            next_stage = CONVERSATION_STAGES[stage_idx + 1] if stage_idx < len(CONVERSATION_STAGES) - 1 else "complete"
+        else:
+            next_stage = "complete"
 
         return {
             "question": question,
@@ -147,6 +161,8 @@ This user is budget-constrained. You should:
         previous: List[Dict[str, str]],
         company_name: str,
         industry: str,
+        data_gaps: Optional[List[str]] = None,
+        user_notes: Optional[str] = None,
     ) -> str:
         """Build the question generation prompt."""
         # Stage-specific guidance
@@ -158,7 +174,18 @@ This user is budget-constrained. You should:
             "stakeholders": f"Ask who else is involved in or affected by {pain_label}. Who needs to approve changes? Who needs to adopt?",
         }
 
-        guidance = stage_guidance.get(stage, stage_guidance["current_state"])
+        # Handle followup stage specially
+        if stage == FOLLOWUP_STAGE:
+            gaps_text = ", ".join(data_gaps[:2]) if data_gaps else "missing details"
+            user_feedback = f"The user said: '{user_notes}'" if user_notes else "The user wants to refine the finding."
+
+            guidance = f"""This is a FOLLOW-UP question. {user_feedback}
+
+We need more information about: {gaps_text}
+
+Ask a specific, targeted question to fill in the missing data. Focus on getting concrete numbers, examples, or clarifications."""
+        else:
+            guidance = stage_guidance.get(stage, stage_guidance["current_state"])
 
         # Build conversation context
         conv_context = ""

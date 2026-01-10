@@ -8,15 +8,17 @@
  */
 
 import { useState, useEffect } from 'react'
-import { Link, useNavigate, useSearchParams } from 'react-router-dom'
+import { useNavigate, useSearchParams } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
 import {
   WorkshopConfirmation,
   WorkshopDeepDive,
   WorkshopMilestone,
+  SynthesisForm,
   ConfirmationCard,
 } from '../components/workshop'
 import AudioUploader from '../components/voice/AudioUploader'
+import { Logo } from '../components/Logo'
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8383'
 
@@ -323,9 +325,7 @@ export default function Workshop() {
       <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white">
         <nav className="fixed top-0 left-0 right-0 z-50 bg-white/80 backdrop-blur-md border-b border-gray-100">
           <div className="max-w-4xl mx-auto px-4 py-4 flex justify-between items-center">
-            <Link to="/" className="text-xl font-bold text-gray-900">
-              Ready<span className="text-primary-600">Path</span>
-            </Link>
+            <Logo size="sm" showIcon={false} />
             <span className="text-sm text-gray-500">Workshop</span>
           </div>
         </nav>
@@ -551,88 +551,4 @@ export default function Workshop() {
 
   // Fallback
   return null
-}
-
-// =============================================================================
-// Synthesis Form Component
-// =============================================================================
-
-interface SynthesisFormProps {
-  onComplete: (answers: Record<string, any>) => void
-}
-
-function SynthesisForm({ onComplete }: SynthesisFormProps) {
-  const [stakeholders, setStakeholders] = useState('')
-  const [timeline, setTimeline] = useState('')
-  const [additions, setAdditions] = useState('')
-  const [isSubmitting, setIsSubmitting] = useState(false)
-
-  const handleSubmit = () => {
-    setIsSubmitting(true)
-    onComplete({
-      stakeholders: stakeholders.split(',').map(s => s.trim()).filter(Boolean),
-      timeline,
-      additions: additions || null,
-    })
-  }
-
-  return (
-    <div className="space-y-6">
-      <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
-        <label className="block text-sm font-medium text-gray-900 mb-2">
-          Who else needs to be involved in this decision?
-        </label>
-        <input
-          type="text"
-          value={stakeholders}
-          onChange={(e) => setStakeholders(e.target.value)}
-          placeholder="e.g., CEO, CFO, IT Manager (comma separated)"
-          className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-primary-500 focus:border-transparent"
-        />
-      </div>
-
-      <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
-        <label className="block text-sm font-medium text-gray-900 mb-2">
-          What's your ideal timeline for making changes?
-        </label>
-        <select
-          value={timeline}
-          onChange={(e) => setTimeline(e.target.value)}
-          className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-primary-500 focus:border-transparent"
-        >
-          <option value="">Select timeline...</option>
-          <option value="immediate">Immediately (next 30 days)</option>
-          <option value="quarter">This quarter</option>
-          <option value="half">Next 6 months</option>
-          <option value="year">Within a year</option>
-          <option value="exploring">Just exploring options</option>
-        </select>
-      </div>
-
-      <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
-        <label className="block text-sm font-medium text-gray-900 mb-2">
-          Anything else we should know?
-        </label>
-        <textarea
-          value={additions}
-          onChange={(e) => setAdditions(e.target.value)}
-          placeholder="Any additional context, concerns, or priorities..."
-          className="w-full px-4 py-3 border border-gray-200 rounded-xl resize-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
-          rows={4}
-        />
-      </div>
-
-      <button
-        onClick={handleSubmit}
-        disabled={!timeline || isSubmitting}
-        className={`w-full px-6 py-4 rounded-xl font-semibold transition ${
-          timeline && !isSubmitting
-            ? 'bg-primary-600 text-white hover:bg-primary-700'
-            : 'bg-gray-200 text-gray-400 cursor-not-allowed'
-        }`}
-      >
-        {isSubmitting ? 'Generating Report...' : 'Generate My Report'}
-      </button>
-    </div>
-  )
 }

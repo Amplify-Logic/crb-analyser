@@ -215,11 +215,37 @@ class TestMilestoneSynthesisSkill:
         assert "potential_savings" in result.data["roi"]
 
     @pytest.mark.asyncio
-    async def test_includes_vendors(self, skill, synthesis_context):
+    async def test_includes_vendors(self, skill, synthesis_context, mocker):
+        # Mock vendor service to return test vendors
+        mock_vendors = [
+            {
+                "name": "Databox",
+                "slug": "databox",
+                "_tier": 1,
+                "best_for": ["Automated reporting"],
+                "pricing": {"free_tier": True},
+            },
+            {
+                "name": "Whatagraph",
+                "slug": "whatagraph",
+                "_tier": 2,
+                "best_for": ["Agency reporting"],
+                "pricing": {"starting_price": 199, "currency": "USD"},
+            },
+        ]
+        mocker.patch(
+            "src.skills.workshop.milestone_skill.vendor_service.get_vendors_with_tier_boost",
+            new_callable=AsyncMock,
+            return_value=mock_vendors,
+        )
+
         result = await skill.run(synthesis_context)
         assert result.success is True
         assert "vendors" in result.data
         assert len(result.data["vendors"]) > 0
+        # Verify vendor data structure
+        assert result.data["vendors"][0]["name"] == "Databox"
+        assert result.data["vendors"][0]["fit"] == "high"  # Tier 1 = high fit
 
     @pytest.mark.asyncio
     async def test_includes_pain_point_id(self, skill, synthesis_context):

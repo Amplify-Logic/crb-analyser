@@ -26,6 +26,8 @@ from src.models.workshop import (
     WorkshopPhase,
     WorkshopData,
     DetectedSignals,
+    WorkshopConfidence,
+    DepthDimensions,
 )
 
 import anthropic
@@ -349,16 +351,37 @@ async def workshop_respond(request: WorkshopRespondRequest):
         industry = answers.get("industry", "general")
         company_name = company_profile.get("basics", {}).get("name", {}).get("value", "your company")
 
+        # Get data gaps and user notes if in followup stage
+        current_stage = current_dd.get("conversation_stage", "current_state")
+        data_gaps = []
+        user_notes = None
+
+        if current_stage == "followup":
+            # Find the milestone for this pain point to get data gaps
+            milestones = workshop_data.get("milestones", [])
+            for milestone in milestones:
+                if milestone.get("pain_point_id") == request.current_pain_point:
+                    data_gaps = milestone.get("data_gaps", [])
+                    user_notes = milestone.get("user_notes")
+                    break
+
+            # Track followup count for determining when to complete
+            followup_count = current_dd.get("followup_count", 0) + 1
+            current_dd["followup_count"] = followup_count
+
         skill_context = SkillContext(
             industry=normalize_industry(industry),
             metadata={
                 "phase": "deepdive",
                 "current_pain_point": request.current_pain_point,
                 "pain_point_label": current_dd["pain_point_label"],
-                "conversation_stage": current_dd.get("conversation_stage", "current_state"),
+                "conversation_stage": current_stage,
                 "signals": workshop_data.get("detected_signals", {}),
                 "previous_messages": current_dd["transcript"][-10:],
                 "company_name": company_name,
+                "data_gaps": data_gaps,
+                "user_notes": user_notes,
+                "followup_count": current_dd.get("followup_count", 0),
             }
         )
 
@@ -538,12 +561,15 @@ async def generate_milestone(request: MilestoneRequest):
 async def save_milestone_feedback(request: MilestoneFeedbackRequest):
     """
     Save user feedback on a milestone.
+
+    If feedback is "needs_edit", enables re-entry to the conversation
+    with targeted follow-up questions based on data gaps.
     """
     try:
         supabase = await get_async_supabase()
 
         result = await supabase.table("quiz_sessions").select(
-            "workshop_data"
+            "workshop_data, answers"
         ).eq("id", request.session_id).single().execute()
 
         if not result.data:
@@ -553,23 +579,65 @@ async def save_milestone_feedback(request: MilestoneFeedbackRequest):
             )
 
         workshop_data = result.data.get("workshop_data", {})
+        answers = result.data.get("answers", {})
         milestones = workshop_data.get("milestones", [])
+        deep_dives = workshop_data.get("deep_dives", [])
 
-        # Find and update the milestone
+        # Find the milestone and deep-dive
+        target_milestone = None
+        target_dd = None
         for milestone in milestones:
             if milestone.get("pain_point_id") == request.pain_point_id:
                 milestone["user_feedback"] = request.feedback
                 milestone["user_notes"] = request.notes
+                target_milestone = milestone
+                break
+
+        for dd in deep_dives:
+            if dd.get("pain_point_id") == request.pain_point_id:
+                target_dd = dd
                 break
 
         workshop_data["milestones"] = milestones
+
+        # If user wants to edit, enable re-entry
+        followup_questions = []
+        can_continue = False
+
+        if request.feedback == "needs_edit" and target_milestone:
+            can_continue = True
+
+            # Generate follow-up questions based on data gaps and user notes
+            followup_questions = _generate_followup_questions(
+                milestone=target_milestone,
+                user_notes=request.notes,
+                deep_dive=target_dd,
+            )
+
+            # Reset the deep-dive stage for continuation
+            if target_dd:
+                target_dd["conversation_stage"] = "followup"
+                target_dd["completed_at"] = None  # Mark as not completed
+                # Add a system note about re-entry
+                target_dd["transcript"].append({
+                    "role": "system",
+                    "content": f"User requested adjustments: {request.notes or 'No specific notes'}",
+                    "timestamp": datetime.utcnow().isoformat(),
+                })
+
+            workshop_data["deep_dives"] = deep_dives
 
         await supabase.table("quiz_sessions").update({
             "workshop_data": workshop_data,
             "updated_at": datetime.utcnow().isoformat(),
         }).eq("id", request.session_id).execute()
 
-        return {"success": True}
+        return {
+            "success": True,
+            "can_continue": can_continue,
+            "followup_questions": followup_questions,
+            "pain_point_id": request.pain_point_id,
+        }
 
     except HTTPException:
         raise
@@ -627,6 +695,8 @@ async def get_workshop_state(session_id: str):
 async def complete_workshop(request: WorkshopCompleteRequest):
     """
     Complete the workshop and trigger report generation.
+
+    Enforces confidence gate - workshop must have sufficient data quality.
     """
     try:
         supabase = await get_async_supabase()
@@ -643,6 +713,21 @@ async def complete_workshop(request: WorkshopCompleteRequest):
 
         session = result.data
         workshop_data = session.get("workshop_data", {})
+
+        # Enforce confidence gate
+        confidence = _build_workshop_confidence(workshop_data)
+        if not confidence.is_ready_for_report():
+            gaps = _identify_data_gaps(workshop_data, confidence)
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail={
+                    "code": "INSUFFICIENT_DATA",
+                    "message": "Workshop needs more information before generating report",
+                    "gaps": gaps,
+                    "confidence_level": confidence.level,
+                    "confidence_score": confidence.overall_score,
+                }
+            )
 
         # Calculate duration
         started_at = workshop_data.get("started_at")
@@ -825,3 +910,232 @@ def _get_pain_point_label(pain_point_id: str) -> str:
         return pain_point_id.replace("pain_", "Pain Point ").replace("_", " ").title()
 
     return labels.get(pain_point_id, pain_point_id.replace("_", " ").title())
+
+
+def _generate_followup_questions(
+    milestone: Dict[str, Any],
+    user_notes: Optional[str],
+    deep_dive: Optional[Dict[str, Any]],
+) -> List[str]:
+    """
+    Generate targeted follow-up questions based on data gaps and user feedback.
+
+    These questions help gather missing information to improve the finding accuracy.
+    """
+    questions = []
+
+    # Get data gaps from milestone
+    data_gaps = milestone.get("data_gaps", [])
+    roi = milestone.get("roi", {})
+    finding = milestone.get("finding", {})
+
+    # If user provided specific notes, prioritize addressing those
+    if user_notes:
+        notes_lower = user_notes.lower()
+
+        if any(word in notes_lower for word in ["number", "amount", "cost", "hour", "time"]):
+            questions.append(
+                "Can you give me more specific numbers? For example, how many hours "
+                "per week does this task take, or what's the approximate cost involved?"
+            )
+
+        if any(word in notes_lower for word in ["wrong", "incorrect", "not right", "different"]):
+            questions.append(
+                "I'd like to make sure I understand correctly. Can you walk me through "
+                "exactly how this process works in your business?"
+            )
+
+        if any(word in notes_lower for word in ["miss", "forgot", "also", "more"]):
+            questions.append(
+                "What else should I know about this challenge that we haven't covered yet?"
+            )
+
+    # Address data gaps from milestone synthesis
+    for gap in data_gaps[:2]:  # Limit to top 2 gaps
+        gap_lower = gap.lower()
+
+        if "hour" in gap_lower or "time" in gap_lower:
+            questions.append(
+                "How much time does your team spend on this each week? "
+                "Even a rough estimate helps."
+            )
+        elif "cost" in gap_lower or "budget" in gap_lower:
+            questions.append(
+                "Do you have a sense of what this is costing you currently? "
+                "This could be in direct costs or lost productivity."
+            )
+        elif "stakeholder" in gap_lower or "team" in gap_lower:
+            questions.append(
+                "Who else on your team is affected by this issue? "
+                "Are there other stakeholders we should consider?"
+            )
+        elif "tool" in gap_lower or "software" in gap_lower:
+            questions.append(
+                "What tools or systems are you currently using for this? "
+                "And are there any you've tried that didn't work?"
+            )
+        else:
+            # Generic gap question
+            questions.append(f"Could you tell me more about: {gap}?")
+
+    # If ROI data is weak, ask for specifics
+    if roi.get("hours_per_week", 0) == 0 or roi.get("confidence", 1.0) < 0.5:
+        if not any("time" in q.lower() or "hour" in q.lower() for q in questions):
+            questions.append(
+                "To calculate potential savings accurately, I need to understand: "
+                "roughly how many hours per week does your team spend on this?"
+            )
+
+    # If pain severity is unclear
+    if finding.get("pain_severity") == "low" and not questions:
+        questions.append(
+            "This seems like it might not be a major pain point. "
+            "Is this actually causing significant problems, or is it more of a minor annoyance?"
+        )
+
+    # Fallback generic questions if no specific ones generated
+    if not questions:
+        questions = [
+            "What specifically would you like me to adjust about this finding?",
+            "Is there anything about your current process I misunderstood?",
+        ]
+
+    # Limit to 3 questions max
+    return questions[:3]
+
+
+def _build_workshop_confidence(workshop_data: Dict[str, Any]) -> WorkshopConfidence:
+    """
+    Build WorkshopConfidence from workshop data.
+
+    Calculates confidence based on:
+    - Number of deep-dives completed
+    - Milestones generated
+    - Data quality from conversations
+    """
+    confidence = WorkshopConfidence()
+
+    milestones = workshop_data.get("milestones", [])
+    deep_dives = workshop_data.get("deep_dives", [])
+
+    # Count pain points with sufficient data
+    pain_points_extracted = len([
+        dd for dd in deep_dives
+        if dd.get("finding") or len(dd.get("transcript", [])) >= 4
+    ])
+
+    # Count quantifiable impacts from milestones
+    quantifiable_impacts = len([
+        m for m in milestones
+        if m.get("roi", {}).get("potential_savings", 0) > 0
+    ])
+
+    # Set quality indicators
+    confidence.quality_indicators = {
+        "pain_points_extracted": pain_points_extracted,
+        "quantifiable_impacts": quantifiable_impacts,
+        "milestones_generated": len(milestones),
+        "deep_dives_completed": len([dd for dd in deep_dives if dd.get("completed_at")]),
+    }
+
+    # Build topic confidence from deep-dive coverage
+    # Map deep-dives to topic areas
+    if deep_dives:
+        # Current challenges topic
+        challenges_score = min(100, len(deep_dives) * 25)
+        confidence.topics["current_challenges"] = {"coverage": challenges_score}
+
+        # Business goals (from milestones with ROI)
+        goals_score = min(100, quantifiable_impacts * 30)
+        confidence.topics["business_goals"] = {"coverage": goals_score}
+
+        # Team operations (from transcript length)
+        total_messages = sum(len(dd.get("transcript", [])) for dd in deep_dives)
+        ops_score = min(100, total_messages * 5)
+        confidence.topics["team_operations"] = {"coverage": ops_score}
+
+        # Technology (from tools mentioned)
+        tools_mentioned = set()
+        for dd in deep_dives:
+            for msg in dd.get("transcript", []):
+                content = msg.get("content", "").lower()
+                for tool in ["hubspot", "salesforce", "slack", "excel", "zapier", "notion"]:
+                    if tool in content:
+                        tools_mentioned.add(tool)
+        tech_score = min(100, len(tools_mentioned) * 20)
+        confidence.topics["technology"] = {"coverage": tech_score}
+
+        # Budget/timeline (from final answers or milestone feedback)
+        budget_score = 40 if workshop_data.get("final_answers") else 0
+        confidence.topics["budget_timeline"] = {"coverage": budget_score}
+
+    # Calculate depth dimensions
+    confidence.depth_dimensions = DepthDimensions(
+        integration_depth=0.5 if len(milestones) >= 2 else 0.2,
+        cost_quantification=0.8 if quantifiable_impacts >= 2 else 0.3,
+        stakeholder_mapping=0.5 if workshop_data.get("final_answers", {}).get("stakeholders") else 0.1,
+        implementation_readiness=0.4 if len(milestones) >= 1 else 0.0,
+    )
+
+    # Recalculate overall score
+    confidence.calculate_overall()
+
+    return confidence
+
+
+def _identify_data_gaps(
+    workshop_data: Dict[str, Any],
+    confidence: WorkshopConfidence,
+) -> List[str]:
+    """
+    Identify specific data gaps that need to be addressed.
+
+    Returns actionable messages for the user.
+    """
+    gaps = []
+
+    milestones = workshop_data.get("milestones", [])
+    deep_dives = workshop_data.get("deep_dives", [])
+
+    # Check minimum requirements
+    if not deep_dives:
+        gaps.append("No pain points have been discussed yet")
+    elif len([dd for dd in deep_dives if dd.get("finding")]) == 0:
+        gaps.append("Complete at least one pain point discussion to generate a finding")
+
+    if not milestones:
+        gaps.append("No milestone summaries have been generated")
+
+    # Check for specific topic gaps
+    challenges_conf = confidence.calculate_topic_confidence("current_challenges")
+    if challenges_conf < 0.5:
+        gaps.append("Need more detail about current challenges and pain points")
+
+    goals_conf = confidence.calculate_topic_confidence("business_goals")
+    if goals_conf < 0.4:
+        gaps.append("Need to understand business goals and success metrics")
+
+    # Check for quantifiable data
+    has_numbers = any(
+        m.get("roi", {}).get("hours_per_week", 0) > 0
+        for m in milestones
+    )
+    if not has_numbers and milestones:
+        gaps.append("Need specific numbers (hours spent, costs) for ROI calculation")
+
+    # Check milestone feedback
+    needs_edit_count = sum(
+        1 for m in milestones
+        if m.get("user_feedback") == "needs_edit"
+    )
+    if needs_edit_count > 0:
+        gaps.append(f"{needs_edit_count} finding(s) marked as needing adjustments")
+
+    # Collect data gaps from milestones
+    for milestone in milestones:
+        milestone_gaps = milestone.get("data_gaps", [])
+        for gap in milestone_gaps[:2]:  # Limit per milestone
+            if gap and gap not in gaps:
+                gaps.append(gap)
+
+    return gaps[:5]  # Return top 5 gaps

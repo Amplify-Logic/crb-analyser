@@ -9,6 +9,7 @@
 import { useState, useEffect, useRef } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import VoiceRecorder from '../voice/VoiceRecorder'
+import { sanitizeHtml } from '../../utils/sanitize'
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8383'
 
@@ -295,7 +296,7 @@ Walk me through how this works today - what's the current process?`,
                   <div
                     className="whitespace-pre-wrap"
                     dangerouslySetInnerHTML={{
-                      __html: message.content.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+                      __html: sanitizeHtml(message.content.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>'))
                     }}
                   />
                 </div>
@@ -347,13 +348,15 @@ Walk me through how this works today - what's the current process?`,
               </button>
             </div>
 
-            {/* Skip button (for testing) */}
-            <button
-              onClick={() => onMilestoneReady(currentPainPoint.id)}
-              className="text-sm text-gray-400 hover:text-gray-600"
-            >
-              Skip to summary
-            </button>
+            {/* Skip button (dev only) */}
+            {import.meta.env.DEV && (
+              <button
+                onClick={() => onMilestoneReady(currentPainPoint.id)}
+                className="text-sm text-gray-400 hover:text-gray-600"
+              >
+                Skip to summary
+              </button>
+            )}
           </div>
 
           {inputMode === 'voice' ? (

@@ -10,3 +10,5 @@ export type { ConfirmationCard, ConfirmationRating, ConfirmationCorrection } fro
 export { default as WorkshopDeepDive } from './WorkshopDeepDive'
 
 export { default as WorkshopMilestone } from './WorkshopMilestone'
+
+export { default as SynthesisForm } from './SynthesisForm'
