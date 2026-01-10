@@ -9,10 +9,17 @@
  */
 
 import { useState, useEffect, useRef, useCallback } from 'react'
-import { Link, useNavigate, useSearchParams } from 'react-router-dom'
+import { useNavigate, useSearchParams } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
 import VoiceRecorder from '../components/voice/VoiceRecorder'
 import AudioUploader from '../components/voice/AudioUploader'
+import { formatCompanyName } from '../lib/formatCompanyName'
+import { SpotlightCard, ShimmerButton } from '../components/magicui'
+import { Logo } from '../components/Logo'
+import {
+  processAnswer,
+  getFirstQuestion,
+} from '../services/interviewApi'
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8383'
 
@@ -44,13 +51,15 @@ interface CompanyProfile {
 const generateQuestions = (profile: CompanyProfile | null, companyName: string): QuizQuestion[] => {
   const industry = profile?.industry?.primary_industry?.value || ''
   const teamSize = profile?.size?.employee_range?.value || profile?.size?.employee_count?.value || ''
+  // Format the company name for display in questions
+  const displayName = formatCompanyName(companyName)
 
   // Base questions - personalized where possible
   const questions: QuizQuestion[] = [
     {
       id: 1,
-      question: companyName
-        ? `I've done some research on ${companyName}. What brought you here today - what's the main thing you're hoping AI could help with?`
+      question: displayName
+        ? `I've done some research on ${displayName}. What brought you here today - what's the main thing you're hoping AI could help with?`
         : "What brought you here today? What's the main thing you're hoping AI could help with?",
       topic: "Goals"
     },
@@ -141,32 +150,46 @@ export default function VoiceQuizInterview() {
   const [showUploader, setShowUploader] = useState(false)
   const [isSpeaking, setIsSpeaking] = useState(false)
 
-  // Question state
-  const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0)
+  // Question state - engine-driven
+  const [currentQuestion, setCurrentQuestion] = useState<string>('')
+  const [currentTopic, setCurrentTopic] = useState<string>('Problem')
+  const [currentAnchor, setCurrentAnchor] = useState(1)
+  const [followUpsAsked, setFollowUpsAsked] = useState(0)
+  const [questionsAsked, setQuestionsAsked] = useState(0)
+  const [maxQuestions] = useState(8)
   const [answers, setAnswers] = useState<Record<number, string>>({})
 
   // Context
   const [companyName, setCompanyName] = useState('')
   const [_companyProfile, setCompanyProfile] = useState<CompanyProfile | null>(null)
   const [questions, setQuestions] = useState<QuizQuestion[]>([])
+  const [industry, setIndustry] = useState('general')
 
   // Refs
   const messagesEndRef = useRef<HTMLDivElement>(null)
   const textareaRef = useRef<HTMLTextAreaElement>(null)
   const audioRef = useRef<HTMLAudioElement | null>(null)
 
-  const currentQuestion = questions[currentQuestionIndex]
-  const isLastQuestion = currentQuestionIndex >= questions.length - 1
-  const progress = questions.length > 0
-    ? ((currentQuestionIndex + 1) / (questions.length + 1)) * 100
+  // Legacy question tracking (for fallback)
+  const currentQuestionIndex = questionsAsked
+  const currentQuestionObj = questions[currentQuestionIndex]
+
+  // Progress: based on engine state
+  const progress = maxQuestions > 0
+    ? (questionsAsked / maxQuestions) * 100
     : 0
+
+  // Get formatted company name for display
+  const displayName = formatCompanyName(companyName)
 
   // Load context and generate personalized questions
   useEffect(() => {
     const name = sessionStorage.getItem('companyName')
     const profileStr = sessionStorage.getItem('companyProfile')
+    const storedIndustry = sessionStorage.getItem('quizIndustry') || 'general'
 
     if (name) setCompanyName(name)
+    setIndustry(storedIndustry)
 
     let profile: CompanyProfile | null = null
     if (profileStr) {
@@ -178,7 +201,7 @@ export default function VoiceQuizInterview() {
       }
     }
 
-    // Generate personalized questions
+    // Generate personalized questions (fallback)
     const generatedQuestions = generateQuestions(profile, name || '')
     setQuestions(generatedQuestions)
   }, [])
@@ -225,26 +248,24 @@ export default function VoiceQuizInterview() {
 
   // Start conversation with first question
   const startConversation = useCallback(async () => {
-    if (questions.length === 0) return
-
     setPhase('conversation')
 
-    const greeting = companyName
-      ? `Thanks for sharing about ${companyName}. I have a few quick questions to understand your situation better.`
-      : "Let's have a quick conversation to understand your business needs."
-    const firstQuestion = questions[0].question
+    try {
+      // Get first question from engine
+      const { question, topic } = await getFirstQuestion(industry, displayName)
+      setCurrentQuestion(question)
+      setCurrentTopic(topic)
 
-    const greetingMessage: Message = {
-      id: 'greeting-1',
-      role: 'assistant',
-      content: `${greeting}\n\n**${firstQuestion}**`,
-      timestamp: new Date(),
+      // Speak the question
+      await speakText(question)
+    } catch (error) {
+      console.error('Failed to start conversation:', error)
+      // Fallback to hardcoded first question
+      const fallbackQuestion = "What's the one thing in your business that costs you the most time or money right now?"
+      setCurrentQuestion(fallbackQuestion)
+      await speakText(fallbackQuestion)
     }
-    setMessages([greetingMessage])
-
-    // Speak the greeting and question
-    await speakText(`${greeting} ${firstQuestion}`)
-  }, [companyName, questions, speakText])
+  }, [industry, displayName, speakText])
 
   // Handle voice recording
   const handleVoiceRecording = async (audioBlob: Blob) => {
@@ -289,7 +310,7 @@ export default function VoiceQuizInterview() {
 
   // Process user answer and move to next question
   const processUserAnswer = async (text: string) => {
-    // Add user message
+    // Add user message to chat
     const userMessage: Message = {
       id: `user-${Date.now()}`,
       role: 'user',
@@ -297,9 +318,10 @@ export default function VoiceQuizInterview() {
       timestamp: new Date(),
     }
     setMessages(prev => [...prev, userMessage])
+    setIsProcessing(true)
 
     // Save answer
-    setAnswers(prev => ({ ...prev, [currentQuestionIndex]: text }))
+    setAnswers(prev => ({ ...prev, [questionsAsked]: text }))
 
     // Check if we're in summary phase
     if (phase === 'summary') {
@@ -307,71 +329,77 @@ export default function VoiceQuizInterview() {
       return
     }
 
-    // Move to next question or summary
-    if (isLastQuestion) {
-      // Go to summary phase
-      setPhase('summary')
-      setIsProcessing(true)
+    try {
+      // Process through engine
+      const result = await processAnswer({
+        session_id: sessionId || '',
+        answer_text: text,
+        current_anchor: currentAnchor,
+        follow_ups_asked: followUpsAsked,
+        industry,
+        company_name: displayName,
+      })
 
-      const summaryPrompt = "Thanks for sharing all that! Before we finish, is there anything else you'd like to add about your situation or goals?"
+      // Update state from engine response
+      setCurrentAnchor(result.progress.current_anchor)
+      setQuestionsAsked(result.progress.questions_asked)
 
-      const summaryMessage: Message = {
-        id: `summary-${Date.now()}`,
-        role: 'assistant',
-        content: `**${summaryPrompt}**`,
-        timestamp: new Date(),
+      if (result.next_question_type === 'follow_up') {
+        setFollowUpsAsked(prev => prev + 1)
+      } else {
+        setFollowUpsAsked(0)
       }
-      setMessages(prev => [...prev, summaryMessage])
-      setIsProcessing(false)
 
-      // Speak summary prompt
-      await speakText(summaryPrompt)
-    } else {
-      // Get AI acknowledgment and next question
-      setIsProcessing(true)
-
-      try {
-        // Fire-and-forget: send message to backend for logging
-        void fetch(`${API_BASE_URL}/api/interview/respond`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            session_id: sessionId,
-            message: text,
-            context: {
-              company_name: companyName,
-              question_count: currentQuestionIndex,
-              topics_covered: questions.slice(0, currentQuestionIndex + 1).map(q => q.topic),
-              is_quiz: true,
-            },
-          }),
-        })
-
-        // Move to next question
-        const nextIndex = currentQuestionIndex + 1
-        setCurrentQuestionIndex(nextIndex)
-
-        const nextQuestion = questions[nextIndex]
-
-        // Generate smart acknowledgment based on what they said
-        const ack = getSmartAcknowledgment(text, currentQuestion?.topic || '')
-
-        const assistantMessage: Message = {
-          id: `assistant-${Date.now()}`,
+      // Check if complete
+      if (result.interview_complete) {
+        setPhase('summary')
+        const summaryAck = result.acknowledgment
+        setMessages(prev => [...prev, {
+          id: `ack-${Date.now()}`,
           role: 'assistant',
-          content: `${ack}\n\n**${nextQuestion.question}**`,
+          content: summaryAck,
           timestamp: new Date(),
-        }
-        setMessages(prev => [...prev, assistantMessage])
-
-        // Speak acknowledgment and next question
-        await speakText(`${ack} ${nextQuestion.question}`)
-
-      } catch (err) {
-        console.error('Response error:', err)
-      } finally {
+        }])
+        await speakText(`${summaryAck} Is there anything else you'd like to add?`)
         setIsProcessing(false)
+        return
       }
+
+      // Update question and show acknowledgment
+      setCurrentQuestion(result.next_question)
+      setCurrentTopic(result.next_topic || currentTopic)
+
+      // Add acknowledgment to chat
+      setMessages(prev => [...prev, {
+        id: `ack-${Date.now()}`,
+        role: 'assistant',
+        content: result.acknowledgment,
+        timestamp: new Date(),
+      }])
+
+      // Speak acknowledgment + next question
+      await speakText(`${result.acknowledgment} ${result.next_question}`)
+
+    } catch (error) {
+      console.error('Error processing answer:', error)
+      // Fallback behavior - use legacy flow
+      const ack = getSmartAcknowledgment(text, currentTopic)
+      setMessages(prev => [...prev, {
+        id: `error-${Date.now()}`,
+        role: 'assistant',
+        content: ack,
+        timestamp: new Date(),
+      }])
+
+      // Try to continue with fallback questions
+      if (currentQuestionObj) {
+        const nextQ = questions[currentQuestionIndex + 1]?.question || "Tell me more about that."
+        setCurrentQuestion(nextQ)
+        setQuestionsAsked(prev => prev + 1)
+        await speakText(`${ack} ${nextQ}`)
+      }
+    } finally {
+      setIsProcessing(false)
     }
   }
 
@@ -451,82 +479,89 @@ export default function VoiceQuizInterview() {
 
   if (phase === 'intro') {
     return (
-      <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white">
+      <div className="min-h-screen bg-white selection:bg-primary-100 selection:text-primary-900">
+        {/* Background elements */}
+        <div className="fixed inset-0 bg-mesh-light opacity-60 pointer-events-none" />
+        <div className="fixed top-20 right-0 w-96 h-96 bg-primary-200/30 rounded-full blur-3xl animate-float opacity-50 pointer-events-none" />
+        <div className="fixed bottom-0 left-10 w-72 h-72 bg-blue-200/30 rounded-full blur-3xl animate-float pointer-events-none" style={{ animationDelay: '1s' }} />
+
         {/* Hidden audio element for TTS */}
         <audio ref={audioRef} className="hidden" />
 
-        <nav className="fixed top-0 left-0 right-0 z-50 bg-white/80 backdrop-blur-md border-b border-gray-100">
+        <nav className="fixed top-0 left-0 right-0 z-50 bg-white/70 backdrop-blur-md border-b border-white/20">
           <div className="max-w-4xl mx-auto px-4 py-4 flex justify-between items-center">
-            <Link to="/" className="text-xl font-bold text-gray-900">
-              Ready<span className="text-primary-600">Path</span>
-            </Link>
-            <span className="text-sm text-gray-500">~5 min interview</span>
+            <Logo size="sm" />
+            <span className="text-sm text-gray-500 bg-gray-100/80 px-3 py-1 rounded-full">~5 min interview</span>
           </div>
         </nav>
 
-        <div className="pt-32 pb-20 px-4">
+        <div className="pt-32 pb-20 px-4 relative z-10">
           <div className="max-w-xl mx-auto text-center">
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
             >
-              <h1 className="text-3xl font-bold text-gray-900 mb-4">
-                We found a lot about {companyName || 'your company'}
-              </h1>
-              <p className="text-lg text-gray-600 mb-12">
-                Now let's have a quick conversation to understand your specific situation.
-              </p>
+              <SpotlightCard className="p-10 text-left">
+                <h1 className="text-3xl font-bold text-gray-900 mb-4 text-center">
+                  We found a lot about {displayName || 'your company'}
+                </h1>
+                <p className="text-lg text-gray-600 mb-10 text-center">
+                  Now let's have a quick conversation to understand your specific situation.
+                </p>
 
-              {/* Main CTA */}
-              <button
-                onClick={startConversation}
-                className="px-10 py-5 bg-primary-600 text-white text-xl font-semibold rounded-2xl hover:bg-primary-700 transition shadow-lg shadow-primary-600/25 flex items-center gap-4 mx-auto"
-              >
-                <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z" />
-                </svg>
-                Start Voice Interview
-              </button>
+                {/* Main CTA */}
+                <div className="flex justify-center">
+                  <ShimmerButton
+                    onClick={startConversation}
+                    className="px-10 py-5 text-xl font-semibold flex items-center gap-4"
+                  >
+                    <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z" />
+                    </svg>
+                    Start Voice Interview
+                  </ShimmerButton>
+                </div>
 
-              {/* Alternative options */}
-              <div className="mt-8">
-                <button
-                  onClick={() => {
-                    setInputMode('text')
-                    startConversation()
-                  }}
-                  className="text-gray-500 hover:text-gray-700 text-sm"
-                >
-                  prefer to type instead?
-                </button>
-              </div>
+                {/* Alternative options */}
+                <div className="mt-8 text-center">
+                  <button
+                    onClick={() => {
+                      setInputMode('text')
+                      startConversation()
+                    }}
+                    className="text-gray-500 hover:text-primary-600 text-sm transition"
+                  >
+                    prefer to type instead?
+                  </button>
+                </div>
 
-              {/* Divider */}
-              <div className="flex items-center gap-4 my-10">
-                <div className="flex-1 h-px bg-gray-200" />
-                <span className="text-gray-400 text-sm">or</span>
-                <div className="flex-1 h-px bg-gray-200" />
-              </div>
+                {/* Divider */}
+                <div className="flex items-center gap-4 my-10">
+                  <div className="flex-1 h-px bg-gray-200" />
+                  <span className="text-gray-400 text-sm">or</span>
+                  <div className="flex-1 h-px bg-gray-200" />
+                </div>
 
-              {/* Upload options */}
-              <div className="flex justify-center gap-4">
-                <button
-                  onClick={() => setShowUploader(true)}
-                  className="flex items-center gap-2 px-4 py-2 text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-lg transition"
-                >
-                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
-                  </svg>
-                  Upload a recording
-                </button>
-                <button
-                  onClick={() => setShowUploader(true)}
-                  className="flex items-center gap-2 px-4 py-2 text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-lg transition"
-                >
-                  <div className="w-3 h-3 bg-red-500 rounded-full" />
-                  Record a conversation
-                </button>
-              </div>
+                {/* Upload options */}
+                <div className="flex justify-center gap-4">
+                  <button
+                    onClick={() => setShowUploader(true)}
+                    className="flex items-center gap-2 px-4 py-2.5 text-gray-600 hover:text-primary-700 hover:bg-primary-50 rounded-xl transition border border-gray-200 hover:border-primary-200"
+                  >
+                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
+                    </svg>
+                    Upload a recording
+                  </button>
+                  <button
+                    onClick={() => setShowUploader(true)}
+                    className="flex items-center gap-2 px-4 py-2.5 text-gray-600 hover:text-red-700 hover:bg-red-50 rounded-xl transition border border-gray-200 hover:border-red-200"
+                  >
+                    <div className="w-3 h-3 bg-red-500 rounded-full animate-pulse" />
+                    Record a conversation
+                  </button>
+                </div>
+              </SpotlightCard>
             </motion.div>
           </div>
         </div>
@@ -538,14 +573,14 @@ export default function VoiceQuizInterview() {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50"
+              className="fixed inset-0 bg-black/30 backdrop-blur-sm flex items-center justify-center p-4 z-50"
               onClick={() => setShowUploader(false)}
             >
               <motion.div
-                initial={{ scale: 0.95 }}
-                animate={{ scale: 1 }}
-                exit={{ scale: 0.95 }}
-                className="bg-white rounded-2xl p-6 max-w-md w-full"
+                initial={{ scale: 0.95, opacity: 0 }}
+                animate={{ scale: 1, opacity: 1 }}
+                exit={{ scale: 0.95, opacity: 0 }}
+                className="bg-white rounded-2xl p-6 max-w-md w-full shadow-2xl border border-gray-100"
                 onClick={e => e.stopPropagation()}
               >
                 <h3 className="text-lg font-semibold text-gray-900 mb-4">
@@ -570,8 +605,13 @@ export default function VoiceQuizInterview() {
 
   if (phase === 'processing-upload') {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <div className="text-center">
+      <div className="min-h-screen bg-white flex items-center justify-center selection:bg-primary-100 selection:text-primary-900">
+        {/* Background elements */}
+        <div className="fixed inset-0 bg-mesh-light opacity-60 pointer-events-none" />
+        <div className="fixed top-20 right-0 w-96 h-96 bg-primary-200/30 rounded-full blur-3xl animate-float opacity-50 pointer-events-none" />
+        <div className="fixed bottom-0 left-10 w-72 h-72 bg-blue-200/30 rounded-full blur-3xl animate-float pointer-events-none" style={{ animationDelay: '1s' }} />
+
+        <div className="text-center relative z-10">
           <motion.div
             animate={{ rotate: 360 }}
             transition={{ duration: 2, repeat: Infinity, ease: 'linear' }}
@@ -590,21 +630,26 @@ export default function VoiceQuizInterview() {
 
   if (phase === 'complete') {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+      <div className="min-h-screen bg-white flex items-center justify-center selection:bg-primary-100 selection:text-primary-900">
+        {/* Background elements */}
+        <div className="fixed inset-0 bg-mesh-light opacity-60 pointer-events-none" />
+        <div className="fixed top-20 right-0 w-96 h-96 bg-green-200/30 rounded-full blur-3xl animate-float opacity-50 pointer-events-none" />
+        <div className="fixed bottom-0 left-10 w-72 h-72 bg-primary-200/30 rounded-full blur-3xl animate-float pointer-events-none" style={{ animationDelay: '1s' }} />
+
         <audio ref={audioRef} className="hidden" />
         <motion.div
           initial={{ opacity: 0, scale: 0.9 }}
           animate={{ opacity: 1, scale: 1 }}
-          className="text-center"
+          className="text-center relative z-10"
         >
-          <div className="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-6">
-            <svg className="w-10 h-10 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <div className="w-20 h-20 bg-gradient-to-br from-green-400 to-green-600 rounded-full flex items-center justify-center mx-auto mb-6 shadow-lg shadow-green-500/30">
+            <svg className="w-10 h-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
             </svg>
           </div>
           <h2 className="text-2xl font-bold text-gray-900 mb-2">Great conversation!</h2>
           <p className="text-gray-600 mb-4">Let's see what opportunities we found...</p>
-          <div className="animate-pulse text-primary-600">Generating your preview...</div>
+          <div className="animate-pulse text-primary-600 font-medium">Generating your preview...</div>
         </motion.div>
       </div>
     )
@@ -615,24 +660,25 @@ export default function VoiceQuizInterview() {
   // ============================================================================
 
   return (
-    <div className="min-h-screen bg-gray-50 flex flex-col">
+    <div className="min-h-screen bg-white flex flex-col selection:bg-primary-100 selection:text-primary-900">
+      {/* Background elements */}
+      <div className="fixed inset-0 bg-mesh-light opacity-40 pointer-events-none" />
+
       {/* Hidden audio element for TTS */}
       <audio ref={audioRef} className="hidden" />
 
       {/* Header with progress */}
-      <nav className="fixed top-0 left-0 right-0 z-50 bg-white border-b border-gray-200">
+      <nav className="fixed top-0 left-0 right-0 z-50 bg-white/70 backdrop-blur-md border-b border-white/20">
         <div className="max-w-4xl mx-auto px-4 py-3">
           <div className="flex items-center justify-between mb-2">
-            <Link to="/" className="text-xl font-bold text-gray-900">
-              Ready<span className="text-primary-600">Path</span>
-            </Link>
+            <Logo size="sm" />
             <div className="flex items-center gap-4">
-              <span className="text-sm text-gray-500">
-                {phase === 'summary' ? 'Final thoughts' : `Question ${currentQuestionIndex + 1} of ${questions.length}`}
+              <span className="text-sm text-gray-500 bg-gray-100/80 px-3 py-1 rounded-full">
+                {phase === 'summary' ? 'Final thoughts' : `Question ${questionsAsked + 1} of ${maxQuestions}`}
               </span>
               <button
                 onClick={skipToPreview}
-                className="text-sm text-primary-600 hover:text-primary-700"
+                className="text-sm text-primary-600 hover:text-primary-700 font-medium transition"
               >
                 Skip to results
               </button>
@@ -640,9 +686,9 @@ export default function VoiceQuizInterview() {
           </div>
 
           {/* Progress bar */}
-          <div className="w-full h-2 bg-gray-200 rounded-full overflow-hidden">
+          <div className="w-full h-2 bg-gray-200/80 rounded-full overflow-hidden">
             <motion.div
-              className="h-full bg-primary-600 rounded-full"
+              className="h-full bg-gradient-to-r from-primary-500 to-primary-600 rounded-full"
               initial={{ width: 0 }}
               animate={{ width: `${progress}%` }}
             />
@@ -651,17 +697,17 @@ export default function VoiceQuizInterview() {
       </nav>
 
       {/* Current Question - Prominent Display */}
-      <div className="pt-24 px-4">
+      <div className="pt-24 px-4 relative z-10">
         <div className="max-w-2xl mx-auto">
           <motion.div
             key={currentQuestionIndex}
             initial={{ opacity: 0, y: -10 }}
             animate={{ opacity: 1, y: 0 }}
-            className="bg-white rounded-2xl p-8 shadow-lg border border-gray-100 mb-6"
+            className="bg-white/80 backdrop-blur-sm rounded-2xl p-8 shadow-lg border border-white/50 mb-6"
           >
             <div className="flex items-center gap-2 mb-4">
-              <span className="text-sm font-medium text-primary-600 bg-primary-50 px-3 py-1 rounded-full">
-                {phase === 'summary' ? 'Final Question' : currentQuestion?.topic}
+              <span className="text-sm font-medium text-primary-700 bg-gradient-to-r from-primary-50 to-indigo-50 px-3 py-1 rounded-full border border-primary-100">
+                {phase === 'summary' ? 'Final Question' : currentTopic}
               </span>
               {isSpeaking && (
                 <span className="flex items-center gap-1 text-sm text-gray-500">
@@ -673,14 +719,14 @@ export default function VoiceQuizInterview() {
             <h2 className="text-2xl font-semibold text-gray-900 leading-relaxed">
               {phase === 'summary'
                 ? "Is there anything else you'd like to add about your situation or goals?"
-                : currentQuestion?.question}
+                : currentQuestion}
             </h2>
           </motion.div>
         </div>
       </div>
 
       {/* Messages */}
-      <div className="flex-1 px-4 pb-48 overflow-y-auto">
+      <div className="flex-1 px-4 pb-48 overflow-y-auto relative z-10">
         <div className="max-w-2xl mx-auto space-y-4">
           <AnimatePresence>
             {messages.map((message) => (
@@ -693,8 +739,8 @@ export default function VoiceQuizInterview() {
                 <div
                   className={`max-w-[85%] rounded-2xl px-5 py-4 ${
                     message.role === 'user'
-                      ? 'bg-primary-600 text-white'
-                      : 'bg-white border border-gray-200 text-gray-900'
+                      ? 'bg-gradient-to-r from-primary-600 to-indigo-600 text-white shadow-lg shadow-primary-500/25'
+                      : 'bg-white/80 backdrop-blur-sm border border-white/50 text-gray-900 shadow-md'
                   }`}
                 >
                   <div
@@ -714,7 +760,7 @@ export default function VoiceQuizInterview() {
               animate={{ opacity: 1 }}
               className="flex justify-start"
             >
-              <div className="bg-white border border-gray-200 rounded-2xl px-5 py-4">
+              <div className="bg-white/80 backdrop-blur-sm border border-white/50 rounded-2xl px-5 py-4 shadow-md">
                 <div className="flex items-center gap-2">
                   <div className="w-2 h-2 bg-primary-600 rounded-full animate-bounce" style={{ animationDelay: '0ms' }} />
                   <div className="w-2 h-2 bg-primary-600 rounded-full animate-bounce" style={{ animationDelay: '150ms' }} />
@@ -729,23 +775,23 @@ export default function VoiceQuizInterview() {
       </div>
 
       {/* Input area */}
-      <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200">
+      <div className="fixed bottom-0 left-0 right-0 bg-white/80 backdrop-blur-md border-t border-white/20 z-20">
         <div className="max-w-2xl mx-auto px-4 py-4">
           {/* Mode toggle */}
           <div className="flex justify-center mb-4">
-            <div className="inline-flex bg-gray-100 rounded-lg p-1">
+            <div className="inline-flex bg-gray-100/80 rounded-xl p-1">
               <button
                 onClick={() => setInputMode('voice')}
-                className={`px-4 py-1.5 rounded-md text-sm font-medium transition ${
-                  inputMode === 'voice' ? 'bg-white text-gray-900 shadow-sm' : 'text-gray-600'
+                className={`px-4 py-1.5 rounded-lg text-sm font-medium transition ${
+                  inputMode === 'voice' ? 'bg-white text-gray-900 shadow-sm' : 'text-gray-600 hover:text-gray-900'
                 }`}
               >
                 Voice
               </button>
               <button
                 onClick={() => setInputMode('text')}
-                className={`px-4 py-1.5 rounded-md text-sm font-medium transition ${
-                  inputMode === 'text' ? 'bg-white text-gray-900 shadow-sm' : 'text-gray-600'
+                className={`px-4 py-1.5 rounded-lg text-sm font-medium transition ${
+                  inputMode === 'text' ? 'bg-white text-gray-900 shadow-sm' : 'text-gray-600 hover:text-gray-900'
                 }`}
               >
                 Type
@@ -772,7 +818,7 @@ export default function VoiceQuizInterview() {
                 onChange={(e) => setCurrentInput(e.target.value)}
                 onKeyDown={handleKeyDown}
                 placeholder="Type your answer..."
-                className="flex-1 px-4 py-3 border border-gray-200 rounded-xl resize-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                className="flex-1 px-4 py-3 border border-gray-200 rounded-xl resize-none focus:ring-2 focus:ring-primary-500 focus:border-transparent bg-white/80"
                 rows={2}
                 disabled={isProcessing}
               />
@@ -781,7 +827,7 @@ export default function VoiceQuizInterview() {
                 disabled={!currentInput.trim() || isProcessing}
                 className={`px-5 py-3 rounded-xl font-medium transition ${
                   currentInput.trim() && !isProcessing
-                    ? 'bg-primary-600 text-white hover:bg-primary-700'
+                    ? 'bg-gradient-to-r from-primary-600 to-indigo-600 text-white hover:from-primary-700 hover:to-indigo-700 shadow-lg shadow-primary-500/25'
                     : 'bg-gray-200 text-gray-400 cursor-not-allowed'
                 }`}
               >
@@ -797,7 +843,7 @@ export default function VoiceQuizInterview() {
             <div className="mt-4 text-center">
               <button
                 onClick={() => finishInterview()}
-                className="text-primary-600 hover:text-primary-700 font-medium"
+                className="text-primary-600 hover:text-primary-700 font-medium transition"
               >
                 Nothing else, let's see my results
               </button>
