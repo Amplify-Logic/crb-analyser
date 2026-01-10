@@ -29,6 +29,7 @@ from src.config.supabase_client import get_async_supabase
 from src.config.settings import settings
 from src.config.system_prompt import get_interview_system_prompt, FOUNDATIONAL_LOGIC
 from src.services.transcription_service import transcription_service
+from src.services.interview_engine import InterviewEngine, InterviewState
 from src.skills import get_skill, SkillContext
 from src.expertise import get_expertise_store
 from src.knowledge import normalize_industry
@@ -79,6 +80,28 @@ class InterviewCompleteRequest(BaseModel):
     session_id: str
     messages: List[dict]
     topics_covered: List[str]
+
+
+class ProcessAnswerRequest(BaseModel):
+    """Request for processing an interview answer."""
+    session_id: str
+    answer_text: str
+    current_anchor: int = 1
+    follow_ups_asked: int = 0
+    industry: str
+    company_name: Optional[str] = None
+
+
+class ProcessAnswerResponse(BaseModel):
+    """Response from processing an interview answer."""
+    transcription: Optional[str] = None
+    signals_detected: List[str]
+    acknowledgment: str
+    next_question: str
+    next_question_type: str  # "anchor", "follow_up", or "summary"
+    next_topic: Optional[str] = None
+    progress: dict
+    interview_complete: bool = False
 
 
 # ============================================================================
@@ -386,6 +409,70 @@ def generate_fallback_response(
 # ============================================================================
 # Routes
 # ============================================================================
+
+@router.post("/process-answer", response_model=ProcessAnswerResponse)
+async def process_interview_answer(request: ProcessAnswerRequest):
+    """
+    Process an interview answer and return the next question.
+
+    This endpoint:
+    1. Detects signals in the answer
+    2. Generates a warm expert acknowledgment
+    3. Decides: follow-up question or next anchor
+    4. Returns everything needed for frontend
+    """
+    try:
+        # Create engine and state
+        client = get_anthropic_client()
+        engine = InterviewEngine(anthropic_client=client)
+
+        state = InterviewState(
+            industry=request.industry,
+            company_name=request.company_name or "your company",
+            current_anchor=request.current_anchor,
+            follow_ups_for_current_anchor=request.follow_ups_asked
+        )
+
+        # Process the answer
+        result = await engine.process_answer(
+            state=state,
+            answer=request.answer_text
+        )
+
+        return ProcessAnswerResponse(
+            signals_detected=result.signals_detected,
+            acknowledgment=result.acknowledgment,
+            next_question=result.next_question,
+            next_question_type=result.next_question_type,
+            next_topic=result.next_topic,
+            progress={
+                "current_anchor": result.new_anchor,
+                "questions_asked": state.questions_asked,
+                "max_questions": state.max_total_questions
+            },
+            interview_complete=result.interview_complete
+        )
+
+    except Exception as e:
+        logger.error(f"Error processing answer: {e}", exc_info=True)
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Failed to process answer: {str(e)}"
+        )
+
+
+@router.get("/first-question")
+async def get_first_question(industry: str, company_name: Optional[str] = None):
+    """Get the first question to start the interview."""
+    engine = InterviewEngine()
+    state = InterviewState(industry=industry, company_name=company_name or "your company")
+
+    return {
+        "question": engine.get_first_question(state),
+        "topic": "Problem",
+        "anchor": 1
+    }
+
 
 @router.post("/respond")
 async def interview_respond(request: InterviewRespondRequest):
