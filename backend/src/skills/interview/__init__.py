@@ -42,9 +42,13 @@ Usage:
 from .followup import FollowUpQuestionSkill
 from .pain_extraction import PainExtractionSkill
 from .confidence import InterviewConfidenceSkill
+from .interview_signal_detector import InterviewSignalDetectorSkill
+from .acknowledgment_generator import AcknowledgmentGeneratorSkill
 
 __all__ = [
     "FollowUpQuestionSkill",
     "PainExtractionSkill",
     "InterviewConfidenceSkill",
+    "InterviewSignalDetectorSkill",
+    "AcknowledgmentGeneratorSkill",
 ]
