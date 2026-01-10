@@ -1,0 +1,33 @@
+{
+  "industry": "dental",
+  "last_updated": "2026-01-08T20:39:04.274196",
+  "total_analyses": 2,
+  "confidence": "low",
+  "pain_points": {},
+  "processes": {},
+  "effective_patterns": [],
+  "anti_patterns": [],
+  "size_specific": {
+    "11-25": {
+      "count": 2,
+      "avg_readiness": 72.0,
+      "common_pain_points": []
+    }
+  },
+  "avg_ai_readiness": 72.0,
+  "avg_potential_savings": 703000.0,
+  "common_tech_stacks": [],
+  "interview_insights": {
+    "common_pains": [
+      "Insurance billing is the hidden time-killer in every practice I talk to",
+      "Patient no-shows cost practices $200+ per slot",
+      "Staff spend hours chasing down insurance pre-authorizations"
+    ],
+    "pain_vocabulary": ["insurance", "billing", "no-show", "scheduling", "pre-auth", "claims", "patients", "hygienist"],
+    "process_hooks": {
+      "scheduling": "Most practices I talk to lose 10-15 hours a week just on scheduling back-and-forth",
+      "billing": "Insurance billing usually takes 2-3 touches per claim before it's resolved",
+      "patient_communication": "Patient communication is usually scattered across phone, text, email, and portal"
+    }
+  }
+}
