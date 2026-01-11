@@ -1,5 +1,6 @@
 import { Routes, Route, Link } from 'react-router-dom'
 import { ProtectedRoute, AnonymousRoute } from './contexts/AuthContext'
+import ErrorBoundary from './components/ErrorBoundary'
 import Landing from './pages/Landing'
 import Login from './pages/Login'
 import Signup from './pages/Signup'
@@ -18,6 +19,7 @@ import Interview from './pages/Interview'
 import VoiceQuizInterview from './pages/VoiceQuizInterview'
 import AdaptiveQuiz from './pages/AdaptiveQuiz'
 import PreviewReport from './pages/PreviewReport'
+import ReportPreview from './pages/ReportPreview'
 import Workshop from './pages/Workshop'
 import Terms from './pages/Terms'
 import Privacy from './pages/Privacy'
@@ -39,7 +41,8 @@ const NotFound = () => (
 
 function App() {
   return (
-    <Routes>
+    <ErrorBoundary>
+      <Routes>
       {/* Public routes */}
       <Route path="/" element={<Landing />} />
       <Route path="/login" element={<Login />} />
@@ -48,6 +51,9 @@ function App() {
       {/* Legal pages */}
       <Route path="/terms" element={<Terms />} />
       <Route path="/privacy" element={<Privacy />} />
+
+      {/* Visual Preview - Mock data only */}
+      <Route path="/preview/report" element={<ReportPreview />} />
 
       {/* Free quiz and checkout - anonymous users only */}
       <Route path="/quiz" element={
@@ -158,7 +164,8 @@ function App() {
 
       {/* 404 */}
       <Route path="*" element={<NotFound />} />
-    </Routes>
+      </Routes>
+    </ErrorBoundary>
   )
 }
 

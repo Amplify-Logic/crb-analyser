@@ -1,0 +1,56 @@
+{
+  "audit_id": "23f3b389-996e-4201-9e1e-7b995e74f6a5",
+  "timestamp": "2026-01-08T20:28:34.847304",
+  "industry": "dental",
+  "company_size": "11-25",
+  "pain_points_found": [],
+  "processes_analyzed": [],
+  "recommendations_made": [],
+  "vendors_recommended": [],
+  "ai_readiness_score": 72,
+  "total_potential_savings": 1250000.0,
+  "findings_count": 15,
+  "tools_used": {},
+  "token_usage": {
+    "usage": [
+      {
+        "task": "generate_findings",
+        "model": "claude-opus-4-5-20251101",
+        "input_tokens": 16525,
+        "output_tokens": 7544
+      },
+      {
+        "task": "generate_roadmap",
+        "model": "claude-opus-4-5-20251101",
+        "input_tokens": 13879,
+        "output_tokens": 1162
+      }
+    ],
+    "summary": {
+      "total_input_tokens": 30404,
+      "total_output_tokens": 8706,
+      "total_tokens": 39110,
+      "estimated_cost_usd": 0.3697,
+      "by_model": {
+        "claude-opus-4-5-20251101": {
+          "input": 30404,
+          "output": 8706,
+          "tasks": [
+            "generate_findings",
+            "generate_roadmap"
+          ],
+          "estimated_cost_usd": 0.3697
+        }
+      },
+      "task_count": 2
+    }
+  },
+  "phases_completed": [
+    "executive_summary",
+    "findings",
+    "playbook",
+    "architecture",
+    "insights"
+  ],
+  "errors_encountered": []
+}

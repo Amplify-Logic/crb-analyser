@@ -570,6 +570,216 @@ class VendorService:
             logger.error(f"Failed to remove vendor tier: {e}")
             return False
 
+    async def get_stack_picker_options(
+        self,
+        industry: str,
+    ) -> Dict[str, Any]:
+        """
+        Get software options for the existing stack picker in the quiz.
+
+        Uses industry_vendor_tiers to show relevant, curated software options
+        for a given industry, sorted by tier (T1 first).
+
+        Args:
+            industry: Industry slug (e.g., 'dental', 'home-services')
+
+        Returns:
+            Dict with:
+                - industry: The industry slug
+                - categories: List of unique categories
+                - options_by_category: Dict mapping category -> list of options
+                - total_options: Total count
+        """
+        supabase = await get_async_supabase()
+
+        try:
+            # Get all tier assignments for this industry with vendor details
+            tiers_result = await supabase.table("industry_vendor_tiers").select(
+                "vendor_id, tier"
+            ).eq("industry", industry).execute()
+
+            tier_map = {t["vendor_id"]: t["tier"] for t in (tiers_result.data or [])}
+
+            if not tier_map:
+                logger.warning(f"No tier assignments found for industry: {industry}")
+                return self._get_fallback_stack_options(industry)
+
+            # Get vendor details for all tiered vendors
+            vendor_ids = list(tier_map.keys())
+            vendors_result = await supabase.table("vendors").select(
+                "id, slug, name, category"
+            ).in_("id", vendor_ids).eq("status", "active").execute()
+
+            vendors = vendors_result.data or []
+
+            # Map category slugs to display names
+            category_display_names = {
+                "dental_practice_management": "Practice Management",
+                "pt_practice_management": "Practice Management",
+                "veterinary_practice_management": "Practice Management",
+                "medspa_management": "Practice Management",
+                "coaching_platform": "Coaching Platform",
+                "accounting_practice_management": "Practice Management",
+                "legal_practice_management": "Practice Management",
+                "field_service_management": "Job Management",
+                "recruitment_ats": "ATS",
+                "recruitment_sourcing": "Sourcing",
+                "recruitment_automation": "Automation",
+                "patient_communication": "Patient Communication",
+                "crm": "CRM",
+                "customer_support": "Customer Support",
+                "marketing_automation": "Email Marketing",
+                "finance": "Accounting",
+                "project_management": "Project Management",
+                "automation": "Automation",
+                "scheduling": "Scheduling",
+                "ai_assistants": "AI Assistants",
+                "ai_receptionist": "AI Receptionist",
+            }
+
+            # Group by display category and sort by tier
+            options_by_category: Dict[str, List[Dict[str, Any]]] = {}
+
+            for vendor in vendors:
+                tier = tier_map.get(vendor["id"], 3)
+                raw_category = vendor.get("category", "Other")
+                display_category = category_display_names.get(raw_category, raw_category.replace("_", " ").title())
+
+                option = {
+                    "slug": vendor["slug"],
+                    "name": vendor["name"],
+                    "category": display_category,
+                    "_tier": tier,
+                }
+
+                if display_category not in options_by_category:
+                    options_by_category[display_category] = []
+                options_by_category[display_category].append(option)
+
+            # Sort each category by tier (T1 first)
+            for category in options_by_category:
+                options_by_category[category].sort(key=lambda x: x.get("_tier", 3))
+                # Remove internal tier field from response
+                for opt in options_by_category[category]:
+                    opt.pop("_tier", None)
+
+            # Add cross-industry tools
+            cross_industry = await self._get_cross_industry_options()
+            for opt in cross_industry:
+                cat = opt["category"]
+                if cat not in options_by_category:
+                    options_by_category[cat] = []
+                # Avoid duplicates
+                if not any(o["slug"] == opt["slug"] for o in options_by_category[cat]):
+                    options_by_category[cat].append(opt)
+
+            # Sort categories: industry-specific first, then cross-industry
+            industry_categories = [
+                "Practice Management", "Job Management", "ATS", "Sourcing",
+                "Patient Communication", "Coaching Platform",
+            ]
+            cross_categories = [
+                "CRM", "Accounting", "Email Marketing", "Customer Support",
+                "Communication", "Project Management", "Scheduling",
+            ]
+
+            sorted_categories = []
+            for cat in industry_categories:
+                if cat in options_by_category:
+                    sorted_categories.append(cat)
+            for cat in cross_categories:
+                if cat in options_by_category and cat not in sorted_categories:
+                    sorted_categories.append(cat)
+            for cat in options_by_category:
+                if cat not in sorted_categories:
+                    sorted_categories.append(cat)
+
+            total = sum(len(opts) for opts in options_by_category.values())
+
+            return {
+                "industry": industry,
+                "categories": sorted_categories,
+                "options_by_category": options_by_category,
+                "total_options": total,
+            }
+
+        except Exception as e:
+            logger.error(f"Failed to get stack picker options for {industry}: {e}")
+            return self._get_fallback_stack_options(industry)
+
+    async def _get_cross_industry_options(self) -> List[Dict[str, str]]:
+        """Get cross-industry software options (CRM, accounting, etc.)."""
+        supabase = await get_async_supabase()
+
+        # Popular cross-industry tools that most businesses use
+        cross_industry_slugs = [
+            # CRM
+            "hubspot", "salesforce", "pipedrive", "zoho-crm",
+            # Accounting
+            "quickbooks", "xero", "freshbooks", "wave",
+            # Communication
+            "slack", "microsoft-teams", "zoom", "google-meet",
+            # Email Marketing
+            "mailchimp", "klaviyo", "activecampaign", "brevo",
+            # Customer Support
+            "zendesk", "intercom", "freshdesk", "help-scout",
+            # Project Management
+            "asana", "monday-com", "trello", "notion", "clickup",
+            # Scheduling
+            "calendly", "acuity-scheduling", "cal-com",
+        ]
+
+        try:
+            result = await supabase.table("vendors").select(
+                "slug, name, category"
+            ).in_("slug", cross_industry_slugs).eq("status", "active").execute()
+
+            category_map = {
+                "crm": "CRM",
+                "finance": "Accounting",
+                "marketing_automation": "Email Marketing",
+                "customer_support": "Customer Support",
+                "project_management": "Project Management",
+                "scheduling": "Scheduling",
+            }
+
+            options = []
+            for v in (result.data or []):
+                raw_cat = v.get("category", "Other")
+                display_cat = category_map.get(raw_cat, raw_cat.replace("_", " ").title())
+
+                # Add Communication category for known tools
+                if v["slug"] in ["slack", "microsoft-teams", "zoom", "google-meet"]:
+                    display_cat = "Communication"
+
+                options.append({
+                    "slug": v["slug"],
+                    "name": v["name"],
+                    "category": display_cat,
+                })
+
+            return options
+
+        except Exception as e:
+            logger.warning(f"Failed to get cross-industry options: {e}")
+            return []
+
+    def _get_fallback_stack_options(self, industry: str) -> Dict[str, Any]:
+        """Fallback to hardcoded options if Supabase query fails."""
+        from src.config.existing_stack import get_software_options_grouped, get_all_categories
+
+        grouped = get_software_options_grouped(industry)
+        categories = get_all_categories(industry)
+        total = sum(len(opts) for opts in grouped.values())
+
+        return {
+            "industry": industry,
+            "categories": categories,
+            "options_by_category": grouped,
+            "total_options": total,
+            "_fallback": True,
+        }
+
     async def get_automation_ready_vendors(
         self,
         category: Optional[str] = None,

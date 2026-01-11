@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from 'react'
-import { Link, useParams, useNavigate } from 'react-router-dom'
+import { useParams, useNavigate } from 'react-router-dom'
 import { motion } from 'framer-motion'
+import { Logo } from '../components/Logo'
 
 interface ProgressStep {
   id: string
@@ -140,9 +141,7 @@ export default function ReportProgress() {
       {/* Nav */}
       <nav className="fixed top-0 left-0 right-0 z-50 bg-white/80 backdrop-blur-md border-b border-gray-100">
         <div className="max-w-6xl mx-auto px-4 py-4">
-          <Link to="/" className="text-xl font-bold text-gray-900">
-            Ready<span className="text-primary-600">Path</span>
-          </Link>
+          <Logo size="sm" showIcon={false} />
         </div>
       </nav>
 

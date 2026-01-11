@@ -150,9 +150,9 @@ export default function StackTab({ architecture }: StackTabProps) {
           <div>
             <h4 className="text-sm font-medium text-gray-500 mb-4 text-center">YOUR TOOLS</h4>
             <div className="space-y-3">
-              {existing_tools.map((tool) => (
+              {existing_tools.map((tool, idx) => (
                 <motion.div
-                  key={tool.id}
+                  key={tool.id || `existing-${idx}`}
                   whileHover={{ scale: 1.02 }}
                   onClick={() => setSelectedNode(tool)}
                   className="p-4 bg-gray-50 rounded-xl border-2 border-gray-200 cursor-pointer hover:border-primary-300 transition"
@@ -168,9 +168,9 @@ export default function StackTab({ architecture }: StackTabProps) {
           <div>
             <h4 className="text-sm font-medium text-gray-500 mb-4 text-center">AI BRAIN</h4>
             <div className="space-y-3">
-              {ai_layer.map((tool) => (
+              {ai_layer.map((tool, idx) => (
                 <motion.div
-                  key={tool.id}
+                  key={tool.id || `ai-${idx}`}
                   whileHover={{ scale: 1.02 }}
                   onClick={() => setSelectedNode(tool)}
                   className="p-4 bg-purple-50 rounded-xl border-2 border-purple-200 cursor-pointer hover:border-purple-400 transition"
@@ -195,9 +195,9 @@ export default function StackTab({ architecture }: StackTabProps) {
           <div>
             <h4 className="text-sm font-medium text-gray-500 mb-4 text-center">AUTOMATIONS</h4>
             <div className="space-y-3">
-              {automations.slice(0, 4).map((auto) => (
+              {automations.slice(0, 4).map((auto, idx) => (
                 <div
-                  key={auto.id}
+                  key={auto.id || `auto-${idx}`}
                   className="p-4 bg-green-50 rounded-xl border-2 border-green-200"
                 >
                   <p className="font-medium text-green-900 text-sm">{auto.name}</p>

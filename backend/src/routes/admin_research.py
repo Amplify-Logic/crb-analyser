@@ -11,9 +11,11 @@ import json
 import uuid
 from typing import Optional
 
-from fastapi import APIRouter, HTTPException, Query
+from fastapi import APIRouter, Depends, HTTPException, Query
 from fastapi.responses import StreamingResponse
 from pydantic import BaseModel, Field
+
+from src.middleware.auth import require_admin, CurrentUser
 
 from src.agents.research import (
     RefreshRequest,
@@ -79,6 +81,7 @@ class StaleCountResponse(BaseModel):
 async def get_stale_vendor_count(
     category: Optional[str] = Query(None),
     industry: Optional[str] = Query(None),
+    current_user: CurrentUser = Depends(require_admin),
 ) -> StaleCountResponse:
     """Get count of stale vendors matching filters."""
     count = await get_stale_count(category=category, industry=industry)
@@ -86,7 +89,10 @@ async def get_stale_vendor_count(
 
 
 @router.post("/refresh")
-async def refresh_vendor_data(body: RefreshRequestBody):
+async def refresh_vendor_data(
+    body: RefreshRequestBody,
+    current_user: CurrentUser = Depends(require_admin),
+):
     """
     Refresh vendor pricing data.
 
@@ -122,7 +128,10 @@ async def refresh_vendor_data(body: RefreshRequestBody):
 
 
 @router.post("/discover")
-async def discover_new_vendors(body: DiscoverRequestBody):
+async def discover_new_vendors(
+    body: DiscoverRequestBody,
+    current_user: CurrentUser = Depends(require_admin),
+):
     """
     Discover new vendors in a category.
 
@@ -149,7 +158,10 @@ async def discover_new_vendors(body: DiscoverRequestBody):
 
 
 @router.post("/apply-updates")
-async def apply_refresh_updates(body: ApplyUpdatesBody):
+async def apply_refresh_updates(
+    body: ApplyUpdatesBody,
+    current_user: CurrentUser = Depends(require_admin),
+):
     """Apply approved vendor updates from a refresh task."""
     # Convert dicts back to VendorUpdate objects
     updates = []
@@ -170,7 +182,10 @@ async def apply_refresh_updates(body: ApplyUpdatesBody):
 
 
 @router.post("/apply-discoveries")
-async def apply_discovered_vendors(body: ApplyDiscoveriesBody):
+async def apply_discovered_vendors(
+    body: ApplyDiscoveriesBody,
+    current_user: CurrentUser = Depends(require_admin),
+):
     """Add approved discovered vendors to the database."""
     # Convert dicts to DiscoveredVendor objects
     vendors = []

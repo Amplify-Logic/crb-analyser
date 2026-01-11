@@ -9,7 +9,7 @@ Includes research integration for dynamic question customization.
 
 import json
 import logging
-from datetime import datetime
+from datetime import datetime, timedelta, timezone
 from typing import Optional, Dict, Any, List
 
 from fastapi import APIRouter, HTTPException, status, Query
@@ -17,6 +17,7 @@ from fastapi.responses import StreamingResponse
 from pydantic import BaseModel, EmailStr
 
 from src.config.supabase_client import get_async_supabase
+from src.config.redis_client import get_redis
 from src.config.questionnaire import (
     get_questionnaire,
     get_total_questions,
@@ -53,6 +54,62 @@ from src.services.software_research_service import (
 logger = logging.getLogger(__name__)
 
 router = APIRouter()
+
+
+# ============================================================================
+# Session Expiry
+# ============================================================================
+
+async def check_session_expiry(session_id: str) -> bool:
+    """
+    Check if a quiz session is expired.
+
+    Expiry rules:
+    - pending_payment: expires after 24 hours
+    - in_progress: expires after 7 days
+
+    Returns True if session is expired, False otherwise.
+    """
+    supabase = await get_async_supabase()
+
+    result = await supabase.table("quiz_sessions").select(
+        "created_at, status"
+    ).eq("id", session_id).single().execute()
+
+    if not result.data:
+        return True  # Session not found = expired
+
+    created_at_str = result.data.get("created_at")
+    status = result.data.get("status")
+
+    if not created_at_str:
+        return False
+
+    # Parse created_at timestamp
+    try:
+        created_at = datetime.fromisoformat(created_at_str.replace("Z", "+00:00"))
+    except (ValueError, AttributeError):
+        return False
+
+    now = datetime.now(timezone.utc)
+
+    # Expire pending_payment after 24 hours
+    if status == "pending_payment" and now - created_at > timedelta(hours=24):
+        await supabase.table("quiz_sessions").update({
+            "status": "expired"
+        }).eq("id", session_id).execute()
+        logger.info(f"Session {session_id} expired (pending_payment > 24h)")
+        return True
+
+    # Expire in_progress after 7 days
+    if status == "in_progress" and now - created_at > timedelta(days=7):
+        await supabase.table("quiz_sessions").update({
+            "status": "expired"
+        }).eq("id", session_id).execute()
+        logger.info(f"Session {session_id} expired (in_progress > 7 days)")
+        return True
+
+    return False
 
 
 # ============================================================================
@@ -235,6 +292,13 @@ async def get_quiz_session(session_id: str):
     Get a quiz session with current progress.
     """
     try:
+        # Check for session expiry
+        if await check_session_expiry(session_id):
+            raise HTTPException(
+                status_code=status.HTTP_410_GONE,
+                detail="Session has expired. Please start a new quiz."
+            )
+
         supabase = await get_async_supabase()
 
         result = await supabase.table("quiz_sessions").select("*").eq(
@@ -519,6 +583,11 @@ async def resume_quiz_session(email: str = Query(..., description="Email to look
             return ResumeResponse(has_progress=False)
 
         session = result.data[0]
+
+        # Check if session is expired
+        if await check_session_expiry(session["id"]):
+            # Session expired, return no progress
+            return ResumeResponse(has_progress=False)
         answers = session.get("answers", {})
         industry = answers.get("industry")
         total_questions = get_total_questions(industry)
@@ -574,27 +643,117 @@ async def get_industry_questions(industry: str):
 
 
 @router.get("/software-options")
-async def get_software_options(industry: Optional[str] = Query(None, description="Industry slug")):
+async def get_software_options(industry: Optional[str] = Query(None, description="Industry slug or name")):
     """
     Get software options for the existing stack question.
 
     Returns industry-specific software plus cross-industry tools,
     grouped by category for easy UI display.
+
+    Uses Supabase vendor database with industry_vendor_tiers for curated,
+    industry-specific recommendations (T1 vendors shown first).
+    Falls back to hardcoded list if Supabase unavailable.
+
+    Accepts either industry slug (e.g., "home-services") or full name
+    (e.g., "Plumbing and Gas Fitting Services").
     """
-    from src.config.existing_stack import (
-        get_software_options_grouped,
-        get_all_categories,
-    )
+    from src.services.vendor_service import vendor_service
 
-    grouped = get_software_options_grouped(industry)
-    categories = get_all_categories(industry)
+    if not industry:
+        # No industry specified - return generic cross-industry tools
+        from src.config.existing_stack import (
+            get_software_options_grouped,
+            get_all_categories,
+        )
+        grouped = get_software_options_grouped(None)
+        categories = get_all_categories(None)
+        return {
+            "industry": None,
+            "categories": categories,
+            "options_by_category": grouped,
+            "total_options": sum(len(opts) for opts in grouped.values()),
+        }
 
-    return {
-        "industry": industry,
-        "categories": categories,
-        "options_by_category": grouped,
-        "total_options": sum(len(opts) for opts in grouped.values()),
+    # Map industry names to slugs (handles both slug and full name inputs)
+    industry_name_to_slug = {
+        # Home Services / Trades
+        "plumbing": "home-services",
+        "plumbing and gas fitting services": "home-services",
+        "plumbing & gas fitting": "home-services",
+        "hvac": "home-services",
+        "electrical": "home-services",
+        "electrical services": "home-services",
+        "roofing": "home-services",
+        "landscaping": "home-services",
+        "cleaning services": "home-services",
+        "home services": "home-services",
+        "construction": "home-services",
+        "contracting": "home-services",
+        "trades": "home-services",
+        # Dental
+        "dental": "dental",
+        "dentistry": "dental",
+        "dental practice": "dental",
+        "dental services": "dental",
+        "orthodontics": "dental",
+        # Veterinary
+        "veterinary": "veterinary",
+        "veterinary services": "veterinary",
+        "animal hospital": "veterinary",
+        "pet care": "veterinary",
+        "vet clinic": "veterinary",
+        # Recruitment
+        "recruitment": "recruitment",
+        "recruiting": "recruitment",
+        "staffing": "recruitment",
+        "staffing agency": "recruitment",
+        "talent acquisition": "recruitment",
+        "hr services": "recruitment",
+        # Professional Services
+        "professional services": "professional-services",
+        "accounting": "professional-services",
+        "accounting firm": "professional-services",
+        "legal": "professional-services",
+        "law firm": "professional-services",
+        "consulting": "professional-services",
+        "business consulting": "professional-services",
+        # Physical Therapy
+        "physical therapy": "physical-therapy",
+        "physiotherapy": "physical-therapy",
+        "pt practice": "physical-therapy",
+        "rehabilitation": "physical-therapy",
+        "chiropractic": "physical-therapy",
+        # MedSpa
+        "medspa": "medspa",
+        "medical spa": "medspa",
+        "aesthetics": "medspa",
+        "cosmetic clinic": "medspa",
+        "beauty clinic": "medspa",
+        # Coaching
+        "coaching": "coaching",
+        "life coaching": "coaching",
+        "business coaching": "coaching",
+        "executive coaching": "coaching",
+        "consulting and coaching": "coaching",
     }
+
+    # Normalize the industry input
+    industry_lower = industry.lower().strip()
+    industry_slug = industry_name_to_slug.get(industry_lower, industry_lower)
+
+    # Also try partial matching for longer names
+    if industry_slug == industry_lower and industry_slug not in [
+        "dental", "veterinary", "recruitment", "coaching", "medspa",
+        "home-services", "professional-services", "physical-therapy"
+    ]:
+        # Try partial match
+        for name, slug in industry_name_to_slug.items():
+            if name in industry_lower or industry_lower in name:
+                industry_slug = slug
+                break
+
+    # Use Supabase-based vendor service for industry-specific options
+    return await vendor_service.get_stack_picker_options(industry_slug)
 
 
 class ResearchSoftwareRequest(BaseModel):
@@ -1710,8 +1869,63 @@ class AdaptiveStateResponse(BaseModel):
 # Adaptive Quiz Routes
 # ============================================================================
 
-# In-memory storage for active quiz generators (in production, use Redis)
-_active_generators: Dict[str, QuestionGenerator] = {}
+# Redis-backed state storage for quiz generators
+# TTL of 1 hour for generator state
+GENERATOR_STATE_TTL = 3600
+
+
+async def _save_generator_state(session_id: str, generator: QuestionGenerator) -> None:
+    """Save generator state to Redis."""
+    redis = await get_redis()
+    if redis:
+        state = {
+            "conversation_history": generator.conversation_history,
+            "asked_question_ids": generator.asked_question_ids,
+            "industry": generator.industry,
+        }
+        await redis.set(
+            f"quiz_generator:{session_id}",
+            json.dumps(state),
+            ex=GENERATOR_STATE_TTL
+        )
+
+
+async def _load_generator_state(session_id: str) -> Optional[Dict[str, Any]]:
+    """Load generator state from Redis."""
+    redis = await get_redis()
+    if redis:
+        state_json = await redis.get(f"quiz_generator:{session_id}")
+        if state_json:
+            return json.loads(state_json)
+    return None
+
+
+async def _delete_generator_state(session_id: str) -> None:
+    """Delete generator state from Redis."""
+    redis = await get_redis()
+    if redis:
+        await redis.delete(f"quiz_generator:{session_id}")
+
+
+async def _get_or_create_generator(
+    session_id: str,
+    profile: "CompanyProfile",
+    industry: str,
+) -> QuestionGenerator:
+    """
+    Get existing generator from Redis or create a new one.
+
+    Restores conversation history and asked questions from stored state.
+    """
+    generator = QuestionGenerator(profile, industry)
+
+    # Try to restore state from Redis
+    state = await _load_generator_state(session_id)
+    if state:
+        generator.conversation_history = state.get("conversation_history", [])
+        generator.asked_question_ids = state.get("asked_question_ids", [])
+
+    return generator
 
 
 @router.post("/adaptive/start", response_model=AdaptiveStartResponse)
@@ -1768,12 +1982,14 @@ async def start_adaptive_quiz(request: AdaptiveStartRequest):
 
         # Create question generator
         generator = QuestionGenerator(company_profile, industry)
-        _active_generators[request.session_id] = generator
 
         # Try to get an industry question first, then fall back to AI generation
         first_question = generator.get_next_industry_question(confidence_state)
         if not first_question:
             first_question = await generator.generate_next_question(confidence_state)
+
+        # Save generator state to Redis
+        await _save_generator_state(request.session_id, generator)
 
         # Update session with adaptive mode
         await supabase.table("quiz_sessions").update({
@@ -1856,11 +2072,10 @@ async def submit_adaptive_answer(request: AdaptiveAnswerRequest):
                 )
             )
 
-        # Get or create question generator
-        generator = _active_generators.get(request.session_id)
-        if not generator:
-            generator = QuestionGenerator(company_profile, industry)
-            _active_generators[request.session_id] = generator
+        # Get or create question generator (Redis-backed)
+        generator = await _get_or_create_generator(
+            request.session_id, company_profile, industry
+        )
 
         # Create the question object from the request
         current_question = AdaptiveQuestion(
@@ -1922,8 +2137,8 @@ async def submit_adaptive_answer(request: AdaptiveAnswerRequest):
                 "updated_at": datetime.utcnow().isoformat(),
             }).eq("id", request.session_id).execute()
 
-            # Cleanup generator
-            _active_generators.pop(request.session_id, None)
+            # Cleanup generator state from Redis
+            await _delete_generator_state(request.session_id)
 
             logger.info(f"Adaptive quiz complete for session {request.session_id}")
 
@@ -1954,6 +2169,9 @@ async def submit_adaptive_answer(request: AdaptiveAnswerRequest):
             "adaptive_answers": adaptive_answers,
             "updated_at": datetime.utcnow().isoformat(),
         }).eq("id", request.session_id).execute()
+
+        # Save generator state to Redis for next request
+        await _save_generator_state(request.session_id, generator)
 
         return AdaptiveAnswerResponse(
             complete=False,

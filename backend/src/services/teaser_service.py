@@ -39,6 +39,56 @@ CATEGORY_LABELS = {
     "marketing": "Marketing & Outreach",
 }
 
+# Score interpretation thresholds (internal assessment framework)
+# These are NOT industry benchmarks - just our scoring rubric
+SCORE_THRESHOLDS = {
+    "early_stage": {"max": 30, "label": "Early Stage", "meaning": "Just starting the AI journey"},
+    "developing": {"max": 50, "label": "Developing", "meaning": "Foundation in place, room to grow"},
+    "established": {"max": 70, "label": "Established", "meaning": "Good systems, ready for optimization"},
+    "advanced": {"max": 100, "label": "Advanced", "meaning": "Well-positioned for AI adoption"},
+}
+
+# Quick wins - practical advice without unsourced statistics
+# These are actionable suggestions, not promises of specific outcomes
+QUICK_WINS = {
+    "scheduling": {
+        "title": "Automate Your Appointment Reminders",
+        "description": "Set up automated SMS/email reminders 24 hours before appointments. Reduces no-shows and saves time chasing confirmations.",
+        "action": "Most calendar tools (Google Calendar, Calendly, even basic CRMs) have this built-in. Takes about 15 minutes to set up.",
+        "impact": "Less time spent on reminder calls and rescheduling missed appointments",
+    },
+    "customer_communication": {
+        "title": "Create a Response Template Library",
+        "description": "Document your most common customer questions and create ready-to-use responses. Improves consistency and speed.",
+        "action": "Start a simple doc or use your email's template feature. Add one template per day until you've covered the common ones.",
+        "impact": "Faster response times and more consistent, professional communication",
+    },
+    "document_processing": {
+        "title": "Digitize Your Most-Used Form",
+        "description": "Take your most frequently used paper form and make it a simple online form (Google Forms, Typeform, JotForm are free).",
+        "action": "Pick ONE form you use weekly. Create a digital version today. Share the link instead of paper.",
+        "impact": "Reduces manual data entry and the errors that come with it",
+    },
+    "billing": {
+        "title": "Enable Online Payments",
+        "description": "If you're still doing checks/cash, adding a simple payment link makes it easier for customers to pay promptly.",
+        "action": "Square, Stripe, or PayPal invoicing takes minutes to set up. Add a 'Pay Now' link to your invoices.",
+        "impact": "Removes friction from getting paid - customers can pay immediately",
+    },
+    "operations": {
+        "title": "Create a Daily Checklist",
+        "description": "Write down the 5-7 things that MUST happen every day. Simple but effective for consistency.",
+        "action": "Spend 10 minutes listing daily must-dos. Use a free tool like Notion, Trello, or even paper.",
+        "impact": "Fewer forgotten tasks and clearer accountability",
+    },
+    "default": {
+        "title": "Start Tracking Time on One Task",
+        "description": "Pick your most repetitive task and track how long it actually takes for one week. Data drives decisions.",
+        "action": "Use your phone timer or a free app like Toggl. Just track one thing to start.",
+        "impact": "Reveals where your time actually goes - often different from what you'd guess",
+    },
+}
+
 
 def _is_stale(verified_date: str, months: int = 18) -> bool:
     """Check if a verified_date is older than the specified months."""
@@ -218,47 +268,90 @@ async def _get_opportunity_categories_from_supabase(
 
 def _extract_user_reflections(
     quiz_answers: Dict[str, Any],
-    company_profile: Dict[str, Any]
+    company_profile: Dict[str, Any],
+    interview_data: Optional[Dict[str, Any]] = None
 ) -> List[Dict[str, Any]]:
     """
     Extract user reflections from quiz answers - what they told us.
 
     These are verbatim or close paraphrases of their inputs.
     Cannot be "wrong" - we're just reflecting their words back.
+
+    Searches multiple locations for data:
+    - quiz_answers directly
+    - company_profile.extracted_facts
+    - interview_data.messages
     """
     reflections = []
 
-    # Pain points - most important
-    pain_points = quiz_answers.get("pain_points", [])
+    # Get extracted facts from company profile (where quiz engine stores them)
+    extracted_facts = company_profile.get("extracted_facts", {})
+
+    # Pain points - check multiple locations
+    pain_points = (
+        quiz_answers.get("pain_points", []) or
+        extracted_facts.get("pain_points", []) or
+        company_profile.get("pain_points", [])
+    )
     if isinstance(pain_points, str):
         pain_points = [pain_points]
-    if pain_points:
-        for pain in pain_points[:3]:  # Max 3 pain points
+
+    # Extract pain point values (may be dicts with "value" key)
+    pain_texts = []
+    for pain in pain_points[:4]:
+        if isinstance(pain, dict):
+            pain_texts.append(pain.get("value", pain.get("fact", str(pain))))
+        elif isinstance(pain, str) and pain:
+            pain_texts.append(pain)
+
+    for pain_text in pain_texts:
+        reflections.append({
+            "type": "pain_point",
+            "what_you_told_us": pain_text,
+            "source": "quiz_response",
+        })
+
+    # Goals - check multiple locations
+    goals = (
+        quiz_answers.get("goals", []) or
+        quiz_answers.get("goals_priorities", []) or
+        extracted_facts.get("goals_priorities", []) or
+        company_profile.get("goals", [])
+    )
+    if isinstance(goals, str):
+        goals = [goals]
+
+    for goal in goals[:2]:
+        goal_text = goal.get("value", goal) if isinstance(goal, dict) else goal
+        if goal_text:
             reflections.append({
-                "type": "pain_point",
-                "what_you_told_us": f"'{pain}' is consuming significant time",
+                "type": "goal",
+                "what_you_told_us": f"Priority: {goal_text}",
                 "source": "quiz_response",
             })
 
-    # Goals if provided
-    goals = quiz_answers.get("goals", quiz_answers.get("goals_priorities", []))
-    if isinstance(goals, str):
-        goals = [goals]
-    if goals:
-        reflections.append({
-            "type": "goal",
-            "what_you_told_us": f"Your priority: {goals[0] if goals else 'improving efficiency'}",
-            "source": "quiz_response",
-        })
+    # Operations/processes mentioned
+    operations = extracted_facts.get("operations", [])
+    for op in operations[:2]:
+        op_text = op.get("value", op) if isinstance(op, dict) else op
+        if op_text:
+            reflections.append({
+                "type": "current_state",
+                "what_you_told_us": op_text,
+                "source": "quiz_response",
+            })
 
     # Current tools/tech stack
     tech_stack = company_profile.get("tech_stack", {})
     technologies = tech_stack.get("technologies_detected", [])
+    if not technologies:
+        technologies = extracted_facts.get("tech_stack", [])
+
     if technologies:
         tech_names = []
         for t in technologies[:5]:
             if isinstance(t, dict):
-                tech_names.append(t.get("value", str(t)))
+                tech_names.append(t.get("value", t.get("name", str(t))))
             else:
                 tech_names.append(str(t))
         if tech_names:
@@ -268,19 +361,123 @@ def _extract_user_reflections(
                 "source": "company_research",
             })
 
-    # Company size context
+    # Extract from interview messages if available
+    if interview_data:
+        messages = interview_data.get("messages", [])
+        for msg in messages:
+            if msg.get("role") == "user" and len(msg.get("content", "")) > 20:
+                # User said something substantial
+                content = msg["content"][:150]
+                if len(msg["content"]) > 150:
+                    content += "..."
+                reflections.append({
+                    "type": "pain_point",
+                    "what_you_told_us": f'"{content}"',
+                    "source": "interview",
+                })
+                if len(reflections) >= 6:
+                    break
+
+    # Company size context (lower priority, add at end)
     size = company_profile.get("size", {})
     employee_range = size.get("employee_range", {})
     if isinstance(employee_range, dict):
         employee_range = employee_range.get("value", "")
-    if employee_range:
+    if employee_range and len(reflections) < 6:
         reflections.append({
             "type": "current_state",
             "what_you_told_us": f"Team size: {employee_range} employees",
             "source": "quiz_response",
         })
 
-    return reflections[:5]  # Max 5 reflections
+    return reflections[:6]  # Max 6 reflections
+
+
+def _get_score_context(score: int) -> Dict[str, Any]:
+    """
+    Get context for the score based on our assessment framework.
+
+    NOTE: We do NOT claim industry benchmarks since we don't have verified data.
+    Instead, we explain what the score means in our framework.
+    """
+    # Determine level based on our scoring rubric
+    if score >= 70:
+        level = "advanced"
+        level_label = "Advanced"
+        context_text = "Your systems and processes are well-suited for AI adoption"
+        next_step = "Focus on optimization and advanced automation"
+    elif score >= 50:
+        level = "established"
+        level_label = "Established"
+        context_text = "You have a solid foundation to build on"
+        next_step = "Identify high-impact areas for targeted automation"
+    elif score >= 30:
+        level = "developing"
+        level_label = "Developing"
+        context_text = "You're building the foundation for AI readiness"
+        next_step = "Start with quick wins to build momentum"
+    else:
+        level = "early_stage"
+        level_label = "Early Stage"
+        context_text = "You're at the beginning of your AI journey"
+        next_step = "Focus on fundamentals before automation"
+
+    return {
+        "your_score": score,
+        "level": level,
+        "level_label": level_label,
+        "context_text": context_text,
+        "next_step": next_step,
+        # Explicitly note we're not comparing to others
+        "note": "Based on our assessment framework",
+    }
+
+
+def _get_quick_win(
+    industry: str,
+    score: int,
+    opportunity_areas: List[Dict[str, Any]],
+    pain_points: List[str]
+) -> Dict[str, Any]:
+    """
+    Select the most relevant quick win based on their situation.
+
+    This is FREE actionable value - something they can do TODAY.
+    """
+    # Try to match to their opportunity areas first
+    if opportunity_areas:
+        first_area = opportunity_areas[0].get("category", "")
+        if first_area in QUICK_WINS:
+            return QUICK_WINS[first_area]
+
+    # Try to match pain points to quick wins
+    pain_text = " ".join(pain_points).lower()
+
+    if any(word in pain_text for word in ["schedule", "appointment", "booking", "calendar", "no-show"]):
+        return QUICK_WINS["scheduling"]
+    elif any(word in pain_text for word in ["email", "respond", "customer", "client", "phone", "call"]):
+        return QUICK_WINS["customer_communication"]
+    elif any(word in pain_text for word in ["paper", "form", "document", "file", "data entry"]):
+        return QUICK_WINS["document_processing"]
+    elif any(word in pain_text for word in ["invoice", "payment", "billing", "collect", "pay"]):
+        return QUICK_WINS["billing"]
+    elif any(word in pain_text for word in ["process", "workflow", "task", "forget", "track"]):
+        return QUICK_WINS["operations"]
+
+    # Default based on industry patterns
+    industry_defaults = {
+        "plumbing": "scheduling",
+        "hvac": "scheduling",
+        "electrical": "scheduling",
+        "dental": "customer_communication",
+        "legal": "document_processing",
+        "accounting": "document_processing",
+        "real-estate": "customer_communication",
+        "construction": "operations",
+    }
+
+    default_category = industry_defaults.get(industry, "default")
+    return QUICK_WINS.get(default_category, QUICK_WINS["default"])
 
 
 async def _generate_personalized_insight(
@@ -289,25 +486,32 @@ async def _generate_personalized_insight(
     score: int,
     pain_points: List[str],
     benchmarks: List[Dict[str, Any]],
+    user_reflections: List[Dict[str, Any]],
+    score_context: Dict[str, Any],
 ) -> Dict[str, str]:
     """
     Generate a personalized insight using Claude Haiku.
 
     This is SAFE personalization because it:
-    - Connects their situation to verified industry data
-    - Frames the workshop as the next step
+    - References what the user actually said
+    - Uses only verified benchmark data (if available)
     - Does NOT recommend specific tools or solutions
-    - Does NOT promise specific ROI
+    - Does NOT promise specific ROI or make up statistics
 
     Returns a headline and body text.
     """
     try:
         if not settings.ANTHROPIC_API_KEY:
             logger.warning("No Anthropic API key - using default insight")
-            return _get_default_insight(company_name, industry, score)
+            return _get_default_insight(company_name, industry, score, score_context)
 
-        # Build context from verified data
-        pain_summary = ", ".join(pain_points[:3]) if pain_points else "operational efficiency"
+        # Get actual things they said
+        their_words = []
+        for ref in user_reflections[:3]:
+            if ref.get("type") == "pain_point":
+                their_words.append(ref.get("what_you_told_us", ""))
+
+        # Only include benchmarks if we have real verified data
         benchmark_context = ""
         if benchmarks:
             benchmark_context = "\n".join([
@@ -315,61 +519,142 @@ async def _generate_personalized_insight(
                 for b in benchmarks[:3]
             ])
 
+        # Use score context (our framework, not fake industry benchmarks)
+        score_level = score_context.get("level_label", "Developing")
+        score_meaning = score_context.get("context_text", "")
+
         prompt = f"""You are writing a brief, warm, personalized insight for a business teaser report.
 
 CONTEXT:
 - Company: {company_name}
-- Industry: {industry}
-- AI Readiness Score: {score}/100
-- Their pain points: {pain_summary}
-- Relevant industry benchmarks:
-{benchmark_context or "No specific benchmarks available"}
+- Industry: {industry.replace('-', ' ')}
+- AI Readiness Score: {score}/100 ({score_level})
+- What this means: {score_meaning}
+
+WHAT THEY TOLD US:
+{chr(10).join(['- ' + w for w in their_words]) if their_words else '- (Limited information provided)'}
+
+{f"VERIFIED INDUSTRY DATA:{chr(10)}{benchmark_context}" if benchmark_context else ""}
 
 TASK: Write a 2-3 sentence personalized insight that:
-1. Acknowledges what they shared (pain points)
-2. Connects it to industry context (use the benchmarks if relevant)
-3. Creates curiosity about what the workshop will uncover
+1. References something SPECIFIC they mentioned (use their actual words if available)
+2. Provides one meaningful observation about their situation
+3. Creates curiosity about what deeper analysis would reveal
 
-RULES:
+CRITICAL RULES:
+- Be specific, not generic. Reference what they actually said.
 - Be warm and conversational, not corporate
+- DO NOT make up statistics or industry benchmarks
 - DO NOT recommend specific tools or vendors
-- DO NOT promise specific ROI or savings
-- DO NOT make claims we can't verify
-- Keep it under 50 words
-- Address them as "you" not by company name
+- DO NOT promise specific ROI or savings numbers
+- DO NOT claim "businesses like yours" save X% - we don't have that data
+- Keep it under 60 words
+- Address them as "you"
 
 Return ONLY the insight text, no quotes or formatting."""
 
         client = anthropic.Anthropic(api_key=settings.ANTHROPIC_API_KEY)
         message = client.messages.create(
             model="claude-haiku-4-5-20251001",  # Fast + cheap
-            max_tokens=150,
+            max_tokens=200,
             messages=[{"role": "user", "content": prompt}]
         )
 
         insight_text = message.content[0].text.strip()
 
+        # Generate a more specific headline based on their situation
+        if pain_points:
+            first_pain = pain_points[0].lower()
+            if "schedule" in first_pain or "appointment" in first_pain:
+                headline = "Your Scheduling Opportunity"
+            elif "customer" in first_pain or "client" in first_pain or "communication" in first_pain:
+                headline = "Your Customer Experience Opportunity"
+            elif "time" in first_pain or "hour" in first_pain:
+                headline = "Your Time Recovery Opportunity"
+            else:
+                headline = f"Your {industry.replace('-', ' ').title()} Opportunity"
+        else:
+            headline = f"Your {industry.replace('-', ' ').title()} Opportunity"
+
         return {
-            "headline": f"Your {industry.replace('-', ' ').title()} AI Opportunity",
+            "headline": headline,
             "body": insight_text,
         }
 
     except Exception as e:
         logger.error(f"Failed to generate personalized insight: {e}")
-        return _get_default_insight(company_name, industry, score)
+        return _get_default_insight(company_name, industry, score, score_context)
 
 
-def _get_default_insight(company_name: str, industry: str, score: int) -> Dict[str, str]:
-    """Fallback insight when LLM is unavailable."""
-    if score >= 60:
-        body = f"Based on what you've shared, you're ahead of many {industry.replace('-', ' ')} businesses in AI readiness. The workshop will help identify your highest-impact opportunities."
+def _get_default_insight(
+    company_name: str,
+    industry: str,
+    score: int,
+    score_context: Optional[Dict[str, Any]] = None
+) -> Dict[str, str]:
+    """Fallback insight when LLM is unavailable. No fabricated statistics."""
+    industry_display = industry.replace('-', ' ')
+
+    if score_context:
+        level = score_context.get("level_label", "Developing")
+        context = score_context.get("context_text", "")
+        next_step = score_context.get("next_step", "")
+        body = f"Your score of {score}/100 puts you at the '{level}' stage. {context}. {next_step}"
     else:
-        body = f"Many {industry.replace('-', ' ')} businesses face similar challenges. The workshop will help us understand your specific situation and identify the most practical next steps."
+        if score >= 50:
+            body = f"Based on what you've shared, you have a solid foundation to build on. The workshop will help identify your highest-impact opportunities."
+        else:
+            body = f"Many {industry_display} businesses face similar challenges. The workshop will help us understand your specific situation and identify practical next steps."
 
     return {
-        "headline": f"Your {industry.replace('-', ' ').title()} AI Opportunity",
+        "headline": f"Your {industry_display.title()} Opportunity",
         "body": body,
     }
+
+
+def _get_fallback_benchmarks(industry: str) -> List[Dict[str, Any]]:
+    """
+    Provide general context when Supabase has no industry-specific data.
+
+    NOTE: We don't fabricate statistics. These are general observations
+    that we label clearly as general patterns, not specific research.
+    """
+    # Return empty - better to show nothing than fake data
+    # The full report will have real, researched data
+    return []
+
+
+def _get_fallback_opportunities(industry: str) -> List[Dict[str, Any]]:
+    """
+    Provide general opportunity areas when Supabase has no industry-specific data.
+
+    These are common patterns, not promises of specific outcomes.
+    """
+    # Common opportunities for most service businesses - no specific claims
+    return [
+        {
+            "category": "customer_communication",
+            "label": "Customer Communication",
+            "potential": "high",
+            "matched_because": "A common area where businesses find room to improve",
+            "in_full_report": [
+                "Specific tools for your situation",
+                "Estimated time savings based on your answers",
+                "Step-by-step implementation approach",
+            ],
+        },
+        {
+            "category": "scheduling",
+            "label": "Scheduling & Coordination",
+            "potential": "high",
+            "matched_because": "Often a significant time investment for service businesses",
+            "in_full_report": [
+                "Automation options comparison",
+                "Integration with your existing tools",
+                "Personalized ROI estimate",
+            ],
+        },
+    ]
 
 
 async def generate_teaser_report(
@@ -378,20 +663,19 @@ async def generate_teaser_report(
     interview_data: Optional[Dict[str, Any]] = None,
 ) -> Dict[str, Any]:
     """
-    Generate insights-first teaser report.
+    Generate insights-first teaser report with FREE actionable value.
 
-    NO AI GENERATION - only verified data from Supabase.
-    Returns diagnostic insights that cannot contradict the full report.
-
-    Output schema:
-    - ai_readiness: Score + breakdown (calculated from inputs)
-    - diagnostics: User reflections + industry benchmarks (with sources)
-    - opportunity_areas: Categories only (not specific recommendations)
+    Returns:
+    - ai_readiness: Score + breakdown + industry comparison
+    - quick_win: ONE actionable thing they can do TODAY (free value!)
+    - diagnostics: User reflections + industry benchmarks
+    - opportunity_areas: Categories with what full report reveals
     - next_steps: Workshop info + what full report includes
     """
     # Ensure we have valid dicts
     company_profile = company_profile or {}
     quiz_answers = quiz_answers or {}
+    interview_data = interview_data or {}
 
     # Extract and normalize industry
     industry_obj = company_profile.get("industry", {})
@@ -403,36 +687,69 @@ async def generate_teaser_report(
 
     # Calculate AI Readiness Score (from quiz inputs - diagnostic)
     score_data = _calculate_ai_readiness_score(company_profile, quiz_answers)
+    score = score_data["score"]
 
-    # Extract user reflections (what they told us - verbatim)
-    user_reflections = _extract_user_reflections(quiz_answers, company_profile)
+    # Get score context (our framework - NOT fake industry benchmarks)
+    score_context = _get_score_context(score)
+
+    # Extract user reflections (what they told us - from all sources)
+    user_reflections = _extract_user_reflections(quiz_answers, company_profile, interview_data)
 
     # Get verified benchmarks from Supabase (with sources)
     industry_benchmarks = await _get_verified_benchmarks_from_supabase(industry)
 
-    # Get pain points for category mapping
-    pain_points = quiz_answers.get("pain_points", [])
+    # Use fallback if no benchmarks found
+    if not industry_benchmarks:
+        industry_benchmarks = _get_fallback_benchmarks(industry)
+        logger.info(f"Using fallback benchmarks for {industry}")
+
+    # Get pain points for category mapping - check multiple sources
+    extracted_facts = company_profile.get("extracted_facts", {})
+    pain_points = (
+        quiz_answers.get("pain_points", []) or
+        extracted_facts.get("pain_points", []) or
+        []
+    )
     if isinstance(pain_points, str):
         pain_points = [pain_points]
 
+    # Extract text from pain point dicts
+    pain_texts = []
+    for p in pain_points:
+        if isinstance(p, dict):
+            pain_texts.append(p.get("value", p.get("fact", str(p))))
+        elif isinstance(p, str):
+            pain_texts.append(p)
+
     # Map pain points to opportunity categories (not specific recommendations)
-    opportunity_areas = await _get_opportunity_categories_from_supabase(industry, pain_points)
+    opportunity_areas = await _get_opportunity_categories_from_supabase(industry, pain_texts)
+
+    # Use fallback if no opportunities found
+    if not opportunity_areas:
+        opportunity_areas = _get_fallback_opportunities(industry)
+        logger.info(f"Using fallback opportunities for {industry}")
+
+    # Get quick win - FREE actionable value!
+    quick_win = _get_quick_win(industry, score, opportunity_areas, pain_texts)
 
     # Generate personalized insight (soft LLM for warmth)
     personalized_insight = await _generate_personalized_insight(
         company_name=company_name,
         industry=industry,
-        score=score_data["score"],
-        pain_points=pain_points,
+        score=score,
+        pain_points=pain_texts,
         benchmarks=industry_benchmarks,
+        user_reflections=user_reflections,
+        score_context=score_context,
     )
 
     logger.info(
         f"Teaser generated for {company_name}: "
-        f"score={score_data['score']}, "
+        f"score={score}, "
         f"reflections={len(user_reflections)}, "
         f"benchmarks={len(industry_benchmarks)}, "
-        f"opportunity_areas={len(opportunity_areas)}"
+        f"opportunity_areas={len(opportunity_areas)}, "
+        f"quick_win={quick_win['title']}"
     )
 
     return {
@@ -445,11 +762,15 @@ async def generate_teaser_report(
         # Personalized insight (LLM-generated warmth)
         "personalized_insight": personalized_insight,
 
-        # Section 1: AI Readiness Score (diagnostic)
+        # NEW: Quick Win - free actionable value
+        "quick_win": quick_win,
+
+        # Section 1: AI Readiness Score (diagnostic) with context
         "ai_readiness": {
-            "score": score_data["score"],
+            "score": score,
             "breakdown": score_data["breakdown"],
-            "interpretation": _get_score_interpretation(score_data["score"]),
+            "interpretation": _get_score_interpretation(score),
+            "score_context": score_context,
         },
 
         # Section 2: Diagnostics (verified data only)
@@ -482,9 +803,9 @@ async def generate_teaser_report(
         },
 
         # Legacy fields for backward compatibility (will be deprecated)
-        "ai_readiness_score": score_data["score"],
+        "ai_readiness_score": score,
         "score_breakdown": score_data["breakdown"],
-        "score_interpretation": _get_score_interpretation(score_data["score"]),
+        "score_interpretation": _get_score_interpretation(score),
     }
 
 

@@ -316,6 +316,98 @@ def get_model_info(task: str, tier: str = "quick") -> dict:
 
 
 # =============================================================================
+# MODEL FALLBACK CHAIN
+# =============================================================================
+
+# Define fallback chains for each model
+MODEL_FALLBACK_CHAIN = {
+    CLAUDE_MODELS["opus"]: [CLAUDE_MODELS["sonnet"], CLAUDE_MODELS["haiku"]],
+    CLAUDE_MODELS["sonnet"]: [CLAUDE_MODELS["haiku"]],
+    CLAUDE_MODELS["haiku"]: [],
+    GEMINI_MODELS["pro"]: [GEMINI_MODELS["flash"]],
+    GEMINI_MODELS["flash"]: [],
+    OPENAI_MODELS["gpt52_pro"]: [OPENAI_MODELS["gpt52"]],
+    OPENAI_MODELS["gpt52"]: [],
+    DEEPSEEK_MODELS["v3"]: [],
+}
+
+
+async def check_model_availability(model: str, client) -> bool:
+    """
+    Quick health check to see if a model is available.
+
+    Args:
+        model: Model ID to check
+        client: Anthropic/OpenAI/etc client instance
+
+    Returns:
+        True if model is available, False otherwise
+    """
+    try:
+        # For Anthropic models
+        if model.startswith("claude"):
+            response = await client.messages.create(
+                model=model,
+                max_tokens=10,
+                messages=[{"role": "user", "content": "ping"}]
+            )
+            return True
+        # Add other provider checks as needed
+        return True
+    except Exception as e:
+        logger.warning(f"Model {model} unavailable: {e}")
+        return False
+
+
+async def get_model_with_fallback(
+    task: str,
+    tier: str = "quick",
+    client=None,
+) -> str:
+    """
+    Get model for task with automatic fallback on failure.
+
+    Tries the primary model first, then falls back through the chain
+    if the model is unavailable.
+
+    Args:
+        task: The task identifier
+        tier: Report tier ("quick" or "full")
+        client: API client for health checks (optional)
+
+    Returns:
+        Model ID string (primary or fallback)
+
+    Raises:
+        RuntimeError: If no models are available
+    """
+    primary_model = get_model_for_task(task, tier)
+
+    # If no client provided, just return primary (can't check availability)
+    if client is None:
+        return primary_model
+
+    # Try primary model
+    if await check_model_availability(primary_model, client):
+        return primary_model
+
+    # Try fallbacks
+    fallbacks = MODEL_FALLBACK_CHAIN.get(primary_model, [])
+    for fallback in fallbacks:
+        if await check_model_availability(fallback, client):
+            logger.warning(
+                f"Using fallback model {fallback} instead of {primary_model} for task '{task}'"
+            )
+            return fallback
+
+    # No models available
+    raise RuntimeError(
+        f"No available models for task '{task}'. "
+        f"Tried: {primary_model}, fallbacks: {fallbacks}"
+    )
+
+
+# =============================================================================
 # TOKEN TRACKING
 # =============================================================================
 

@@ -2,6 +2,8 @@ import { useState, useEffect, useRef, useCallback } from 'react'
 import { Link, useSearchParams } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useInterviewVoice } from '../hooks/useInterviewVoice'
+import { Logo } from '../components/Logo'
+import { sanitizeHtml } from '../utils/sanitize'
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8383'
 
@@ -339,9 +341,7 @@ Let's start with the big picture: **What's the main challenge or opportunity tha
       <div className="min-h-screen bg-gray-50">
         <nav className="fixed top-0 left-0 right-0 z-50 bg-white/80 backdrop-blur-md border-b border-gray-100">
           <div className="max-w-6xl mx-auto px-4 py-4">
-            <Link to="/" className="text-xl font-bold text-gray-900">
-              Ready<span className="text-primary-600">Path</span>
-            </Link>
+            <Logo size="sm" showIcon={false} />
           </div>
         </nav>
 
@@ -484,7 +484,7 @@ Let's start with the big picture: **What's the main challenge or opportunity tha
                   <div
                     className={`whitespace-pre-wrap ${message.role === 'assistant' ? 'prose prose-sm max-w-none' : ''}`}
                     dangerouslySetInnerHTML={{
-                      __html: message.content.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+                      __html: sanitizeHtml(message.content.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>'))
                     }}
                   />
                 </div>

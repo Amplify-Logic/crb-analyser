@@ -22,7 +22,7 @@ interface AdoptionStat {
   capability: string
   adoption_percentage: number
   average_outcome: string
-  crb: InsightCRB
+  crb?: InsightCRB  // Optional for backwards compatibility with legacy data
 }
 
 interface OpportunityMap {
@@ -101,6 +101,19 @@ export default function InsightsTab({ insights }: InsightsTabProps) {
 
   const { adoption_stats, opportunity_map, social_proof, industry_display_name } = insights
 
+  // Validate data shape - old sample data uses different schema
+  const hasValidStats = adoption_stats?.length > 0 &&
+    adoption_stats[0]?.capability !== undefined &&
+    adoption_stats[0]?.adoption_percentage !== undefined
+
+  if (!hasValidStats) {
+    return (
+      <div className="bg-white rounded-2xl p-8 text-center">
+        <p className="text-gray-500">Industry insights data format not supported.</p>
+      </div>
+    )
+  }
+
   // Prepare chart data
   const chartData = adoption_stats.map((stat) => ({
     name: stat.capability,
@@ -170,13 +183,15 @@ export default function InsightsTab({ insights }: InsightsTabProps) {
                         <p className="font-semibold text-gray-900">{data.name}</p>
                         <p className="text-primary-600 font-bold">{data.adoption}% adoption</p>
                         <p className="text-sm text-gray-500 mt-1">{data.outcome}</p>
-                        <div className="mt-2 pt-2 border-t border-gray-100 text-xs space-y-1">
-                          <p className="text-gray-600">Cost: {data.crb.typical_cost}</p>
-                          <p className={RISK_COLORS[data.crb.risk_level as keyof typeof RISK_COLORS]}>
-                            Risk: {data.crb.risk_level}
-                          </p>
-                          <p className="text-green-600">Benefit: {data.crb.typical_benefit}</p>
-                        </div>
+                        {data.crb && (
+                          <div className="mt-2 pt-2 border-t border-gray-100 text-xs space-y-1">
+                            <p className="text-gray-600">Cost: {data.crb.typical_cost}</p>
+                            <p className={RISK_COLORS[data.crb.risk_level as keyof typeof RISK_COLORS]}>
+                              Risk: {data.crb.risk_level}
+                            </p>
+                            <p className="text-green-600">Benefit: {data.crb.typical_benefit}</p>
+                          </div>
+                        )}
                       </div>
                     )
                   }
@@ -233,18 +248,20 @@ export default function InsightsTab({ insights }: InsightsTabProps) {
               <p className="text-sm text-gray-500">{stat.average_outcome}</p>
 
               {/* CRB Mini Display */}
-              <div className="flex gap-2 mt-2 text-xs">
-                <span className="px-2 py-0.5 bg-gray-100 rounded text-gray-600">
-                  {stat.crb.typical_cost}
-                </span>
-                <span className={`px-2 py-0.5 rounded ${
-                  stat.crb.risk_level === 'low' ? 'bg-green-100 text-green-700' :
-                  stat.crb.risk_level === 'medium' ? 'bg-yellow-100 text-yellow-700' :
-                  'bg-red-100 text-red-700'
-                }`}>
-                  {stat.crb.risk_level} risk
-                </span>
-              </div>
+              {stat.crb && (
+                <div className="flex gap-2 mt-2 text-xs">
+                  <span className="px-2 py-0.5 bg-gray-100 rounded text-gray-600">
+                    {stat.crb.typical_cost}
+                  </span>
+                  <span className={`px-2 py-0.5 rounded ${
+                    stat.crb.risk_level === 'low' ? 'bg-green-100 text-green-700' :
+                    stat.crb.risk_level === 'medium' ? 'bg-yellow-100 text-yellow-700' :
+                    'bg-red-100 text-red-700'
+                  }`}>
+                    {stat.crb.risk_level} risk
+                  </span>
+                </div>
+              )}
             </motion.div>
           ))}
         </div>

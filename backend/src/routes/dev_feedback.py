@@ -51,6 +51,30 @@ async def get_report_context(
             detail="Context view only available in dev mode"
         )
 
+    # Handle sample report - return mock context for demo
+    if report_id == "sample":
+        return ReportContext(
+            session_id="sample-session",
+            email=None,
+            company_name="TechFlow Solutions",
+            quiz_answers={
+                "industry": "b2b_saas",
+                "team_size": "11-50",
+                "main_pain_points": ["manual_processes", "scaling_support"],
+            },
+            company_profile={"name": "TechFlow Solutions", "industry": "B2B SaaS"},
+            interview_data={},
+            interview_transcript=[],
+            research_data={},
+            industry_knowledge={},
+            vendors_considered=[],
+            generation_started_at=None,
+            generation_completed_at=None,
+            confidence_scores={},
+            tokens_used={},
+            generation_trace={},
+        ).model_dump()
+
     try:
         supabase = await get_async_supabase()
 

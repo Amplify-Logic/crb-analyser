@@ -23,6 +23,7 @@ from datetime import datetime
 from fastapi import APIRouter, HTTPException, status, Depends
 from pydantic import BaseModel
 
+from src.middleware.auth import require_admin, CurrentUser
 from src.config.supabase_client import get_async_supabase
 from src.config.settings import settings
 from src.models.interview_confidence import ReportStatus, QAReview
@@ -65,6 +66,7 @@ async def get_qa_queue(
     industry: Optional[str] = None,
     limit: int = 20,
     offset: int = 0,
+    current_user: CurrentUser = Depends(require_admin),
 ):
     """
     Get the QA review queue.
@@ -148,7 +150,10 @@ async def get_qa_queue(
 
 
 @router.get("/report/{report_id}")
-async def get_report_for_qa(report_id: str):
+async def get_report_for_qa(
+    report_id: str,
+    current_user: CurrentUser = Depends(require_admin),
+):
     """
     Get full report details for QA review.
 
@@ -222,7 +227,10 @@ async def get_report_for_qa(report_id: str):
 
 
 @router.post("/review")
-async def submit_qa_review(request: QAReviewRequest):
+async def submit_qa_review(
+    request: QAReviewRequest,
+    current_user: CurrentUser = Depends(require_admin),
+):
     """
     Submit a QA review for a report.
 
@@ -328,7 +336,9 @@ async def submit_qa_review(request: QAReviewRequest):
 
 
 @router.get("/stats")
-async def get_qa_stats():
+async def get_qa_stats(
+    current_user: CurrentUser = Depends(require_admin),
+):
     """
     Get QA queue statistics.
 
@@ -379,7 +389,10 @@ async def get_qa_stats():
 
 
 @router.post("/regenerate/{report_id}")
-async def regenerate_report(report_id: str):
+async def regenerate_report(
+    report_id: str,
+    current_user: CurrentUser = Depends(require_admin),
+):
     """
     Trigger regeneration of a rejected report.
 

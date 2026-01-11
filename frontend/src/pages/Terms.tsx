@@ -1,4 +1,5 @@
 import { Link } from 'react-router-dom'
+import { Logo } from '../components/Logo'
 
 export default function Terms() {
   return (
@@ -6,9 +7,7 @@ export default function Terms() {
       {/* Header */}
       <nav className="fixed top-0 left-0 right-0 z-50 bg-white/80 backdrop-blur-md border-b border-gray-100">
         <div className="max-w-6xl mx-auto px-4 py-4 flex justify-between items-center">
-          <Link to="/" className="text-xl font-bold text-gray-900">
-            Ready<span className="text-primary-600">Path</span>
-          </Link>
+          <Logo size="sm" showIcon={false} />
           <Link
             to="/"
             className="text-gray-600 hover:text-gray-900 transition"

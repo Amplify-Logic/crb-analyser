@@ -15,6 +15,7 @@ import logging
 from typing import Any, Dict, List, Optional
 
 from src.skills.base import LLMSkill, SkillContext, SkillError
+from src.utils.prompt_safety import sanitize_user_input
 
 logger = logging.getLogger(__name__)
 
@@ -95,7 +96,8 @@ class AcknowledgmentGeneratorSkill(LLMSkill[Dict[str, Any]]):
                 - acknowledgment: The generated acknowledgment
                 - used_llm: Whether LLM was used or fallback
         """
-        answer = context.metadata.get("answer", "")
+        raw_answer = context.metadata.get("answer", "")
+        answer = sanitize_user_input(raw_answer)
         signals = context.metadata.get("signals_detected", [])
         next_question = context.metadata.get("next_question", "")
         industry = context.industry

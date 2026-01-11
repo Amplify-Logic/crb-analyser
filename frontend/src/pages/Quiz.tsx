@@ -1,103 +1,14 @@
 import { useState, useEffect, useRef, useCallback } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
+import { ShimmerButton, SpotlightCard } from '../components/magicui'
+import { formatCompanyName } from '../lib/formatCompanyName'
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8383'
 
 // ============================================================================
 // Helper Functions
 // ============================================================================
-
-/**
- * Format company name for display - handles domain-style names
- * "oflahertyconstruction" -> "O'Flaherty Construction"
- * "acme-corp" -> "Acme Corp"
- */
-const formatCompanyName = (name: string): string => {
-  if (!name) return ''
-
-  // Remove common TLDs and www
-  let cleaned = name
-    .replace(/^(https?:\/\/)?(www\.)?/, '')
-    .replace(/\.(com|co|ie|uk|net|org|io|ai|app)(\/.*)?$/i, '')
-    .replace(/[-_]/g, ' ')
-
-  // Handle camelCase
-  cleaned = cleaned.replace(/([a-z])([A-Z])/g, '$1 $2')
-
-  // Common words to split on (business terms, nature, colors, etc.)
-  const splitWords = [
-    // Business suffixes
-    'construction', 'consulting', 'solutions', 'services', 'group', 'agency',
-    'studio', 'media', 'digital', 'tech', 'technologies', 'software', 'systems',
-    'partners', 'associates', 'industries', 'enterprises', 'holdings', 'corp',
-    'corporation', 'company', 'limited', 'ltd', 'inc', 'llc', 'plumbing',
-    'electric', 'electrical', 'mechanical', 'dental', 'medical', 'legal',
-    'financial', 'insurance', 'realty', 'properties', 'development', 'design',
-    'marketing', 'creative', 'labs', 'works', 'builders', 'contracting',
-    // Nature words (common in company names)
-    'oak', 'pine', 'maple', 'cedar', 'willow', 'birch', 'elm', 'ash',
-    'river', 'lake', 'hill', 'mountain', 'valley', 'creek', 'brook', 'stone',
-    'rock', 'wood', 'forest', 'meadow', 'field', 'spring', 'summit', 'peak',
-    'bay', 'harbor', 'harbour', 'coast', 'shore', 'bridge', 'gate', 'park',
-    // Colors
-    'green', 'blue', 'red', 'black', 'white', 'gold', 'golden', 'silver',
-    // Directions/positions
-    'north', 'south', 'east', 'west', 'central', 'pacific', 'atlantic',
-    // Common prefixes/words
-    'smart', 'bright', 'clear', 'pure', 'prime', 'first', 'apex', 'alpha',
-    'beta', 'omega', 'nova', 'star', 'sun', 'moon', 'sky', 'cloud', 'data',
-    'cyber', 'net', 'web', 'app', 'bit', 'byte', 'code', 'logic', 'sync',
-    'link', 'hub', 'point', 'base', 'core', 'pro', 'max', 'flex', 'flow'
-  ]
-
-  // Split concatenated words (longer words first to avoid partial matches)
-  const sortedWords = [...splitWords].sort((a, b) => b.length - a.length)
-  for (const word of sortedWords) {
-    const regex = new RegExp(`(${word})`, 'gi')
-    cleaned = cleaned.replace(regex, ' $1 ')
-  }
-
-  // Handle Irish/Scottish names: O'Brien, O'Flaherty, Mc/Mac prefixes
-  // But NOT common words starting with 'o' like oak, ocean, office, etc.
-  const commonOWords = ['oak', 'ocean', 'office', 'one', 'open', 'orange', 'order', 'organic', 'original', 'outdoor', 'owl', 'oxygen']
-  cleaned = cleaned
-    .split(' ')
-    .map(word => {
-      const lower = word.toLowerCase()
-      // Only apply O' prefix to words starting with 'o' that aren't common words
-      if (lower.match(/^o[a-z]/) && !commonOWords.includes(lower)) {
-        return "O'" + word.slice(1)
-      }
-      return word
-    })
-    .join(' ')
-    .replace(/\bmc([a-z])/gi, 'Mc$1')  // mccarthy -> McCarthy
-    .replace(/\bmac([a-z])/gi, 'Mac$1') // macdonald -> MacDonald
-
-  // Clean up multiple spaces and trim
-  cleaned = cleaned.replace(/\s+/g, ' ').trim()
-
-  // Capitalize each word properly
-  return cleaned
-    .split(' ')
-    .map(word => {
-      // Handle O'Names - keep apostrophe and capitalize after
-      if (word.startsWith("O'") || word.startsWith("o'")) {
-        return "O'" + word.slice(2).charAt(0).toUpperCase() + word.slice(3).toLowerCase()
-      }
-      // Handle Mc/Mac names
-      if (word.toLowerCase().startsWith('mc') && word.length > 2) {
-        return 'Mc' + word.charAt(2).toUpperCase() + word.slice(3).toLowerCase()
-      }
-      if (word.toLowerCase().startsWith('mac') && word.length > 3) {
-        return 'Mac' + word.charAt(3).toUpperCase() + word.slice(4).toLowerCase()
-      }
-      return word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()
-    })
-    .join(' ')
-    .trim()
-}
 
 /**
  * Map technical research step names to user-friendly descriptions
@@ -883,6 +794,70 @@ export default function Quiz() {
   void setTeaserReport // Suppress unused warning until teaser feature is complete
 
   // ============================================================================
+  // LocalStorage Persistence for Quiz Progress
+  // ============================================================================
+
+  const QUIZ_STORAGE_KEY = 'crb_quiz_progress'
+
+  // Load saved progress on mount
+  useEffect(() => {
+    try {
+      const saved = localStorage.getItem(QUIZ_STORAGE_KEY)
+      if (saved) {
+        const parsed = JSON.parse(saved)
+        // Only restore if session matches or no session yet
+        if (!sessionId || parsed.sessionId === sessionId) {
+          if (parsed.answers) setAnswers(parsed.answers)
+          if (typeof parsed.currentQuestionIndex === 'number') {
+            setCurrentQuestionIndex(parsed.currentQuestionIndex)
+          }
+          if (parsed.userEmail) setUserEmail(parsed.userEmail)
+          if (parsed.companyName) setCompanyName(parsed.companyName)
+        }
+      }
+    } catch (e) {
+      console.warn('Failed to load quiz progress from localStorage:', e)
+    }
+  }, [])
+
+  // Debounced save to localStorage
+  const saveTimeoutRef = useRef<NodeJS.Timeout | null>(null)
+
+  useEffect(() => {
+    // Debounce save by 500ms to avoid excessive writes
+    if (saveTimeoutRef.current) {
+      clearTimeout(saveTimeoutRef.current)
+    }
+
+    saveTimeoutRef.current = setTimeout(() => {
+      try {
+        const progress = {
+          sessionId,
+          answers,
+          currentQuestionIndex,
+          userEmail,
+          companyName,
+          savedAt: new Date().toISOString(),
+        }
+        localStorage.setItem(QUIZ_STORAGE_KEY, JSON.stringify(progress))
+      } catch (e) {
+        console.warn('Failed to save quiz progress to localStorage:', e)
+      }
+    }, 500)
+
+    return () => {
+      if (saveTimeoutRef.current) {
+        clearTimeout(saveTimeoutRef.current)
+      }
+    }
+  }, [answers, currentQuestionIndex, userEmail, companyName, sessionId])
+
+  // Clear saved progress on quiz completion
+  const clearSavedProgress = useCallback(() => {
+    localStorage.removeItem(QUIZ_STORAGE_KEY)
+  }, [])
+
+  // ============================================================================
   // Helper Functions (defined before useEffect that uses them)
   // ============================================================================
 
@@ -890,8 +865,27 @@ export default function Quiz() {
     const extracted: ResearchFinding[] = []
     const missingFields: string[] = []
 
+    // Helper to check if a value is effectively "unknown" or uninformative
+    const isUnknownValue = (value: string | undefined | null): boolean => {
+      if (!value) return true
+      const lower = String(value).toLowerCase().trim()
+      const unknownPatterns = [
+        'unknown', 'not available', 'not publicly available', 'n/a', 'none',
+        'none identified', 'not found', 'not specified', 'undisclosed',
+        'no venture capital', 'no funding', 'bootstrapped'
+      ]
+      return unknownPatterns.some(pattern => lower.includes(pattern))
+    }
+
+    // Helper to check if this is a small business (skip irrelevant enterprise fields)
+    const isSmallBusiness = (): boolean => {
+      const size = profile.size?.employee_range?.value?.toLowerCase() || ''
+      return size.includes('1-10') || size.includes('1-5') || size.includes('small') ||
+             size.includes('family') || size.includes('solo')
+    }
+
     // Extract basics
-    if (profile.basics?.description?.value) {
+    if (profile.basics?.description?.value && !isUnknownValue(profile.basics.description.value)) {
       extracted.push({
         field: 'Company Description',
         value: profile.basics.description.value,
@@ -901,7 +895,7 @@ export default function Quiz() {
       missingFields.push('Company description')
     }
 
-    if (profile.basics?.founded_year?.value) {
+    if (profile.basics?.founded_year?.value && !isUnknownValue(profile.basics.founded_year.value)) {
       extracted.push({
         field: 'Founded',
         value: profile.basics.founded_year.value,
@@ -909,7 +903,7 @@ export default function Quiz() {
       })
     }
 
-    if (profile.basics?.headquarters?.value) {
+    if (profile.basics?.headquarters?.value && !isUnknownValue(profile.basics.headquarters.value)) {
       extracted.push({
         field: 'Headquarters',
         value: profile.basics.headquarters.value,
@@ -918,7 +912,7 @@ export default function Quiz() {
     }
 
     // Extract size
-    if (profile.size?.employee_range?.value) {
+    if (profile.size?.employee_range?.value && !isUnknownValue(profile.size.employee_range.value)) {
       extracted.push({
         field: 'Team Size',
         value: profile.size.employee_range.value,
@@ -928,17 +922,20 @@ export default function Quiz() {
       missingFields.push('Team size')
     }
 
-    if (profile.size?.revenue_estimate?.value) {
+    // Only show revenue if it's a meaningful value (not "unknown" variants)
+    if (profile.size?.revenue_estimate?.value && !isUnknownValue(profile.size.revenue_estimate.value)) {
       extracted.push({
         field: 'Revenue',
         value: profile.size.revenue_estimate.value,
         confidence: profile.size.revenue_estimate.confidence as 'high' | 'medium' | 'low',
       })
-    } else {
-      missingFields.push('Revenue information')
     }
 
-    if (profile.size?.funding_raised?.value) {
+    // Skip funding for small businesses - it's irrelevant noise
+    // Only show if it's a meaningful positive value (actual funding raised)
+    if (profile.size?.funding_raised?.value &&
+        !isUnknownValue(profile.size.funding_raised.value) &&
+        !isSmallBusiness()) {
       extracted.push({
         field: 'Funding',
         value: profile.size.funding_raised.value,
@@ -1259,6 +1256,9 @@ export default function Quiz() {
       sessionStorage.setItem('companyProfile', JSON.stringify(researchResult.company_profile))
     }
 
+    // Clear saved progress before navigating
+    clearSavedProgress()
+
     // Navigate to checkout with tier
     const tierParam = tier === 'report_only' ? 'report' : 'report_plus_call'
     navigate(`/checkout?tier=${tierParam}&session_id=${sessionId}`)
@@ -1329,34 +1329,49 @@ export default function Quiz() {
 
   if (phase === 'website') {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-gray-50 to-primary-50">
-        <nav className="fixed top-0 left-0 right-0 z-50 bg-white/80 backdrop-blur-md border-b border-gray-100">
-          <div className="max-w-6xl mx-auto px-4 py-4">
-            <Link to="/" className="text-xl font-bold text-gray-900">
-              Ready<span className="text-primary-600">Path</span>
+      <div className="min-h-screen bg-white selection:bg-primary-100 selection:text-primary-900">
+        {/* Background elements */}
+        <div className="fixed inset-0 bg-mesh-light opacity-60 pointer-events-none" />
+        <div className="fixed top-20 right-0 w-96 h-96 bg-primary-200/30 rounded-full blur-3xl animate-float opacity-50 pointer-events-none" />
+        <div className="fixed bottom-0 left-10 w-72 h-72 bg-blue-200/30 rounded-full blur-3xl animate-float pointer-events-none" style={{ animationDelay: '1s' }} />
+
+        {/* Navigation - Glass effect */}
+        <nav className="fixed top-0 left-0 right-0 z-50 bg-white/70 backdrop-blur-md border-b border-white/20">
+          <div className="max-w-6xl mx-auto px-4 py-4 flex justify-between items-center">
+            <Link to="/" className="flex items-center gap-2">
+              <div className="w-8 h-8 bg-gradient-to-br from-primary-500 to-primary-700 rounded-lg flex items-center justify-center text-white shadow-lg shadow-primary-500/30">
+                <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
+                </svg>
+              </div>
+              <div className="flex flex-col">
+                <span className="text-xl font-bold text-gray-900 tracking-tight leading-tight">Ready<span className="text-primary-600">Path</span></span>
+                <span className="text-[10px] text-gray-400 font-medium -mt-0.5">by Amplify Logic AI</span>
+              </div>
             </Link>
           </div>
         </nav>
 
-        <div className="pt-24 pb-20 px-4 flex items-center justify-center min-h-screen">
+        <div className="relative pt-28 pb-20 px-4 flex items-center justify-center min-h-screen">
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
+            initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
-            className="max-w-xl w-full"
+            transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+            className="max-w-xl w-full relative z-10"
           >
             <div className="text-center mb-8">
-              <div className="inline-flex items-center justify-center w-16 h-16 bg-primary-100 rounded-2xl mb-4">
+              <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br from-primary-100 to-primary-200 rounded-2xl mb-4 shadow-lg shadow-primary-500/20">
                 <svg className="w-8 h-8 text-primary-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
                 </svg>
               </div>
-              <h1 className="text-3xl font-bold text-gray-900 mb-2">Let's research your business</h1>
-              <p className="text-gray-600">
+              <h1 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-3 tracking-tight">Let's research your business</h1>
+              <p className="text-gray-600 text-lg">
                 We'll analyze publicly available information about your company to provide personalized insights.
               </p>
             </div>
 
-            <div className="bg-white rounded-2xl p-8 shadow-sm border border-gray-100">
+            <SpotlightCard className="p-8">
               <label className="block text-sm font-medium text-gray-700 mb-2">
                 Your company website
               </label>
@@ -1365,11 +1380,11 @@ export default function Quiz() {
                 value={websiteUrl}
                 onChange={(e) => setWebsiteUrl(e.target.value)}
                 placeholder="www.yourcompany.com"
-                className="w-full px-4 py-4 text-lg border border-gray-200 rounded-xl focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                className="w-full px-4 py-4 text-lg border border-gray-200 rounded-xl focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all bg-white"
                 onKeyDown={(e) => e.key === 'Enter' && websiteUrl.length > 3 && startResearch()}
               />
 
-              <div className="mt-4 p-4 bg-gray-50 rounded-xl">
+              <div className="mt-4 p-4 bg-gradient-to-br from-gray-50 to-primary-50/30 rounded-xl border border-gray-100">
                 <div className="flex items-start gap-3">
                   <svg className="w-5 h-5 text-primary-600 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
@@ -1386,29 +1401,37 @@ export default function Quiz() {
                 </div>
               </div>
 
-              <button
-                onClick={startResearch}
-                disabled={websiteUrl.length < 4 || !sessionId}
-                className={`w-full mt-6 py-4 font-semibold rounded-xl transition text-lg ${
-                  websiteUrl.length >= 4 && sessionId
-                    ? 'bg-primary-600 text-white hover:bg-primary-700 shadow-lg shadow-primary-600/25'
-                    : 'bg-gray-200 text-gray-400 cursor-not-allowed'
-                }`}
-              >
-                {!sessionId ? 'Loading...' : 'Start Research'}
-              </button>
-            </div>
+              {websiteUrl.length >= 4 && sessionId ? (
+                <ShimmerButton
+                  onClick={startResearch}
+                  className="w-full mt-6 text-lg"
+                  shimmerColor="#ffffff"
+                  background="linear-gradient(135deg, #7c3aed 0%, #6366f1 50%, #8b5cf6 100%)"
+                >
+                  Start Research →
+                </ShimmerButton>
+              ) : (
+                <button
+                  disabled
+                  className="w-full mt-6 py-4 font-semibold rounded-xl text-lg bg-gray-200 text-gray-400 cursor-not-allowed"
+                >
+                  {!sessionId ? 'Loading...' : 'Start Research'}
+                </button>
+              )}
+            </SpotlightCard>
 
             {/* Start fresh option */}
-            <button
-              onClick={() => {
-                localStorage.removeItem('crb_session_id')
-                window.location.reload()
-              }}
-              className="mt-4 text-sm text-gray-500 hover:text-gray-700 underline"
-            >
-              Start a new analysis
-            </button>
+            <div className="text-center mt-6">
+              <button
+                onClick={() => {
+                  localStorage.removeItem('crb_session_id')
+                  window.location.reload()
+                }}
+                className="text-sm text-gray-500 hover:text-gray-700 transition"
+              >
+                Start a new analysis
+              </button>
+            </div>
 
             {/* DEV MODE: Generate test report */}
             {import.meta.env.DEV && (
@@ -1434,12 +1457,11 @@ export default function Quiz() {
     ]
 
     return (
-      <div className="min-h-screen bg-gradient-to-br from-slate-50 via-purple-50/30 to-indigo-50/50 flex items-center justify-center px-4">
-        {/* Subtle background pattern */}
-        <div className="fixed inset-0 overflow-hidden pointer-events-none">
-          <div className="absolute -top-1/2 -right-1/2 w-full h-full bg-gradient-radial from-purple-200/20 to-transparent rounded-full blur-3xl" />
-          <div className="absolute -bottom-1/2 -left-1/2 w-full h-full bg-gradient-radial from-indigo-200/20 to-transparent rounded-full blur-3xl" />
-        </div>
+      <div className="min-h-screen bg-white flex items-center justify-center px-4 selection:bg-primary-100 selection:text-primary-900">
+        {/* Background elements - consistent with landing */}
+        <div className="fixed inset-0 bg-mesh-light opacity-60 pointer-events-none" />
+        <div className="fixed top-20 right-0 w-96 h-96 bg-primary-200/30 rounded-full blur-3xl animate-float opacity-50 pointer-events-none" />
+        <div className="fixed bottom-0 left-10 w-72 h-72 bg-blue-200/30 rounded-full blur-3xl animate-float pointer-events-none" style={{ animationDelay: '1s' }} />
 
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -1659,6 +1681,59 @@ export default function Quiz() {
     // Extract key company info for display
     const profile = researchResult?.company_profile
     const description = profile?.basics?.description?.value || ''
+    const detectedIndustry = profile?.industry?.primary_industry?.value?.toLowerCase() || ''
+
+    // Industry-specific verified stats for the value hook
+    // All stats verified against actual source URLs
+    const industryHooks: Record<string, { stat: string; source: string; sourceUrl: string; cta: string }> = {
+      'dental': {
+        stat: 'Automated reminders reduce dental no-shows by up to 38%',
+        source: 'Patient Reminder Statistics',
+        sourceUrl: 'https://www.dialoghealth.com/post/patient-appointment-reminder-statistics',
+        cta: 'Complete the interview to discover your specific opportunities'
+      },
+      'recruiting': {
+        stat: 'Recruiters using AI save a full day per week (20% of time)',
+        source: 'LinkedIn Future of Recruiting 2025',
+        sourceUrl: 'https://business.linkedin.com/talent-solutions/resources/future-of-recruiting',
+        cta: 'Complete the interview to find your biggest time savings'
+      },
+      'coaching': {
+        stat: '47% of coaches now use digital platforms — are you keeping up?',
+        source: 'ICF Global Coaching Study 2025',
+        sourceUrl: 'https://coachingfederation.org/resource/2025-icf-global-coaching-study-executive-summary/',
+        cta: 'Complete the interview to find your efficiency gains'
+      },
+      'home-services': {
+        stat: 'Technicians spend 30% of their day on admin, only 29% on actual service',
+        source: 'Salesforce Field Service Trends',
+        sourceUrl: 'https://www.zuper.co/field-service/field-service-management-trends-2025',
+        cta: 'Complete the interview to find your efficiency gains'
+      },
+      'veterinary': {
+        stat: '39% of vet practices want AI tools — early adopters gain the edge',
+        source: 'AAHA/Digitail Survey 2024',
+        sourceUrl: 'https://www.aaha.org/trends-magazine/trends-may-2024/applications-of-ai-in-veterinary-practice/',
+        cta: 'Complete the interview to discover your opportunities'
+      },
+      'professional-services': {
+        stat: 'Lawyers bill just 37% of their day (2.9 hours) — AI can change that',
+        source: 'Clio Legal Trends Report 2024',
+        sourceUrl: 'https://www.clio.com/resources/legal-trends/2024-report/',
+        cta: 'Complete the interview to find your billable hour gains'
+      }
+    }
+
+    // Industry-specific hook (may be null if industry not recognized)
+    const industryHook = industryHooks[detectedIndustry] || null
+
+    // General stat that always applies
+    const generalHook = {
+      stat: '88% of organizations now use AI regularly — is yours capturing full value?',
+      source: 'McKinsey State of AI 2025',
+      sourceUrl: 'https://www.mckinsey.com/capabilities/quantumblack/our-insights/the-state-of-ai',
+      cta: 'Complete the interview to discover your specific opportunities'
+    }
 
     const nextSteps = [
       {
@@ -1685,25 +1760,32 @@ export default function Quiz() {
       {
         num: 4,
         title: 'Receive your full report',
-        description: 'Expert-reviewed by Amplify Logic AI, delivered within 24-48 hours',
+        description: 'Personalized AI analysis with actionable recommendations, delivered within 24-48 hours',
         active: false,
         icon: '📋'
       }
     ]
 
     return (
-      <div className="min-h-screen bg-gradient-to-br from-slate-50 via-emerald-50/30 to-teal-50/50">
-        {/* Subtle background decoration */}
-        <div className="fixed inset-0 overflow-hidden pointer-events-none">
-          <div className="absolute -top-1/2 -right-1/4 w-[800px] h-[800px] bg-gradient-radial from-emerald-200/30 to-transparent rounded-full blur-3xl" />
-          <div className="absolute -bottom-1/4 -left-1/4 w-[600px] h-[600px] bg-gradient-radial from-teal-200/20 to-transparent rounded-full blur-3xl" />
-        </div>
+      <div className="min-h-screen bg-white selection:bg-primary-100 selection:text-primary-900">
+        {/* Background elements - consistent with landing */}
+        <div className="fixed inset-0 bg-mesh-light opacity-60 pointer-events-none" />
+        <div className="fixed top-20 right-0 w-96 h-96 bg-emerald-200/30 rounded-full blur-3xl animate-float opacity-50 pointer-events-none" />
+        <div className="fixed bottom-0 left-10 w-72 h-72 bg-teal-200/30 rounded-full blur-3xl animate-float pointer-events-none" style={{ animationDelay: '1s' }} />
 
-        {/* Navigation */}
-        <nav className="fixed top-0 left-0 right-0 z-50 bg-white/70 backdrop-blur-xl border-b border-white/50">
+        {/* Navigation - Glass effect with logo */}
+        <nav className="fixed top-0 left-0 right-0 z-50 bg-white/70 backdrop-blur-md border-b border-white/20">
           <div className="max-w-6xl mx-auto px-4 py-4 flex justify-between items-center">
-            <Link to="/" className="text-xl font-bold text-gray-900">
-              Ready<span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-600 to-indigo-600">Path</span>
+            <Link to="/" className="flex items-center gap-2">
+              <div className="w-8 h-8 bg-gradient-to-br from-primary-500 to-primary-700 rounded-lg flex items-center justify-center text-white shadow-lg shadow-primary-500/30">
+                <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
+                </svg>
+              </div>
+              <div className="flex flex-col">
+                <span className="text-xl font-bold text-gray-900 tracking-tight leading-tight">Ready<span className="text-primary-600">Path</span></span>
+                <span className="text-[10px] text-gray-400 font-medium -mt-0.5">by Amplify Logic AI</span>
+              </div>
             </Link>
             <motion.div
               initial={{ opacity: 0, x: 20 }}
@@ -1792,6 +1874,68 @@ export default function Quiz() {
                 </motion.p>
               </div>
 
+              {/* Value Hook Teasers */}
+              <div className="space-y-3 mb-6">
+                {/* Industry-specific stat (if available) */}
+                {industryHook && (
+                  <motion.div
+                    initial={{ opacity: 0, scale: 0.95 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    transition={{ delay: 0.45 }}
+                    className="bg-gradient-to-r from-emerald-50 to-teal-50 border border-emerald-200/50 rounded-2xl p-4 flex items-center gap-4"
+                  >
+                    <div className="w-12 h-12 bg-gradient-to-br from-emerald-500 to-teal-600 rounded-xl flex items-center justify-center flex-shrink-0 shadow-lg shadow-emerald-500/20">
+                      <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
+                      </svg>
+                    </div>
+                    <div className="flex-1">
+                      <p className="text-sm font-semibold text-emerald-800">
+                        {industryHook.stat}
+                      </p>
+                      <a
+                        href={industryHook.sourceUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-[10px] text-emerald-500/70 hover:text-emerald-600 hover:underline mt-1 inline-block"
+                      >
+                        Source: {industryHook.source} ↗
+                      </a>
+                    </div>
+                  </motion.div>
+                )}
+
+                {/* General stat (always shown) */}
+                <motion.div
+                  initial={{ opacity: 0, scale: 0.95 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  transition={{ delay: industryHook ? 0.55 : 0.45 }}
+                  className="bg-gradient-to-r from-blue-50 to-indigo-50 border border-blue-200/50 rounded-2xl p-4 flex items-center gap-4"
+                >
+                  <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-xl flex items-center justify-center flex-shrink-0 shadow-lg shadow-blue-500/20">
+                    <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+                    </svg>
+                  </div>
+                  <div className="flex-1">
+                    <p className="text-sm font-semibold text-blue-800">
+                      {generalHook.stat}
+                    </p>
+                    <p className="text-xs text-blue-600 mt-0.5">
+                      {generalHook.cta}
+                    </p>
+                    <a
+                      href={generalHook.sourceUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-[10px] text-blue-500/70 hover:text-blue-600 hover:underline mt-1 inline-block"
+                    >
+                      Source: {generalHook.source} ↗
+                    </a>
+                  </div>
+                </motion.div>
+              </div>
+
               {/* Research Findings - Prominent Display */}
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
@@ -1812,13 +1956,25 @@ export default function Quiz() {
                       <p className="text-sm text-gray-500">{findings.length} insights gathered</p>
                     </div>
                   </div>
-                  <span className={`text-sm font-bold px-3 py-1 rounded-full ${
-                    knowledgeScore >= 60
-                      ? 'text-emerald-700 bg-emerald-100'
-                      : knowledgeScore >= 30
-                        ? 'text-amber-700 bg-amber-100'
-                        : 'text-orange-700 bg-orange-100'
-                  }`}>{knowledgeScore}% coverage</span>
+                  <div className="group relative">
+                    <span className={`text-sm font-bold px-3 py-1 rounded-full cursor-help ${
+                      knowledgeScore >= 60
+                        ? 'text-emerald-700 bg-emerald-100'
+                        : knowledgeScore >= 30
+                          ? 'text-amber-700 bg-amber-100'
+                          : 'text-orange-700 bg-orange-100'
+                    }`}>
+                      {knowledgeScore >= 60 ? 'Good coverage' : knowledgeScore >= 30 ? 'Basic coverage' : 'Building profile'}
+                    </span>
+                    <div className="absolute right-0 top-full mt-2 w-64 p-3 bg-gray-900 text-white text-xs rounded-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all z-50 shadow-xl">
+                      <p className="font-medium mb-1">{knowledgeScore}% of profile complete</p>
+                      <p className="text-gray-300">
+                        {knowledgeScore >= 60
+                          ? "We have enough to generate valuable insights. The interview will fill in the rest."
+                          : "The AI interview will gather the remaining context needed for a personalized analysis."}
+                      </p>
+                    </div>
+                  </div>
                 </div>
 
                 {/* Findings Grid */}
@@ -2103,8 +2259,9 @@ export default function Quiz() {
       <div className="min-h-screen bg-gradient-to-br from-gray-50 to-primary-50">
         <nav className="fixed top-0 left-0 right-0 z-50 bg-white/80 backdrop-blur-md border-b border-gray-100">
           <div className="max-w-6xl mx-auto px-4 py-4">
-            <Link to="/" className="text-xl font-bold text-gray-900">
-              Ready<span className="text-primary-600">Path</span>
+            <Link to="/" className="flex flex-col">
+              <span className="text-xl font-bold text-gray-900 leading-tight">Ready<span className="text-primary-600">Path</span></span>
+              <span className="text-[10px] text-gray-400 font-medium -mt-0.5">by Amplify Logic AI</span>
             </Link>
           </div>
         </nav>
@@ -2262,8 +2419,9 @@ export default function Quiz() {
       <div className="min-h-screen bg-gradient-to-br from-gray-50 to-primary-50">
         <nav className="fixed top-0 left-0 right-0 z-50 bg-white/80 backdrop-blur-md border-b border-gray-100">
           <div className="max-w-6xl mx-auto px-4 py-4">
-            <Link to="/" className="text-xl font-bold text-gray-900">
-              Ready<span className="text-primary-600">Path</span>
+            <Link to="/" className="flex flex-col">
+              <span className="text-xl font-bold text-gray-900 leading-tight">Ready<span className="text-primary-600">Path</span></span>
+              <span className="text-[10px] text-gray-400 font-medium -mt-0.5">by Amplify Logic AI</span>
             </Link>
           </div>
         </nav>
@@ -2451,8 +2609,9 @@ export default function Quiz() {
       <div className="min-h-screen bg-gradient-to-br from-gray-50 to-primary-50">
         <nav className="fixed top-0 left-0 right-0 z-50 bg-white/80 backdrop-blur-md border-b border-gray-100">
           <div className="max-w-6xl mx-auto px-4 py-4">
-            <Link to="/" className="text-xl font-bold text-gray-900">
-              Ready<span className="text-primary-600">Path</span>
+            <Link to="/" className="flex flex-col">
+              <span className="text-xl font-bold text-gray-900 leading-tight">Ready<span className="text-primary-600">Path</span></span>
+              <span className="text-[10px] text-gray-400 font-medium -mt-0.5">by Amplify Logic AI</span>
             </Link>
           </div>
         </nav>
@@ -2501,13 +2660,21 @@ export default function Quiz() {
               <button
                 type="submit"
                 disabled={!userEmail || emailSubmitting}
-                className={`w-full py-4 font-semibold rounded-xl transition text-lg ${
+                className={`w-full py-4 font-semibold rounded-xl transition text-lg flex items-center justify-center gap-2 ${
                   userEmail && !emailSubmitting
                     ? 'bg-primary-600 text-white hover:bg-primary-700 shadow-lg shadow-primary-600/25'
                     : 'bg-gray-200 text-gray-400 cursor-not-allowed'
                 }`}
               >
-                {emailSubmitting ? 'Saving...' : 'Continue to Interview'}
+                {emailSubmitting ? (
+                  <>
+                    <svg className="animate-spin w-5 h-5" fill="none" viewBox="0 0 24 24">
+                      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                      <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                    </svg>
+                    Saving...
+                  </>
+                ) : 'Continue to Interview'}
               </button>
 
               <p className="text-xs text-gray-500 text-center mt-4">
@@ -2539,8 +2706,9 @@ export default function Quiz() {
       <div className="min-h-screen bg-gray-50">
         <nav className="fixed top-0 left-0 right-0 z-50 bg-white/80 backdrop-blur-md border-b border-gray-100">
           <div className="max-w-6xl mx-auto px-4 py-4 flex justify-between items-center">
-            <Link to="/" className="text-xl font-bold text-gray-900">
-              Ready<span className="text-primary-600">Path</span>
+            <Link to="/" className="flex flex-col">
+              <span className="text-xl font-bold text-gray-900 leading-tight">Ready<span className="text-primary-600">Path</span></span>
+              <span className="text-[10px] text-gray-400 font-medium -mt-0.5">by Amplify Logic AI</span>
             </Link>
             <div className="text-sm text-gray-500">
               Question {currentQuestionIndex + 1} of {questions.length}
@@ -2753,8 +2921,9 @@ export default function Quiz() {
       <div className="min-h-screen bg-gray-50">
         <nav className="fixed top-0 left-0 right-0 z-50 bg-white/80 backdrop-blur-md border-b border-gray-100">
           <div className="max-w-6xl mx-auto px-4 py-4">
-            <Link to="/" className="text-xl font-bold text-gray-900">
-              Ready<span className="text-primary-600">Path</span>
+            <Link to="/" className="flex flex-col">
+              <span className="text-xl font-bold text-gray-900 leading-tight">Ready<span className="text-primary-600">Path</span></span>
+              <span className="text-[10px] text-gray-400 font-medium -mt-0.5">by Amplify Logic AI</span>
             </Link>
           </div>
         </nav>

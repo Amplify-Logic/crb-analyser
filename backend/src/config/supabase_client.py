@@ -1,10 +1,13 @@
 """
 Supabase Client Configuration
+
+Includes retry logic with exponential backoff for resilient database operations.
 """
 
+import asyncio
 import logging
-from functools import lru_cache
-from typing import Optional
+from functools import lru_cache, wraps
+from typing import Optional, Callable, TypeVar, Any
 
 from supabase import create_client, Client
 from supabase._async.client import AsyncClient, create_client as create_async_client
@@ -12,6 +15,58 @@ from supabase._async.client import AsyncClient, create_client as create_async_cl
 from .settings import settings
 
 logger = logging.getLogger(__name__)
+
+# Retry configuration
+SUPABASE_MAX_RETRIES = 3
+SUPABASE_BASE_DELAY = 1.0  # seconds
+
+T = TypeVar('T')
+
+
+def with_retry(
+    max_retries: int = SUPABASE_MAX_RETRIES,
+    base_delay: float = SUPABASE_BASE_DELAY,
+    exceptions: tuple = (Exception,),
+):
+    """
+    Decorator for Supabase operations with exponential backoff.
+
+    Args:
+        max_retries: Maximum number of retry attempts
+        base_delay: Base delay in seconds (doubles each retry)
+        exceptions: Tuple of exceptions to catch and retry
+
+    Usage:
+        @with_retry(max_retries=3)
+        async def my_db_operation():
+            ...
+    """
+    def decorator(func: Callable[..., T]) -> Callable[..., T]:
+        @wraps(func)
+        async def wrapper(*args: Any, **kwargs: Any) -> T:
+            last_exception = None
+
+            for attempt in range(max_retries):
+                try:
+                    return await func(*args, **kwargs)
+                except exceptions as e:
+                    last_exception = e
+                    if attempt < max_retries - 1:
+                        delay = base_delay * (2 ** attempt)
+                        logger.warning(
+                            f"Supabase operation '{func.__name__}' failed (attempt {attempt + 1}/{max_retries}): {e}. "
+                            f"Retrying in {delay:.1f}s..."
+                        )
+                        await asyncio.sleep(delay)
+                    else:
+                        logger.error(
+                            f"Supabase operation '{func.__name__}' failed after {max_retries} attempts: {e}"
+                        )
+
+            raise last_exception  # type: ignore
+
+        return wrapper  # type: ignore
+    return decorator
 
 
 class SupabaseClientManager:

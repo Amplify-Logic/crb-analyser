@@ -73,16 +73,34 @@ interface PersonalizedInsight {
   body: string
 }
 
+interface ScoreContext {
+  your_score: number
+  level: 'early_stage' | 'developing' | 'established' | 'advanced'
+  level_label: string
+  context_text: string
+  next_step: string
+  note: string
+}
+
+interface QuickWin {
+  title: string
+  description: string
+  action: string
+  impact: string
+}
+
 interface TeaserData {
   generated_at: string
   company_name: string
   industry: string
   industry_slug: string
   personalized_insight?: PersonalizedInsight
+  quick_win?: QuickWin
   ai_readiness: {
     score: number
     breakdown: ScoreBreakdown
     interpretation: ScoreInterpretation
+    score_context?: ScoreContext
   }
   diagnostics: {
     user_reflections: UserReflection[]
@@ -290,7 +308,7 @@ export default function PreviewReport() {
             </p>
           </motion.div>
 
-          {/* AI Readiness Score Card */}
+          {/* AI Readiness Score Card with Industry Comparison */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -300,9 +318,21 @@ export default function PreviewReport() {
             <div className="flex flex-col md:flex-row items-center justify-between gap-6">
               <div>
                 <h2 className="text-lg font-medium opacity-90 mb-1">AI Readiness Score</h2>
-                <div className="text-6xl font-bold">{ai_readiness.score}</div>
+                <div className="text-6xl font-bold">{ai_readiness.score}<span className="text-2xl opacity-75">/100</span></div>
                 <p className="text-lg opacity-90 mt-2">{ai_readiness.interpretation.level}</p>
                 <p className="text-sm opacity-75 mt-1">{ai_readiness.interpretation.summary}</p>
+
+                {/* Score Context */}
+                {ai_readiness.score_context && (
+                  <div className="mt-4 pt-4 border-t border-white/20">
+                    <p className="text-sm opacity-90 mb-2">
+                      {ai_readiness.score_context.context_text}
+                    </p>
+                    <p className="text-sm font-medium opacity-90">
+                      Next step: {ai_readiness.score_context.next_step}
+                    </p>
+                  </div>
+                )}
               </div>
               <div className="bg-white/20 rounded-xl p-6 backdrop-blur-sm w-full md:w-auto">
                 <div className="text-sm font-medium opacity-90 mb-3">Score Breakdown</div>
@@ -326,12 +356,51 @@ export default function PreviewReport() {
             </div>
           </motion.div>
 
+          {/* Quick Win - FREE Actionable Value */}
+          {teaserData.quick_win && (
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.15 }}
+              className="bg-gradient-to-r from-green-50 to-emerald-50 rounded-2xl p-6 border-2 border-green-200 mb-8"
+            >
+              <div className="flex items-start gap-4">
+                <div className="w-12 h-12 rounded-xl bg-green-100 flex items-center justify-center flex-shrink-0">
+                  <span className="text-2xl">🎁</span>
+                </div>
+                <div className="flex-1">
+                  <div className="flex items-center gap-2 mb-2">
+                    <span className="px-2 py-0.5 bg-green-600 text-white text-xs font-bold rounded-full uppercase">
+                      Free Quick Win
+                    </span>
+                  </div>
+                  <h2 className="text-xl font-bold text-green-900 mb-2">
+                    {teaserData.quick_win.title}
+                  </h2>
+                  <p className="text-green-800 mb-4">
+                    {teaserData.quick_win.description}
+                  </p>
+                  <div className="bg-white rounded-xl p-4 space-y-3">
+                    <div>
+                      <p className="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-1">What to do</p>
+                      <p className="text-gray-700">{teaserData.quick_win.action}</p>
+                    </div>
+                    <div>
+                      <p className="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-1">Expected impact</p>
+                      <p className="text-green-700 font-medium">{teaserData.quick_win.impact}</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </motion.div>
+          )}
+
           {/* Personalized Insight */}
           {teaserData.personalized_insight && (
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.15 }}
+              transition={{ delay: 0.2 }}
               className="bg-gradient-to-r from-amber-50 to-orange-50 rounded-2xl p-6 border border-amber-200 mb-8"
             >
               <div className="flex items-start gap-4">
@@ -355,29 +424,40 @@ export default function PreviewReport() {
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.2 }}
+              transition={{ delay: 0.25 }}
               className="bg-white rounded-2xl p-6 border border-gray-200 mb-8"
             >
-              <h2 className="text-xl font-semibold text-gray-900 mb-4 flex items-center gap-2">
+              <h2 className="text-xl font-semibold text-gray-900 mb-2 flex items-center gap-2">
                 <span className="text-2xl">💬</span>
                 What You Told Us
               </h2>
+              <p className="text-gray-500 text-sm mb-4">We heard you. Here's what we captured from your responses.</p>
               <div className="space-y-3">
                 {diagnostics.user_reflections.map((reflection, index) => (
-                  <div key={index} className="flex items-start gap-3 p-3 bg-gray-50 rounded-xl">
-                    <div className={`w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0 ${
-                      reflection.type === 'pain_point' ? 'bg-red-100 text-red-600' :
-                      reflection.type === 'goal' ? 'bg-green-100 text-green-600' :
-                      'bg-blue-100 text-blue-600'
+                  <div key={index} className="flex items-start gap-3 p-4 bg-gray-50 rounded-xl border border-gray-100">
+                    <div className={`w-10 h-10 rounded-lg flex items-center justify-center flex-shrink-0 ${
+                      reflection.type === 'pain_point' ? 'bg-red-100' :
+                      reflection.type === 'goal' ? 'bg-green-100' :
+                      'bg-blue-100'
                     }`}>
                       {reflection.type === 'pain_point' ? '🎯' :
                        reflection.type === 'goal' ? '🚀' : '💼'}
                     </div>
-                    <div>
-                      <p className="text-gray-800">{reflection.what_you_told_us}</p>
-                      <p className="text-xs text-gray-500 mt-1">
-                        Source: {reflection.source.replace('_', ' ')}
-                      </p>
+                    <div className="flex-1">
+                      <p className="text-gray-800 font-medium">{reflection.what_you_told_us}</p>
+                      <div className="flex items-center gap-2 mt-1">
+                        <span className={`text-xs px-2 py-0.5 rounded-full ${
+                          reflection.type === 'pain_point' ? 'bg-red-100 text-red-700' :
+                          reflection.type === 'goal' ? 'bg-green-100 text-green-700' :
+                          'bg-blue-100 text-blue-700'
+                        }`}>
+                          {reflection.type === 'pain_point' ? 'Challenge' :
+                           reflection.type === 'goal' ? 'Goal' : 'Context'}
+                        </span>
+                        <span className="text-xs text-gray-400">
+                          from {reflection.source === 'interview' ? 'conversation' : 'quiz'}
+                        </span>
+                      </div>
                     </div>
                   </div>
                 ))}
@@ -393,10 +473,11 @@ export default function PreviewReport() {
               transition={{ delay: 0.3 }}
               className="bg-purple-50 rounded-2xl p-6 border border-purple-100 mb-8"
             >
-              <h2 className="text-xl font-semibold text-purple-900 mb-4 flex items-center gap-2">
+              <h2 className="text-xl font-semibold text-purple-900 mb-2 flex items-center gap-2">
                 <span className="text-2xl">📊</span>
                 Industry Context
               </h2>
+              <p className="text-purple-700 text-sm mb-4">How {teaserData.industry || 'your industry'} businesses typically operate.</p>
               <div className="space-y-4">
                 {diagnostics.industry_benchmarks.map((benchmark, index) => (
                   <div key={index} className="bg-white rounded-xl p-4">
@@ -408,7 +489,7 @@ export default function PreviewReport() {
                           <p className="text-sm text-gray-600 mt-2">{benchmark.relevance}</p>
                         )}
                       </div>
-                      <div className="text-right">
+                      <div className="text-right flex-shrink-0">
                         <p className="text-xs text-gray-500">Source</p>
                         {benchmark.source.url ? (
                           <a
@@ -438,19 +519,19 @@ export default function PreviewReport() {
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.4 }}
+              transition={{ delay: 0.35 }}
               className="bg-white rounded-2xl p-6 border border-gray-200 mb-8"
             >
-              <h2 className="text-xl font-semibold text-gray-900 mb-4 flex items-center gap-2">
+              <h2 className="text-xl font-semibold text-gray-900 mb-2 flex items-center gap-2">
                 <span className="text-2xl">🎯</span>
                 High-Potential Areas
               </h2>
-              <p className="text-gray-600 mb-4">
-                Based on what you shared, these areas show opportunity. The workshop will validate and prioritize.
+              <p className="text-gray-600 text-sm mb-4">
+                Based on what you shared, these areas show the most promise for improvement.
               </p>
               <div className="space-y-4">
                 {opportunity_areas.map((area, index) => (
-                  <div key={index} className="border border-gray-100 rounded-xl p-4">
+                  <div key={index} className="border border-gray-100 rounded-xl p-4 hover:border-primary-200 transition">
                     <div className="flex items-start justify-between gap-4 mb-3">
                       <div>
                         <div className="flex items-center gap-2">
@@ -483,48 +564,17 @@ export default function PreviewReport() {
             </motion.div>
           )}
 
-          {/* What's Next: Workshop */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.5 }}
-            className="bg-gradient-to-r from-amber-50 to-orange-50 rounded-2xl p-6 border border-amber-200 mb-8"
-          >
-            <h2 className="text-xl font-semibold text-amber-900 mb-4 flex items-center gap-2">
-              <span className="text-2xl">🎓</span>
-              What Happens Next: {next_steps.workshop.what_it_is}
-            </h2>
-            <p className="text-amber-800 mb-4">
-              Duration: {next_steps.workshop.duration}
-            </p>
-            <div className="grid md:grid-cols-3 gap-4 mb-4">
-              {next_steps.workshop.phases.map((phase, index) => (
-                <div key={index} className="bg-white rounded-xl p-4">
-                  <div className="flex items-center gap-2 mb-2">
-                    <div className="w-6 h-6 bg-amber-100 rounded-full flex items-center justify-center text-amber-700 text-sm font-bold">
-                      {index + 1}
-                    </div>
-                    <h3 className="font-semibold text-gray-900">{phase.name}</h3>
-                  </div>
-                  <p className="text-sm text-gray-600">{phase.description}</p>
-                </div>
-              ))}
-            </div>
-            <p className="text-amber-700 font-medium">
-              Outcome: {next_steps.workshop.outcome}
-            </p>
-          </motion.div>
-
           {/* What's in the Full Report */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.6 }}
+            transition={{ delay: 0.4 }}
             className="bg-white rounded-2xl p-8 border border-gray-200 mb-8"
           >
-            <h2 className="text-xl font-semibold text-gray-900 mb-6 text-center">
+            <h2 className="text-xl font-semibold text-gray-900 mb-2 text-center">
               What Your Full Report Includes
             </h2>
+            <p className="text-gray-500 text-sm mb-6 text-center">Everything you need to start improving, with specific numbers and recommendations.</p>
             <div className="grid md:grid-cols-2 gap-4">
               {next_steps.full_report_includes.map((item, i) => (
                 <div key={i} className="flex items-start gap-3 p-4 bg-gray-50 rounded-xl">
@@ -538,26 +588,71 @@ export default function PreviewReport() {
             </div>
           </motion.div>
 
+          {/* Workshop Process - Simplified */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.45 }}
+            className="bg-gray-50 rounded-2xl p-6 border border-gray-200 mb-8"
+          >
+            <h2 className="text-lg font-semibold text-gray-900 mb-4 text-center">
+              How It Works
+            </h2>
+            <div className="flex flex-col md:flex-row items-center justify-center gap-4 md:gap-8">
+              {next_steps.workshop.phases.map((phase, index) => (
+                <div key={index} className="flex items-center gap-3">
+                  <div className="w-8 h-8 bg-primary-100 rounded-full flex items-center justify-center text-primary-700 text-sm font-bold">
+                    {index + 1}
+                  </div>
+                  <div>
+                    <p className="font-medium text-gray-900">{phase.name}</p>
+                    <p className="text-xs text-gray-500">{phase.description}</p>
+                  </div>
+                  {index < next_steps.workshop.phases.length - 1 && (
+                    <svg className="w-4 h-4 text-gray-300 hidden md:block ml-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                    </svg>
+                  )}
+                </div>
+              ))}
+            </div>
+            <p className="text-sm text-gray-500 text-center mt-4">
+              Duration: {next_steps.workshop.duration}
+            </p>
+          </motion.div>
+
           {/* CTA */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.7 }}
-            className="bg-white rounded-2xl p-8 border-2 border-primary-200 text-center"
+            transition={{ delay: 0.5 }}
+            className="bg-gradient-to-r from-primary-50 to-purple-50 rounded-2xl p-8 border-2 border-primary-200 text-center"
           >
+            <p className="text-sm font-medium text-primary-600 uppercase tracking-wide mb-2">Ready for the full picture?</p>
             <div className="text-4xl font-bold text-gray-900 mb-2">€147</div>
-            <p className="text-gray-500 mb-6">Workshop + Full Personalized Report</p>
+            <p className="text-gray-600 mb-6">90-minute AI Workshop + Personalized Report</p>
 
             <button
               onClick={handleGetFullReport}
               className="w-full max-w-md py-4 bg-primary-600 text-white font-semibold rounded-xl hover:bg-primary-700 transition shadow-lg shadow-primary-600/25 text-lg"
             >
-              Start Your Workshop →
+              Get Your Full Report →
             </button>
 
-            <p className="text-sm text-gray-500 mt-4">
-              14-day money-back guarantee if you're not satisfied
-            </p>
+            <div className="flex items-center justify-center gap-6 mt-6 text-sm text-gray-500">
+              <span className="flex items-center gap-1">
+                <svg className="w-4 h-4 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                </svg>
+                14-day money-back guarantee
+              </span>
+              <span className="flex items-center gap-1">
+                <svg className="w-4 h-4 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                </svg>
+                Specific to your business
+              </span>
+            </div>
           </motion.div>
         </div>
       </div>

@@ -10,6 +10,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { useAuth } from '../contexts/AuthContext';
 import { Eye, EyeOff, Mail, Lock, User, AlertCircle, CheckCircle } from 'lucide-react';
+import { Logo } from '../components/Logo';
 
 const signupSchema = z.object({
   fullName: z.string().min(2, 'Name must be at least 2 characters'),
@@ -70,10 +71,10 @@ export default function Signup() {
       <div className="w-full max-w-md">
         {/* Logo/Brand */}
         <div className="text-center mb-8">
-          <Link to="/" className="inline-block">
-            <h1 className="text-3xl font-bold text-white">Ready Path</h1>
-          </Link>
-          <p className="text-primary-200 mt-2">Create your account</p>
+          <div className="inline-flex mb-2">
+            <Logo size="lg" showIcon={false} variant="dark" />
+          </div>
+          <p className="text-primary-200">Create your account</p>
         </div>
 
         {/* Signup Card */}

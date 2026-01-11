@@ -1,5 +1,10 @@
 # CRB Analyser - Development Guide
 
+> **For domain concepts** → [PRODUCT.md](./PRODUCT.md)
+> **For business strategy** → [STRATEGY.md](./STRATEGY.md)
+
+---
+
 ## Quick Start
 
 ```bash
@@ -12,6 +17,52 @@ cd frontend && npm run dev
 # Redis (required)
 brew services start redis
 ```
+
+---
+
+## Project Commands
+
+Use these commands at conversation start and during development:
+
+| Command | When to Use |
+|---------|-------------|
+| `/prime` | Start of any new conversation - loads essential context |
+| `/plan-feature` | Before implementing a feature - creates structured plan |
+| `/execute [plan.md]` | After context reset - executes a plan with minimal context |
+| `/create-prd` | After discussing a product idea - generates PRD |
+| `/evolve` | After fixing a bug - improves rules/commands to prevent recurrence |
+
+### Context Reset Workflow
+
+**Always reset context between planning and execution:**
+
+```
+1. Plan the feature (/plan-feature)
+      ↓
+2. Output plan to docs/plans/[date]-[feature].md
+      ↓
+3. CLEAR CONTEXT (new conversation or /clear)
+      ↓
+4. Execute with only the plan (/execute docs/plans/[plan].md)
+```
+
+This keeps context light during execution for better reasoning.
+
+---
+
+## Task-Specific Reference
+
+Load these ONLY when working on the relevant task type:
+
+| Working On | Read This |
+|------------|-----------|
+| API routes, backend services | `.claude/reference/api-development.md` |
+| React components, frontend pages | `.claude/reference/frontend-development.md` |
+| Report generation, findings | `.claude/reference/report-quality.md` |
+| Vendor database, research agents | `.claude/reference/vendor-management.md` |
+| Writing or fixing tests | `.claude/reference/testing.md` |
+
+**Do NOT load all references.** Only load what's relevant to the current task.
 
 ---
 
@@ -85,180 +136,17 @@ created → in_progress → completed → payment_pending → paid
 
 ## CRB Analysis Framework
 
-The Cost-Risk-Benefit framework is the core analytical methodology. **The analysis must make the best option obvious** - not just list pros/cons.
+> **Full framework details** → [PRODUCT.md](./PRODUCT.md)
 
-### The Six Dimensions of Cost
+Core principle: **The analysis must make the best option obvious.**
 
-Cost is NOT just money. Analyze all six dimensions:
+- **6 Costs**: Financial, Time, Opportunity, Complexity, Risk, Brand/Trust
+- **4 Benefits**: Financial, Time, Strategic, Quality
+- **NET SCORE** = Benefit - Cost - (Risk ÷ 10)
+- **Three Options**: Off-the-Shelf, Best-in-Class, Custom Build
+- **Connect vs Replace**: Integrate existing tools OR migrate to new ones
 
-| Dimension | What to Measure | Questions to Ask |
-|-----------|-----------------|------------------|
-| **Financial** | Direct €, indirect €, ongoing € | Subscription? Implementation? Hidden fees? |
-| **Time** | Hours to implement, learn, maintain | Time to value? Learning curve? Ongoing drain? |
-| **Opportunity** | What you can't do if you do this | What else could this budget/time fund? |
-| **Complexity** | Mental load, integration difficulty | How many systems touched? Training needed? |
-| **Risk** | What could go wrong, reversibility | What if it fails? How hard to undo? |
-| **Brand/Trust** | Customer perception, team morale | Will customers notice? Will team resist? |
-
-### The Four Dimensions of Benefit
-
-| Dimension | What to Measure | Questions to Ask |
-|-----------|-----------------|------------------|
-| **Financial** | Revenue increase, cost savings | How much saved/earned? When does ROI hit? |
-| **Time** | Hours freed, speed improvements | Hours/week saved? How much faster? |
-| **Strategic** | Market position, competitive edge | Does this differentiate? Does it compound? |
-| **Quality** | Customer experience, team satisfaction | Will customers notice? Will team be happier? |
-
-### Risk Categories
-
-| Risk Type | Key Question | Mitigation |
-|-----------|--------------|------------|
-| **Implementation** | Will this actually work? | Pilot first, phased rollout |
-| **Adoption** | Will the team use it? | Training, change management |
-| **Vendor** | Will they exist in 2 years? | Exit strategy, data portability |
-| **Security** | What data is exposed? | Audit, compliance check |
-| **Integration** | Will it break existing systems? | Sandbox testing |
-
-### Scoring System
-
-Each option gets scored to make comparison objective:
-
-```
-Option A: [Tool Name]
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-
-COSTS                          Score (1-5, lower = better)
-├── Financial: €X/month        ██░░░ 2
-├── Time to Value: X weeks     ███░░ 3
-├── Complexity: X integrations ██░░░ 2
-├── Risk: [description]        █░░░░ 1
-├── Opportunity: [trade-off]   ██░░░ 2
-└── Brand Impact: [effect]     █░░░░ 1
-                      COST SCORE: 11/30
-
-BENEFITS                       Score (1-5, higher = better)
-├── Financial: €X saved/month  ████░ 4
-├── Time: X hrs/week freed     █████ 5
-├── Strategic: [advantage]     ███░░ 3
-└── Quality: [improvement]     ████░ 4
-                   BENEFIT SCORE: 16/20
-
-RISK SCORE: (Probability × Impact, summed)  9/30
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-NET SCORE: Benefit - Cost - (Risk÷10) = +4.1
-CONFIDENCE: MEDIUM
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-```
-
-### Making the Answer Obvious
-
-The comparison summary must make the winner clear:
-
-```
-COMPARISON SUMMARY
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-Option A: HubSpot Free         NET: +4.1  ◀━━ RECOMMENDED
-Option B: Salesforce           NET: +1.2
-Option C: Custom Build         NET: -2.3
-
-WHY OPTION A WINS:
-✓ Lowest time-to-value (2 weeks vs 8 weeks)
-✓ Free tier covers current needs
-✓ Team already familiar with interface
-
-WHAT YOU'RE TRADING OFF:
-△ Less customization than Option C
-△ May outgrow free tier in 12-18 months
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-```
-
-### Connect vs Replace Strategy
-
-When recommending automation, always present both paths:
-
-| Strategy | When to Recommend | Example |
-|----------|-------------------|---------|
-| **Connect** (Integrate) | Current tools are good, just need automation | Keep Dentrix, add n8n for reminders |
-| **Replace** (Migrate) | Current tools are fundamentally broken | Move from spreadsheets to HubSpot |
-
-**Decision Factors:**
-- Current tool quality → Good = Connect, Broken = Replace
-- Team size → Large = Connect (change risk), Small = Replace (can adapt)
-- Data complexity → High = Connect (migration risk), Low = Replace
-- Budget → Limited = Connect, Available = Replace
-
----
-
-## Report Quality Standards
-
-### Anti-Slop Rules
-
-The report is worthless if it sounds like generic AI output.
-
-❌ **NEVER use these phrases:**
-| Banned Phrase | Replace With |
-|---------------|--------------|
-| "Streamline operations" | "Reduce invoice processing from 4 hours to 30 minutes" |
-| "Enhance efficiency" | "Save €2,400/month on manual data entry" |
-| "Leverage AI capabilities" | "Use Claude to draft client emails (€15/month)" |
-| "Transform your business" | "Free up 10 hours/week for billable work" |
-| "Unlock potential" | "Increase capacity from 40 to 55 clients/month" |
-| "Optimize workflows" | "Cut appointment scheduling from 15 to 2 minutes" |
-| "Drive growth" | "Add €4,200/month revenue with automated follow-ups" |
-
-### Specificity Requirements
-
-Every claim needs backing:
-- **ROI figures**: Source + calculation + confidence level
-- **Vendor recommendations**: Pricing verified within 90 days
-- **Benchmarks**: Source URL + date + industry specificity
-- **Time estimates**: Based on similar implementations, not guesses
-- **Ranges over false precision**: "€1,200-€1,800/month" not "€1,547/month"
-
-### Teaser vs Full Report
-
-| Element | Teaser (Free) | Full Report (€147+) |
-|---------|---------------|---------------------|
-| AI Readiness Score | ✅ Full | ✅ Full |
-| Top 3 Opportunities | Headlines only | Full CRB analysis |
-| Vendor Recommendations | "We found 5 tools" | Names + pricing + comparison |
-| Implementation Roadmap | ❌ | ✅ with timeline |
-| Quick Wins | Count only | Detailed steps |
-| ROI Calculations | Total only | Per-finding breakdown |
-
----
-
-## Quality Assurance
-
-### Before Shipping Report Changes
-
-```bash
-# Run these checks before any report generation PR
-- [ ] Generate reports for 3 different industries
-- [ ] Search output for banned phrases (grep -i "streamline\|leverage\|enhance")
-- [ ] Verify all ROI figures have confidence levels
-- [ ] Check vendor pricing is < 90 days old
-- [ ] Confirm benchmarks have sources
-```
-
-### Report Review Checklist
-
-- [ ] Would a dentist/plumber/lawyer understand this without jargon?
-- [ ] Are recommendations actionable THIS WEEK?
-- [ ] Does every number have a source or confidence level?
-- [ ] Is the €147 price clearly justified by the value shown?
-- [ ] Does the best option emerge obviously from the analysis?
-
-### Common Quality Issues
-
-| Issue | How to Detect | How to Fix |
-|-------|---------------|------------|
-| Generic findings | Search for "improve", "enhance", "optimize" | Replace with specific metrics |
-| Unverified benchmarks | `verified_date` missing or > 6 months | Update from source or mark UNVERIFIED |
-| Stale vendor pricing | `verified_at` > 90 days | Run vendor refresh |
-| Missing confidence | ROI without HIGH/MED/LOW | Add confidence scoring |
-| Unclear winner | All options look equal | Sharpen the scoring, highlight trade-offs |
+When working on report generation, load `.claude/reference/report-quality.md`.
 
 ---
 
@@ -338,45 +226,23 @@ test: add integration tests for payment flow
 
 ## Testing
 
-### Framework
-- Backend: `pytest` + `pytest-asyncio`
-- Frontend: `vitest` + `@testing-library/react`
-
-### Structure
-```
-backend/tests/
-├── conftest.py         # Shared fixtures
-├── test_*.py           # Test files (flat structure)
-└── skills/             # Skill-specific tests
-
-frontend/src/
-└── __tests__/          # Co-located with components
-```
+> **Full patterns** → `.claude/reference/testing.md`
 
 ### Running Tests
 ```bash
 # Backend
 cd backend && pytest
 cd backend && pytest -v tests/test_report_service.py  # Single file
-cd backend && pytest -k "test_calculate"              # By name pattern
 
 # Frontend
 cd frontend && npm test
 ```
 
-### Patterns
-```python
-# Unit test - fast, isolated
-def test_calculate_roi_with_high_confidence():
-    result = calculate_roi(base=10000, confidence="HIGH")
-    assert result == 10000  # 1.0 factor
-
-# Integration test - with mocks
-async def test_get_vendor_caches_result(mock_supabase, mock_redis):
-    service = VendorService(mock_supabase, mock_redis)
-    await service.get_vendor("123")
-    mock_redis.setex.assert_called_once()
-```
+### Critical Paths (80%+ coverage required)
+- Authentication flow
+- Payment processing
+- Report generation
+- Quiz session management
 
 ---
 
@@ -470,27 +336,12 @@ async def test_get_vendor_caches_result(mock_supabase, mock_redis):
 
 ## API Patterns
 
-```python
-# Auth dependency
-@router.get("/audits")
-async def list_audits(
-    current_user: CurrentUser = Depends(get_current_user),
-    supabase: AsyncClient = Depends(get_async_supabase)
-):
-    # current_user.workspace_id for multi-tenant isolation
-    ...
+> **Full patterns** → `.claude/reference/api-development.md`
 
+```python
 # Response format
 {"data": {...}, "message": "optional"}
 {"error": {"code": "...", "message": "...", "status": 400}}
-
-# SSE Streaming
-@router.get("/audits/{id}/progress")
-async def stream_progress(id: str):
-    async def generate():
-        async for update in agent.run_analysis(id):
-            yield f"data: {json.dumps(update)}\n\n"
-    return StreamingResponse(generate(), media_type="text/event-stream")
 ```
 
 ---
@@ -759,166 +610,16 @@ python -m backend.src.services.vendor_refresh_service
 
 ## Vendor Database Management
 
-The vendor knowledge base is stored in Supabase. Claude Code can directly manage vendors.
+> **Full details** → `.claude/reference/vendor-management.md`
 
-### Adding a New Vendor
+Quick commands:
+- "Add vendor: [url]" - Research and add new vendor
+- "Refresh vendor: [slug]" - Re-fetch pricing and update
+- "List stale vendors" - Show vendors not verified in 90+ days
 
-1. Fetch the vendor's website and pricing page using WebFetch
-2. Extract: name, pricing tiers, features, integrations, company sizes
-3. Determine category from: `crm`, `customer_support`, `ai_sales_tools`, `automation`, `analytics`, `ecommerce`, `finance`, `hr_payroll`, `marketing`, `project_management`, `ai_assistants`, `ai_agents`, `ai_content_creation`, `dev_tools`
-4. Insert into Supabase `vendors` table
-5. Log action in `vendor_audit_log`
+CLI: `python -m backend.src.agents.research.cli [discover|refresh] --help`
 
-### Vendor Schema (Required Fields)
-
-| Field | Type | Description |
-|-------|------|-------------|
-| slug | TEXT | Unique lowercase-hyphenated identifier |
-| name | TEXT | Display name |
-| category | TEXT | One of the categories above |
-| website | TEXT | Full URL |
-| description | TEXT | 1-2 sentences |
-| pricing | JSONB | `{model, tiers[], starting_price, free_tier}` |
-
-### Quick Commands
-
-| Command | Action |
-|---------|--------|
-| "Add vendor: [url]" | Research and add new vendor |
-| "Refresh vendor: [slug]" | Re-fetch pricing and update |
-| "Set [slug] as tier 1 for [industry]" | Add to industry tier list |
-| "Mark [slug] as deprecated" | Soft delete vendor |
-| "List stale vendors" | Show vendors not verified in 90+ days |
-
-### Supabase Access Pattern
-
-```python
-from src.config.supabase_client import get_async_supabase
-
-supabase = await get_async_supabase()
-
-# Insert vendor
-await supabase.table("vendors").insert({
-    "slug": "vendor-name",
-    "name": "Vendor Name",
-    "category": "crm",
-    "website": "https://vendor.com",
-    "description": "What the vendor does",
-    "pricing": {"model": "subscription", "starting_price": 49, "free_tier": True},
-    "status": "active",
-}).execute()
-
-# Update vendor
-await supabase.table("vendors").update({
-    "pricing": {...},
-    "verified_at": datetime.utcnow().isoformat(),
-    "verified_by": "claude-code",
-}).eq("slug", "vendor-slug").execute()
-
-# Log audit entry
-await supabase.table("vendor_audit_log").insert({
-    "vendor_slug": "vendor-slug",
-    "action": "create",
-    "changed_by": "claude-code",
-    "changes": {"field": {"old": None, "new": "value"}},
-}).execute()
-
-# Set industry tier
-await supabase.table("industry_vendor_tiers").upsert({
-    "industry": "dental",
-    "vendor_id": vendor_id,
-    "tier": 1,
-    "boost_score": 0,
-}).execute()
-```
-
-### Admin UI
-
-Access: `http://localhost:5174/admin/vendors` (requires login)
-
-Features:
-- View/search/filter vendors
-- Edit vendor details
-- Manage industry tiers (T1/T2/T3)
-- View audit log
-- Mark vendors as verified
-
-### CLI Helper
-
-```bash
-# Run vendor CLI
-python -m backend.src.scripts.vendor_cli add "https://vendor.com"
-python -m backend.src.scripts.vendor_cli refresh "vendor-slug"
-python -m backend.src.scripts.vendor_cli list-stale
-```
-
----
-
-## Research Agent System
-
-Automated vendor discovery and data refresh to keep the knowledge base current.
-
-### Architecture
-
-```
-backend/src/agents/research/
-├── __init__.py
-├── cli.py              # Command-line interface
-├── discover.py         # Find new vendors for an industry
-├── refresh.py          # Update existing vendor data
-├── schemas.py          # Pydantic models for research data
-└── sources/
-    ├── __init__.py
-    ├── vendor_site.py  # Scrape vendor websites
-    └── web_search.py   # Search for vendor info
-```
-
-### Usage
-
-```bash
-# Discover vendors for an industry
-python -m backend.src.agents.research.cli discover --industry dental
-
-# Refresh stale vendors (not verified in X days)
-python -m backend.src.agents.research.cli refresh --stale-days 90
-
-# Refresh a specific vendor
-python -m backend.src.agents.research.cli refresh --vendor hubspot
-```
-
-### Adding New Industries
-
-1. Run discovery: `python -m backend.src.agents.research.cli discover --industry {slug}`
-2. Review output in `vendor_audit_output.json`
-3. Approve/reject in admin UI (`/admin/vendors`)
-4. Set tier rankings (T1/T2/T3) for approved vendors
-5. Verify pricing manually for T1 vendors
-
-### Data Flow
-
-```
-Discovery Agent
-    ↓
-Searches web for "{industry} software tools"
-    ↓
-Extracts vendor info (name, website, pricing, features)
-    ↓
-Validates against existing vendors (dedup)
-    ↓
-Creates pending entries in Supabase
-    ↓
-Admin reviews and approves
-    ↓
-Vendor available in recommendations
-```
-
-### Refresh Cadence
-
-| Vendor Tier | Refresh Frequency | Manual Verification |
-|-------------|-------------------|---------------------|
-| T1 (primary) | Weekly | Monthly |
-| T2 (secondary) | Bi-weekly | Quarterly |
-| T3 (alternatives) | Monthly | As needed |
+Admin UI: `http://localhost:5174/admin/vendors`
 
 ---
 
@@ -961,6 +662,24 @@ supabase db push --linked
 - Never delete columns in production without deprecation period
 - Test migration on local DB first
 - Backup before applying to production
+
+---
+
+## System Evolution
+
+> "Don't just fix the bug - fix the system that allowed the bug."
+
+After fixing any bug or issue, run `/evolve` to analyze what could prevent it:
+
+| Layer | What to Improve |
+|-------|-----------------|
+| Rules | Add constraint to CLAUDE.md or reference files |
+| Commands | Add validation step to plan-feature or execute |
+| Reference | Document the pattern in task-specific docs |
+
+**Evolution log:** `docs/evolution-log.md` tracks all system improvements.
+
+**Habit:** Every bug is an opportunity to make the AI coding system stronger.
 
 ---
 

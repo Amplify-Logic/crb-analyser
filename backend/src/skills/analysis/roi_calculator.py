@@ -218,12 +218,15 @@ class ROICalculatorSkill(LLMSkill[Dict[str, Any]]):
             DEFAULT_ASSUMPTIONS["hourly_rate"]["value"]
         )
 
-        team_size = (
+        team_size_raw = (
             answers.get("team_size") or
             answers.get("employee_count") or
             company_context.get("team_size") or
             5  # Default for SMB
         )
+
+        # Parse team_size - handle range strings like "11-25" or "11-50"
+        team_size = self._parse_team_size(team_size_raw)
 
         # Determine if values came from actual data or assumptions
         hourly_rate_source = "quiz_data" if answers.get("hourly_rate") else "assumption"
@@ -232,12 +235,45 @@ class ROICalculatorSkill(LLMSkill[Dict[str, Any]]):
         return {
             "hourly_rate": float(hourly_rate),
             "hourly_rate_source": hourly_rate_source,
-            "team_size": int(team_size),
+            "team_size": team_size,
             "team_size_source": team_size_source,
             "work_weeks": DEFAULT_ASSUMPTIONS["work_weeks_per_year"]["value"],
             "automation_efficiency": DEFAULT_ASSUMPTIONS["automation_efficiency"]["value"],
             "adoption_rate": DEFAULT_ASSUMPTIONS["adoption_rate"]["value"],
         }
+
+    def _parse_team_size(self, value: Any) -> int:
+        """Parse team size from various formats (int, string, range string).
+
+        Handles formats like:
+        - 25 (int)
+        - "25" (string)
+        - "11-25" (range string - uses midpoint)
+        - "11-50" (range string - uses midpoint)
+        """
+        if isinstance(value, int):
+            return value
+
+        if isinstance(value, str):
+            # Check for range format like "11-25" or "11-50"
+            if "-" in value:
+                try:
+                    parts = value.split("-")
+                    if len(parts) == 2:
+                        low = int(parts[0].strip())
+                        high = int(parts[1].strip())
+                        return (low + high) // 2  # Use midpoint
+                except (ValueError, IndexError):
+                    pass
+
+            # Try direct int conversion
+            try:
+                return int(value)
+            except ValueError:
+                pass
+
+        # Default fallback
+        return 5
 
     async def _estimate_time_savings(
         self,

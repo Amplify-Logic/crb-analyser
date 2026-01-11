@@ -26,6 +26,7 @@ import logging
 from typing import Dict, Any, List, Optional
 
 from src.skills.base import LLMSkill, SkillContext, SkillError
+from src.utils.prompt_safety import sanitize_user_input
 
 logger = logging.getLogger(__name__)
 
@@ -222,17 +223,20 @@ Common pain points in {industry}:
 PRIORITY: If the user mentions anything related to these pain points, probe deeper!
 """
 
-        # Build conversation context
+        # Build conversation context with sanitized user messages
         recent_messages = previous_messages[-6:] if previous_messages else []
         conversation_context = "\n".join([
-            f"{msg.get('role', 'user').upper()}: {msg.get('content', '')}"
+            f"{msg.get('role', 'user').upper()}: {sanitize_user_input(msg.get('content', '')) if msg.get('role') == 'user' else msg.get('content', '')}"
             for msg in recent_messages
         ])
+
+        # Sanitize user message to prevent prompt injection
+        safe_user_message = sanitize_user_input(user_message)
 
         prompt = f"""Generate an adaptive follow-up question for this CRB interview.
 
 USER'S LAST MESSAGE:
-"{user_message}"
+"{safe_user_message}"
 
 RECENT CONVERSATION:
 {conversation_context if conversation_context else "This is the first exchange."}

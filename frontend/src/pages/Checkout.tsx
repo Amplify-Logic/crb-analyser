@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import { Link, useSearchParams, useNavigate } from 'react-router-dom'
 import apiClient from '../services/apiClient'
+import { Logo } from '../components/Logo'
 
 interface QuizResults {
   score: number
@@ -56,10 +57,8 @@ export default function Checkout() {
   const [quizResults, setQuizResults] = useState<QuizResults | null>(null)
 
   useEffect(() => {
-    // DEV BYPASS: Skip payment in development
-    const devBypass = searchParams.get('dev') === 'bypass'
-    if (devBypass) {
-      console.log('🔓 Dev bypass: Skipping payment, redirecting to workshop')
+    // DEV BYPASS: Skip payment in development mode only
+    if (import.meta.env.DEV && searchParams.get('dev') === 'bypass') {
       // Get session ID from storage
       const sessionId = sessionStorage.getItem('quizSessionId')
       navigate(`/interview${sessionId ? `?session_id=${sessionId}` : ''}`)
@@ -127,9 +126,7 @@ export default function Checkout() {
       {/* Navigation */}
       <nav className="fixed top-0 left-0 right-0 z-50 bg-white/80 backdrop-blur-md border-b border-gray-100">
         <div className="max-w-6xl mx-auto px-4 py-4 flex justify-between items-center">
-          <Link to="/" className="text-xl font-bold text-gray-900">
-            Ready<span className="text-primary-600">Path</span>
-          </Link>
+          <Logo size="sm" showIcon={false} />
           <div className="flex items-center gap-2 text-sm text-gray-500">
             <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />

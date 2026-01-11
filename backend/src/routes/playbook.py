@@ -125,6 +125,10 @@ async def get_playbook_progress(report_id: str):
 
     Returns completed tasks grouped by playbook.
     """
+    # Handle sample report - return empty progress (demo mode)
+    if report_id == "sample":
+        return []
+
     supabase = await get_async_supabase()
 
     try:

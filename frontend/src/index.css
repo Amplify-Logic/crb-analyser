@@ -7,6 +7,7 @@ body {
   font-family: 'Inter', system-ui, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  @apply bg-white text-gray-900;
 }
 
 /* Custom utilities */
@@ -14,34 +15,41 @@ body {
   .text-balance {
     text-wrap: balance;
   }
+  
+  .glass-panel {
+    @apply bg-white/70 backdrop-blur-md border border-white/20 shadow-glass;
+  }
 }
 
 /* Custom component styles */
 @layer components {
   .btn-primary {
-    @apply px-6 py-3 bg-primary-600 text-white font-semibold rounded-xl
-           hover:bg-primary-700 transition-colors focus:outline-none
-           focus:ring-2 focus:ring-primary-500 focus:ring-offset-2;
+    @apply relative px-6 py-3 bg-primary-600 text-white font-semibold rounded-xl
+           hover:bg-primary-700 hover:shadow-glow-primary hover:-translate-y-0.5
+           active:translate-y-0 transition-all duration-200
+           focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2;
   }
 
   .btn-secondary {
-    @apply px-6 py-3 border-2 border-primary-600 text-primary-600
-           font-semibold rounded-xl hover:bg-primary-50 transition-colors
+    @apply px-6 py-3 border-2 border-primary-200 text-primary-700 bg-white
+           font-semibold rounded-xl hover:bg-primary-50 hover:border-primary-300
+           hover:-translate-y-0.5 active:translate-y-0 transition-all duration-200
            focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2;
   }
 
   .card {
-    @apply bg-white rounded-2xl shadow-sm border border-gray-100 p-6;
+    @apply bg-white rounded-2xl shadow-card-premium border border-gray-100 p-6
+           hover:shadow-card-premium-hover transition-all duration-300;
   }
 
   .input {
-    @apply w-full px-4 py-3 border border-gray-300 rounded-xl
-           focus:outline-none focus:ring-2 focus:ring-primary-500
-           focus:border-transparent transition-colors;
+    @apply w-full px-4 py-3 border border-gray-200 rounded-xl bg-gray-50/50
+           focus:bg-white focus:outline-none focus:ring-2 focus:ring-primary-500/20
+           focus:border-primary-500 transition-all duration-200;
   }
 
   .label {
-    @apply block text-sm font-medium text-gray-700 mb-2;
+    @apply block text-sm font-medium text-gray-700 mb-2 ml-1;
   }
 }
 

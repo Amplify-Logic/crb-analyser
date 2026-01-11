@@ -1,8 +1,13 @@
 """
 Web search for vendor discovery using Brave Search or Tavily.
+
+Improvements:
+- Better error handling with specific error types
+- Retry logic for transient failures
+- Clearer logging and diagnostics
 """
 
-import json
+import asyncio
 from typing import Optional
 
 import httpx
@@ -13,6 +18,43 @@ from src.config.settings import settings
 logger = structlog.get_logger()
 
 
+# =============================================================================
+# Configuration
+# =============================================================================
+
+class SearchConfig:
+    """Search configuration constants."""
+    REQUEST_TIMEOUT = 15.0
+    MAX_RETRIES = 2
+    RETRY_DELAY = 1.0
+
+
+# =============================================================================
+# Error Types
+# =============================================================================
+
+class SearchError(Exception):
+    """Base class for search errors."""
+    pass
+
+
+class NoSearchAPIError(SearchError):
+    """No search API configured."""
+    pass
+
+
+class SearchAPIError(SearchError):
+    """Search API returned an error."""
+    def __init__(self, message: str, provider: str, status_code: Optional[int] = None):
+        super().__init__(message)
+        self.provider = provider
+        self.status_code = status_code
+
+
+# =============================================================================
+# Main Search Function
+# =============================================================================
+
 async def search_vendors(
     category: str,
     industry: Optional[str] = None,
@@ -21,28 +63,59 @@ async def search_vendors(
     """
     Search for vendors in a category/industry.
 
+    Uses Brave Search (primary) or Tavily (fallback).
+
     Returns list of search results with:
     - title: str
     - url: str
     - description: str
     - source: str (brave or tavily)
+
+    Raises:
+        NoSearchAPIError: If no search API is configured
     """
+    # Check if any search API is available
+    if not settings.BRAVE_SEARCH_API_KEY and not settings.TAVILY_API_KEY:
+        logger.error("no_search_api_configured")
+        raise NoSearchAPIError(
+            "No search API configured. Set BRAVE_SEARCH_API_KEY or TAVILY_API_KEY."
+        )
+
     # Build search queries
     queries = _build_search_queries(category, industry)
 
     all_results = []
+    errors = []
 
     for query in queries:
-        # Try Brave first, then Tavily
+        results = None
+
+        # Try Brave first
         if settings.BRAVE_SEARCH_API_KEY:
-            results = await _search_brave(query, limit=limit // len(queries))
+            try:
+                results = await _search_brave_with_retry(query, limit=limit // len(queries))
+            except SearchAPIError as e:
+                errors.append(f"Brave: {e}")
+                logger.warning("brave_search_error", query=query, error=str(e))
+
+        # Try Tavily as fallback
+        if results is None and settings.TAVILY_API_KEY:
+            try:
+                results = await _search_tavily_with_retry(query, limit=limit // len(queries))
+            except SearchAPIError as e:
+                errors.append(f"Tavily: {e}")
+                logger.warning("tavily_search_error", query=query, error=str(e))
+
+        if results:
             all_results.extend(results)
-        elif settings.TAVILY_API_KEY:
-            results = await _search_tavily(query, limit=limit // len(queries))
-            all_results.extend(results)
-        else:
-            logger.warning("no_search_api_configured")
-            break
+
+    # Log if we had errors but still got some results
+    if errors and all_results:
+        logger.info("search_completed_with_errors", result_count=len(all_results), errors=errors)
+
+    # If no results and we had errors, log them
+    if not all_results and errors:
+        logger.error("all_searches_failed", errors=errors)
 
     # Deduplicate by URL
     seen_urls = set()
@@ -86,10 +159,32 @@ def _build_search_queries(category: str, industry: Optional[str] = None) -> list
     return queries
 
 
+# =============================================================================
+# Brave Search
+# =============================================================================
+
+async def _search_brave_with_retry(query: str, limit: int = 10) -> list[dict]:
+    """Search using Brave Search API with retry."""
+    last_error = None
+
+    for attempt in range(SearchConfig.MAX_RETRIES):
+        try:
+            return await _search_brave(query, limit)
+        except SearchAPIError as e:
+            last_error = e
+            if e.status_code and e.status_code < 500:
+                # Client error, don't retry
+                raise
+            if attempt < SearchConfig.MAX_RETRIES - 1:
+                await asyncio.sleep(SearchConfig.RETRY_DELAY * (attempt + 1))
+
+    raise last_error or SearchAPIError("Unknown error", "brave")
+
+
 async def _search_brave(query: str, limit: int = 10) -> list[dict]:
     """Search using Brave Search API."""
     if not settings.BRAVE_SEARCH_API_KEY:
-        return []
+        raise SearchAPIError("Brave API key not configured", "brave")
 
     logger.info("brave_search", query=query)
 
@@ -106,9 +201,19 @@ async def _search_brave(query: str, limit: int = 10) -> list[dict]:
                     "count": limit,
                     "text_decorations": False,
                 },
-                timeout=10.0,
+                timeout=SearchConfig.REQUEST_TIMEOUT,
             )
-            response.raise_for_status()
+
+            if response.status_code == 429:
+                raise SearchAPIError("Rate limited", "brave", 429)
+
+            if response.status_code != 200:
+                raise SearchAPIError(
+                    f"HTTP {response.status_code}: {response.text[:200]}",
+                    "brave",
+                    response.status_code,
+                )
+
             data = response.json()
 
             results = []
@@ -123,15 +228,38 @@ async def _search_brave(query: str, limit: int = 10) -> list[dict]:
             logger.info("brave_search_results", query=query, count=len(results))
             return results
 
-    except Exception as e:
-        logger.exception("brave_search_failed", query=query, error=str(e))
-        return []
+    except httpx.TimeoutException:
+        raise SearchAPIError("Request timed out", "brave")
+    except httpx.RequestError as e:
+        raise SearchAPIError(f"Request failed: {e}", "brave")
+
+
+# =============================================================================
+# Tavily Search
+# =============================================================================
+
+async def _search_tavily_with_retry(query: str, limit: int = 10) -> list[dict]:
+    """Search using Tavily API with retry."""
+    last_error = None
+
+    for attempt in range(SearchConfig.MAX_RETRIES):
+        try:
+            return await _search_tavily(query, limit)
+        except SearchAPIError as e:
+            last_error = e
+            if e.status_code and e.status_code < 500:
+                # Client error, don't retry
+                raise
+            if attempt < SearchConfig.MAX_RETRIES - 1:
+                await asyncio.sleep(SearchConfig.RETRY_DELAY * (attempt + 1))
+
+    raise last_error or SearchAPIError("Unknown error", "tavily")
 
 
 async def _search_tavily(query: str, limit: int = 10) -> list[dict]:
     """Search using Tavily API."""
     if not settings.TAVILY_API_KEY:
-        return []
+        raise SearchAPIError("Tavily API key not configured", "tavily")
 
     logger.info("tavily_search", query=query)
 
@@ -146,9 +274,19 @@ async def _search_tavily(query: str, limit: int = 10) -> list[dict]:
                     "include_domains": [],
                     "exclude_domains": [],
                 },
-                timeout=15.0,
+                timeout=SearchConfig.REQUEST_TIMEOUT,
             )
-            response.raise_for_status()
+
+            if response.status_code == 429:
+                raise SearchAPIError("Rate limited", "tavily", 429)
+
+            if response.status_code != 200:
+                raise SearchAPIError(
+                    f"HTTP {response.status_code}: {response.text[:200]}",
+                    "tavily",
+                    response.status_code,
+                )
+
             data = response.json()
 
             results = []
@@ -163,10 +301,15 @@ async def _search_tavily(query: str, limit: int = 10) -> list[dict]:
             logger.info("tavily_search_results", query=query, count=len(results))
             return results
 
-    except Exception as e:
-        logger.exception("tavily_search_failed", query=query, error=str(e))
-        return []
+    except httpx.TimeoutException:
+        raise SearchAPIError("Request timed out", "tavily")
+    except httpx.RequestError as e:
+        raise SearchAPIError(f"Request failed: {e}", "tavily")
 
+
+# =============================================================================
+# Utilities
+# =============================================================================
 
 def extract_vendor_from_url(url: str) -> Optional[str]:
     """Extract vendor name/slug from a URL."""

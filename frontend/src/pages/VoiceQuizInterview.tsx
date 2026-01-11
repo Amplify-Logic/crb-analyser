@@ -16,6 +16,7 @@ import AudioUploader from '../components/voice/AudioUploader'
 import { formatCompanyName } from '../lib/formatCompanyName'
 import { SpotlightCard, ShimmerButton } from '../components/magicui'
 import { Logo } from '../components/Logo'
+import { sanitizeHtml } from '../utils/sanitize'
 import {
   processAnswer,
   getFirstQuestion,
@@ -746,7 +747,7 @@ export default function VoiceQuizInterview() {
                   <div
                     className="whitespace-pre-wrap"
                     dangerouslySetInnerHTML={{
-                      __html: message.content.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+                      __html: sanitizeHtml(message.content.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>'))
                     }}
                   />
                 </div>

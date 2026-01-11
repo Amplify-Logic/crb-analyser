@@ -7,6 +7,7 @@ import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { useAuth } from '../contexts/AuthContext'
 import apiClient from '../services/apiClient'
+import { Logo } from '../components/Logo'
 
 interface Audit {
   id: string
@@ -91,9 +92,7 @@ export default function Dashboard() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
             <div className="flex items-center">
-              <Link to="/dashboard" className="text-xl font-bold text-primary-600">
-                Ready Path
-              </Link>
+              <Logo size="sm" showIcon={false} />
             </div>
             <div className="flex items-center gap-4">
               <span className="text-sm text-gray-600">

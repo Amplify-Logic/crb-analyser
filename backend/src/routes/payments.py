@@ -66,89 +66,135 @@ async def create_user_from_quiz_session(
     """
     Create user account from quiz session after payment.
 
+    Uses manual rollback to clean up partial records on failure.
+
     Returns: {user_id, workspace_id, audit_id, password}
     """
     email = session["email"]
     company_name = session.get("company_name", "My Company")
 
-    # Generate random password
-    password = ''.join(secrets.choice(string.ascii_letters + string.digits) for _ in range(16))
+    # Track created resources for cleanup on failure
+    created_user_id: Optional[str] = None
+    created_workspace_id: Optional[str] = None
+    created_client_id: Optional[str] = None
+    created_audit_id: Optional[str] = None
 
-    # Create user in Supabase Auth
-    auth_response = await supabase.auth.admin.create_user({
-        "email": email,
-        "password": password,
-        "email_confirm": True,  # Auto-confirm since they paid
-        "user_metadata": {
+    async def cleanup_on_failure():
+        """Clean up partially created resources."""
+        try:
+            if created_audit_id:
+                await supabase.table("interview_responses").delete().eq(
+                    "audit_id", created_audit_id
+                ).execute()
+                await supabase.table("audits").delete().eq(
+                    "id", created_audit_id
+                ).execute()
+            if created_client_id:
+                await supabase.table("clients").delete().eq(
+                    "id", created_client_id
+                ).execute()
+            if created_user_id:
+                await supabase.table("users").delete().eq(
+                    "id", created_user_id
+                ).execute()
+            if created_workspace_id:
+                await supabase.table("workspaces").delete().eq(
+                    "id", created_workspace_id
+                ).execute()
+            if created_user_id:
+                try:
+                    await supabase.auth.admin.delete_user(created_user_id)
+                except Exception:
+                    pass  # Auth deletion may fail, that's ok
+            logger.warning(f"Cleaned up partial account creation for {email}")
+        except Exception as cleanup_err:
+            logger.error(f"Cleanup failed for {email}: {cleanup_err}")
+
+    try:
+        # Generate random password
+        password = ''.join(secrets.choice(string.ascii_letters + string.digits) for _ in range(16))
+
+        # Create user in Supabase Auth
+        auth_response = await supabase.auth.admin.create_user({
+            "email": email,
+            "password": password,
+            "email_confirm": True,  # Auto-confirm since they paid
+            "user_metadata": {
+                "full_name": company_name,
+                "source": "quiz_payment"
+            }
+        })
+
+        if not auth_response.user:
+            raise Exception("Failed to create user account")
+
+        user = auth_response.user
+        created_user_id = user.id
+
+        # Create workspace
+        workspace_result = await supabase.table("workspaces").insert({
+            "name": f"{company_name} Workspace",
+        }).execute()
+
+        created_workspace_id = workspace_result.data[0]["id"]
+
+        # Link user to workspace
+        await supabase.table("users").insert({
+            "id": user.id,
+            "email": email,
             "full_name": company_name,
-            "source": "quiz_payment"
+            "workspace_id": created_workspace_id,
+            "role": "admin",
+        }).execute()
+
+        # Create client
+        industry = session.get("company_profile", {}).get("industry", {}).get("primary_industry", {}).get("value", "general")
+        client_result = await supabase.table("clients").insert({
+            "workspace_id": created_workspace_id,
+            "name": company_name,
+            "industry": industry,
+            "website": session.get("company_website"),
+        }).execute()
+
+        created_client_id = client_result.data[0]["id"]
+
+        # Determine if strategy call is included
+        strategy_call_included = tier_purchased in ["report_plus_call", "human", "full"]
+
+        # Create audit
+        audit_result = await supabase.table("audits").insert({
+            "workspace_id": created_workspace_id,
+            "client_id": created_client_id,
+            "title": f"{company_name} - CRB Audit",
+            "tier": tier_purchased,
+            "status": "pending",
+            "workshop_status": "pending",
+            "strategy_call_included": strategy_call_included,
+        }).execute()
+
+        created_audit_id = audit_result.data[0]["id"]
+
+        # Create interview_responses record
+        await supabase.table("interview_responses").insert({
+            "audit_id": created_audit_id,
+            "user_id": user.id,
+            "status": "not_started",
+        }).execute()
+
+        logger.info(f"Created account for {email}: user={user.id}, workspace={created_workspace_id}, audit={created_audit_id}")
+
+        return {
+            "user_id": user.id,
+            "workspace_id": created_workspace_id,
+            "client_id": created_client_id,
+            "audit_id": created_audit_id,
+            "password": password,
         }
-    })
 
-    if not auth_response.user:
-        raise Exception("Failed to create user account")
-
-    user = auth_response.user
-
-    # Create workspace
-    workspace_result = await supabase.table("workspaces").insert({
-        "name": f"{company_name} Workspace",
-    }).execute()
-
-    workspace_id = workspace_result.data[0]["id"]
-
-    # Link user to workspace
-    await supabase.table("users").insert({
-        "id": user.id,
-        "email": email,
-        "full_name": company_name,
-        "workspace_id": workspace_id,
-        "role": "admin",
-    }).execute()
-
-    # Create client
-    industry = session.get("company_profile", {}).get("industry", {}).get("primary_industry", {}).get("value", "general")
-    client_result = await supabase.table("clients").insert({
-        "workspace_id": workspace_id,
-        "name": company_name,
-        "industry": industry,
-        "website": session.get("company_website"),
-    }).execute()
-
-    client_id = client_result.data[0]["id"]
-
-    # Determine if strategy call is included
-    strategy_call_included = tier_purchased in ["report_plus_call", "human", "full"]
-
-    # Create audit
-    audit_result = await supabase.table("audits").insert({
-        "workspace_id": workspace_id,
-        "client_id": client_id,
-        "title": f"{company_name} - CRB Audit",
-        "tier": tier_purchased,
-        "status": "pending",
-        "workshop_status": "pending",
-        "strategy_call_included": strategy_call_included,
-    }).execute()
-
-    audit_id = audit_result.data[0]["id"]
-
-    # Create interview_responses record
-    await supabase.table("interview_responses").insert({
-        "audit_id": audit_id,
-        "user_id": user.id,
-        "status": "not_started",
-    }).execute()
-
-    logger.info(f"Created account for {email}: user={user.id}, workspace={workspace_id}, audit={audit_id}")
-
-    return {
-        "user_id": user.id,
-        "workspace_id": workspace_id,
-        "client_id": client_id,
-        "audit_id": audit_id,
-        "password": password,
-    }
+    except Exception as e:
+        logger.error(f"Account creation failed for {email}: {e}")
+        await cleanup_on_failure()
+        raise
 
 
 @router.post("/create-checkout", response_model=CheckoutResponse)
@@ -372,10 +418,12 @@ async def create_guest_checkout(request: GuestCheckoutRequest):
 @router.post("/webhook")
 async def stripe_webhook(
     request: Request,
+    background_tasks: BackgroundTasks,
     stripe_signature: str = Header(None, alias="stripe-signature"),
 ):
     """
     Handle Stripe webhooks.
+    Returns quickly and processes report generation in background.
     """
     try:
         payload = await request.body()
@@ -394,7 +442,7 @@ async def stripe_webhook(
 
         # Handle specific events
         if event["type"] == "checkout.session.completed":
-            await handle_checkout_completed(event["data"]["object"])
+            await handle_checkout_completed(event["data"]["object"], background_tasks)
         elif event["type"] == "checkout.session.expired":
             await handle_checkout_expired(event["data"]["object"])
         elif event["type"] == "charge.refunded":
@@ -416,14 +464,14 @@ async def stripe_webhook(
         )
 
 
-async def handle_checkout_completed(session: dict):
+async def handle_checkout_completed(session: dict, background_tasks: BackgroundTasks):
     """Handle successful checkout with idempotency."""
     supabase = await get_async_supabase()
     metadata = session.get("metadata", {})
 
     # Check if this is a guest checkout
     if metadata.get("type") == "guest_checkout":
-        await handle_guest_checkout_completed(session)
+        await handle_guest_checkout_completed(session, background_tasks)
         return
 
     # Handle regular audit checkout
@@ -466,7 +514,56 @@ async def handle_checkout_completed(session: dict):
         logger.error(f"Handle checkout error: {e}")
 
 
-async def handle_guest_checkout_completed(session: dict):
+async def _generate_report_background(quiz_session_id: str, tier: str, email: Optional[str]):
+    """
+    Background task for report generation and notification.
+    Runs after webhook returns to avoid Stripe timeout.
+    """
+    try:
+        logger.info(f"Background: Starting report generation for quiz session {quiz_session_id}")
+        report_id = await generate_report_for_quiz(quiz_session_id, tier)
+
+        if report_id:
+            logger.info(f"Background: Report generated: {report_id}")
+
+            # Get report summary for email
+            report = await get_report(report_id)
+            if report and email:
+                executive_summary = report.get("executive_summary", {})
+
+                # Generate PDF for attachment
+                pdf_bytes = None
+                try:
+                    from src.services.pdf_generator import generate_pdf_from_report_data
+                    pdf_buffer = await generate_pdf_from_report_data(report)
+                    pdf_bytes = pdf_buffer.read()
+
+                    # Also cache PDF in storage
+                    from src.services.storage_service import upload_report_pdf
+                    await upload_report_pdf(report_id, pdf_bytes)
+                    logger.info(f"Background: PDF generated and cached for report {report_id}")
+                except Exception as pdf_err:
+                    logger.warning(f"Background: Failed to generate PDF for email: {pdf_err}")
+
+                await send_report_ready_email(
+                    to_email=email,
+                    report_id=report_id,
+                    ai_readiness_score=executive_summary.get("ai_readiness_score", 0),
+                    top_opportunities=executive_summary.get("top_opportunities", []),
+                    pdf_bytes=pdf_bytes,
+                )
+        else:
+            logger.error(f"Background: Failed to generate report for quiz session {quiz_session_id}")
+            # Send failure email
+            if email:
+                from src.services.email import send_report_failed_email
+                await send_report_failed_email(email)
+
+    except Exception as e:
+        logger.error(f"Background report generation error: {e}", exc_info=True)
+
+
+async def handle_guest_checkout_completed(session: dict, background_tasks: BackgroundTasks):
     """Handle successful guest checkout from quiz flow with idempotency and account creation."""
     supabase = await get_async_supabase()
     metadata = session.get("metadata", {})
@@ -554,45 +651,14 @@ async def handle_guest_checkout_completed(session: dict):
             if email:
                 await send_payment_confirmation_email(email, tier, amount)
 
-        # Generate report (runs async in background)
-        logger.info(f"Starting report generation for quiz session {quiz_session_id}")
-        report_id = await generate_report_for_quiz(quiz_session_id, tier)
+        # Update status to generating and schedule background report generation
+        await supabase.table("quiz_sessions").update({
+            "status": "generating",
+        }).eq("id", quiz_session_id).execute()
 
-        if report_id:
-            logger.info(f"Report generated: {report_id}")
-
-            # Get report summary for email
-            report = await get_report(report_id)
-            if report and email:
-                executive_summary = report.get("executive_summary", {})
-
-                # Generate PDF for attachment
-                pdf_bytes = None
-                try:
-                    from src.services.pdf_generator import generate_pdf_from_report_data
-                    pdf_buffer = await generate_pdf_from_report_data(report)
-                    pdf_bytes = pdf_buffer.read()
-
-                    # Also cache PDF in storage
-                    from src.services.storage_service import upload_report_pdf
-                    await upload_report_pdf(report_id, pdf_bytes)
-                    logger.info(f"PDF generated and cached for report {report_id}")
-                except Exception as pdf_err:
-                    logger.warning(f"Failed to generate PDF for email: {pdf_err}")
-
-                await send_report_ready_email(
-                    to_email=email,
-                    report_id=report_id,
-                    ai_readiness_score=executive_summary.get("ai_readiness_score", 0),
-                    top_opportunities=executive_summary.get("top_opportunities", []),
-                    pdf_bytes=pdf_bytes,
-                )
-        else:
-            logger.error(f"Failed to generate report for quiz session {quiz_session_id}")
-            # Send failure email
-            if email:
-                from src.services.email import send_report_failed_email
-                await send_report_failed_email(email)
+        # Schedule report generation in background (returns immediately to Stripe)
+        logger.info(f"Scheduling background report generation for quiz session {quiz_session_id}")
+        background_tasks.add_task(_generate_report_background, quiz_session_id, tier, email)
 
     except Exception as e:
         logger.error(f"Handle guest checkout error: {e}", exc_info=True)

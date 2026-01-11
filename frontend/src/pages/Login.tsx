@@ -10,6 +10,8 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { useAuth } from '../contexts/AuthContext';
 import { Eye, EyeOff, Mail, Lock, AlertCircle } from 'lucide-react';
+import { SpotlightCard } from '../components/magicui';
+import { Logo } from '../components/Logo';
 
 const loginSchema = z.object({
   email: z.string().email('Please enter a valid email'),
@@ -46,18 +48,23 @@ export default function Login() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-primary-900 via-primary-800 to-primary-900 flex items-center justify-center p-4">
-      <div className="w-full max-w-md">
+    <div className="min-h-screen bg-white flex items-center justify-center p-4 selection:bg-primary-100 selection:text-primary-900">
+      {/* Background elements */}
+      <div className="fixed inset-0 bg-mesh-light opacity-60 pointer-events-none" />
+      <div className="fixed top-20 right-0 w-96 h-96 bg-primary-200/30 rounded-full blur-3xl animate-float opacity-50 pointer-events-none" />
+      <div className="fixed bottom-0 left-10 w-72 h-72 bg-blue-200/30 rounded-full blur-3xl animate-float pointer-events-none" style={{ animationDelay: '1s' }} />
+
+      <div className="w-full max-w-md relative z-10">
         {/* Logo/Brand */}
         <div className="text-center mb-8">
-          <Link to="/" className="inline-block">
-            <h1 className="text-3xl font-bold text-white">Ready Path</h1>
-          </Link>
-          <p className="text-primary-200 mt-2">Sign in to your account</p>
+          <div className="inline-flex mb-4">
+            <Logo size="md" />
+          </div>
+          <p className="text-gray-600">Sign in to your account</p>
         </div>
 
         {/* Login Card */}
-        <div className="bg-white rounded-2xl shadow-xl p-8">
+        <SpotlightCard className="p-8">
           {/* Error Alert */}
           {error && (
             <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-xl flex items-start gap-3">
@@ -79,8 +86,8 @@ export default function Login() {
                   type="email"
                   id="email"
                   placeholder="you@company.com"
-                  className={`w-full pl-10 pr-4 py-3 border rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent ${
-                    errors.email ? 'border-red-300' : 'border-gray-300'
+                  className={`w-full pl-10 pr-4 py-3 border rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent bg-white transition ${
+                    errors.email ? 'border-red-300' : 'border-gray-200'
                   }`}
                 />
               </div>
@@ -97,7 +104,7 @@ export default function Login() {
                 </label>
                 <Link
                   to="/forgot-password"
-                  className="text-sm text-primary-600 hover:text-primary-700"
+                  className="text-sm text-primary-600 hover:text-primary-700 transition"
                 >
                   Forgot password?
                 </Link>
@@ -109,14 +116,14 @@ export default function Login() {
                   type={showPassword ? 'text' : 'password'}
                   id="password"
                   placeholder="Enter your password"
-                  className={`w-full pl-10 pr-12 py-3 border rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent ${
-                    errors.password ? 'border-red-300' : 'border-gray-300'
+                  className={`w-full pl-10 pr-12 py-3 border rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent bg-white transition ${
+                    errors.password ? 'border-red-300' : 'border-gray-200'
                   }`}
                 />
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 transition"
                 >
                   {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
                 </button>
@@ -130,7 +137,7 @@ export default function Login() {
             <button
               type="submit"
               disabled={isLoading}
-              className="w-full py-3 px-4 bg-primary-600 text-white font-semibold rounded-xl hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed transition"
+              className="w-full py-3.5 px-4 bg-gradient-to-r from-primary-600 to-indigo-600 text-white font-semibold rounded-xl hover:from-primary-700 hover:to-indigo-700 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed transition-all shadow-lg shadow-primary-500/25 hover:shadow-primary-500/40 hover:scale-[1.02]"
             >
               {isLoading ? (
                 <span className="flex items-center justify-center gap-2">
@@ -156,7 +163,7 @@ export default function Login() {
           {/* Google Sign In */}
           <button
             type="button"
-            className="w-full py-3 px-4 border border-gray-300 rounded-xl font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 transition flex items-center justify-center gap-3"
+            className="w-full py-3 px-4 border border-gray-200 rounded-xl font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 transition flex items-center justify-center gap-3 hover:border-gray-300"
           >
             <svg className="w-5 h-5" viewBox="0 0 24 24">
               <path
@@ -182,11 +189,11 @@ export default function Login() {
           {/* Sign Up Link */}
           <p className="mt-6 text-center text-sm text-gray-600">
             Don't have an account?{' '}
-            <Link to="/signup" className="text-primary-600 font-medium hover:text-primary-700">
+            <Link to="/signup" className="text-primary-600 font-medium hover:text-primary-700 transition">
               Sign up
             </Link>
           </p>
-        </div>
+        </SpotlightCard>
       </div>
     </div>
   );

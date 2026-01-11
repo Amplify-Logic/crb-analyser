@@ -4,6 +4,7 @@ Report Routes
 Routes for managing and generating reports.
 """
 
+import asyncio
 import logging
 import json
 from pathlib import Path
@@ -14,6 +15,7 @@ from fastapi import APIRouter, Depends, HTTPException, status
 from fastapi.responses import StreamingResponse
 
 from src.config.supabase_client import get_async_supabase
+from src.config.redis_client import get_redis
 from src.middleware.auth import require_workspace, CurrentUser, get_optional_user
 from src.services.pdf_generator import generate_pdf_report
 from src.services.report_service import (
@@ -28,6 +30,9 @@ from src.services.storage_service import (
 )
 
 logger = logging.getLogger(__name__)
+
+# Lock expiry for report generation (5 minutes)
+REPORT_GENERATION_LOCK_TTL = 300
 
 router = APIRouter()
 
@@ -71,6 +76,7 @@ async def get_sample_report_endpoint():
 async def get_public_report(report_id: str):
     """
     Get a report by ID (public access for quiz-based reports).
+    Requires payment to have been completed.
     """
     try:
         report = await get_report_by_id(report_id)
@@ -80,6 +86,23 @@ async def get_public_report(report_id: str):
                 status_code=status.HTTP_404_NOT_FOUND,
                 detail="Report not found"
             )
+
+        # Verify payment status via quiz session
+        quiz_session_id = report.get("quiz_session_id")
+        if quiz_session_id:
+            supabase = await get_async_supabase()
+            session_result = await supabase.table("quiz_sessions").select(
+                "status"
+            ).eq("id", quiz_session_id).single().execute()
+
+            if session_result.data:
+                session_status = session_result.data.get("status")
+                # Only allow access if payment was completed
+                if session_status not in ["paid", "completed", "generating"]:
+                    raise HTTPException(
+                        status_code=status.HTTP_402_PAYMENT_REQUIRED,
+                        detail="Payment required to access this report"
+                    )
 
         # Only return completed/viewable reports
         viewable_statuses = ["completed", "qa_pending", "released"]
@@ -152,10 +175,58 @@ async def get_report_by_quiz(quiz_session_id: str):
         )
 
 
+async def _poll_existing_generation(quiz_session_id: str):
+    """
+    Poll for existing report generation progress.
+    Used when another request is already generating the report.
+    """
+    supabase = await get_async_supabase()
+    poll_interval = 2  # seconds
+    max_polls = 150  # 5 minutes max
+
+    for i in range(max_polls):
+        try:
+            # Check quiz session status
+            result = await supabase.table("quiz_sessions").select(
+                "status, report_id"
+            ).eq("id", quiz_session_id).single().execute()
+
+            if not result.data:
+                yield f"data: {json.dumps({'phase': 'error', 'step': 'Session not found', 'progress': 0})}\n\n"
+                return
+
+            status = result.data.get("status")
+            report_id = result.data.get("report_id")
+
+            if status == "completed" and report_id:
+                yield f"data: {json.dumps({'phase': 'complete', 'report_id': report_id, 'progress': 100})}\n\n"
+                return
+            elif status == "generating":
+                # Estimate progress based on time
+                progress = min(10 + (i * 2), 90)
+                yield f"data: {json.dumps({'phase': 'generating', 'step': 'Report generation in progress...', 'progress': progress})}\n\n"
+            elif status in ["paid"]:
+                yield f"data: {json.dumps({'phase': 'waiting', 'step': 'Waiting for generation to start...', 'progress': 5})}\n\n"
+            else:
+                yield f"data: {json.dumps({'phase': 'error', 'step': f'Unexpected status: {status}', 'progress': 0})}\n\n"
+                return
+
+            await asyncio.sleep(poll_interval)
+
+        except Exception as e:
+            logger.error(f"Poll error: {e}")
+            yield f"data: {json.dumps({'phase': 'error', 'step': str(e), 'progress': 0})}\n\n"
+            return
+
+    yield f"data: {json.dumps({'phase': 'error', 'step': 'Generation timeout', 'progress': 0})}\n\n"
+
+
 @router.get("/stream/{quiz_session_id}")
 async def stream_report_generation(quiz_session_id: str, tier: str = "quick"):
     """
     Server-Sent Events stream for report generation progress.
+
+    Uses Redis lock to prevent duplicate generation from multiple tabs.
 
     Events:
     - progress: {"phase": "...", "step": "...", "progress": 25}
@@ -171,14 +242,41 @@ async def stream_report_generation(quiz_session_id: str, tier: str = "quick"):
             // Handle progress updates
         };
     """
+    lock_key = f"report_generation:{quiz_session_id}"
+
     async def event_generator():
+        redis = await get_redis()
+        lock_acquired = False
+
         try:
+            # Try to acquire lock (only if Redis is available)
+            if redis:
+                lock_acquired = await redis.set(
+                    lock_key, "1", nx=True, ex=REPORT_GENERATION_LOCK_TTL
+                )
+
+            if redis and not lock_acquired:
+                # Another generation in progress, poll for status
+                logger.info(f"Report generation already in progress for {quiz_session_id}, polling...")
+                async for event in _poll_existing_generation(quiz_session_id):
+                    yield event
+                return
+
+            # We have the lock (or Redis unavailable), proceed with generation
             async for event in generate_report_streaming(quiz_session_id, tier):
                 yield event
+
         except Exception as e:
             logger.error(f"Streaming error: {e}")
-            import json
             yield f"data: {json.dumps({'phase': 'error', 'step': str(e), 'progress': 0})}\n\n"
+
+        finally:
+            # Release lock
+            if redis and lock_acquired:
+                try:
+                    await redis.delete(lock_key)
+                except Exception as e:
+                    logger.warning(f"Failed to release report generation lock: {e}")
 
     return StreamingResponse(
         event_generator(),
@@ -340,6 +438,7 @@ async def download_public_pdf(report_id: str):
     """
     Download PDF for a public report.
     Checks storage cache first, generates if not found.
+    Requires payment to have been completed.
     """
     try:
         from src.services.pdf_generator import generate_pdf_from_report_data
@@ -352,6 +451,22 @@ async def download_public_pdf(report_id: str):
                 status_code=status.HTTP_404_NOT_FOUND,
                 detail="Report not found"
             )
+
+        # Verify payment status via quiz session
+        quiz_session_id = report.get("quiz_session_id")
+        if quiz_session_id:
+            supabase = await get_async_supabase()
+            session_result = await supabase.table("quiz_sessions").select(
+                "status"
+            ).eq("id", quiz_session_id).single().execute()
+
+            if session_result.data:
+                session_status = session_result.data.get("status")
+                if session_status not in ["paid", "completed", "generating"]:
+                    raise HTTPException(
+                        status_code=status.HTTP_402_PAYMENT_REQUIRED,
+                        detail="Payment required to access this report"
+                    )
 
         if report.get("status") != "completed":
             raise HTTPException(
