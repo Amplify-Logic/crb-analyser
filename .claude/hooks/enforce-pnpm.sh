@@ -7,8 +7,8 @@ command=$(echo "$input" | jq -r '.tool_input.command // ""')
 
 # Check if command starts with npm (but not npx)
 if [[ "$command" == npm\ * ]] || [[ "$command" == "npm" ]]; then
-  echo "This project uses pnpm, not npm. Please use 'pnpm' instead of 'npm'."
-  echo "Examples: pnpm install, pnpm add <package>, pnpm run dev"
+  echo "This project uses pnpm, not npm. Please use 'pnpm' instead of 'npm'." >&2
+  echo "Examples: pnpm install, pnpm add <package>, pnpm run dev" >&2
   exit 2
 fi
 

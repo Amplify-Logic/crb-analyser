@@ -1297,7 +1297,210 @@
       "verified_by": "manual",
       "source_url": "https://forethought.ai",
       "notes": "Multi-agent platform with autonomous reasoning. Solve handles resolutions, Triage classifies tickets, Assist helps human agents, Discover surfaces insights. Enterprise security and compliance. No public pricing - requires demo/quote. Highly recommended for website chat that needs to follow assigned policies."
+    },
+    {
+      "slug": "buddypro-ai",
+      "name": "BuddyPro",
+      "category": "customer_support",
+      "subcategory": "ai_knowledge_expert",
+      "website": "https://buddypro.ai",
+      "pricing_url": "https://buddypro.ai",
+      "description": "AI knowledge expert platform that lets you create AI assistants trained on your specific content and expertise. Unlike typical chatbots, BuddyPro creates a premium AI service you can sell to clients. Upload videos, PDFs, audio files, and website content to train an AI that answers based on YOUR knowledge. White-label solution with integrated Stripe payments for monetization.",
+      "tagline": "Train your AI expert based on your knowledge",
+      "key_capabilities": [
+        "Train AI on your content (videos, PDFs, audio, links)",
+        "Structured knowledge base creation",
+        "White-label branding",
+        "Integrated Stripe payments",
+        "Subscription management for clients",
+        "No-code setup",
+        "Multi-format content ingestion",
+        "Deep relationship with clients (not just support deflection)"
+      ],
+      "unique_positioning": "Unlike typical support chatbots that deflect tickets, BuddyPro creates an AI expert that you can monetize as a premium service to clients.",
+      "use_case_example": "A consultant uploads their courses, methodology PDFs, and recorded sessions. BuddyPro creates an AI expert that provides 24/7 personalized advice to their clients, who pay a monthly subscription for access.",
+      "pricing": {
+        "model": "subscription",
+        "currency": "USD",
+        "note": "Specific tier pricing not publicly available - contact for details",
+        "approach": "Platform fee + ability to monetize your AI expert to clients",
+        "verified_status": "PARTIALLY_VERIFIED",
+        "verified_date": "2026-01-14",
+        "source": "buddypro.ai"
+      },
+      "best_for": [
+        "Consultants and coaches wanting to scale expertise",
+        "Course creators extending value beyond content",
+        "Experts monetizing knowledge 24/7",
+        "Businesses creating premium AI support tiers",
+        "Thought leaders building AI versions of themselves",
+        "Service providers wanting recurring revenue from knowledge"
+      ],
+      "business_model_insight": "Shifts from 'time for money' to 'know-how for value' - your AI expert serves unlimited clients while you sleep.",
+      "industries": [
+        "Consulting",
+        "Coaching",
+        "Education",
+        "Professional Services",
+        "Expert Services"
+      ],
+      "company_sizes": ["individual", "startup", "smb"],
+      "avoid_if": [
+        "Need standard customer support deflection (use Intercom/Zendesk)",
+        "Don't have substantial existing content/expertise",
+        "Want free tier or transparent pricing upfront",
+        "Need enterprise compliance features"
+      ],
+      "implementation": {
+        "avg_weeks": 2,
+        "complexity": "low",
+        "requires_developer": false
+      },
+      "ratings": {
+        "our_rating": 4.3,
+        "our_notes": "Unique positioning as a monetizable AI expert rather than cost-center chatbot. Good for consultants and coaches. Requires substantial existing content to train effectively. No public pricing is a barrier. Competes with Coachvox and Delphi AI in the 'AI expert clone' space."
+      },
+      "integrations": [
+        "Stripe (built-in)",
+        "Website embed",
+        "Various content formats"
+      ],
+      "competitors": [
+        "Coachvox",
+        "Delphi AI",
+        "Chatbase (for standard chatbots)",
+        "CustomGPT"
+      ],
+      "verified_at": "2026-01-14T00:00:00Z",
+      "verified_by": "manual",
+      "source_url": "https://buddypro.ai",
+      "notes": "Distinct from buddypro.io (different company - service management). Focus is on creating sellable AI experts, not free chatbots. Best suited for individuals with substantial expertise content. Platform analyzes uploaded material to identify key concepts and relationships for comprehensive AI responses."
+    },
+    {
+      "slug": "chatbase",
+      "name": "Chatbase",
+      "category": "customer_support",
+      "subcategory": "ai_chatbot_builder",
+      "website": "https://www.chatbase.co",
+      "pricing_url": "https://www.chatbase.co/pricing",
+      "description": "No-code AI chatbot builder for customer service. Create custom AI agents trained on your website content, documents, and knowledge base. Deploy chatbots that answer customer questions 24/7 with accurate responses based on your specific content. Simple setup with website embed or API integration.",
+      "tagline": "Build AI chatbots trained on your data",
+      "key_capabilities": [
+        "Train AI on website content and documents",
+        "No-code chatbot builder",
+        "Custom knowledge base integration",
+        "Website embed widget",
+        "API access for custom integrations",
+        "Multi-language support",
+        "Lead capture and qualification",
+        "Analytics and conversation history"
+      ],
+      "use_case_example": "A SaaS company uploads their help docs and FAQ to Chatbase, deploys an AI chatbot on their website that instantly answers customer questions, reducing support tickets by 40%.",
+      "pricing": {
+        "model": "subscription",
+        "currency": "USD",
+        "billing_options": ["monthly", "annual"],
+        "annual_discount_percent": 20,
+        "tiers": [
+          {
+            "name": "Hobby",
+            "price": 40,
+            "per": "month",
+            "billing": "monthly",
+            "annual_price": 32,
+            "features": [
+              "Basic chatbot functionality",
+              "Website embed",
+              "Entry-level message credits"
+            ]
+          },
+          {
+            "name": "Standard",
+            "price": 150,
+            "per": "month",
+            "billing": "monthly",
+            "annual_price": 120,
+            "features": [
+              "All Hobby features",
+              "More message credits",
+              "Team members",
+              "Multiple agents"
+            ]
+          },
+          {
+            "name": "Pro",
+            "price": 500,
+            "per": "month",
+            "billing": "monthly",
+            "annual_price": 400,
+            "features": [
+              "All Standard features",
+              "High message volume",
+              "Advanced features",
+              "Priority support"
+            ]
+          }
+        ],
+        "add_ons": {
+          "extra_message_credits": {"price": 1.50, "per": "1000 messages"},
+          "extra_agents": {"price": 25, "per": "agent/month"},
+          "extra_team_members": {"price": 25, "per": "member/month"},
+          "custom_domain": {"price": 199, "per": "month"},
+          "remove_branding": {"price": 199, "per": "month"}
+        },
+        "verified_status": "VERIFIED",
+        "verified_date": "2026-01-15",
+        "source": "chatbase.co/pricing"
+      },
+      "best_for": [
+        "Small to medium businesses wanting AI support",
+        "Teams without technical resources",
+        "Businesses with existing documentation/FAQ",
+        "Companies wanting to reduce support tickets",
+        "Startups needing 24/7 customer support"
+      ],
+      "industries": [
+        "SaaS",
+        "E-commerce",
+        "Professional Services",
+        "Education",
+        "Small Business"
+      ],
+      "company_sizes": ["startup", "smb", "mid_market"],
+      "avoid_if": [
+        "Need advanced enterprise features",
+        "Require complex multi-channel support",
+        "Want deep helpdesk integration (use Intercom/Zendesk)",
+        "High-volume operations (costs scale with add-ons)"
+      ],
+      "implementation": {
+        "avg_weeks": 1,
+        "complexity": "low",
+        "requires_developer": false
+      },
+      "ratings": {
+        "our_rating": 4.2,
+        "our_notes": "Simple, effective chatbot builder. Good for SMBs wanting quick AI support without complexity. Add-on pricing can escalate costs (custom domain + remove branding = $398/mo extra). Competes with Tidio, Crisp, and DIY GPT solutions."
+      },
+      "integrations": [
+        "Website embed",
+        "API",
+        "Slack",
+        "WordPress",
+        "Shopify"
+      ],
+      "competitors": [
+        "Tidio",
+        "Crisp",
+        "CustomGPT",
+        "Botpress",
+        "Voiceflow"
+      ],
+      "verified_at": "2026-01-15T00:00:00Z",
+      "verified_by": "manual",
+      "source_url": "https://www.chatbase.co/pricing",
+      "notes": "Simple setup process - upload docs or connect website URL. Annual billing saves 20%. Watch add-on costs - removing branding and custom domain add $398/month. Good entry point for AI customer support."
     }
   ],
-  "last_updated": "2025-12-31T00:00:00Z"
+  "last_updated": "2026-01-15T00:00:00Z"
 }

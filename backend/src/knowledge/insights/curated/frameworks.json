@@ -1,0 +1,278 @@
+{
+  "type": "framework",
+  "description": "Actionable frameworks and methodologies for AI adoption and implementation",
+  "last_updated": "2026-01-15",
+  "insights": [
+    {
+      "id": "framework-jagged-frontier-opportunity",
+      "type": "framework",
+      "title": "The Jagged Frontier Framework for AI Career Advantage",
+      "content": "The current undefined and messy state of AI creates a unique window where expertise is being reset. Success comes from learning faster than others rather than having perfect plans, as there are no established experts who know everything yet.",
+      "supporting_data": [
+        {
+          "claim": "Research on the 'jagged frontier' of AI shows expertise is being reset, creating opportunities for rapid learners",
+          "source": "Ethan Mollick, Wharton Professor",
+          "source_url": null,
+          "date": "2026",
+          "credibility": "academic"
+        }
+      ],
+      "actionable_insight": "Stop waiting for perfect AI learning plans. Focus on learning faster than peers by experimenting and adapting quickly in the current undefined landscape where traditional expertise advantages are temporarily reduced.",
+      "tags": {
+        "topics": [
+          "career_strategy",
+          "learning_approach",
+          "competitive_advantage"
+        ],
+        "industries": [
+          "all"
+        ],
+        "use_in": [
+          "quiz_results",
+          "landing"
+        ],
+        "user_stages": [
+          "considering",
+          "early_adopter"
+        ]
+      },
+      "source": {
+        "title": "Top 6 AI Trends That Will Define 2026",
+        "author": "Jeff Su",
+        "url": "https://www.youtube.com/watch?v=jeff-su-ai-trends",
+        "date": "2026-01-06",
+        "type": "youtube"
+      },
+      "extracted_at": "2026-01-15",
+      "reviewed": true
+    },
+    {
+      "id": "framework-capital-assets-to-software",
+      "type": "framework",
+      "title": "Capital Assets Becoming Software Endpoints",
+      "content": "Physical assets like cars, tractors, and warehouse robots are transforming from depreciating capital into continuously improving software platforms that gain value over time through updates, similar to smartphones.",
+      "supporting_data": [
+        {
+          "claim": "Analyst Mary Meeker's concept of AI turning capital assets into software endpoints",
+          "source": "Mary Meeker",
+          "source_url": null,
+          "date": "2026",
+          "credibility": "analyst"
+        }
+      ],
+      "actionable_insight": "Evaluate how physical assets in your industry could be transformed into software-driven platforms that improve over time, shifting from depreciation to appreciation models.",
+      "tags": {
+        "topics": [
+          "digital_transformation",
+          "asset_management",
+          "software_platforms"
+        ],
+        "industries": [
+          "manufacturing",
+          "transportation",
+          "logistics"
+        ],
+        "use_in": [
+          "report"
+        ],
+        "user_stages": [
+          "scaling"
+        ]
+      },
+      "source": {
+        "title": "Top 6 AI Trends That Will Define 2026",
+        "author": "Jeff Su",
+        "url": "https://www.youtube.com/watch?v=jeff-su-ai-trends",
+        "date": "2026-01-06",
+        "type": "youtube"
+      },
+      "extracted_at": "2026-01-15",
+      "reviewed": false
+    },
+    {
+      "id": "framework-ai-two-superpowers",
+      "type": "framework",
+      "title": "AI's Dual Nature: Distraction vs. Hyper-Creativity",
+      "content": "AI has two superpowers: it can either distract people (like TikTok algorithms making users hyper-consumers) or make them hyper-creative. This creates a bifurcation where some people become incredibly productive while others get trapped in consumption cycles.",
+      "supporting_data": [
+        {
+          "claim": "AI either distracts users or makes them hyper-creative",
+          "source": "Content author analysis",
+          "source_url": null,
+          "date": "2026-01",
+          "credibility": "anecdotal"
+        }
+      ],
+      "actionable_insight": "Actively choose to use AI for creation rather than consumption. Be mindful of which AI tools you engage with and how they affect your productivity.",
+      "tags": {
+        "topics": [
+          "productivity",
+          "ai_adoption",
+          "digital_wellness"
+        ],
+        "industries": [
+          "all"
+        ],
+        "use_in": [
+          "report",
+          "quiz_results"
+        ],
+        "user_stages": [
+          "considering",
+          "early_adopter"
+        ]
+      },
+      "source": {
+        "title": "AI Revolution: The Opportunity Window is Closing",
+        "author": "Unknown",
+        "url": "",
+        "date": "2026-01",
+        "type": "youtube"
+      },
+      "extracted_at": "2026-01-15",
+      "reviewed": false
+    },
+    {
+      "id": "framework-inflation-ai-investment-necessity",
+      "type": "framework",
+      "title": "AI Investment as Inflation Protection Strategy",
+      "content": "In an inflationary environment, owning assets is not optional. With AI moving 10 times faster than traditional markets, staying in cash or underperforming assets while AI transforms the economy guarantees wealth erosion through both inflation and missed opportunity.",
+      "supporting_data": [
+        {
+          "claim": "AI moving 10 times faster than traditional markets",
+          "source": "Content author analysis",
+          "source_url": null,
+          "date": "2026-01",
+          "credibility": "anecdotal"
+        }
+      ],
+      "actionable_insight": "Treat AI investment not just as growth opportunity but as essential protection against inflation and economic disruption.",
+      "tags": {
+        "topics": [
+          "investment_strategy",
+          "inflation_protection",
+          "wealth_preservation"
+        ],
+        "industries": [
+          "finance"
+        ],
+        "use_in": [
+          "report",
+          "landing"
+        ],
+        "user_stages": [
+          "considering",
+          "early_adopter"
+        ]
+      },
+      "source": {
+        "title": "AI Revolution: The Opportunity Window is Closing",
+        "author": "Unknown",
+        "url": "",
+        "date": "2026-01",
+        "type": "youtube"
+      },
+      "extracted_at": "2026-01-15",
+      "reviewed": false
+    },
+    {
+      "id": "framework-task-queue-model",
+      "type": "framework",
+      "title": "Task Queue vs Chat - A New Way to Work with AI",
+      "content": "Instead of back-and-forth prompting (you ask, it answers, you ask again), queue up 5-6 tasks and let AI work on all of them in parallel. It's less like a conversation and more like leaving messages for a capable assistant who handles them while you do other things.",
+      "supporting_data": [
+        {
+          "claim": "I can do this in parallel... come back, it'll give me assessments all at the same time that it's working on my PowerPoint deck",
+          "source": "Claude Co-work demonstration",
+          "source_url": null,
+          "date": "2026-01",
+          "credibility": "industry_data"
+        }
+      ],
+      "actionable_insight": "Stop thinking 'How do I prompt this perfectly?' Start thinking 'What do I actually need done today?' Queue multiple tasks - calendar review, file organization, document prep - and let AI work through them while you focus on clients.",
+      "tags": {
+        "topics": ["workflows", "productivity", "ai-tools"],
+        "industries": ["all"],
+        "use_in": ["landing", "quiz_results", "report"],
+        "user_stages": ["considering", "early_adopter"]
+      },
+      "source": {
+        "title": "Claude Co-work Launch Analysis",
+        "author": "Dan Shipper",
+        "url": "https://www.youtube.com/watch?v=5KVDDfAkl",
+        "date": "2026-01-09",
+        "type": "youtube"
+      },
+      "extracted_at": "2026-01-15",
+      "reviewed": false,
+      "audience_relevance": "high",
+      "relevance_reason": "Practical framework SMB owners can implement immediately to save time"
+    },
+    {
+      "id": "framework-steering-vs-editing",
+      "type": "framework",
+      "title": "Steering Loop vs Editing Loop",
+      "content": "The cognitive shift with agent AI is from 'editing what AI gives you' to 'steering what AI does.' You describe an outcome, AI makes a plan, you can redirect mid-execution. The thinking happens at the start (what do you want?) not at the end (cleaning up the output).",
+      "supporting_data": [
+        {
+          "claim": "Claude code keeps you in the steering loop rather than the editing loop",
+          "source": "Dan Shipper analysis",
+          "source_url": null,
+          "date": "2026-01",
+          "credibility": "analyst"
+        }
+      ],
+      "actionable_insight": "Get better at describing outcomes clearly. 'Process my receipts into a categorized spreadsheet with totals by category' beats 'help me with expenses.' The clearer your intent, the less cleanup you do.",
+      "tags": {
+        "topics": ["ai-skills", "productivity", "frameworks"],
+        "industries": ["all"],
+        "use_in": ["report", "quiz_results"],
+        "user_stages": ["considering", "early_adopter"]
+      },
+      "source": {
+        "title": "Claude Co-work Launch Analysis",
+        "author": "Dan Shipper",
+        "url": "https://www.youtube.com/watch?v=5KVDDfAkl",
+        "date": "2026-01-09",
+        "type": "youtube"
+      },
+      "extracted_at": "2026-01-15",
+      "reviewed": false,
+      "audience_relevance": "high",
+      "relevance_reason": "Teaches the mindset shift needed to get value from AI - directly actionable"
+    },
+    {
+      "id": "framework-file-system-advantage",
+      "type": "framework",
+      "title": "Your Files Don't Fight Back",
+      "content": "Browser-based AI agents constantly break - websites block them, logins fail, CAPTCHAs stop them. File system agents work on YOUR files - no bot detection, no authentication battles. Your local machine is cooperative, not adversarial.",
+      "supporting_data": [
+        {
+          "claim": "Browser agents will always be a little bit brittle for high stakes tasks because the web fights back... File system agents can be robust because your local machine is not adversarial",
+          "source": "Dan Shipper analysis",
+          "source_url": null,
+          "date": "2026-01",
+          "credibility": "analyst"
+        }
+      ],
+      "actionable_insight": "For reliable AI automation, start with file-based tasks: processing documents, organizing folders, analyzing spreadsheets. These work consistently. Web automation is improving but still breaks.",
+      "tags": {
+        "topics": ["ai-tools", "reliability", "workflows"],
+        "industries": ["all"],
+        "use_in": ["report"],
+        "user_stages": ["early_adopter"]
+      },
+      "source": {
+        "title": "Claude Co-work Launch Analysis",
+        "author": "Dan Shipper",
+        "url": "https://www.youtube.com/watch?v=5KVDDfAkl",
+        "date": "2026-01-09",
+        "type": "youtube"
+      },
+      "extracted_at": "2026-01-15",
+      "reviewed": false,
+      "audience_relevance": "high",
+      "relevance_reason": "Practical guidance on where to start with AI automation - reduces risk of failure"
+    }
+  ]
+}

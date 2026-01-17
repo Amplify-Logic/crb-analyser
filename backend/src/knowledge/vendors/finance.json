@@ -1093,7 +1093,81 @@
       "verified_by": "manual",
       "source_url": "https://www.sage.com/en-us/sage-business-cloud/accounting/pricing",
       "notes": "IMPORTANT: Sage Business Cloud Accounting retired in U.S. as of December 24, 2024. Sage 50 Accounting is now flagship U.S. small business product. International availability varies by country. Per-user pricing ($25/user/month). Annual cost ~$300/year for unlimited users vs Sage 50cloud starting at $567/user/year. No contracts or commitments. Upgrade/cancel anytime. Volume discounts may apply for larger user counts. Customer support not available weekends."
+    },
+    {
+      "slug": "frank-ai",
+      "name": "Frank AI",
+      "category": "finance",
+      "subcategory": "ai_cfo",
+      "website": "https://www.hellofrank.ai",
+      "description": "AI-powered CFO assistant that helps businesses understand their financial health, track metrics, and make data-driven decisions. Acts as a virtual CFO for small to medium businesses that don't have dedicated finance leadership. Provides financial insights, cash flow analysis, and strategic recommendations.",
+      "tagline": "Your AI CFO for smarter financial decisions",
+      "key_capabilities": [
+        "Financial health monitoring",
+        "Cash flow analysis and forecasting",
+        "Key metrics tracking and alerts",
+        "AI-powered financial insights",
+        "Budget vs actual analysis",
+        "Strategic financial recommendations",
+        "Automated financial reporting"
+      ],
+      "use_case_example": "A growing startup without a CFO connects Frank to their accounting software. Frank provides weekly financial health updates, alerts on cash flow concerns, and suggests areas to optimize spending.",
+      "pricing": {
+        "model": "subscription",
+        "currency": "USD",
+        "note": "Specific pricing not publicly available - requires demo/consultation",
+        "verified_status": "PARTIALLY_VERIFIED",
+        "verified_date": "2026-01-15",
+        "source": "hellofrank.ai"
+      },
+      "best_for": [
+        "SMBs without dedicated CFO or finance team",
+        "Founders wanting financial visibility",
+        "Growing businesses needing cash flow insights",
+        "Teams wanting AI-driven financial analysis",
+        "Companies connecting accounting data for insights"
+      ],
+      "industries": [
+        "Technology",
+        "Professional Services",
+        "E-commerce",
+        "SaaS",
+        "Small Business"
+      ],
+      "company_sizes": ["startup", "smb"],
+      "avoid_if": [
+        "Have dedicated finance team (may duplicate functionality)",
+        "Need full accounting features (this is insights, not bookkeeping)",
+        "Require transparent upfront pricing",
+        "Need enterprise-level financial planning"
+      ],
+      "implementation": {
+        "avg_weeks": 1,
+        "complexity": "low",
+        "requires_developer": false
+      },
+      "ratings": {
+        "our_rating": 4.0,
+        "our_notes": "Interesting AI CFO concept for SMBs lacking finance expertise. Limited public pricing information. Best for founders who want financial visibility without hiring a CFO. Competes with Pry, Mosaic, and traditional fractional CFO services."
+      },
+      "integrations": [
+        "QuickBooks",
+        "Xero",
+        "Banking connections",
+        "Accounting platforms"
+      ],
+      "competitors": [
+        "Pry",
+        "Mosaic",
+        "Jirav",
+        "Fathom",
+        "Fractional CFO services"
+      ],
+      "verified_at": "2026-01-15T00:00:00Z",
+      "verified_by": "manual",
+      "source_url": "https://www.hellofrank.ai",
+      "notes": "AI CFO tool for businesses without dedicated finance leadership. Connects to existing accounting software to provide insights. Pricing not publicly disclosed. Good for founders wanting financial clarity without the cost of a full-time CFO."
     }
   ],
-  "last_updated": "2025-12-17T00:00:00Z"
+  "last_updated": "2026-01-15T00:00:00Z"
 }

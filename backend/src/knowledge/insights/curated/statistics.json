@@ -1,0 +1,364 @@
+{
+  "type": "statistic",
+  "description": "Data-backed statistics and metrics from credible sources",
+  "last_updated": "2026-01-15",
+  "insights": [
+    {
+      "id": "statistic-non-technical-ai-adoption",
+      "type": "statistic",
+      "title": "75% of Enterprise Users Complete Previously Impossible Tasks with AI",
+      "content": "Three-quarters of enterprise users report using AI to complete tasks they literally could not do before, with coding-related messages from non-technical employees growing 36% in just 6 months.",
+      "supporting_data": [
+        {
+          "claim": "75% of enterprise users reported using AI to complete tasks they could not do before",
+          "source": "OpenAI latest report",
+          "source_url": null,
+          "date": "2026",
+          "credibility": "industry_data"
+        },
+        {
+          "claim": "Coding-related messages from non-technical employees grew 36% in 6 months",
+          "source": "OpenAI latest report",
+          "source_url": null,
+          "date": "2026",
+          "credibility": "industry_data"
+        }
+      ],
+      "actionable_insight": "Attempt one technically challenging task you usually outsource this month - build a dashboard, clean data, or automate a report using AI tools.",
+      "tags": {
+        "topics": [
+          "digital_transformation",
+          "skill_democratization",
+          "productivity"
+        ],
+        "industries": [
+          "all"
+        ],
+        "use_in": [
+          "report",
+          "quiz_results",
+          "landing"
+        ],
+        "user_stages": [
+          "considering",
+          "early_adopter"
+        ]
+      },
+      "source": {
+        "title": "Top 6 AI Trends That Will Define 2026",
+        "author": "Jeff Su",
+        "url": "https://www.youtube.com/watch?v=jeff-su-ai-trends",
+        "date": "2026-01-06",
+        "type": "youtube"
+      },
+      "extracted_at": "2026-01-15",
+      "reviewed": true
+    },
+    {
+      "id": "statistic-waymo-autonomous-safety",
+      "type": "statistic",
+      "title": "Waymo Achieves 96% Fewer Crashes Than Human Drivers",
+      "content": "Waymo's autonomous taxi service has logged over 100 million fully autonomous miles and demonstrates significantly superior safety performance compared to human drivers.",
+      "supporting_data": [
+        {
+          "claim": "Waymo logged over 100 million fully autonomous miles",
+          "source": "Waymo",
+          "source_url": null,
+          "date": "2026",
+          "credibility": "industry_data"
+        },
+        {
+          "claim": "Waymo involved in 96% fewer crashes than human drivers",
+          "source": "Waymo",
+          "source_url": null,
+          "date": "2026",
+          "credibility": "industry_data"
+        }
+      ],
+      "actionable_insight": "Consider how autonomous systems in your industry might achieve superior performance to human operators, particularly in safety-critical applications.",
+      "tags": {
+        "topics": [
+          "autonomous_vehicles",
+          "safety",
+          "robotics"
+        ],
+        "industries": [
+          "transportation",
+          "logistics"
+        ],
+        "use_in": [
+          "report",
+          "quiz_results"
+        ],
+        "user_stages": [
+          "considering",
+          "early_adopter"
+        ]
+      },
+      "source": {
+        "title": "Top 6 AI Trends That Will Define 2026",
+        "author": "Jeff Su",
+        "url": "https://www.youtube.com/watch?v=jeff-su-ai-trends",
+        "date": "2026-01-06",
+        "type": "youtube"
+      },
+      "extracted_at": "2026-01-15",
+      "reviewed": false
+    },
+    {
+      "id": "statistic-ai-job-transformation-2030",
+      "type": "statistic",
+      "title": "800 Million Jobs at Risk by 2030",
+      "content": "AI is projected to eliminate or transform up to 800 million jobs worldwide by 2030, affecting nearly one in five workers on planet Earth.",
+      "supporting_data": [
+        {
+          "claim": "AI will eliminate or transform 800 million jobs by 2030",
+          "source": "Industry projection",
+          "source_url": null,
+          "date": "2030",
+          "credibility": "analyst"
+        }
+      ],
+      "actionable_insight": "Prepare for workforce transformation by developing AI-complementary skills and considering how your role might evolve.",
+      "tags": {
+        "topics": [
+          "workforce_transformation",
+          "job_displacement",
+          "future_of_work"
+        ],
+        "industries": [
+          "all"
+        ],
+        "use_in": [
+          "report",
+          "quiz_results"
+        ],
+        "user_stages": [
+          "considering",
+          "early_adopter"
+        ]
+      },
+      "source": {
+        "title": "AI Revolution: The Opportunity Window is Closing",
+        "author": "Unknown",
+        "url": "",
+        "date": "2026-01",
+        "type": "youtube"
+      },
+      "extracted_at": "2026-01-15",
+      "reviewed": false
+    },
+    {
+      "id": "statistic-corporate-ai-mentions-surge",
+      "type": "statistic",
+      "title": "Corporate AI Discussion Explodes 360% in 2023",
+      "content": "In 2023 alone, the number of corporate earnings calls mentioning AI surged over 360% compared to the prior year, indicating massive corporate focus and investment in AI technologies.",
+      "supporting_data": [
+        {
+          "claim": "Corporate earnings calls mentioning AI increased 360% in 2023",
+          "source": "Corporate earnings analysis",
+          "source_url": null,
+          "date": "2023",
+          "credibility": "industry_data"
+        }
+      ],
+      "actionable_insight": "Corporate AI adoption is accelerating rapidly. Consider how your business or career aligns with this trend.",
+      "tags": {
+        "topics": [
+          "corporate_adoption",
+          "ai_investment",
+          "business_strategy"
+        ],
+        "industries": [
+          "all"
+        ],
+        "use_in": [
+          "report"
+        ],
+        "user_stages": [
+          "early_adopter",
+          "scaling"
+        ]
+      },
+      "source": {
+        "title": "AI Revolution: The Opportunity Window is Closing",
+        "author": "Unknown",
+        "url": "",
+        "date": "2026-01",
+        "type": "youtube"
+      },
+      "extracted_at": "2026-01-15",
+      "reviewed": false
+    },
+    {
+      "id": "statistic-goldman-sachs-ai-gdp-projection",
+      "type": "statistic",
+      "title": "AI Could Drive $7 Trillion in Global GDP Growth",
+      "content": "Goldman Sachs estimates AI could drive $7 trillion in global GDP growth over the next decade, representing one of the largest economic opportunities in modern history.",
+      "supporting_data": [
+        {
+          "claim": "AI could drive $7 trillion in global GDP growth over next decade",
+          "source": "Goldman Sachs",
+          "source_url": null,
+          "date": "2023",
+          "credibility": "industry_research"
+        }
+      ],
+      "actionable_insight": "The AI economic opportunity is massive. Consider positioning investments and business strategies to capture some of this growth.",
+      "tags": {
+        "topics": [
+          "economic_impact",
+          "ai_investment",
+          "gdp_growth"
+        ],
+        "industries": [
+          "finance",
+          "technology"
+        ],
+        "use_in": [
+          "report",
+          "landing"
+        ],
+        "user_stages": [
+          "considering",
+          "early_adopter"
+        ]
+      },
+      "source": {
+        "title": "AI Revolution: The Opportunity Window is Closing",
+        "author": "Unknown",
+        "url": "",
+        "date": "2026-01",
+        "type": "youtube"
+      },
+      "extracted_at": "2026-01-15",
+      "reviewed": false
+    },
+    {
+      "id": "statistic-big-tech-ai-infrastructure-spending",
+      "type": "statistic",
+      "title": "Big Tech's $400 Billion AI Infrastructure Investment",
+      "content": "In 2024, Google, Meta, Amazon, and Microsoft collectively invested over $400 billion in AI infrastructure, surpassing US government spending on social services. For 2025, they plan to spend over $300 billion more.",
+      "supporting_data": [
+        {
+          "claim": "Google, Meta, Amazon, Microsoft invested $400B in AI infrastructure in 2024",
+          "source": "Corporate financial reports",
+          "source_url": null,
+          "date": "2024",
+          "credibility": "industry_data"
+        },
+        {
+          "claim": "Big tech planning $300B+ more AI infrastructure spending in 2025",
+          "source": "Corporate projections",
+          "source_url": null,
+          "date": "2025",
+          "credibility": "industry_data"
+        }
+      ],
+      "actionable_insight": "Major tech companies are making unprecedented infrastructure investments. Consider supply chain opportunities or complementary services.",
+      "tags": {
+        "topics": [
+          "infrastructure_investment",
+          "big_tech",
+          "ai_spending"
+        ],
+        "industries": [
+          "technology",
+          "finance"
+        ],
+        "use_in": [
+          "report"
+        ],
+        "user_stages": [
+          "early_adopter",
+          "scaling"
+        ]
+      },
+      "source": {
+        "title": "AI Revolution: The Opportunity Window is Closing",
+        "author": "Unknown",
+        "url": "",
+        "date": "2026-01",
+        "type": "youtube"
+      },
+      "extracted_at": "2026-01-15",
+      "reviewed": false
+    },
+    {
+      "id": "statistic-fortune-500-ai-integration",
+      "type": "statistic",
+      "title": "Half of Fortune 500 Already Using Generative AI",
+      "content": "More than half of Fortune 500 companies are already integrating generative AI into their core operations, demonstrating rapid enterprise adoption beyond experimental phases.",
+      "supporting_data": [
+        {
+          "claim": "Over 50% of Fortune 500 companies integrating generative AI into core operations",
+          "source": "Enterprise survey data",
+          "source_url": null,
+          "date": "2024",
+          "credibility": "industry_data"
+        }
+      ],
+      "actionable_insight": "Enterprise AI adoption is mainstream, not experimental. Ensure your business strategy accounts for AI-enabled competitors.",
+      "tags": {
+        "topics": [
+          "enterprise_adoption",
+          "generative_ai",
+          "competitive_advantage"
+        ],
+        "industries": [
+          "all"
+        ],
+        "use_in": [
+          "report",
+          "quiz_results"
+        ],
+        "user_stages": [
+          "early_adopter",
+          "scaling"
+        ]
+      },
+      "source": {
+        "title": "AI Revolution: The Opportunity Window is Closing",
+        "author": "Unknown",
+        "url": "",
+        "date": "2026-01",
+        "type": "youtube"
+      },
+      "extracted_at": "2026-01-15",
+      "reviewed": false
+    },
+    {
+      "id": "stat-67pct-productivity-increase",
+      "type": "statistic",
+      "title": "67% More Output Per Person with AI Agents",
+      "content": "Anthropic's internal data shows engineers using Claude Code saw a 67% increase in completed work per person per day. While this was measured in software development, the same architecture now powers general knowledge work tasks.",
+      "supporting_data": [
+        {
+          "claim": "67% increase in merge pull requests per engineer per day",
+          "source": "Anthropic internal data",
+          "source_url": null,
+          "date": "2026-01",
+          "credibility": "industry_data"
+        }
+      ],
+      "actionable_insight": "The productivity gains are real and measurable. If competitors in your industry adopt these tools and you don't, they'll be doing 67% more with the same headcount.",
+      "tags": {
+        "topics": ["roi", "productivity", "competitive-advantage"],
+        "industries": ["all"],
+        "use_in": ["report", "landing"],
+        "user_stages": ["considering", "early_adopter"]
+      },
+      "source": {
+        "title": "Claude Co-work Launch Analysis",
+        "author": "Dan Shipper",
+        "url": "https://www.youtube.com/watch?v=5KVDDfAkl",
+        "date": "2026-01-09",
+        "type": "youtube"
+      },
+      "extracted_at": "2026-01-15",
+      "reviewed": false,
+      "audience_relevance": "high",
+      "relevance_reason": "Concrete productivity number that answers 'what will I gain?' - directly relevant to ROI"
+    }
+  ]
+}

@@ -731,5 +731,172 @@
       "note": "Businesses pay for outcomes, not for learning tools"
     }
   },
-  "last_updated": "2025-12-27T00:00:00Z"
+  "ai_voice_tools": {
+    "description": "AI-powered voice and phone automation tools for sales and support",
+    "vendors": [
+      {
+        "slug": "youratlas",
+        "name": "YourAtlas",
+        "category": "ai_sales_tools",
+        "subcategory": "ai_voice_agents",
+        "website": "https://youratlas.com",
+        "pricing_url": "https://youratlas.com",
+        "description": "AI sales agent platform that handles inbound and outbound calls, qualifies leads, and books appointments 24/7. Engages leads via Voice, SMS, or Chat within 60 seconds. White-glove onboarding builds your entire revenue engine including scripts, automations, and integrations. Backed by Dan Martell's Martell Ventures.",
+        "tagline": "AI Sales Agents for Service Business Owners",
+        "key_capabilities": [
+          "AI voice agents for inbound/outbound calls",
+          "Lead qualification and routing",
+          "Appointment booking automation",
+          "SMS and chat engagement",
+          "60-second lead response",
+          "Live call transfer to humans",
+          "CRM integrations",
+          "Custom scripts and workflows"
+        ],
+        "results_claimed": {
+          "conversion_increase": "300%",
+          "roas_improvement": "10x",
+          "website_conversion_lift": "30%"
+        },
+        "use_case_example": "AI agent answers every inbound call 24/7, qualifies the lead based on your criteria, books qualified leads directly into your calendar, and transfers hot leads live to your team.",
+        "pricing": {
+          "model": "custom",
+          "currency": "USD",
+          "note": "Consultation required - no public pricing",
+          "requirements": [
+            "Minimum ad spend requirement",
+            "Full needs analysis during initial call"
+          ],
+          "guarantee": "90-day results guarantee - if you don't see results, they'll make it right",
+          "verified_status": "PARTIALLY_VERIFIED",
+          "verified_date": "2026-01-14",
+          "source": "youratlas.com"
+        },
+        "general_voice_ai_pricing": {
+          "note": "Industry context for voice AI tools",
+          "typical_range": "$0.01-$0.25 per minute",
+          "monthly_subscriptions": "Starting at $15, scaling to thousands based on usage"
+        },
+        "best_for": [
+          "Service businesses with high call volume",
+          "Companies with ad spend driving inbound leads",
+          "Businesses losing leads to slow response times",
+          "Teams wanting 24/7 phone coverage without hiring",
+          "Organizations needing lead qualification at scale"
+        ],
+        "industries": [
+          "Home Services",
+          "Real Estate",
+          "Legal",
+          "Healthcare",
+          "Insurance",
+          "Automotive"
+        ],
+        "company_sizes": ["smb", "mid_market"],
+        "avoid_if": [
+          "Low call volume (may not justify investment)",
+          "No existing ad spend/lead flow",
+          "Need transparent self-serve pricing",
+          "Very complex sales processes requiring human touch"
+        ],
+        "implementation": {
+          "avg_weeks": 2,
+          "complexity": "low",
+          "requires_developer": false,
+          "note": "White-glove onboarding - they build everything for you"
+        },
+        "ratings": {
+          "our_rating": 4.4,
+          "our_notes": "Portfolio company of Martell Ventures. White-glove approach reduces implementation burden. 90-day guarantee shows confidence. Lack of public pricing is barrier for evaluation. Best for service businesses with substantial lead flow. Competes with Synthflow, Bland AI, Air AI in voice agent space."
+        },
+        "integrations": [
+          "CRM systems",
+          "Calendar tools",
+          "Ad platforms",
+          "Custom webhooks"
+        ],
+        "competitors": [
+          "Synthflow",
+          "Bland AI",
+          "Air AI",
+          "Vapi",
+          "Retell AI"
+        ],
+        "verified_at": "2026-01-14T00:00:00Z",
+        "source": "Dan Martell AI Tools video Jan 2026, verified via youratlas.com"
+      },
+      {
+        "slug": "revio",
+        "name": "Revio",
+        "category": "ai_sales_tools",
+        "subcategory": "social_selling",
+        "website": "https://www.getrevio.com",
+        "description": "AI-powered social media sales CRM that converts Instagram and Facebook followers into paying customers. Combines AI copilot for selling with automated lead generation and sales coaching. Manages DM-based sales conversations with AI-powered reply suggestions trained on closed-won conversations.",
+        "tagline": "Turn followers into customers with AI-powered social selling",
+        "key_capabilities": [
+          "AI Copilot for Selling with on-brand reply suggestions",
+          "AI Sales Coach that scores chats and provides feedback",
+          "Automated lead generation from followers",
+          "AI-based lead scoring and qualification",
+          "Personal audio message functionality",
+          "Social CRM for Instagram and Facebook DMs",
+          "Real-time pipeline and analytics dashboard",
+          "Team collaboration without sharing credentials"
+        ],
+        "use_case_example": "Coaches and consultants selling high-ticket programs via Instagram DMs get AI-suggested replies, automated lead scraping from followers, and AI scoring of their sales conversations to improve close rates.",
+        "pricing": {
+          "model": "custom",
+          "currency": "USD",
+          "note": "Pricing not publicly disclosed - requires Growth Session consultation",
+          "verified_status": "PARTIALLY_VERIFIED",
+          "verified_date": "2026-01-15",
+          "source": "getrevio.com"
+        },
+        "best_for": [
+          "Coaches and consultants selling via social DMs",
+          "High-ticket service businesses using Instagram/Facebook",
+          "Sales teams doing social selling at scale",
+          "Creators monetizing followers through DM sales",
+          "Teams wanting AI-assisted DM conversations"
+        ],
+        "industries": [
+          "Coaching",
+          "Consulting",
+          "E-commerce",
+          "Personal Brands",
+          "Online Education"
+        ],
+        "company_sizes": ["individual", "startup", "smb"],
+        "avoid_if": [
+          "B2B enterprise sales (better suited for LinkedIn tools)",
+          "Need transparent upfront pricing",
+          "Don't sell through social media DMs",
+          "Primarily cold outbound (this is for warm follower conversion)"
+        ],
+        "implementation": {
+          "avg_weeks": 1,
+          "complexity": "low",
+          "requires_developer": false
+        },
+        "ratings": {
+          "our_rating": 4.2,
+          "our_notes": "Strong for social DM sales with claimed 50% conversion rate increase. AI copilot trained on winning conversations is unique. Lack of public pricing is a barrier. Best for coaches/consultants with established social followings. LinkedIn support coming soon."
+        },
+        "integrations": [
+          "Instagram",
+          "Facebook Messenger",
+          "LinkedIn (coming soon)"
+        ],
+        "competitors": [
+          "Manychat",
+          "MobileMonkey",
+          "Customers.ai",
+          "Chatfuel"
+        ],
+        "verified_at": "2026-01-15T00:00:00Z",
+        "source": "AI Operating System SOP, verified via getrevio.com"
+      }
+    ]
+  },
+  "last_updated": "2026-01-15T00:00:00Z"
 }

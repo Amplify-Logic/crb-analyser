@@ -1,0 +1,481 @@
+{
+  "type": "trend",
+  "description": "AI and industry trends backed by data from research institutions and analysts",
+  "last_updated": "2026-01-15",
+  "insights": [
+    {
+      "id": "trend-2026-ai-models-commoditized",
+      "type": "trend",
+      "title": "AI Models Becoming Commoditized as Performance Gaps Narrow",
+      "content": "The competitive advantage is shifting from having the best AI model to how AI is integrated and applied. Models are clustering in performance with shrinking quality gaps between frontier models, while costs have dropped dramatically. Competition now focuses on reach, integration, and trust rather than raw AI capabilities.",
+      "supporting_data": [
+        {
+          "claim": "Major AI models are clustering in the top performance tier with shrinking gaps between them",
+          "source": "Artificial Analysis",
+          "source_url": null,
+          "date": "2026",
+          "credibility": "industry_data"
+        },
+        {
+          "claim": "Free open-weight models like Deep Seek and Llama are approaching frontier performance",
+          "source": "Stanford",
+          "source_url": null,
+          "date": "2026",
+          "credibility": "academic"
+        },
+        {
+          "claim": "Nvidia's latest chips use 105,000 times less energy per token than 10 years ago",
+          "source": "Epoch AI",
+          "source_url": null,
+          "date": "2026",
+          "credibility": "industry_research"
+        }
+      ],
+      "actionable_insight": "Stop obsessing over technical model scores and focus on integration with your actual workflows. Choose AI based on how well it fits into your existing tools and processes, not raw performance metrics.",
+      "tags": {
+        "topics": [
+          "ai_models",
+          "commoditization",
+          "competitive_advantage"
+        ],
+        "industries": [
+          "all"
+        ],
+        "use_in": [
+          "report",
+          "quiz_results"
+        ],
+        "user_stages": [
+          "considering",
+          "early_adopter",
+          "scaling"
+        ]
+      },
+      "source": {
+        "title": "Top 6 AI Trends That Will Define 2026",
+        "author": "Jeff Su",
+        "url": "https://www.youtube.com/watch?v=jeff-su-ai-trends",
+        "date": "2026-01-06",
+        "type": "youtube"
+      },
+      "extracted_at": "2026-01-15",
+      "reviewed": true
+    },
+    {
+      "id": "trend-2026-workflows-over-agents",
+      "type": "trend",
+      "title": "AI Workflows Outpacing Autonomous Agents in Real Adoption",
+      "content": "Despite industry hype around autonomous agents, actual enterprise adoption is happening through AI workflows. Organizations are finding more value in human-AI collaboration within structured processes than fully autonomous systems.",
+      "supporting_data": [
+        {
+          "claim": "No more than 10% of organizations report scaling true agents in any business function",
+          "source": "McKinsey",
+          "source_url": null,
+          "date": "2026",
+          "credibility": "industry_research"
+        },
+        {
+          "claim": "20% of enterprise AI use happens through workflow-specific tools like custom GPTs and projects",
+          "source": "OpenAI Enterprise Report",
+          "source_url": null,
+          "date": "2026",
+          "credibility": "industry_data"
+        },
+        {
+          "claim": "Redesigning workflows will unlock nearly $3 trillion in economic value by 2030",
+          "source": "McKinsey",
+          "source_url": null,
+          "date": "2030",
+          "credibility": "industry_research"
+        }
+      ],
+      "actionable_insight": "Focus on turning successful prompts into repeatable workflows. Pick one recurring deliverable, break it into steps, let AI handle predictable parts while keeping humans in the loop for judgment calls.",
+      "tags": {
+        "topics": [
+          "ai_workflows",
+          "automation",
+          "human_ai_collaboration"
+        ],
+        "industries": [
+          "all"
+        ],
+        "use_in": [
+          "report",
+          "quiz_results",
+          "landing"
+        ],
+        "user_stages": [
+          "early_adopter",
+          "scaling"
+        ]
+      },
+      "source": {
+        "title": "Top 6 AI Trends That Will Define 2026",
+        "author": "Jeff Su",
+        "url": "https://www.youtube.com/watch?v=jeff-su-ai-trends",
+        "date": "2026-01-06",
+        "type": "youtube"
+      },
+      "extracted_at": "2026-01-15",
+      "reviewed": true
+    },
+    {
+      "id": "trend-2026-technical-divide-closing",
+      "type": "trend",
+      "title": "AI Eliminating the Technical Skills Divide",
+      "content": "Non-technical employees are increasingly able to complete technical tasks they previously couldn't do, fundamentally changing the competitive landscape between technical and domain experts.",
+      "supporting_data": [
+        {
+          "claim": "75% of enterprise users reported using AI to complete tasks they literally could not do before",
+          "source": "OpenAI Report",
+          "source_url": null,
+          "date": "2026",
+          "credibility": "industry_data"
+        },
+        {
+          "claim": "Coding-related messages from non-technical employees grew 36% in just 6 months",
+          "source": "OpenAI Report",
+          "source_url": null,
+          "date": "2026",
+          "credibility": "industry_data"
+        },
+        {
+          "claim": "AI acts as an equalizer, disproportionately helping workers with lower technical skills close the performance gap with experts",
+          "source": "MIT Study",
+          "source_url": null,
+          "date": "2026",
+          "credibility": "academic"
+        }
+      ],
+      "actionable_insight": "If you're purely technical, expand into domain expertise. If you're domain-focused, attempt one 'impossible' technical task this month using AI to build new capabilities.",
+      "tags": {
+        "topics": [
+          "skills_democratization",
+          "career_development",
+          "competitive_advantage"
+        ],
+        "industries": [
+          "all"
+        ],
+        "use_in": [
+          "report",
+          "quiz_results",
+          "landing"
+        ],
+        "user_stages": [
+          "considering",
+          "early_adopter"
+        ]
+      },
+      "source": {
+        "title": "Top 6 AI Trends That Will Define 2026",
+        "author": "Jeff Su",
+        "url": "https://www.youtube.com/watch?v=jeff-su-ai-trends",
+        "date": "2026-01-06",
+        "type": "youtube"
+      },
+      "extracted_at": "2026-01-15",
+      "reviewed": false
+    },
+    {
+      "id": "trend-2026-context-over-prompting",
+      "type": "trend",
+      "title": "Context Management Becomes More Important Than Prompt Engineering",
+      "content": "As AI models become better at understanding vague instructions, the competitive advantage shifts from how you ask (prompting) to what information you provide (context). Platform consolidation becomes critical for AI effectiveness.",
+      "supporting_data": [
+        {
+          "claim": "New models have gotten much better at understanding vague instructions but still have a 'fact gap' about company-specific information",
+          "source": "Jeff Su Analysis",
+          "source_url": "https://www.youtube.com/watch?v=jeff-su-ai-trends",
+          "date": "2026",
+          "credibility": "analyst"
+        }
+      ],
+      "actionable_insight": "Prioritize file organization and platform consolidation. Ensure your work materials are systematically organized and accessible within one ecosystem to maximize AI effectiveness.",
+      "tags": {
+        "topics": [
+          "context_management",
+          "file_organization",
+          "platform_strategy"
+        ],
+        "industries": [
+          "all"
+        ],
+        "use_in": [
+          "report",
+          "quiz_results"
+        ],
+        "user_stages": [
+          "early_adopter",
+          "scaling"
+        ]
+      },
+      "source": {
+        "title": "Top 6 AI Trends That Will Define 2026",
+        "author": "Jeff Su",
+        "url": "https://www.youtube.com/watch?v=jeff-su-ai-trends",
+        "date": "2026-01-06",
+        "type": "youtube"
+      },
+      "extracted_at": "2026-01-15",
+      "reviewed": false
+    },
+    {
+      "id": "trend-2026-software-to-physical-ai",
+      "type": "trend",
+      "title": "AI Expanding from Software to Physical World Applications",
+      "content": "AI is increasingly being deployed in physical applications like autonomous vehicles and warehouse automation, transforming capital assets into continuously improving software platforms.",
+      "supporting_data": [
+        {
+          "claim": "Waymo's autonomous taxis have logged over 100 million fully autonomous miles and are involved in 96% fewer crashes than human drivers",
+          "source": "Waymo",
+          "source_url": null,
+          "date": "2026",
+          "credibility": "industry_data"
+        },
+        {
+          "claim": "Amazon's AI-enabled warehouse robots have cut time from order to shipping by 78%",
+          "source": "Amazon",
+          "source_url": null,
+          "date": "2026",
+          "credibility": "industry_data"
+        },
+        {
+          "claim": "China deployed more industrial robots than the US and rest of world combined as of 2023",
+          "source": "Industrial Data",
+          "source_url": null,
+          "date": "2023",
+          "credibility": "industry_data"
+        }
+      ],
+      "actionable_insight": "Consider how AI might transform physical assets in your industry into continuously improving platforms, while noting that blue-collar disruption will happen over a longer timeframe than white-collar changes.",
+      "tags": {
+        "topics": [
+          "physical_ai",
+          "automation",
+          "industrial_robots"
+        ],
+        "industries": [
+          "manufacturing",
+          "logistics",
+          "transportation"
+        ],
+        "use_in": [
+          "report"
+        ],
+        "user_stages": [
+          "scaling"
+        ]
+      },
+      "source": {
+        "title": "Top 6 AI Trends That Will Define 2026",
+        "author": "Jeff Su",
+        "url": "https://www.youtube.com/watch?v=jeff-su-ai-trends",
+        "date": "2026-01-06",
+        "type": "youtube"
+      },
+      "extracted_at": "2026-01-15",
+      "reviewed": false
+    },
+    {
+      "id": "trend-context-over-prompting",
+      "type": "trend",
+      "title": "Context Becomes More Important Than Prompting Skills",
+      "content": "AI models have become much better at understanding vague instructions, but they still struggle with the 'fact gap' - lacking knowledge about your specific context, files, and company information. The focus has shifted from how you ask to what information you provide.",
+      "supporting_data": [
+        {
+          "claim": "New models have gotten much better at understanding vague instructions but lack company-specific context",
+          "source": "Jeff Su analysis",
+          "source_url": null,
+          "date": "2026",
+          "credibility": "analyst"
+        }
+      ],
+      "actionable_insight": "Organize your files with clear naming systems and consolidate information into fewer platforms so AI can access the context it needs to help you effectively.",
+      "tags": {
+        "topics": [
+          "ai_prompting",
+          "information_management",
+          "productivity"
+        ],
+        "industries": [
+          "all"
+        ],
+        "use_in": [
+          "report",
+          "quiz_results"
+        ],
+        "user_stages": [
+          "early_adopter",
+          "scaling"
+        ]
+      },
+      "source": {
+        "title": "Top 6 AI Trends That Will Define 2026",
+        "author": "Jeff Su",
+        "url": "https://www.youtube.com/watch?v=jeff-su-ai-trends",
+        "date": "2026-01-06",
+        "type": "youtube"
+      },
+      "extracted_at": "2026-01-15",
+      "reviewed": false
+    },
+    {
+      "id": "trend-capital-assets-software-endpoints",
+      "type": "trend",
+      "title": "Physical Assets Becoming Software-Driven Platforms",
+      "content": "Physical assets like cars, tractors, and robots are transforming from depreciating capital into software endpoints that improve over time through updates, similar to smartphones. This represents a fundamental shift in how we value and utilize physical infrastructure.",
+      "supporting_data": [
+        {
+          "claim": "AI turning capital assets into software endpoints",
+          "source": "Mary Meeker (analyst)",
+          "source_url": null,
+          "date": "2026",
+          "credibility": "analyst"
+        },
+        {
+          "claim": "A Waymo car today is safer and smarter than 2 years ago despite unchanged physical vehicle",
+          "source": "Jeff Su analysis",
+          "source_url": null,
+          "date": "2026",
+          "credibility": "analyst"
+        }
+      ],
+      "actionable_insight": "Rethink asset valuation models to account for software-driven improvements over time, and consider how your physical assets could become platforms for continuous enhancement.",
+      "tags": {
+        "topics": [
+          "asset_valuation",
+          "software_platforms",
+          "business_models"
+        ],
+        "industries": [
+          "all"
+        ],
+        "use_in": [
+          "report"
+        ],
+        "user_stages": [
+          "scaling"
+        ]
+      },
+      "source": {
+        "title": "Top 6 AI Trends That Will Define 2026",
+        "author": "Jeff Su",
+        "url": "https://www.youtube.com/watch?v=jeff-su-ai-trends",
+        "date": "2026-01-06",
+        "type": "youtube"
+      },
+      "extracted_at": "2026-01-15",
+      "reviewed": false
+    },
+    {
+      "id": "trend-ai-adoption-window-closing",
+      "type": "trend",
+      "title": "AI's Opportunity Window Rapidly Narrowing",
+      "content": "Unlike previous technological revolutions that took decades to mature, AI's adoption curve is so steep that the window for massive early-stage gains is being measured in months, not decades. Companies are hitting valuations in 1 year that took internet giants a decade to reach.",
+      "supporting_data": [
+        {
+          "claim": "AI companies reaching decade-level valuations in 1 year",
+          "source": "Market analysis",
+          "source_url": null,
+          "date": "2024-2025",
+          "credibility": "analyst"
+        }
+      ],
+      "actionable_insight": "Act quickly to position yourself in AI. The traditional luxury of waiting and watching may result in missing the opportunity entirely.",
+      "tags": {
+        "topics": [
+          "timing",
+          "market_dynamics",
+          "early_adoption"
+        ],
+        "industries": [
+          "all"
+        ],
+        "use_in": [
+          "report",
+          "landing",
+          "quiz_results"
+        ],
+        "user_stages": [
+          "considering"
+        ]
+      },
+      "source": {
+        "title": "AI Revolution: The Opportunity Window is Closing",
+        "author": "Unknown",
+        "url": "",
+        "date": "2026-01",
+        "type": "youtube"
+      },
+      "extracted_at": "2026-01-15",
+      "reviewed": false
+    },
+    {
+      "id": "trend-2026-agent-ai-accessible",
+      "type": "trend",
+      "title": "Non-Technical Users Can Now Use Agent AI",
+      "content": "Claude Co-work puts the same AI agent architecture that developers use into a click-and-point interface. No terminal, no code - you point at a folder, describe what you want, and walk away. The tool makes a plan, shows you the plan, executes autonomously, and notifies you when done.",
+      "supporting_data": [
+        {
+          "claim": "Anthropic built Co-work in 10 days after seeing non-developers using Claude Code for expense reports and file organization",
+          "source": "Anthropic / Claude Co-work Launch",
+          "source_url": null,
+          "date": "2026-01",
+          "credibility": "industry_data"
+        }
+      ],
+      "actionable_insight": "If you've been waiting for AI tools that don't require technical skills, the wait is over. Try Claude Co-work for tasks like organizing receipts, preparing for meetings, or processing documents.",
+      "tags": {
+        "topics": ["ai-tools", "productivity", "accessibility"],
+        "industries": ["all"],
+        "use_in": ["landing", "quiz_results", "report"],
+        "user_stages": ["considering", "early_adopter"]
+      },
+      "source": {
+        "title": "Claude Co-work Launch Analysis",
+        "author": "Dan Shipper",
+        "url": "https://www.youtube.com/watch?v=5KVDDfAkl",
+        "date": "2026-01-09",
+        "type": "youtube"
+      },
+      "extracted_at": "2026-01-15",
+      "reviewed": false,
+      "audience_relevance": "high",
+      "relevance_reason": "Directly enables SMB owners to use AI without technical skills - solves access barrier"
+    },
+    {
+      "id": "trend-2026-finished-deliverables",
+      "type": "trend",
+      "title": "AI Now Produces Finished Deliverables, Not Drafts",
+      "content": "Previous AI tools produced text blobs you had to copy-paste and clean up. Agent AI produces actual deliverables - Excel files with working formulas, PowerPoints ready to present, organized folders. The output IS the work product.",
+      "supporting_data": [
+        {
+          "claim": "When you ask Co-work to process expense receipts into a spreadsheet, it produces an Excel file with working VLOOKUP formulas and conditional formatting, not a CSV that you then clean up",
+          "source": "Claude Co-work architecture",
+          "source_url": null,
+          "date": "2026-01",
+          "credibility": "industry_data"
+        }
+      ],
+      "actionable_insight": "Stop using AI to generate drafts you then manually fix. Use agent AI to produce finished work. If you're still copy-pasting AI output into documents, you're using 2024 workflows in 2026.",
+      "tags": {
+        "topics": ["productivity", "workflows", "ai-tools"],
+        "industries": ["all"],
+        "use_in": ["landing", "quiz_results", "report"],
+        "user_stages": ["considering", "early_adopter"]
+      },
+      "source": {
+        "title": "Claude Co-work Launch Analysis",
+        "author": "Dan Shipper",
+        "url": "https://www.youtube.com/watch?v=5KVDDfAkl",
+        "date": "2026-01-09",
+        "type": "youtube"
+      },
+      "extracted_at": "2026-01-15",
+      "reviewed": false,
+      "audience_relevance": "high",
+      "relevance_reason": "Directly addresses time waste from cleanup - SMB owners get finished work not drafts"
+    }
+  ]
+}

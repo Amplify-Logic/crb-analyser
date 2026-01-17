@@ -331,7 +331,420 @@
       ],
       "verified_at": "2025-12-27T00:00:00Z",
       "source": "WeAreNoCode video Dec 2025"
+    },
+    {
+      "slug": "elevenlabs",
+      "name": "ElevenLabs",
+      "category": "ai_content_creation",
+      "subcategory": "voice_synthesis",
+      "website": "https://elevenlabs.io",
+      "pricing_url": "https://elevenlabs.io/pricing",
+      "description": "Leading AI voice synthesis platform for creating ultra-realistic voices. Offers text-to-speech, voice cloning, dubbing, and conversational AI. Used for podcasts, audiobooks, video narration, IVR systems, and content localization. Supports 32+ languages with instant and professional voice cloning options.",
+      "tagline": "The most realistic AI voices",
+      "key_capabilities": [
+        "Text-to-speech with natural intonation",
+        "Instant voice cloning (30 seconds of audio)",
+        "Professional voice cloning (high-fidelity)",
+        "AI dubbing for video localization",
+        "Conversational AI voices",
+        "Voice library with 1000+ voices",
+        "32+ language support",
+        "API access for integration",
+        "Projects for long-form content"
+      ],
+      "use_case_example": "Create voiceovers for marketing videos in multiple languages, clone your voice for podcast intros, or build voice-enabled customer service bots.",
+      "pricing": {
+        "model": "credits",
+        "currency": "USD",
+        "billing_options": ["monthly", "annual"],
+        "annual_discount_percent": 17,
+        "tiers": [
+          {
+            "name": "Free",
+            "price": 0,
+            "per": "month",
+            "features": ["10,000 characters/month (~10 min audio)", "Shared voices only", "Attribution required", "Non-commercial use"],
+            "limits": {
+              "characters_per_month": 10000,
+              "voice_clones": 0
+            }
+          },
+          {
+            "name": "Starter",
+            "price": 5,
+            "per": "month",
+            "billing": "monthly",
+            "features": ["30,000 characters/month (~30 min)", "Instant voice cloning (10 voices)", "Commercial license", "API access"],
+            "limits": {
+              "characters_per_month": 30000,
+              "instant_voice_clones": 10
+            }
+          },
+          {
+            "name": "Creator",
+            "price": 22,
+            "per": "month",
+            "billing": "monthly",
+            "annual_price": 18,
+            "features": ["100,000 characters/month (~100 min)", "Professional voice cloning", "30 instant voice clones", "Projects feature", "Usage analytics"],
+            "limits": {
+              "characters_per_month": 100000,
+              "instant_voice_clones": 30,
+              "professional_voice_clones": 1
+            }
+          },
+          {
+            "name": "Pro",
+            "price": 99,
+            "per": "month",
+            "billing": "monthly",
+            "annual_price": 82,
+            "features": ["500,000 characters/month (~8 hrs)", "Unlimited instant clones", "3 professional voice clones", "Higher quality audio", "44.1kHz output"],
+            "limits": {
+              "characters_per_month": 500000,
+              "instant_voice_clones": null,
+              "professional_voice_clones": 3
+            }
+          },
+          {
+            "name": "Scale",
+            "price": 330,
+            "per": "month",
+            "billing": "monthly",
+            "features": ["2,000,000 characters/month (~33 hrs)", "Enterprise features", "Priority support"],
+            "limits": {
+              "characters_per_month": 2000000
+            }
+          },
+          {
+            "name": "Business",
+            "price": 1320,
+            "per": "month",
+            "billing": "monthly",
+            "features": ["11,000,000 characters/month", "Dedicated support", "Custom onboarding", "Volume discounts available"]
+          },
+          {
+            "name": "Enterprise",
+            "price": null,
+            "per": "custom",
+            "features": ["Custom character volumes", "Dedicated infrastructure", "Custom SLA", "Advanced security", "White-glove support"]
+          }
+        ],
+        "verified_status": "VERIFIED",
+        "verified_date": "2026-01-14",
+        "source": "elevenlabs.io/pricing"
+      },
+      "best_for": [
+        "Content creators needing voiceovers",
+        "Podcasters and audiobook producers",
+        "Marketing teams creating video content",
+        "E-learning and training content",
+        "App developers adding voice features",
+        "Businesses localizing content to new markets"
+      ],
+      "time_savings": {
+        "estimate": "90% reduction in voiceover production time",
+        "comparison": "Professional voiceover: days → ElevenLabs: minutes"
+      },
+      "industries": [
+        "Content Creation",
+        "E-learning",
+        "Marketing",
+        "Entertainment",
+        "Customer Service",
+        "Gaming"
+      ],
+      "company_sizes": ["individual", "startup", "smb", "mid_market", "enterprise"],
+      "implementation": {
+        "avg_weeks": 0,
+        "complexity": "low",
+        "requires_developer": false
+      },
+      "ratings": {
+        "g2": {
+          "score": 4.7,
+          "reviews": 250,
+          "last_updated": "2026-01"
+        },
+        "our_rating": 4.8,
+        "our_notes": "Industry leader in voice synthesis quality. Creator plan at $22/mo is sweet spot for most businesses. Professional voice cloning is remarkably accurate. API is well-documented for integration. Annual billing saves 2 months."
+      },
+      "competitors": [
+        "Amazon Polly",
+        "Google Cloud TTS",
+        "Microsoft Azure Speech",
+        "Murf.ai",
+        "Play.ht",
+        "Resemble AI"
+      ],
+      "verified_at": "2026-01-14T00:00:00Z",
+      "source": "Dan Martell AI Tools video Jan 2026, verified via elevenlabs.io/pricing"
+    },
+    {
+      "slug": "heygen",
+      "name": "HeyGen",
+      "category": "ai_content_creation",
+      "subcategory": "ai_avatars",
+      "website": "https://www.heygen.com",
+      "pricing_url": "https://www.heygen.com/pricing",
+      "description": "AI avatar video platform that creates realistic spokesperson videos from text. Generate professional videos with AI avatars speaking any script in 175+ languages. Features Avatar IV technology with full-body motion and micro-expressions. Used for training videos, marketing content, product demos, and personalized video messages at scale.",
+      "tagline": "AI video generator for engaging business videos",
+      "key_capabilities": [
+        "AI avatar video generation",
+        "Avatar IV with full-body motion and expressions",
+        "175+ language support with lip-sync",
+        "Custom avatar creation from your likeness",
+        "Voice cloning integration",
+        "Template library for quick creation",
+        "Batch video generation via API",
+        "Real-time avatar for live interactions"
+      ],
+      "use_case_example": "Create training videos for new employees with an AI version of your CEO, or generate personalized video messages for thousands of customers with their names.",
+      "pricing": {
+        "model": "credits",
+        "currency": "USD",
+        "billing_options": ["monthly", "annual"],
+        "annual_discount_percent": 17,
+        "tiers": [
+          {
+            "name": "Free",
+            "price": 0,
+            "per": "month",
+            "features": ["1 credit (1 min video)", "Access to 100+ avatars", "Watermark on exports", "720p resolution"],
+            "limits": {
+              "credits_per_month": 1,
+              "resolution": "720p",
+              "watermark": true
+            }
+          },
+          {
+            "name": "Creator",
+            "price": 24,
+            "per": "month",
+            "billing": "annual",
+            "monthly_price": 29,
+            "features": ["15 credits/month (15 min video)", "No watermark", "1080p resolution", "Avatar IV: 5 min/month", "Premium voices", "Priority rendering"],
+            "limits": {
+              "credits_per_month": 15,
+              "resolution": "1080p",
+              "avatar_iv_minutes": 5
+            }
+          },
+          {
+            "name": "Team",
+            "price": 60,
+            "per": "month",
+            "billing": "annual",
+            "note": "Minimum 2 seats, being deprecated Jan 2026",
+            "features": ["30 credits/seat/month", "4K resolution", "Team workspace", "Brand kit", "API access"],
+            "limits": {
+              "credits_per_seat": 30,
+              "resolution": "4K",
+              "min_seats": 2
+            }
+          },
+          {
+            "name": "Enterprise",
+            "price": null,
+            "per": "custom",
+            "features": ["Custom credits", "SSO", "Dedicated support", "Custom avatars", "Translation proofreading", "Enterprise security"]
+          }
+        ],
+        "add_ons": {
+          "generative_credits": {"price": 15, "credits": 300},
+          "priority_processing": {"price": 15, "per": "month"},
+          "custom_voice_clone": {"price": 99, "per": "year"},
+          "additional_avatar_slot": {"price": 29, "per": "month"}
+        },
+        "verified_status": "VERIFIED",
+        "verified_date": "2026-01-14",
+        "source": "heygen.com/pricing"
+      },
+      "best_for": [
+        "Corporate training and onboarding videos",
+        "Marketing teams creating product videos",
+        "Sales teams with personalized outreach",
+        "E-learning course creators",
+        "Businesses needing multilingual content",
+        "Agencies creating video at scale"
+      ],
+      "time_savings": {
+        "estimate": "95% reduction in video production time",
+        "comparison": "Traditional video shoot: weeks → HeyGen: hours"
+      },
+      "industries": [
+        "E-learning",
+        "Corporate Training",
+        "Marketing",
+        "Sales",
+        "Real Estate",
+        "Healthcare"
+      ],
+      "company_sizes": ["individual", "startup", "smb", "mid_market"],
+      "implementation": {
+        "avg_weeks": 0,
+        "complexity": "low",
+        "requires_developer": false
+      },
+      "ratings": {
+        "g2": {
+          "score": 4.8,
+          "reviews": 800,
+          "last_updated": "2026-01"
+        },
+        "our_rating": 4.6,
+        "our_notes": "G2's #1 Fastest Growing Product 2025. Avatar IV is impressively realistic. Creator plan at $24/mo is good entry point. Watch for add-on costs - priority processing and extra avatars add up. Great for replacing expensive video production."
+      },
+      "competitors": [
+        "Synthesia",
+        "D-ID",
+        "Colossyan",
+        "Hour One",
+        "Elai.io"
+      ],
+      "verified_at": "2026-01-14T00:00:00Z",
+      "source": "Dan Martell AI Tools video Jan 2026, verified via heygen.com/pricing"
+    },
+    {
+      "slug": "midjourney",
+      "name": "MidJourney",
+      "category": "ai_content_creation",
+      "subcategory": "image_generation",
+      "website": "https://www.midjourney.com",
+      "pricing_url": "https://docs.midjourney.com/hc/en-us/articles/27870484040333-Comparing-Midjourney-Plans",
+      "description": "Leading AI image generation platform known for exceptionally high-quality, artistic outputs. Create stunning images from text prompts for marketing, branding, concept art, and creative projects. Operates through Discord with a web interface. Known for cinematic, stylized aesthetic that sets it apart from competitors.",
+      "tagline": "Explore new mediums of thought",
+      "key_capabilities": [
+        "Text-to-image generation",
+        "Image variations and upscaling",
+        "Style tuning and customization",
+        "Pan and zoom on generated images",
+        "Blend multiple images together",
+        "Consistent character generation",
+        "High-resolution outputs (up to 4K)",
+        "Commercial usage rights"
+      ],
+      "use_case_example": "Generate marketing visuals, social media graphics, product mockups, website hero images, or concept art for presentations without hiring designers.",
+      "pricing": {
+        "model": "subscription",
+        "currency": "USD",
+        "billing_options": ["monthly", "annual"],
+        "annual_discount_percent": 20,
+        "tiers": [
+          {
+            "name": "Basic",
+            "price": 10,
+            "per": "month",
+            "billing": "monthly",
+            "annual_price": 8,
+            "features": ["~200 generations/month", "3.3 Fast GPU hours", "General commercial terms", "Access to member gallery"],
+            "limits": {
+              "fast_gpu_hours": 3.3,
+              "approx_images": 200,
+              "concurrent_jobs": 3
+            }
+          },
+          {
+            "name": "Standard",
+            "price": 30,
+            "per": "month",
+            "billing": "monthly",
+            "annual_price": 24,
+            "features": ["~900 generations/month", "15 Fast GPU hours", "Unlimited Relax Mode", "General commercial terms"],
+            "limits": {
+              "fast_gpu_hours": 15,
+              "approx_images": 900,
+              "relax_mode": "unlimited",
+              "concurrent_jobs": 3
+            }
+          },
+          {
+            "name": "Pro",
+            "price": 60,
+            "per": "month",
+            "billing": "monthly",
+            "annual_price": 48,
+            "features": ["~1,800 generations/month", "30 Fast GPU hours", "Unlimited Relax Mode", "Stealth Mode (private)", "12 concurrent jobs"],
+            "limits": {
+              "fast_gpu_hours": 30,
+              "approx_images": 1800,
+              "relax_mode": "unlimited",
+              "concurrent_jobs": 12,
+              "stealth_mode": true
+            },
+            "note": "Required for companies with >$1M revenue per TOS"
+          },
+          {
+            "name": "Mega",
+            "price": 120,
+            "per": "month",
+            "billing": "monthly",
+            "annual_price": 96,
+            "features": ["~3,600 generations/month", "60 Fast GPU hours", "Unlimited Relax Mode", "Stealth Mode", "12 concurrent jobs"],
+            "limits": {
+              "fast_gpu_hours": 60,
+              "approx_images": 3600,
+              "relax_mode": "unlimited",
+              "concurrent_jobs": 12,
+              "stealth_mode": true
+            }
+          }
+        ],
+        "verified_status": "VERIFIED",
+        "verified_date": "2026-01-14",
+        "source": "docs.midjourney.com"
+      },
+      "best_for": [
+        "Marketing teams creating visual content",
+        "Social media managers needing graphics",
+        "Designers exploring concepts quickly",
+        "Small businesses without design resources",
+        "Content creators needing thumbnails/covers",
+        "Agencies doing creative work at scale"
+      ],
+      "time_savings": {
+        "estimate": "80% reduction in visual content creation time",
+        "comparison": "Custom design: hours/days → MidJourney: minutes"
+      },
+      "industries": [
+        "Marketing",
+        "Advertising",
+        "Content Creation",
+        "Gaming",
+        "Architecture",
+        "Fashion"
+      ],
+      "company_sizes": ["individual", "startup", "smb", "mid_market"],
+      "avoid_if": [
+        "Need precise control over outputs (use Photoshop)",
+        "Require photorealistic product shots (use photography)",
+        "Companies >$1M revenue on Basic/Standard (TOS requires Pro)",
+        "Need consistent brand characters (improving but still challenging)"
+      ],
+      "implementation": {
+        "avg_weeks": 0,
+        "complexity": "low",
+        "requires_developer": false
+      },
+      "ratings": {
+        "g2": {
+          "score": 4.4,
+          "reviews": 150,
+          "last_updated": "2026-01"
+        },
+        "our_rating": 4.5,
+        "our_notes": "Best-in-class image quality and artistic style. Standard plan at $30/mo is sweet spot with unlimited Relax Mode. No free tier anymore. Discord-based workflow can be learning curve. Pro plan required for larger businesses per TOS."
+      },
+      "competitors": [
+        "DALL-E 3",
+        "Stable Diffusion",
+        "Adobe Firefly",
+        "Leonardo.ai",
+        "Ideogram"
+      ],
+      "verified_at": "2026-01-14T00:00:00Z",
+      "source": "Dan Martell AI Tools video Jan 2026, verified via midjourney.com"
     }
   ],
-  "last_updated": "2025-12-27T00:00:00Z"
+  "last_updated": "2026-01-14T00:00:00Z"
 }

@@ -10,7 +10,6 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { useAuth } from '../contexts/AuthContext';
 import { Eye, EyeOff, Mail, Lock, AlertCircle } from 'lucide-react';
-import { SpotlightCard } from '../components/magicui';
 import { Logo } from '../components/Logo';
 
 const loginSchema = z.object({
@@ -64,7 +63,7 @@ export default function Login() {
         </div>
 
         {/* Login Card */}
-        <SpotlightCard className="p-8">
+        <div className="rounded-2xl border border-gray-200 bg-white p-8">
           {/* Error Alert */}
           {error && (
             <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-xl flex items-start gap-3">
@@ -193,7 +192,7 @@ export default function Login() {
               Sign up
             </Link>
           </p>
-        </SpotlightCard>
+        </div>
       </div>
     </div>
   );

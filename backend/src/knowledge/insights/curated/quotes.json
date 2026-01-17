@@ -1,0 +1,170 @@
+{
+  "type": "quote",
+  "description": "Memorable, quotable insights from industry experts and thought leaders",
+  "last_updated": "2026-01-15",
+  "insights": [
+    {
+      "id": "quote-karpathy-agent-expectations",
+      "type": "quote",
+      "title": "Andre Karpathy on Agent Hype vs Reality",
+      "content": "Calling everything an agent creates unrealistic expectations and confusion. Fully autonomous AI still faces massive hurdles like data security. We're looking at the decade of agents, not the year.",
+      "supporting_data": [
+        {
+          "claim": "Quote from Andre Karpathy about agent timeline and expectations",
+          "source": "Andre Karpathy",
+          "source_url": null,
+          "date": "2026",
+          "credibility": "analyst"
+        }
+      ],
+      "actionable_insight": "Set realistic expectations for AI agent deployment and focus on workflow integration rather than full autonomy in the near term.",
+      "tags": {
+        "topics": [
+          "ai_agents",
+          "expectations_management",
+          "timeline"
+        ],
+        "industries": [
+          "all"
+        ],
+        "use_in": [
+          "report",
+          "quiz_results"
+        ],
+        "user_stages": [
+          "considering",
+          "early_adopter"
+        ]
+      },
+      "source": {
+        "title": "Top 6 AI Trends That Will Define 2026",
+        "author": "Jeff Su",
+        "url": "https://www.youtube.com/watch?v=jeff-su-ai-trends",
+        "date": "2026-01-06",
+        "type": "youtube"
+      },
+      "extracted_at": "2026-01-15",
+      "reviewed": false
+    },
+    {
+      "id": "quote-expertise-reset-opportunity",
+      "type": "quote",
+      "title": "AI Creates Unique Window Where Expertise is Being Reset",
+      "content": "Professor Ethan Mollick's research on the 'jagged frontier of AI' shows we're in a unique window where expertise is being reset. Because things are messy and undefined, there are no experts who know everything already - you just need to be willing to learn faster than the person next to you.",
+      "supporting_data": [
+        {
+          "claim": "Research on 'jagged frontier of AI' shows expertise is being reset in current window",
+          "source": "Ethan Mollick (Wharton professor)",
+          "source_url": null,
+          "date": "2026",
+          "credibility": "academic"
+        }
+      ],
+      "actionable_insight": "Stop waiting for a perfect AI learning plan - start experimenting now while the playing field is still level and expertise advantages are being reshuffled.",
+      "tags": {
+        "topics": [
+          "learning",
+          "career_development",
+          "competitive_advantage"
+        ],
+        "industries": [
+          "all"
+        ],
+        "use_in": [
+          "landing",
+          "quiz_results"
+        ],
+        "user_stages": [
+          "considering",
+          "early_adopter"
+        ]
+      },
+      "source": {
+        "title": "Top 6 AI Trends That Will Define 2026",
+        "author": "Jeff Su",
+        "url": "https://www.youtube.com/watch?v=jeff-su-ai-trends",
+        "date": "2026-01-06",
+        "type": "youtube"
+      },
+      "extracted_at": "2026-01-15",
+      "reviewed": true
+    },
+    {
+      "id": "quote-small-teams-infinite-leverage",
+      "type": "quote",
+      "title": "Small Teams with AI Have Infinite Leverage",
+      "content": "Small teams have infinite leverage now. A team of 5 to 10 people who share an incredible passion for a meaningful problem, armed with the technology we now have available, can probably do more in a three-year window than most people did in a 30-year career.",
+      "supporting_data": [
+        {
+          "claim": "Small AI-enabled teams can accomplish 30 years of work in 3 years",
+          "source": "Content author observation",
+          "source_url": null,
+          "date": "2026-01",
+          "credibility": "anecdotal"
+        }
+      ],
+      "actionable_insight": "Consider forming or joining small, passionate teams focused on meaningful problems rather than large organizational structures.",
+      "tags": {
+        "topics": [
+          "team_dynamics",
+          "entrepreneurship",
+          "productivity"
+        ],
+        "industries": [
+          "technology",
+          "startups"
+        ],
+        "use_in": [
+          "quiz_results",
+          "landing"
+        ],
+        "user_stages": [
+          "early_adopter",
+          "scaling"
+        ]
+      },
+      "source": {
+        "title": "AI Revolution: The Opportunity Window is Closing",
+        "author": "Unknown",
+        "url": "",
+        "date": "2026-01",
+        "type": "youtube"
+      },
+      "extracted_at": "2026-01-15",
+      "reviewed": false
+    },
+    {
+      "id": "quote-intent-definition-skill",
+      "type": "quote",
+      "title": "Define Your Intent Well - The Key Skill of 2026",
+      "content": "If you can define your intent well enough, Claude Code now dressed up as Claude Co-work is able to do a good enough job that it will get it all the way done. And of course, that depends on your ability to define intent well, which is one of the key skills of 2026.",
+      "supporting_data": [
+        {
+          "claim": "Defining intent well is the key skill of 2026",
+          "source": "Dan Shipper",
+          "source_url": null,
+          "date": "2026-01",
+          "credibility": "analyst"
+        }
+      ],
+      "actionable_insight": "Practice describing what you want in terms of outcomes, not steps. 'Prepare a summary of my week's client meetings with action items' not 'look at my calendar and write some notes.'",
+      "tags": {
+        "topics": ["ai-skills", "productivity"],
+        "industries": ["all"],
+        "use_in": ["quiz_results", "landing"],
+        "user_stages": ["considering", "early_adopter"]
+      },
+      "source": {
+        "title": "Claude Co-work Launch Analysis",
+        "author": "Dan Shipper",
+        "url": "https://www.youtube.com/watch?v=5KVDDfAkl",
+        "date": "2026-01-09",
+        "type": "youtube"
+      },
+      "extracted_at": "2026-01-15",
+      "reviewed": false,
+      "audience_relevance": "high",
+      "relevance_reason": "Teachable skill that helps SMB owners get better results from AI immediately"
+    }
+  ]
+}

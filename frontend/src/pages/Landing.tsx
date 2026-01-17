@@ -1,7 +1,21 @@
+import { useState, useEffect } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { motion } from 'framer-motion'
-import { ShimmerButton, AnimatedGradientText, SpotlightCard } from '../components/magicui'
+import { ShimmerButton, AnimatedGradientText } from '../components/magicui'
 import { Logo } from '../components/Logo'
+import apiClient from '../services/apiClient'
+
+// Insight type for landing page
+interface LandingInsight {
+  id: string
+  type: string
+  title: string
+  content: string
+  source: {
+    title: string
+    author?: string
+  }
+}
 
 const VALUE_PROPS = [
   {
@@ -96,8 +110,26 @@ const REPORT_FEATURES = [
   'Shareable link for your team',
 ]
 
+// Type icons for insights
+const TYPE_ICONS: Record<string, string> = {
+  trend: '📈',
+  framework: '🔧',
+  case_study: '📋',
+  statistic: '📊',
+  quote: '💬',
+  prediction: '🔮',
+}
+
 export default function Landing() {
   const navigate = useNavigate()
+  const [insights, setInsights] = useState<LandingInsight[]>([])
+
+  useEffect(() => {
+    // Fetch landing page insights
+    apiClient.get<{ data: LandingInsight[] }>('/api/admin/insights/public/landing?limit=3')
+      .then(res => setInsights(res.data.data))
+      .catch(() => {/* Silently fail - insights are optional */})
+  }, [])
 
   const handleQuizStart = () => {
     navigate('/quiz?new=true')
@@ -195,7 +227,7 @@ export default function Landing() {
         </div>
       </section>
 
-      {/* Value Props - Spotlight Cards */}
+      {/* Value Props */}
       <section className="py-20 bg-white relative">
         <div className="max-w-6xl mx-auto px-4">
           <div className="grid md:grid-cols-3 gap-8">
@@ -207,13 +239,13 @@ export default function Landing() {
                 viewport={{ once: true }}
                 transition={{ duration: 0.5, delay: index * 0.1 }}
               >
-                <SpotlightCard className="group h-full p-8 hover:shadow-card-hover transition-all duration-300">
+                <div className="group h-full p-8 rounded-2xl border border-gray-200 bg-white hover:shadow-card-hover transition-all duration-300">
                   <div className="inline-flex items-center justify-center w-14 h-14 bg-gradient-to-br from-primary-50 to-primary-100 text-primary-600 rounded-2xl mb-6 shadow-sm border border-primary-100/50 group-hover:scale-110 group-hover:shadow-glow-primary transition-all duration-300">
                     {prop.icon}
                   </div>
                   <h3 className="text-xl font-bold text-gray-900 mb-3">{prop.title}</h3>
                   <p className="text-gray-600 leading-relaxed">{prop.description}</p>
-                </SpotlightCard>
+                </div>
               </motion.div>
             ))}
           </div>
@@ -445,6 +477,60 @@ export default function Landing() {
           </div>
         </div>
       </section>
+
+      {/* AI Trends Section - Only show if we have insights */}
+      {insights.length > 0 && (
+        <section className="py-20 bg-gradient-to-br from-violet-50/50 to-blue-50/50 border-t border-gray-100">
+          <div className="max-w-6xl mx-auto px-4">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              className="text-center mb-12"
+            >
+              <span className="inline-block px-3 py-1 bg-violet-100 text-violet-700 rounded-full text-sm font-medium mb-4">
+                Latest AI Research
+              </span>
+              <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+                What the data actually says
+              </h2>
+              <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+                Insights from leading researchers and industry analysts on where AI is headed.
+              </p>
+            </motion.div>
+
+            <div className="grid md:grid-cols-3 gap-6">
+              {insights.map((insight, index) => (
+                <motion.div
+                  key={insight.id}
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: index * 0.1 }}
+                  className="group bg-white rounded-2xl p-6 border border-gray-100 hover:border-violet-200 hover:shadow-lg transition-all duration-300"
+                >
+                  <div className="flex items-center gap-2 mb-4">
+                    <span className="text-2xl">{TYPE_ICONS[insight.type] || '💡'}</span>
+                    <span className="text-xs font-medium text-violet-600 bg-violet-50 px-2 py-0.5 rounded-md uppercase">
+                      {insight.type.replace('_', ' ')}
+                    </span>
+                  </div>
+                  <h3 className="font-semibold text-gray-900 mb-2 group-hover:text-violet-700 transition-colors line-clamp-2">
+                    {insight.title}
+                  </h3>
+                  <p className="text-sm text-gray-600 line-clamp-3 mb-4">
+                    {insight.content}
+                  </p>
+                  <div className="text-xs text-gray-400 truncate">
+                    Source: {insight.source.title}
+                    {insight.source.author && ` • ${insight.source.author}`}
+                  </div>
+                </motion.div>
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
 
       {/* Footer */}
       <footer className="py-12 bg-white border-t border-gray-100">

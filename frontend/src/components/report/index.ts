@@ -10,6 +10,7 @@ export { default as YourStorySection } from './YourStorySection'
 export { default as StickyNav } from './StickyNav'
 export { default as TieredFindings } from './TieredFindings'
 export { default as NumberedRecommendations } from './NumberedRecommendations'
+export { default as FourOptions } from './FourOptions'
 export { default as ValueSummary } from './ValueSummary'
 export { default as UpgradeCTA } from './UpgradeCTA'
 

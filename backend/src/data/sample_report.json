@@ -2,226 +2,400 @@
   "id": "sample-demo-report",
   "tier": "full",
   "status": "completed",
-  "created_at": "2024-12-20T10:00:00Z",
+  "created_at": "2026-01-10T10:00:00Z",
+  "company_profile": {
+    "company_name": "Friendly Build & Fix",
+    "industry": "construction",
+    "industry_display": "Construction & Building",
+    "team_size": "1-5 employees",
+    "tech_level": "Basic - spreadsheets and phone",
+    "budget_range": "$200-500/month",
+    "existing_tools": ["Xero", "Google Workspace", "Excel/Sheets"],
+    "location": "Warkworth, New Zealand",
+    "website": "friendlybuildandfix.co.nz",
+    "description": "Husband-wife building team with nearly a decade of hands-on experience. NZ Certified Builders offering renovations, repairs, decks, and custom projects across the upper North Island from the North Shore to Mangawhai."
+  },
   "executive_summary": {
-    "ai_readiness_score": 68,
-    "customer_value_score": 8,
+    "ai_readiness_score": 72,
+    "customer_value_score": 9,
     "business_health_score": 7,
-    "key_insight": "TechFlow Solutions has strong customer service foundations but is leaving €180K+ on the table annually through manual processes. The 'quick wins' in support automation and lead scoring can pay for your entire AI investment in 6 months.",
-    "total_value_potential": {"min": 180000, "max": 320000, "projection_years": 3},
+    "key_insight": "Friendly Build & Fix has exceptional craftsmanship and client relationships but is losing 12+ hours weekly to manual quoting, scheduling, and admin. Automating these workflows could free up an extra day per week for billable work - worth $45K+ annually at your rates.",
+    "total_value_potential": {"min": 65000, "max": 95000, "projection_years": 3},
     "top_opportunities": [
-      {"title": "AI Customer Support Triage", "value_potential": "€45K-75K/year", "time_horizon": "short"},
-      {"title": "Predictive Lead Scoring", "value_potential": "€60K-100K/year", "time_horizon": "short"},
-      {"title": "Automated Invoice Processing", "value_potential": "€25K-40K/year", "time_horizon": "mid"},
-      {"title": "Sales Forecasting Dashboard", "value_potential": "€30K-50K/year", "time_horizon": "mid"}
+      {"title": "AI-Assisted Quoting & Estimation", "value_potential": "$18K-28K/year", "time_horizon": "short"},
+      {"title": "Automated Client Progress Updates", "value_potential": "$12K-18K/year", "time_horizon": "short"},
+      {"title": "Job Management & Scheduling", "value_potential": "$15K-22K/year", "time_horizon": "mid"},
+      {"title": "Lead Follow-up Automation", "value_potential": "$8K-15K/year", "time_horizon": "mid"}
     ],
     "not_recommended": [
-      {"title": "Full CRM Replacement", "reason": "Your current CRM works well; integrate AI on top rather than replacing"},
-      {"title": "Custom Chatbot Development", "reason": "Off-the-shelf solutions like Intercom AI are more cost-effective at your scale"}
+      {"title": "Enterprise ERP Systems", "reason": "SAP, Oracle, or large-scale systems are overkill for a 2-person team. Stick with trade-specific tools."},
+      {"title": "Custom-Built Job Management Software", "reason": "Off-the-shelf NZ trade software like Fergus or Tradify is purpose-built for your needs at a fraction of the cost."}
     ],
-    "recommended_investment": {"year_1_min": 12000, "year_1_max": 25000},
+    "recommended_investment": {"year_1_min": 3500, "year_1_max": 7500},
     "verdict": {
       "recommendation": "proceed",
-      "headline": "Strong Opportunity",
-      "subheadline": "Your business is well-positioned for AI adoption",
+      "headline": "Strong Fit for Automation",
+      "subheadline": "Your business model is ideal for quick wins with minimal disruption",
       "reasoning": [
-        "Clear ROI opportunity with 6-month payback potential",
-        "Existing data infrastructure supports AI implementation",
-        "Team shows willingness to adopt new tools"
+        "Clear time savings available - 12+ hours/week on admin that could be billable",
+        "Existing client communication strength means automation enhances rather than replaces your personal touch",
+        "NZ-specific trade software is mature and proven for businesses like yours",
+        "As NZ Certified Builders, you already have systems thinking in place"
       ],
-      "when_to_revisit": "Quarterly check-ins to measure ROI",
+      "when_to_revisit": "Review impact after 3 months - if quoting time drops 50%+, consider phase 2",
       "recommended_approach": [
-        "Start with customer support triage (highest ROI, lowest risk)",
-        "Add lead scoring in month 3",
-        "Evaluate invoice automation after Q1 results"
+        "Start with quoting software (Buildxact or Fergus) - biggest time saver",
+        "Add automated client updates via job management portal in month 2",
+        "Implement lead automation once new enquiry volume increases"
       ],
       "confidence": "high",
       "color": "green"
     }
   },
   "value_summary": {
-    "value_saved": {"subtotal": {"min": 45000, "max": 75000}, "hours_per_week": 25, "hourly_rate": 45},
-    "value_created": {"subtotal": {"min": 90000, "max": 150000}},
-    "total": {"min": 135000, "max": 225000}
+    "value_saved": {"subtotal": {"min": 35000, "max": 52000}, "hours_per_week": 12, "hourly_rate": 85},
+    "value_created": {"subtotal": {"min": 18000, "max": 35000}},
+    "total": {"min": 53000, "max": 87000}
   },
   "findings": [
     {
       "id": "f1",
-      "title": "Customer Support Team Overwhelmed",
-      "description": "Support team spends 60% of time on repetitive tier-1 questions that could be automated. Response times averaging 4 hours are hurting customer satisfaction.",
+      "title": "Quoting Takes 3-4 Hours Per Job",
+      "description": "Each quote requires manual measurements, supplier price lookups, margin calculations, and document formatting. With 8-12 quotes per month, this represents 30-40+ hours of unbillable time. Industry-leading builders use AI-assisted estimation to cut this by 60%.",
       "category": "operations",
       "customer_value_score": 9,
-      "business_health_score": 7,
-      "value_saved": {"hours_per_week": 15, "hourly_rate": 45, "annual_savings": 35100},
+      "business_health_score": 8,
+      "value_saved": {"hours_per_week": 6, "hourly_rate": 85, "annual_savings": 26520},
       "confidence": "high",
-      "sources": ["Customer support ticket analysis", "Team interviews"],
+      "sources": ["Industry benchmarks - NZ Master Builders 2025", "Trade software adoption studies"],
       "time_horizon": "short"
     },
     {
       "id": "f2",
-      "title": "Sales Team Lacks Lead Prioritization",
-      "description": "Sales reps treat all leads equally, spending same time on low-probability leads as high-value ones. Win rate is 12% when industry average is 20%.",
-      "category": "sales",
-      "customer_value_score": 8,
-      "business_health_score": 8,
-      "value_created": {"description": "Improved conversion rate", "potential_revenue": 80000},
+      "title": "Client Updates Are Manual and Time-Consuming",
+      "description": "Dani spends 5+ hours weekly on phone calls, texts, and emails keeping clients informed about project progress, schedule changes, and next steps. While this personal touch is valued, much of it could be automated while maintaining your friendly brand.",
+      "category": "customer_experience",
+      "customer_value_score": 10,
+      "business_health_score": 7,
+      "value_saved": {"hours_per_week": 4, "hourly_rate": 65, "annual_savings": 13520},
       "confidence": "high",
-      "sources": ["CRM data analysis", "Industry benchmarks"],
+      "sources": ["Client communication analysis", "Similar NZ trade business benchmarks"],
       "time_horizon": "short"
     },
     {
       "id": "f3",
-      "title": "Manual Invoice Processing",
-      "description": "Finance team manually processes 200+ invoices monthly, with 3% error rate causing payment delays and vendor frustration.",
+      "title": "Job Scheduling Is Reactive, Not Proactive",
+      "description": "Without a centralised scheduling system, jobs occasionally overlap, travel between sites isn't optimised, and weather delays cause cascading rescheduling. Smart scheduling could recover 2-3 hours weekly and reduce client friction from last-minute changes.",
+      "category": "operations",
+      "customer_value_score": 8,
+      "business_health_score": 8,
+      "value_saved": {"hours_per_week": 2.5, "hourly_rate": 85, "annual_savings": 11050},
+      "confidence": "medium",
+      "sources": ["Project timeline analysis", "Industry scheduling benchmarks"],
+      "time_horizon": "mid"
+    },
+    {
+      "id": "f4",
+      "title": "Lead Follow-Up Falls Through Cracks",
+      "description": "Website enquiries and referrals sometimes wait 2-3 days for response during busy periods. Research shows 78% of customers choose the first builder to respond. Automated lead capture and instant follow-up could increase conversion by 15-25%.",
+      "category": "sales",
+      "customer_value_score": 7,
+      "business_health_score": 9,
+      "value_created": {"description": "Increased lead conversion from faster response", "potential_revenue": 25000},
+      "confidence": "medium",
+      "sources": ["Lead response time studies - ServiceTitan 2024", "NZ construction lead benchmarks"],
+      "time_horizon": "mid"
+    },
+    {
+      "id": "f5",
+      "title": "Invoice and Payment Tracking Is Manual",
+      "description": "Creating invoices, tracking payments, and following up on overdue accounts is done via spreadsheet. Average payment collection is 45 days when industry best practice is under 30. Automated invoicing with payment reminders could improve cash flow by 30%.",
       "category": "finance",
       "customer_value_score": 6,
-      "business_health_score": 8,
-      "value_saved": {"hours_per_week": 8, "hourly_rate": 50, "annual_savings": 20800},
-      "confidence": "medium",
-      "sources": ["Finance team survey", "Error rate analysis"],
-      "time_horizon": "mid"
+      "business_health_score": 9,
+      "value_created": {"description": "Improved cash flow and reduced payment collection time", "potential_revenue": 8000},
+      "confidence": "high",
+      "sources": ["Cash flow analysis", "Trade payment benchmarks - Xero Small Business Insights NZ"],
+      "time_horizon": "short"
     }
   ],
   "recommendations": [
     {
       "id": "r1",
-      "title": "Deploy AI Support Triage System",
-      "description": "Implement AI-powered ticket routing and auto-response for common queries. Reduces tier-1 volume by 40-60%.",
+      "title": "Implement AI-Assisted Quoting Software",
+      "description": "Deploy a trade-specific quoting tool that integrates with NZ supplier pricing, auto-calculates materials from measurements, and generates professional quotes in minutes instead of hours.",
       "why_it_matters": {
-        "customer_value": "Customers get instant answers 24/7, improving satisfaction scores",
-        "business_health": "Frees support team for complex issues, reduces burnout and turnover"
+        "customer_value": "Clients receive accurate, professional quotes same-day instead of waiting 3-5 days. Faster response wins more jobs.",
+        "business_health": "Reclaim 6+ hours weekly for billable work. More accurate estimates mean better margins and fewer surprises."
       },
       "priority": "high",
       "crb_analysis": {
-        "cost": {"short_term": {"setup": 3000, "monthly": 200}, "mid_term": {"monthly": 200}, "long_term": {"monthly": 200}, "total": 10200},
+        "cost": {"short_term": {"setup": 500, "monthly": 129}, "mid_term": {"monthly": 129}, "long_term": {"monthly": 129}, "total": 5048},
         "risk": [
-          {"description": "AI may misroute complex tickets initially", "probability": "medium", "impact": 2, "mitigation": "Keep human review for first 30 days"}
+          {"description": "Learning curve - 2-3 weeks to get comfortable", "probability": "medium", "impact": 2, "mitigation": "Use Buildxact's NZ support team for onboarding"},
+          {"description": "Initial quotes may need manual adjustment", "probability": "high", "impact": 1, "mitigation": "Review all quotes for first month, build templates"}
         ],
-        "benefit": {"short_term": {"annual": 35000}, "mid_term": {"annual": 35000}, "long_term": {"annual": 35000}, "total": 105000}
+        "benefit": {"short_term": {"annual": 26520}, "mid_term": {"annual": 26520}, "long_term": {"annual": 26520}, "total": 79560}
       },
       "options": {
-        "off_the_shelf": {"name": "Intercom Fin AI", "vendor": "Intercom", "monthly_cost": 199, "implementation_weeks": 2, "pros": ["Easy setup", "Proven solution"], "cons": ["Less customizable"]},
-        "best_in_class": {"name": "Zendesk AI", "vendor": "Zendesk", "monthly_cost": 299, "implementation_weeks": 3, "pros": ["Deep integrations", "Advanced analytics"], "cons": ["Higher cost"]},
-        "custom_solution": {"approach": "Build custom RAG chatbot on your knowledge base", "estimated_cost": {"min": 15000, "max": 25000}, "implementation_weeks": 8, "pros": ["Fully customized"], "cons": ["Maintenance burden", "Longer timeline"]}
+        "off_the_shelf": {"name": "Tradify", "vendor": "Tradify", "monthly_cost": 59, "implementation_weeks": 1, "pros": ["NZ-built for Kiwi trades", "Simple and fast to learn", "Good mobile app"], "cons": ["Less sophisticated estimating", "Basic supplier integration"]},
+        "best_in_class": {"name": "Buildxact", "vendor": "Buildxact", "monthly_cost": 129, "implementation_weeks": 2, "pros": ["Deep NZ supplier integration", "AI-assisted takeoffs from plans", "Professional quote templates"], "cons": ["Slightly steeper learning curve", "Higher monthly cost"]},
+        "custom_solution": {"approach": "Build custom quoting spreadsheet with macros and supplier API connections", "estimated_cost": {"min": 5000, "max": 12000}, "implementation_weeks": 8, "pros": ["Fully customised to your workflow"], "cons": ["Maintenance burden", "No mobile app", "No ongoing updates"]}
       },
-      "our_recommendation": "off_the_shelf",
-      "recommendation_rationale": "Intercom Fin provides 80% of the value at 20% of the cost of custom development. At your ticket volume, the ROI math strongly favors the off-the-shelf approach.",
-      "roi_percentage": 343,
-      "payback_months": 4,
-      "assumptions": ["Current tier-1 ticket volume: 500/month", "Average handling time: 15 minutes", "40% deflection rate (conservative)"]
+      "our_recommendation": "best_in_class",
+      "recommendation_rationale": "Buildxact's NZ supplier integration and AI-assisted takeoffs will save the most time on your complex renovation quotes. The $70/month extra over Tradify pays back in the first week from time savings. Their NZ support team understands local building requirements.",
+      "roi_percentage": 415,
+      "payback_months": 2,
+      "assumptions": ["8-12 quotes per month", "Current time per quote: 3.5 hours", "Buildxact reduces this to 1.5 hours", "Hourly rate: $85"]
     },
     {
       "id": "r2",
-      "title": "Implement Predictive Lead Scoring",
-      "description": "Use ML to score and prioritize leads based on fit, behavior, and intent signals. Focus sales effort on highest-probability opportunities.",
+      "title": "Set Up Automated Client Communication Portal",
+      "description": "Use job management software to give clients a portal where they can see project progress, photos, schedules, and next steps - reducing inbound calls while maintaining your personal touch for important conversations.",
       "why_it_matters": {
-        "customer_value": "Better-qualified prospects get more attention, improving their buying experience",
-        "business_health": "Higher win rates and shorter sales cycles directly impact revenue"
+        "customer_value": "Clients feel informed 24/7 without having to call. They can share progress with family/friends, increasing referrals.",
+        "business_health": "Dani reclaims 4+ hours weekly from routine update calls. Focus shifts to high-value client relationships."
       },
       "priority": "high",
       "crb_analysis": {
-        "cost": {"short_term": {"setup": 5000, "monthly": 500}, "mid_term": {"monthly": 500}, "long_term": {"monthly": 500}, "total": 23000},
+        "cost": {"short_term": {"setup": 200, "monthly": 79}, "mid_term": {"monthly": 79}, "long_term": {"monthly": 79}, "total": 3048},
         "risk": [
-          {"description": "Model needs 3-6 months of data to train properly", "probability": "low", "impact": 3, "mitigation": "Start with rule-based scoring, then layer ML"}
+          {"description": "Clients may prefer personal calls initially", "probability": "medium", "impact": 1, "mitigation": "Position portal as 'in addition to' not 'instead of' your service"},
+          {"description": "Need to remember to update job status", "probability": "medium", "impact": 2, "mitigation": "Set daily reminder, takes 5 mins to update all jobs"}
         ],
-        "benefit": {"short_term": {"annual": 50000}, "mid_term": {"annual": 80000}, "long_term": {"annual": 100000}, "total": 230000}
+        "benefit": {"short_term": {"annual": 13520}, "mid_term": {"annual": 13520}, "long_term": {"annual": 13520}, "total": 40560}
       },
       "options": {
-        "off_the_shelf": {"name": "HubSpot Predictive Lead Scoring", "vendor": "HubSpot", "monthly_cost": 400, "implementation_weeks": 2, "pros": ["Native CRM integration", "No data export needed"], "cons": ["Requires HubSpot Enterprise"]},
-        "best_in_class": {"name": "6sense", "vendor": "6sense", "monthly_cost": 1500, "implementation_weeks": 6, "pros": ["Intent data included", "Account-based focus"], "cons": ["Enterprise pricing"]},
-        "custom_solution": {"approach": "Build custom scoring model using your CRM data + external signals", "estimated_cost": {"min": 20000, "max": 35000}, "implementation_weeks": 12, "pros": ["Tailored to your sales motion"], "cons": ["Requires data team to maintain"]}
+        "off_the_shelf": {"name": "Fergus", "vendor": "Fergus", "monthly_cost": 79, "implementation_weeks": 1, "pros": ["Excellent client portal", "Built in NZ for NZ trades", "Great mobile app for site updates"], "cons": ["Quoting less sophisticated than Buildxact"]},
+        "best_in_class": {"name": "Buildertrend", "vendor": "Buildertrend", "monthly_cost": 199, "implementation_weeks": 3, "pros": ["Comprehensive project management", "Beautiful client experience", "Photo sharing and selections"], "cons": ["US-based, less NZ-specific", "Higher price point"]},
+        "custom_solution": {"approach": "Build client portal using Notion or Airtable with automation", "estimated_cost": {"min": 2000, "max": 5000}, "implementation_weeks": 4, "pros": ["Fully branded experience"], "cons": ["Manual integration", "No trade-specific features", "Ongoing maintenance"]}
       },
       "our_recommendation": "off_the_shelf",
-      "recommendation_rationale": "HubSpot's built-in scoring gets you 70% of the benefit immediately. As you grow, you can evaluate 6sense for intent data.",
-      "roi_percentage": 217,
-      "payback_months": 6,
-      "assumptions": ["Current pipeline: €2M/year", "Win rate improvement: 4% (12% → 16%)", "Average deal size: €25,000"]
+      "recommendation_rationale": "Fergus is built in Wellington specifically for NZ trades. The client portal is excellent, mobile app works well on-site, and it integrates with Xero for invoicing. At $79/month, ROI is achieved in the first month.",
+      "roi_percentage": 344,
+      "payback_months": 3,
+      "assumptions": ["Currently 5+ hours/week on client update calls", "70% of routine calls eliminated via portal", "Dani's effective hourly rate: $65"]
+    },
+    {
+      "id": "r3",
+      "title": "Implement Lead Capture and Auto-Response",
+      "description": "Set up automated lead capture from your website with instant personalised response and CRM tracking. Ensure no enquiry waits more than 5 minutes for acknowledgment, even when you're on-site.",
+      "why_it_matters": {
+        "customer_value": "Potential clients get immediate acknowledgment and clear next steps, building trust before you've even spoken.",
+        "business_health": "Capture leads that currently fall through cracks. First-responder advantage in competitive market."
+      },
+      "priority": "medium",
+      "crb_analysis": {
+        "cost": {"short_term": {"setup": 300, "monthly": 45}, "mid_term": {"monthly": 45}, "long_term": {"monthly": 45}, "total": 1920},
+        "risk": [
+          {"description": "Auto-responses may feel impersonal", "probability": "low", "impact": 2, "mitigation": "Write responses in Dani's friendly voice, promise personal callback within 24hrs"}
+        ],
+        "benefit": {"short_term": {"annual": 12000}, "mid_term": {"annual": 18000}, "long_term": {"annual": 25000}, "total": 55000}
+      },
+      "options": {
+        "off_the_shelf": {"name": "HubSpot Free CRM + Forms", "vendor": "HubSpot", "monthly_cost": 0, "implementation_weeks": 1, "pros": ["Free tier available", "Professional forms", "Basic automation"], "cons": ["Limited automation on free tier", "Less trade-specific"]},
+        "best_in_class": {"name": "Jobber", "vendor": "Jobber", "monthly_cost": 65, "implementation_weeks": 2, "pros": ["Built for trades", "Online booking", "Quote follow-up automation"], "cons": ["Another subscription to manage", "Some overlap with Fergus"]},
+        "custom_solution": {"approach": "Zapier connecting website form to SMS/email automation", "estimated_cost": {"min": 500, "max": 1500}, "implementation_weeks": 2, "pros": ["Flexible and customisable", "Works with existing tools"], "cons": ["Multiple tools to maintain", "Can break if any component changes"]}
+      },
+      "our_recommendation": "off_the_shelf",
+      "recommendation_rationale": "Start with HubSpot Free - it's genuinely free and handles lead capture, auto-response, and basic CRM. If Fergus becomes your main system (from recommendation #2), use its built-in lead features instead.",
+      "roi_percentage": 625,
+      "payback_months": 1,
+      "assumptions": ["10-15 website enquiries per month", "Currently 20% fall through cracks", "Average job value: $8,000", "15% improvement in conversion from faster response"]
     }
   ],
   "roadmap": {
     "short_term": [
-      {"title": "Deploy AI Support Triage", "description": "Set up Intercom Fin AI with your knowledge base", "timeline": "Weeks 1-2", "expected_outcome": "40% reduction in tier-1 tickets"},
-      {"title": "Implement Lead Scoring", "description": "Enable HubSpot predictive scoring on existing leads", "timeline": "Weeks 3-4", "expected_outcome": "Sales focuses on top 30% of leads"}
+      {"title": "Deploy Buildxact for Quoting", "description": "Set up AI-assisted quoting with NZ supplier integration", "timeline": "Weeks 1-2", "expected_outcome": "Quote time reduced from 3.5hrs to 1.5hrs"},
+      {"title": "Set Up Fergus Client Portal", "description": "Enable client portal and train on mobile updates", "timeline": "Weeks 3-4", "expected_outcome": "Clients can see job progress 24/7, reducing update calls by 60%"}
     ],
     "mid_term": [
-      {"title": "Invoice Automation", "description": "Deploy OCR + workflow automation for AP", "timeline": "Months 3-4", "expected_outcome": "80% of invoices auto-processed"},
-      {"title": "Sales Forecasting", "description": "Build ML-based forecast model", "timeline": "Months 5-6", "expected_outcome": "Forecast accuracy improves 25%"}
+      {"title": "Lead Capture Automation", "description": "Implement auto-response for website enquiries", "timeline": "Months 2-3", "expected_outcome": "Every lead gets response within 5 minutes, 24/7"},
+      {"title": "Xero Integration", "description": "Connect job management to accounting for automated invoicing", "timeline": "Month 3", "expected_outcome": "Invoices generated automatically on job completion"}
     ],
     "long_term": [
-      {"title": "Customer Health Scoring", "description": "Predict churn risk and expansion opportunities", "timeline": "Months 9-12", "expected_outcome": "Reduce churn by 15%"},
-      {"title": "AI-Assisted Content Creation", "description": "Generate personalized proposals and content", "timeline": "Year 2", "expected_outcome": "50% faster proposal turnaround"}
+      {"title": "Smart Scheduling", "description": "Optimise job scheduling with travel time and weather integration", "timeline": "Months 6-9", "expected_outcome": "Better job sequencing, less windshield time"},
+      {"title": "Review & Referral Automation", "description": "Automated review requests and referral program", "timeline": "Months 9-12", "expected_outcome": "Consistent 5-star reviews, referral tracking"}
     ]
   },
   "playbooks": [
     {
       "id": "pb1",
       "recommendation_id": "r1",
+      "option_type": "best_in_class",
+      "total_weeks": 2,
+      "phases": [
+        {
+          "name": "Setup & Import",
+          "week": 1,
+          "tasks": [
+            {"id": "t1", "title": "Create Buildxact account and complete NZ business setup", "hours": 1, "owner": "Dani"},
+            {"id": "t2", "title": "Connect PlaceMakers and ITM supplier price lists", "hours": 2, "owner": "Joh"},
+            {"id": "t3", "title": "Import past 5 quotes as templates for similar job types", "hours": 3, "owner": "Joh"},
+            {"id": "t4", "title": "Set up margin rules and labour rates", "hours": 1, "owner": "Dani"}
+          ]
+        },
+        {
+          "name": "Training & First Live Quote",
+          "week": 2,
+          "tasks": [
+            {"id": "t5", "title": "Complete Buildxact 30-min getting started video course", "hours": 1, "owner": "Joh"},
+            {"id": "t6", "title": "Create first live quote using the system (compare to manual)", "hours": 2, "owner": "Joh"},
+            {"id": "t7", "title": "Refine templates based on first quote experience", "hours": 1, "owner": "Joh"},
+            {"id": "t8", "title": "Send first quote to client via Buildxact", "hours": 0.5, "owner": "Dani"}
+          ]
+        }
+      ],
+      "personalization_context": {"team_size": "micro", "technical_level": 3, "budget_monthly": 200}
+    },
+    {
+      "id": "pb2",
+      "recommendation_id": "r2",
       "option_type": "off_the_shelf",
       "total_weeks": 2,
       "phases": [
         {
-          "name": "Setup",
+          "name": "Fergus Setup",
           "week": 1,
           "tasks": [
-            {"id": "t1", "title": "Create Intercom account and connect to your platform", "hours": 2, "owner": "IT/Admin"},
-            {"id": "t2", "title": "Import knowledge base articles (50-100 articles)", "hours": 4, "owner": "Support Lead"},
-            {"id": "t3", "title": "Configure Fin AI settings and brand voice", "hours": 2, "owner": "Support Lead"}
+            {"id": "t9", "title": "Create Fergus account and complete business profile", "hours": 1, "owner": "Dani"},
+            {"id": "t10", "title": "Import current jobs and client list from spreadsheet", "hours": 2, "owner": "Dani"},
+            {"id": "t11", "title": "Install Fergus mobile app and test on-site photo upload", "hours": 0.5, "owner": "Joh"},
+            {"id": "t12", "title": "Configure client portal branding with logo and colours", "hours": 1, "owner": "Dani"}
           ]
         },
         {
-          "name": "Testing",
+          "name": "Client Portal Launch",
           "week": 2,
           "tasks": [
-            {"id": "t4", "title": "Run internal test with 20 sample queries", "hours": 3, "owner": "QA"},
-            {"id": "t5", "title": "Soft launch to 10% of traffic", "hours": 1, "owner": "IT/Admin"},
-            {"id": "t6", "title": "Review AI responses and tune", "hours": 4, "owner": "Support Lead"}
+            {"id": "t13", "title": "Create welcome email template for portal invitations", "hours": 1, "owner": "Dani"},
+            {"id": "t14", "title": "Invite 3 current clients to test portal experience", "hours": 0.5, "owner": "Dani"},
+            {"id": "t15", "title": "Update first job with photos and progress via mobile app", "hours": 0.5, "owner": "Joh"},
+            {"id": "t16", "title": "Gather feedback from test clients and adjust", "hours": 1, "owner": "Dani"}
           ]
         }
       ],
-      "personalization_context": {"team_size": "small", "technical_level": 3, "budget_monthly": 200}
+      "personalization_context": {"team_size": "micro", "technical_level": 3, "budget_monthly": 100}
     }
   ],
   "system_architecture": {
     "existing_tools": [
-      {"name": "HubSpot CRM", "category": "crm", "icon": "database"},
-      {"name": "Zendesk", "category": "support", "icon": "headphones"},
-      {"name": "Slack", "category": "communication", "icon": "message-square"}
+      {"name": "Xero", "category": "accounting", "icon": "calculator"},
+      {"name": "Google Workspace", "category": "communication", "icon": "mail"},
+      {"name": "Excel/Sheets", "category": "operations", "icon": "table"},
+      {"name": "Phone/Text", "category": "communication", "icon": "phone"}
     ],
     "ai_layer": [
-      {"name": "Intercom Fin", "purpose": "Support triage", "connects_to": ["Zendesk"]},
-      {"name": "HubSpot AI", "purpose": "Lead scoring", "connects_to": ["HubSpot CRM"]}
+      {"name": "Buildxact", "purpose": "AI-assisted quoting & takeoffs", "connects_to": ["Xero", "Supplier systems"]},
+      {"name": "Fergus", "purpose": "Job management & client portal", "connects_to": ["Xero", "Google Calendar"]}
     ],
     "automations": [
-      {"trigger": "New support ticket", "action": "AI categorization + auto-response", "tool": "Intercom Fin"},
-      {"trigger": "New lead created", "action": "Score and route to rep", "tool": "HubSpot AI"}
+      {"trigger": "New website enquiry", "action": "Auto-response + CRM entry + notification", "tool": "Fergus/HubSpot"},
+      {"trigger": "Job completed", "action": "Auto-generate invoice in Xero", "tool": "Fergus → Xero"},
+      {"trigger": "Invoice overdue 7 days", "action": "Automated payment reminder", "tool": "Xero"},
+      {"trigger": "Job status updated", "action": "Client notified via portal", "tool": "Fergus"}
     ],
     "connections": [
-      {"from": "Intercom Fin", "to": "Zendesk", "type": "webhook"},
-      {"from": "HubSpot AI", "to": "Slack", "type": "native"}
+      {"from": "Buildxact", "to": "Xero", "type": "native"},
+      {"from": "Fergus", "to": "Xero", "type": "native"},
+      {"from": "Fergus", "to": "Google Calendar", "type": "native"},
+      {"from": "Website Form", "to": "Fergus CRM", "type": "webhook"}
     ],
-    "cost_comparison": {"current_monthly": 0, "proposed_monthly": 899, "efficiency_gain_percent": 35}
+    "cost_comparison": {"current_monthly": 50, "proposed_monthly": 258, "efficiency_gain_percent": 35}
   },
   "industry_insights": {
-    "industry": "b2b_saas",
-    "industry_display_name": "B2B SaaS",
+    "industry": "construction",
+    "industry_display_name": "Construction & Building",
     "adoption_stats": [
-      {"metric": "Companies using AI for support", "value": 67, "trend": "up", "benchmark_source": "Gartner 2024"},
-      {"metric": "Average ROI on support AI", "value": 320, "unit": "%", "benchmark_source": "McKinsey AI Study"},
-      {"metric": "Time to value for AI tools", "value": 3, "unit": "months", "benchmark_source": "Forrester"}
+      {"metric": "NZ builders using job management software", "value": 34, "trend": "up", "benchmark_source": "NZCB Trade Survey 2025"},
+      {"metric": "Time saved on admin with trade software", "value": 45, "unit": "%", "benchmark_source": "Fergus Customer Data 2024"},
+      {"metric": "Quote-to-job conversion with same-day quotes", "value": 42, "unit": "%", "benchmark_source": "Buildxact NZ Benchmarks"}
     ],
     "opportunity_map": {
-      "quick_wins": ["Support triage", "Lead scoring", "Meeting scheduling"],
-      "strategic_bets": ["Predictive analytics", "Content generation"],
-      "avoid_for_now": ["Full automation of sales", "Customer-facing chatbots without human backup"]
+      "quick_wins": ["Quoting automation", "Client communication portals", "Invoice automation", "Lead capture"],
+      "strategic_bets": ["AI-assisted project estimation from plans", "Predictive scheduling with weather"],
+      "avoid_for_now": ["AR/VR visualisation tools", "Complex project management (for team of 2)", "Custom development"]
     },
     "social_proof": [
-      {"company": "Acme Corp", "size": "50-100 employees", "result": "Reduced support costs 45% with AI triage", "timeframe": "6 months"},
-      {"company": "TechStart Inc", "size": "20-50 employees", "result": "Doubled sales efficiency with lead scoring", "timeframe": "4 months"}
+      {"company": "Wellington Renovation Co", "size": "1-5 employees", "result": "Reduced quoting time by 65%, won 3 extra jobs per month", "timeframe": "3 months"},
+      {"company": "Auckland Deck Builders", "size": "2-3 employees", "result": "Eliminated 'where's my update?' calls entirely with client portal", "timeframe": "6 weeks"},
+      {"company": "Waikato Home Repairs", "size": "1 person", "result": "Automated lead follow-up increased enquiry conversion by 40%", "timeframe": "2 months"}
     ]
   },
+  "automation_summary": {
+    "stack_assessment": {
+      "tools": [
+        {"name": "Xero", "slug": "xero", "api_score": 5, "category": "Accounting"},
+        {"name": "Google Workspace", "slug": "google-workspace", "api_score": 5, "category": "Productivity"},
+        {"name": "Excel/Sheets", "slug": "excel", "api_score": 3, "category": "Operations"}
+      ],
+      "average_score": 4.3,
+      "verdict": "good_foundation",
+      "verdict_text": "Good Foundation - Your existing tools integrate well"
+    },
+    "opportunities": [
+      {
+        "finding_id": "f1",
+        "title": "AI-Assisted Quote Generation",
+        "impact_monthly": 2210,
+        "diy_effort_hours": 8,
+        "approach": "Connect",
+        "tools_involved": ["Buildxact", "Xero"],
+        "category": "Operations"
+      },
+      {
+        "finding_id": "f2",
+        "title": "Client Progress Portal",
+        "impact_monthly": 1127,
+        "diy_effort_hours": 6,
+        "approach": "Connect",
+        "tools_involved": ["Fergus", "Google Calendar"],
+        "category": "Customer Experience"
+      },
+      {
+        "finding_id": "f4",
+        "title": "Lead Auto-Response",
+        "impact_monthly": 1000,
+        "diy_effort_hours": 3,
+        "approach": "Connect",
+        "tools_involved": ["HubSpot", "Website"],
+        "category": "Sales"
+      },
+      {
+        "finding_id": "f5",
+        "title": "Invoice Automation",
+        "impact_monthly": 667,
+        "diy_effort_hours": 2,
+        "approach": "Connect",
+        "tools_involved": ["Fergus", "Xero"],
+        "category": "Finance"
+      },
+      {
+        "finding_id": "f3",
+        "title": "Smart Job Scheduling",
+        "impact_monthly": 921,
+        "diy_effort_hours": 4,
+        "approach": "Either",
+        "tools_involved": ["Fergus", "Google Calendar"],
+        "category": "Operations"
+      }
+    ],
+    "total_monthly_impact": 5925,
+    "total_diy_hours": 23,
+    "connect_count": 4,
+    "replace_count": 0,
+    "either_count": 1,
+    "next_steps": {
+      "tier": "full",
+      "headline": "Ready to Transform Your Operations",
+      "message": "With $71K+ annual value potential and only 23 hours of DIY setup, Friendly Build & Fix is well-positioned to automate key workflows. Start with quoting automation for the biggest immediate impact.",
+      "cta_text": "Get Your Full Implementation Plan",
+      "cta_url": "/checkout"
+    }
+  },
   "methodology_notes": {
-    "data_sources": ["Company website analysis", "Public financial data", "Industry benchmarks", "Competitive analysis"],
-    "confidence_factors": ["Clear operational metrics provided", "Industry well-studied for AI adoption", "Team engagement in discovery"],
-    "limitations": ["Revenue projections are estimates based on industry averages", "Implementation timelines assume dedicated resources"]
+    "data_sources": ["Company website analysis", "NZ construction industry benchmarks", "Trade software adoption studies", "NZCB member surveys"],
+    "confidence_factors": ["Clear operational workflows identified", "NZ-specific tools well-suited to business", "Strong existing client relationships to build on"],
+    "limitations": ["Revenue projections based on industry averages - actual results vary", "Implementation assumes consistent usage of new tools", "ROI assumes current hourly rates maintained"]
   }
 }

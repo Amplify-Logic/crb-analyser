@@ -1160,7 +1160,137 @@
       "verified_by": "manual",
       "source_url": "https://supabase.com/pricing",
       "notes": "Hybrid pricing: base fee + usage overages. Free tier limited to 2 projects, pauses after 7 days inactivity. Pro plan ($25/project/mo) includes $10 compute credits. Additional MAUs cost $0.00325 each above 100k. Team plan ($599/mo) for collaboration features. HIPAA compliance requires Enterprise plan. Spend caps available to control costs. Open source - can self-host for free."
+    },
+    {
+      "slug": "lovable",
+      "name": "Lovable",
+      "category": "dev_tools",
+      "subcategory": "ai_app_builder",
+      "website": "https://lovable.dev",
+      "pricing_url": "https://lovable.dev/pricing",
+      "description": "AI-powered no-code app builder that turns natural language prompts into production-ready full-stack applications. Generates React code with Supabase backend integration. Features Agent Mode for autonomous debugging and iteration. Export code to own hosting or use Lovable domains. Used by enterprises like Klarna, Uber, and Zendesk for internal tools.",
+      "tagline": "Build apps & websites with AI, fast",
+      "key_capabilities": [
+        "Natural language to React code",
+        "Full-stack generation (frontend + backend)",
+        "Supabase integration for databases",
+        "Agent Mode for autonomous debugging",
+        "Code export and self-hosting",
+        "Custom domains",
+        "Real-time collaboration",
+        "Design system support"
+      ],
+      "use_case_example": "Describe an internal tool like 'Build me a customer dashboard that shows order history, support tickets, and lets admins add notes' - Lovable generates a working React app with database in minutes.",
+      "pricing": {
+        "model": "credits",
+        "currency": "USD",
+        "billing_options": ["monthly"],
+        "tiers": [
+          {
+            "name": "Free",
+            "price": 0,
+            "per": "month",
+            "features": ["5 credits/day", "Public projects only", "lovable.app domains", "Community support"],
+            "limits": {
+              "credits_per_day": 5,
+              "private_projects": false
+            }
+          },
+          {
+            "name": "Pro",
+            "price": 25,
+            "per": "month",
+            "features": ["100 monthly credits + 5 daily (up to 150/mo)", "Private projects", "Custom domains", "Code editing access", "Remove Lovable badge", "User roles & permissions", "Credit rollover", "On-demand top-ups"],
+            "limits": {
+              "credits_per_month": 150,
+              "private_projects": true,
+              "custom_domains": true
+            }
+          },
+          {
+            "name": "Business",
+            "price": 50,
+            "per": "month",
+            "features": ["100 monthly credits", "All Pro features", "SSO", "Internal publish", "Personal projects", "Opt out of data training", "Design templates"],
+            "limits": {
+              "credits_per_month": 100,
+              "sso": true,
+              "data_training_opt_out": true
+            }
+          },
+          {
+            "name": "Enterprise",
+            "price": null,
+            "per": "custom",
+            "features": ["Custom credits", "All Business features", "Dedicated support", "Custom integrations", "Group-based access control", "SCIM", "Custom design systems", "Onboarding services"]
+          }
+        ],
+        "credit_usage": {
+          "app_structure": "~2 credits",
+          "simple_change": "~0.5 credits",
+          "complex_feature": "~5-10 credits"
+        },
+        "discounts": {
+          "student": "Up to 50% off Pro"
+        },
+        "verified_status": "VERIFIED",
+        "verified_date": "2026-01-14",
+        "source": "lovable.dev/pricing"
+      },
+      "best_for": [
+        "Non-technical founders building MVPs",
+        "Internal tool development",
+        "Rapid prototyping",
+        "Teams wanting to reduce developer dependency",
+        "Businesses building 'disposable' operational apps",
+        "Agencies creating client apps quickly"
+      ],
+      "time_savings": {
+        "estimate": "90% reduction in app development time",
+        "comparison": "Traditional development: weeks → Lovable: hours"
+      },
+      "industries": [
+        "Startups",
+        "Enterprise (internal tools)",
+        "Agencies",
+        "SaaS",
+        "Operations"
+      ],
+      "company_sizes": ["individual", "startup", "smb", "mid_market", "enterprise"],
+      "avoid_if": [
+        "Need highly custom UI/UX (generated designs are template-based)",
+        "Require complex backend logic beyond CRUD",
+        "Want full control without AI generation",
+        "Need mobile-native apps (web-focused)"
+      ],
+      "implementation": {
+        "avg_weeks": 0,
+        "complexity": "low",
+        "requires_developer": false
+      },
+      "ratings": {
+        "our_rating": 4.5,
+        "our_notes": "Leading AI app builder. $330M Series B at $6.6B valuation (Dec 2025) shows market confidence. Pro plan at $25/mo is great value for building internal tools. Credit-based system requires understanding consumption. Enterprise customers include Klarna, Uber, Zendesk. Export option avoids vendor lock-in."
+      },
+      "integrations": [
+        "Supabase",
+        "GitHub",
+        "Custom APIs",
+        "Stripe",
+        "Various frontend frameworks"
+      ],
+      "competitors": [
+        "Bolt.new",
+        "Vercel v0",
+        "Replit",
+        "Cursor (for developers)",
+        "Retool (for internal tools)"
+      ],
+      "verified_at": "2026-01-14T00:00:00Z",
+      "verified_by": "manual",
+      "source_url": "https://lovable.dev/pricing",
+      "notes": "Credit-based system where complexity determines consumption. Simple changes ~0.5 credits, new features ~2-10 credits. Student discount up to 50% off. Code is exportable - no vendor lock-in. Generates production-ready React code that developers can extend."
     }
   ],
-  "last_updated": "2025-12-17T00:00:00Z"
+  "last_updated": "2026-01-14T00:00:00Z"
 }

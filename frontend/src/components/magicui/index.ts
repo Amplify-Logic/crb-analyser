@@ -1,5 +1,4 @@
 export { ShimmerButton } from './shimmer-button'
 export { BorderBeam, GlowingBorder } from './border-beam'
 export { AnimatedGradientText } from './animated-gradient-text'
-export { Spotlight, SpotlightCard } from './spotlight'
 export { Meteors } from './meteors'

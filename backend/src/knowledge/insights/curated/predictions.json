@@ -1,0 +1,190 @@
+{
+  "type": "prediction",
+  "description": "Forward-looking predictions about AI trends and industry evolution",
+  "last_updated": "2026-01-15",
+  "insights": [
+    {
+      "id": "prediction-chatbot-advertising-democratization",
+      "type": "prediction",
+      "title": "ChatBot Advertising Will Democratize Access to Premium AI",
+      "content": "Advertising in chatbots, while controversial, will prevent AI from becoming a wealth-only tool by providing ad-supported access to premium models for those who cannot afford subscriptions.",
+      "supporting_data": [
+        {
+          "claim": "Ads are coming to ChatGPT in 2026",
+          "source": "Industry Confirmation",
+          "source_url": null,
+          "date": "2026",
+          "credibility": "industry_data"
+        },
+        {
+          "claim": "Chatbot ads will likely be display banners separate from AI responses, not integrated into answers",
+          "source": "Eric Seufert (Industry Expert)",
+          "source_url": null,
+          "date": "2026",
+          "credibility": "analyst"
+        }
+      ],
+      "actionable_insight": "Prepare for ad-supported AI tiers as a positive development for accessibility, while maintaining awareness of how advertising might influence platform choice and user experience.",
+      "tags": {
+        "topics": [
+          "advertising",
+          "ai_accessibility",
+          "business_models"
+        ],
+        "industries": [
+          "all"
+        ],
+        "use_in": [
+          "report"
+        ],
+        "user_stages": [
+          "considering",
+          "early_adopter"
+        ]
+      },
+      "source": {
+        "title": "Top 6 AI Trends That Will Define 2026",
+        "author": "Jeff Su",
+        "url": "https://www.youtube.com/watch?v=jeff-su-ai-trends",
+        "date": "2026-01-06",
+        "type": "youtube"
+      },
+      "extracted_at": "2026-01-15",
+      "reviewed": false
+    },
+    {
+      "id": "prediction-humanoid-robots-timeline",
+      "type": "prediction",
+      "title": "Functional Humanoid Robots Still 15 Years Away Despite Hype",
+      "content": "While industrial and specialized AI robots are advancing rapidly, functional humanoid robots for daily life remain at least 15 years away from practical deployment.",
+      "supporting_data": [
+        {
+          "claim": "MIT robotics professor Rodney Brooks estimates we are at least 15 years away from functional humanoid robots in daily lives",
+          "source": "MIT Professor Rodney Brooks",
+          "source_url": null,
+          "date": "2026",
+          "credibility": "academic"
+        }
+      ],
+      "actionable_insight": "Focus AI robotics investments and expectations on specialized industrial applications rather than general-purpose humanoid robots for the next decade.",
+      "tags": {
+        "topics": [
+          "humanoid_robots",
+          "timeline_expectations",
+          "robotics"
+        ],
+        "industries": [
+          "manufacturing",
+          "technology"
+        ],
+        "use_in": [
+          "report"
+        ],
+        "user_stages": [
+          "scaling"
+        ]
+      },
+      "source": {
+        "title": "Top 6 AI Trends That Will Define 2026",
+        "author": "Jeff Su",
+        "url": "https://www.youtube.com/watch?v=jeff-su-ai-trends",
+        "date": "2026-01-06",
+        "type": "youtube"
+      },
+      "extracted_at": "2026-01-15",
+      "reviewed": false
+    },
+    {
+      "id": "prediction-chatbot-advertising-2026",
+      "type": "prediction",
+      "title": "Chatbot Advertising Will Launch in 2026 with Display Format",
+      "content": "Advertising is confirmed to be coming to ChatGPT in 2026, likely in display banner format rather than integrated into responses to maintain trust. This will enable free tiers with premium AI capabilities for underserved populations.",
+      "supporting_data": [
+        {
+          "claim": "Ads coming to ChatGPT confirmed for 2026",
+          "source": "Industry reports cited by Jeff Su",
+          "source_url": null,
+          "date": "2026",
+          "credibility": "analyst"
+        },
+        {
+          "claim": "Chatbot ads will likely be display banners separate from conversation content to maintain trust",
+          "source": "Eric Seufert (industry expert prediction)",
+          "source_url": null,
+          "date": "2026",
+          "credibility": "analyst"
+        }
+      ],
+      "actionable_insight": "Prepare for ad-supported AI tiers that will democratize access to powerful models while premium subscriptions remain ad-free for professional use.",
+      "tags": {
+        "topics": [
+          "ai_monetization",
+          "advertising",
+          "accessibility"
+        ],
+        "industries": [
+          "all"
+        ],
+        "use_in": [
+          "report"
+        ],
+        "user_stages": [
+          "considering",
+          "early_adopter"
+        ]
+      },
+      "source": {
+        "title": "Top 6 AI Trends That Will Define 2026",
+        "author": "Jeff Su",
+        "url": "https://www.youtube.com/watch?v=jeff-su-ai-trends",
+        "date": "2026-01-06",
+        "type": "youtube"
+      },
+      "extracted_at": "2026-01-15",
+      "reviewed": false
+    },
+    {
+      "id": "prediction-ai-chip-market-5x-growth",
+      "type": "prediction",
+      "title": "AI Chip Market to Grow 5x by 2032",
+      "content": "The AI chip market is projected to more than 5x from 2022 to 2032, representing one of the fastest-growing technology sectors and indicating massive infrastructure demand.",
+      "supporting_data": [
+        {
+          "claim": "AI chip market will grow 5x from 2022 to 2032",
+          "source": "Market research projection",
+          "source_url": null,
+          "date": "2032",
+          "credibility": "industry_research"
+        }
+      ],
+      "actionable_insight": "Consider investment opportunities in AI chip companies, semiconductor supply chains, or businesses dependent on AI computing power.",
+      "tags": {
+        "topics": [
+          "hardware",
+          "semiconductors",
+          "market_growth"
+        ],
+        "industries": [
+          "technology",
+          "manufacturing"
+        ],
+        "use_in": [
+          "report"
+        ],
+        "user_stages": [
+          "early_adopter",
+          "scaling"
+        ]
+      },
+      "source": {
+        "title": "AI Revolution: The Opportunity Window is Closing",
+        "author": "Unknown",
+        "url": "",
+        "date": "2026-01",
+        "type": "youtube"
+      },
+      "extracted_at": "2026-01-15",
+      "reviewed": false
+    }
+  ]
+}

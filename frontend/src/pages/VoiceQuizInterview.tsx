@@ -14,7 +14,7 @@ import { motion, AnimatePresence } from 'framer-motion'
 import VoiceRecorder from '../components/voice/VoiceRecorder'
 import AudioUploader from '../components/voice/AudioUploader'
 import { formatCompanyName } from '../lib/formatCompanyName'
-import { SpotlightCard, ShimmerButton } from '../components/magicui'
+import { ShimmerButton } from '../components/magicui'
 import { Logo } from '../components/Logo'
 import { sanitizeHtml } from '../utils/sanitize'
 import {
@@ -502,7 +502,7 @@ export default function VoiceQuizInterview() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
             >
-              <SpotlightCard className="p-10 text-left">
+              <div className="rounded-2xl border border-gray-200 bg-white p-10 text-left">
                 <h1 className="text-3xl font-bold text-gray-900 mb-4 text-center">
                   We found a lot about {displayName || 'your company'}
                 </h1>
@@ -562,7 +562,7 @@ export default function VoiceQuizInterview() {
                     Record a conversation
                   </button>
                 </div>
-              </SpotlightCard>
+              </div>
             </motion.div>
           </div>
         </div>

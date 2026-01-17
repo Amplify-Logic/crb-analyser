@@ -1,0 +1,149 @@
+{
+  "category": "ai_productivity",
+  "description": "AI-powered productivity tools for meetings, note-taking, and workplace efficiency",
+  "meta": {
+    "source": "Dan Martell AI Tools video Jan 2026 + web verification",
+    "added": "2026-01-14",
+    "last_verified": "2026-01-14"
+  },
+  "vendors": [
+    {
+      "slug": "granola-ai",
+      "name": "Granola",
+      "category": "ai_productivity",
+      "subcategory": "meeting_notes",
+      "website": "https://www.granola.ai",
+      "pricing_url": "https://www.granola.ai/pricing",
+      "description": "AI meeting notes app that records on your device (not via bot) and generates transcripts, summaries, and action items. Works across Zoom, Google Meet, and Teams without other participants knowing. Features cross-meeting search and AI chat to query past conversations. Privacy-focused alternative to bot-based transcription tools.",
+      "tagline": "AI notepad for meetings",
+      "key_capabilities": [
+        "Local recording (no bot joining calls)",
+        "Automatic transcription with speaker ID",
+        "AI-generated meeting summaries",
+        "Action item extraction",
+        "Cross-meeting search",
+        "AI chat to query all meetings",
+        "Works with Zoom, Meet, Teams",
+        "Mac and Windows apps"
+      ],
+      "privacy_note": "Records on your device - participants don't see a bot or notification. Similar to personal note-taking.",
+      "use_case_example": "Record all your meetings locally, get AI summaries and action items, then ask Granola's AI questions like 'What did the client say about timeline?' across all past conversations.",
+      "pricing": {
+        "model": "subscription",
+        "currency": "USD",
+        "billing_options": ["monthly", "annual"],
+        "tiers": [
+          {
+            "name": "Free",
+            "price": 0,
+            "per": "month",
+            "features": ["25 meetings total (lifetime)", "14-day history retention", "Basic AI notes", "Cross-meeting chat"],
+            "limits": {
+              "meetings_total": 25,
+              "history_days": 14
+            }
+          },
+          {
+            "name": "Individual",
+            "price": 18,
+            "per": "user/month",
+            "billing": "monthly",
+            "features": ["Unlimited meetings", "Full history retention", "Advanced AI notes", "All integrations", "Priority support"],
+            "limits": {
+              "meetings": "unlimited",
+              "history": "unlimited"
+            }
+          },
+          {
+            "name": "Business",
+            "price": 14,
+            "per": "user/month",
+            "billing": "annual",
+            "features": ["All Individual features", "Team collaboration", "Shared meeting library", "Admin controls", "Usage analytics"],
+            "limits": {
+              "meetings": "unlimited",
+              "team_features": true
+            }
+          },
+          {
+            "name": "Enterprise",
+            "price": 35,
+            "per": "user/month",
+            "billing": "annual",
+            "features": ["All Business features", "SSO (Okta, Google, Azure AD)", "Advanced admin controls", "Opt-out of AI model training", "100+ user support", "Custom onboarding"],
+            "limits": {
+              "min_users": 100,
+              "sso": true,
+              "data_training_opt_out": true
+            }
+          }
+        ],
+        "verified_status": "VERIFIED",
+        "verified_date": "2026-01-14",
+        "source": "granola.ai/pricing"
+      },
+      "best_for": [
+        "Professionals in many meetings per day",
+        "Consultants tracking client conversations",
+        "Sales teams documenting prospect calls",
+        "Managers who hate taking notes",
+        "Anyone wanting meeting AI without bot notifications",
+        "Privacy-conscious users"
+      ],
+      "time_savings": {
+        "estimate": "2-4 hours per week",
+        "activities_eliminated": [
+          "Manual note-taking during meetings",
+          "Writing meeting summaries",
+          "Searching through past meeting notes",
+          "Creating follow-up action items"
+        ]
+      },
+      "industries": [
+        "Consulting",
+        "Sales",
+        "Professional Services",
+        "Technology",
+        "Finance",
+        "Legal"
+      ],
+      "company_sizes": ["individual", "startup", "smb", "mid_market", "enterprise"],
+      "avoid_if": [
+        "Need shared recordings (Granola doesn't allow playback)",
+        "Require compliance/audit trail of recordings",
+        "Want participants to know they're being recorded",
+        "Need video recording (audio only)"
+      ],
+      "implementation": {
+        "avg_weeks": 0,
+        "complexity": "none",
+        "requires_developer": false
+      },
+      "ratings": {
+        "our_rating": 4.7,
+        "our_notes": "Top choice among technical AI users. Local recording approach is unique - no awkward bot joining calls. Individual plan at $18/mo pays for itself if you have 3+ meetings/day. Raised $43M in May 2025 at $250M valuation. Note: you can't play back recordings, only get AI summaries."
+      },
+      "integrations": [
+        "Zoom",
+        "Google Meet",
+        "Microsoft Teams",
+        "Webex",
+        "Slack",
+        "Notion",
+        "HubSpot",
+        "Salesforce"
+      ],
+      "competitors": [
+        "Otter.ai",
+        "Fireflies.ai",
+        "tl;dv",
+        "Fathom",
+        "Grain",
+        "Read.ai"
+      ],
+      "verified_at": "2026-01-14T00:00:00Z",
+      "source": "Dan Martell AI Tools video Jan 2026, verified via granola.ai/pricing"
+    }
+  ],
+  "last_updated": "2026-01-14T00:00:00Z"
+}

@@ -1202,7 +1202,257 @@
       "verified_by": "manual",
       "source_url": "https://www.oysterhr.com/pricing",
       "notes": "EOR pricing: $499/employee/month (annual), $599/month (monthly), or $699/month on some plans. Save $1,200/year per employee with annual billing. 30-day free trial for Contractor plan. May require refundable security deposit (1 month service cost) for new hires. Add-on costs for salary bands, visa sponsorship, premium benefits. Companies save $50k-200k per country vs entity setup. Scale plan (3+ employees) offers custom pricing and volume discounts."
+    },
+    {
+      "slug": "trainual",
+      "name": "Trainual",
+      "category": "hr_payroll",
+      "subcategory": "training_documentation",
+      "website": "https://trainual.com",
+      "pricing_url": "https://trainual.com/pricing",
+      "description": "AI-powered training and documentation platform for systematizing business operations. Create SOPs, training materials, and onboarding processes with AI assistance. Features include role-based training paths, testing, completion tracking, and organizational documentation. Helps businesses scale by turning tribal knowledge into searchable, trainable content.",
+      "tagline": "The playbook for your business",
+      "key_capabilities": [
+        "AI-assisted documentation creation",
+        "Training path builder with roles & responsibilities",
+        "Test and quiz creation with tracking",
+        "500+ templates for processes and SOPs",
+        "Screen recording for visual guides",
+        "Employee directory and org chart",
+        "Language translation for global teams",
+        "HRIS/payroll integrations",
+        "Mobile app for on-the-go learning",
+        "Gamification and completion tracking"
+      ],
+      "use_case_example": "A growing restaurant franchise uses Trainual to document all SOPs, create role-specific training paths for new hires, and ensure consistent operations across 20 locations. New employees complete training 40% faster with tracked progress.",
+      "pricing": {
+        "model": "base_plus_seats",
+        "currency": "USD",
+        "billing_options": ["annual"],
+        "implementation_fee": 1000,
+        "tiers": [
+          {
+            "name": "Core",
+            "price": 249,
+            "per": "month",
+            "billing": "annual",
+            "seats_included": 10,
+            "features": [
+              "Unlimited AI-assisted documentation",
+              "Flowcharts and diagrams",
+              "AI-powered search",
+              "500+ templates",
+              "Screen recording",
+              "Collaboration tools",
+              "Language translation",
+              "Roles & responsibilities builder",
+              "Group training",
+              "Testing and tracking",
+              "Employee directory",
+              "HRIS/payroll integrations",
+              "Slack integration",
+              "Mobile app",
+              "30-day version history",
+              "Gamification"
+            ]
+          },
+          {
+            "name": "Pro",
+            "price": 319,
+            "per": "month",
+            "billing": "annual",
+            "features": [
+              "All Core features",
+              "Individual training paths",
+              "Time estimates for training",
+              "Content feedback collection",
+              "Auto-generated video transcriptions",
+              "15GB hosted video storage",
+              "300 annual e-signatures",
+              "Org chart",
+              "Accountability chart",
+              "Delegation Planner",
+              "90-day version history",
+              "Dedicated Customer Success Manager"
+            ],
+            "note": "Most popular"
+          },
+          {
+            "name": "Premium",
+            "price": 399,
+            "per": "month",
+            "billing": "annual",
+            "features": [
+              "All Pro features",
+              "Unlimited video storage",
+              "Unlimited version history",
+              "Unlimited e-signatures",
+              "Custom branding",
+              "Custom domain",
+              "Single Sign-On (SSO)",
+              "15GB SCORM storage"
+            ]
+          },
+          {
+            "name": "Enterprise",
+            "price": null,
+            "per": "custom",
+            "billing": "annual",
+            "features": [
+              "All Premium features",
+              "API access",
+              "SOC2 documentation",
+              "Extended implementation",
+              "Dedicated CSM",
+              "Organizational rollout support",
+              "Quarterly reviews",
+              "Priority support"
+            ]
+          }
+        ],
+        "verified_status": "VERIFIED",
+        "verified_date": "2026-01-15",
+        "source": "trainual.com/pricing"
+      },
+      "best_for": [
+        "Growing businesses needing to document processes",
+        "Franchises ensuring consistent operations",
+        "Companies with high employee turnover",
+        "Teams wanting to reduce tribal knowledge dependency",
+        "Businesses scaling operations with SOPs",
+        "Organizations needing compliance training"
+      ],
+      "industries": [
+        "Retail",
+        "Franchises",
+        "Professional Services",
+        "Healthcare",
+        "Manufacturing",
+        "Hospitality"
+      ],
+      "company_sizes": ["smb", "mid_market"],
+      "avoid_if": [
+        "Very small team (under 10 employees - minimum seat requirement)",
+        "Need advanced LMS features (use dedicated LMS)",
+        "Looking for free solution (no free tier)",
+        "One-time implementation fee is barrier ($1,000)"
+      ],
+      "implementation": {
+        "avg_weeks": 4,
+        "complexity": "medium",
+        "requires_developer": false,
+        "cost_range": {
+          "diy": {
+            "min": 1000,
+            "max": 2000
+          },
+          "with_help": {
+            "min": 2000,
+            "max": 5000
+          }
+        }
+      },
+      "ratings": {
+        "g2": {
+          "score": 4.7,
+          "reviews": 700,
+          "last_updated": "2026-01"
+        },
+        "our_rating": 4.5,
+        "our_notes": "Excellent for documenting and training. AI-assisted content creation saves significant time. The $1,000 implementation fee is a consideration. Pro plan at $319/mo is sweet spot with dedicated CSM. Great for businesses systematizing operations."
+      },
+      "integrations": [
+        "Slack",
+        "Gusto",
+        "ADP",
+        "BambooHR",
+        "Rippling",
+        "Zapier",
+        "Google Workspace",
+        "Microsoft 365",
+        "API (Enterprise only)"
+      ],
+      "api": {
+        "available": true,
+        "type": "REST",
+        "documentation": "https://help.trainual.com/en/articles/api",
+        "note": "Enterprise plan only"
+      },
+      "competitors": [
+        "Lessonly",
+        "Notion",
+        "Process Street",
+        "TalentLMS",
+        "Whale"
+      ],
+      "verified_at": "2026-01-15T00:00:00Z",
+      "verified_by": "manual",
+      "source_url": "https://trainual.com/pricing",
+      "notes": "All plans require $1,000 one-time implementation fee. Base pricing for 10 seats, scales with additional employees. Strong for operational documentation and training but not a full LMS replacement. Gamification and testing features help with engagement and completion rates."
+    },
+    {
+      "slug": "herohire",
+      "name": "HeroHire",
+      "category": "hr_payroll",
+      "subcategory": "ai_recruiting",
+      "website": "https://herohire.ai",
+      "description": "AI-powered recruiting platform designed for startups. Provides instant, trusted hires by using AI to streamline the hiring process. Focuses on helping early-stage companies quickly find and onboard qualified talent without traditional recruiting overhead.",
+      "tagline": "Instant, trusted hires for startups",
+      "key_capabilities": [
+        "AI-powered candidate matching",
+        "Automated screening and qualification",
+        "Quick hiring for startup roles",
+        "Reduced time-to-hire",
+        "Focus on startup hiring needs"
+      ],
+      "use_case_example": "A seed-stage startup needs to hire their first 5 engineers quickly. HeroHire's AI matches them with pre-vetted candidates, reducing hiring time from weeks to days.",
+      "pricing": {
+        "model": "custom",
+        "currency": "USD",
+        "note": "Pricing not publicly disclosed - contact for details",
+        "verified_status": "PARTIALLY_VERIFIED",
+        "verified_date": "2026-01-15",
+        "source": "herohire.ai"
+      },
+      "best_for": [
+        "Early-stage startups hiring quickly",
+        "Teams without dedicated recruiters",
+        "Companies needing to scale hiring fast",
+        "Startup roles (engineering, product, etc.)"
+      ],
+      "industries": [
+        "Technology",
+        "Startups",
+        "SaaS"
+      ],
+      "company_sizes": ["startup", "smb"],
+      "avoid_if": [
+        "Need transparent upfront pricing",
+        "Enterprise-level hiring volumes",
+        "Non-startup industries",
+        "Looking for full ATS functionality"
+      ],
+      "implementation": {
+        "avg_weeks": 1,
+        "complexity": "low",
+        "requires_developer": false
+      },
+      "ratings": {
+        "our_rating": 3.8,
+        "our_notes": "Focused on startup hiring niche. Limited public information on pricing and detailed features. Best for early-stage companies needing quick hires. Competes with Ashby, Lever, and JazzHR in the startup recruiting space."
+      },
+      "competitors": [
+        "Ashby",
+        "Lever",
+        "JazzHR",
+        "Greenhouse",
+        "Dover"
+      ],
+      "verified_at": "2026-01-15T00:00:00Z",
+      "verified_by": "manual",
+      "source_url": "https://herohire.ai",
+      "notes": "Startup-focused AI recruiting platform. Limited public pricing information available. Good for quick startup hires but may lack enterprise features."
     }
   ],
-  "last_updated": "2025-12-17T00:00:00Z"
+  "last_updated": "2026-01-15T00:00:00Z"
 }

@@ -78,6 +78,7 @@ from src.knowledge import (
 from src.expertise import get_self_improve_service, get_expertise_store
 from src.skills import get_skill, SkillContext
 from src.services.playbook_generator import PlaybookGenerator
+from src.models.user_profile import UserProfile
 from src.services.architecture_generator import ArchitectureGenerator
 from src.services.insights_generator import InsightsGenerator
 from src.services.review_service import ReviewService
@@ -224,16 +225,32 @@ class ReportGenerator:
             logger.warning(f"Could not load expertise for {industry}: {e}")
             expertise = None
 
+        # Build user profile from quiz answers for four-options scoring
+        answers = self.context.get("answers", {})
+        existing_stack = self.context.get("existing_stack", [])
+        api_ready = any(
+            tool.get("api_score", 0) >= 3.5
+            for tool in existing_stack
+            if isinstance(tool, dict)
+        )
+
+        try:
+            user_profile = UserProfile.from_quiz_answers(answers, existing_stack_api_ready=api_ready)
+        except Exception as e:
+            logger.warning(f"Could not build user profile: {e}")
+            user_profile = None
+
         return SkillContext(
             industry=industry,
             company_name=self.context.get("company_name"),
             company_size=self.context.get("company_size"),
-            quiz_answers=self.context.get("answers", {}),
+            quiz_answers=answers,
             interview_data=self.context.get("interview_data"),
             expertise=expertise,
             knowledge=self.context.get("industry_knowledge"),
             report_data=self.context,
-            existing_stack=self.context.get("existing_stack"),
+            existing_stack=existing_stack,
+            user_profile=user_profile,
         )
 
     def _call_claude(self, task: str, prompt: str, max_tokens: int = 4000) -> str:
@@ -1644,6 +1661,22 @@ IMPORTANT:
                                 assumptions = rec.get("assumptions", [])
                                 assumptions.append(f"ROI capped at 500% (original estimate: {roi}%)")
                                 rec["assumptions"] = assumptions
+
+                            # Enrich with four-options personalized recommendations
+                            four_options_skill = get_skill("four-options", client=self.client)
+                            if four_options_skill and context.user_profile:
+                                try:
+                                    four_context = self._get_skill_context()
+                                    four_context.finding = finding
+                                    four_context.vendors = self.context.get("vendors", [])[:10]
+
+                                    four_result = await four_options_skill.run(four_context)
+
+                                    if four_result.success:
+                                        rec["four_options"] = four_result.data
+                                        logger.debug(f"Four-options generated for {finding.get('id')}")
+                                except Exception as four_e:
+                                    logger.debug(f"Four-options skipped for {finding.get('id')}: {four_e}")
 
                             recommendations.append(rec)
                         else:

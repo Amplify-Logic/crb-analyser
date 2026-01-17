@@ -21,8 +21,8 @@ secret_patterns=(
 # Check file path for Read/Edit/Write tools
 for pattern in "${secret_patterns[@]}"; do
   if [[ "$file_path" =~ $pattern ]]; then
-    echo "Access blocked: '$file_path' appears to contain secrets."
-    echo "If you need to reference environment variables, check .env.example instead."
+    echo "Access blocked: '$file_path' appears to contain secrets." >&2
+    echo "If you need to reference environment variables, check .env.example instead." >&2
     exit 2
   fi
 done
@@ -30,8 +30,8 @@ done
 # Check bash commands that might access secrets
 for pattern in "${secret_patterns[@]}"; do
   if [[ "$command" =~ $pattern ]]; then
-    echo "Command blocked: appears to access secret files."
-    echo "Secret files should not be read, printed, or modified by Claude."
+    echo "Command blocked: appears to access secret files." >&2
+    echo "Secret files should not be read, printed, or modified by Claude." >&2
     exit 2
   fi
 done

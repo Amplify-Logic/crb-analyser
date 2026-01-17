@@ -49,6 +49,11 @@ class SkillContext(BaseModel):
     # List of tools with API scores: [{"slug": "hubspot", "name": "HubSpot", "api_score": 4, ...}]
     existing_stack: Optional[List[Dict[str, Any]]] = None
 
+    # Four Options skill context
+    finding: Optional[Dict[str, Any]] = None  # Current finding being processed
+    user_profile: Optional[Any] = None  # UserProfile for scoring
+    vendors: Optional[List[Dict[str, Any]]] = None  # Relevant vendors for this finding
+
     # Additional context
     metadata: Dict[str, Any] = Field(default_factory=dict)
 
@@ -309,7 +314,7 @@ class LLMSkill(BaseSkill[T]):
     requires_llm: bool = True
 
     # Default model settings
-    default_model: str = "claude-sonnet-4-20250514"
+    default_model: str = "claude-sonnet-4-5-20250929"  # Claude Sonnet 4.5
     default_max_tokens: int = 4000
 
     async def call_llm(

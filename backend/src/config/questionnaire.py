@@ -193,6 +193,62 @@ QUESTIONNAIRE_SECTIONS = [
     },
     {
         "id": 4,
+        "title": "Implementation Preferences",
+        "description": "Help us understand how you prefer to solve problems",
+        "questions": [
+            {
+                "id": "implementation_capability",
+                "question": "How would you describe your technical comfort level?",
+                "type": QuestionType.SELECT,
+                "required": True,
+                "options": [
+                    {"value": "non_technical", "label": "I avoid anything technical - just give me something that works"},
+                    {"value": "tutorial_follower", "label": "I can follow tutorials and use no-code tools like Notion or Airtable"},
+                    {"value": "automation_user", "label": "I'm comfortable with automation tools like Zapier or Make"},
+                    {"value": "ai_coder", "label": "I can code or am learning AI coding tools like Cursor"},
+                    {"value": "has_developers", "label": "I have developers on staff or easy access to technical help"},
+                ],
+            },
+            {
+                "id": "implementation_preference",
+                "question": "When solving business problems with software, you prefer to...",
+                "type": QuestionType.SELECT,
+                "required": True,
+                "options": [
+                    {"value": "buy", "label": "Find a ready-made solution that just works"},
+                    {"value": "connect", "label": "Customize and connect my existing tools"},
+                    {"value": "build", "label": "Build exactly what I need, even if it takes longer"},
+                    {"value": "hire", "label": "Hire someone to handle it for me"},
+                ],
+            },
+            {
+                "id": "budget_comfort",
+                "question": "For a tool that saves you 10+ hours/month, what's your comfort zone?",
+                "type": QuestionType.SELECT,
+                "required": True,
+                "options": [
+                    {"value": "low", "label": "Under €50/month"},
+                    {"value": "moderate", "label": "€50-200/month"},
+                    {"value": "comfortable", "label": "€200-500/month"},
+                    {"value": "high", "label": "€500+/month or one-time €2K-10K investment"},
+                ],
+            },
+            {
+                "id": "implementation_urgency",
+                "question": "How soon do you need solutions working?",
+                "type": QuestionType.SELECT,
+                "required": False,
+                "options": [
+                    {"value": "this_week", "label": "This week"},
+                    {"value": "this_month", "label": "This month"},
+                    {"value": "this_quarter", "label": "This quarter"},
+                    {"value": "no_rush", "label": "No rush, want it done right"},
+                ],
+            },
+        ],
+    },
+    {
+        "id": 5,
         "title": "Pain Points & Challenges",
         "description": "Where do you struggle the most?",
         "questions": [
@@ -247,7 +303,7 @@ QUESTIONNAIRE_SECTIONS = [
         ],
     },
     {
-        "id": 5,
+        "id": 6,
         "title": "AI & Automation Readiness",
         "description": "Let's assess your readiness for AI implementation",
         "questions": [

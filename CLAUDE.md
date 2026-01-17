@@ -282,6 +282,7 @@ cd frontend && npm test
 | Teaser | `backend/src/services/teaser_service.py` |
 | Token Analytics | `backend/src/services/token_analytics.py` |
 | Vendor Service | `backend/src/services/vendor_service.py` |
+| Insight Service | `backend/src/services/insight_service.py` |
 | Software Research | `backend/src/services/software_research_service.py` |
 | **Skills** | |
 | Base | `backend/src/skills/base.py` |
@@ -289,6 +290,7 @@ cd frontend && npm test
 | Vendor Matching | `backend/src/skills/analysis/vendor_matching.py` |
 | Quick Wins | `backend/src/skills/analysis/quick_win_identifier.py` |
 | Automation Summary | `backend/src/skills/report-generation/automation_summary.py` |
+| Insight Extraction | `backend/src/skills/extraction/insight_extraction.py` |
 | **Research Agents** | |
 | Discover | `backend/src/agents/research/discover.py` |
 | Refresh | `backend/src/agents/research/refresh.py` |
@@ -298,6 +300,7 @@ cd frontend && npm test
 | Interview | `backend/src/routes/interview.py` |
 | Workshop | `backend/src/routes/workshop.py` |
 | Admin Research | `backend/src/routes/admin_research.py` |
+| Admin Insights | `backend/src/routes/admin_insights.py` |
 | **Knowledge** | |
 | Knowledge Base | `backend/src/knowledge/__init__.py` |
 | Expertise | `backend/src/expertise/__init__.py` |
@@ -306,6 +309,9 @@ cd frontend && npm test
 | Quiz Page | `frontend/src/pages/Quiz.tsx` |
 | Report Viewer | `frontend/src/pages/ReportViewer.tsx` |
 | Vendor Admin | `frontend/src/pages/admin/VendorAdmin.tsx` |
+| Admin Dashboard | `frontend/src/pages/admin/AdminDashboard.tsx` |
+| Insights Admin | `frontend/src/pages/admin/InsightsAdmin.tsx` |
+| Insight Extractor | `frontend/src/pages/admin/InsightExtractor.tsx` |
 | Automation Roadmap | `frontend/src/components/report/AutomationRoadmap.tsx` |
 
 ---
@@ -605,6 +611,76 @@ python -m backend.src.services.vendor_refresh_service
 - Every stat needs `"source"` and `"verified_date": "YYYY-MM"`
 - Unverified data: `"status": "UNVERIFIED"` → shows ⚠️ in reports
 - Pricing: verify against vendor website, not AI-generated
+
+---
+
+## Curated Insights System
+
+Store and retrieve AI/industry insights from external content (YouTube, articles, reports).
+
+### Structure
+```
+backend/src/knowledge/insights/
+├── raw/                    # Original sources (transcripts, articles)
+├── curated/                # Extracted, reviewed insights by type
+│   ├── trends.json
+│   ├── frameworks.json
+│   ├── case_studies.json
+│   ├── statistics.json
+│   ├── quotes.json
+│   └── predictions.json
+└── embeddings/             # Vector embeddings (future)
+```
+
+### Insight Types
+| Type | Description |
+|------|-------------|
+| `trend` | Industry shifts backed by data |
+| `framework` | Actionable methodologies |
+| `case_study` | Real-world examples with outcomes |
+| `statistic` | Data-backed claims with sources |
+| `quote` | Memorable, quotable insights |
+| `prediction` | Forward-looking forecasts |
+
+### CLI Commands
+```bash
+cd backend
+
+# Extract from transcript/article
+python scripts/extract_insights.py \
+    --file src/knowledge/insights/raw/2026-01-source.txt \
+    --title "Title" --author "Author" --date "2026-01-14"
+
+# List all insights
+python scripts/extract_insights.py --list
+
+# Filter by type
+python scripts/extract_insights.py --list --type trend
+
+# Show stats
+python scripts/extract_insights.py --stats
+
+# Mark as reviewed
+python scripts/extract_insights.py --review <insight-id>
+```
+
+### Admin UI
+- **Dashboard**: http://localhost:5174/admin
+- **List/Edit**: http://localhost:5174/admin/insights
+- **Extract**: http://localhost:5174/admin/insights/extract
+
+### Surfaces
+Insights are surfaced in:
+- **Reports**: Trends/stats in exec summary, case studies as social proof
+- **Quiz results**: 1-2 relevant trend insights
+- **Landing page**: Rotating stats, quotes, case studies
+
+### API Endpoints
+- `GET /api/admin/insights/list` - List with filters
+- `POST /api/admin/insights/extract` - AI extraction
+- `POST /api/admin/insights/save-extracted` - Save after review
+- `PUT /api/admin/insights/{id}` - Update insight
+- `POST /api/admin/insights/{id}/review` - Mark reviewed
 
 ---
 

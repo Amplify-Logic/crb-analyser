@@ -114,6 +114,47 @@ SIZE_MAPPING = {
     "500+": "enterprise",
 }
 
+# Category aliases: map generic categories to industry-specific equivalents
+# When searching for "scheduling", also include "dental_practice_management" etc.
+CATEGORY_ALIASES = {
+    "scheduling": [
+        "scheduling",
+        "dental_practice_management",
+        "pt_practice_management",
+        "veterinary_practice_management",
+        "medspa_management",
+        "chiropractic_practice_management",
+        "coaching_platform",
+        "field_service_management",
+    ],
+    "crm": [
+        "crm",
+        "patient_communication",
+        "legal_crm",
+        "recruitment_ats",
+    ],
+    "finance": [
+        "finance",
+        "accounting_practice_management",
+    ],
+    "customer_support": [
+        "customer_support",
+        "patient_communication",
+        "ai_receptionist",
+    ],
+    "hr_payroll": [
+        "hr_payroll",
+        "recruitment_ats",
+        "recruitment_automation",
+        "recruitment_sourcing",
+    ],
+    "project_management": [
+        "project_management",
+        "psa",
+        "construction_project_management",
+    ],
+}
+
 
 class VendorMatchingSkill(LLMSkill[Dict[str, Any]]):
     """
@@ -183,6 +224,7 @@ class VendorMatchingSkill(LLMSkill[Dict[str, Any]]):
             vendors=vendors,
             finding=finding,
             company_context=company_context,
+            detected_category=category,
         )
 
         # Use LLM for nuanced matching if we have candidates
@@ -264,22 +306,38 @@ class VendorMatchingSkill(LLMSkill[Dict[str, Any]]):
         try:
             normalized_industry = normalize_industry(industry)
 
-            # Get vendors with tier boosts applied (includes budget filtering)
-            vendors = await vendor_service.get_vendors_with_tier_boost(
-                industry=normalized_industry,
-                category=category,
-                finding_tags=finding_tags,
-                company_context=company_context,
-            )
+            # Get category aliases to search multiple related categories
+            categories_to_search = [category] if category else [None]
+            if category and category in CATEGORY_ALIASES:
+                categories_to_search = CATEGORY_ALIASES[category]
 
-            if vendors:
-                logger.info(
-                    f"Found {len(vendors)} vendors from Supabase for "
-                    f"{normalized_industry}/{category}"
+            all_vendors = []
+            seen_ids = set()
+
+            # Search each category alias
+            for cat in categories_to_search:
+                vendors = await vendor_service.get_vendors_with_tier_boost(
+                    industry=normalized_industry,
+                    category=cat,
+                    finding_tags=finding_tags,
+                    company_context=company_context,
                 )
-                return vendors
+                for v in vendors:
+                    vid = v.get("id") or v.get("slug")
+                    if vid and vid not in seen_ids:
+                        seen_ids.add(vid)
+                        all_vendors.append(v)
 
-            # Fallback: try without category filter
+            if all_vendors:
+                logger.info(
+                    f"Found {len(all_vendors)} vendors from Supabase for "
+                    f"{normalized_industry}/{category} (searched {len(categories_to_search)} categories)"
+                )
+                # Re-sort by recommendation score after merging
+                all_vendors.sort(key=lambda v: v.get("_recommendation_score", 0), reverse=True)
+                return all_vendors
+
+            # Fallback: try without category filter if nothing found
             if category:
                 vendors = await vendor_service.get_vendors_with_tier_boost(
                     industry=normalized_industry,
@@ -287,8 +345,9 @@ class VendorMatchingSkill(LLMSkill[Dict[str, Any]]):
                     finding_tags=finding_tags,
                     company_context=company_context,
                 )
+                return vendors
 
-            return vendors
+            return all_vendors
 
         except Exception as e:
             logger.warning(f"Supabase vendor fetch failed, using JSON fallback: {e}")
@@ -353,6 +412,7 @@ class VendorMatchingSkill(LLMSkill[Dict[str, Any]]):
         vendors: List[Dict[str, Any]],
         finding: Dict[str, Any],
         company_context: Dict[str, Any],
+        detected_category: Optional[str] = None,
     ) -> List[Dict[str, Any]]:
         """Score vendors based on fit."""
         scored = []
@@ -375,6 +435,14 @@ class VendorMatchingSkill(LLMSkill[Dict[str, Any]]):
             score = 50  # Base score
             reasons = []
             limitations = []
+
+            # CATEGORY MATCH BOOST: Vendors whose category exactly matches the detected
+            # category get a significant boost (helps generic tools compete with
+            # industry-specific tools that have tier boosts)
+            vendor_category = vendor.get("category", "")
+            if detected_category and vendor_category == detected_category:
+                score += 25
+                reasons.append(f"Direct category match ({detected_category})")
 
             # Include tier boost from Supabase (if available)
             tier_boost = vendor.get("_tier_boost", 0)
@@ -439,7 +507,7 @@ class VendorMatchingSkill(LLMSkill[Dict[str, Any]]):
                 limitations.append("Complex implementation")
 
             # Pricing - check if free tier available
-            pricing = vendor.get("pricing", {})
+            pricing = vendor.get("pricing") or {}
             if pricing.get("free_tier"):
                 score += 5
                 reasons.append("Free tier available")
@@ -500,7 +568,7 @@ class VendorMatchingSkill(LLMSkill[Dict[str, Any]]):
 
         vendor_summaries = []
         for v in top_vendors:
-            pricing = v.get("pricing", {})
+            pricing = v.get("pricing") or {}
             tiers = pricing.get("tiers", [])
             starting_tier = tiers[0] if tiers else {}
             mid_tier = tiers[len(tiers)//2] if len(tiers) > 1 else starting_tier
@@ -607,8 +675,8 @@ Return ONLY a JSON object:
         if off_the_shelf and not best_in_class and len(vendors) > 1:
             # Find a premium option
             for vendor in vendors[1:]:
-                pricing = vendor.get("pricing", {})
-                tiers = pricing.get("tiers", [])
+                pricing = vendor.get("pricing") or {}
+                tiers = pricing.get("tiers") or []
                 if tiers:
                     mid_tier = tiers[len(tiers)//2]
                     mid_price = mid_tier.get("price") or 0
@@ -638,9 +706,9 @@ Return ONLY a JSON object:
 
     def _format_vendor(self, vendor: Dict[str, Any]) -> Dict[str, Any]:
         """Format vendor for output."""
-        pricing = vendor.get("pricing", {})
-        tiers = pricing.get("tiers", [])
-        impl = vendor.get("implementation", {})
+        pricing = vendor.get("pricing") or {}
+        tiers = pricing.get("tiers") or []
+        impl = vendor.get("implementation") or {}
 
         # Find appropriate tier
         starter_tier = None

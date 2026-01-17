@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef, useCallback } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
-import { ShimmerButton, SpotlightCard } from '../components/magicui'
+import { ShimmerButton } from '../components/magicui'
 import { formatCompanyName } from '../lib/formatCompanyName'
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8383'
@@ -1371,7 +1371,7 @@ export default function Quiz() {
               </p>
             </div>
 
-            <SpotlightCard className="p-8">
+            <div className="rounded-2xl border border-gray-200 bg-white p-8">
               <label className="block text-sm font-medium text-gray-700 mb-2">
                 Your company website
               </label>
@@ -1418,7 +1418,7 @@ export default function Quiz() {
                   {!sessionId ? 'Loading...' : 'Start Research'}
                 </button>
               )}
-            </SpotlightCard>
+            </div>
 
             {/* Start fresh option */}
             <div className="text-center mt-6">

@@ -25,6 +25,9 @@ import Terms from './pages/Terms'
 import Privacy from './pages/Privacy'
 import KnowledgeBase from './pages/admin/KnowledgeBase'
 import VendorAdmin from './pages/admin/VendorAdmin'
+import AdminDashboard from './pages/admin/AdminDashboard'
+import InsightsAdmin from './pages/admin/InsightsAdmin'
+import InsightExtractor from './pages/admin/InsightExtractor'
 
 // 404 page
 const NotFound = () => (
@@ -146,6 +149,14 @@ function App() {
 
       {/* Admin routes */}
       <Route
+        path="/admin"
+        element={
+          <ProtectedRoute>
+            <AdminDashboard />
+          </ProtectedRoute>
+        }
+      />
+      <Route
         path="/admin/knowledge"
         element={
           <ProtectedRoute>
@@ -158,6 +169,22 @@ function App() {
         element={
           <ProtectedRoute>
             <VendorAdmin />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/admin/insights"
+        element={
+          <ProtectedRoute>
+            <InsightsAdmin />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/admin/insights/extract"
+        element={
+          <ProtectedRoute>
+            <InsightExtractor />
           </ProtectedRoute>
         }
       />

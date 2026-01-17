@@ -1,0 +1,264 @@
+{
+  "type": "case_study",
+  "description": "Real-world examples of AI implementation with measurable outcomes",
+  "last_updated": "2026-01-15",
+  "insights": [
+    {
+      "id": "case-study-pharma-clinical-workflow",
+      "type": "case_study",
+      "title": "Pharma Company Reduces Clinical Study Prep Time by 60% with AI Workflow",
+      "content": "A pharmaceutical company redesigned their clinical study workflow using AI to analyze raw clinical data while humans focus on validation, resulting in significant time and error reduction.",
+      "supporting_data": [
+        {
+          "claim": "60% reduction in prep time and 50% fewer errors in clinical studies",
+          "source": "Jeff Su AI Trends Report",
+          "source_url": "https://www.youtube.com/watch?v=jeff-su-ai-trends",
+          "date": "2026",
+          "credibility": "anecdotal"
+        }
+      ],
+      "actionable_insight": "Consider AI-human workflows for complex analysis tasks where AI handles data processing and humans provide validation and quality control.",
+      "tags": {
+        "topics": [
+          "clinical_trials",
+          "data_analysis",
+          "quality_control"
+        ],
+        "industries": [
+          "healthcare",
+          "pharmaceuticals"
+        ],
+        "use_in": [
+          "report",
+          "quiz_results"
+        ],
+        "user_stages": [
+          "scaling"
+        ]
+      },
+      "source": {
+        "title": "Top 6 AI Trends That Will Define 2026",
+        "author": "Jeff Su",
+        "url": "https://www.youtube.com/watch?v=jeff-su-ai-trends",
+        "date": "2026-01-06",
+        "type": "youtube"
+      },
+      "extracted_at": "2026-01-15",
+      "reviewed": false
+    },
+    {
+      "id": "case-study-utility-call-center",
+      "type": "case_study",
+      "title": "Utility Company Cuts Call Center Costs 50% with AI Workflow Design",
+      "content": "A utility company redesigned their call center workflow where AI handles authentication and routine inquiries, while humans focus on complex issues, resulting in cost reduction and improved satisfaction.",
+      "supporting_data": [
+        {
+          "claim": "50% reduction in cost per call and 6% increase in satisfaction scores",
+          "source": "Jeff Su AI Trends Report",
+          "source_url": "https://www.youtube.com/watch?v=jeff-su-ai-trends",
+          "date": "2026",
+          "credibility": "anecdotal"
+        }
+      ],
+      "actionable_insight": "Implement AI for routine, high-volume interactions while preserving human expertise for complex problem-solving to achieve both cost savings and customer satisfaction improvements.",
+      "tags": {
+        "topics": [
+          "customer_service",
+          "cost_reduction",
+          "workflow_optimization"
+        ],
+        "industries": [
+          "utilities",
+          "customer_service"
+        ],
+        "use_in": [
+          "report",
+          "quiz_results"
+        ],
+        "user_stages": [
+          "scaling"
+        ]
+      },
+      "source": {
+        "title": "Top 6 AI Trends That Will Define 2026",
+        "author": "Jeff Su",
+        "url": "https://www.youtube.com/watch?v=jeff-su-ai-trends",
+        "date": "2026-01-06",
+        "type": "youtube"
+      },
+      "extracted_at": "2026-01-15",
+      "reviewed": false
+    },
+    {
+      "id": "case-study-amazon-warehouse-robots",
+      "type": "case_study",
+      "title": "Amazon Cuts Order-to-Shipping Time by 78% with AI Robots",
+      "content": "Amazon's AI-enabled warehouse robots have dramatically reduced fulfillment time, demonstrating how physical AI agents are already delivering measurable business value in logistics operations.",
+      "supporting_data": [
+        {
+          "claim": "Amazon's AI warehouse robots cut order-to-shipping time by 78%",
+          "source": "Amazon",
+          "source_url": null,
+          "date": "2026",
+          "credibility": "industry_data"
+        }
+      ],
+      "actionable_insight": "Evaluate warehouse and logistics operations for AI robotics opportunities that can dramatically improve fulfillment speed and efficiency.",
+      "tags": {
+        "topics": [
+          "warehouse_automation",
+          "logistics",
+          "robotics"
+        ],
+        "industries": [
+          "retail",
+          "logistics",
+          "manufacturing"
+        ],
+        "use_in": [
+          "report",
+          "quiz_results"
+        ],
+        "user_stages": [
+          "early_adopter",
+          "scaling"
+        ]
+      },
+      "source": {
+        "title": "Top 6 AI Trends That Will Define 2026",
+        "author": "Jeff Su",
+        "url": "https://www.youtube.com/watch?v=jeff-su-ai-trends",
+        "date": "2026-01-06",
+        "type": "youtube"
+      },
+      "extracted_at": "2026-01-15",
+      "reviewed": false
+    },
+    {
+      "id": "case-study-apple-founder-missed-opportunity",
+      "type": "case_study",
+      "title": "Apple Co-founder's $200 Billion Mistake",
+      "content": "Steve Wozniak, one of Apple's three co-founders, sold his 10% stake back to the company for $800 just 12 days after founding, worried the company would fail. That stake would be worth over $200 billion today, making it one of history's most expensive early exits.",
+      "supporting_data": [
+        {
+          "claim": "Wozniak sold 10% Apple stake for $800 after 12 days, now worth $200+ billion",
+          "source": "Historical Apple records",
+          "source_url": null,
+          "date": "1976",
+          "credibility": "industry_data"
+        }
+      ],
+      "actionable_insight": "Revolutionary technologies require patience and conviction. Early-stage fear often leads to massive opportunity costs.",
+      "tags": {
+        "topics": [
+          "early_adoption",
+          "investment_timing",
+          "risk_management"
+        ],
+        "industries": [
+          "technology",
+          "finance"
+        ],
+        "use_in": [
+          "report",
+          "landing"
+        ],
+        "user_stages": [
+          "considering"
+        ]
+      },
+      "source": {
+        "title": "AI Revolution: The Opportunity Window is Closing",
+        "author": "Unknown",
+        "url": "",
+        "date": "2026-01",
+        "type": "youtube"
+      },
+      "extracted_at": "2026-01-15",
+      "reviewed": false
+    },
+    {
+      "id": "case-study-historical-tech-investment-patterns",
+      "type": "case_study",
+      "title": "Historical Tech Investment Pattern: Early vs. Late Adopters",
+      "content": "Historical pattern shows massive early gains followed by modest returns. Microsoft early investors saw 50,000% returns over two decades, but post-2000 buyers got single-digit annual growth. Amazon went from 7 cents to $3+ (4,000%+ gain) in 2 years during internet boom, but late investors missed these gains.",
+      "supporting_data": [
+        {
+          "claim": "Microsoft early investors achieved 50,000% returns over two decades",
+          "source": "Historical market data",
+          "source_url": null,
+          "date": "1980-2000",
+          "credibility": "industry_data"
+        },
+        {
+          "claim": "Amazon achieved 4,000%+ gain from IPO price in 2 years",
+          "source": "Historical market data",
+          "source_url": null,
+          "date": "1997-1999",
+          "credibility": "industry_data"
+        }
+      ],
+      "actionable_insight": "Technology revolutions follow predictable patterns: massive early returns followed by mature market growth. Position early in the cycle.",
+      "tags": {
+        "topics": [
+          "investment_timing",
+          "historical_patterns",
+          "market_cycles"
+        ],
+        "industries": [
+          "finance",
+          "technology"
+        ],
+        "use_in": [
+          "report",
+          "landing"
+        ],
+        "user_stages": [
+          "considering"
+        ]
+      },
+      "source": {
+        "title": "AI Revolution: The Opportunity Window is Closing",
+        "author": "Unknown",
+        "url": "",
+        "date": "2026-01",
+        "type": "youtube"
+      },
+      "extracted_at": "2026-01-15",
+      "reviewed": false
+    },
+    {
+      "id": "case-study-google-engineer-prototype",
+      "type": "case_study",
+      "title": "Google Engineer Replicated Year of Work in One Session",
+      "content": "Jana Dogen, a Google principal engineer, gave Claude Code a description of a problem her team spent a year building a solution for. Claude generated a working prototype of the same solution in one hour. The post got 5.5 million views.",
+      "supporting_data": [
+        {
+          "claim": "It generated what we actually built last year in an hour",
+          "source": "Jana Dogen, Google Principal Engineer, Twitter/X",
+          "source_url": null,
+          "date": "2025-12",
+          "credibility": "industry_data"
+        }
+      ],
+      "actionable_insight": "Complex projects that used to take months can now be prototyped in hours. Before hiring someone or spending weeks on a project, try describing the problem to AI and see what it produces.",
+      "tags": {
+        "topics": ["case-study", "productivity", "prototyping"],
+        "industries": ["all"],
+        "use_in": ["report", "landing"],
+        "user_stages": ["considering", "early_adopter"]
+      },
+      "source": {
+        "title": "Claude Co-work Launch Analysis",
+        "author": "Dan Shipper",
+        "url": "https://www.youtube.com/watch?v=5KVDDfAkl",
+        "date": "2026-01-09",
+        "type": "youtube"
+      },
+      "extracted_at": "2026-01-15",
+      "reviewed": false,
+      "audience_relevance": "high",
+      "relevance_reason": "Concrete example of time savings - 1 year to 1 hour is compelling for any business owner"
+    }
+  ]
+}

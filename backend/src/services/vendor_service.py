@@ -255,17 +255,18 @@ class VendorService:
         older_than_days: int = 7,
         limit: int = 50,
     ) -> List[Dict[str, Any]]:
-        """Get vendors that need pricing refresh."""
+        """Get vendors that need pricing/data refresh based on verified_at timestamp."""
         supabase = await get_async_supabase()
 
         from datetime import timedelta
 
         cutoff = (datetime.utcnow() - timedelta(days=older_than_days)).isoformat()
 
+        # Use verified_at column (the actual column in schema)
         result = await supabase.table("vendors").select("*").eq(
-            "auto_refresh_enabled", True
+            "status", "active"
         ).or_(
-            f"pricing_verified_at.is.null,pricing_verified_at.lt.{cutoff}"
+            f"verified_at.is.null,verified_at.lt.{cutoff}"
         ).limit(limit).execute()
 
         return result.data or []
@@ -343,7 +344,8 @@ class VendorService:
         supabase = await get_async_supabase()
 
         try:
-            # Query vendors that include this industry
+            # Query vendors that include this industry OR are cross-industry (*)
+            # We need two queries since Supabase doesn't support OR on contains easily
             query = supabase.table("vendors").select("*").eq("status", "active")
 
             if category:
@@ -354,6 +356,21 @@ class VendorService:
 
             result = await query.execute()
             vendors = result.data or []
+
+            # Also fetch cross-industry vendors (industries contains "*")
+            cross_query = supabase.table("vendors").select("*").eq("status", "active")
+            if category:
+                cross_query = cross_query.eq("category", category)
+            cross_query = cross_query.contains("industries", ["*"])
+
+            cross_result = await cross_query.execute()
+            cross_vendors = cross_result.data or []
+
+            # Merge, avoiding duplicates
+            existing_ids = {v.get("id") for v in vendors}
+            for cv in cross_vendors:
+                if cv.get("id") not in existing_ids:
+                    vendors.append(cv)
 
             # Apply tier boosts
             vendors = await self._apply_industry_boosts(vendors, industry)

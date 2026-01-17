@@ -1,0 +1,102 @@
+Source: YouTube - Jeff Su
+Title: Top 6 AI Trends That Will Define 2026 (backed by data)
+URL: https://www.youtube.com/watch?v=...
+Date: 2026-01-06
+Author: Jeff Su
+Type: youtube_transcript
+
+---
+
+Here are the six AI trends that will matter most in 2026. This list is based on daily research and reports from institutions like McKenzie, OpenAI, Stanford, and from analysts who are much more knowledgeable than myself. In other words, don't blame me if they get it wrong. For each trend, I'll first start with a big picture, then move on to the actionable takeaways so that by the end, you have a clear sense of where AI is heading and what to do about it. Let's get started.
+
+TREND 1: MODELS DON'T MATTER MUCH ANYMORE
+
+For the past few years, every new model released sparked debate about the best AI, and for good reason. The difference in quality between models was significant. In 2026, though, that choice is going to matter a lot less.
+
+Taking a look at the data, this graph from artificial analysis shows how the major AI models have improved over time. Notice the clustering in the top right corner. The models are still getting smarter in absolute terms, but the gap between them keeps shrinking, meaning no single model has a clear lead anymore.
+
+A Stanford study confirms this from another angle by comparing closed models like Gemini and ChatGPT against open weight alternatives like Deep Seek and Llama. The trend is pretty clear. Models that are free to run are now approaching frontier performance and performance is only half the story.
+
+The cost matters as well. Data from Epoch AI shows that using powerful models has become drastically cheaper and one of the reasons is because hardware is getting more efficient. For perspective, Nvidia's latest chips uses 105,000 times less energy per token than they did 10 years ago.
+
+So, what does this mean for us? In plain English, when things get cheaper and more similar, they become more like commodities. You don't ask who provides the best electricity, right? You ask what can I use the electricity for? And because of this, the competition is shifting from the AI model itself to the way we actually use it, aka the app layer.
+
+Just think about cars. Once the engine becomes standardized, the focus shifts to the features and the design. This creates an interesting dynamic for each of the frontier AI labs. For example, OpenAI has a mind share advantage because ChatGPT is synonymous with AI and has the largest market share. Google has a distribution advantage because Gemini is already embedded across its existing products like search, Gmail, and Android. Anthropic has a specialization advantage given its loyal customer base in developers and enterprise customers. Notice what's missing from that list. None of them are winning because they have the best AI. The competition has moved beyond raw power to reach, integration, and trust.
+
+The practical takeaway here is to stop obsessing over technical scores and instead focus on how they fit into your actual work. For example, if you live in Google Workspace, Gemini's deep integration with all of Google's apps gives it an edge that has nothing to do with raw intelligence.
+
+TREND 2: 2026 IS THE YEAR OF AI WORKFLOWS, NOT AI AGENTS
+
+If you spend any time on Twitter or LinkedIn, you've probably noticed the industry jump from chat bots straight to autonomous agents and completely skip the middle step where the actual value is being unlocked, AI workflows.
+
+And the numbers prove this. According to McKenzie, no more than 10% of organizations in any given business function report scaling true agents. Meanwhile, we see from OpenAI's enterprise report that 20% of enterprise AI use is already happening through workflow specific tools like custom GPTs and projects. This gap tells you the market has voted for workflows, not autonomy.
+
+And we're seeing this play out across industries:
+- A pharma company redesigned their clinical study workflow by using AI to analyze raw clinical data while humans focus on validation leading to 60% less prep time and 50% fewer errors.
+- A utility company redesigned their call center workflow where AI handles authentication and routine inquiries cutting cost per call by 50% while increasing satisfaction scores by 6%.
+- A bank redesigned their code migration workflow where AI scans legacy code and generates updated versions for developers to verify, cutting the required human hours by 50%.
+
+Andre Karpathy sums it up perfectly, calling everything an agent creates unrealistic expectations and confusion. Fully autonomous AI still faces massive hurdles like data security. So, we're looking at the decade of agents, not the year.
+
+Meanwhile, by integrating something like custom GPTs into an existing workflow, we've essentially created an agent light which is much more reliable at producing consistent results. To really ram this point home, McKenzie predicts that redesigning workflows will unlock nearly $3 trillion in economic value by 2030.
+
+And more importantly, these organizations will have the muscle memory to adopt true AI agents faster when they finally arrive. So here's your practical takeaway. Your goal for 2026 is to turn your successful prompts into repeatable workflows. Pick one recurring deliverable you produce, like a weekly report. Break it into steps and let AI handle the predictable parts. Keep yourself in the loop for the final judgment calls. That structure is what creates true reliability.
+
+TREND 3: THE END OF THE TECHNICAL DIVIDE
+
+When I was at Google, non-technical teams like sales and marketing had to rely on specialist teams to help them build stuff like dashboards. And I'm not someone who holds grudges, but a lot of my requests were deprioritized because they were too low impact and my clients weren't key accounts, but no, I'm over it.
+
+Anyways, in 2026, that's going to happen a lot less. The numbers backing this are honestly kind of insane. According to Open AI's latest report, 75% of enterprise users reported using AI to complete tasks they literally could not do before. Not just doing old tasks faster, they're doing entirely new things.
+
+For example, coding related messages from non-technical employees grew 36% in just 6 months. These are salespeople, marketers, and operations managers writing scripts, automating spreadsheets, and building internal tools.
+
+A study from MIT confirms this. AI acts as an equalizer, disproportionately helping workers with lower technical skills close the performance gap with experts.
+
+Here's what all this means for your career. If your value is purely technical, aka you're the dashboard person, then your competitive advantage is shrinking because the marketing manager who used to wait in your queue can now do it themselves. But if you are that marketing manager or the salesperson who deeply understands their clients, then this is the biggest opportunity of your career because the technical barrier that stood between your expertise and your execution is now gone.
+
+Here's your practical takeaway. Attempt one impossible task this month. Identify a technical project you usually outsource like building a dashboard, cleaning a messy data set, or automating a report and try doing it yourself using Gemini, Claude, or ChatGPT. You'll be surprised by what you can now pull off alone.
+
+TREND 4: FROM PROMPTING TO CONTEXT
+
+One of my most popular videos is this one teaching you how to prompt because as we all know, if we don't phrase our request well, we get a bad result from AI. Unfortunately for me, that video is going to matter a lot less in 2026 because new models have gotten so much better at understanding vague instructions.
+
+However, they still have one massive weakness I call the fact gap. While models know almost everything on the public internet from Shakespeare to Python code, they know nothing about your Q3 goals, your brand guidelines, or that email your boss sent yesterday. It's like having a brilliant employee who technically knows how to complete tasks, but isn't allowed to look at any company files. They're still going to fail, right? Because they lack context.
+
+At least that's what I told my boss during my first internship. It's the exact same thing with AI. The focus has shifted from how we ask the wording to what we give it, the context.
+
+And this explains the platform wars we're seeing right now. Google, Microsoft, and others are racing to embed AI into their productivity suites because whoever holds your context, your emails, your docs, your calendar, holds your attention. This is also how they'll trap you with platform lock-in. The more context you build up in one ecosystem, the smarter the AI is for you and the harder it becomes to switch.
+
+There are two practical takeaways here:
+1. File management is no longer optional. To get value from AI, you need some sort of system to keep your files organized and clearly named. If your work is scattered in random, unnamed folders, you can't point the AI to it.
+2. Audit where your information lives. If it's spread across three or four different platforms, you need to consolidate. If your resume lives in Google Drive, but the job description and interview notes are stored in Notion, neither Gemini nor Notion AI can help with interview prep, you end up doing the synthesis manually, which leads to more friction and defeats the whole purpose.
+
+So, as a rule of thumb, prompting still matters, but it's more important to ask yourself, does the AI have the files it needs to know what I'm talking about?
+
+TREND 5: ADVERTISING IS COMING TO CHATBOTS (AND IT'S NOT ALL BAD)
+
+First of all, please don't shoot the messenger on this one. Hear me out. At this point, it's basically been confirmed that ads are coming to ChatGPT in 2026. So, instead of debating if it will happen, let's talk about the implications.
+
+Imagine a world where advertising never comes to chatbots. In that reality, the best AI models stay locked behind expensive subscriptions, creating a wealth gap, where only those who can pay have access to the best tools, while everyone else is left with an inferior version. Over time, this creates a compounding advantage. The wealthy use powerful AI to get wealthier while everyone else falls further behind.
+
+Think of it like YouTube. Imagine if you couldn't watch videos from the top creators unless you pay for YouTube Premium. That is where AI is headed without an ad supported tier.
+
+Now that we know ads are inevitable, the thing to watch is what format those ads will take because it's going to look very different from the search ads we're currently used to. For example, industry expert Eric Seufert predicts chatbot ads will not be tied to our specific questions because if an AI recommended a product directly in its answer, we wouldn't trust it. Instead, the ad will probably look like standard display banners that stay separate from your actual conversation. Sort of like the banner ads we see on websites today.
+
+So, here's the bottom line. I don't like ads. You don't like ads. Nobody likes ads. But it's the ad revenue that makes it possible for companies to offer their best models to students in developing countries, nonprofits, and casual users who can't afford another monthly bill.
+
+TREND 6: FROM CHATBOTS TO ROBOTS
+
+Everything we've covered so far has focused on AI as software. But in 2026, that software is going to appear even more in the physical world as physical agents who can move on their own.
+
+The numbers show this is already happening:
+- Exhibit A, Waymo. Their autonomous taxi service has now logged over 100 million fully autonomous miles and are involved in 96% fewer crashes than human drivers.
+- Exhibit B, Amazon. Their AI enabled warehouse robots have cut the time from order to shipping by 78%.
+- Exhibit C, China. As early as 2023, China had deployed more industrial robots than the US and the rest of the world combined.
+
+Now, there is one caveat to all this. Humanoid robots are still mostly hype. MIT robotics professor Rodney Brooks estimates that we are at least 15 years away from seeing functional humanoid robots in our daily lives.
+
+The real shift is what analyst Mary Meeker calls AI turning capital assets into software endpoints. And here's what that means in plain English. A car, a tractor, or warehouse robot used to be a depreciating asset, which means it loses value as time goes on. Right now, these machines are becoming platforms that improve over time through software updates, exactly like our phones. A Waymo car today is actually safer and smarter than it was 2 years ago, even if the physical vehicle hasn't changed.
+
+So, what does all this mean for us? In a nutshell, while the headlines are focusing on white collar disruption for now, this trend suggests that blue collar work will also be disrupted, but over a much longer time horizon.
+
+On a more positive note, I want to leave you with something Ethan Mollick said. He's a professor at Wharton, and this is something I really believe in. His research on what he calls the jagged frontier of AI shows that right now we are in a unique window where expertise is being reset thanks to AI. And precisely because things are messy and undefined right now, there are no experts who know everything already. You just need to be willing to learn faster than the person next to you. That is how you win in 2026. Stop worrying about developing a perfect plan to learn AI and instead just get started.
