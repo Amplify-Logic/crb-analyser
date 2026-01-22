@@ -77,6 +77,11 @@ from src.knowledge import (
 )
 from src.expertise import get_self_improve_service, get_expertise_store
 from src.skills import get_skill, SkillContext
+from src.skills.analysis.platform_consolidation import (
+    identify_platform_opportunities,
+    get_platform_for_finding,
+    PLATFORM_CATEGORIES,
+)
 from src.services.playbook_generator import PlaybookGenerator
 from src.models.user_profile import UserProfile
 from src.services.architecture_generator import ArchitectureGenerator
@@ -240,12 +245,37 @@ class ReportGenerator:
             logger.warning(f"Could not build user profile: {e}")
             user_profile = None
 
+        # Extract currency - check quiz answer first, then company profile
+        currency = "EUR"  # Default
+
+        # Priority 1: Quiz answer for company_location
+        location = answers.get("company_location")
+        if location:
+            location_currency_map = {
+                "NL": "EUR", "DE": "EUR", "IE": "EUR", "OTHER": "EUR",
+                "UK": "GBP",
+                "AU": "AUD",
+                "NZ": "NZD",
+                "US": "USD",
+            }
+            currency = location_currency_map.get(location, "EUR")
+        else:
+            # Priority 2: Company profile (from website research)
+            company_profile = self.context.get("company_profile", {})
+            financials = company_profile.get("financials", {})
+            currency_data = financials.get("currency", {})
+            if isinstance(currency_data, dict):
+                currency = currency_data.get("value", "EUR")
+            elif isinstance(currency_data, str):
+                currency = currency_data
+
         return SkillContext(
             industry=industry,
             company_name=self.context.get("company_name"),
             company_size=self.context.get("company_size"),
             quiz_answers=answers,
             interview_data=self.context.get("interview_data"),
+            currency=currency,
             expertise=expertise,
             knowledge=self.context.get("industry_knowledge"),
             report_data=self.context,
@@ -1015,6 +1045,34 @@ class ReportGenerator:
             if vendor_tracking["total_mentions"] > 0:
                 logger.info(f"[FINALIZE] Tracked {vendor_tracking['total_mentions']} vendor mentions: {vendor_tracking['unique_vendors']}")
 
+            # ================================================================
+            # DETERMINISTIC VALIDATION - catches issues before QA
+            # ================================================================
+            from src.services.validation_service import validate_report
+
+            full_report = {
+                "company_profile": self.context.get("company_profile", {}),
+                "executive_summary": executive_summary,
+                "findings": findings,
+                "recommendations": recommendations,
+                "playbooks": playbooks,
+            }
+
+            validation_result = validate_report(full_report)
+
+            if not validation_result.is_valid:
+                logger.warning(f"[FINALIZE] Report validation found {len(validation_result.errors)} errors")
+                for error in validation_result.errors:
+                    logger.warning(f"[VALIDATION] {error.get('location', 'unknown')}: {error.get('issue', error)}")
+                # Store validation issues for QA review
+                assumption_log["validation_issues"] = validation_result.errors
+                assumption_log["validation_warnings"] = validation_result.warnings
+            else:
+                logger.info(f"[FINALIZE] Report validation passed ({len(validation_result.warnings)} warnings)")
+                if validation_result.warnings:
+                    assumption_log["validation_warnings"] = validation_result.warnings
+            # ================================================================
+
             logger.info(f"[FINALIZE] Updating report status to qa_pending...")
             try:
                 # Try with all fields first including generation trace
@@ -1570,6 +1628,9 @@ IMPORTANT:
 
         Uses the skills framework for consistent Three Options output.
         Falls back to legacy method if skill fails.
+
+        Key improvement: Uses platform consolidation to avoid recommending
+        competing vendors (e.g., Jobber AND Tradify) for related findings.
         """
         # Try skill-based generation first
         skill = get_skill("three-options", client=self.client)
@@ -1579,21 +1640,186 @@ IMPORTANT:
                 # Filter out not-recommended findings
                 recommendable = [f for f in findings if not f.get("is_not_recommended")]
 
-                # Group by priority
-                high_priority = [f for f in recommendable if f.get("customer_value_score", 0) >= 8 or f.get("business_health_score", 0) >= 8]
-                other = [f for f in recommendable if f not in high_priority]
+                # === PLATFORM CONSOLIDATION ===
+                # Identify which findings can be solved by ONE platform
+                industry = self.context.get("industry", "general")
+                existing_stack = self.context.get("existing_stack", [])
 
-                # Top findings for recommendations
+                consolidation = identify_platform_opportunities(
+                    findings=recommendable,
+                    industry=industry,
+                    existing_stack=existing_stack,
+                )
+
+                if consolidation.platform_recommendations:
+                    logger.info(
+                        f"Platform consolidation: {len(consolidation.platform_recommendations)} platforms "
+                        f"cover {len(consolidation.already_covered_findings)} findings"
+                    )
+
+                # Group by priority (excluding already-covered findings for individual recs)
+                high_priority = [
+                    f for f in recommendable
+                    if (f.get("customer_value_score", 0) >= 8 or f.get("business_health_score", 0) >= 8)
+                    and f.get("id") not in consolidation.already_covered_findings
+                ]
+                other = [
+                    f for f in recommendable
+                    if f not in high_priority
+                    and f.get("id") not in consolidation.already_covered_findings
+                ]
+
+                # Top findings for individual recommendations
                 priority_findings = high_priority[:5] + other[:5]
 
                 recommendations = []
                 roi_skill = get_skill("roi-calculator", client=self.client)
                 vendor_skill = get_skill("vendor-matching", client=self.client)
 
+                # Track used vendors to avoid duplicate recommendations across findings
+                used_vendors: set[str] = set()
+
+                # === GENERATE PLATFORM RECOMMENDATIONS FIRST ===
+                for platform_rec in consolidation.platform_recommendations:
+                    # Add the platform vendor to used list
+                    used_vendors.add(platform_rec.recommended_vendor.lower())
+
+                    # Create a consolidated recommendation for the platform
+                    platform_finding_titles = platform_rec.finding_titles[:3]
+                    rec = {
+                        "id": f"rec-platform-{platform_rec.category}",
+                        "title": f"{platform_rec.display_name} Platform",
+                        "description": (
+                            f"Implement {platform_rec.recommended_vendor.title()} to address "
+                            f"{len(platform_rec.solves_findings)} related findings: "
+                            f"{', '.join(platform_finding_titles)}"
+                            + (f" and {len(platform_rec.solves_findings) - 3} more" if len(platform_rec.solves_findings) > 3 else "")
+                        ),
+                        "why_it_matters": {
+                            "customer_value": "Single platform means consistent customer experience across scheduling, quoting, and communication",
+                            "business_health": "Reduces complexity, training, and integration costs vs separate tools",
+                        },
+                        "priority": "high",
+                        "is_platform_recommendation": True,
+                        "solves_findings": platform_rec.solves_findings,
+                        "finding_titles": platform_rec.finding_titles,
+                        "platform_category": platform_rec.category,
+                        "options": {
+                            "off_the_shelf": {
+                                "name": platform_rec.recommended_vendor.title(),
+                                "vendor": platform_rec.recommended_vendor.title(),
+                                "monthly_cost": 169,  # Typical mid-tier FSM cost
+                                "implementation_weeks": 2,
+                                "implementation_cost": 500,  # Standard setup
+                                "pros": [
+                                    f"Solves {len(platform_rec.solves_findings)} findings at once",
+                                    "Single vendor relationship and support",
+                                    "Built-in integrations between features",
+                                ],
+                                "cons": [
+                                    "May have more features than needed",
+                                    "Learning curve for full platform",
+                                ],
+                            },
+                            "best_in_class": {
+                                "name": platform_rec.alternatives[1].title() if len(platform_rec.alternatives) > 1 else "Alternative",
+                                "vendor": platform_rec.alternatives[1].title() if len(platform_rec.alternatives) > 1 else "Alternative",
+                                "monthly_cost": 299,
+                                "implementation_weeks": 4,
+                                "implementation_cost": 1500,
+                                "pros": ["More advanced features", "Better for scaling"],
+                                "cons": ["Higher cost", "Longer implementation"],
+                            },
+                            "custom_solution": {
+                                "approach": "Build custom workflows with existing tools + Make/n8n",
+                                "estimated_cost": {"min": 2000, "max": 5000},
+                                "monthly_running_cost": 50,
+                                "implementation_weeks": 6,
+                                "pros": ["Perfect fit", "Lower ongoing cost"],
+                                "cons": ["Higher upfront investment", "Requires maintenance"],
+                            },
+                        },
+                        "our_recommendation": "off_the_shelf",
+                        "recommendation_rationale": (
+                            f"A single {platform_rec.display_name} platform like {platform_rec.recommended_vendor.title()} "
+                            f"addresses {len(platform_rec.solves_findings)} of your findings instead of buying "
+                            f"separate tools for each. This simplifies training, reduces integration complexity, "
+                            f"and typically costs less than multiple point solutions."
+                        ),
+                        "assumptions": [
+                            f"Platform addresses {len(platform_rec.solves_findings)} related findings",
+                            "Assumes mid-tier pricing for platform",
+                        ],
+                        "consolidation_note": consolidation.consolidation_savings,
+                    }
+
+                    # Calculate ROI using the ROI Calculator Skill
+                    if roi_skill:
+                        try:
+                            # Create synthetic finding that aggregates hours from all solved findings
+                            total_hours = 0.0
+                            solved_finding_data = []
+                            for f in recommendable:
+                                if f.get("id") in platform_rec.solves_findings:
+                                    solved_finding_data.append(f)
+                                    value_saved = f.get("value_saved", {})
+                                    hours = value_saved.get("hours_per_week", 0) or 0
+                                    total_hours += hours
+
+                            synthetic_finding = {
+                                "id": f"synthetic-{platform_rec.category}",
+                                "title": f"Combined: {', '.join(platform_rec.finding_titles[:2])}",
+                                "hours_per_week": total_hours,
+                                "confidence": "medium",  # Conservative for aggregated values
+                                "value_saved": {
+                                    "hours_per_week": total_hours,
+                                },
+                            }
+
+                            roi_context = self._get_skill_context()
+                            roi_context.metadata["finding"] = synthetic_finding
+                            roi_context.metadata["recommendation"] = rec
+                            roi_context.metadata["company_context"] = self.context.get("company_profile", {})
+
+                            roi_result = await roi_skill.run(roi_context)
+
+                            if roi_result.success:
+                                rec["roi_percentage"] = roi_result.data.get("roi_percentage", 0)
+                                rec["roi_confidence_adjusted"] = roi_result.data.get("roi_confidence_adjusted")
+                                rec["payback_months"] = roi_result.data.get("payback_months", 12)
+                                rec["roi_detail"] = {
+                                    "sensitivity": roi_result.data.get("sensitivity", {}),
+                                    "assumptions": roi_result.data.get("assumptions", []),
+                                    "calculation_breakdown": roi_result.data.get("calculation_breakdown", ""),
+                                    "time_savings": roi_result.data.get("time_savings", {}),
+                                    "financial_impact": roi_result.data.get("financial_impact", {}),
+                                }
+                                rec["assumptions"].append(f"ROI calculated from {total_hours:.1f} hours/week combined savings")
+                            else:
+                                # Fallback: set to 0 so validators can catch missing ROI
+                                rec["roi_percentage"] = 0
+                                rec["payback_months"] = 0
+                                rec["roi_warning"] = "ROI calculation failed - requires manual review"
+                        except Exception as roi_e:
+                            logger.warning(f"ROI calculation failed for platform {platform_rec.category}: {roi_e}")
+                            rec["roi_percentage"] = 0
+                            rec["payback_months"] = 0
+                            rec["roi_warning"] = f"ROI calculation error: {roi_e}"
+                    else:
+                        # No ROI skill available - set to 0 for validator to catch
+                        rec["roi_percentage"] = 0
+                        rec["payback_months"] = 0
+                        rec["roi_warning"] = "ROI Calculator Skill not available"
+
+                    recommendations.append(rec)
+                    logger.info(f"Generated platform recommendation: {platform_rec.recommended_vendor} (covers {len(platform_rec.solves_findings)} findings, ROI: {rec.get('roi_percentage', 'N/A')}%)")
+
                 for i, finding in enumerate(priority_findings):
                     try:
                         context = self._get_skill_context()
                         context.metadata["finding"] = finding
+                        # Pass used vendors to avoid duplicates across recommendations
+                        context.metadata["exclude_vendors"] = list(used_vendors)
 
                         result = await skill.run(context)
 
@@ -1601,12 +1827,25 @@ IMPORTANT:
                             rec = result.data
                             rec["id"] = f"rec-{i+1:03d}"
 
-                            # Enrich with specific vendor matches
+                            # Track vendors from the three_options output to avoid duplicates
+                            options = rec.get("options", {})
+                            for option_key in ["off_the_shelf", "best_in_class"]:
+                                option = options.get(option_key, {})
+                                vendor_name = option.get("vendor", "").lower().replace(" ", "-")
+                                product_name = option.get("name", "").lower().replace(" ", "-")
+                                if vendor_name:
+                                    used_vendors.add(vendor_name)
+                                if product_name and product_name != vendor_name:
+                                    used_vendors.add(product_name)
+
+                            # Enrich with specific vendor matches (avoiding duplicates)
                             if vendor_skill:
                                 try:
                                     vendor_context = self._get_skill_context()
                                     vendor_context.metadata["finding"] = finding
                                     vendor_context.metadata["company_context"] = self.context.get("company_profile", {})
+                                    # Pass used vendors to avoid recommending same vendor twice
+                                    vendor_context.metadata["exclude_vendors"] = list(used_vendors)
 
                                     vendor_result = await vendor_skill.run(vendor_context)
 
@@ -1614,13 +1853,36 @@ IMPORTANT:
                                         vendor_data = vendor_result.data
                                         # Enhance options with specific vendor info
                                         if vendor_data.get("off_the_shelf") and rec.get("options", {}).get("off_the_shelf"):
-                                            rec["options"]["off_the_shelf"]["matched_vendor"] = vendor_data["off_the_shelf"]
+                                            off_shelf_vendor = vendor_data["off_the_shelf"]
+                                            vendor_slug = off_shelf_vendor.get("slug", "").lower()
+                                            # Skip if vendor already used
+                                            if vendor_slug and vendor_slug not in used_vendors:
+                                                rec["options"]["off_the_shelf"]["matched_vendor"] = off_shelf_vendor
+                                                used_vendors.add(vendor_slug)
+                                            else:
+                                                # Try alternatives
+                                                for alt in vendor_data.get("alternatives", []):
+                                                    alt_slug = alt.get("slug", "").lower()
+                                                    if alt_slug and alt_slug not in used_vendors:
+                                                        rec["options"]["off_the_shelf"]["matched_vendor"] = alt
+                                                        used_vendors.add(alt_slug)
+                                                        break
+
                                         if vendor_data.get("best_in_class") and rec.get("options", {}).get("best_in_class"):
-                                            rec["options"]["best_in_class"]["matched_vendor"] = vendor_data["best_in_class"]
+                                            best_vendor = vendor_data["best_in_class"]
+                                            vendor_slug = best_vendor.get("slug", "").lower()
+                                            # Skip if vendor already used
+                                            if vendor_slug and vendor_slug not in used_vendors:
+                                                rec["options"]["best_in_class"]["matched_vendor"] = best_vendor
+                                                used_vendors.add(vendor_slug)
+
                                         rec["vendor_match"] = {
                                             "category": vendor_data.get("category"),
                                             "confidence": vendor_data.get("match_confidence"),
-                                            "alternatives": vendor_data.get("alternatives", []),
+                                            "alternatives": [
+                                                alt for alt in vendor_data.get("alternatives", [])
+                                                if alt.get("slug", "").lower() not in used_vendors
+                                            ],
                                         }
                                 except Exception as vendor_e:
                                     logger.debug(f"Vendor matching skipped for {finding.get('id')}: {vendor_e}")
@@ -1652,15 +1914,29 @@ IMPORTANT:
                                 except Exception as roi_e:
                                     logger.debug(f"ROI calculation skipped for {finding.get('id')}: {roi_e}")
 
+                            # Validate ROI values
+                            roi = rec.get("roi_percentage", 0) or 0
+                            assumptions = rec.get("assumptions", [])
+
+                            # Handle negative ROI (costs exceed benefits)
+                            if roi < 0:
+                                logger.warning(f"Negative ROI ({roi}%) for {rec.get('title')} - capping at 0%")
+                                rec["roi_percentage"] = 0
+                                rec["roi_warning"] = f"Originally calculated as {roi}% - costs may exceed estimated benefits"
+                                assumptions.append(f"ROI adjusted from {roi}% to 0% - requires detailed cost/benefit analysis")
+                                # Downgrade priority for negative ROI recommendations
+                                if rec.get("priority") == "high":
+                                    rec["priority"] = "medium"
+                                    assumptions.append("Priority adjusted from high to medium due to uncertain ROI")
+
                             # Cap unrealistic ROI values (max 500%)
-                            roi = rec.get("roi_percentage", 0)
-                            if roi > 500:
+                            elif roi > 500:
                                 logger.info(f"Capping ROI from {roi}% to 500% for {rec.get('title')}")
                                 rec["roi_percentage"] = 500
                                 rec["roi_capped"] = True
-                                assumptions = rec.get("assumptions", [])
                                 assumptions.append(f"ROI capped at 500% (original estimate: {roi}%)")
-                                rec["assumptions"] = assumptions
+
+                            rec["assumptions"] = assumptions
 
                             # Enrich with four-options personalized recommendations
                             four_options_skill = get_skill("four-options", client=self.client)
@@ -1677,6 +1953,35 @@ IMPORTANT:
                                         logger.debug(f"Four-options generated for {finding.get('id')}")
                                 except Exception as four_e:
                                     logger.debug(f"Four-options skipped for {finding.get('id')}: {four_e}")
+
+                            # Add automation insight from finding's connect_path
+                            # This ensures automation workflows are surfaced, not just software
+                            connect_path = finding.get("connect_path")
+                            if connect_path:
+                                rec["automation_insight"] = {
+                                    "approach": "CONNECT (Use Existing Tools)",
+                                    "integration_flow": connect_path.get("integration_flow", ""),
+                                    "flow_steps": connect_path.get("flow_steps", []),
+                                    "what_it_does": connect_path.get("what_it_does", ""),
+                                    "tools_used": connect_path.get("tools_used", []),
+                                    "estimated_hours": connect_path.get("setup_effort_hours", 0),
+                                    "monthly_cost": connect_path.get("monthly_cost_estimate", 0),
+                                    "why_this_works": connect_path.get("why_this_works", ""),
+                                    "verdict": finding.get("verdict", "EITHER"),
+                                    "verdict_reasoning": finding.get("verdict_reasoning", ""),
+                                }
+                            elif finding.get("verdict") == "CONNECT":
+                                # If verdict is CONNECT but no path, generate generic insight
+                                rec["automation_insight"] = {
+                                    "approach": "CONNECT (Use Existing Tools)",
+                                    "integration_flow": "Your existing tools can be connected via Make/Zapier/n8n",
+                                    "what_it_does": "Automate this workflow without buying new software",
+                                    "tools_used": ["Make", "n8n", "Zapier"],
+                                    "estimated_hours": 4,
+                                    "monthly_cost": 29,  # Typical Make Pro cost
+                                    "verdict": "CONNECT",
+                                    "verdict_reasoning": "Your existing stack has good API support for automation",
+                                }
 
                             recommendations.append(rec)
                         else:
@@ -1809,8 +2114,6 @@ For each recommendation, use this EXACT structure:
     }},
     "our_recommendation": "off_the_shelf|best_in_class|custom_solution",
     "recommendation_rationale": "<detailed explanation of why this option is best for THIS business based on their size, budget, tech comfort, and goals>",
-    "roi_percentage": <calculated ROI>,
-    "payback_months": <months until investment recovered>,
     "assumptions": [
         "<assumption 1 with specific numbers>",
         "<assumption 2 with specific numbers>",
@@ -1818,10 +2121,12 @@ For each recommendation, use this EXACT structure:
     ]
 }}
 
+NOTE: roi_percentage and payback_months will be calculated automatically by the ROI Calculator Skill using the canonical formulas. Do NOT generate these values.
+
 CRITICAL REQUIREMENTS:
 1. ALL THREE OPTIONS must be complete with real vendor names and pricing
 2. CUSTOM SOLUTION must always include build_tools, model_recommendation, skills_required, dev_hours_estimate
-3. ROI calculations must be transparent - show your math in assumptions
+3. Cost and benefit numbers must be realistic and consistent across options
 4. Recommendation rationale must be specific to THIS business context
 5. Use real vendor names and current pricing (approximate if needed)
 
@@ -1866,16 +2171,29 @@ Generate 5-10 recommendations. Return ONLY the JSON array."""
                 custom = self._enrich_build_it_yourself(rec["title"], custom)
                 options["custom_solution"] = custom
 
+                # Validate ROI values
+                roi = rec.get("roi_percentage", 0) or 0
+                assumptions = rec.get("assumptions", [])
+
+                # Handle negative ROI (costs exceed benefits)
+                if roi < 0:
+                    logger.warning(f"Negative ROI ({roi}%) for {rec.get('title')} - capping at 0%")
+                    rec["roi_percentage"] = 0
+                    rec["roi_warning"] = f"Originally calculated as {roi}% - costs may exceed estimated benefits"
+                    assumptions.append(f"ROI adjusted from {roi}% to 0% - requires detailed cost/benefit analysis")
+                    # Downgrade priority for negative ROI recommendations
+                    if rec.get("priority") == "high":
+                        rec["priority"] = "medium"
+                        assumptions.append("Priority adjusted from high to medium due to uncertain ROI")
+
                 # Cap unrealistic ROI values (max 500%)
-                roi = rec.get("roi_percentage", 0)
-                if roi > 500:
+                elif roi > 500:
                     logger.info(f"Capping ROI from {roi}% to 500% for {rec.get('title')}")
                     rec["roi_percentage"] = 500
                     rec["roi_capped"] = True
-                    assumptions = rec.get("assumptions", [])
                     assumptions.append(f"ROI capped at 500% (original estimate: {roi}%)")
-                    rec["assumptions"] = assumptions
 
+                rec["assumptions"] = assumptions
                 validated_recommendations.append(rec)
 
             return validated_recommendations
