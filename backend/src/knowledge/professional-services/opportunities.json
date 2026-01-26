@@ -1,6 +1,6 @@
 {
   "industry": "professional-services",
-  "opportunities": [
+  "ai_opportunities": [
     {
       "id": "ai-voice-receptionist",
       "name": "AI Voice Receptionist & Client Intake",
@@ -291,6 +291,28 @@
       "name": "Advanced AI",
       "opportunities": ["contract-review-ai", "ai-legal-research", "knowledge-management-ai"],
       "rationale": "Higher complexity, higher reward"
+    }
+  ],
+  "not_recommended": [
+    {
+      "name": "Full AI document drafting without human review",
+      "reason": "Professional liability and client duty of care require human judgment on all client deliverables",
+      "alternative": "Use AI for first drafts with mandatory human review and approval workflow"
+    },
+    {
+      "name": "Enterprise document management for small firms",
+      "reason": "iManage and NetDocuments cost €500-1500/user/month and require IT support; overkill for <20 person firms",
+      "alternative": "Use practice management systems like Clio or PracticePanther which include document management"
+    },
+    {
+      "name": "Building custom billing system",
+      "reason": "Trust accounting, LEDES billing, and regulatory compliance requirements are complex; rebuilding is expensive",
+      "alternative": "Use established legal billing tools like Clio, CARET Legal, or TimeSolv"
+    },
+    {
+      "name": "AI chatbots for client communication on active matters",
+      "reason": "Clients expect personalized attention and confidentiality; AI responses risk malpractice issues",
+      "alternative": "AI for intake and scheduling, human attorneys for substantive client communications"
     }
   ]
 }

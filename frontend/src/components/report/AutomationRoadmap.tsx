@@ -49,9 +49,12 @@ interface AutomationRoadmapProps {
 }
 
 function ApiScoreBar({ score }: { score: number }) {
-  // Create visual bar representation (e.g., "████░░" for 4/5)
-  const filledBlocks = score
-  const emptyBlocks = 5 - score
+  // Handle scores on different scales (0-5 or 0-10)
+  // Normalize to 0-5 for display
+  const maxScore = score > 5 ? 10 : 5
+  const normalizedScore = Math.round((score / maxScore) * 5)
+  const filledBlocks = Math.max(0, Math.min(5, normalizedScore))
+  const emptyBlocks = 5 - filledBlocks
 
   return (
     <div className="flex items-center gap-2">
@@ -64,7 +67,7 @@ function ApiScoreBar({ score }: { score: number }) {
         </span>
       </span>
       <span className="text-sm text-gray-600 dark:text-gray-400">
-        {score}/5
+        {score}/{maxScore}
       </span>
     </div>
   )

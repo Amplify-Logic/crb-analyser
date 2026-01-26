@@ -72,6 +72,7 @@ from src.knowledge import (
     get_industry_context,
     get_relevant_opportunities,
     get_vendor_recommendations,
+    get_vendors_within_budget,
     get_benchmarks_for_metrics,
     normalize_industry,
 )
@@ -280,6 +281,7 @@ class ReportGenerator:
             knowledge=self.context.get("industry_knowledge"),
             report_data=self.context,
             existing_stack=existing_stack,
+            current_tool_categories=self.context.get("current_tool_categories"),
             user_profile=user_profile,
         )
 
@@ -488,6 +490,14 @@ class ReportGenerator:
 
             # Load existing software stack (Phase 2C - Connect vs Replace)
             self.context["existing_stack"] = quiz_data.get("existing_stack", [])
+
+            # Also extract current_tools from quiz answers and merge into context
+            # current_tools contains tool categories user selected: ["crm", "accounting", etc.]
+            current_tools = self.context["answers"].get("current_tools", [])
+            if current_tools:
+                self.context["current_tool_categories"] = current_tools
+                logger.info(f"Report input - Tool categories from quiz: {current_tools}")
+
             if self.context["existing_stack"]:
                 logger.info(
                     f"Report input - Existing stack: {len(self.context['existing_stack'])} tools"
@@ -582,7 +592,17 @@ class ReportGenerator:
             self.context["industry"] = industry
             self.context["industry_knowledge"] = get_industry_context(industry)
             self.context["opportunities"] = get_relevant_opportunities(industry)
-            self.context["vendors"] = get_vendor_recommendations(industry)
+
+            # Load vendors filtered by user's budget from quiz answers
+            quiz_answers = self.context.get("answers", {})
+            self.context["vendors"] = get_vendors_within_budget(
+                industry=industry,
+                quiz_answers=quiz_answers,
+                include_over_budget=True,  # Include but mark over-budget vendors
+            )
+            # Also store unfiltered vendors for reference
+            self.context["all_vendors"] = get_vendor_recommendations(industry)
+
             self.context["benchmarks"] = get_benchmarks_for_metrics(industry)
 
             # Log knowledge base data loaded
@@ -590,10 +610,11 @@ class ReportGenerator:
             kb_opps = self.context["opportunities"]
             kb_vendors = self.context["vendors"]
             kb_benchmarks = self.context["benchmarks"]
+            within_budget = len([v for v in kb_vendors if v.get("budget_fit") != "over_budget"]) if kb_vendors else 0
             logger.info(f"Knowledge base - Industry: {industry}")
             logger.info(f"Knowledge base - Is supported: {kb_knowledge.get('is_supported', False)}")
             logger.info(f"Knowledge base - Opportunities loaded: {len(kb_opps) if kb_opps else 0}")
-            logger.info(f"Knowledge base - Vendors loaded: {len(kb_vendors) if kb_vendors else 0}")
+            logger.info(f"Knowledge base - Vendors loaded: {len(kb_vendors) if kb_vendors else 0} ({within_budget} within budget)")
             logger.info(f"Knowledge base - Benchmark categories: {list(kb_benchmarks.keys()) if kb_benchmarks else []}")
 
             # Trace knowledge retrievals
@@ -1477,7 +1498,7 @@ Generate a JSON array with this structure:
     "id": "finding-001",
     "title": "Short descriptive title",
     "description": "Clear description of the opportunity or issue",
-    "category": "efficiency|growth|risk|compliance|customer_experience",
+    "category": "operations|sales|customer_experience|finance|marketing|hr|compliance|technology",
     "customer_value_score": <1-10>,
     "business_health_score": <1-10>,
     "current_state": "How they're doing this now (from quiz answers)",
@@ -1560,6 +1581,14 @@ IMPORTANT:
                 if "id" not in finding:
                     finding["id"] = f"finding-{i+1:03d}"
 
+                # Validate category against allowed list
+                VALID_CATEGORIES = ["operations", "sales", "customer_experience", "finance", "marketing", "hr", "compliance", "technology"]
+                category = finding.get("category", "operations")
+                if category not in VALID_CATEGORIES:
+                    logger.warning(f"Invalid category '{category}' for finding '{finding.get('id')}', defaulting to 'operations'")
+                    category = "operations"
+                finding["category"] = category
+
                 # Ensure confidence is valid
                 confidence = finding.get("confidence", "medium").lower()
                 if confidence not in ["high", "medium", "low"]:
@@ -1576,7 +1605,7 @@ IMPORTANT:
                     finding["sources"] = ["Based on industry patterns"]
                     finding["confidence"] = "low"  # Downgrade confidence if no sources
 
-                # Ensure value_saved has defaults
+                # Ensure value_saved has defaults with DETERMINISTIC recalculation
                 if not isinstance(finding.get("value_saved"), dict):
                     finding["value_saved"] = {
                         "hours_per_week": 0,
@@ -1585,10 +1614,14 @@ IMPORTANT:
                     }
                 else:
                     vs = finding["value_saved"]
+                    hours_per_week = vs.get("hours_per_week", 0) or 0
+                    hourly_rate = vs.get("hourly_rate", 50) or 50
+                    # ALWAYS recalculate annual_savings deterministically
+                    annual_savings = hours_per_week * hourly_rate * 52
                     finding["value_saved"] = {
-                        "hours_per_week": vs.get("hours_per_week", 0) or 0,
-                        "hourly_rate": vs.get("hourly_rate", 50) or 50,
-                        "annual_savings": vs.get("annual_savings", 0) or 0
+                        "hours_per_week": hours_per_week,
+                        "hourly_rate": hourly_rate,
+                        "annual_savings": annual_savings,
                     }
 
                 # Ensure value_created has defaults
@@ -2171,7 +2204,57 @@ Generate 5-10 recommendations. Return ONLY the JSON array."""
                 custom = self._enrich_build_it_yourself(rec["title"], custom)
                 options["custom_solution"] = custom
 
-                # Validate ROI values
+                # Calculate ROI using ROI Calculator Skill (canonical formulas)
+                roi_skill = get_skill("roi-calculator", client=self.client)
+                if roi_skill:
+                    try:
+                        # Find the related finding
+                        finding_id = rec.get("finding_id")
+                        related_finding = None
+                        for f in priority_findings:
+                            if f.get("id") == finding_id:
+                                related_finding = f
+                                break
+
+                        if related_finding:
+                            roi_context = self._get_skill_context()
+                            roi_context.metadata["finding"] = related_finding
+                            roi_context.metadata["recommendation"] = rec
+                            roi_context.metadata["company_context"] = self.context.get("company_profile", {})
+
+                            roi_result = await roi_skill.run(roi_context)
+
+                            if roi_result.success:
+                                rec["roi_percentage"] = roi_result.data.get("roi_percentage", 0)
+                                rec["roi_confidence_adjusted"] = roi_result.data.get("roi_confidence_adjusted")
+                                rec["payback_months"] = roi_result.data.get("payback_months", 12)
+                                rec["roi_detail"] = {
+                                    "sensitivity": roi_result.data.get("sensitivity", {}),
+                                    "assumptions": roi_result.data.get("assumptions", []),
+                                    "calculation_breakdown": roi_result.data.get("calculation_breakdown", ""),
+                                    "time_savings": roi_result.data.get("time_savings", {}),
+                                    "financial_impact": roi_result.data.get("financial_impact", {}),
+                                }
+                                logger.info(f"Calculated ROI {rec['roi_percentage']}% for {rec.get('title')}")
+                            else:
+                                rec["roi_percentage"] = 0
+                                rec["payback_months"] = 0
+                                rec["roi_warning"] = "ROI calculation failed - requires manual review"
+                        else:
+                            rec["roi_percentage"] = 0
+                            rec["payback_months"] = 0
+                            rec["roi_warning"] = f"Finding {finding_id} not found for ROI calculation"
+                    except Exception as roi_e:
+                        logger.warning(f"ROI calculation failed for {rec.get('title')}: {roi_e}")
+                        rec["roi_percentage"] = 0
+                        rec["payback_months"] = 0
+                        rec["roi_warning"] = f"ROI calculation error: {roi_e}"
+                else:
+                    rec["roi_percentage"] = 0
+                    rec["payback_months"] = 0
+                    rec["roi_warning"] = "ROI Calculator Skill not available"
+
+                # Validate ROI values (post-calculation validation)
                 roi = rec.get("roi_percentage", 0) or 0
                 assumptions = rec.get("assumptions", [])
 

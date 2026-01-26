@@ -1,0 +1,56 @@
+{
+  "audit_id": "40cb69d9-3a72-4d7b-98d4-5e8788bcebf5",
+  "timestamp": "2026-01-22T20:47:17.305113",
+  "industry": "home-services",
+  "company_size": "2-10",
+  "pain_points_found": [],
+  "processes_analyzed": [],
+  "recommendations_made": [],
+  "vendors_recommended": [],
+  "ai_readiness_score": 42,
+  "total_potential_savings": 145000.0,
+  "findings_count": 11,
+  "tools_used": {},
+  "token_usage": {
+    "usage": [
+      {
+        "task": "generate_findings",
+        "model": "claude-sonnet-4-5-20250929",
+        "input_tokens": 16695,
+        "output_tokens": 4972
+      },
+      {
+        "task": "generate_roadmap",
+        "model": "claude-sonnet-4-5-20250929",
+        "input_tokens": 20689,
+        "output_tokens": 1766
+      }
+    ],
+    "summary": {
+      "total_input_tokens": 37384,
+      "total_output_tokens": 6738,
+      "total_tokens": 44122,
+      "estimated_cost_usd": 0.2132,
+      "by_model": {
+        "claude-sonnet-4-5-20250929": {
+          "input": 37384,
+          "output": 6738,
+          "tasks": [
+            "generate_findings",
+            "generate_roadmap"
+          ],
+          "estimated_cost_usd": 0.2132
+        }
+      },
+      "task_count": 2
+    }
+  },
+  "phases_completed": [
+    "executive_summary",
+    "findings",
+    "playbook",
+    "architecture",
+    "insights"
+  ],
+  "errors_encountered": []
+}

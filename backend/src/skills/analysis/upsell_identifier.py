@@ -221,8 +221,25 @@ class UpsellIdentifierSkill(LLMSkill[Dict[str, Any]]):
             engagement.get("report_views", 0) > 3
         )
 
-        # Company size indicator
+        # Company size indicator - handle int, string ranges, and numeric strings
         company_size = company.get("employee_count", 0)
+        if isinstance(company_size, str):
+            # Parse employee range strings like "2-10", "11-50", "51-200"
+            size_map = {"1": 1, "2-10": 6, "11-50": 30, "51-200": 125, "200+": 300}
+            if company_size in size_map:
+                company_size = size_map[company_size]
+            else:
+                # Try parsing as int directly (e.g., "3" -> 3)
+                try:
+                    company_size = int(company_size)
+                except ValueError:
+                    # Try extracting first number from string (e.g., "5 employees" -> 5)
+                    import re
+                    match = re.search(r'\d+', str(company_size))
+                    company_size = int(match.group()) if match else 0
+        # Ensure company_size is an int for comparison
+        if not isinstance(company_size, int):
+            company_size = 0
         mid_market = 10 <= company_size <= 200
 
         return {

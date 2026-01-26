@@ -50,15 +50,24 @@ logger = logging.getLogger(__name__)
 
 
 # Categories that map to different types of existing software
+# Must match VALID_CATEGORIES in validation_service.py
+VALID_FINDING_CATEGORIES = [
+    "operations", "sales", "customer_experience", "finance",
+    "marketing", "hr", "compliance", "technology"
+]
+
 CATEGORY_TO_STACK_MAPPING = {
-    "efficiency": ["Practice Management", "Job Management", "Project Management", "Automation"],
-    "growth": ["CRM", "Marketing", "Email Marketing", "Sales"],
-    "risk": ["Practice Management", "Compliance", "Security"],
-    "compliance": ["Practice Management", "Document Management", "Compliance"],
+    "operations": ["Practice Management", "Job Management", "Project Management", "Automation"],
+    "sales": ["CRM", "Sales", "Quoting", "Proposals"],
     "customer_experience": [
         "Customer Support", "Patient Communication", "Client Communication",
         "Phone & SMS", "Scheduling", "CRM"
     ],
+    "finance": ["Accounting", "Invoicing", "Payments", "Bookkeeping"],
+    "marketing": ["Marketing", "Email Marketing", "Social Media", "SEO"],
+    "hr": ["HR", "Payroll", "Time Tracking", "Scheduling"],
+    "compliance": ["Practice Management", "Document Management", "Compliance", "Security"],
+    "technology": ["IT Management", "Automation", "Integration", "API"],
 }
 
 
@@ -83,7 +92,7 @@ class FindingGenerationSkill(LLMSkill[List[Dict[str, Any]]]):
         "id": "",
         "title": "",
         "description": "",
-        "category": "efficiency",
+        "category": "operations",
         "customer_value_score": 5,
         "business_health_score": 5,
         "current_state": "",
@@ -134,6 +143,25 @@ class FindingGenerationSkill(LLMSkill[List[Dict[str, Any]]]):
         expertise = context.expertise or {}
         knowledge = context.knowledge or {}
         existing_stack = context.existing_stack or []
+        currency = context.currency
+        currency_symbol = context.currency_symbol
+
+        # Extract hourly_rate from quiz answers or use default
+        # Check multiple possible sources for hourly rate
+        hourly_rate = 50  # Default
+        if answers.get("hourly_rate"):
+            try:
+                hourly_rate = float(answers["hourly_rate"])
+            except (ValueError, TypeError):
+                pass
+        elif context.metadata.get("hourly_rate"):
+            try:
+                hourly_rate = float(context.metadata["hourly_rate"])
+            except (ValueError, TypeError):
+                pass
+
+        # Store for use in validation
+        context.metadata["effective_hourly_rate"] = hourly_rate
 
         # Get opportunities and benchmarks from knowledge
         opportunities_data = knowledge.get("opportunities", {})
@@ -147,6 +175,9 @@ class FindingGenerationSkill(LLMSkill[List[Dict[str, Any]]]):
         # Build expertise context for calibration
         expertise_context = self._build_expertise_context(expertise, industry)
 
+        # Extract tool categories from context (from quiz current_tools answer)
+        tool_categories = context.current_tool_categories or answers.get("current_tools", [])
+
         # Generate findings using LLM
         findings = await self._generate_findings(
             answers=answers,
@@ -157,6 +188,10 @@ class FindingGenerationSkill(LLMSkill[List[Dict[str, Any]]]):
             existing_stack=existing_stack,
             max_findings=max_findings,
             min_not_recommended=min_not_recommended,
+            currency=currency,
+            currency_symbol=currency_symbol,
+            hourly_rate=hourly_rate,
+            tool_categories=tool_categories,
         )
 
         # Apply expertise calibration if available
@@ -166,8 +201,8 @@ class FindingGenerationSkill(LLMSkill[List[Dict[str, Any]]]):
         # Post-process: Add Connect vs Replace paths and verdicts
         findings = self._add_automation_paths(findings, existing_stack)
 
-        # Validate and normalize findings
-        findings = self._validate_findings(findings)
+        # Validate and normalize findings with the effective hourly rate
+        findings = self._validate_findings(findings, default_hourly_rate=hourly_rate)
 
         return findings
 
@@ -184,7 +219,7 @@ class FindingGenerationSkill(LLMSkill[List[Dict[str, Any]]]):
         if not existing_stack:
             return []
 
-        category = finding.get("category", "efficiency")
+        category = finding.get("category", "operations")
         relevant_categories = CATEGORY_TO_STACK_MAPPING.get(category, [])
 
         relevant_tools = []
@@ -301,6 +336,35 @@ class FindingGenerationSkill(LLMSkill[List[Dict[str, Any]]]):
 
         return "\n".join(lines)
 
+    def _format_tool_categories(self, tool_categories: Optional[List[str]]) -> str:
+        """Format tool categories from quiz answers for the prompt."""
+        if not tool_categories:
+            return ""
+
+        # Map category values to readable names
+        category_names = {
+            "crm": "CRM (Salesforce, HubSpot, etc.)",
+            "project_management": "Project Management (Asana, Monday, Trello)",
+            "accounting": "Accounting (QuickBooks, Xero, etc.)",
+            "email_marketing": "Email Marketing (Mailchimp, etc.)",
+            "social_media": "Social Media Management",
+            "ecommerce": "E-commerce Platform (Shopify, WooCommerce)",
+            "spreadsheets": "Spreadsheets (Excel, Google Sheets)",
+            "communication": "Team Communication (Slack, Teams)",
+            "analytics": "Analytics (Google Analytics, etc.)",
+        }
+
+        lines = ["USER'S CURRENT TOOL CATEGORIES (from quiz):"]
+        for cat in tool_categories:
+            readable = category_names.get(cat, cat.replace("_", " ").title())
+            lines.append(f"- {readable}")
+
+        lines.append("")
+        lines.append("IMPORTANT: When generating findings, acknowledge these existing tool categories.")
+        lines.append("Recommendations should CONNECT with these tools where possible, not ignore them.")
+
+        return "\n".join(lines)
+
     async def _generate_findings(
         self,
         answers: Dict[str, Any],
@@ -311,6 +375,10 @@ class FindingGenerationSkill(LLMSkill[List[Dict[str, Any]]]):
         existing_stack: List[Dict[str, Any]],
         max_findings: int,
         min_not_recommended: int,
+        currency: str = "EUR",
+        currency_symbol: str = "€",
+        hourly_rate: float = 50,
+        tool_categories: Optional[List[str]] = None,
     ) -> List[Dict[str, Any]]:
         """Generate findings using Claude with Connect vs Replace paths."""
         # Build expertise injection for prompt
@@ -333,7 +401,13 @@ USE THIS EXPERTISE:
         stack_context = self._format_existing_stack(existing_stack)
         has_stack = bool(existing_stack)
 
+        # Format tool categories from quiz
+        tool_categories_context = self._format_tool_categories(tool_categories)
+        has_tool_categories = bool(tool_categories)
+
         prompt = f"""Analyze the quiz responses and generate findings for a CRB Analysis report.
+
+CURRENCY: {currency} (use {currency_symbol} symbol for all monetary values)
 
 QUIZ ANSWERS:
 {json.dumps(answers, indent=2)}
@@ -347,6 +421,7 @@ INDUSTRY BENCHMARKS:
 {json.dumps(benchmarks, indent=2) if benchmarks else "Use general industry standards"}
 
 {stack_context}
+{tool_categories_context}
 {expertise_injection}
 
 ===============================================================================
@@ -453,14 +528,14 @@ Generate a JSON array with this structure:
         "id": "finding-001",
         "title": "Short descriptive title",
         "description": "Clear description of the opportunity or issue",
-        "category": "efficiency|growth|risk|compliance|customer_experience",
+        "category": "operations|sales|customer_experience|finance|marketing|hr|compliance|technology",
         "customer_value_score": <1-10>,
         "business_health_score": <1-10>,
         "current_state": "How they're doing this now (from quiz answers)",
         "value_saved": {{
             "hours_per_week": <number>,
-            "hourly_rate": 50,
-            "annual_savings": <hours * 50 * 52>
+            "hourly_rate": {hourly_rate},
+            "annual_savings": <hours * {hourly_rate} * 52>
         }},
         "value_created": {{
             "description": "How this creates new value",
@@ -480,8 +555,8 @@ Generate a JSON array with this structure:
             "cost": {{
                 "implementation_diy": {{
                     "hours": <number>,
-                    "hourly_rate": 50,
-                    "total": <hours × 50>,
+                    "hourly_rate": {hourly_rate},
+                    "total": <hours × {hourly_rate}>,
                     "description": "What work is required"
                 }},
                 "implementation_professional": {{
@@ -783,10 +858,12 @@ CONNECT VS REPLACE GUIDANCE
 
     def _validate_findings(
         self,
-        findings: List[Dict[str, Any]]
+        findings: List[Dict[str, Any]],
+        default_hourly_rate: float = 50,
     ) -> List[Dict[str, Any]]:
-        """Validate and normalize findings structure."""
+        """Validate and normalize findings structure with deterministic calculations."""
         validated = []
+        seen_ids = set()  # Track IDs for duplicate detection
 
         for i, finding in enumerate(findings):
             if not isinstance(finding, dict):
@@ -794,10 +871,24 @@ CONNECT VS REPLACE GUIDANCE
 
             # Create validated finding with defaults
             validated_finding = self.FINDING_TEMPLATE.copy()
-            validated_finding["id"] = finding.get("id", f"finding-{i+1:03d}")
+
+            # Generate unique ID, handling duplicates
+            finding_id = finding.get("id", f"finding-{i+1:03d}")
+            if finding_id in seen_ids:
+                logger.warning(f"Duplicate finding ID '{finding_id}', generating new ID")
+                finding_id = f"finding-{i+1:03d}-{len(validated)+1}"
+            seen_ids.add(finding_id)
+            validated_finding["id"] = finding_id
+
             validated_finding["title"] = finding.get("title", "Untitled Finding")
             validated_finding["description"] = finding.get("description", "")
-            validated_finding["category"] = finding.get("category", "efficiency")
+
+            # Validate category against allowed list
+            category = finding.get("category", "operations")
+            if category not in VALID_FINDING_CATEGORIES:
+                logger.warning(f"Invalid category '{category}' for finding '{finding_id}', defaulting to 'operations'")
+                category = "operations"
+            validated_finding["category"] = category
 
             # Clamp scores to valid range
             cv_score = finding.get("customer_value_score", 5)
@@ -819,16 +910,34 @@ CONNECT VS REPLACE GUIDANCE
                 validated_finding["why_not"] = finding.get("why_not", "")
                 validated_finding["what_instead"] = finding.get("what_instead", "")
 
-            # Handle value_saved
+            # Handle value_saved with DETERMINISTIC recalculation
             if isinstance(finding.get("value_saved"), dict):
                 vs = finding["value_saved"]
+                hours_per_week = vs.get("hours_per_week", 0) or 0
+                # Use LLM-provided hourly_rate if present, otherwise use default from context
+                hourly_rate = vs.get("hourly_rate") or default_hourly_rate
+                # ALWAYS recalculate annual_savings deterministically
+                # Formula: hours_per_week × hourly_rate × 52 weeks
+                annual_savings = hours_per_week * hourly_rate * 52
+
+                llm_annual = vs.get("annual_savings", 0) or 0
+                if llm_annual > 0 and abs(llm_annual - annual_savings) > 1:
+                    logger.info(
+                        f"Recalculated annual_savings for '{validated_finding['id']}': "
+                        f"LLM={llm_annual}, calculated={annual_savings} "
+                        f"(hours={hours_per_week}, rate={hourly_rate})"
+                    )
+
                 validated_finding["value_saved"] = {
-                    "hours_per_week": vs.get("hours_per_week", 0),
-                    "hourly_rate": vs.get("hourly_rate", 50),
-                    "annual_savings": vs.get("annual_savings", 0),
+                    "hours_per_week": hours_per_week,
+                    "hourly_rate": hourly_rate,
+                    "annual_savings": annual_savings,
                 }
             else:
-                validated_finding["value_saved"] = self.FINDING_TEMPLATE["value_saved"].copy()
+                # Use default template but with context-aware hourly rate
+                default_vs = self.FINDING_TEMPLATE["value_saved"].copy()
+                default_vs["hourly_rate"] = default_hourly_rate
+                validated_finding["value_saved"] = default_vs
 
             # Handle value_created
             if isinstance(finding.get("value_created"), dict):

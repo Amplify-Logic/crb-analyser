@@ -394,7 +394,7 @@ export default function Landing() {
               Simple Pricing
             </h2>
             <p className="text-lg text-gray-600">
-              Consultants charge €15,000+ for this. We charge €147.
+              Expert consultants typically charge €2,000-5,000 for similar analysis.
             </p>
           </div>
 

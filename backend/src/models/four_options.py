@@ -80,6 +80,20 @@ class BuyOption(BaseModel):
     next_steps: List[NextStep] = Field(default_factory=list)
     cost: CostEstimate = Field(default_factory=CostEstimate)
 
+    # Vendor validation fields (added for KB verification)
+    vendor_verified: bool = Field(
+        default=False,
+        description="Whether vendor exists in knowledge base"
+    )
+    vendor_match_type: str = Field(
+        default="none",
+        description="How vendor was matched: exact_slug, exact_name, fuzzy_name, none"
+    )
+    kb_monthly_price: Optional[float] = Field(
+        None,
+        description="Monthly price from knowledge base for comparison"
+    )
+
 
 class ConnectOption(BaseModel):
     """

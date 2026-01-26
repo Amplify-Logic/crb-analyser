@@ -104,11 +104,13 @@ Data: Supabase (quiz_sessions, reports, vendors) + Redis (cache) + Knowledge Bas
 The anonymous quiz is the primary user acquisition funnel.
 
 ```
-Landing → Quiz (5-7 questions) → [Optional: Voice Interview]
+Landing → Quiz (5-7 questions) → AI Readiness Score + Teaser
     ↓
-AI Readiness Score + Report Teaser
+Stripe Checkout (€147)
     ↓
-Stripe Checkout → Full Report Access
+90-min Workshop (deep context gathering)
+    ↓
+Human-Reviewed Report (24-48 hour delivery)
 ```
 
 ### Key Components
@@ -119,18 +121,21 @@ Stripe Checkout → Full Report Access
 | `quiz.py` | Backend routes, session management |
 | `quiz_engine.py` | Adaptive question selection, confidence scoring |
 | `teaser_service.py` | Generate report preview before payment |
+| `workshop.py` | 90-minute deep-dive session management |
 
 ### Quiz Session States
 ```
-created → in_progress → completed → payment_pending → paid
+created → in_progress → completed → payment_pending → paid → workshop_complete → report_delivered
 ```
 
-### Pricing Tiers (EUR)
-| Tier | Price | Model | Includes |
-|------|-------|-------|----------|
-| **CRB Report** | €147 | Sonnet | Self-service analysis, interactive report |
-| **Report + Call** | €497 | Opus | + 60-min strategy call, priority support |
-| **Sprint** | €1,997 | Opus | + 2-week implementation help, 3x calls |
+### Launch Pricing
+| Tier | Price | Includes |
+|------|-------|----------|
+| **CRB Report** | €147 | Quiz + 90-min workshop + human-reviewed report (24-48hr delivery) |
+
+**Future tiers** (add only after 50+ reports delivered):
+- Report + Call (€497) - add 60-min strategy call
+- Sprint (€1,997) - add 2-week implementation help
 
 ---
 

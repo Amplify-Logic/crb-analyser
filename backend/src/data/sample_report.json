@@ -2,265 +2,314 @@
   "id": "sample-demo-report",
   "tier": "full",
   "status": "completed",
-  "created_at": "2026-01-10T10:00:00Z",
+  "created_at": "2026-01-26T10:00:00Z",
   "company_profile": {
-    "company_name": "Friendly Build & Fix",
-    "industry": "construction",
-    "industry_display": "Construction & Building",
-    "team_size": "1-5 employees",
-    "tech_level": "Basic - spreadsheets and phone",
-    "budget_range": "$200-500/month",
-    "existing_tools": ["Xero", "Google Workspace", "Excel/Sheets"],
-    "location": "Warkworth, New Zealand",
-    "website": "friendlybuildandfix.co.nz",
-    "description": "Husband-wife building team with nearly a decade of hands-on experience. NZ Certified Builders offering renovations, repairs, decks, and custom projects across the upper North Island from the North Shore to Mangawhai."
+    "company_name": "Morrison & Clarke Legal",
+    "industry": "professional-services",
+    "industry_display": "Professional Services - Law Firm",
+    "team_size": "11-50 employees",
+    "tech_level": "Moderate - Clio for practice management, basic automation",
+    "budget_range": "500-1000/month",
+    "existing_tools": ["Clio Manage", "Microsoft 365", "Xero", "SharePoint"],
+    "location": "Amsterdam, Netherlands",
+    "website": "morrisonclarke.nl",
+    "description": "Boutique commercial law firm with 18 fee earners specializing in corporate M&A, employment law, and commercial contracts. Known for responsive service and practical advice. Primarily serves mid-market Dutch and international companies."
   },
   "executive_summary": {
-    "ai_readiness_score": 72,
-    "customer_value_score": 9,
-    "business_health_score": 7,
-    "key_insight": "Friendly Build & Fix has exceptional craftsmanship and client relationships but is losing 12+ hours weekly to manual quoting, scheduling, and admin. Automating these workflows could free up an extra day per week for billable work - worth $62-88K annually at your rates.",
-    "total_value_potential": {"min": 186600, "max": 264120, "projection_years": 3},
+    "ai_readiness_score": 78,
+    "customer_value_score": 8,
+    "business_health_score": 9,
+    "key_insight": "Morrison & Clarke has strong client relationships but partners and associates lose 15-20% of billable time to admin tasks that AI can automate. Time tracking capture alone is leaving an estimated 80,000-120,000/year in unbilled work. The firm is well-positioned for AI adoption given existing Clio infrastructure.",
+    "total_value_potential": {"min": 315000, "max": 525000, "projection_years": 3},
     "top_opportunities": [
-      {"title": "AI-Assisted Quoting & Estimation", "value_potential": "$18K-28K/year", "time_horizon": "short"},
-      {"title": "Automated Client Progress Updates", "value_potential": "$12K-18K/year", "time_horizon": "short"},
-      {"title": "Job Management & Scheduling", "value_potential": "$11K-15K/year", "time_horizon": "mid"},
-      {"title": "Lead Follow-up Automation", "value_potential": "$12K-25K/year", "time_horizon": "mid"}
+      {"title": "AI-Powered Time Capture", "value_potential": "40K-65K/year", "time_horizon": "short"},
+      {"title": "Document Drafting Automation", "value_potential": "25K-40K/year", "time_horizon": "short"},
+      {"title": "Client Intake & Conflict Checking", "value_potential": "15K-25K/year", "time_horizon": "mid"},
+      {"title": "Contract Review AI", "value_potential": "20K-35K/year", "time_horizon": "mid"}
     ],
     "not_recommended": [
-      {"title": "Enterprise ERP Systems", "reason": "SAP, Oracle, or large-scale systems are overkill for a 2-person team. Stick with trade-specific tools."},
-      {"title": "Custom-Built Job Management Software", "reason": "Off-the-shelf NZ trade software like Fergus or Tradify is purpose-built for your needs at a fraction of the cost."}
+      {"title": "Enterprise Document Management (iManage/NetDocuments)", "reason": "At 18 fee earners, these systems cost 500-1500/user/month and require dedicated IT. SharePoint + Clio integration is sufficient for your scale."},
+      {"title": "Full AI-Autonomous Drafting", "reason": "Professional liability requires human review on all client work. Use AI for first drafts with mandatory lawyer review."},
+      {"title": "Custom Billing System Build", "reason": "Trust accounting and LEDES compliance are complex. Clio handles this well - don't rebuild."}
     ],
-    "recommended_investment": {"year_1_min": 3500, "year_1_max": 7500},
+    "recommended_investment": {"year_1_min": 15000, "year_1_max": 28000},
     "verdict": {
       "recommendation": "proceed",
-      "headline": "Strong Fit for Automation",
-      "subheadline": "Your business model is ideal for quick wins with minimal disruption",
+      "headline": "Strong Fit for AI Enhancement",
+      "subheadline": "Your existing Clio infrastructure provides an excellent foundation for AI tools",
       "reasoning": [
-        "Clear time savings available - 12+ hours/week on admin that could be billable",
-        "Existing client communication strength means automation enhances rather than replaces your personal touch",
-        "NZ-specific trade software is mature and proven for businesses like yours",
-        "As NZ Certified Builders, you already have systems thinking in place"
+        "Lost billable time is your biggest revenue leak - AI time capture has immediate ROI",
+        "Document-heavy practice (M&A, contracts) is ideal for AI drafting assistance",
+        "Existing Clio setup means integrations are straightforward",
+        "Partner/associate tech comfort is above average for legal sector"
       ],
-      "when_to_revisit": "Review impact after 3 months - if quoting time drops 50%+, consider phase 2",
+      "when_to_revisit": "Review after 6 months - if utilization increases 10%+, consider advanced contract AI",
       "recommended_approach": [
-        "Start with quoting software (Buildxact or Fergus) - biggest time saver",
-        "Add automated client updates via job management portal in month 2",
-        "Implement lead automation once new enquiry volume increases"
+        "Start with AI time capture (biggest immediate ROI)",
+        "Add document drafting AI in month 2-3",
+        "Implement automated conflict checking and intake in month 4-6",
+        "Evaluate contract review AI based on M&A deal flow"
       ],
       "confidence": "high",
       "color": "green"
     }
   },
   "value_summary": {
-    "value_saved": {"subtotal": {"min": 44200, "max": 53040}, "hours_per_week": 12, "hourly_rate": 85},
-    "value_created": {"subtotal": {"min": 18000, "max": 35000}},
-    "total": {"min": 62200, "max": 88040}
+    "value_saved": {"subtotal": {"min": 80000, "max": 130000}, "hours_per_week": 35, "hourly_rate": 185},
+    "value_created": {"subtotal": {"min": 25000, "max": 45000}},
+    "total": {"min": 105000, "max": 175000}
   },
   "findings": [
     {
       "id": "f1",
-      "title": "Quoting Takes 3-4 Hours Per Job",
-      "description": "Each quote requires manual measurements, supplier price lookups, margin calculations, and document formatting. With 8-12 quotes per month, this represents 30-40+ hours of unbillable time. Industry-leading builders use AI-assisted estimation to cut this by 60%.",
-      "category": "operations",
-      "customer_value_score": 9,
-      "business_health_score": 8,
-      "value_saved": {"hours_per_week": 6, "hourly_rate": 85, "annual_savings": 26520},
+      "title": "10-15% of Billable Time Goes Unrecorded",
+      "description": "Partners and associates routinely forget to capture all time spent on client matters - quick calls, email review, brief research. At average billable rates of 250/hour across 18 fee earners, this represents 80K-120K in lost annual revenue. Industry best practice is AI-assisted time capture from calendar, email, and document activity.",
+      "category": "billing",
+      "customer_value_score": 6,
+      "business_health_score": 10,
+      "value_saved": {"hours_per_week": 12, "hourly_rate": 250, "annual_savings": 65000},
       "confidence": "high",
-      "sources": ["Industry benchmarks - NZ Master Builders 2025", "Trade software adoption studies"],
+      "sources": ["Legal industry benchmarks - Clio Legal Trends Report 2025", "Time leakage studies - Thomson Reuters"],
       "time_horizon": "short"
     },
     {
       "id": "f2",
-      "title": "Client Updates Are Manual and Time-Consuming",
-      "description": "Dani spends 5+ hours weekly on phone calls, texts, and emails keeping clients informed about project progress, schedule changes, and next steps. While this personal touch is valued, much of it could be automated while maintaining your friendly brand.",
-      "category": "customer_experience",
-      "customer_value_score": 10,
-      "business_health_score": 7,
-      "value_saved": {"hours_per_week": 4, "hourly_rate": 65, "annual_savings": 13520},
+      "title": "Document Drafting Takes 2-3x Longer Than Necessary",
+      "description": "Associates spend 3-5 hours drafting standard documents (NDAs, employment contracts, shareholder agreements) that could start from AI-generated first drafts in 15-30 minutes. With 40+ such documents monthly, junior time could be better spent on higher-value analysis.",
+      "category": "productivity",
+      "customer_value_score": 7,
+      "business_health_score": 8,
+      "value_saved": {"hours_per_week": 10, "hourly_rate": 150, "annual_savings": 39000},
       "confidence": "high",
-      "sources": ["Client communication analysis", "Similar NZ trade business benchmarks"],
+      "sources": ["Document workflow analysis", "Legal AI adoption benchmarks"],
       "time_horizon": "short"
     },
     {
       "id": "f3",
-      "title": "Job Scheduling Is Reactive, Not Proactive",
-      "description": "Without a centralised scheduling system, jobs occasionally overlap, travel between sites isn't optimised, and weather delays cause cascading rescheduling. Smart scheduling could recover 2-3 hours weekly and reduce client friction from last-minute changes.",
-      "category": "operations",
-      "customer_value_score": 8,
-      "business_health_score": 8,
-      "value_saved": {"hours_per_week": 2.5, "hourly_rate": 85, "annual_savings": 11050},
+      "title": "Client Intake Takes 2-4 Hours Per New Matter",
+      "description": "New client onboarding involves manual conflict checks, engagement letter drafting, KYC collection, and multiple email exchanges. Competitors using automated intake convert leads 40% faster. Your current process occasionally loses prospects to faster-responding firms.",
+      "category": "client_experience",
+      "customer_value_score": 9,
+      "business_health_score": 7,
+      "value_saved": {"hours_per_week": 6, "hourly_rate": 120, "annual_savings": 18720},
+      "value_created": {"description": "Faster intake improves conversion of new prospects", "potential_revenue": 25000},
       "confidence": "medium",
-      "sources": ["Project timeline analysis", "Industry scheduling benchmarks"],
+      "sources": ["Client intake timing analysis", "Legal services conversion studies"],
       "time_horizon": "mid"
     },
     {
       "id": "f4",
-      "title": "Lead Follow-Up Falls Through Cracks",
-      "description": "Website enquiries and referrals sometimes wait 2-3 days for response during busy periods. Research shows 78% of customers choose the first builder to respond. Automated lead capture and instant follow-up could increase conversion by 15-25%.",
-      "category": "sales",
-      "customer_value_score": 7,
-      "business_health_score": 9,
-      "value_created": {"description": "Increased lead conversion from faster response", "potential_revenue": 25000},
+      "title": "Contract Review in M&A Deals Is Labor-Intensive",
+      "description": "Due diligence on M&A transactions requires reviewing hundreds of contracts for key terms, risks, and anomalies. Associates spend 60-80% of their time on mechanical review tasks that AI can accelerate by 50-70%.",
+      "category": "productivity",
+      "customer_value_score": 8,
+      "business_health_score": 8,
+      "value_saved": {"hours_per_week": 8, "hourly_rate": 175, "annual_savings": 36400},
       "confidence": "medium",
-      "sources": ["Lead response time studies - ServiceTitan 2024", "NZ construction lead benchmarks"],
+      "sources": ["M&A deal flow analysis", "Contract AI benchmarks - Luminance, Kira Systems case studies"],
       "time_horizon": "mid"
     },
     {
       "id": "f5",
-      "title": "Invoice and Payment Tracking Is Manual",
-      "description": "Creating invoices, tracking payments, and following up on overdue accounts is done via spreadsheet. Average payment collection is 45 days when industry best practice is under 30. Automated invoicing with payment reminders could improve cash flow by 30%.",
-      "category": "finance",
-      "customer_value_score": 6,
-      "business_health_score": 9,
-      "value_created": {"description": "Improved cash flow and reduced payment collection time", "potential_revenue": 8000},
+      "title": "Email Drafting and Inbox Management Consumes Partner Time",
+      "description": "Partners spend 1-2 hours daily on email - drafting responses, summarizing threads for colleagues, and triaging inbox. AI email assistance can draft responses for review and summarize long chains, saving 30-40% of email time.",
+      "category": "productivity",
+      "customer_value_score": 7,
+      "business_health_score": 7,
+      "value_saved": {"hours_per_week": 5, "hourly_rate": 300, "annual_savings": 39000},
       "confidence": "high",
-      "sources": ["Cash flow analysis", "Trade payment benchmarks - Xero Small Business Insights NZ"],
+      "sources": ["Partner time allocation surveys", "Microsoft Copilot adoption studies"],
       "time_horizon": "short"
     }
   ],
   "recommendations": [
     {
       "id": "r1",
-      "title": "Implement AI-Assisted Quoting Software",
-      "description": "Deploy a trade-specific quoting tool that integrates with NZ supplier pricing, auto-calculates materials from measurements, and generates professional quotes in minutes instead of hours.",
+      "title": "Implement AI-Powered Time Capture",
+      "description": "Deploy AI time tracking that automatically captures billable time from calendar events, email activity, and document work. System suggests time entries for lawyer approval, recovering the 10-15% of billable hours currently lost.",
       "why_it_matters": {
-        "customer_value": "Clients receive accurate, professional quotes same-day instead of waiting 3-5 days. Faster response wins more jobs.",
-        "business_health": "Reclaim 6+ hours weekly for billable work. More accurate estimates mean better margins and fewer surprises."
+        "customer_value": "More accurate billing means clients pay for actual work done - no more uncomfortable conversations about missed time or estimates.",
+        "business_health": "Immediate revenue recovery of 80K-120K annually. Utilization visibility helps identify capacity issues."
       },
       "priority": "high",
       "crb_analysis": {
-        "cost": {"short_term": {"setup": 500, "monthly": 129}, "mid_term": {"monthly": 129}, "long_term": {"monthly": 129}, "total": 5048},
+        "cost": {
+          "short_term": {"setup": 2000, "monthly": 1600},
+          "mid_term": {"monthly": 1600},
+          "long_term": {"monthly": 1600},
+          "total": 59200
+        },
         "risk": [
-          {"description": "Learning curve - 2-3 weeks to get comfortable", "probability": "medium", "impact": 2, "mitigation": "Use Buildxact's NZ support team for onboarding"},
-          {"description": "Initial quotes may need manual adjustment", "probability": "high", "impact": 1, "mitigation": "Review all quotes for first month, build templates"}
+          {"description": "Privacy concerns from lawyers about activity monitoring", "probability": "medium", "impact": 3, "mitigation": "Position as 'time suggestion' not 'surveillance' - lawyers approve all entries"},
+          {"description": "Integration with existing Clio may require setup time", "probability": "low", "impact": 2, "mitigation": "Smokeball and Timeero have certified Clio integrations"}
         ],
-        "benefit": {"short_term": {"annual": 26520}, "mid_term": {"annual": 26520}, "long_term": {"annual": 26520}, "total": 79560}
+        "benefit": {
+          "short_term": {"annual": 65000},
+          "mid_term": {"annual": 65000},
+          "long_term": {"annual": 65000},
+          "total": 195000
+        }
       },
       "options": {
-        "off_the_shelf": {"name": "Tradify", "vendor": "Tradify", "monthly_cost": 59, "implementation_weeks": 1, "pros": ["NZ-built for Kiwi trades", "Simple and fast to learn", "Good mobile app"], "cons": ["Less sophisticated estimating", "Basic supplier integration"]},
-        "best_in_class": {"name": "Buildxact", "vendor": "Buildxact", "monthly_cost": 129, "implementation_weeks": 2, "pros": ["Deep NZ supplier integration", "AI-assisted takeoffs from plans", "Professional quote templates"], "cons": ["Slightly steeper learning curve", "Higher monthly cost"]},
-        "custom_solution": {"approach": "Build custom quoting spreadsheet with macros and supplier API connections", "estimated_cost": {"min": 5000, "max": 12000}, "implementation_weeks": 8, "pros": ["Fully customised to your workflow"], "cons": ["Maintenance burden", "No mobile app", "No ongoing updates"]}
+        "off_the_shelf": {
+          "name": "Clio + Time Tracking Discipline",
+          "vendor": "Clio",
+          "monthly_cost": 0,
+          "implementation_weeks": 0,
+          "pros": ["No additional cost", "Already in your stack"],
+          "cons": ["Relies on behavior change", "No AI assistance", "Doesn't capture forgotten time"]
+        },
+        "best_in_class": {
+          "name": "Smokeball",
+          "vendor": "Smokeball",
+          "monthly_cost": 89,
+          "implementation_weeks": 2,
+          "pros": ["Automatic time capture from all activity", "AI-suggested time entries", "Integrates with Clio", "Per-user pricing scales with firm"],
+          "cons": ["Requires migration planning", "Per-user cost adds up"]
+        },
+        "custom_solution": {
+          "approach": "Build internal time capture using Microsoft Graph API + Claude for time suggestions",
+          "estimated_cost": {"min": 15000, "max": 35000},
+          "implementation_weeks": 12,
+          "pros": ["Fully customized to your workflow", "No ongoing per-user fees"],
+          "cons": ["Significant development time", "Maintenance burden", "No vendor support"]
+        }
       },
       "our_recommendation": "best_in_class",
-      "recommendation_rationale": "Buildxact's NZ supplier integration and AI-assisted takeoffs will save the most time on your complex renovation quotes. The $70/month extra over Tradify pays back in the first week from time savings. Their NZ support team understands local building requirements.",
-      "roi_percentage": 300,
-      "payback_months": 1,
-      "roi_detail": {
-        "financial_impact": {
-          "yearly_savings": 7692,
-          "yearly_cost": 1548,
-          "implementation_cost": 500,
-          "monthly_cost": 129,
-          "monthly_savings": 641,
-          "three_year_net": 16992
-        },
-        "assumptions": [
-          {"statement": "Time savings of ~7.5 hours/month at $85/hr", "source": "user_input"},
-          {"statement": "Buildxact subscription at $129/month", "source": "vendor_pricing"}
-        ],
-        "calculation_breakdown": "ROI = (7692 - 1548) / (500 + 1548) × 100 = 300%"
-      },
-      "assumptions": ["~7.5 hours/month saved on quoting", "Buildxact mid-tier at $129/month", "Hourly rate: $85"]
+      "recommendation_rationale": "Smokeball's automatic time capture is purpose-built for law firms and has proven ROI. The 89/user/month pays for itself if each lawyer captures just 2 additional hours monthly. Their Clio integration means you keep your existing workflows.",
+      "roi_percentage": 329,
+      "payback_months": 3,
+      "assumptions": ["18 fee earners", "10% of billable time currently unrecorded", "Average billable rate: 250/hour", "System recovers 50% of lost time"]
     },
     {
       "id": "r2",
-      "title": "Set Up Automated Client Communication Portal",
-      "description": "Use job management software to give clients a portal where they can see project progress, photos, schedules, and next steps - reducing inbound calls while maintaining your personal touch for important conversations.",
+      "title": "Deploy AI Document Drafting Assistant",
+      "description": "Implement AI-powered first draft generation for standard legal documents. Associates describe what they need, AI produces a draft based on your templates and precedents, associate reviews and refines.",
       "why_it_matters": {
-        "customer_value": "Clients feel informed 24/7 without having to call. They can share progress with family/friends, increasing referrals.",
-        "business_health": "Dani reclaims 4+ hours weekly from routine update calls. Focus shifts to high-value client relationships."
+        "customer_value": "Faster turnaround on routine documents. Clients get drafts same-day instead of 2-3 day wait.",
+        "business_health": "Associates spend time on analysis and client advice rather than formatting. Enables more matters with same headcount."
       },
       "priority": "high",
       "crb_analysis": {
-        "cost": {"short_term": {"setup": 200, "monthly": 79}, "mid_term": {"monthly": 79}, "long_term": {"monthly": 79}, "total": 3048},
+        "cost": {
+          "short_term": {"setup": 500, "monthly": 500},
+          "mid_term": {"monthly": 500},
+          "long_term": {"monthly": 500},
+          "total": 18500
+        },
         "risk": [
-          {"description": "Clients may prefer personal calls initially", "probability": "medium", "impact": 1, "mitigation": "Position portal as 'in addition to' not 'instead of' your service"},
-          {"description": "Need to remember to update job status", "probability": "medium", "impact": 2, "mitigation": "Set daily reminder, takes 5 mins to update all jobs"}
+          {"description": "AI may produce errors requiring careful review", "probability": "high", "impact": 4, "mitigation": "Mandatory lawyer review on ALL AI-drafted documents - never send without human approval"},
+          {"description": "Client confidentiality with AI services", "probability": "low", "impact": 5, "mitigation": "Use enterprise-grade AI with data processing agreements (Claude for Work, Microsoft Copilot)"}
         ],
-        "benefit": {"short_term": {"annual": 13520}, "mid_term": {"annual": 13520}, "long_term": {"annual": 13520}, "total": 40560}
+        "benefit": {
+          "short_term": {"annual": 39000},
+          "mid_term": {"annual": 39000},
+          "long_term": {"annual": 39000},
+          "total": 117000
+        }
       },
       "options": {
-        "off_the_shelf": {"name": "Fergus", "vendor": "Fergus", "monthly_cost": 79, "implementation_weeks": 1, "pros": ["Excellent client portal", "Built in NZ for NZ trades", "Great mobile app for site updates"], "cons": ["Quoting less sophisticated than Buildxact"]},
-        "best_in_class": {"name": "Buildertrend", "vendor": "Buildertrend", "monthly_cost": 199, "implementation_weeks": 3, "pros": ["Comprehensive project management", "Beautiful client experience", "Photo sharing and selections"], "cons": ["US-based, less NZ-specific", "Higher price point"]},
-        "custom_solution": {"approach": "Build client portal using Notion or Airtable with automation", "estimated_cost": {"min": 2000, "max": 5000}, "implementation_weeks": 4, "pros": ["Fully branded experience"], "cons": ["Manual integration", "No trade-specific features", "Ongoing maintenance"]}
+        "off_the_shelf": {
+          "name": "Microsoft Copilot for M365",
+          "vendor": "Microsoft",
+          "monthly_cost": 28,
+          "implementation_weeks": 1,
+          "pros": ["Already integrated with Word/Outlook", "GDPR compliant", "Low per-user cost"],
+          "cons": ["Not legal-specific", "Limited template learning"]
+        },
+        "best_in_class": {
+          "name": "Documate + Claude API",
+          "vendor": "Documate",
+          "monthly_cost": 299,
+          "implementation_weeks": 4,
+          "pros": ["Legal-specific document automation", "Learns from your templates", "Client intake integration"],
+          "cons": ["Higher setup investment", "Requires template configuration"]
+        },
+        "custom_solution": {
+          "approach": "Build custom drafting system using Claude API with firm precedent library",
+          "estimated_cost": {"min": 25000, "max": 50000},
+          "implementation_weeks": 16,
+          "pros": ["Fully trained on your documents", "Deep integration with systems"],
+          "cons": ["Significant development time", "Ongoing model refinement needed"]
+        }
       },
       "our_recommendation": "off_the_shelf",
-      "recommendation_rationale": "Fergus is built in Wellington specifically for NZ trades. The client portal is excellent, mobile app works well on-site, and it integrates with Xero for invoicing. At $79/month, ROI is achieved in the first month.",
-      "roi_percentage": 300,
-      "payback_months": 0.7,
-      "roi_detail": {
-        "financial_impact": {
-          "yearly_savings": 4392,
-          "yearly_cost": 948,
-          "implementation_cost": 200,
-          "monthly_cost": 79,
-          "monthly_savings": 366,
-          "three_year_net": 9420
-        },
-        "assumptions": [
-          {"statement": "Time savings of ~5.6 hours/month at $65/hr", "source": "user_input"},
-          {"statement": "Fergus subscription at $79/month", "source": "vendor_pricing"}
-        ],
-        "calculation_breakdown": "ROI = (4392 - 948) / (200 + 948) × 100 = 300%"
-      },
-      "assumptions": ["~5.6 hours/month saved on client calls", "Fergus at $79/month", "Dani's effective hourly rate: $65"]
+      "recommendation_rationale": "Start with Microsoft Copilot since you already have M365. At 28/user/month, it's low-risk to pilot. If results are good after 3 months, evaluate Documate for more legal-specific features. Don't over-engineer initially.",
+      "roi_percentage": 532,
+      "payback_months": 2,
+      "assumptions": ["40+ standard documents drafted monthly", "Current drafting time: 3 hours average", "AI reduces to 1 hour average", "Associate rate: 150/hour"]
     },
     {
       "id": "r3",
-      "title": "Implement Lead Capture and Auto-Response",
-      "description": "Set up automated lead capture from your website with instant personalised response and CRM tracking. Ensure no enquiry waits more than 5 minutes for acknowledgment, even when you're on-site.",
+      "title": "Automate Client Intake & Conflict Checking",
+      "description": "Implement digital intake forms, automated conflict-of-interest checking against your client database, and e-signature for engagement letters. New clients can onboard in hours instead of days.",
       "why_it_matters": {
-        "customer_value": "Potential clients get immediate acknowledgment and clear next steps, building trust before you've even spoken.",
-        "business_health": "Capture leads that currently fall through cracks. First-responder advantage in competitive market."
+        "customer_value": "Prospects experience modern, responsive service from first contact. Faster engagement means they can proceed with their matter sooner.",
+        "business_health": "Reduce intake admin time by 70%. Win more competitive pitches by responding first."
       },
       "priority": "medium",
       "crb_analysis": {
-        "cost": {"short_term": {"setup": 300, "monthly": 45}, "mid_term": {"monthly": 45}, "long_term": {"monthly": 45}, "total": 1920},
+        "cost": {
+          "short_term": {"setup": 1000, "monthly": 350},
+          "mid_term": {"monthly": 350},
+          "long_term": {"monthly": 350},
+          "total": 13600
+        },
         "risk": [
-          {"description": "Auto-responses may feel impersonal", "probability": "low", "impact": 2, "mitigation": "Write responses in Dani's friendly voice, promise personal callback within 24hrs"}
+          {"description": "Automated conflict checks may miss complex relationships", "probability": "low", "impact": 5, "mitigation": "AI flags potential conflicts for partner review - never auto-clear"},
+          {"description": "Clients may prefer personal contact over digital forms", "probability": "medium", "impact": 2, "mitigation": "Offer both options - digital for speed, phone for preference"}
         ],
-        "benefit": {"short_term": {"annual": 12000}, "mid_term": {"annual": 18000}, "long_term": {"annual": 25000}, "total": 55000}
+        "benefit": {
+          "short_term": {"annual": 18720},
+          "mid_term": {"annual": 25000},
+          "long_term": {"annual": 25000},
+          "total": 68720
+        }
       },
       "options": {
-        "off_the_shelf": {"name": "HubSpot Free CRM + Forms", "vendor": "HubSpot", "monthly_cost": 0, "implementation_weeks": 1, "pros": ["Free tier available", "Professional forms", "Basic automation"], "cons": ["Limited automation on free tier", "Less trade-specific"]},
-        "best_in_class": {"name": "Jobber", "vendor": "Jobber", "monthly_cost": 65, "implementation_weeks": 2, "pros": ["Built for trades", "Online booking", "Quote follow-up automation"], "cons": ["Another subscription to manage", "Some overlap with Fergus"]},
-        "custom_solution": {"approach": "Zapier connecting website form to SMS/email automation", "estimated_cost": {"min": 500, "max": 1500}, "implementation_weeks": 2, "pros": ["Flexible and customisable", "Works with existing tools"], "cons": ["Multiple tools to maintain", "Can break if any component changes"]}
+        "off_the_shelf": {
+          "name": "Clio Grow",
+          "vendor": "Clio",
+          "monthly_cost": 49,
+          "implementation_weeks": 2,
+          "pros": ["Native Clio integration", "Built-in conflict checking", "E-signature included"],
+          "cons": ["Additional Clio cost", "Limited customization"]
+        },
+        "best_in_class": {
+          "name": "Lawmatics",
+          "vendor": "Lawmatics",
+          "monthly_cost": 199,
+          "implementation_weeks": 3,
+          "pros": ["Powerful automation workflows", "Marketing integration", "Advanced reporting"],
+          "cons": ["Higher price", "Learning curve"]
+        },
+        "custom_solution": {
+          "approach": "Build intake portal using Typeform + Zapier + Clio API",
+          "estimated_cost": {"min": 5000, "max": 12000},
+          "implementation_weeks": 6,
+          "pros": ["Fully branded experience", "Flexible workflow"],
+          "cons": ["Manual conflict check integration", "Maintenance burden"]
+        }
       },
       "our_recommendation": "off_the_shelf",
-      "recommendation_rationale": "Start with HubSpot Free - it's genuinely free and handles lead capture, auto-response, and basic CRM. If Fergus becomes your main system (from recommendation #2), use its built-in lead features instead.",
-      "roi_percentage": 400,
-      "payback_months": 1.1,
-      "roi_detail": {
-        "financial_impact": {
-          "yearly_savings": 3900,
-          "yearly_cost": 540,
-          "implementation_cost": 300,
-          "monthly_cost": 45,
-          "monthly_savings": 325,
-          "three_year_net": 9380
-        },
-        "assumptions": [
-          {"statement": "Additional revenue from captured leads: ~$3,900/year", "source": "estimate"},
-          {"statement": "Automation tools at $45/month avg", "source": "vendor_pricing"}
-        ],
-        "calculation_breakdown": "ROI = (3900 - 540) / (300 + 540) × 100 = 400%"
-      },
-      "assumptions": ["10-15 website enquiries per month", "2-3 additional captured leads/year at $8K avg job value", "$45/month for automation tools"]
+      "recommendation_rationale": "Clio Grow is the natural choice since you're already on Clio Manage. Native integration means data flows automatically, conflict checking works against your existing client database, and there's no new system to learn.",
+      "roi_percentage": 405,
+      "payback_months": 4,
+      "assumptions": ["20-30 new matters monthly", "Current intake time: 3 hours average", "Automated intake reduces to 45 minutes", "15% improvement in prospect conversion"]
     }
   ],
   "roadmap": {
     "short_term": [
-      {"title": "Deploy Buildxact for Quoting", "description": "Set up AI-assisted quoting with NZ supplier integration", "timeline": "Weeks 1-2", "expected_outcome": "Quote time reduced from 3.5hrs to 1.5hrs"},
-      {"title": "Set Up Fergus Client Portal", "description": "Enable client portal and train on mobile updates", "timeline": "Weeks 3-4", "expected_outcome": "Clients can see job progress 24/7, reducing update calls by 60%"}
+      {"title": "Deploy AI Time Capture", "description": "Implement Smokeball or similar AI time tracking across all fee earners", "timeline": "Month 1-2", "expected_outcome": "Recover 10-15% lost billable time"},
+      {"title": "Enable Copilot for Partners", "description": "Turn on Microsoft Copilot for the 5 partners immediately", "timeline": "Week 1", "expected_outcome": "Save 3-5 hours/week on email and admin"}
     ],
     "mid_term": [
-      {"title": "Lead Capture Automation", "description": "Implement auto-response for website enquiries", "timeline": "Months 2-3", "expected_outcome": "Every lead gets response within 5 minutes, 24/7"},
-      {"title": "Xero Integration", "description": "Connect job management to accounting for automated invoicing", "timeline": "Month 3", "expected_outcome": "Invoices generated automatically on job completion"}
+      {"title": "Document Drafting AI", "description": "Roll out AI drafting assistance for standard documents", "timeline": "Month 3-4", "expected_outcome": "50% reduction in first draft time"},
+      {"title": "Automated Client Intake", "description": "Implement Clio Grow for digital intake and conflict checking", "timeline": "Month 5-6", "expected_outcome": "70% faster client onboarding"}
     ],
     "long_term": [
-      {"title": "Smart Scheduling", "description": "Optimise job scheduling with travel time and weather integration", "timeline": "Months 6-9", "expected_outcome": "Better job sequencing, less windshield time"},
-      {"title": "Review & Referral Automation", "description": "Automated review requests and referral program", "timeline": "Months 9-12", "expected_outcome": "Consistent 5-star reviews, referral tracking"}
+      {"title": "Contract Review AI", "description": "Evaluate and pilot contract analysis tools for M&A due diligence", "timeline": "Month 9-12", "expected_outcome": "50-70% faster contract review"},
+      {"title": "Knowledge Management", "description": "Build searchable knowledge base from firm precedents", "timeline": "Year 2", "expected_outcome": "Faster onboarding, better consistency"}
     ]
   },
   "playbooks": [
@@ -268,379 +317,191 @@
       "id": "pb1",
       "recommendation_id": "r1",
       "option_type": "best_in_class",
-      "total_weeks": 2,
+      "total_weeks": 4,
       "phases": [
         {
-          "phase_number": 1,
-          "title": "Setup & Import",
-          "name": "Setup & Import",
-          "duration_weeks": 1,
-          "outcome": "Buildxact account configured with NZ supplier pricing and your job templates",
+          "name": "Setup & Integration",
+          "week": 1,
           "tasks": [
-            {"id": "t1", "title": "Create Buildxact account and complete NZ business setup", "hours": 1, "owner": "Dani", "difficulty": "easy"},
-            {"id": "t2", "title": "Connect PlaceMakers and ITM supplier price lists", "hours": 2, "owner": "Joh", "difficulty": "medium"},
-            {"id": "t3", "title": "Import past 5 quotes as templates for similar job types", "hours": 3, "owner": "Joh", "difficulty": "medium", "dependencies": ["t1", "t2"]},
-            {"id": "t4", "title": "Set up margin rules and labour rates", "hours": 1, "owner": "Dani", "difficulty": "easy", "dependencies": ["t1"]}
+            {"id": "t1", "title": "Sign up for Smokeball trial", "description": "Start 14-day trial with your Clio credentials"},
+            {"id": "t2", "title": "Connect Clio integration", "description": "Enable two-way sync between Smokeball and Clio"},
+            {"id": "t3", "title": "Configure billing categories", "description": "Map Smokeball activity types to your Clio billing codes"},
+            {"id": "t4", "title": "Pilot with 2-3 lawyers", "description": "Have partners and one associate test for first week"}
           ]
         },
         {
-          "phase_number": 2,
-          "title": "Training & First Live Quote",
-          "name": "Training & First Live Quote",
-          "duration_weeks": 1,
-          "outcome": "First client quote sent through Buildxact with confidence",
+          "name": "Team Rollout",
+          "week": 2,
           "tasks": [
-            {"id": "t5", "title": "Complete Buildxact 30-min getting started video course", "hours": 1, "owner": "Joh", "difficulty": "easy"},
-            {"id": "t6", "title": "Create first live quote using the system (compare to manual)", "hours": 2, "owner": "Joh", "difficulty": "medium", "dependencies": ["t3", "t5"]},
-            {"id": "t7", "title": "Refine templates based on first quote experience", "hours": 1, "owner": "Joh", "difficulty": "easy", "dependencies": ["t6"]},
-            {"id": "t8", "title": "Send first quote to client via Buildxact", "hours": 0.5, "owner": "Dani", "difficulty": "easy", "dependencies": ["t6"]}
+            {"id": "t5", "title": "Training session for all fee earners", "description": "30-minute demo showing time suggestion approval workflow"},
+            {"id": "t6", "title": "Set up daily reminders", "description": "Configure end-of-day prompts to review suggested time"},
+            {"id": "t7", "title": "Enable for all fee earners", "description": "Roll out to remaining 15 lawyers"},
+            {"id": "t8", "title": "Collect first week feedback", "description": "Quick survey on ease of use and accuracy"}
+          ]
+        },
+        {
+          "name": "Optimization",
+          "week": 3,
+          "tasks": [
+            {"id": "t9", "title": "Review captured time vs baseline", "description": "Compare billed hours to previous month"},
+            {"id": "t10", "title": "Adjust category mappings", "description": "Fix any miscategorized activities"},
+            {"id": "t11", "title": "Address privacy concerns", "description": "Meet with any skeptical team members"},
+            {"id": "t12", "title": "Fine-tune detection rules", "description": "Improve accuracy based on feedback"}
+          ]
+        },
+        {
+          "name": "Measure & Scale",
+          "week": 4,
+          "tasks": [
+            {"id": "t13", "title": "Calculate ROI", "description": "Measure additional hours captured and revenue impact"},
+            {"id": "t14", "title": "Decision: commit or trial another tool", "description": "Based on results, commit to annual subscription"},
+            {"id": "t15", "title": "Document best practices", "description": "Create quick reference guide for team"},
+            {"id": "t16", "title": "Schedule quarterly review", "description": "Set calendar reminder to assess ongoing impact"}
           ]
         }
       ],
-      "personalization_context": {"team_size": "micro", "technical_level": 3, "budget_monthly": 200}
+      "personalization_context": {
+        "team_size": "18",
+        "technical_level": 7,
+        "budget_monthly": 1600
+      }
     },
     {
       "id": "pb2",
       "recommendation_id": "r2",
       "option_type": "off_the_shelf",
-      "total_weeks": 2,
+      "total_weeks": 4,
       "phases": [
         {
-          "phase_number": 1,
-          "title": "Fergus Setup",
-          "name": "Fergus Setup",
-          "duration_weeks": 1,
-          "outcome": "Fergus configured with your jobs, clients, and branding",
+          "name": "Enable & Pilot",
+          "week": 1,
           "tasks": [
-            {"id": "t9", "title": "Create Fergus account and complete business profile", "hours": 1, "owner": "Dani", "difficulty": "easy"},
-            {"id": "t10", "title": "Import current jobs and client list from spreadsheet", "hours": 2, "owner": "Dani", "difficulty": "medium", "dependencies": ["t9"]},
-            {"id": "t11", "title": "Install Fergus mobile app and test on-site photo upload", "hours": 0.5, "owner": "Joh", "difficulty": "easy", "dependencies": ["t9"]},
-            {"id": "t12", "title": "Configure client portal branding with logo and colours", "hours": 1, "owner": "Dani", "difficulty": "easy", "dependencies": ["t9"]}
+            {"id": "t1", "title": "Enable Copilot licenses", "description": "Add Copilot to M365 admin for 5 partners"},
+            {"id": "t2", "title": "Partner training session", "description": "30-minute demo on email and document features"},
+            {"id": "t3", "title": "Create prompt library", "description": "Document 5-10 common prompts for legal documents"},
+            {"id": "t4", "title": "Test with real documents", "description": "Try drafting NDA, engagement letter, and client memo"}
           ]
         },
         {
-          "phase_number": 2,
-          "title": "Client Portal Launch",
-          "name": "Client Portal Launch",
-          "duration_weeks": 1,
-          "outcome": "Clients actively using the portal for project updates",
+          "name": "Expand to Associates",
+          "week": 2,
           "tasks": [
-            {"id": "t13", "title": "Create welcome email template for portal invitations", "hours": 1, "owner": "Dani", "difficulty": "easy", "dependencies": ["t12"]},
-            {"id": "t14", "title": "Invite 3 current clients to test portal experience", "hours": 0.5, "owner": "Dani", "difficulty": "easy", "dependencies": ["t13"]},
-            {"id": "t15", "title": "Update first job with photos and progress via mobile app", "hours": 0.5, "owner": "Joh", "difficulty": "easy", "dependencies": ["t11"]},
-            {"id": "t16", "title": "Gather feedback from test clients and adjust", "hours": 1, "owner": "Dani", "difficulty": "easy", "dependencies": ["t14", "t15"]}
+            {"id": "t5", "title": "Enable for senior associates", "description": "Add Copilot to 5 senior associates"},
+            {"id": "t6", "title": "Associate training", "description": "Focus on document drafting use cases"},
+            {"id": "t7", "title": "Review workflow", "description": "Establish AI draft → lawyer review → client process"},
+            {"id": "t8", "title": "Collect quality feedback", "description": "Track accuracy and time savings"}
+          ]
+        },
+        {
+          "name": "Full Rollout",
+          "week": 3,
+          "tasks": [
+            {"id": "t9", "title": "Enable for all fee earners", "description": "Roll out to remaining team"},
+            {"id": "t10", "title": "Create document templates", "description": "Build Copilot-optimized starting templates"},
+            {"id": "t11", "title": "Establish review standards", "description": "Define what 'reviewed' means for AI drafts"},
+            {"id": "t12", "title": "Track usage metrics", "description": "Monitor adoption via M365 admin"}
+          ]
+        },
+        {
+          "name": "Evaluate Next Steps",
+          "week": 4,
+          "tasks": [
+            {"id": "t13", "title": "Measure time savings", "description": "Compare drafting time before/after"},
+            {"id": "t14", "title": "Assess quality", "description": "Review client feedback on turnaround"},
+            {"id": "t15", "title": "Decision: expand or upgrade", "description": "Consider Documate if results warrant"},
+            {"id": "t16", "title": "Document learnings", "description": "Share best prompts and workflows"}
           ]
         }
       ],
-      "personalization_context": {"team_size": "micro", "technical_level": 3, "budget_monthly": 100}
+      "personalization_context": {
+        "team_size": "18",
+        "technical_level": 7,
+        "budget_monthly": 500
+      }
     }
   ],
   "system_architecture": {
     "existing_tools": [
-      {
-        "id": "xero",
-        "name": "Xero",
-        "category": "Accounting",
-        "monthly_cost": 50,
-        "one_time_cost": 0,
-        "crb": {
-          "cost": "$50/mo (already paying)",
-          "risk": "None - already in use",
-          "risk_level": "low",
-          "benefit": "Financial data ready to integrate",
-          "powers": ["Invoice automation", "Financial reporting"]
-        },
-        "is_existing": true
-      },
-      {
-        "id": "google-workspace",
-        "name": "Google Workspace",
-        "category": "Productivity",
-        "monthly_cost": 0,
-        "one_time_cost": 0,
-        "crb": {
-          "cost": "Free tier",
-          "risk": "None - already in use",
-          "risk_level": "low",
-          "benefit": "Calendar and email integration ready",
-          "powers": ["Calendar sync", "Email automation"]
-        },
-        "is_existing": true
-      },
-      {
-        "id": "excel",
-        "name": "Excel/Sheets",
-        "category": "Operations",
-        "monthly_cost": 0,
-        "one_time_cost": 0,
-        "crb": {
-          "cost": "Free",
-          "risk": "Data silos without integration",
-          "risk_level": "medium",
-          "benefit": "Familiar interface for data",
-          "powers": []
-        },
-        "is_existing": true
-      }
+      {"name": "Clio Manage", "category": "Practice Management", "api_score": 8},
+      {"name": "Microsoft 365", "category": "Productivity", "api_score": 10},
+      {"name": "Xero", "category": "Accounting", "api_score": 8},
+      {"name": "SharePoint", "category": "Document Management", "api_score": 9}
     ],
     "ai_layer": [
-      {
-        "id": "buildxact",
-        "name": "Buildxact",
-        "category": "Quoting",
-        "monthly_cost": 129,
-        "one_time_cost": 500,
-        "crb": {
-          "cost": "$129/mo + setup",
-          "risk": "2-week learning curve",
-          "risk_level": "low",
-          "benefit": "60% faster quotes, better accuracy",
-          "powers": ["AI-assisted takeoffs", "Quote generation", "Supplier pricing"]
-        },
-        "is_existing": false
-      },
-      {
-        "id": "fergus",
-        "name": "Fergus",
-        "category": "Job Management",
-        "monthly_cost": 79,
-        "one_time_cost": 200,
-        "crb": {
-          "cost": "$79/mo + setup",
-          "risk": "Need consistent updates",
-          "risk_level": "low",
-          "benefit": "Client portal, job tracking, invoicing",
-          "powers": ["Client updates", "Job scheduling", "Invoice automation"]
-        },
-        "is_existing": false
-      }
+      {"name": "Microsoft Copilot", "purpose": "Document drafting, email assistance"},
+      {"name": "Smokeball", "purpose": "AI time capture and billing"},
+      {"name": "Clio Grow", "purpose": "Client intake automation"}
     ],
     "automations": [
-      {
-        "id": "auto-lead",
-        "name": "Lead Auto-Response",
-        "trigger": "New website enquiry",
-        "action": "Instant personalised email + SMS + CRM entry",
-        "tools_used": ["Fergus", "Website"]
-      },
-      {
-        "id": "auto-invoice",
-        "name": "Invoice Generation",
-        "trigger": "Job marked complete",
-        "action": "Auto-generate and send invoice via Xero",
-        "tools_used": ["Fergus", "Xero"]
-      },
-      {
-        "id": "auto-reminder",
-        "name": "Payment Reminder",
-        "trigger": "Invoice overdue 7 days",
-        "action": "Automated friendly reminder email",
-        "tools_used": ["Xero"]
-      },
-      {
-        "id": "auto-update",
-        "name": "Client Progress Update",
-        "trigger": "Job status changed",
-        "action": "Client notified via portal with photos",
-        "tools_used": ["Fergus"]
-      }
+      {"from": "Clio Manage", "to": "Smokeball", "data": "Time entries", "direction": "bidirectional"},
+      {"from": "Microsoft 365", "to": "Clio Manage", "data": "Calendar, email", "direction": "read"},
+      {"from": "Clio Grow", "to": "Clio Manage", "data": "New clients, conflicts", "direction": "write"}
     ],
     "connections": [
-      {
-        "id": "conn-1",
-        "from_node": "buildxact",
-        "to_node": "xero",
-        "data_flow": "Quote accepted → Invoice created",
-        "integration_type": "native"
-      },
-      {
-        "id": "conn-2",
-        "from_node": "fergus",
-        "to_node": "xero",
-        "data_flow": "Job complete → Invoice synced",
-        "integration_type": "native"
-      },
-      {
-        "id": "conn-3",
-        "from_node": "fergus",
-        "to_node": "google-workspace",
-        "data_flow": "Jobs → Calendar events",
-        "integration_type": "native"
-      }
+      {"source": "Email", "target": "Smokeball", "description": "Time capture from emails"},
+      {"source": "Calendar", "target": "Smokeball", "description": "Meeting time capture"},
+      {"source": "Documents", "target": "Smokeball", "description": "Document work time"}
     ],
     "cost_comparison": {
-      "saas_route": {
-        "items": [
-          {"name": "Buildxact", "monthly_cost": 129, "one_time_cost": 500},
-          {"name": "Fergus", "monthly_cost": 79, "one_time_cost": 200},
-          {"name": "Xero (existing)", "monthly_cost": 50, "one_time_cost": 0}
-        ],
-        "total_monthly": 258,
-        "total_one_time": 700
-      },
-      "diy_route": {
-        "items": [
-          {"name": "Zapier Pro", "monthly_cost": 29, "one_time_cost": 0},
-          {"name": "Notion", "monthly_cost": 10, "one_time_cost": 0},
-          {"name": "Xero (existing)", "monthly_cost": 50, "one_time_cost": 0},
-          {"name": "Custom development", "monthly_cost": 0, "one_time_cost": 8000}
-        ],
-        "total_monthly": 89,
-        "total_one_time": 8000
-      },
-      "monthly_savings": 169,
-      "savings_percentage": 65,
-      "build_cost": 8000,
-      "breakeven_months": 47
+      "current_annual": 0,
+      "proposed_annual": 31200,
+      "savings_annual": 105000,
+      "net_benefit": 73800
     }
   },
   "industry_insights": {
-    "industry": "construction",
-    "industry_display_name": "Construction & Building",
+    "industry": "professional-services",
+    "industry_display_name": "Professional Services - Legal",
     "adoption_stats": [
-      {
-        "capability": "Job Management Software",
-        "adoption_percentage": 34,
-        "average_outcome": "45% time saved on admin tasks",
-        "crb": {
-          "typical_cost": "$50-150/mo",
-          "risk_level": "low",
-          "typical_benefit": "10+ hrs/week saved"
-        }
-      },
-      {
-        "capability": "Digital Quoting Tools",
-        "adoption_percentage": 28,
-        "average_outcome": "65% faster quote turnaround",
-        "crb": {
-          "typical_cost": "$80-200/mo",
-          "risk_level": "low",
-          "typical_benefit": "Win 15% more jobs"
-        }
-      },
-      {
-        "capability": "Client Communication Portal",
-        "adoption_percentage": 22,
-        "average_outcome": "60% fewer status update calls",
-        "crb": {
-          "typical_cost": "$50-100/mo",
-          "risk_level": "low",
-          "typical_benefit": "Higher client satisfaction"
-        }
-      },
-      {
-        "capability": "Automated Lead Capture",
-        "adoption_percentage": 18,
-        "average_outcome": "40% higher conversion rate",
-        "crb": {
-          "typical_cost": "$0-50/mo",
-          "risk_level": "low",
-          "typical_benefit": "Never miss enquiries"
-        }
-      }
+      {"metric": "Law firms using AI time capture", "value": "23%", "source": "Clio Legal Trends 2025"},
+      {"metric": "Productivity gain from AI drafting", "value": "30-40%", "source": "Thomson Reuters Legal AI Study"},
+      {"metric": "Revenue recovered through better time capture", "value": "10-15%", "source": "Legal Tech News 2025"}
     ],
     "opportunity_map": {
-      "emerging": ["AI-assisted project estimation from plans", "Predictive scheduling with weather", "Drone site surveys"],
-      "growing": ["Digital quoting tools", "Client communication portals", "Automated invoicing", "Lead capture automation"],
-      "established": ["Accounting software (Xero)", "Basic scheduling", "Email communication"],
-      "best_fit": "growing",
-      "rationale": "As a 2-person team with solid client relationships, you're perfectly positioned to adopt 'growing' technologies. These tools are proven, affordable, and designed for small trade businesses. Skip the 'emerging' tech for now - it's overkill for your scale."
+      "high_impact_low_effort": ["AI time capture", "Email drafting assistance"],
+      "high_impact_high_effort": ["Contract review AI", "Knowledge management"],
+      "low_impact_low_effort": ["Meeting scheduling automation"],
+      "low_impact_high_effort": ["Custom practice management"]
     },
     "social_proof": [
-      {
-        "quote": "We went from 3-hour quotes to 45-minute quotes. Last month we won 3 extra jobs just because we responded faster than competitors.",
-        "company_description": "Wellington Renovation Co - 4 person team",
-        "outcome": "65% faster quoting",
-        "industry": "construction"
-      },
-      {
-        "quote": "The client portal eliminated 'where's my update?' calls entirely. Clients love seeing progress photos and knowing exactly when we'll be on-site.",
-        "company_description": "Auckland Deck Builders - 2 person team",
-        "outcome": "Zero status calls",
-        "industry": "construction"
-      },
-      {
-        "quote": "I used to lose leads because I couldn't reply fast enough when on a job. Now every enquiry gets an instant response, and I follow up properly.",
-        "company_description": "Waikato Home Repairs - Solo operator",
-        "outcome": "40% more conversions",
-        "industry": "construction"
-      }
+      {"quote": "We recovered $180K in the first year just from better time capture", "source": "Managing Partner, 25-person law firm"},
+      {"quote": "AI drafting cut our NDA turnaround from 2 days to 2 hours", "source": "Corporate Partner, Amsterdam"}
     ]
   },
   "automation_summary": {
     "stack_assessment": {
       "tools": [
-        {"name": "Xero", "slug": "xero", "api_score": 5, "category": "Accounting"},
-        {"name": "Google Workspace", "slug": "google-workspace", "api_score": 5, "category": "Productivity"},
-        {"name": "Excel/Sheets", "slug": "excel", "api_score": 3, "category": "Operations"}
+        {"name": "Clio Manage", "slug": "clio", "api_score": 8, "category": "Practice Management"},
+        {"name": "Microsoft 365", "slug": "microsoft-365", "api_score": 10, "category": "Productivity"},
+        {"name": "Xero", "slug": "xero", "api_score": 8, "category": "Accounting"},
+        {"name": "SharePoint", "slug": "sharepoint", "api_score": 9, "category": "Document Management"}
       ],
-      "average_score": 4.3,
-      "verdict": "good_foundation",
-      "verdict_text": "Good Foundation - Your existing tools integrate well"
+      "average_score": 8.75,
+      "verdict": "strong_foundation",
+      "verdict_text": "Your existing tools have excellent API support, making AI integration straightforward."
     },
     "opportunities": [
-      {
-        "finding_id": "f1",
-        "title": "AI-Assisted Quote Generation",
-        "impact_monthly": 2210,
-        "diy_effort_hours": 8,
-        "approach": "Connect",
-        "tools_involved": ["Buildxact", "Xero"],
-        "category": "Operations"
-      },
-      {
-        "finding_id": "f2",
-        "title": "Client Progress Portal",
-        "impact_monthly": 1127,
-        "diy_effort_hours": 6,
-        "approach": "Connect",
-        "tools_involved": ["Fergus", "Google Calendar"],
-        "category": "Customer Experience"
-      },
-      {
-        "finding_id": "f4",
-        "title": "Lead Auto-Response",
-        "impact_monthly": 1000,
-        "diy_effort_hours": 3,
-        "approach": "Connect",
-        "tools_involved": ["HubSpot", "Website"],
-        "category": "Sales"
-      },
-      {
-        "finding_id": "f5",
-        "title": "Invoice Automation",
-        "impact_monthly": 667,
-        "diy_effort_hours": 2,
-        "approach": "Connect",
-        "tools_involved": ["Fergus", "Xero"],
-        "category": "Finance"
-      },
-      {
-        "finding_id": "f3",
-        "title": "Smart Job Scheduling",
-        "impact_monthly": 921,
-        "diy_effort_hours": 4,
-        "approach": "Either",
-        "tools_involved": ["Fergus", "Google Calendar"],
-        "category": "Operations"
-      }
+      {"finding_id": "f1", "title": "AI Time Capture", "impact_monthly": 5400, "diy_effort_hours": 8, "approach": "Connect", "tools_involved": ["Smokeball", "Clio"], "category": "billing"},
+      {"finding_id": "f2", "title": "Document Drafting AI", "impact_monthly": 3250, "diy_effort_hours": 4, "approach": "Connect", "tools_involved": ["Microsoft Copilot", "Word"], "category": "productivity"},
+      {"finding_id": "f3", "title": "Client Intake Automation", "impact_monthly": 1560, "diy_effort_hours": 12, "approach": "Connect", "tools_involved": ["Clio Grow", "Clio Manage"], "category": "client_experience"}
     ],
-    "total_monthly_impact": 5925,
-    "total_diy_hours": 23,
-    "connect_count": 4,
+    "total_monthly_impact": 10210,
+    "total_diy_hours": 24,
+    "connect_count": 3,
     "replace_count": 0,
-    "either_count": 1,
+    "either_count": 0,
     "next_steps": {
       "tier": "full",
-      "headline": "Ready to Transform Your Operations",
-      "message": "With $71K+ annual value potential and only 23 hours of DIY setup, Friendly Build & Fix is well-positioned to automate key workflows. Start with quoting automation for the biggest immediate impact.",
-      "cta_text": "Get Your Full Implementation Plan",
-      "cta_url": "/checkout"
+      "headline": "Ready to implement",
+      "message": "Your stack is well-suited for AI integration. Start with time capture for fastest ROI.",
+      "cta_text": "Schedule Implementation Call",
+      "cta_url": "/contact"
     }
   },
   "methodology_notes": {
-    "data_sources": ["Company website analysis", "NZ construction industry benchmarks", "Trade software adoption studies", "NZCB member surveys"],
-    "confidence_factors": ["Clear operational workflows identified", "NZ-specific tools well-suited to business", "Strong existing client relationships to build on"],
-    "limitations": ["Revenue projections based on industry averages - actual results vary", "Implementation assumes consistent usage of new tools", "ROI assumes current hourly rates maintained"]
+    "data_sources": ["Client interview", "Practice management data", "Industry benchmarks"],
+    "assumptions": ["18 fee earners", "Average blended rate 200/hour", "70% utilization target"],
+    "confidence_level": "high",
+    "last_updated": "2026-01-26"
   }
 }

@@ -358,5 +358,27 @@
       "why_avoid": "Candidates want human connection for career decisions",
       "better_approach": "AI for initial screening, humans for relationship building"
     }
+  ],
+  "not_recommended": [
+    {
+      "name": "Building custom ATS from scratch",
+      "reason": "Years of development; compliance requirements (GDPR, EEO); candidates expect standardized UX",
+      "alternative": "Use established ATS like Bullhorn, JobAdder, or Recruitee with API integrations"
+    },
+    {
+      "name": "Fully automated candidate rejections",
+      "reason": "Damages employer brand and agency reputation; candidates share experiences",
+      "alternative": "AI drafts personalized rejections, human reviews before sending for final rounds"
+    },
+    {
+      "name": "Custom AI matching for small agencies",
+      "reason": "Need large dataset to train effectively; enterprise AI tools have years of data",
+      "alternative": "Use HireEZ, SeekOut, or ATS built-in matching until doing 100+ placements/month"
+    },
+    {
+      "name": "Replacing phone screens entirely with chatbots",
+      "reason": "Candidates evaluating career moves want human connection; high-value roles need human qualification",
+      "alternative": "Chatbots for FAQ and scheduling, human conversations for qualification and selling opportunity"
+    }
   ]
 }

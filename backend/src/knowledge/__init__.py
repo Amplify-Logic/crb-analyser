@@ -16,6 +16,8 @@ from pathlib import Path
 from typing import Dict, Any, Optional, List
 from datetime import datetime
 
+from src.utils.quiz_utils import get_monthly_budget_range
+
 logger = logging.getLogger(__name__)
 
 KNOWLEDGE_BASE_PATH = Path(__file__).parent
@@ -39,6 +41,7 @@ VENDOR_CATEGORIES = [
     "hr_payroll",
     "marketing",
     "project_management",
+    "scheduling",
 ]
 
 AI_TOOLS_TYPES = [
@@ -615,6 +618,81 @@ def get_vendor_recommendations(industry: str, category: str = None) -> List[Dict
         all_vendors.extend(cat.get("vendors", []))
 
     return all_vendors
+
+
+def get_vendors_within_budget(
+    industry: str,
+    quiz_answers: Dict[str, Any],
+    category: str = None,
+    include_over_budget: bool = True,
+) -> List[Dict]:
+    """
+    Get vendor recommendations filtered by user's budget from quiz answers.
+
+    Args:
+        industry: Industry name
+        quiz_answers: Quiz answers dict containing budget fields
+        category: Optional category filter
+        include_over_budget: If True, include over-budget vendors but mark them
+
+    Returns:
+        List of vendors sorted by budget fit, with budget_fit field added
+    """
+    all_vendors = get_vendor_recommendations(industry, category)
+    if not all_vendors:
+        return []
+
+    # Get budget range from quiz answers
+    min_budget, max_budget = get_monthly_budget_range(quiz_answers)
+
+    filtered_vendors = []
+    over_budget_vendors = []
+
+    for vendor in all_vendors:
+        # Get vendor price (try multiple pricing fields)
+        pricing = vendor.get("pricing", {})
+        monthly_price = (
+            pricing.get("starting_price") or
+            pricing.get("monthly_price") or
+            vendor.get("monthly_price") or
+            vendor.get("starting_price") or
+            0
+        )
+
+        # Determine budget fit
+        if monthly_price <= 0:
+            # No price info - include with warning
+            vendor_copy = vendor.copy()
+            vendor_copy["budget_fit"] = "unknown"
+            vendor_copy["budget_note"] = "Pricing not available"
+            filtered_vendors.append(vendor_copy)
+        elif monthly_price <= max_budget:
+            # Within budget
+            vendor_copy = vendor.copy()
+            if monthly_price <= min_budget:
+                vendor_copy["budget_fit"] = "comfortable"
+            elif monthly_price <= max_budget * 0.7:
+                vendor_copy["budget_fit"] = "good"
+            else:
+                vendor_copy["budget_fit"] = "stretch"
+            filtered_vendors.append(vendor_copy)
+        else:
+            # Over budget
+            if include_over_budget:
+                vendor_copy = vendor.copy()
+                vendor_copy["budget_fit"] = "over_budget"
+                vendor_copy["budget_note"] = f"€{monthly_price}/mo exceeds budget (max €{max_budget}/mo)"
+                over_budget_vendors.append(vendor_copy)
+
+    # Sort within-budget vendors by fit (comfortable first)
+    fit_order = {"comfortable": 0, "good": 1, "stretch": 2, "unknown": 3}
+    filtered_vendors.sort(key=lambda v: fit_order.get(v.get("budget_fit", "unknown"), 4))
+
+    # Add over-budget at the end if requested
+    if include_over_budget:
+        filtered_vendors.extend(over_budget_vendors)
+
+    return filtered_vendors
 
 
 # Quick access functions for common queries

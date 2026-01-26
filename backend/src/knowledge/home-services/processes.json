@@ -144,5 +144,76 @@
     "Managing multiple job types and skill requirements",
     "Truck inventory and parts availability",
     "After-hours emergency calls"
+  ],
+  "pain_points": [
+    {
+      "id": "missed-calls",
+      "name": "Missed Calls & Lost Leads",
+      "description": "Potential customers call during peak times or after hours and don't get answered",
+      "impact": "30-50% of inbound calls go unanswered, each missed call worth €200-500 average ticket",
+      "current_solutions": "Voicemail, answering services",
+      "ai_potential": "AI call answering and booking captures 90%+ of calls 24/7"
+    },
+    {
+      "id": "technician-efficiency",
+      "name": "Technician Route Inefficiency",
+      "description": "Poor scheduling leads to excessive drive time between jobs",
+      "impact": "20-30% of technician time spent driving instead of billing",
+      "current_solutions": "Manual scheduling, basic routing",
+      "ai_potential": "AI-optimized routing can reduce drive time by 15-25%"
+    },
+    {
+      "id": "seasonal-demand",
+      "name": "Seasonal Demand Fluctuations",
+      "description": "HVAC and seasonal services have extreme peaks and valleys",
+      "impact": "Overstaffed in slow seasons, overwhelmed in busy seasons",
+      "current_solutions": "Temporary staffing, overtime",
+      "ai_potential": "Membership programs smooth demand; AI forecasting improves staffing"
+    },
+    {
+      "id": "quote-conversion",
+      "name": "Low Quote Conversion Rate",
+      "description": "Estimates don't convert to booked jobs",
+      "impact": "Only 40-60% of quotes convert to jobs",
+      "current_solutions": "Sales training, follow-up calls",
+      "ai_potential": "Good-better-best options and financing increase conversion by 20-30%"
+    }
+  ],
+  "key_metrics": [
+    {
+      "id": "revenue-per-tech",
+      "name": "Revenue per Technician",
+      "description": "Average revenue generated per technician per day/month",
+      "benchmark": "€1,000-2,000/day or €15,000-30,000/month",
+      "how_to_improve": "Reduce drive time, increase average ticket, better scheduling"
+    },
+    {
+      "id": "average-ticket",
+      "name": "Average Ticket/Invoice",
+      "description": "Average revenue per completed job",
+      "benchmark": "€300-500 for service calls, €3,000-15,000 for installations",
+      "how_to_improve": "Good-better-best options, financing, membership upsells"
+    },
+    {
+      "id": "booking-rate",
+      "name": "Call-to-Booking Rate",
+      "description": "Percentage of inbound calls that convert to booked appointments",
+      "benchmark": "70-85% is good, <60% needs improvement",
+      "how_to_improve": "CSR training, AI call answering, online booking"
+    },
+    {
+      "id": "membership-rate",
+      "name": "Membership/Service Agreement Rate",
+      "description": "Percentage of customers on recurring maintenance plans",
+      "benchmark": "15-25% of customer base on agreements",
+      "how_to_improve": "Technician incentives, automated renewals, value demonstration"
+    },
+    {
+      "id": "tech-utilization",
+      "name": "Technician Utilization Rate",
+      "description": "Percentage of technician time spent on billable work vs driving/waiting",
+      "benchmark": "65-75% utilization is excellent",
+      "how_to_improve": "Route optimization, dispatch software, reduce callbacks"
+    }
   ]
 }

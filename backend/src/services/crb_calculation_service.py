@@ -264,7 +264,14 @@ class CRBCalculationService:
         monthly_cost: float,
         months: int = 12
     ) -> ROIAnalysis:
-        """Calculate ROI with conservative/expected/optimistic scenarios."""
+        """
+        Calculate ROI with conservative/expected/optimistic scenarios.
+
+        Uses canonical formulas from roi_calculator.py:
+        - net_annual = yearly_savings - yearly_cost
+        - first_year_investment = implementation_cost + yearly_cost
+        - roi_percentage = (net_annual / first_year_investment) × 100
+        """
         if implementation_cost <= 0 and monthly_cost <= 0:
             return ROIAnalysis(
                 conservative=0,
@@ -275,29 +282,36 @@ class CRBCalculationService:
                 sensitivity_note="No cost data - cannot calculate ROI"
             )
 
-        total_benefit = monthly_benefit * months
-        total_cost = implementation_cost + (monthly_cost * months)
+        # Annual values
+        yearly_benefit = monthly_benefit * 12
+        yearly_cost = monthly_cost * 12
 
-        if total_cost <= 0:
+        # Canonical: first_year_investment = implementation_cost + yearly_cost
+        first_year_investment = implementation_cost + yearly_cost
+
+        if first_year_investment <= 0:
             return ROIAnalysis(
                 conservative=0,
                 expected=0,
                 optimistic=0,
                 payback_months_conservative=999,
                 payback_months_expected=999,
-                sensitivity_note="Zero cost - ROI undefined"
+                sensitivity_note="Zero investment - ROI undefined"
             )
 
-        # Expected ROI
-        expected_roi = ((total_benefit - total_cost) / total_cost) * 100
+        # Canonical: net_annual = yearly_benefit - yearly_cost
+        net_annual = yearly_benefit - yearly_cost
+
+        # Canonical: ROI = net_annual / first_year_investment × 100
+        expected_roi = (net_annual / first_year_investment) * 100
 
         # Conservative (70% of expected benefit)
-        conservative_benefit = total_benefit * 0.7
-        conservative_roi = ((conservative_benefit - total_cost) / total_cost) * 100
+        conservative_net = (yearly_benefit * 0.7) - yearly_cost
+        conservative_roi = (conservative_net / first_year_investment) * 100
 
         # Optimistic (130% of expected benefit)
-        optimistic_benefit = total_benefit * 1.3
-        optimistic_roi = ((optimistic_benefit - total_cost) / total_cost) * 100
+        optimistic_net = (yearly_benefit * 1.3) - yearly_cost
+        optimistic_roi = (optimistic_net / first_year_investment) * 100
 
         # Payback calculation
         net_monthly = monthly_benefit - monthly_cost

@@ -1,0 +1,631 @@
+{
+  "id": "sample-professional-services",
+  "tier": "full",
+  "status": "completed",
+  "created_at": "2026-01-26T10:00:00Z",
+  "company_profile": {
+    "company_name": "Morrison & Clarke Legal",
+    "industry": "professional-services",
+    "industry_display": "Professional Services - Law Firm",
+    "team_size": "11-50 employees",
+    "tech_level": "Moderate - Clio for practice management, basic automation",
+    "budget_range": "500-1000/month",
+    "existing_tools": [
+      "Clio Manage",
+      "Microsoft 365",
+      "Xero",
+      "SharePoint"
+    ],
+    "location": "Amsterdam, Netherlands",
+    "website": "morrisonclarke.nl",
+    "description": "Boutique commercial law firm with 18 fee earners specializing in corporate M&A, employment law, and commercial contracts. Known for responsive service and practical advice. Primarily serves mid-market Dutch and international companies."
+  },
+  "executive_summary": {
+    "ai_readiness_score": 78,
+    "customer_value_score": 8,
+    "business_health_score": 9,
+    "key_insight": "Morrison & Clarke has strong client relationships but partners and associates lose 15-20% of billable time to admin tasks that AI can automate. Time tracking capture alone is leaving an estimated 80,000-120,000/year in unbilled work. The firm is well-positioned for AI adoption given existing Clio infrastructure.",
+    "total_value_potential": {
+      "min": 185000,
+      "max": 295000,
+      "projection_years": 3
+    },
+    "top_opportunities": [
+      {
+        "title": "AI-Powered Time Capture",
+        "value_potential": "40K-65K/year",
+        "time_horizon": "short"
+      },
+      {
+        "title": "Document Drafting Automation",
+        "value_potential": "25K-40K/year",
+        "time_horizon": "short"
+      },
+      {
+        "title": "Client Intake & Conflict Checking",
+        "value_potential": "15K-25K/year",
+        "time_horizon": "mid"
+      },
+      {
+        "title": "Contract Review AI",
+        "value_potential": "20K-35K/year",
+        "time_horizon": "mid"
+      }
+    ],
+    "not_recommended": [
+      {
+        "title": "Enterprise Document Management (iManage/NetDocuments)",
+        "reason": "At 18 fee earners, these systems cost 500-1500/user/month and require dedicated IT. SharePoint + Clio integration is sufficient for your scale."
+      },
+      {
+        "title": "Full AI-Autonomous Drafting",
+        "reason": "Professional liability requires human review on all client work. Use AI for first drafts with mandatory lawyer review."
+      },
+      {
+        "title": "Custom Billing System Build",
+        "reason": "Trust accounting and LEDES compliance are complex. Clio handles this well - don't rebuild."
+      }
+    ],
+    "recommended_investment": {
+      "year_1_min": 15000,
+      "year_1_max": 28000
+    },
+    "verdict": {
+      "recommendation": "proceed",
+      "headline": "Strong Fit for AI Enhancement",
+      "subheadline": "Your existing Clio infrastructure provides an excellent foundation for AI tools",
+      "reasoning": [
+        "Lost billable time is your biggest revenue leak - AI time capture has immediate ROI",
+        "Document-heavy practice (M&A, contracts) is ideal for AI drafting assistance",
+        "Existing Clio setup means integrations are straightforward",
+        "Partner/associate tech comfort is above average for legal sector"
+      ],
+      "when_to_revisit": "Review after 6 months - if utilization increases 10%+, consider advanced contract AI",
+      "recommended_approach": [
+        "Start with AI time capture (biggest immediate ROI)",
+        "Add document drafting AI in month 2-3",
+        "Implement automated conflict checking and intake in month 4-6",
+        "Evaluate contract review AI based on M&A deal flow"
+      ],
+      "confidence": "high",
+      "color": "green"
+    }
+  },
+  "value_summary": {
+    "value_saved": {
+      "subtotal": {
+        "min": 80000,
+        "max": 130000
+      },
+      "hours_per_week": 35,
+      "hourly_rate": 185
+    },
+    "value_created": {
+      "subtotal": {
+        "min": 25000,
+        "max": 45000
+      }
+    },
+    "total": {
+      "min": 105000,
+      "max": 175000
+    }
+  },
+  "findings": [
+    {
+      "id": "f1",
+      "title": "10-15% of Billable Time Goes Unrecorded",
+      "description": "Partners and associates routinely forget to capture all time spent on client matters - quick calls, email review, brief research. At average billable rates of 250/hour across 18 fee earners, this represents 80K-120K in lost annual revenue. Industry best practice is AI-assisted time capture from calendar, email, and document activity.",
+      "category": "billing",
+      "customer_value_score": 6,
+      "business_health_score": 10,
+      "value_saved": {
+        "hours_per_week": 12,
+        "hourly_rate": 250,
+        "annual_savings": 65000
+      },
+      "confidence": "high",
+      "sources": [
+        "Legal industry benchmarks - Clio Legal Trends Report 2025",
+        "Time leakage studies - Thomson Reuters"
+      ],
+      "time_horizon": "short"
+    },
+    {
+      "id": "f2",
+      "title": "Document Drafting Takes 2-3x Longer Than Necessary",
+      "description": "Associates spend 3-5 hours drafting standard documents (NDAs, employment contracts, shareholder agreements) that could start from AI-generated first drafts in 15-30 minutes. With 40+ such documents monthly, junior time could be better spent on higher-value analysis.",
+      "category": "productivity",
+      "customer_value_score": 7,
+      "business_health_score": 8,
+      "value_saved": {
+        "hours_per_week": 10,
+        "hourly_rate": 150,
+        "annual_savings": 39000
+      },
+      "confidence": "high",
+      "sources": [
+        "Document workflow analysis",
+        "Legal AI adoption benchmarks"
+      ],
+      "time_horizon": "short"
+    },
+    {
+      "id": "f3",
+      "title": "Client Intake Takes 2-4 Hours Per New Matter",
+      "description": "New client onboarding involves manual conflict checks, engagement letter drafting, KYC collection, and multiple email exchanges. Competitors using automated intake convert leads 40% faster. Your current process occasionally loses prospects to faster-responding firms.",
+      "category": "client_experience",
+      "customer_value_score": 9,
+      "business_health_score": 7,
+      "value_saved": {
+        "hours_per_week": 6,
+        "hourly_rate": 120,
+        "annual_savings": 18720
+      },
+      "value_created": {
+        "description": "Faster intake improves conversion of new prospects",
+        "potential_revenue": 25000
+      },
+      "confidence": "medium",
+      "sources": [
+        "Client intake timing analysis",
+        "Legal services conversion studies"
+      ],
+      "time_horizon": "mid"
+    },
+    {
+      "id": "f4",
+      "title": "Contract Review in M&A Deals Is Labor-Intensive",
+      "description": "Due diligence on M&A transactions requires reviewing hundreds of contracts for key terms, risks, and anomalies. Associates spend 60-80% of their time on mechanical review tasks that AI can accelerate by 50-70%.",
+      "category": "productivity",
+      "customer_value_score": 8,
+      "business_health_score": 8,
+      "value_saved": {
+        "hours_per_week": 8,
+        "hourly_rate": 175,
+        "annual_savings": 36400
+      },
+      "confidence": "medium",
+      "sources": [
+        "M&A deal flow analysis",
+        "Contract AI benchmarks - Luminance, Kira Systems case studies"
+      ],
+      "time_horizon": "mid"
+    },
+    {
+      "id": "f5",
+      "title": "Email Drafting and Inbox Management Consumes Partner Time",
+      "description": "Partners spend 1-2 hours daily on email - drafting responses, summarizing threads for colleagues, and triaging inbox. AI email assistance can draft responses for review and summarize long chains, saving 30-40% of email time.",
+      "category": "productivity",
+      "customer_value_score": 7,
+      "business_health_score": 7,
+      "value_saved": {
+        "hours_per_week": 5,
+        "hourly_rate": 300,
+        "annual_savings": 39000
+      },
+      "confidence": "high",
+      "sources": [
+        "Partner time allocation surveys",
+        "Microsoft Copilot adoption studies"
+      ],
+      "time_horizon": "short"
+    }
+  ],
+  "recommendations": [
+    {
+      "id": "r1",
+      "title": "Implement AI-Powered Time Capture",
+      "description": "Deploy AI time tracking that automatically captures billable time from calendar events, email activity, and document work. System suggests time entries for lawyer approval, recovering the 10-15% of billable hours currently lost.",
+      "why_it_matters": {
+        "customer_value": "More accurate billing means clients pay for actual work done - no more uncomfortable conversations about missed time or estimates.",
+        "business_health": "Immediate revenue recovery of 80K-120K annually. Utilization visibility helps identify capacity issues."
+      },
+      "priority": "high",
+      "crb_analysis": {
+        "cost": {
+          "short_term": {
+            "setup": 2000,
+            "monthly": 450
+          },
+          "mid_term": {
+            "monthly": 450
+          },
+          "long_term": {
+            "monthly": 450
+          },
+          "total": 18200
+        },
+        "risk": [
+          {
+            "description": "Privacy concerns from lawyers about activity monitoring",
+            "probability": "medium",
+            "impact": 3,
+            "mitigation": "Position as 'time suggestion' not 'surveillance' - lawyers approve all entries"
+          },
+          {
+            "description": "Integration with existing Clio may require setup time",
+            "probability": "low",
+            "impact": 2,
+            "mitigation": "Smokeball and Timeero have certified Clio integrations"
+          }
+        ],
+        "benefit": {
+          "short_term": {
+            "annual": 65000
+          },
+          "mid_term": {
+            "annual": 65000
+          },
+          "long_term": {
+            "annual": 65000
+          },
+          "total": 195000
+        }
+      },
+      "options": {
+        "off_the_shelf": {
+          "name": "Clio + Time Tracking Discipline",
+          "vendor": "Clio",
+          "monthly_cost": 0,
+          "implementation_weeks": 0,
+          "pros": [
+            "No additional cost",
+            "Already in your stack"
+          ],
+          "cons": [
+            "Relies on behavior change",
+            "No AI assistance",
+            "Doesn't capture forgotten time"
+          ]
+        },
+        "best_in_class": {
+          "name": "Smokeball",
+          "vendor": "Smokeball",
+          "monthly_cost": 89,
+          "implementation_weeks": 2,
+          "pros": [
+            "Automatic time capture from all activity",
+            "AI-suggested time entries",
+            "Integrates with Clio",
+            "Per-user pricing scales with firm"
+          ],
+          "cons": [
+            "Requires migration planning",
+            "Per-user cost adds up"
+          ]
+        },
+        "custom_solution": {
+          "approach": "Build internal time capture using Microsoft Graph API + Claude for time suggestions",
+          "estimated_cost": {
+            "min": 15000,
+            "max": 35000
+          },
+          "implementation_weeks": 12,
+          "pros": [
+            "Fully customized to your workflow",
+            "No ongoing per-user fees"
+          ],
+          "cons": [
+            "Significant development time",
+            "Maintenance burden",
+            "No vendor support"
+          ]
+        }
+      },
+      "our_recommendation": "best_in_class",
+      "recommendation_rationale": "Smokeball's automatic time capture is purpose-built for law firms and has proven ROI. The 89/user/month pays for itself if each lawyer captures just 2 additional hours monthly. Their Clio integration means you keep your existing workflows.",
+      "roi_percentage": 357,
+      "payback_months": 3,
+      "assumptions": [
+        "18 fee earners",
+        "10% of billable time currently unrecorded",
+        "Average billable rate: 250/hour",
+        "System recovers 50% of lost time"
+      ]
+    },
+    {
+      "id": "r2",
+      "title": "Deploy AI Document Drafting Assistant",
+      "description": "Implement AI-powered first draft generation for standard legal documents. Associates describe what they need, AI produces a draft based on your templates and precedents, associate reviews and refines.",
+      "why_it_matters": {
+        "customer_value": "Faster turnaround on routine documents. Clients get drafts same-day instead of 2-3 day wait.",
+        "business_health": "Associates spend time on analysis and client advice rather than formatting. Enables more matters with same headcount."
+      },
+      "priority": "high",
+      "crb_analysis": {
+        "cost": {
+          "short_term": {
+            "setup": 5000,
+            "monthly": 800
+          },
+          "mid_term": {
+            "monthly": 800
+          },
+          "long_term": {
+            "monthly": 800
+          },
+          "total": 33800
+        },
+        "risk": [
+          {
+            "description": "AI may produce errors requiring careful review",
+            "probability": "high",
+            "impact": 4,
+            "mitigation": "Mandatory lawyer review on ALL AI-drafted documents - never send without human approval"
+          },
+          {
+            "description": "Client confidentiality with AI services",
+            "probability": "low",
+            "impact": 5,
+            "mitigation": "Use enterprise-grade AI with data processing agreements (Claude for Work, Microsoft Copilot)"
+          }
+        ],
+        "benefit": {
+          "short_term": {
+            "annual": 39000
+          },
+          "mid_term": {
+            "annual": 39000
+          },
+          "long_term": {
+            "annual": 39000
+          },
+          "total": 117000
+        }
+      },
+      "options": {
+        "off_the_shelf": {
+          "name": "Microsoft Copilot for M365",
+          "vendor": "Microsoft",
+          "monthly_cost": 28,
+          "implementation_weeks": 1,
+          "pros": [
+            "Already integrated with Word/Outlook",
+            "GDPR compliant",
+            "Low per-user cost"
+          ],
+          "cons": [
+            "Not legal-specific",
+            "Limited template learning"
+          ]
+        },
+        "best_in_class": {
+          "name": "Documate + Claude API",
+          "vendor": "Documate",
+          "monthly_cost": 299,
+          "implementation_weeks": 4,
+          "pros": [
+            "Legal-specific document automation",
+            "Learns from your templates",
+            "Client intake integration"
+          ],
+          "cons": [
+            "Higher setup investment",
+            "Requires template configuration"
+          ]
+        },
+        "custom_solution": {
+          "approach": "Build custom drafting system using Claude API with firm precedent library",
+          "estimated_cost": {
+            "min": 25000,
+            "max": 50000
+          },
+          "implementation_weeks": 16,
+          "pros": [
+            "Fully trained on your documents",
+            "Deep integration with systems"
+          ],
+          "cons": [
+            "Significant development time",
+            "Ongoing model refinement needed"
+          ]
+        }
+      },
+      "our_recommendation": "off_the_shelf",
+      "recommendation_rationale": "Start with Microsoft Copilot since you already have M365. At 28/user/month, it's low-risk to pilot. If results are good after 3 months, evaluate Documate for more legal-specific features. Don't over-engineer initially.",
+      "roi_percentage": 215,
+      "payback_months": 4,
+      "assumptions": [
+        "40+ standard documents drafted monthly",
+        "Current drafting time: 3 hours average",
+        "AI reduces to 1 hour average",
+        "Associate rate: 150/hour"
+      ]
+    },
+    {
+      "id": "r3",
+      "title": "Automate Client Intake & Conflict Checking",
+      "description": "Implement digital intake forms, automated conflict-of-interest checking against your client database, and e-signature for engagement letters. New clients can onboard in hours instead of days.",
+      "why_it_matters": {
+        "customer_value": "Prospects experience modern, responsive service from first contact. Faster engagement means they can proceed with their matter sooner.",
+        "business_health": "Reduce intake admin time by 70%. Win more competitive pitches by responding first."
+      },
+      "priority": "medium",
+      "crb_analysis": {
+        "cost": {
+          "short_term": {
+            "setup": 3000,
+            "monthly": 350
+          },
+          "mid_term": {
+            "monthly": 350
+          },
+          "long_term": {
+            "monthly": 350
+          },
+          "total": 15600
+        },
+        "risk": [
+          {
+            "description": "Automated conflict checks may miss complex relationships",
+            "probability": "low",
+            "impact": 5,
+            "mitigation": "AI flags potential conflicts for partner review - never auto-clear"
+          },
+          {
+            "description": "Clients may prefer personal contact over digital forms",
+            "probability": "medium",
+            "impact": 2,
+            "mitigation": "Offer both options - digital for speed, phone for preference"
+          }
+        ],
+        "benefit": {
+          "short_term": {
+            "annual": 18720
+          },
+          "mid_term": {
+            "annual": 25000
+          },
+          "long_term": {
+            "annual": 25000
+          },
+          "total": 68720
+        }
+      },
+      "options": {
+        "off_the_shelf": {
+          "name": "Clio Grow",
+          "vendor": "Clio",
+          "monthly_cost": 49,
+          "implementation_weeks": 2,
+          "pros": [
+            "Native Clio integration",
+            "Built-in conflict checking",
+            "E-signature included"
+          ],
+          "cons": [
+            "Additional Clio cost",
+            "Limited customization"
+          ]
+        },
+        "best_in_class": {
+          "name": "Lawmatics",
+          "vendor": "Lawmatics",
+          "monthly_cost": 199,
+          "implementation_weeks": 3,
+          "pros": [
+            "Powerful automation workflows",
+            "Marketing integration",
+            "Advanced reporting"
+          ],
+          "cons": [
+            "Higher price",
+            "Learning curve"
+          ]
+        },
+        "custom_solution": {
+          "approach": "Build intake portal using Typeform + Zapier + Clio API",
+          "estimated_cost": {
+            "min": 5000,
+            "max": 12000
+          },
+          "implementation_weeks": 6,
+          "pros": [
+            "Fully branded experience",
+            "Flexible workflow"
+          ],
+          "cons": [
+            "Manual conflict check integration",
+            "Maintenance burden"
+          ]
+        }
+      },
+      "our_recommendation": "off_the_shelf",
+      "recommendation_rationale": "Clio Grow is the natural choice since you're already on Clio Manage. Native integration means data flows automatically, conflict checking works against your existing client database, and there's no new system to learn. At 49/user/month it's cost-effective for your firm size.",
+      "roi_percentage": 340,
+      "payback_months": 5,
+      "assumptions": [
+        "20-30 new matters monthly",
+        "Current intake time: 3 hours average",
+        "Automated intake reduces to 45 minutes",
+        "15% improvement in prospect conversion"
+      ]
+    }
+  ],
+  "playbook": {
+    "phases": [
+      {
+        "name": "Phase 1: Billing & Time Capture",
+        "duration": "Months 1-2",
+        "priorities": [
+          "Deploy Smokeball for AI time capture",
+          "Integrate with existing Clio workflow",
+          "Train fee earners on time suggestion approval",
+          "Measure captured time vs. baseline"
+        ],
+        "investment": "2,000 setup + 1,600/month",
+        "expected_impact": "10-15% increase in recorded billable time"
+      },
+      {
+        "name": "Phase 2: Document Productivity",
+        "duration": "Months 3-4",
+        "priorities": [
+          "Roll out Microsoft Copilot to all fee earners",
+          "Create AI prompts for common document types",
+          "Establish review workflow for AI-drafted documents",
+          "Track time savings on standard documents"
+        ],
+        "investment": "500/month for 18 users",
+        "expected_impact": "50% reduction in first draft time"
+      },
+      {
+        "name": "Phase 3: Client Experience",
+        "duration": "Months 5-6",
+        "priorities": [
+          "Implement Clio Grow for client intake",
+          "Configure conflict check automation",
+          "Create digital engagement letter templates",
+          "Train staff on new intake workflow"
+        ],
+        "investment": "3,000 setup + 350/month",
+        "expected_impact": "70% faster client onboarding"
+      }
+    ],
+    "total_investment": {
+      "setup": 5500,
+      "monthly_recurring": 2450,
+      "year_1_total": 34900
+    },
+    "expected_annual_value": {
+      "min": 105000,
+      "max": 175000
+    },
+    "roi_summary": "3-5x return on investment in year 1"
+  },
+  "quick_wins": [
+    {
+      "title": "Enable Copilot for Partners",
+      "description": "Turn on Microsoft Copilot for the 5 partners immediately. Focus on email drafting and meeting summaries.",
+      "time_to_implement": "1 day",
+      "cost": "140/month",
+      "impact": "Save 3-5 hours/week across partners on email and admin"
+    },
+    {
+      "title": "Implement time entry reminders",
+      "description": "Set up automated daily reminder at 5pm for all fee earners to enter time. Simple behavior change before AI tools.",
+      "time_to_implement": "30 minutes",
+      "cost": "0",
+      "impact": "Capture 2-3 additional hours per person weekly"
+    },
+    {
+      "title": "Dormant client outreach campaign",
+      "description": "Export clients inactive 12-24 months. Send AI-personalized outreach about regulatory updates relevant to their sector.",
+      "time_to_implement": "1 day",
+      "cost": "100",
+      "impact": "Re-engage 5-10 past clients, direct revenue from repeat matters"
+    }
+  ],
+  "metadata": {
+    "generation_model": "claude-opus-4-5-20251101",
+    "token_usage": {
+      "input": 12500,
+      "output": 8500,
+      "total": 21000
+    },
+    "generation_time_seconds": 45,
+    "human_review_status": "completed",
+    "reviewed_by": "Lars",
+    "review_date": "2026-01-26"
+  }
+}

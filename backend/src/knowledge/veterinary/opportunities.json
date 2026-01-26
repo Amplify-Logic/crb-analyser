@@ -358,5 +358,27 @@
       "why_avoid": "Pet parents are emotionally invested, want human empathy",
       "better_approach": "Automate routine reminders, human updates for health concerns"
     }
+  ],
+  "not_recommended": [
+    {
+      "name": "Custom AI diagnostic imaging for veterinary",
+      "reason": "Regulatory complexity for medical AI; high development cost with liability exposure",
+      "alternative": "Use established vet AI platforms like Signalment or VetAI for imaging support"
+    },
+    {
+      "name": "Building your own practice management system",
+      "reason": "Years of development needed; vet-specific workflows are complex; support burden",
+      "alternative": "Use established PM systems like eVetPractice, Digitail, or AVImark with API integrations"
+    },
+    {
+      "name": "Full AI replacement for emergency triage",
+      "reason": "Liability risk for missed emergencies; pet owners expect human judgment for urgent cases",
+      "alternative": "AI for initial screening and routing, but human vet techs make emergency decisions"
+    },
+    {
+      "name": "Generic CRM instead of vet-specific tools",
+      "reason": "Missing pet records, vaccination tracking, species-specific workflows",
+      "alternative": "Use vet-specific communication tools like Weave, PetDesk, or AllyDVM"
+    }
   ]
 }

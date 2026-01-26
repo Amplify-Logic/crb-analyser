@@ -1039,11 +1039,12 @@
             "limits": null
           }
         ],
-        "starting_price": 60000,
+        "starting_price": null,
         "custom_pricing": true,
         "free_trial_days": null,
         "free_tier": false,
-        "startup_discount": null
+        "startup_discount": null,
+        "pricing_note": "Enterprise pricing starts at approximately $60,000/year (~$5,000/month) based on third-party sources"
       },
       "best_for": [
         "Enterprise companies with high ticket volumes",

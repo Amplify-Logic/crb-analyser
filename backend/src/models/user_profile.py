@@ -9,6 +9,8 @@ from enum import Enum
 from typing import Optional, Dict, Any
 from pydantic import BaseModel, Field
 
+from src.utils.quiz_utils import parse_budget_tier, parse_urgency
+
 
 class CapabilityLevel(str, Enum):
     """Technical capability levels for option scoring."""
@@ -150,15 +152,16 @@ class UserProfile(BaseModel):
         else:
             preference = industry_defaults.get("preference", DEFAULT_PROFILE["preference"])
 
-        # Get budget with fallback
-        budget_str = answers.get("budget_comfort")
-        if budget_str:
+        # Get budget with fallback - use combined budget parser
+        # This prefers budget_for_solutions (more granular) over budget_comfort
+        budget_str = parse_budget_tier(answers)
+        try:
             budget = BudgetTier(budget_str)
-        else:
+        except ValueError:
             budget = industry_defaults.get("budget", DEFAULT_PROFILE["budget"])
 
-        # Get urgency (optional, no default)
-        urgency_str = answers.get("implementation_urgency")
+        # Get urgency (optional) - combines implementation_urgency and implementation_timeline
+        urgency_str = parse_urgency(answers)
         urgency = Urgency(urgency_str) if urgency_str else None
 
         return cls(

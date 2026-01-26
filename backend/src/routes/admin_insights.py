@@ -477,3 +477,211 @@ async def get_dashboard_summary() -> Dict[str, Any]:
             "last_updated": datetime.now().isoformat(),
         }
     }
+
+
+# =============================================================================
+# Product Strategy Insights (from docs/video-insights/)
+# =============================================================================
+
+class ProductInsightSummary(BaseModel):
+    """Summary of a product strategy insight."""
+    filename: str
+    title: str
+    date: str
+    relevance_score: Optional[str] = None
+    tldr: Optional[str] = None
+    immediate_actions: List[Dict[str, Any]] = []
+    watch_list: List[str] = []
+    file_path: str
+
+
+class ProductInsightsResponse(BaseModel):
+    """Response containing product insights."""
+    success: bool
+    data: List[ProductInsightSummary]
+    total: int
+
+
+def parse_product_insight_markdown(filepath: str) -> Optional[ProductInsightSummary]:
+    """Parse a product insight markdown file and extract key sections."""
+    import re
+    from pathlib import Path
+
+    path = Path(filepath)
+    if not path.exists():
+        return None
+
+    content = path.read_text()
+    filename = path.name
+
+    # Extract date from filename (e.g., 2026-01-21-disposable-software-analysis.md)
+    date_match = re.match(r'^(\d{4}-\d{2}-\d{2})', filename)
+    date = date_match.group(1) if date_match else "Unknown"
+
+    # Extract title from first H1
+    title_match = re.search(r'^# (.+)$', content, re.MULTILINE)
+    title = title_match.group(1) if title_match else filename.replace('.md', '').replace('-', ' ').title()
+
+    # Extract relevance score
+    score_match = re.search(r'RELEVANCE SCORE[:\s]+(\d+/10)', content, re.IGNORECASE)
+    relevance_score = score_match.group(1) if score_match else None
+
+    # Extract TL;DR
+    tldr_match = re.search(r'\*\*TL;DR[:\s]*\*\*\s*(.+?)(?=\n\n|\*\*Immediate)', content, re.DOTALL | re.IGNORECASE)
+    tldr = tldr_match.group(1).strip() if tldr_match else None
+
+    # Extract immediate actions (checkbox items)
+    actions = []
+    actions_section = re.search(r'\*\*Immediate actions.*?\*\*[:\s]*\n((?:- \[[ x]\].+\n?)+)', content, re.IGNORECASE)
+    if actions_section:
+        action_lines = re.findall(r'- \[([ x])\] (.+)', actions_section.group(1))
+        for completed, text in action_lines:
+            actions.append({
+                "text": text.strip(),
+                "completed": completed.lower() == 'x'
+            })
+
+    # Extract watch list
+    watch_list = []
+    watch_section = re.search(r'\*\*Watch list.*?\*\*[:\s]*\n((?:- .+\n?)+)', content, re.IGNORECASE)
+    if watch_section:
+        watch_items = re.findall(r'- (.+)', watch_section.group(1))
+        watch_list = [item.strip() for item in watch_items]
+
+    return ProductInsightSummary(
+        filename=filename,
+        title=title,
+        date=date,
+        relevance_score=relevance_score,
+        tldr=tldr,
+        immediate_actions=actions,
+        watch_list=watch_list,
+        file_path=str(path),
+    )
+
+
+@router.get("/product-insights")
+async def list_product_insights() -> ProductInsightsResponse:
+    """
+    List all product strategy insights from docs/video-insights/.
+
+    These are internal insights for informing product decisions,
+    NOT customer-facing insights.
+    """
+    from pathlib import Path
+
+    # Find the docs/video-insights directory relative to backend
+    backend_dir = Path(__file__).parent.parent.parent
+    insights_dir = backend_dir.parent / "docs" / "video-insights"
+
+    if not insights_dir.exists():
+        return ProductInsightsResponse(success=True, data=[], total=0)
+
+    insights = []
+    for md_file in sorted(insights_dir.glob("*.md"), reverse=True):
+        parsed = parse_product_insight_markdown(str(md_file))
+        if parsed:
+            insights.append(parsed)
+
+    return ProductInsightsResponse(
+        success=True,
+        data=insights,
+        total=len(insights),
+    )
+
+
+@router.get("/product-insights/{filename}")
+async def get_product_insight(filename: str) -> Dict[str, Any]:
+    """
+    Get the full content of a specific product insight.
+    """
+    from pathlib import Path
+
+    backend_dir = Path(__file__).parent.parent.parent
+    insights_dir = backend_dir.parent / "docs" / "video-insights"
+    filepath = insights_dir / filename
+
+    if not filepath.exists() or not filepath.suffix == '.md':
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail=f"Product insight not found: {filename}"
+        )
+
+    content = filepath.read_text()
+    parsed = parse_product_insight_markdown(str(filepath))
+
+    return {
+        "success": True,
+        "data": {
+            "summary": parsed.model_dump() if parsed else None,
+            "content": content,
+        }
+    }
+
+
+@router.post("/product-insights/{filename}/toggle-action")
+async def toggle_product_insight_action(
+    filename: str,
+    action_index: int = Query(..., description="Index of the action to toggle")
+) -> Dict[str, Any]:
+    """
+    Toggle the completion status of an action item in a product insight.
+
+    Updates the markdown file directly.
+    """
+    from pathlib import Path
+    import re
+
+    backend_dir = Path(__file__).parent.parent.parent
+    insights_dir = backend_dir.parent / "docs" / "video-insights"
+    filepath = insights_dir / filename
+
+    if not filepath.exists() or not filepath.suffix == '.md':
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail=f"Product insight not found: {filename}"
+        )
+
+    content = filepath.read_text()
+
+    # Find all checkbox items in immediate actions section
+    pattern = r'(\*\*Immediate actions.*?\*\*[:\s]*\n)((?:- \[[ x]\].+\n?)+)'
+    match = re.search(pattern, content, re.IGNORECASE)
+
+    if not match:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="No immediate actions section found"
+        )
+
+    header = match.group(1)
+    actions_text = match.group(2)
+
+    # Parse and toggle the specific action
+    lines = actions_text.strip().split('\n')
+    if action_index < 0 or action_index >= len(lines):
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail=f"Invalid action index: {action_index}"
+        )
+
+    line = lines[action_index]
+    if '[ ]' in line:
+        lines[action_index] = line.replace('[ ]', '[x]')
+        new_status = True
+    else:
+        lines[action_index] = line.replace('[x]', '[ ]')
+        new_status = False
+
+    # Rebuild content
+    new_actions = '\n'.join(lines) + '\n'
+    new_content = content[:match.start()] + header + new_actions + content[match.end():]
+
+    # Write back
+    filepath.write_text(new_content)
+
+    return {
+        "success": True,
+        "message": f"Action {'completed' if new_status else 'uncompleted'}",
+        "data": {"completed": new_status}
+    }

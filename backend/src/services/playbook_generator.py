@@ -3,146 +3,34 @@
 Playbook Generation Service
 
 Generates personalized implementation playbooks from recommendations.
+Uses canonical models from src/models/playbook.py with full validation.
 """
 import json
 import logging
 import re
 import uuid
-from datetime import datetime
-from typing import Dict, Any, List, Optional, Literal
+from typing import Dict, Any, List, Optional
 
 from anthropic import Anthropic
-from pydantic import BaseModel, Field, field_validator
 
 from src.config.settings import settings
 from src.config.model_routing import get_model_for_task
+from src.models.playbook import (
+    Playbook,
+    Phase,
+    Week,
+    PlaybookTask,
+    TaskCRB,
+    PhaseCRBSummary,
+    PersonalizationContext,
+    ImmediateFirstStep,
+    PlaybookValidationResult,
+    validate_playbook_data,
+    MIN_TASK_MINUTES,
+    MAX_TASK_MINUTES,
+)
 
 logger = logging.getLogger(__name__)
-
-
-# =============================================================================
-# INLINE MODELS (Stubs - will be replaced when models/playbook.py is created)
-# =============================================================================
-
-class TaskCRB(BaseModel):
-    """CRB breakdown for a single task."""
-    cost: str = Field(..., description="Cost description, e.g., '€0 (free tier)'")
-    risk: Literal["low", "medium", "high"] = "low"
-    benefit: str = Field(..., description="Benefit description, e.g., 'Saves 2 hrs/week'")
-
-    @field_validator('risk', mode='before')
-    @classmethod
-    def extract_risk_level(cls, v):
-        """Extract just the risk level from strings like 'medium - pricing accuracy critical'."""
-        if isinstance(v, str):
-            v_lower = v.lower().strip()
-            if v_lower.startswith('high'):
-                return 'high'
-            elif v_lower.startswith('medium'):
-                return 'medium'
-            elif v_lower.startswith('low'):
-                return 'low'
-            # Try to find keywords anywhere in the string
-            if 'high' in v_lower:
-                return 'high'
-            elif 'medium' in v_lower:
-                return 'medium'
-            else:
-                return 'low'  # Default to low
-        return v
-
-
-class PlaybookTask(BaseModel):
-    """A single actionable task within a week."""
-    id: str
-    title: str
-    description: str = ""
-    time_estimate_minutes: int = 30
-    difficulty: Literal["easy", "medium", "hard"] = "medium"
-    executor: Literal["owner", "team", "hire_out"] = "owner"
-    tools: List[str] = Field(default_factory=list)
-    tutorial_hint: Optional[str] = None
-    crb: TaskCRB
-    completed: bool = False
-    completed_at: Optional[datetime] = None
-
-
-class Week(BaseModel):
-    """A week of tasks within a phase."""
-    week_number: int
-    theme: str
-    tasks: List[PlaybookTask]
-    checkpoint: str = Field(..., description="What success looks like at end of week")
-
-
-class PhaseCRBSummary(BaseModel):
-    """Aggregated CRB for an entire phase."""
-    total_cost: str
-    monthly_cost: str
-    setup_hours: int
-    risks: List[str]
-    benefits: List[str]
-    crb_score: float = Field(..., ge=0, le=10)
-
-
-class Phase(BaseModel):
-    """A major phase of the playbook (3-5 per playbook)."""
-    phase_number: int
-    title: str
-    duration_weeks: int
-    outcome: str
-    crb_summary: PhaseCRBSummary
-    weeks: List[Week]
-
-
-class PersonalizationContext(BaseModel):
-    """Context derived from quiz answers for personalization."""
-    team_size: Literal["solo", "small", "medium", "large"] = "solo"
-    technical_level: int = Field(3, ge=1, le=5)
-    budget_monthly: int = 500
-    existing_tools: List[str] = Field(default_factory=list)
-    primary_pain_point: str = ""
-    industry: str = "general"
-    urgency: Literal["asap", "normal", "flexible"] = "normal"
-
-
-class ImmediateFirstStep(BaseModel):
-    """The ONE thing to do before reading further - creates momentum."""
-    action: str = Field(..., description="What to do, e.g., 'Create a Calendly account'")
-    url: Optional[str] = Field(None, description="Direct URL to start")
-    time_minutes: int = Field(15, description="Time to complete (5-30 min)")
-    outcome: str = Field(..., description="What they'll have after, e.g., 'A booking link ready to share'")
-    do_this_now: str = Field(
-        "Do this before reading the rest of the playbook.",
-        description="Instruction to act immediately"
-    )
-
-
-class Playbook(BaseModel):
-    """Complete playbook for a recommendation option."""
-    id: str
-    recommendation_id: str
-    option_type: Literal["off_the_shelf", "best_in_class", "custom_solution"]
-    total_weeks: int
-    immediate_first_step: Optional[ImmediateFirstStep] = Field(
-        None,
-        description="The ONE thing to do right now before reading further"
-    )
-    phases: List[Phase]
-    personalization_context: PersonalizationContext
-    created_at: datetime = Field(default_factory=datetime.utcnow)
-
-
-class PlaybookProgress(BaseModel):
-    """Track user progress through playbook."""
-    report_id: str
-    playbook_id: str
-    tasks_completed: int = 0
-    tasks_total: int = 0
-    current_phase: int = 1
-    current_week: int = 1
-    started_at: Optional[datetime] = None
-    last_activity_at: Optional[datetime] = None
 
 
 # =============================================================================
@@ -159,8 +47,9 @@ Your playbooks must be:
 2. FAST-PACED - Things can move fast with modern tools. Compress timelines.
 3. PERSONALIZED - Adapt to team size, tech level, existing tools
 4. CRB-FOCUSED - Every task shows Cost, Risk, Benefit
+5. DEPENDENCY-AWARE - Tasks reference prerequisites by ID
 
-Generate aggressive but achievable week-by-week plans."""
+Generate aggressive but achievable week-by-week plans with proper task dependencies."""
 
     def __init__(self):
         self.client = Anthropic(api_key=settings.ANTHROPIC_API_KEY)
@@ -234,21 +123,30 @@ Generate aggressive but achievable week-by-week plans."""
             return int(base * 1.3)
         return base
 
-    async def generate_playbook(
+    def _build_generation_prompt(
         self,
         recommendation: Dict[str, Any],
         option_type: str,
-        quiz_answers: Dict[str, Any],
-        industry_context: Dict[str, Any],
-    ) -> Playbook:
-        """Generate a complete playbook for a recommendation option."""
-        context = self._extract_personalization_context(quiz_answers)
-        total_weeks = self._get_week_count(context.urgency, option_type)
+        option: Dict[str, Any],
+        context: PersonalizationContext,
+        total_weeks: int,
+    ) -> str:
+        """Build the LLM prompt for playbook generation."""
+        executor_guidance = (
+            "all tasks go to 'owner' since this is a solo operation"
+            if context.team_size == "solo"
+            else "distribute between 'owner' and 'team' based on skill requirements"
+        )
 
-        # Get the specific option details
-        option = recommendation.get("options", {}).get(option_type, {})
+        detail_level = (
+            "detailed hand-holding with step-by-step instructions"
+            if context.technical_level <= 2
+            else "link to docs, skip basics - user is technically proficient"
+            if context.technical_level >= 4
+            else "moderate detail - explain key concepts but don't over-explain"
+        )
 
-        prompt = f"""Generate a detailed implementation playbook.
+        return f"""Generate a detailed implementation playbook.
 
 RECOMMENDATION: {recommendation.get('title')}
 OPTION: {option_type.replace('_', ' ').title()}
@@ -287,7 +185,7 @@ Generate a JSON playbook with this EXACT structure:
                     "theme": "Foundation",
                     "tasks": [
                         {{
-                            "id": "task-1-1-1",
+                            "id": "p1-w1-t1",
                             "title": "Sign up for [specific tool]",
                             "description": "Create account and complete onboarding",
                             "time_estimate_minutes": 30,
@@ -295,14 +193,30 @@ Generate a JSON playbook with this EXACT structure:
                             "executor": "owner",
                             "tools": ["tool-name"],
                             "tutorial_hint": "Use code SAVE20 for discount",
+                            "dependencies": [],
                             "crb": {{
                                 "cost": "€0 (free trial)",
                                 "risk": "low",
                                 "benefit": "Access to platform"
                             }}
+                        }},
+                        {{
+                            "id": "p1-w1-t2",
+                            "title": "Configure basic settings",
+                            "description": "Set up essential configurations",
+                            "time_estimate_minutes": 45,
+                            "difficulty": "easy",
+                            "executor": "owner",
+                            "tools": ["tool-name"],
+                            "dependencies": ["p1-w1-t1"],
+                            "crb": {{
+                                "cost": "€0",
+                                "risk": "low",
+                                "benefit": "System ready for use"
+                            }}
                         }}
                     ],
-                    "checkpoint": "Account created and verified"
+                    "checkpoint": "Account created and configured"
                 }}
             ]
         }}
@@ -312,13 +226,212 @@ Generate a JSON playbook with this EXACT structure:
 REQUIREMENTS:
 1. 3-5 phases total, covering all {total_weeks} weeks
 2. 3-6 tasks per week
-3. Tasks are 15-120 minutes each
-4. Executor based on team size: "{context.team_size}" means {'all tasks go to owner' if context.team_size == 'solo' else 'distribute between owner and team'}
+3. Tasks are {MIN_TASK_MINUTES}-{MAX_TASK_MINUTES} minutes each (most should be 15-120 min)
+4. Executor: {executor_guidance}
 5. Skip setup for tools they already have: {context.existing_tools}
-6. Technical level {context.technical_level}/5 means {'detailed hand-holding' if context.technical_level <= 2 else 'link to docs, skip basics' if context.technical_level >= 4 else 'moderate detail'}
+6. Technical level {context.technical_level}/5 means {detail_level}
 7. Every task MUST have a CRB breakdown
+8. IMPORTANT: Task IDs follow pattern "p{{phase}}-w{{week}}-t{{task}}" (e.g., p1-w1-t1, p1-w1-t2, p1-w2-t1)
+9. Dependencies MUST reference existing task IDs from earlier in the playbook
+10. First task of first week has no dependencies (empty array)
+11. Later tasks should reference their prerequisites
+
+DEPENDENCY RULES:
+- Only reference task IDs that appear BEFORE the current task
+- Use dependencies to show logical order (e.g., "configure" depends on "sign up")
+- Cross-week dependencies are allowed (task in week 2 can depend on task in week 1)
+- Cross-phase dependencies are allowed but should be minimal
 
 Return ONLY valid JSON, no explanation."""
+
+    def _sanitize_task_data(
+        self,
+        task_data: Dict[str, Any],
+        phase_num: int,
+        week_num: int,
+        task_num: int,
+    ) -> Dict[str, Any]:
+        """Sanitize and normalize task data from LLM response."""
+        # Ensure valid ID
+        task_id = task_data.get("id") or f"p{phase_num}-w{week_num}-t{task_num}"
+
+        # Ensure time estimate is within bounds
+        time_est = task_data.get("time_estimate_minutes", 30)
+        if not isinstance(time_est, int):
+            try:
+                time_est = int(time_est)
+            except (ValueError, TypeError):
+                time_est = 30
+        time_est = max(MIN_TASK_MINUTES, min(MAX_TASK_MINUTES, time_est))
+
+        # Ensure valid difficulty
+        difficulty = task_data.get("difficulty", "medium")
+        if difficulty not in ("easy", "medium", "hard"):
+            difficulty = "medium"
+
+        # Ensure valid executor
+        executor = task_data.get("executor", "owner")
+        if executor not in ("owner", "team", "hire_out"):
+            executor = "owner"
+
+        # Ensure dependencies is a list
+        dependencies = task_data.get("dependencies", [])
+        if not isinstance(dependencies, list):
+            dependencies = []
+        # Filter out any non-string dependencies
+        dependencies = [d for d in dependencies if isinstance(d, str) and d]
+
+        # Build CRB
+        crb_data = task_data.get("crb", {})
+        if not isinstance(crb_data, dict):
+            crb_data = {}
+
+        return {
+            "id": task_id,
+            "title": task_data.get("title", f"Task {task_num}"),
+            "description": task_data.get("description", ""),
+            "time_estimate_minutes": time_est,
+            "difficulty": difficulty,
+            "executor": executor,
+            "tools": task_data.get("tools", []),
+            "tutorial_hint": task_data.get("tutorial_hint"),
+            "dependencies": dependencies,
+            "crb": {
+                "cost": crb_data.get("cost", "TBD"),
+                "risk": crb_data.get("risk", "low"),
+                "benefit": crb_data.get("benefit", "TBD"),
+            },
+        }
+
+    def _parse_llm_response(self, content: str) -> Dict[str, Any]:
+        """Parse and extract JSON from LLM response."""
+        if not content:
+            raise ValueError("Empty response from LLM")
+
+        # Clean markdown code blocks
+        if "```" in content:
+            match = re.search(r'```(?:json)?\s*([\s\S]*?)```', content)
+            if match:
+                content = match.group(1).strip()
+
+        # Find JSON object if response has extra text
+        if not content.startswith("{"):
+            json_match = re.search(r'\{[\s\S]*\}', content)
+            if json_match:
+                content = json_match.group(0)
+            else:
+                raise ValueError("No valid JSON in response")
+
+        return json.loads(content)
+
+    def _build_playbook_from_data(
+        self,
+        data: Dict[str, Any],
+        recommendation: Dict[str, Any],
+        option_type: str,
+        option: Dict[str, Any],
+        context: PersonalizationContext,
+        total_weeks: int,
+    ) -> Playbook:
+        """Build Playbook model from parsed data with sanitization."""
+        phases: List[Phase] = []
+        all_task_ids: set = set()
+
+        for pi, phase_data in enumerate(data.get("phases", [])):
+            phase_num = phase_data.get("phase_number", pi + 1)
+            weeks: List[Week] = []
+
+            for wi, week_data in enumerate(phase_data.get("weeks", [])):
+                week_num = week_data.get("week_number", wi + 1)
+                tasks: List[PlaybookTask] = []
+
+                for ti, task_data in enumerate(week_data.get("tasks", [])):
+                    sanitized = self._sanitize_task_data(
+                        task_data, phase_num, week_num, ti + 1
+                    )
+
+                    # Filter dependencies to only include existing task IDs
+                    valid_deps = [
+                        d for d in sanitized["dependencies"]
+                        if d in all_task_ids
+                    ]
+                    if len(valid_deps) != len(sanitized["dependencies"]):
+                        invalid = set(sanitized["dependencies"]) - set(valid_deps)
+                        logger.warning(
+                            f"Task {sanitized['id']} has invalid dependencies "
+                            f"removed: {invalid}"
+                        )
+                        sanitized["dependencies"] = valid_deps
+
+                    tasks.append(PlaybookTask(
+                        id=sanitized["id"],
+                        title=sanitized["title"],
+                        description=sanitized["description"],
+                        time_estimate_minutes=sanitized["time_estimate_minutes"],
+                        difficulty=sanitized["difficulty"],
+                        executor=sanitized["executor"],
+                        tools=sanitized["tools"],
+                        tutorial_hint=sanitized["tutorial_hint"],
+                        dependencies=sanitized["dependencies"],
+                        crb=TaskCRB(**sanitized["crb"]),
+                    ))
+
+                    all_task_ids.add(sanitized["id"])
+
+                weeks.append(Week(
+                    week_number=week_num,
+                    theme=week_data.get("theme", f"Week {week_num}"),
+                    tasks=tasks,
+                    checkpoint=week_data.get("checkpoint", "Review progress"),
+                ))
+
+            crb_sum = phase_data.get("crb_summary", {})
+            phases.append(Phase(
+                phase_number=phase_num,
+                title=phase_data.get("title", f"Phase {phase_num}"),
+                duration_weeks=phase_data.get("duration_weeks", len(weeks)),
+                outcome=phase_data.get("outcome", ""),
+                crb_summary=PhaseCRBSummary(
+                    total_cost=crb_sum.get("total_cost", "€0"),
+                    monthly_cost=crb_sum.get("monthly_cost", "€0"),
+                    setup_hours=max(0, crb_sum.get("setup_hours", 0)),
+                    risks=crb_sum.get("risks", []),
+                    benefits=crb_sum.get("benefits", []),
+                    crb_score=min(10, max(0, crb_sum.get("crb_score", 5.0))),
+                ),
+                weeks=weeks,
+            ))
+
+        # Extract immediate first step
+        immediate_step = self._extract_immediate_first_step(phases, option, option_type)
+
+        return Playbook(
+            id=f"playbook-{uuid.uuid4().hex[:8]}",
+            recommendation_id=recommendation.get("id", ""),
+            option_type=option_type,
+            total_weeks=total_weeks,
+            immediate_first_step=immediate_step,
+            phases=phases,
+            personalization_context=context,
+        )
+
+    async def generate_playbook(
+        self,
+        recommendation: Dict[str, Any],
+        option_type: str,
+        quiz_answers: Dict[str, Any],
+        industry_context: Dict[str, Any],
+    ) -> Playbook:
+        """Generate a complete playbook for a recommendation option."""
+        context = self._extract_personalization_context(quiz_answers)
+        total_weeks = self._get_week_count(context.urgency, option_type)
+
+        # Get the specific option details
+        option = recommendation.get("options", {}).get(option_type, {})
+
+        prompt = self._build_generation_prompt(
+            recommendation, option_type, option, context, total_weeks
+        )
 
         try:
             model = get_model_for_task("generate_playbook", "full")
@@ -330,90 +443,22 @@ Return ONLY valid JSON, no explanation."""
             )
 
             content = response.content[0].text.strip() if response.content else ""
+            data = self._parse_llm_response(content)
 
-            # Check for empty response
-            if not content:
-                logger.warning("Empty response from LLM for playbook generation")
-                raise ValueError("Empty response from LLM")
+            # Pre-validate the data
+            validation = validate_playbook_data(data)
+            if not validation.valid:
+                logger.error(f"Playbook validation errors: {validation.errors}")
+                # Try to fix common issues and continue
+                for warning in validation.warnings:
+                    logger.warning(f"Playbook warning: {warning}")
 
-            # Clean and parse JSON
-            if "```" in content:
-                match = re.search(r'```(?:json)?\s*([\s\S]*?)```', content)
-                if match:
-                    content = match.group(1).strip()
-
-            # Additional cleanup - find JSON object
-            if not content.startswith("{"):
-                # Try to find JSON object in response
-                json_match = re.search(r'\{[\s\S]*\}', content)
-                if json_match:
-                    content = json_match.group(0)
-                else:
-                    logger.warning(f"No JSON found in playbook response: {content[:200]}")
-                    raise ValueError("No valid JSON in response")
-
-            data = json.loads(content)
-
-            # Build Playbook model
-            phases = []
-            for phase_data in data.get("phases", []):
-                weeks = []
-                for week_data in phase_data.get("weeks", []):
-                    tasks = []
-                    for task_data in week_data.get("tasks", []):
-                        crb_data = task_data.get("crb", {})
-                        tasks.append(PlaybookTask(
-                            id=task_data.get("id", f"task-{uuid.uuid4().hex[:8]}"),
-                            title=task_data.get("title", ""),
-                            description=task_data.get("description", ""),
-                            time_estimate_minutes=task_data.get("time_estimate_minutes", 30),
-                            difficulty=task_data.get("difficulty", "medium"),
-                            executor=task_data.get("executor", "owner"),
-                            tools=task_data.get("tools", []),
-                            tutorial_hint=task_data.get("tutorial_hint"),
-                            crb=TaskCRB(
-                                cost=crb_data.get("cost", "TBD"),
-                                risk=crb_data.get("risk", "low"),
-                                benefit=crb_data.get("benefit", "TBD"),
-                            ),
-                        ))
-
-                    weeks.append(Week(
-                        week_number=week_data.get("week_number", 1),
-                        theme=week_data.get("theme", ""),
-                        tasks=tasks,
-                        checkpoint=week_data.get("checkpoint", ""),
-                    ))
-
-                crb_sum = phase_data.get("crb_summary", {})
-                phases.append(Phase(
-                    phase_number=phase_data.get("phase_number", 1),
-                    title=phase_data.get("title", ""),
-                    duration_weeks=phase_data.get("duration_weeks", 2),
-                    outcome=phase_data.get("outcome", ""),
-                    crb_summary=PhaseCRBSummary(
-                        total_cost=crb_sum.get("total_cost", "€0"),
-                        monthly_cost=crb_sum.get("monthly_cost", "€0"),
-                        setup_hours=crb_sum.get("setup_hours", 0),
-                        risks=crb_sum.get("risks", []),
-                        benefits=crb_sum.get("benefits", []),
-                        crb_score=crb_sum.get("crb_score", 5.0),
-                    ),
-                    weeks=weeks,
-                ))
-
-            # Extract immediate first step from first task or generate one
-            immediate_step = self._extract_immediate_first_step(phases, option, option_type)
-
-            return Playbook(
-                id=f"playbook-{uuid.uuid4().hex[:8]}",
-                recommendation_id=recommendation.get("id", ""),
-                option_type=option_type,
-                total_weeks=total_weeks,
-                immediate_first_step=immediate_step,
-                phases=phases,
-                personalization_context=context,
+            # Build the playbook (with sanitization)
+            playbook = self._build_playbook_from_data(
+                data, recommendation, option_type, option, context, total_weeks
             )
+
+            return playbook
 
         except Exception as e:
             logger.error(f"Failed to generate playbook: {e}")

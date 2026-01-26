@@ -22,6 +22,22 @@ interface DashboardStats {
   }
 }
 
+interface ProductInsightAction {
+  text: string
+  completed: boolean
+}
+
+interface ProductInsight {
+  filename: string
+  title: string
+  date: string
+  relevance_score: string | null
+  tldr: string | null
+  immediate_actions: ProductInsightAction[]
+  watch_list: string[]
+  file_path: string
+}
+
 function StatCard({
   title,
   value,
@@ -137,11 +153,13 @@ function QuickAction({
 
 export default function AdminDashboard() {
   const [stats, setStats] = useState<DashboardStats | null>(null)
+  const [productInsights, setProductInsights] = useState<ProductInsight[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
 
   useEffect(() => {
     fetchStats()
+    fetchProductInsights()
   }, [])
 
   async function fetchStats() {
@@ -154,6 +172,24 @@ export default function AdminDashboard() {
       setError('Failed to load dashboard data')
     } finally {
       setLoading(false)
+    }
+  }
+
+  async function fetchProductInsights() {
+    try {
+      const response = await apiClient.get<{ data: ProductInsight[] }>('/api/admin/insights/product-insights')
+      setProductInsights(response.data.data)
+    } catch (err) {
+      console.error('Failed to fetch product insights:', err)
+    }
+  }
+
+  async function toggleAction(filename: string, actionIndex: number) {
+    try {
+      await apiClient.post(`/api/admin/insights/product-insights/${filename}/toggle-action?action_index=${actionIndex}`)
+      fetchProductInsights() // Refresh
+    } catch (err) {
+      console.error('Failed to toggle action:', err)
     }
   }
 
@@ -328,6 +364,119 @@ export default function AdminDashboard() {
                   })}
                 </tbody>
               </table>
+            </div>
+          </div>
+        )}
+
+        {/* Product Strategy Insights */}
+        {productInsights.length > 0 && (
+          <div className="mb-10">
+            <div className="flex items-center justify-between mb-5">
+              <h2 className="text-lg font-semibold text-gray-900">Product Strategy Insights</h2>
+              <span className="text-xs text-gray-400">Internal insights for product decisions</span>
+            </div>
+            <div className="space-y-4">
+              {productInsights.map((insight) => {
+                const pendingActions = insight.immediate_actions.filter(a => !a.completed).length
+                const totalActions = insight.immediate_actions.length
+                return (
+                  <div
+                    key={insight.filename}
+                    className="bg-white rounded-2xl border border-gray-100 p-5 hover:shadow-lg transition-all duration-300"
+                  >
+                    <div className="flex items-start justify-between mb-3">
+                      <div className="flex-1">
+                        <div className="flex items-center gap-3 mb-1">
+                          <h3 className="font-semibold text-gray-900">{insight.title}</h3>
+                          {insight.relevance_score && (
+                            <span className={`text-xs px-2 py-0.5 rounded-full font-medium ${
+                              parseInt(insight.relevance_score) >= 7
+                                ? 'bg-emerald-100 text-emerald-700'
+                                : parseInt(insight.relevance_score) >= 4
+                                ? 'bg-amber-100 text-amber-700'
+                                : 'bg-gray-100 text-gray-600'
+                            }`}>
+                              {insight.relevance_score}
+                            </span>
+                          )}
+                        </div>
+                        <p className="text-xs text-gray-400">{insight.date}</p>
+                      </div>
+                      {totalActions > 0 && (
+                        <div className="flex items-center gap-1.5">
+                          {pendingActions > 0 ? (
+                            <span className="inline-flex items-center gap-1 text-xs px-2 py-1 rounded-full bg-amber-50 text-amber-700 font-medium">
+                              <span className="w-1.5 h-1.5 bg-amber-500 rounded-full animate-pulse" />
+                              {pendingActions} action{pendingActions !== 1 ? 's' : ''} pending
+                            </span>
+                          ) : (
+                            <span className="inline-flex items-center gap-1 text-xs px-2 py-1 rounded-full bg-emerald-50 text-emerald-700 font-medium">
+                              <svg className="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
+                                <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                              </svg>
+                              All done
+                            </span>
+                          )}
+                        </div>
+                      )}
+                    </div>
+
+                    {insight.tldr && (
+                      <p className="text-sm text-gray-600 mb-4 leading-relaxed">{insight.tldr}</p>
+                    )}
+
+                    {/* Action Items */}
+                    {insight.immediate_actions.length > 0 && (
+                      <div className="mb-4">
+                        <p className="text-xs font-medium text-gray-500 uppercase tracking-wider mb-2">Actions</p>
+                        <div className="space-y-1.5">
+                          {insight.immediate_actions.map((action, idx) => (
+                            <button
+                              key={idx}
+                              onClick={() => toggleAction(insight.filename, idx)}
+                              className={`flex items-center gap-2 w-full text-left px-3 py-2 rounded-lg transition-all ${
+                                action.completed
+                                  ? 'bg-gray-50 text-gray-400 line-through'
+                                  : 'bg-blue-50 text-gray-700 hover:bg-blue-100'
+                              }`}
+                            >
+                              <span className={`w-4 h-4 rounded border flex items-center justify-center flex-shrink-0 ${
+                                action.completed
+                                  ? 'bg-emerald-500 border-emerald-500 text-white'
+                                  : 'border-gray-300'
+                              }`}>
+                                {action.completed && (
+                                  <svg className="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                                  </svg>
+                                )}
+                              </span>
+                              <span className="text-sm">{action.text}</span>
+                            </button>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+
+                    {/* Watch List */}
+                    {insight.watch_list.length > 0 && (
+                      <div>
+                        <p className="text-xs font-medium text-gray-500 uppercase tracking-wider mb-2">Watch List</p>
+                        <div className="flex flex-wrap gap-2">
+                          {insight.watch_list.map((item, idx) => (
+                            <span
+                              key={idx}
+                              className="text-xs px-2.5 py-1 rounded-full bg-gray-100 text-gray-600"
+                            >
+                              {item.length > 60 ? item.substring(0, 60) + '...' : item}
+                            </span>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                )
+              })}
             </div>
           </div>
         )}

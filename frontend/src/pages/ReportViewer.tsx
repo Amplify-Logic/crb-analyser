@@ -1,13 +1,12 @@
-import { useState, useEffect, useCallback } from 'react'
+import { useState, useEffect, useCallback, useMemo } from 'react'
 import { useParams, useSearchParams } from 'react-router-dom'
-import { motion, AnimatePresence } from 'framer-motion'
+import { motion } from 'framer-motion'
 import apiClient from '../services/apiClient'
 import {
   AIReadinessGauge,
   TwoPillarsChart,
   ValueTimelineChart,
   VerdictCard,
-  PersonalizedHeader,
   YourStorySection,
   TieredFindings,
   NumberedRecommendations,
@@ -21,6 +20,8 @@ import InsightsTab from '../components/report/InsightsTab'
 import DevModePanel from '../components/report/DevModePanel'
 import AutomationRoadmap from '../components/report/AutomationRoadmap'
 import usePlaybookProgress from '../hooks/usePlaybookProgress'
+import { Sidebar, SidebarItem } from '../components/report/Sidebar/Sidebar'
+import { ContentPanel } from '../components/report/ContentPanel/ContentPanel'
 
 // Premium skeleton loading component
 function SkeletonPulse({ className = '' }: { className?: string }) {
@@ -94,8 +95,28 @@ interface Verdict {
   color: 'green' | 'yellow' | 'orange' | 'gray'
 }
 
+interface AIReadinessComponent {
+  score: number
+  max: number
+  label: string
+  description: string
+  factors?: string[]
+}
+
+interface AIReadinessBreakdown {
+  total_score: number
+  components: {
+    tech_stack: AIReadinessComponent
+    data_readiness: AIReadinessComponent
+    team_readiness: AIReadinessComponent
+    process_maturity: AIReadinessComponent
+  }
+  improvement_suggestions: string[]
+}
+
 interface ExecutiveSummary {
   ai_readiness_score: number
+  ai_readiness_breakdown?: AIReadinessBreakdown
   customer_value_score: number
   business_health_score: number
   key_insight: string
@@ -235,6 +256,7 @@ interface CompanyProfile {
   tech_level: string
   budget_range: string
   existing_tools?: string[]
+  location?: string
 }
 
 interface Report {
@@ -263,25 +285,7 @@ export default function ReportViewer() {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
   const [report, setReport] = useState<Report | null>(null)
-  const [activeSection, setActiveSection] = useState('story')
-  const [showTools, setShowTools] = useState(true)
-
-  // Navigation sections for the narrative layout
-  const sections = [
-    { id: 'story', label: 'Your Story' },
-    { id: 'findings', label: 'Findings' },
-    { id: 'actions', label: 'Actions' },
-    { id: 'playbook', label: 'Playbook' },
-    { id: 'tools', label: 'Tools' },
-  ]
-
-  const scrollToSection = (id: string) => {
-    const element = document.getElementById(id)
-    if (element) {
-      element.scrollIntoView({ behavior: 'smooth' })
-      setActiveSection(id)
-    }
-  }
+  const [activeItem, setActiveItem] = useState<SidebarItem>({ type: 'overview', id: null })
 
   // Playbook progress tracking
   const {
@@ -312,6 +316,31 @@ export default function ReportViewer() {
   useEffect(() => {
     loadReport()
   }, [reportId, quizSessionId])
+
+  // Prepare sidebar data - must be before early returns (Rules of Hooks)
+  const sidebarFindings = useMemo(() =>
+    (report?.findings || []).map(f => ({
+      id: f.id,
+      title: f.title,
+      status: 'pending' as const,
+    })), [report?.findings])
+
+  const sidebarActions = useMemo(() =>
+    (report?.recommendations || []).map(r => ({
+      id: r.id,
+      title: r.title,
+      priority: r.priority,
+    })), [report?.recommendations])
+
+  const sidebarPlaybookPhases = useMemo(() => {
+    if (!report?.playbooks || report.playbooks.length === 0) return []
+    return report.playbooks.map((pb, index) => ({
+      id: pb.id,
+      title: `Phase ${index + 1}`,
+      completedTasks: getCompletedTasks(pb.id).length,
+      totalTasks: pb.phases?.reduce((sum: number, phase: any) => sum + (phase.tasks?.length || 0), 0) || 0,
+    }))
+  }, [report?.playbooks, getCompletedTasks])
 
   async function loadReport() {
     setLoading(true)
@@ -383,7 +412,7 @@ export default function ReportViewer() {
     )
   }
 
-  const { executive_summary: summary, value_summary, findings, recommendations, roadmap } = report
+  const { executive_summary: summary, value_summary, findings, recommendations } = report
 
   // Calculate total investment from recommendations
   const totalInvestment = recommendations?.reduce(
@@ -392,313 +421,357 @@ export default function ReportViewer() {
   ) || 0
 
   // Extract company profile data for personalization
-  const companyProfile = report.company_profile || {
-    company_name: '',
-    industry: report.industry_insights?.industry_display_name || '',
-    industry_display: report.industry_insights?.industry_display_name || '',
-    team_size: '',
-    tech_level: '',
-    budget_range: '',
-    existing_tools: report.system_architecture?.existing_tools?.map(t => t.name) || []
+  // Handle industry which can be a string or object {primary_industry, sub_industry}
+  const INDUSTRY_DISPLAY_NAMES: Record<string, string> = {
+    'home_services': 'Home Services & Trades',
+    'home-services': 'Home Services & Trades',
+    'professional_services': 'Professional Services',
+    'healthcare': 'Healthcare',
+    'dental': 'Dental Practice',
+    'retail': 'Retail',
+    'hospitality': 'Hospitality',
+    'construction': 'Construction',
+    'real_estate': 'Real Estate',
+    'legal': 'Legal Services',
+    'accounting': 'Accounting & Finance',
+    'marketing': 'Marketing & Advertising',
+    'technology': 'Technology',
+    'manufacturing': 'Manufacturing',
+    'general': 'General Business',
   }
 
-  return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
+  const extractIndustry = (profile: any): string => {
+    if (!profile?.industry) return ''
+    let industrySlug = ''
+    if (typeof profile.industry === 'string') {
+      industrySlug = profile.industry
+    } else if (typeof profile.industry === 'object') {
+      // Handle object format from company research
+      const primary = profile.industry.primary_industry
+      if (typeof primary === 'string') industrySlug = primary
+      else if (primary?.value) industrySlug = primary.value
+    }
+    // Return display name if available, otherwise format the slug
+    return INDUSTRY_DISPLAY_NAMES[industrySlug] ||
+           industrySlug.replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase())
+  }
 
-      {/* Personalized Header with Navigation */}
-      <PersonalizedHeader
-        companyName={companyProfile.company_name}
-        industry={companyProfile.industry_display || companyProfile.industry}
-        teamSize={companyProfile.team_size}
-        techLevel={companyProfile.tech_level}
-        budgetRange={companyProfile.budget_range}
-        tier={report.tier as 'quick' | 'full'}
-        onExportPDF={() => window.print()}
-        sections={sections}
-        activeSection={activeSection}
-        onSectionClick={scrollToSection}
-      />
+  const rawProfile = report.company_profile
+  const companyProfile = {
+    company_name: rawProfile?.company_name || '',
+    industry: extractIndustry(rawProfile) || report.industry_insights?.industry_display_name || '',
+    industry_display: rawProfile?.industry_display || report.industry_insights?.industry_display_name || '',
+    team_size: rawProfile?.team_size || '',
+    tech_level: rawProfile?.tech_level || '',
+    budget_range: rawProfile?.budget_range || '',
+    existing_tools: rawProfile?.existing_tools || report.system_architecture?.existing_tools?.map(t => t.name) || []
+  }
 
-      <div className="max-w-4xl mx-auto px-4 py-6">
+  // Get breadcrumb and prev/next based on active item
+  const getBreadcrumb = (): string[] => {
+    switch (activeItem.type) {
+      case 'overview': return ['Overview']
+      case 'finding': {
+        const finding = findings?.find(f => f.id === activeItem.id)
+        return ['Findings', finding?.title || '']
+      }
+      case 'action': {
+        const action = recommendations?.find(r => r.id === activeItem.id)
+        return ['Actions', action?.title || '']
+      }
+      case 'playbook': return ['Playbook', `Phase ${activeItem.id}`]
+      case 'tool': {
+        const toolNames: Record<string, string> = { roi: 'ROI Calculator', stack: 'Stack Analysis', insights: 'Industry Insights' }
+        return ['Tools', toolNames[activeItem.id || ''] || '']
+      }
+      default: return ['Overview']
+    }
+  }
 
-        {/* SECTION 1: Your Story */}
-        <YourStorySection
-          keyInsight={summary?.key_insight || 'Your AI readiness analysis is complete.'}
-          findingsCount={findings?.length || 0}
-          mirroredStatements={[]}
-          companyContext={{
-            teamSize: companyProfile.team_size,
-            techLevel: companyProfile.tech_level,
-            budget: companyProfile.budget_range,
-            existingTools: companyProfile.existing_tools
-          }}
-        />
+  // Navigation helpers
+  const getNavigationItems = () => {
+    const items: SidebarItem[] = [
+      { type: 'overview', id: null },
+      ...sidebarFindings.map(f => ({ type: 'finding' as const, id: f.id })),
+      ...sidebarActions.map(a => ({ type: 'action' as const, id: a.id })),
+      ...sidebarPlaybookPhases.map(p => ({ type: 'playbook' as const, id: p.id })),
+      { type: 'tool', id: 'roi' },
+      { type: 'tool', id: 'stack' },
+      { type: 'tool', id: 'insights' },
+    ]
+    return items
+  }
 
-        {/* Verdict Card */}
-        {summary?.verdict && (
-          <div className="mb-6">
-            <VerdictCard verdict={summary.verdict} />
-          </div>
-        )}
+  const navItems = getNavigationItems()
+  const currentIndex = navItems.findIndex(item => item.type === activeItem.type && item.id === activeItem.id)
+  const prevItem = currentIndex > 0 ? navItems[currentIndex - 1] : null
+  const nextItem = currentIndex < navItems.length - 1 ? navItems[currentIndex + 1] : null
 
-        {/* Score Dashboard - Compact */}
-        <div className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-6 mb-6">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <div className="text-center">
-              <p className="text-sm font-medium text-gray-500 dark:text-gray-400 mb-3 uppercase tracking-wide">
-                AI Readiness Score
-              </p>
-              <AIReadinessGauge score={summary?.ai_readiness_score || 0} size="md" />
+  const getItemLabel = (item: SidebarItem | null): string | undefined => {
+    if (!item) return undefined
+    switch (item.type) {
+      case 'overview': return 'Overview'
+      case 'finding': return findings?.find(f => f.id === item.id)?.title
+      case 'action': return recommendations?.find(r => r.id === item.id)?.title
+      case 'playbook': return `Phase ${item.id}`
+      case 'tool': {
+        const toolNames: Record<string, string> = { roi: 'ROI Calculator', stack: 'Stack Analysis', insights: 'Industry Insights' }
+        return toolNames[item.id || '']
+      }
+    }
+  }
+
+  // Render content based on active item
+  const renderContent = () => {
+    switch (activeItem.type) {
+      case 'overview':
+        return (
+          <div className="space-y-6">
+            {/* Your Story */}
+            <YourStorySection
+              keyInsight={summary?.key_insight || 'Your AI readiness analysis is complete.'}
+              findingsCount={findings?.length || 0}
+              mirroredStatements={[]}
+              companyContext={{
+                teamSize: companyProfile.team_size,
+                techLevel: companyProfile.tech_level,
+                budget: companyProfile.budget_range,
+                existingTools: companyProfile.existing_tools
+              }}
+            />
+
+            {/* Verdict Card */}
+            {summary?.verdict && (
+              <VerdictCard verdict={summary.verdict} />
+            )}
+
+            {/* Score Dashboard */}
+            <div className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-6">
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div className="text-center">
+                  <p className="text-sm font-medium text-gray-500 dark:text-gray-400 mb-3 uppercase tracking-wide">
+                    AI Readiness Score
+                  </p>
+                  <AIReadinessGauge
+                    score={summary?.ai_readiness_score || 0}
+                    size="md"
+                    breakdown={summary?.ai_readiness_breakdown}
+                  />
+                </div>
+                <div className="md:col-span-2">
+                  <p className="text-sm font-medium text-gray-500 dark:text-gray-400 mb-3 text-center uppercase tracking-wide">
+                    The Two Pillars
+                  </p>
+                  <TwoPillarsChart
+                    customerValue={summary?.customer_value_score || 0}
+                    businessHealth={summary?.business_health_score || 0}
+                  />
+                </div>
+              </div>
             </div>
-            <div className="md:col-span-2">
-              <p className="text-sm font-medium text-gray-500 dark:text-gray-400 mb-3 text-center uppercase tracking-wide">
-                The Two Pillars
-              </p>
-              <TwoPillarsChart
-                customerValue={summary?.customer_value_score || 0}
-                businessHealth={summary?.business_health_score || 0}
-              />
-            </div>
-          </div>
-        </div>
 
-        {/* SECTION 2: Tiered Findings */}
-        {findings && findings.length > 0 && (
-          <TieredFindings
-            findings={findings as any}
-            heroCount={3}
-            compactCount={4}
-          />
-        )}
-
-        {/* SECTION 3: Numbered Recommendations (Actions) */}
-        {recommendations && recommendations.length > 0 && (
-          <NumberedRecommendations recommendations={recommendations as any} />
-        )}
-
-        {/* SECTION 4: Playbook (Value Projection) */}
-        <section id="playbook" className="scroll-mt-20 mb-8">
-          <div className="mb-6">
-            <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-1">
-              Your Playbook
-            </h2>
-            <p className="text-gray-600 dark:text-gray-400">
-              Investment breakdown and projected returns
-            </p>
-          </div>
-
-          {/* Value Summary */}
-          <div className="mb-6">
+            {/* Value Summary */}
             <ValueSummary
               investment={summary?.recommended_investment?.year_1_max || totalInvestment}
               returnMin={value_summary?.total?.min || 0}
               returnMax={value_summary?.total?.max || 0}
             />
           </div>
+        )
 
-          {/* Value Timeline Chart */}
-          <div className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-6 mb-6">
-            <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
-              3-Year Value Projection
-            </h3>
-            <ValueTimelineChart
-              valueSaved={value_summary?.value_saved?.subtotal || { min: 0, max: 0 }}
-              valueCreated={value_summary?.value_created?.subtotal || { min: 0, max: 0 }}
-              totalInvestment={totalInvestment}
-              showMilestones={true}
+      case 'finding':
+        const finding = findings?.find(f => f.id === activeItem.id)
+        if (!finding) return <div>Finding not found</div>
+        return (
+          <div className="space-y-6">
+            <TieredFindings
+              findings={[finding] as any}
+              heroCount={1}
+              compactCount={0}
             />
           </div>
+        )
 
-          {/* Playbook Phases */}
-          {report.playbooks && report.playbooks.length > 0 && (
+      case 'action':
+        const action = recommendations?.find(r => r.id === activeItem.id)
+        if (!action) return <div>Action not found</div>
+        return (
+          <div className="space-y-6">
+            <NumberedRecommendations recommendations={[action] as any} />
+          </div>
+        )
+
+      case 'playbook':
+        return (
+          <div className="space-y-6">
+            <div className="mb-6">
+              <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-1">
+                Your Playbook
+              </h2>
+              <p className="text-gray-600 dark:text-gray-400">
+                Investment breakdown and projected returns
+              </p>
+            </div>
+
+            {/* Value Timeline Chart */}
             <div className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-6">
-              {isSyncing && (
-                <div className="fixed bottom-4 right-4 bg-primary-600 text-white px-3 py-2 rounded-lg text-sm flex items-center gap-2 shadow-lg z-50">
-                  <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
-                  Saving progress...
-                </div>
-              )}
-              <PlaybookTab
-                playbooks={report.playbooks}
+              <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
+                3-Year Value Projection
+              </h3>
+              <ValueTimelineChart
+                valueSaved={value_summary?.value_saved?.subtotal || { min: 0, max: 0 }}
+                valueCreated={value_summary?.value_created?.subtotal || { min: 0, max: 0 }}
+                totalInvestment={totalInvestment}
+                showMilestones={true}
+              />
+            </div>
+
+            {/* Playbook Phases */}
+            {report.playbooks && report.playbooks.length > 0 && (
+              <div className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-6">
+                {isSyncing && (
+                  <div className="fixed bottom-4 right-4 bg-primary-600 text-white px-3 py-2 rounded-lg text-sm flex items-center gap-2 shadow-lg z-50">
+                    <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                    Saving progress...
+                  </div>
+                )}
+                <PlaybookTab
+                  playbooks={report.playbooks}
+                  reportId={reportId}
+                  onTaskComplete={handleTaskComplete}
+                  initialCompletedTasks={getInitialCompletedTasks()}
+                />
+              </div>
+            )}
+          </div>
+        )
+
+      case 'tool':
+        switch (activeItem.id) {
+          case 'roi':
+            // Detect currency from company location (NZ = NZD, AU = AUD, default EUR)
+            const location = report.company_profile?.location || ''
+            const isNZ = location.toLowerCase().includes('zealand') || location.toLowerCase().includes('nz')
+            const isAU = location.toLowerCase().includes('australia') || location.toLowerCase().includes('au')
+            const detectedCurrency = isNZ ? 'NZD' : isAU ? 'AUD' : 'EUR'
+            const detectedLocale = isNZ ? 'en-NZ' : isAU ? 'en-AU' : 'de-DE'
+
+            return (
+              <div className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-6">
+                <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">ROI Calculator</h3>
+                <ROICalculator
+                  recommendations={recommendations as any}
+                  valueSummary={value_summary as any}
+                  currency={detectedCurrency}
+                  locale={detectedLocale}
+                />
+              </div>
+            )
+          case 'stack':
+            if (!report.system_architecture) return <div>Stack data not available</div>
+            return (
+              <div className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-6">
+                <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">Your Stack</h3>
+                <StackTab architecture={report.system_architecture} />
+              </div>
+            )
+          case 'insights':
+            if (!report.industry_insights) return <div>Industry insights not available</div>
+            return (
+              <div className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-6">
+                <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">Industry Insights</h3>
+                <InsightsTab insights={report.industry_insights} />
+              </div>
+            )
+        }
+        return null
+
+      default:
+        return <div>Select an item from the sidebar</div>
+    }
+  }
+
+  return (
+    <div className="h-screen flex flex-col bg-gray-50 dark:bg-gray-900">
+      {/* Compact Header */}
+      <header className="flex-shrink-0 h-14 border-b border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 flex items-center px-4 gap-4">
+        <a href="/" className="text-lg font-semibold text-primary-600 dark:text-primary-400">
+          Ready Path
+        </a>
+        <span className="text-gray-300 dark:text-gray-600">|</span>
+        <span className="text-sm text-gray-600 dark:text-gray-400 truncate">
+          {companyProfile.company_name || 'AI Readiness Report'}
+        </span>
+        <div className="ml-auto flex items-center gap-2">
+          <button
+            onClick={() => window.print()}
+            className="px-3 py-1.5 text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors"
+          >
+            Export PDF
+          </button>
+          {reportId && (
+            <UpgradeCTA
+              currentTier={report.tier as 'quick' | 'full'}
+              reportId={reportId}
+            />
+          )}
+        </div>
+      </header>
+
+      {/* Two-Panel Layout */}
+      <div className="flex-1 flex overflow-hidden">
+        {/* Sidebar */}
+        <Sidebar
+          companyName={companyProfile.company_name || 'AI Readiness Report'}
+          industry={companyProfile.industry_display || companyProfile.industry || 'Business'}
+          score={summary?.ai_readiness_score || 0}
+          findings={sidebarFindings}
+          actions={sidebarActions}
+          playbookPhases={sidebarPlaybookPhases}
+          activeItem={activeItem}
+          onItemClick={setActiveItem}
+        />
+
+        {/* Content Panel */}
+        <ContentPanel
+          breadcrumb={getBreadcrumb()}
+          onPrev={() => prevItem && setActiveItem(prevItem)}
+          onNext={() => nextItem && setActiveItem(nextItem)}
+          prevLabel={getItemLabel(prevItem)}
+          nextLabel={getItemLabel(nextItem)}
+        >
+          {renderContent()}
+
+          {/* Dev Mode Panel - Only visible in dev mode */}
+          {(import.meta.env.DEV || searchParams.get('dev') === 'true') && report && reportId && activeItem.type === 'overview' && (
+            <div className="mt-8">
+              <DevModePanel
                 reportId={reportId}
-                onTaskComplete={handleTaskComplete}
-                initialCompletedTasks={getInitialCompletedTasks()}
+                findings={findings || []}
+                recommendations={recommendations || []}
               />
             </div>
           )}
-        </section>
 
-        {/* Tools Section */}
-        <section id="tools" className="scroll-mt-20 mb-8">
-          <button
-            onClick={() => setShowTools(!showTools)}
-            className="flex items-center gap-2 text-sm font-medium text-primary-600 dark:text-primary-400 hover:text-primary-700 mb-4"
-          >
-            {showTools ? 'Collapse tools section' : 'Expand tools: ROI Calculator, Stack Analysis, Industry Insights'}
-            <svg
-              className={`w-4 h-4 transition-transform ${showTools ? 'rotate-180' : ''}`}
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-            </svg>
-          </button>
+          {/* Automation Roadmap Summary - show on overview */}
+          {report.automation_summary && activeItem.type === 'overview' && (
+            <div className="mt-8">
+              <AutomationRoadmap summary={report.automation_summary} />
+            </div>
+          )}
 
-          <AnimatePresence>
-            {showTools && (
-              <motion.div
-                initial={{ opacity: 0, height: 0 }}
-                animate={{ opacity: 1, height: 'auto' }}
-                exit={{ opacity: 0, height: 0 }}
-                className="space-y-6 overflow-hidden"
-              >
-                {/* ROI Calculator */}
-                <div className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-6">
-                  <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">ROI Calculator</h3>
-                  <ROICalculator
-                    recommendations={recommendations}
-                    valueSummary={value_summary as any}
-                  />
-                </div>
-
-                {/* Stack Architecture */}
-                {report.system_architecture &&
-                 report.system_architecture.cost_comparison &&
-                 (report.system_architecture.existing_tools?.length > 0 ||
-                  report.system_architecture.ai_layer?.length > 0) && (
-                  <div className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-6">
-                    <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">Your Stack</h3>
-                    <StackTab architecture={report.system_architecture} />
-                  </div>
-                )}
-
-                {/* Industry Insights */}
-                {report.industry_insights && (
-                  <div className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-6">
-                    <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">Industry Insights</h3>
-                    <InsightsTab insights={report.industry_insights} />
-                  </div>
-                )}
-
-                {/* Roadmap */}
-                {roadmap && (roadmap.short_term?.length > 0 || roadmap.mid_term?.length > 0 || roadmap.long_term?.length > 0) && (
-                  <div className="space-y-4">
-                    <h3 className="text-lg font-semibold text-gray-900 dark:text-white">Implementation Roadmap</h3>
-
-                    {roadmap.short_term && roadmap.short_term.length > 0 && (
-                      <div className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-6">
-                        <div className="flex items-center gap-3 mb-4">
-                          <div className="w-10 h-10 bg-green-100 dark:bg-green-900/30 text-green-600 dark:text-green-400 rounded-full flex items-center justify-center">
-                            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
-                            </svg>
-                          </div>
-                          <div>
-                            <h4 className="font-semibold text-gray-900 dark:text-white">Phase 1: Quick Wins</h4>
-                            <p className="text-sm text-gray-500 dark:text-gray-400">0-6 months</p>
-                          </div>
-                        </div>
-                        <div className="space-y-3">
-                          {roadmap.short_term.map((item, i) => (
-                            <div key={i} className="border-l-4 border-green-400 pl-4 py-2">
-                              <p className="font-medium text-gray-900 dark:text-white">{item.title}</p>
-                              <p className="text-sm text-gray-600 dark:text-gray-400">{item.description}</p>
-                            </div>
-                          ))}
-                        </div>
-                      </div>
-                    )}
-
-                    {roadmap.mid_term && roadmap.mid_term.length > 0 && (
-                      <div className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-6">
-                        <div className="flex items-center gap-3 mb-4">
-                          <div className="w-10 h-10 bg-blue-100 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 rounded-full flex items-center justify-center">
-                            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
-                            </svg>
-                          </div>
-                          <div>
-                            <h4 className="font-semibold text-gray-900 dark:text-white">Phase 2: Foundation</h4>
-                            <p className="text-sm text-gray-500 dark:text-gray-400">6-18 months</p>
-                          </div>
-                        </div>
-                        <div className="space-y-3">
-                          {roadmap.mid_term.map((item, i) => (
-                            <div key={i} className="border-l-4 border-blue-400 pl-4 py-2">
-                              <p className="font-medium text-gray-900 dark:text-white">{item.title}</p>
-                              <p className="text-sm text-gray-600 dark:text-gray-400">{item.description}</p>
-                            </div>
-                          ))}
-                        </div>
-                      </div>
-                    )}
-
-                    {roadmap.long_term && roadmap.long_term.length > 0 && (
-                      <div className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-6">
-                        <div className="flex items-center gap-3 mb-4">
-                          <div className="w-10 h-10 bg-purple-100 dark:bg-purple-900/30 text-purple-600 dark:text-purple-400 rounded-full flex items-center justify-center">
-                            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
-                            </svg>
-                          </div>
-                          <div>
-                            <h4 className="font-semibold text-gray-900 dark:text-white">Phase 3: Transformation</h4>
-                            <p className="text-sm text-gray-500 dark:text-gray-400">18+ months</p>
-                          </div>
-                        </div>
-                        <div className="space-y-3">
-                          {roadmap.long_term.map((item, i) => (
-                            <div key={i} className="border-l-4 border-purple-400 pl-4 py-2">
-                              <p className="font-medium text-gray-900 dark:text-white">{item.title}</p>
-                              <p className="text-sm text-gray-600 dark:text-gray-400">{item.description}</p>
-                            </div>
-                          ))}
-                        </div>
-                      </div>
-                    )}
-                  </div>
-                )}
-              </motion.div>
-            )}
-          </AnimatePresence>
-        </section>
-
-        {/* Dev Mode Panel - Only visible in dev mode */}
-        {(import.meta.env.DEV || searchParams.get('dev') === 'true') && report && reportId && (
-          <DevModePanel
-            reportId={reportId}
-            findings={findings || []}
-            recommendations={recommendations || []}
-          />
-        )}
-
-        {/* Automation Roadmap Summary */}
-        {report.automation_summary && (
-          <div className="mt-8">
-            <AutomationRoadmap summary={report.automation_summary} />
+          {/* Footer */}
+          <div className="mt-12 pt-6 border-t border-gray-200 dark:border-gray-700">
+            <div className="text-center">
+              <p className="text-sm text-gray-600 dark:text-gray-400">
+                Report generated by <span className="font-medium text-gray-900 dark:text-white">Ready Path</span>
+              </p>
+              <p className="text-xs text-gray-500 dark:text-gray-500 mt-1">
+                This report contains estimates based on provided data and industry benchmarks.
+              </p>
+            </div>
           </div>
-        )}
-
-        {/* Upgrade CTA - Only for quick tier */}
-        {reportId && (
-          <UpgradeCTA
-            currentTier={report.tier as 'quick' | 'full'}
-            reportId={reportId}
-          />
-        )}
-
-        {/* Footer */}
-        <div className="mt-12 pt-6 border-t border-gray-200 dark:border-gray-700">
-          <div className="text-center">
-            <p className="text-sm text-gray-600 dark:text-gray-400">
-              Report generated by <span className="font-medium text-gray-900 dark:text-white">Ready Path</span>
-            </p>
-            <p className="text-xs text-gray-500 dark:text-gray-500 mt-1">
-              This report contains estimates based on provided data and industry benchmarks.
-            </p>
-          </div>
-        </div>
+        </ContentPanel>
       </div>
 
       {/* Print styles */}

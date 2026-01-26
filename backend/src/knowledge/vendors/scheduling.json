@@ -1,0 +1,650 @@
+{
+  "category": "scheduling",
+  "description": "Appointment scheduling and booking platforms for managing calendars, client bookings, and availability across various industries",
+  "vendors": [
+    {
+      "slug": "calendly",
+      "name": "Calendly",
+      "category": "scheduling",
+      "subcategory": "appointment_scheduling",
+      "website": "https://www.calendly.com",
+      "pricing_url": "https://calendly.com/pricing",
+      "description": "The most popular scheduling automation platform for individuals and teams. Simplifies appointment booking with shareable links, automated reminders, and integrations with Google, Microsoft, and Zoom.",
+      "tagline": "Scheduling automation for everyone",
+      "pricing": {
+        "model": "freemium",
+        "currency": "USD",
+        "billing_options": ["monthly", "annual"],
+        "annual_discount_percent": 20,
+        "tiers": [
+          {
+            "name": "Free",
+            "price": 0,
+            "per": "month",
+            "billing": "monthly",
+            "features": [
+              "1 calendar connection",
+              "1 active event type",
+              "Unlimited one-on-one meetings",
+              "Basic integrations",
+              "Mobile apps",
+              "Community support"
+            ],
+            "limits": {
+              "users": 1,
+              "event_types": 1,
+              "calendars": 1
+            }
+          },
+          {
+            "name": "Standard",
+            "price": 10,
+            "per": "seat/month",
+            "billing": "annual",
+            "features": [
+              "Unlimited event types",
+              "Group events",
+              "Multiple calendar connections",
+              "Custom branding and colors",
+              "Stripe/PayPal integration",
+              "Email reminders and follow-ups",
+              "Zoom, Google Meet, Teams integration"
+            ],
+            "limits": {
+              "users": "unlimited",
+              "event_types": "unlimited",
+              "calendars": 6
+            }
+          },
+          {
+            "name": "Teams",
+            "price": 16,
+            "per": "seat/month",
+            "billing": "annual",
+            "features": [
+              "All Standard features",
+              "Round-robin and collective scheduling",
+              "Automated workflows",
+              "Salesforce integration",
+              "HubSpot integration",
+              "Admin analytics",
+              "Team management"
+            ],
+            "limits": {
+              "users": "unlimited"
+            }
+          },
+          {
+            "name": "Enterprise",
+            "price": null,
+            "per": "custom",
+            "billing": "annual",
+            "features": [
+              "All Teams features",
+              "SSO (SAML)",
+              "SCIM provisioning",
+              "Advanced security",
+              "Custom API access",
+              "Dedicated success manager",
+              "Custom SLA"
+            ],
+            "limits": {}
+          }
+        ],
+        "starting_price": 0,
+        "custom_pricing": true,
+        "free_trial_days": 14,
+        "free_tier": true
+      },
+      "best_for": [
+        "Professionals scheduling 1:1 meetings",
+        "Sales teams booking demos and calls",
+        "Recruiters scheduling interviews",
+        "Service providers booking appointments",
+        "Teams needing round-robin scheduling"
+      ],
+      "industries": [
+        "Professional Services",
+        "Sales",
+        "Recruiting",
+        "Coaching",
+        "Healthcare"
+      ],
+      "company_sizes": ["startup", "smb", "mid-market", "enterprise"],
+      "avoid_if": [
+        "Need complex resource scheduling",
+        "Require industry-specific features (use vertical solutions)",
+        "Need built-in payments beyond basic",
+        "Want extensive customization"
+      ],
+      "implementation": {
+        "avg_weeks": 1,
+        "complexity": "low",
+        "requires_developer": false,
+        "cost_range": {
+          "DIY": {"min": 0, "max": 50},
+          "with_help": {"min": 200, "max": 500}
+        }
+      },
+      "ratings": {
+        "g2": {"score": 4.7, "reviews": 2200, "url": "https://www.g2.com/products/calendly"},
+        "capterra": {"score": 4.7, "reviews": 3500},
+        "our_rating": 4.6,
+        "our_notes": "Industry standard for simple scheduling. Best for general business use. Lacks industry-specific features found in vertical solutions."
+      },
+      "integrations": [
+        "Google Calendar", "Microsoft Outlook", "iCloud Calendar",
+        "Zoom", "Google Meet", "Microsoft Teams",
+        "Salesforce", "HubSpot", "Pipedrive",
+        "Stripe", "PayPal", "Zapier", "Make"
+      ],
+      "api": {
+        "available": true,
+        "documentation": "https://developer.calendly.com/",
+        "features": ["REST API", "Webhooks"]
+      },
+      "competitors": ["Acuity Scheduling", "SavvyCal", "Cal.com", "Doodle"],
+      "verified_at": "2026-01-22T00:00:00Z",
+      "verified_by": "manual",
+      "source_url": "https://calendly.com/pricing",
+      "notes": "Pricing verified January 2026. Market leader in scheduling. Free tier limited to 1 event type. Teams tier required for round-robin."
+    },
+    {
+      "slug": "acuity-scheduling",
+      "name": "Acuity Scheduling",
+      "category": "scheduling",
+      "subcategory": "appointment_scheduling",
+      "website": "https://acuityscheduling.com",
+      "pricing_url": "https://acuityscheduling.com/pricing",
+      "description": "Squarespace-owned scheduling platform designed for service businesses. Strong client management, package tracking, and payment processing features.",
+      "tagline": "Client scheduling for growing businesses",
+      "pricing": {
+        "model": "per_seat",
+        "currency": "USD",
+        "billing_options": ["monthly", "annual"],
+        "annual_discount_percent": 20,
+        "tiers": [
+          {
+            "name": "Emerging",
+            "price": 16,
+            "per": "month",
+            "billing": "annual",
+            "features": [
+              "1 staff calendar",
+              "Unlimited appointments",
+              "Email reminders",
+              "Client self-scheduling",
+              "Square/Stripe/PayPal payments",
+              "Zoom integration"
+            ],
+            "limits": {
+              "staff": 1
+            }
+          },
+          {
+            "name": "Growing",
+            "price": 27,
+            "per": "month",
+            "billing": "annual",
+            "features": [
+              "Up to 6 staff calendars",
+              "Text reminders",
+              "Package and subscription tracking",
+              "Intake forms",
+              "Gift certificates",
+              "Remove Acuity branding"
+            ],
+            "limits": {
+              "staff": 6
+            }
+          },
+          {
+            "name": "Powerhouse",
+            "price": 49,
+            "per": "month",
+            "billing": "annual",
+            "features": [
+              "Up to 36 staff calendars",
+              "Multiple time zones",
+              "API access",
+              "HIPAA compliance add-on",
+              "Custom CSS",
+              "Priority support"
+            ],
+            "limits": {
+              "staff": 36
+            }
+          }
+        ],
+        "starting_price": 16,
+        "custom_pricing": false,
+        "free_trial_days": 7,
+        "free_tier": false
+      },
+      "best_for": [
+        "Service-based businesses (salons, spas, coaches)",
+        "Businesses selling packages or memberships",
+        "Solopreneurs to small teams",
+        "Those needing HIPAA compliance",
+        "Squarespace users"
+      ],
+      "industries": [
+        "Health & Wellness", "Coaching", "Beauty & Personal Care",
+        "Professional Services", "Education"
+      ],
+      "company_sizes": ["startup", "smb"],
+      "avoid_if": [
+        "Large teams (36+ staff)",
+        "Need enterprise features",
+        "Require complex workflow automation",
+        "Heavy CRM integration needs"
+      ],
+      "implementation": {
+        "avg_weeks": 1,
+        "complexity": "low",
+        "requires_developer": false,
+        "cost_range": {
+          "DIY": {"min": 0, "max": 100},
+          "with_help": {"min": 200, "max": 800}
+        }
+      },
+      "ratings": {
+        "g2": {"score": 4.7, "reviews": 400, "url": "https://www.g2.com/products/acuity-scheduling"},
+        "capterra": {"score": 4.8, "reviews": 5500},
+        "our_rating": 4.5,
+        "our_notes": "Excellent for service businesses. Strong package/subscription tracking. HIPAA option for healthcare. Limited to 36 staff."
+      },
+      "integrations": [
+        "Google Calendar", "iCloud", "Outlook",
+        "Zoom", "Google Meet", "GoToMeeting",
+        "Stripe", "Square", "PayPal",
+        "Mailchimp", "ConvertKit", "Zapier"
+      ],
+      "api": {
+        "available": true,
+        "documentation": "https://developers.acuityscheduling.com/",
+        "features": ["REST API", "Webhooks"]
+      },
+      "competitors": ["Calendly", "SimplyBook.me", "Jane", "Vagaro"],
+      "verified_at": "2026-01-22T00:00:00Z",
+      "verified_by": "manual",
+      "source_url": "https://acuityscheduling.com/pricing",
+      "notes": "Pricing verified January 2026. Owned by Squarespace. Flat pricing (not per-user) makes it cost-effective for small teams."
+    },
+    {
+      "slug": "cal-com",
+      "name": "Cal.com",
+      "category": "scheduling",
+      "subcategory": "appointment_scheduling",
+      "website": "https://cal.com",
+      "pricing_url": "https://cal.com/pricing",
+      "description": "Open-source scheduling infrastructure. Self-hostable alternative to Calendly with full API access and customization.",
+      "tagline": "Scheduling infrastructure for everyone",
+      "pricing": {
+        "model": "freemium",
+        "currency": "USD",
+        "billing_options": ["monthly", "annual"],
+        "annual_discount_percent": null,
+        "tiers": [
+          {
+            "name": "Free",
+            "price": 0,
+            "per": "month",
+            "billing": "monthly",
+            "features": [
+              "Unlimited event types",
+              "Unlimited bookings",
+              "Basic integrations",
+              "Cal Video built-in",
+              "Community support"
+            ],
+            "limits": {
+              "users": 1
+            }
+          },
+          {
+            "name": "Team",
+            "price": 12,
+            "per": "seat/month",
+            "billing": "monthly",
+            "features": [
+              "Team scheduling",
+              "Round robin",
+              "Collective booking",
+              "Webhooks",
+              "Admin tools",
+              "Priority support"
+            ],
+            "limits": {}
+          },
+          {
+            "name": "Organization",
+            "price": 37,
+            "per": "seat/month",
+            "billing": "monthly",
+            "features": [
+              "Multiple teams",
+              "SAML SSO",
+              "Directory sync",
+              "Audit logs",
+              "Impersonation",
+              "Custom SLA"
+            ],
+            "limits": {}
+          },
+          {
+            "name": "Self-hosted",
+            "price": 0,
+            "per": "forever",
+            "billing": "one-time",
+            "features": [
+              "Full feature access",
+              "Host on your infrastructure",
+              "Full customization",
+              "AGPL v3 licensed",
+              "Community support only"
+            ],
+            "limits": {}
+          }
+        ],
+        "starting_price": 0,
+        "custom_pricing": true,
+        "free_trial_days": null,
+        "free_tier": true
+      },
+      "best_for": [
+        "Developers and technical teams",
+        "Companies wanting self-hosted solutions",
+        "Startups needing customizable scheduling",
+        "Organizations with data sovereignty requirements",
+        "Teams building scheduling into products"
+      ],
+      "industries": [
+        "Technology", "SaaS", "Professional Services", "Healthcare"
+      ],
+      "company_sizes": ["startup", "smb", "mid-market"],
+      "avoid_if": [
+        "Non-technical team without developer resources",
+        "Need extensive pre-built integrations",
+        "Require enterprise support SLAs",
+        "Want turnkey solution with no setup"
+      ],
+      "implementation": {
+        "avg_weeks": 1,
+        "complexity": "low",
+        "requires_developer": false,
+        "cost_range": {
+          "DIY": {"min": 0, "max": 100},
+          "with_help": {"min": 500, "max": 2000}
+        }
+      },
+      "ratings": {
+        "g2": {"score": 4.6, "reviews": 80, "url": "https://www.g2.com/products/cal-com"},
+        "our_rating": 4.4,
+        "our_notes": "Best open-source alternative to Calendly. Self-hosted option for full control. Growing ecosystem."
+      },
+      "integrations": [
+        "Google Calendar", "Microsoft 365", "Apple Calendar",
+        "Zoom", "Google Meet", "Cal Video",
+        "HubSpot", "Salesforce", "Zapier"
+      ],
+      "api": {
+        "available": true,
+        "documentation": "https://cal.com/docs/api-reference",
+        "features": ["REST API", "Webhooks", "SDKs"]
+      },
+      "competitors": ["Calendly", "SavvyCal", "TidyCal"],
+      "verified_at": "2026-01-22T00:00:00Z",
+      "verified_by": "manual",
+      "source_url": "https://cal.com/pricing",
+      "notes": "Pricing verified January 2026. Open-source (AGPL v3). YC-backed. Self-hosted option is truly free. ~30k GitHub stars."
+    },
+    {
+      "slug": "goodtime",
+      "name": "GoodTime",
+      "category": "scheduling",
+      "subcategory": "interview_scheduling",
+      "website": "https://www.goodtime.io",
+      "pricing_url": "https://www.goodtime.io/pricing",
+      "description": "Enterprise interview scheduling platform for recruiting teams. Automates complex multi-party interview coordination with ATS integrations.",
+      "tagline": "Interview scheduling for recruiting teams",
+      "pricing": {
+        "model": "custom",
+        "currency": "USD",
+        "billing_options": ["annual"],
+        "annual_discount_percent": null,
+        "tiers": [
+          {
+            "name": "Essentials",
+            "price": null,
+            "per": "custom",
+            "billing": "annual",
+            "features": [
+              "Self-scheduling links",
+              "Automated reminders",
+              "Calendar sync",
+              "Basic ATS integrations",
+              "Analytics dashboard"
+            ],
+            "limits": {}
+          },
+          {
+            "name": "Advanced",
+            "price": null,
+            "per": "custom",
+            "billing": "annual",
+            "features": [
+              "All Essentials features",
+              "Panel interview coordination",
+              "Load balancing",
+              "Advanced analytics",
+              "Premium integrations"
+            ],
+            "limits": {}
+          },
+          {
+            "name": "Enterprise",
+            "price": null,
+            "per": "custom",
+            "billing": "annual",
+            "features": [
+              "All Advanced features",
+              "SSO",
+              "Custom integrations",
+              "Dedicated support",
+              "Custom SLA"
+            ],
+            "limits": {}
+          }
+        ],
+        "starting_price": null,
+        "custom_pricing": true,
+        "free_trial_days": null,
+        "free_tier": false,
+        "pricing_note": "Enterprise pricing typically starts at $200-500/month based on hiring volume"
+      },
+      "best_for": [
+        "High-volume recruiting teams",
+        "Companies with complex interview processes",
+        "Organizations needing panel coordination",
+        "Teams using Greenhouse, Lever, or Workday ATS"
+      ],
+      "industries": [
+        "Technology", "Recruiting", "Financial Services", "Healthcare"
+      ],
+      "company_sizes": ["mid-market", "enterprise"],
+      "avoid_if": [
+        "Small recruiting team (<5 recruiters)",
+        "Simple 1:1 interview process",
+        "Budget under $200/month",
+        "Don't use major ATS systems"
+      ],
+      "implementation": {
+        "avg_weeks": 4,
+        "complexity": "medium",
+        "requires_developer": false,
+        "cost_range": {
+          "DIY": {"min": 1000, "max": 3000},
+          "with_help": {"min": 3000, "max": 8000}
+        }
+      },
+      "ratings": {
+        "g2": {"score": 4.5, "reviews": 150, "url": "https://www.g2.com/products/goodtime"},
+        "capterra": {"score": 4.6, "reviews": 40},
+        "our_rating": 4.3,
+        "our_notes": "Excellent for enterprise recruiting. Strong ATS integrations. Overkill for small teams."
+      },
+      "integrations": [
+        "Greenhouse", "Lever", "Workday", "SAP SuccessFactors",
+        "Google Calendar", "Microsoft 365",
+        "Zoom", "Google Meet", "Teams"
+      ],
+      "api": {
+        "available": true,
+        "documentation": "Available to customers",
+        "features": ["REST API", "Webhooks"]
+      },
+      "competitors": ["ModernLoop", "Prelude", "Cronofy"],
+      "verified_at": "2026-01-22T00:00:00Z",
+      "verified_by": "manual",
+      "source_url": "https://www.goodtime.io/pricing",
+      "notes": "Pricing verified January 2026. No public pricing - requires demo. Focused on high-volume recruiting use cases."
+    },
+    {
+      "slug": "simplybook-me",
+      "name": "SimplyBook.me",
+      "category": "scheduling",
+      "subcategory": "service_booking",
+      "website": "https://simplybook.me",
+      "pricing_url": "https://simplybook.me/en/pricing",
+      "description": "Feature-rich booking system for service businesses. Includes POS, marketing, client management, and multi-location support.",
+      "tagline": "Complete booking system for service businesses",
+      "pricing": {
+        "model": "per_location",
+        "currency": "USD",
+        "billing_options": ["monthly", "annual"],
+        "annual_discount_percent": 17,
+        "tiers": [
+          {
+            "name": "Free",
+            "price": 0,
+            "per": "month",
+            "billing": "monthly",
+            "features": [
+              "50 bookings/month",
+              "Basic booking page",
+              "Email notifications",
+              "1 provider"
+            ],
+            "limits": {
+              "bookings_per_month": 50,
+              "providers": 1
+            }
+          },
+          {
+            "name": "Basic",
+            "price": 8.25,
+            "per": "month",
+            "billing": "annual",
+            "features": [
+              "100 bookings/month",
+              "Custom features (pick 1)",
+              "Accept deposits",
+              "Remove branding"
+            ],
+            "limits": {
+              "bookings_per_month": 100,
+              "custom_features": 1
+            }
+          },
+          {
+            "name": "Standard",
+            "price": 24.9,
+            "per": "month",
+            "billing": "annual",
+            "features": [
+              "500 bookings/month",
+              "Custom features (pick 3)",
+              "HIPAA compliance",
+              "API access",
+              "Multiple locations"
+            ],
+            "limits": {
+              "bookings_per_month": 500,
+              "custom_features": 3
+            }
+          },
+          {
+            "name": "Premium",
+            "price": 49.9,
+            "per": "month",
+            "billing": "annual",
+            "features": [
+              "2000 bookings/month",
+              "All custom features",
+              "POS integration",
+              "Priority support",
+              "Admin app"
+            ],
+            "limits": {
+              "bookings_per_month": 2000,
+              "custom_features": "all"
+            }
+          }
+        ],
+        "starting_price": 0,
+        "custom_pricing": false,
+        "free_trial_days": 14,
+        "free_tier": true
+      },
+      "best_for": [
+        "Service businesses (salons, spas, fitness)",
+        "Medical practices needing HIPAA",
+        "Multi-location businesses",
+        "Businesses wanting all-in-one solution"
+      ],
+      "industries": [
+        "Health & Wellness", "Beauty", "Fitness", "Healthcare", "Education"
+      ],
+      "company_sizes": ["startup", "smb"],
+      "avoid_if": [
+        "Only need simple meeting scheduling",
+        "Large enterprise needs",
+        "Require deep CRM integrations",
+        "Don't need service business features"
+      ],
+      "implementation": {
+        "avg_weeks": 1,
+        "complexity": "low",
+        "requires_developer": false,
+        "cost_range": {
+          "DIY": {"min": 0, "max": 100},
+          "with_help": {"min": 200, "max": 800}
+        }
+      },
+      "ratings": {
+        "g2": {"score": 4.4, "reviews": 150, "url": "https://www.g2.com/products/simplybook-me"},
+        "capterra": {"score": 4.6, "reviews": 1100},
+        "our_rating": 4.3,
+        "our_notes": "Best value for service businesses. Modular feature system is unique. Good HIPAA option."
+      },
+      "integrations": [
+        "Google Calendar", "Outlook",
+        "Stripe", "Square", "PayPal",
+        "Zoom", "Google Meet",
+        "Facebook", "Instagram", "Zapier"
+      ],
+      "api": {
+        "available": true,
+        "documentation": "https://simplybook.me/en/api-documentation",
+        "features": ["REST API", "Webhooks"]
+      },
+      "competitors": ["Acuity Scheduling", "Setmore", "Vagaro"],
+      "verified_at": "2026-01-22T00:00:00Z",
+      "verified_by": "manual",
+      "source_url": "https://simplybook.me/en/pricing",
+      "notes": "Pricing verified January 2026. Unique 'custom features' model - pay only for what you need. Good for budget-conscious service businesses."
+    }
+  ],
+  "last_updated": "2026-01-22T00:00:00Z"
+}

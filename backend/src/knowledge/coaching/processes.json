@@ -154,5 +154,76 @@
     "Differentiating in crowded market",
     "Balancing customization with systemization",
     "Measuring coaching impact objectively"
+  ],
+  "pain_points": [
+    {
+      "id": "admin-overhead",
+      "name": "Admin Time vs Coaching Time",
+      "description": "Scheduling, notes, billing, and follow-ups consume significant time",
+      "impact": "30-50% of time spent on admin instead of billable coaching",
+      "current_solutions": "Manual processes, basic tools",
+      "ai_potential": "Automation + AI can reclaim 10+ hours/week for coaching or personal time"
+    },
+    {
+      "id": "session-notes",
+      "name": "Session Documentation Burden",
+      "description": "Taking notes during/after sessions takes time and impacts presence",
+      "impact": "30-60 minutes per session on documentation",
+      "current_solutions": "Manual notes, recordings",
+      "ai_potential": "AI transcription + summaries save 75%+ of documentation time"
+    },
+    {
+      "id": "scaling-income",
+      "name": "Income Ceiling in 1:1 Model",
+      "description": "Limited hours means limited income without burning out",
+      "impact": "Income capped at hours available × rate",
+      "current_solutions": "Raise rates, work more hours",
+      "ai_potential": "Automation enables group programs and courses that scale beyond 1:1"
+    },
+    {
+      "id": "client-between-sessions",
+      "name": "Maintaining Client Momentum Between Sessions",
+      "description": "Clients lose focus between sessions without accountability",
+      "impact": "Lower results, lower retention, fewer referrals",
+      "current_solutions": "Manual check-ins, worksheets",
+      "ai_potential": "Automated personalized check-ins keep clients engaged between sessions"
+    }
+  ],
+  "key_metrics": [
+    {
+      "id": "revenue-per-client",
+      "name": "Lifetime Client Value",
+      "description": "Total revenue from average client relationship",
+      "benchmark": "€5,000-25,000 for executive coaching, €1,000-5,000 for life coaching",
+      "how_to_improve": "Package structures, retention programs, upsells to group programs"
+    },
+    {
+      "id": "client-retention",
+      "name": "Client Retention/Re-engagement Rate",
+      "description": "Percentage of clients who renew or re-engage",
+      "benchmark": "60-70% retention is healthy",
+      "how_to_improve": "Progress tracking, accountability check-ins, results documentation"
+    },
+    {
+      "id": "referral-rate",
+      "name": "Referral Rate",
+      "description": "Percentage of new clients from referrals",
+      "benchmark": "30-50% from referrals indicates strong results",
+      "how_to_improve": "Testimonial collection, referral programs, results documentation"
+    },
+    {
+      "id": "coaching-hours",
+      "name": "Weekly Coaching Hours",
+      "description": "Hours spent in actual coaching sessions vs admin",
+      "benchmark": "20-25 hours coaching is sustainable, 15-20 optimal for quality",
+      "how_to_improve": "Automation of scheduling, notes, and admin tasks"
+    },
+    {
+      "id": "session-show-rate",
+      "name": "Session Show Rate",
+      "description": "Percentage of scheduled sessions that happen",
+      "benchmark": "95%+ is excellent, <85% indicates issues",
+      "how_to_improve": "Automated reminders, calendar sync, cancellation policies"
+    }
   ]
 }

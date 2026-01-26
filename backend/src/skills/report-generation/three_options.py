@@ -39,15 +39,9 @@ import logging
 from typing import Dict, Any, List, Optional
 
 from src.skills.base import LLMSkill, SkillContext, SkillError
+from src.services.vendor_validation_service import VendorValidationService
 
 logger = logging.getLogger(__name__)
-
-# Confidence-adjusted ROI factors
-CONFIDENCE_FACTORS = {
-    "high": 1.0,
-    "medium": 0.85,
-    "low": 0.70
-}
 
 
 class ThreeOptionsSkill(LLMSkill[Dict[str, Any]]):
@@ -145,6 +139,9 @@ class ThreeOptionsSkill(LLMSkill[Dict[str, Any]]):
             "budget_range": context.quiz_answers.get("budget_range", "5000-10000") if context.quiz_answers else "5000-10000",
         }
 
+        # Get excluded vendors (already used in other recommendations)
+        exclude_vendors = context.metadata.get("exclude_vendors", [])
+
         # Generate recommendation
         recommendation = await self._generate_recommendation(
             finding=finding,
@@ -152,6 +149,7 @@ class ThreeOptionsSkill(LLMSkill[Dict[str, Any]]):
             industry=context.industry,
             company_context=company_context,
             expertise=context.expertise,
+            exclude_vendors=exclude_vendors,
         )
 
         # Apply confidence-adjusted ROI
@@ -163,6 +161,9 @@ class ThreeOptionsSkill(LLMSkill[Dict[str, Any]]):
         # Validate and normalize
         recommendation = self._validate_recommendation(recommendation, finding)
 
+        # Validate vendors against knowledge base
+        recommendation = self._validate_vendors(recommendation, context.industry)
+
         return recommendation
 
     async def _generate_recommendation(
@@ -172,14 +173,26 @@ class ThreeOptionsSkill(LLMSkill[Dict[str, Any]]):
         industry: str,
         company_context: Dict[str, Any],
         expertise: Optional[Dict[str, Any]],
+        exclude_vendors: Optional[List[str]] = None,
     ) -> Dict[str, Any]:
         """Generate recommendation using Claude."""
         # Filter vendors relevant to finding category
         category = finding.get("category", "efficiency")
+
+        # Build set of excluded vendors (already used in other recommendations)
+        excluded = set(v.lower() for v in (exclude_vendors or []))
+
         relevant_vendors = [
             v for v in vendors
-            if category in v.get("categories", []) or not v.get("categories")
+            if (category in v.get("categories", []) or not v.get("categories"))
+            and v.get("slug", "").lower() not in excluded
+            and v.get("name", "").lower().replace(" ", "-") not in excluded
         ][:10]
+
+        # Note for LLM about excluded vendors
+        exclude_note = ""
+        if excluded:
+            exclude_note = f"\n\nIMPORTANT: Do NOT recommend these vendors (already used in other recommendations): {', '.join(excluded)}"
 
         # Get AI tools context
         ai_tools_context = self._get_ai_tools_context()
@@ -196,7 +209,7 @@ COMPANY CONTEXT:
 - Budget Range: €{company_context['budget_range']}
 
 AVAILABLE VENDORS:
-{json.dumps(relevant_vendors, indent=2) if relevant_vendors else "Use general market vendors"}
+{json.dumps(relevant_vendors, indent=2) if relevant_vendors else "Use general market vendors"}{exclude_note}
 
 {ai_tools_context}
 
@@ -266,23 +279,6 @@ Generate a JSON object with this structure:
     }},
     "our_recommendation": "off_the_shelf|best_in_class|custom_solution",
     "recommendation_rationale": "<why this option is best for THIS company - MUST reference their size, budget, or tech comfort from quiz>",
-
-    "roi_analysis": {{
-        "conservative": {{
-            "roi_percentage": <lower bound - use 70% of expected>,
-            "payback_months": <conservative estimate>
-        }},
-        "expected": {{
-            "roi_percentage": <base calculation>,
-            "payback_months": <base estimate>
-        }},
-        "optimistic": {{
-            "roi_percentage": <upper bound - best case>,
-            "payback_months": <best case>
-        }},
-        "show_by_default": "conservative",
-        "sensitivity": "<REQUIRED if investment > €10K: 'If benefits are 50% lower, payback extends to X months'>"
-    }},
 
     "comparison_summary": {{
         "table": [
@@ -356,13 +352,8 @@ KEY PRINCIPLES
 5. COMPLETE OPTIONS: All three options must be fully specified with real numbers
 
 ═══════════════════════════════════════════════════════════════════════════════
-ROI GUARDRAILS - STRICTLY ENFORCED
-═══════════════════════════════════════════════════════════════════════════════
-- If roi_percentage > 500%: You MUST explain why this is credible (exceptional case)
-- If payback_months < 3: You MUST note this is exceptional with explanation
-- ALWAYS show conservative estimate by default, not optimistic
-- For investments > €10K: MUST include sensitivity analysis
-
+NOTE: roi_percentage and payback_months will be calculated by the ROI Calculator Skill.
+Do NOT generate these values - they will be computed using canonical formulas.
 ═══════════════════════════════════════════════════════════════════════════════
 DECISION RULES
 ═══════════════════════════════════════════════════════════════════════════════
@@ -398,24 +389,17 @@ STACK RECOMMENDATIONS:
         recommendation: Dict[str, Any],
         confidence: str
     ) -> Dict[str, Any]:
-        """Apply confidence-adjusted ROI."""
-        factor = CONFIDENCE_FACTORS.get(confidence.lower(), 0.85)
+        """
+        Mark recommendation with confidence level.
 
-        if "roi_percentage" in recommendation:
-            original_roi = recommendation["roi_percentage"]
-            adjusted_roi = int(original_roi * factor)
-            recommendation["roi_percentage"] = adjusted_roi
-            recommendation["roi_confidence_adjusted"] = True
-            recommendation["confidence_level"] = confidence
-
-            # Add note about adjustment
-            if factor < 1.0:
-                assumptions = recommendation.get("assumptions", [])
-                assumptions.append(
-                    f"ROI adjusted by {int((1-factor)*100)}% for {confidence} confidence"
-                )
-                recommendation["assumptions"] = assumptions
-
+        NOTE: ROI adjustment is handled by ROI Calculator Skill using canonical formulas.
+        This method now only records the confidence level for the ROI Calculator to use.
+        """
+        recommendation["confidence_level"] = confidence
+        # ROI values will be calculated by ROI Calculator Skill - set to 0 as placeholder
+        recommendation["roi_percentage"] = 0
+        recommendation["payback_months"] = 0
+        recommendation["roi_pending_calculation"] = True
         return recommendation
 
     def _validate_recommendation(
@@ -471,11 +455,53 @@ STACK RECOMMENDATIONS:
         rec["recommendation_rationale"] = recommendation.get(
             "recommendation_rationale", ""
         )
-        rec["roi_percentage"] = recommendation.get("roi_percentage", 0)
-        rec["payback_months"] = recommendation.get("payback_months", 0)
+        # ROI values are calculated by ROI Calculator Skill, not LLM
+        # Set to 0 as placeholder - report_service.py will call ROI Calculator
+        rec["roi_percentage"] = 0
+        rec["payback_months"] = 0
+        rec["roi_pending_calculation"] = True
         rec["assumptions"] = recommendation.get("assumptions", [])
 
         return rec
+
+    def _validate_vendors(
+        self,
+        recommendation: Dict[str, Any],
+        industry: str
+    ) -> Dict[str, Any]:
+        """
+        Validate vendors in recommendation against knowledge base.
+
+        Adds verification flags to each option indicating whether the
+        vendor exists in our knowledge base.
+
+        Args:
+            recommendation: The recommendation with options
+            industry: Industry for context-specific vendor lookup
+
+        Returns:
+            Recommendation with vendor validation metadata
+        """
+        try:
+            validator = VendorValidationService(industry=industry)
+            validation_result = validator.validate_recommendation(recommendation)
+            recommendation = validator.apply_validation(recommendation, validation_result)
+
+            # Log warnings for monitoring
+            if validation_result.warnings:
+                for warning in validation_result.warnings:
+                    logger.warning(f"Vendor validation: {warning}")
+
+        except Exception as e:
+            # Don't fail the recommendation if validation fails
+            logger.error(f"Vendor validation failed: {e}")
+            recommendation["vendor_validation"] = {
+                "all_verified": False,
+                "warnings": [f"Validation error: {str(e)}"],
+                "validated_at": "error"
+            }
+
+        return recommendation
 
     def _get_default_recommendation(
         self,
@@ -501,7 +527,8 @@ STACK RECOMMENDATIONS:
             "recommendation_rationale": "Start with proven solutions for faster implementation.",
             "roi_percentage": 0,
             "payback_months": 0,
-            "assumptions": ["Insufficient data for ROI calculation"],
+            "roi_pending_calculation": True,
+            "assumptions": ["ROI to be calculated by ROI Calculator Skill"],
         }
 
 

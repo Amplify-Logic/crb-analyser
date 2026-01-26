@@ -87,18 +87,25 @@ async def get_public_report(report_id: str):
                 detail="Report not found"
             )
 
-        # Verify payment status via quiz session
+        # Verify payment status and get company info via quiz session
         quiz_session_id = report.get("quiz_session_id")
+        company_profile = None
+        company_name = None
+        company_website = None
         if quiz_session_id:
             supabase = await get_async_supabase()
             session_result = await supabase.table("quiz_sessions").select(
-                "status"
+                "status, company_profile, company_name, company_website"
             ).eq("id", quiz_session_id).single().execute()
 
             if session_result.data:
                 session_status = session_result.data.get("status")
+                company_profile = session_result.data.get("company_profile")
+                company_name = session_result.data.get("company_name")
+                company_website = session_result.data.get("company_website")
                 # Only allow access if payment was completed
-                if session_status not in ["paid", "completed", "generating"]:
+                # qa_pending and released are post-generation states that indicate paid access
+                if session_status not in ["paid", "completed", "generating", "qa_pending", "released"]:
                     raise HTTPException(
                         status_code=status.HTTP_402_PAYMENT_REQUIRED,
                         detail="Payment required to access this report"
@@ -127,6 +134,10 @@ async def get_public_report(report_id: str):
             "playbooks": report.get("playbooks", []),
             "system_architecture": report.get("system_architecture", {}),
             "industry_insights": report.get("industry_insights", {}),
+            # Company information from quiz session
+            "company_profile": company_profile,
+            "company_name": company_name,
+            "company_website": company_website,
             # Transparency / Accuracy data
             "math_validation": report.get("math_validation", {}),
             "assumption_log": report.get("assumption_log", {}),
@@ -462,7 +473,7 @@ async def download_public_pdf(report_id: str):
 
             if session_result.data:
                 session_status = session_result.data.get("status")
-                if session_status not in ["paid", "completed", "generating"]:
+                if session_status not in ["paid", "completed", "generating", "qa_pending", "released"]:
                     raise HTTPException(
                         status_code=status.HTTP_402_PAYMENT_REQUIRED,
                         detail="Payment required to access this report"

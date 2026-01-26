@@ -46,7 +46,8 @@ Output Schema:
 """
 
 import logging
-from typing import Dict, Any, List, Optional
+from datetime import datetime
+from typing import Dict, Any, List, Optional, Set, Tuple
 
 from src.skills.base import LLMSkill, SkillContext, SkillError
 from src.config.settings import get_settings
@@ -56,10 +57,15 @@ from src.knowledge import (
     load_vendor_category,
     normalize_industry,
     VENDOR_CATEGORIES,
+    get_freshness_status,
 )
 from src.services.vendor_service import vendor_service
 
 logger = logging.getLogger(__name__)
+
+# Freshness thresholds for pricing warnings
+PRICING_STALE_DAYS = 90
+PRICING_WARNING_DAYS = 30
 
 # Keywords to category mapping for finding classification
 CATEGORY_KEYWORDS = {
@@ -162,11 +168,17 @@ class VendorMatchingSkill(LLMSkill[Dict[str, Any]]):
 
     Uses rule-based category detection with LLM fallback for
     nuanced matching. Scores vendors based on company fit.
+
+    Key features:
+    - Competitor exclusion: Won't recommend competitors to user's existing tools
+    - Integration compatibility: Boosts vendors that integrate with existing stack
+    - Pricing freshness: Warns when pricing data may be outdated
+    - Vendor validation: Ensures recommendations exist in knowledge base
     """
 
     name = "vendor-matching"
     description = "Match findings to specific vendor solutions"
-    version = "1.0.0"
+    version = "1.1.0"  # Updated for competitor/integration checks
 
     requires_llm = True
     requires_knowledge = True
@@ -179,13 +191,22 @@ class VendorMatchingSkill(LLMSkill[Dict[str, Any]]):
             context: SkillContext with:
                 - metadata.finding: The finding to match
                 - metadata.company_context: Company size, budget, etc.
+                - metadata.exclude_vendors: List of vendor slugs to exclude (already recommended)
+                - metadata.existing_stack: User's current software tools
                 - industry: For industry-specific vendors
 
         Returns:
-            Vendor matches with scoring and reasoning
+            Vendor matches with scoring and reasoning, including:
+            - Competitor exclusion info
+            - Integration compatibility scores
+            - Pricing freshness warnings
         """
         finding = context.metadata.get("finding", {})
         company_context = context.metadata.get("company_context", {})
+        # Get list of vendors to exclude (already used in other recommendations)
+        exclude_vendors = set(v.lower() for v in context.metadata.get("exclude_vendors", []))
+        # Get user's existing software stack for competitor/integration checks
+        existing_stack = context.metadata.get("existing_stack", []) or context.existing_stack or []
 
         if not finding:
             raise SkillError(
@@ -219,12 +240,25 @@ class VendorMatchingSkill(LLMSkill[Dict[str, Any]]):
             # Try broader search
             vendors = self._search_all_vendors(finding)
 
+        # Filter out excluded vendors (already used in other recommendations)
+        if exclude_vendors:
+            vendors = [
+                v for v in vendors
+                if v.get("slug", "").lower() not in exclude_vendors
+                and v.get("name", "").lower().replace(" ", "-") not in exclude_vendors
+            ]
+            logger.debug(f"Filtered vendors, {len(vendors)} remaining after excluding {len(exclude_vendors)} used vendors")
+
+        # NEW: Filter out competitors of user's existing tools
+        vendors, excluded_competitors = self._filter_competitors(vendors, existing_stack)
+
         # Score and rank vendors
         scored_vendors = self._score_vendors(
             vendors=vendors,
             finding=finding,
             company_context=company_context,
             detected_category=category,
+            existing_stack=existing_stack,  # Pass for integration scoring
         )
 
         # Use LLM for nuanced matching if we have candidates
@@ -238,6 +272,10 @@ class VendorMatchingSkill(LLMSkill[Dict[str, Any]]):
 
         # Select best matches for each tier
         result = self._select_tier_matches(scored_vendors, finding)
+
+        # NEW: Add metadata about filtering and compatibility
+        result["excluded_competitors"] = excluded_competitors
+        result["existing_stack_considered"] = bool(existing_stack)
 
         return result
 
@@ -294,6 +332,206 @@ class VendorMatchingSkill(LLMSkill[Dict[str, Any]]):
                 tags.append(tag)
 
         return tags
+
+    def _filter_competitors(
+        self,
+        vendors: List[Dict[str, Any]],
+        existing_stack: List[Dict[str, Any]],
+    ) -> Tuple[List[Dict[str, Any]], List[Dict[str, str]]]:
+        """
+        Filter out vendors that are competitors to user's existing tools.
+
+        Args:
+            vendors: List of candidate vendors
+            existing_stack: User's current software tools
+
+        Returns:
+            Tuple of (filtered_vendors, excluded_competitors_info)
+            excluded_competitors_info is a list of {"vendor": name, "reason": why}
+        """
+        if not existing_stack:
+            return vendors, []
+
+        # Build sets of existing tool identifiers (lowercase for comparison)
+        existing_names: Set[str] = set()
+        existing_slugs: Set[str] = set()
+        for tool in existing_stack:
+            name = tool.get("name", "").lower().strip()
+            slug = tool.get("slug", "").lower().strip()
+            if name:
+                existing_names.add(name)
+                # Also add variations
+                existing_names.add(name.replace(" ", "-"))
+                existing_names.add(name.replace("-", " "))
+            if slug:
+                existing_slugs.add(slug)
+                existing_slugs.add(slug.replace("-", " "))
+
+        filtered = []
+        excluded_info = []
+
+        for vendor in vendors:
+            vendor_name = vendor.get("name", "")
+            vendor_slug = vendor.get("slug", "")
+
+            # Get competitor list from vendor data
+            competitors = vendor.get("competitors", [])
+            competitors_lower = [c.lower().strip() for c in competitors]
+
+            # Check if any existing tool is a competitor of this vendor
+            is_competitor = False
+            competing_with = None
+
+            for comp in competitors_lower:
+                if comp in existing_names or comp in existing_slugs:
+                    is_competitor = True
+                    # Find the actual tool name for the message
+                    for tool in existing_stack:
+                        tool_name = tool.get("name", "").lower()
+                        tool_slug = tool.get("slug", "").lower()
+                        if comp == tool_name or comp == tool_slug or comp in tool_name:
+                            competing_with = tool.get("name", tool.get("slug", comp))
+                            break
+                    break
+
+            # Also check reverse: is this vendor already in existing stack?
+            vendor_name_lower = vendor_name.lower()
+            vendor_slug_lower = vendor_slug.lower()
+            if vendor_name_lower in existing_names or vendor_slug_lower in existing_slugs:
+                is_competitor = True
+                competing_with = vendor_name  # They already have this vendor
+
+            if is_competitor:
+                reason = (
+                    f"Competes with your existing {competing_with}"
+                    if competing_with and competing_with != vendor_name
+                    else f"You already have {vendor_name}"
+                )
+                excluded_info.append({
+                    "vendor": vendor_name,
+                    "vendor_slug": vendor_slug,
+                    "reason": reason,
+                })
+                logger.debug(
+                    f"Excluded vendor {vendor_name}: {reason}"
+                )
+            else:
+                filtered.append(vendor)
+
+        if excluded_info:
+            logger.info(
+                f"Filtered {len(excluded_info)} competitor vendors: "
+                f"{[e['vendor'] for e in excluded_info]}"
+            )
+
+        return filtered, excluded_info
+
+    def _score_integration_compatibility(
+        self,
+        vendor: Dict[str, Any],
+        existing_stack: List[Dict[str, Any]],
+    ) -> Tuple[int, List[str]]:
+        """
+        Score vendor based on integration compatibility with existing stack.
+
+        Args:
+            vendor: Vendor to score
+            existing_stack: User's current software tools
+
+        Returns:
+            Tuple of (score_boost, integration_matches)
+        """
+        if not existing_stack:
+            return 0, []
+
+        # Get vendor's integration list
+        vendor_integrations = vendor.get("integrations", [])
+        vendor_integrations_lower = [i.lower() for i in vendor_integrations]
+
+        score = 0
+        matches = []
+
+        for tool in existing_stack:
+            tool_name = tool.get("name", "").lower()
+            tool_slug = tool.get("slug", "").lower()
+
+            # Check if vendor integrates with this tool
+            for integration in vendor_integrations_lower:
+                if (tool_name and tool_name in integration) or \
+                   (tool_slug and tool_slug in integration) or \
+                   (tool_name and integration in tool_name):
+                    score += 15  # Boost for each matching integration
+                    matches.append(tool.get("name", tool.get("slug", "Unknown")))
+                    break
+
+        # Cap the integration boost at 30 points
+        return min(score, 30), matches
+
+    def _check_pricing_freshness(
+        self,
+        vendor: Dict[str, Any],
+    ) -> Dict[str, Any]:
+        """
+        Check if vendor pricing data is fresh.
+
+        Args:
+            vendor: Vendor to check
+
+        Returns:
+            Dict with freshness info:
+            - is_fresh: bool
+            - freshness_status: 'fresh'|'current'|'aging'|'stale'|'unknown'
+            - days_old: int or None
+            - warning: str or None
+        """
+        verified_at = vendor.get("verified_at") or vendor.get("pricing_verified_at")
+
+        if not verified_at:
+            return {
+                "is_fresh": False,
+                "freshness_status": "unknown",
+                "days_old": None,
+                "warning": "Pricing not verified - may be outdated",
+            }
+
+        try:
+            # Parse the date
+            if isinstance(verified_at, str):
+                # Handle ISO format with or without timezone
+                verified_at = verified_at.replace("Z", "+00:00")
+                verified_date = datetime.fromisoformat(verified_at)
+            else:
+                verified_date = verified_at
+
+            # Calculate days old
+            now = datetime.now(verified_date.tzinfo) if verified_date.tzinfo else datetime.now()
+            days_old = (now - verified_date).days
+
+            # Determine freshness status
+            status = get_freshness_status(vendor.get("verified_at", ""))
+            is_fresh = days_old <= PRICING_WARNING_DAYS
+
+            warning = None
+            if days_old > PRICING_STALE_DAYS:
+                warning = f"Pricing last verified {days_old} days ago - may have changed"
+            elif days_old > PRICING_WARNING_DAYS:
+                warning = f"Pricing verified {days_old} days ago - verify before purchasing"
+
+            return {
+                "is_fresh": is_fresh,
+                "freshness_status": status,
+                "days_old": days_old,
+                "warning": warning,
+            }
+
+        except (ValueError, AttributeError) as e:
+            logger.warning(f"Failed to parse verified_at date: {e}")
+            return {
+                "is_fresh": False,
+                "freshness_status": "unknown",
+                "days_old": None,
+                "warning": "Pricing verification date invalid",
+            }
 
     async def _get_candidate_vendors_supabase(
         self,
@@ -413,9 +651,11 @@ class VendorMatchingSkill(LLMSkill[Dict[str, Any]]):
         finding: Dict[str, Any],
         company_context: Dict[str, Any],
         detected_category: Optional[str] = None,
+        existing_stack: Optional[List[Dict[str, Any]]] = None,
     ) -> List[Dict[str, Any]]:
-        """Score vendors based on fit."""
+        """Score vendors based on fit, integration compatibility, and pricing freshness."""
         scored = []
+        existing_stack = existing_stack or []
 
         # Determine company size
         employee_count = company_context.get("employee_count", "11-50")
@@ -543,11 +783,28 @@ class VendorMatchingSkill(LLMSkill[Dict[str, Any]]):
                     limitations.append(condition)
                     break
 
+            # NEW: Score integration compatibility with existing stack
+            integration_boost, integration_matches = self._score_integration_compatibility(
+                vendor, existing_stack
+            )
+            if integration_boost > 0:
+                score += integration_boost
+                reasons.append(f"Integrates with {', '.join(integration_matches[:3])}")
+
+            # NEW: Check pricing freshness
+            freshness_info = self._check_pricing_freshness(vendor)
+            pricing_warning = freshness_info.get("warning")
+            if pricing_warning:
+                limitations.append(pricing_warning)
+
             scored.append({
                 **vendor,
                 "_fit_score": min(100, max(0, score)),
                 "_fit_reasons": reasons,
                 "_limitations": limitations,
+                "_integration_matches": integration_matches,
+                "_integration_boost": integration_boost,
+                "_pricing_freshness": freshness_info,
             })
 
         # Sort by score
@@ -694,6 +951,17 @@ Return ONLY a JSON object:
         else:
             confidence = "low"
 
+        # NEW: Validate vendors exist in knowledge base
+        validation_warnings = []
+        if off_the_shelf and not self._validate_vendor_exists(off_the_shelf.get("slug")):
+            validation_warnings.append(
+                f"Off-the-shelf vendor '{off_the_shelf.get('vendor')}' not found in knowledge base"
+            )
+        if best_in_class and not self._validate_vendor_exists(best_in_class.get("slug")):
+            validation_warnings.append(
+                f"Best-in-class vendor '{best_in_class.get('vendor')}' not found in knowledge base"
+            )
+
         return {
             "finding_id": finding.get("id"),
             "category": self._detect_category(finding),
@@ -702,10 +970,13 @@ Return ONLY a JSON object:
             "alternatives": alternatives,
             "match_confidence": confidence,
             "match_reasoning": off_the_shelf.get("_llm_reasoning", "") if off_the_shelf else "",
+            # NEW: Validation info
+            "validation_warnings": validation_warnings,
+            "all_vendors_validated": len(validation_warnings) == 0,
         }
 
     def _format_vendor(self, vendor: Dict[str, Any]) -> Dict[str, Any]:
-        """Format vendor for output."""
+        """Format vendor for output with integration and freshness info."""
         pricing = vendor.get("pricing") or {}
         tiers = pricing.get("tiers") or []
         impl = vendor.get("implementation") or {}
@@ -729,6 +1000,9 @@ Return ONLY a JSON object:
         with_help = cost_range.get("with_help", {})
         impl_cost = (with_help.get("min", 0) + with_help.get("max", 0)) / 2 if with_help else 0
 
+        # Extract pricing freshness info
+        freshness = vendor.get("_pricing_freshness", {})
+
         return {
             "vendor": vendor.get("name"),
             "slug": vendor.get("slug"),
@@ -741,7 +1015,42 @@ Return ONLY a JSON object:
             "key_features": selected_tier.get("features", [])[:5],
             "limitations": vendor.get("_limitations", []),
             "_llm_reasoning": vendor.get("_llm_reasoning", ""),
+            # NEW: Integration compatibility info
+            "integration_matches": vendor.get("_integration_matches", []),
+            "integration_boost": vendor.get("_integration_boost", 0),
+            # NEW: Pricing freshness info
+            "pricing_freshness": freshness.get("freshness_status", "unknown"),
+            "pricing_warning": freshness.get("warning"),
+            "pricing_verified_days_ago": freshness.get("days_old"),
+            # NEW: Vendor validation
+            "from_knowledge_base": True,  # We only get here if vendor is in KB
         }
+
+    def _validate_vendor_exists(self, vendor_slug: str) -> bool:
+        """
+        Validate that a vendor exists in the knowledge base.
+
+        Args:
+            vendor_slug: Vendor slug to check
+
+        Returns:
+            True if vendor exists in knowledge base
+        """
+        if not vendor_slug:
+            return False
+
+        # Check in JSON knowledge base
+        vendor = get_vendor_by_slug(vendor_slug)
+        if vendor:
+            return True
+
+        # Also check with normalized slug variations
+        normalized = vendor_slug.lower().replace(" ", "-")
+        vendor = get_vendor_by_slug(normalized)
+        if vendor:
+            return True
+
+        return False
 
 
 # For skill discovery

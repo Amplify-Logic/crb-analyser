@@ -1,7 +1,10 @@
 import { Routes, Route, Link } from 'react-router-dom'
 import { ProtectedRoute, AnonymousRoute } from './contexts/AuthContext'
 import ErrorBoundary from './components/ErrorBoundary'
-import Landing from './pages/Landing'
+import LandingHome from './pages/LandingHome'
+import ProfessionalServices from './pages/industries/ProfessionalServices'
+import Dental from './pages/industries/Dental'
+import Ecommerce from './pages/industries/Ecommerce'
 import Login from './pages/Login'
 import Signup from './pages/Signup'
 import Quiz from './pages/Quiz'
@@ -47,7 +50,10 @@ function App() {
     <ErrorBoundary>
       <Routes>
       {/* Public routes */}
-      <Route path="/" element={<Landing />} />
+      <Route path="/" element={<LandingHome />} />
+      <Route path="/professional-services" element={<ProfessionalServices />} />
+      <Route path="/dental" element={<Dental />} />
+      <Route path="/ecommerce" element={<Ecommerce />} />
       <Route path="/login" element={<Login />} />
       <Route path="/signup" element={<Signup />} />
 

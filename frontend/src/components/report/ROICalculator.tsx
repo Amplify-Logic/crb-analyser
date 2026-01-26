@@ -16,7 +16,7 @@ interface ROIInputs {
   hoursWeekly: number
   hourlyRate: number
   automationRate: number
-  implementationApproach: 'diy' | 'saas' | 'freelancer'
+  implementationApproach: 'diy' | 'saas' | 'custom'
 }
 
 interface ROIResults {
@@ -40,69 +40,138 @@ interface SavedScenario {
   createdAt: Date
 }
 
-interface CRBSummary {
-  costDisplay: string
-  riskDisplay: string
-  riskBar: number
-  benefitDisplay: string
-  timeBenefit: string
-}
-
-interface Recommendation {
+// Actual recommendation structure from report
+interface ReportRecommendation {
   id: string
   title: string
-  potential_monthly_savings?: number
-  implementation_cost?: number
+  priority: 'high' | 'medium' | 'low'
+  roi_percentage: number
+  payback_months: number
+  crb_analysis: {
+    cost: { short_term: any; mid_term: any; long_term: any; total: number }
+    risk: { description: string; probability: string; impact: number; mitigation: string }[]
+    benefit: { short_term: any; mid_term: any; long_term: any; total: number }
+  }
+  options: {
+    off_the_shelf: { name: string; vendor: string; monthly_cost: number; implementation_weeks: number }
+    best_in_class: { name: string; vendor: string; monthly_cost: number; implementation_weeks: number }
+    custom_solution: { approach: string; estimated_cost: { min: number; max: number }; implementation_weeks: number }
+  }
+  our_recommendation: string
+  assumptions: string[]
 }
 
-interface ValueSummary {
-  total_monthly_savings?: number
-  total_implementation_cost?: number
+// Actual value summary structure from report
+interface ReportValueSummary {
+  value_saved?: { subtotal: { min: number; max: number }; hours_per_week?: number; hourly_rate?: number }
+  value_created?: { subtotal: { min: number; max: number } }
+  total: { min: number; max: number }
 }
 
 interface ROICalculatorProps {
-  recommendations: Recommendation[]
-  valueSummary?: ValueSummary
+  recommendations: ReportRecommendation[]
+  valueSummary?: ReportValueSummary
   reportId?: string
+  locale?: string // 'en-NZ', 'en-AU', 'de-DE', etc.
+  currency?: string // 'NZD', 'AUD', 'EUR', etc.
   onSaveScenario?: (scenario: SavedScenario) => void
 }
 
-// Cost assumptions by approach
-const APPROACH_COSTS = {
-  diy: { implementation: 0, monthly: 70 },
+// Cost assumptions by approach - will be overridden by report data
+const DEFAULT_APPROACH_COSTS = {
+  diy: { implementation: 0, monthly: 50 },
   saas: { implementation: 500, monthly: 150 },
-  freelancer: { implementation: 2400, monthly: 50 },
+  custom: { implementation: 3000, monthly: 50 },
 }
 
 const APPROACH_LABELS = {
-  diy: 'DIY (Your Time)',
-  saas: 'SaaS Tools',
-  freelancer: 'Hire a Freelancer',
+  diy: 'DIY Setup',
+  saas: 'SaaS Tools (Recommended)',
+  custom: 'Custom Build',
 }
 
 const APPROACH_RISK = {
   diy: { level: 'medium', bar: 0.5, display: 'Medium (learning curve)' },
   saas: { level: 'low', bar: 0.2, display: 'Low (proven solutions)' },
-  freelancer: { level: 'low', bar: 0.3, display: 'Low (expert implementation)' },
+  custom: { level: 'high', bar: 0.7, display: 'Higher (maintenance burden)' },
 }
 
 export default function ROICalculator({
-  recommendations: _recommendations,
+  recommendations,
   valueSummary,
+  locale = 'en-NZ',
+  currency = 'NZD',
   onSaveScenario,
 }: ROICalculatorProps) {
-  // Default values from recommendations or sensible defaults
-  // _recommendations can be used for suggested values in future
-  const _defaultMonthly = valueSummary?.total_monthly_savings || 2500
-  const defaultImplementation = valueSummary?.total_implementation_cost || 2400
-  void _recommendations
-  void _defaultMonthly
+  // Extract actual values from report data
+  const reportDefaults = useMemo(() => {
+    // Calculate total hours from value_saved
+    const hoursPerWeek = valueSummary?.value_saved?.hours_per_week || 12
+    const hourlyRate = valueSummary?.value_saved?.hourly_rate || 85
+
+    // Calculate costs from recommendations
+    const totalMonthlyCost = recommendations.reduce((sum, rec) => {
+      const option = rec.options?.best_in_class || rec.options?.off_the_shelf
+      return sum + (option?.monthly_cost || 0)
+    }, 0)
+
+    const totalImplementationCost = recommendations.reduce((sum, rec) => {
+      return sum + (rec.crb_analysis?.cost?.total || 0)
+    }, 0)
+
+    // Calculate benefits
+    const totalAnnualBenefit = recommendations.reduce((sum, rec) => {
+      return sum + (rec.crb_analysis?.benefit?.total || 0)
+    }, 0)
+
+    // Average ROI and payback from recommendations
+    const avgRoi = recommendations.length > 0
+      ? recommendations.reduce((sum, rec) => sum + (rec.roi_percentage || 0), 0) / recommendations.length
+      : 300
+
+    const avgPayback = recommendations.length > 0
+      ? recommendations.reduce((sum, rec) => sum + (rec.payback_months || 0), 0) / recommendations.length
+      : 3
+
+    return {
+      hoursPerWeek,
+      hourlyRate,
+      totalMonthlyCost,
+      totalImplementationCost,
+      totalAnnualBenefit,
+      avgRoi: Math.round(avgRoi),
+      avgPayback: Math.round(avgPayback * 10) / 10,
+    }
+  }, [recommendations, valueSummary])
+
+  // Dynamic approach costs based on report data
+  const approachCosts = useMemo(() => {
+    const saasMonthly = recommendations.reduce((sum, rec) => {
+      const option = rec.options?.best_in_class || rec.options?.off_the_shelf
+      return sum + (option?.monthly_cost || 0)
+    }, 0) || DEFAULT_APPROACH_COSTS.saas.monthly
+
+    const saasImplementation = recommendations.reduce((sum, rec) => {
+      const option = rec.options?.best_in_class?.implementation_weeks || rec.options?.off_the_shelf?.implementation_weeks || 2
+      return sum + (option * 200) // Rough estimate: $200 per week of setup time
+    }, 0) || DEFAULT_APPROACH_COSTS.saas.implementation
+
+    const customMin = recommendations.reduce((sum, rec) => {
+      return sum + (rec.options?.custom_solution?.estimated_cost?.min || 0)
+    }, 0) || DEFAULT_APPROACH_COSTS.custom.implementation
+
+    return {
+      diy: { implementation: 0, monthly: Math.round(saasMonthly * 0.5) },
+      saas: { implementation: saasImplementation, monthly: saasMonthly },
+      custom: { implementation: customMin, monthly: 50 },
+    }
+  }, [recommendations])
 
   const [inputs, setInputs] = useState<ROIInputs>({
-    hoursWeekly: 15,
-    hourlyRate: 75,
+    hoursWeekly: reportDefaults.hoursPerWeek,
+    hourlyRate: reportDefaults.hourlyRate,
     automationRate: 0.7,
-    implementationApproach: 'freelancer',
+    implementationApproach: 'saas',
   })
 
   const [savedScenarios, setSavedScenarios] = useState<SavedScenario[]>([])
@@ -111,9 +180,18 @@ export default function ROICalculator({
   const [compareMode, setCompareMode] = useState(false)
   const [selectedScenarios, setSelectedScenarios] = useState<string[]>([])
 
+  // Format currency based on locale
+  const formatCurrency = useCallback((value: number): string => {
+    return new Intl.NumberFormat(locale, {
+      style: 'currency',
+      currency: currency,
+      maximumFractionDigits: 0,
+    }).format(value)
+  }, [locale, currency])
+
   // Calculate results based on inputs
   const results = useMemo((): ROIResults => {
-    const approach = APPROACH_COSTS[inputs.implementationApproach]
+    const approach = approachCosts[inputs.implementationApproach]
 
     const hoursSavedWeekly = inputs.hoursWeekly * inputs.automationRate
     const hoursSavedMonthly = hoursSavedWeekly * 4.33
@@ -122,11 +200,11 @@ export default function ROICalculator({
     const monthlySavings = hoursSavedMonthly * inputs.hourlyRate
     const yearlySavings = hoursSavedYearly * inputs.hourlyRate
 
-    const implementationCost = approach.implementation || defaultImplementation * 0.5
+    const implementationCost = approach.implementation
     const monthlyCost = approach.monthly
 
     const netMonthlySavings = monthlySavings - monthlyCost
-    const breakevenMonths = implementationCost > 0
+    const breakevenMonths = implementationCost > 0 && netMonthlySavings > 0
       ? implementationCost / netMonthlySavings
       : 0
 
@@ -147,11 +225,11 @@ export default function ROICalculator({
       breakevenMonths: Math.max(0, parseFloat(breakevenMonths.toFixed(1))),
       threeYearNet,
     }
-  }, [inputs, defaultImplementation])
+  }, [inputs, approachCosts])
 
   // CRB summary for display
-  const crbSummary = useMemo((): CRBSummary => {
-    const approach = APPROACH_COSTS[inputs.implementationApproach]
+  const crbSummary = useMemo(() => {
+    const approach = approachCosts[inputs.implementationApproach]
     const risk = APPROACH_RISK[inputs.implementationApproach]
 
     return {
@@ -163,7 +241,7 @@ export default function ROICalculator({
       benefitDisplay: `${formatCurrency(results.monthlySavings)}/mo saved`,
       timeBenefit: `${results.hoursSavedWeekly.toFixed(1)} hrs/wk freed`,
     }
-  }, [inputs.implementationApproach, results])
+  }, [inputs.implementationApproach, results, approachCosts, formatCurrency])
 
   // Chart data for comparison
   const chartData = useMemo(() => {
@@ -403,9 +481,9 @@ export default function ROICalculator({
                     {APPROACH_LABELS[approach]}
                   </p>
                   <p className="text-xs text-gray-500 mt-1">
-                    {formatCurrency(APPROACH_COSTS[approach].monthly)}/mo
-                    {APPROACH_COSTS[approach].implementation > 0 &&
-                      ` + ${formatCurrency(APPROACH_COSTS[approach].implementation)}`}
+                    {formatCurrency(approachCosts[approach].monthly)}/mo
+                    {approachCosts[approach].implementation > 0 &&
+                      ` + ${formatCurrency(approachCosts[approach].implementation)}`}
                   </p>
                 </button>
               ))}
@@ -646,13 +724,4 @@ export default function ROICalculator({
       `}</style>
     </div>
   )
-}
-
-// Helper function to format currency
-function formatCurrency(value: number): string {
-  return new Intl.NumberFormat('de-DE', {
-    style: 'currency',
-    currency: 'EUR',
-    maximumFractionDigits: 0,
-  }).format(value)
 }

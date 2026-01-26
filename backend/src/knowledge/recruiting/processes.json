@@ -153,5 +153,76 @@
     "Compliance with GDPR and hiring regulations",
     "Commission-based comp creating urgency",
     "Client exclusivity and fee negotiations"
+  ],
+  "pain_points": [
+    {
+      "id": "candidate-sourcing",
+      "name": "Finding Quality Candidates",
+      "description": "Spending hours searching LinkedIn and job boards for qualified candidates",
+      "impact": "40-60% of recruiter time spent on sourcing vs relationship building",
+      "current_solutions": "Boolean searches, LinkedIn Recruiter",
+      "ai_potential": "AI matching and semantic search reduce sourcing time by 50%+"
+    },
+    {
+      "id": "candidate-ghosting",
+      "name": "Candidate Ghosting",
+      "description": "Candidates stop responding during the hiring process",
+      "impact": "30-50% of candidates ghost, wasting recruiter time and client relationships",
+      "current_solutions": "Follow-up calls, multiple channels",
+      "ai_potential": "Automated personalized nurturing keeps candidates engaged"
+    },
+    {
+      "id": "scheduling-coordination",
+      "name": "Interview Scheduling Complexity",
+      "description": "Coordinating schedules between candidates, clients, and panel interviewers",
+      "impact": "Hours per week on back-and-forth scheduling emails",
+      "current_solutions": "Manual coordination, basic Calendly",
+      "ai_potential": "Self-service scheduling with panel coordination saves 80%+ time"
+    },
+    {
+      "id": "database-decay",
+      "name": "ATS Database Decay",
+      "description": "Candidate database becomes stale with outdated information",
+      "impact": "50-70% of ATS data is outdated within 2 years",
+      "current_solutions": "Manual updates, re-sourcing",
+      "ai_potential": "Data enrichment and re-engagement campaigns keep database fresh"
+    }
+  ],
+  "key_metrics": [
+    {
+      "id": "time-to-fill",
+      "name": "Time to Fill",
+      "description": "Days from job order to placement",
+      "benchmark": "30-45 days for professional roles, 60-90 for executive",
+      "how_to_improve": "Pre-vetted talent pools, faster sourcing, streamlined process"
+    },
+    {
+      "id": "placements-per-recruiter",
+      "name": "Placements per Recruiter per Month",
+      "description": "Number of successful placements per recruiter",
+      "benchmark": "2-4 placements/month for permanent, 8-15 for contract",
+      "how_to_improve": "Better matching, reduced admin time, warm candidate pipeline"
+    },
+    {
+      "id": "submittal-to-interview",
+      "name": "Submittal to Interview Ratio",
+      "description": "Percentage of submitted candidates that get interviews",
+      "benchmark": "50-70% is good, <40% indicates matching issues",
+      "how_to_improve": "Better qualification, AI matching, client calibration"
+    },
+    {
+      "id": "offer-acceptance",
+      "name": "Offer Acceptance Rate",
+      "description": "Percentage of offers that are accepted",
+      "benchmark": "85-95% is excellent, <75% indicates issues",
+      "how_to_improve": "Better candidate prep, market rate validation, relationship building"
+    },
+    {
+      "id": "gross-profit-per-recruiter",
+      "name": "Gross Profit per Recruiter",
+      "description": "Revenue generated per recruiter per month/year",
+      "benchmark": "€15,000-30,000/month or €150,000-300,000/year",
+      "how_to_improve": "Higher-value placements, faster fills, reduced admin time"
+    }
   ]
 }

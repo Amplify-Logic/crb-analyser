@@ -153,5 +153,76 @@
     "Client compliance with treatment plans",
     "Competition from low-cost clinics and online pharmacies",
     "Communicating complex medical info to pet parents"
+  ],
+  "pain_points": [
+    {
+      "id": "wellness-compliance",
+      "name": "Low Wellness Visit Compliance",
+      "description": "Pet owners don't bring pets in for regular checkups and preventive care",
+      "impact": "40-60% of pets overdue for wellness visits, missing early disease detection",
+      "current_solutions": "Postcards, phone call reminders",
+      "ai_potential": "Automated multi-channel recall campaigns increase compliance by 20-30%"
+    },
+    {
+      "id": "no-shows",
+      "name": "Appointment No-Shows",
+      "description": "Clients miss appointments without notice, leaving gaps in schedule",
+      "impact": "10-20% no-show rate costs €300-600/day in lost revenue",
+      "current_solutions": "Phone reminders, deposit requirements",
+      "ai_potential": "Automated reminders + easy rescheduling reduce no-shows by 30-50%"
+    },
+    {
+      "id": "after-hours-emergencies",
+      "name": "After-Hours Emergency Handling",
+      "description": "Emergency calls after hours need triage but staff unavailable",
+      "impact": "Missing emergencies damages reputation; unnecessary ER referrals frustrate clients",
+      "current_solutions": "Answering service, ER referral message",
+      "ai_potential": "AI triage + routing captures emergencies and handles routine queries 24/7"
+    },
+    {
+      "id": "documentation-time",
+      "name": "Clinical Documentation Burden",
+      "description": "Vets spend significant time on notes, reducing patient care time",
+      "impact": "30-60 minutes/day on documentation per vet, contributing to burnout",
+      "current_solutions": "Manual typing, templates",
+      "ai_potential": "AI-assisted SOAP notes reduce documentation time by 50%+"
+    }
+  ],
+  "key_metrics": [
+    {
+      "id": "production-per-vet",
+      "name": "Production per Veterinarian",
+      "description": "Revenue generated per vet per day/month",
+      "benchmark": "€1,500-3,000/day or €25,000-50,000/month",
+      "how_to_improve": "Reduce documentation time, optimize scheduling, increase case acceptance"
+    },
+    {
+      "id": "wellness-reappointment",
+      "name": "Wellness Reappointment Rate",
+      "description": "Percentage of pets pre-booked for next wellness visit",
+      "benchmark": "70-85% is excellent, <50% needs improvement",
+      "how_to_improve": "Pre-book at checkout, automated reminders, wellness plans"
+    },
+    {
+      "id": "average-transaction",
+      "name": "Average Client Transaction",
+      "description": "Average revenue per visit",
+      "benchmark": "€150-300 for general practice, €500-2000 for specialty",
+      "how_to_improve": "Comprehensive care recommendations, diagnostics, dental cleanings"
+    },
+    {
+      "id": "new-client-flow",
+      "name": "New Client Acquisition",
+      "description": "Number of new clients per month",
+      "benchmark": "30-50 new clients/month for general practice",
+      "how_to_improve": "Online booking, reputation management, referral programs"
+    },
+    {
+      "id": "client-retention",
+      "name": "Client Retention Rate",
+      "description": "Percentage of clients returning within 18 months",
+      "benchmark": "70-80% retention is healthy",
+      "how_to_improve": "Communication quality, wellness programs, client experience"
+    }
   ]
 }

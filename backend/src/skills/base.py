@@ -24,6 +24,31 @@ logger = logging.getLogger(__name__)
 # Skill Input/Output Models
 # =============================================================================
 
+# Currency symbol mapping
+CURRENCY_SYMBOLS = {
+    "EUR": "€",
+    "USD": "$",
+    "GBP": "£",
+    "NZD": "NZ$",
+    "AUD": "A$",
+    "CAD": "C$",
+    "CHF": "CHF",
+    "JPY": "¥",
+    "CNY": "¥",
+    "INR": "₹",
+    "SGD": "S$",
+    "HKD": "HK$",
+    "SEK": "kr",
+    "NOK": "kr",
+    "DKK": "kr",
+    "PLN": "zł",
+    "CZK": "Kč",
+    "MXN": "MX$",
+    "BRL": "R$",
+    "ZAR": "R",
+}
+
+
 class SkillContext(BaseModel):
     """Context passed to skill execution."""
 
@@ -35,6 +60,9 @@ class SkillContext(BaseModel):
     company_size: Optional[str] = None
     quiz_answers: Optional[Dict[str, Any]] = None
     interview_data: Optional[Dict[str, Any]] = None
+
+    # Currency for monetary values (defaults to EUR for backwards compatibility)
+    currency: str = "EUR"
 
     # Expertise injection (from Layer 2)
     expertise: Optional[Dict[str, Any]] = None
@@ -49,6 +77,10 @@ class SkillContext(BaseModel):
     # List of tools with API scores: [{"slug": "hubspot", "name": "HubSpot", "api_score": 4, ...}]
     existing_stack: Optional[List[Dict[str, Any]]] = None
 
+    # Tool categories from quiz answers (current_tools field)
+    # e.g., ["crm", "accounting", "project_management"]
+    current_tool_categories: Optional[List[str]] = None
+
     # Four Options skill context
     finding: Optional[Dict[str, Any]] = None  # Current finding being processed
     user_profile: Optional[Any] = None  # UserProfile for scoring
@@ -56,6 +88,11 @@ class SkillContext(BaseModel):
 
     # Additional context
     metadata: Dict[str, Any] = Field(default_factory=dict)
+
+    @property
+    def currency_symbol(self) -> str:
+        """Get the currency symbol for display."""
+        return CURRENCY_SYMBOLS.get(self.currency, self.currency)
 
 
 class SkillResult(BaseModel):

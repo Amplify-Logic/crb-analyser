@@ -155,5 +155,76 @@
     "Compliance burden increasing annually",
     "Clients demanding fee predictability over hourly billing",
     "Junior staff retention and development"
+  ],
+  "pain_points": [
+    {
+      "id": "lost-billable-time",
+      "name": "Lost Billable Time",
+      "description": "Professionals forget to record all time spent on client work",
+      "impact": "10-20% of billable time goes unrecorded, costing €50,000-200,000/year per firm",
+      "current_solutions": "Manual time entry, end-of-day reconstruction",
+      "ai_potential": "AI time capture from calendar/email recovers 10-15% lost revenue"
+    },
+    {
+      "id": "admin-burden",
+      "name": "Partner/Senior Admin Time",
+      "description": "High-value professionals doing low-value admin tasks",
+      "impact": "Partners spend 20-40% of time on admin vs client work",
+      "current_solutions": "Admin assistants, basic automation",
+      "ai_potential": "AI email drafting, document generation, and scheduling save 5-10 hours/week"
+    },
+    {
+      "id": "client-intake-speed",
+      "name": "Slow Client Intake Process",
+      "description": "Lengthy intake processes cause prospective clients to go elsewhere",
+      "impact": "10-20% of potential clients lost to faster competitors",
+      "current_solutions": "Paper forms, manual conflict checks",
+      "ai_potential": "Digital intake + automated conflict checks reduce intake time by 80%"
+    },
+    {
+      "id": "document-drafting",
+      "name": "Repetitive Document Drafting",
+      "description": "Time spent on similar documents that could be templated",
+      "impact": "30-50% of junior time on document work that could be automated",
+      "current_solutions": "Templates, copy-paste from precedents",
+      "ai_potential": "AI-assisted drafting creates first versions in minutes vs hours"
+    }
+  ],
+  "key_metrics": [
+    {
+      "id": "realization-rate",
+      "name": "Realization Rate",
+      "description": "Percentage of worked hours that get billed and collected",
+      "benchmark": "85-95% is healthy, <80% indicates collection/write-off issues",
+      "how_to_improve": "Better time capture, upfront pricing, automated billing"
+    },
+    {
+      "id": "utilization-rate",
+      "name": "Utilization Rate",
+      "description": "Percentage of available hours spent on billable work",
+      "benchmark": "70-85% for fee earners, varies by seniority",
+      "how_to_improve": "Reduce admin tasks, better matter assignment, AI automation"
+    },
+    {
+      "id": "revenue-per-professional",
+      "name": "Revenue per Professional",
+      "description": "Annual revenue generated per fee earner",
+      "benchmark": "€200,000-500,000 for associates, €500,000-1,500,000 for partners",
+      "how_to_improve": "Increase utilization, reduce write-offs, leverage technology"
+    },
+    {
+      "id": "days-sales-outstanding",
+      "name": "Days Sales Outstanding (DSO)",
+      "description": "Average days to collect payment after invoicing",
+      "benchmark": "30-45 days is good, >60 days indicates collection issues",
+      "how_to_improve": "Automated reminders, online payment options, e-billing"
+    },
+    {
+      "id": "client-retention",
+      "name": "Client Retention Rate",
+      "description": "Percentage of clients returning year-over-year",
+      "benchmark": "80-90% retention for established firms",
+      "how_to_improve": "Client portals, proactive communication, relationship management"
+    }
   ]
 }

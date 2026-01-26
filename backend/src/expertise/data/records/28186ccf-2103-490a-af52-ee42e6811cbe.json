@@ -1,0 +1,56 @@
+{
+  "audit_id": "28186ccf-2103-490a-af52-ee42e6811cbe",
+  "timestamp": "2026-01-17T22:10:51.546501",
+  "industry": "dental",
+  "company_size": "2-10",
+  "pain_points_found": [],
+  "processes_analyzed": [],
+  "recommendations_made": [],
+  "vendors_recommended": [],
+  "ai_readiness_score": 58,
+  "total_potential_savings": 850000.0,
+  "findings_count": 13,
+  "tools_used": {},
+  "token_usage": {
+    "usage": [
+      {
+        "task": "generate_findings",
+        "model": "claude-sonnet-4-5-20250929",
+        "input_tokens": 17431,
+        "output_tokens": 5734
+      },
+      {
+        "task": "generate_roadmap",
+        "model": "claude-sonnet-4-5-20250929",
+        "input_tokens": 31228,
+        "output_tokens": 1752
+      }
+    ],
+    "summary": {
+      "total_input_tokens": 48659,
+      "total_output_tokens": 7486,
+      "total_tokens": 56145,
+      "estimated_cost_usd": 0.2583,
+      "by_model": {
+        "claude-sonnet-4-5-20250929": {
+          "input": 48659,
+          "output": 7486,
+          "tasks": [
+            "generate_findings",
+            "generate_roadmap"
+          ],
+          "estimated_cost_usd": 0.2583
+        }
+      },
+      "task_count": 2
+    }
+  },
+  "phases_completed": [
+    "executive_summary",
+    "findings",
+    "playbook",
+    "architecture",
+    "insights"
+  ],
+  "errors_encountered": []
+}

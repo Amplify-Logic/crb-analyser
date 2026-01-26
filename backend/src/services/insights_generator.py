@@ -383,6 +383,60 @@ INDUSTRY_DATA = {
             },
         ],
     },
+    "home-services": {
+        "display_name": "Home Services & Trades",
+        "adoption_stats": [
+            {
+                "capability": "AI call answering",
+                "adoption": 25,
+                "outcome": "Capture missed calls 24/7",
+                "cost": "$200-500/mo",
+                "risk": "low",
+                "benefit": "30% more leads captured"
+            },
+            {
+                "capability": "Job management software",
+                "adoption": 55,
+                "outcome": "Eliminate double-entry",
+                "cost": "$50-200/mo",
+                "risk": "low",
+                "benefit": "10 hrs/wk saved"
+            },
+            {
+                "capability": "Mobile quoting",
+                "adoption": 40,
+                "outcome": "Quote on-site instantly",
+                "cost": "$50-150/mo",
+                "risk": "low",
+                "benefit": "2x faster quotes"
+            },
+            {
+                "capability": "Automated reminders",
+                "adoption": 60,
+                "outcome": "Reduce no-shows by 50%",
+                "cost": "$20-50/mo",
+                "risk": "low",
+                "benefit": "50% fewer no-shows"
+            },
+        ],
+        "opportunities": {
+            "emerging": ["AI dispatch optimization", "Predictive maintenance", "Voice-to-job automation"],
+            "growing": ["AI call answering", "Photo-based quoting", "Customer portal"],
+            "established": ["Job management", "Mobile invoicing", "Automated reminders"],
+        },
+        "social_proof": [
+            {
+                "quote": "We stopped losing emergency calls. AI answers when we're under a sink.",
+                "company": "Plumbing business, 3 technicians",
+                "outcome": "40% more emergency jobs"
+            },
+            {
+                "quote": "Invoicing used to take 2 hours every night. Now it's automatic.",
+                "company": "HVAC contractor, 5 technicians",
+                "outcome": "10 hrs/wk freed"
+            },
+        ],
+    },
     "general": {
         "display_name": "General Business",
         "adoption_stats": [

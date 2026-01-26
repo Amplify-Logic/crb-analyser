@@ -13,29 +13,41 @@ async def calculate_roi(
     context: Dict[str, Any],
     audit_id: str,
 ) -> Dict[str, Any]:
-    """Calculate ROI with transparent assumptions."""
+    """
+    Calculate ROI with transparent assumptions using canonical formulas.
+
+    Canonical ROI Formula (from roi_calculator.py):
+    - net_annual = yearly_savings - yearly_cost
+    - first_year_investment = implementation_cost + yearly_cost
+    - roi_percentage = (net_annual / first_year_investment) × 100
+    - payback_months = implementation_cost / (net_annual / 12)
+    """
     solution_name = inputs.get("solution_name", "")
     implementation_cost = inputs.get("implementation_cost", 0)
     monthly_cost = inputs.get("monthly_cost", 0)
     monthly_savings = inputs.get("monthly_savings", 0)
     time_horizon = inputs.get("time_horizon_months", 12)
 
-    # Calculate total costs
-    total_implementation = implementation_cost
-    total_recurring = monthly_cost * time_horizon
-    total_cost = total_implementation + total_recurring
+    # Calculate annual values (canonical formula uses annual)
+    yearly_cost = monthly_cost * 12
+    yearly_savings = monthly_savings * 12
 
-    # Calculate total savings
-    total_savings = monthly_savings * time_horizon
+    # Canonical: Net annual benefit = yearly savings - yearly cost
+    net_annual = yearly_savings - yearly_cost
 
-    # Calculate net benefit
-    net_benefit = total_savings - total_cost
+    # Canonical: First year investment = implementation + yearly cost
+    first_year_investment = implementation_cost + yearly_cost
 
-    # Calculate ROI percentage
-    if total_cost > 0:
-        roi_percentage = ((net_benefit) / total_cost) * 100
+    # Canonical: ROI = net annual / first year investment × 100
+    if first_year_investment > 0:
+        roi_percentage = (net_annual / first_year_investment) * 100
     else:
-        roi_percentage = 0 if total_savings == 0 else 100
+        roi_percentage = 0 if yearly_savings == 0 else 100
+
+    # For multi-year reporting, also calculate total values
+    total_cost = implementation_cost + (monthly_cost * time_horizon)
+    total_savings = monthly_savings * time_horizon
+    net_benefit = total_savings - total_cost
 
     # Calculate payback period
     net_monthly_benefit = monthly_savings - monthly_cost

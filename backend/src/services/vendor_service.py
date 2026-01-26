@@ -942,6 +942,30 @@ class VendorService:
             logger.error(f"Failed to update vendor API info for {slug}: {e}")
             return None
 
+    async def vendor_exists(self, slug: str) -> bool:
+        """
+        Check if a vendor exists in Supabase or JSON knowledge base.
+
+        Args:
+            slug: Vendor slug to check
+
+        Returns:
+            True if vendor exists
+        """
+        settings = get_settings()
+
+        if settings.USE_SUPABASE_VENDORS:
+            try:
+                vendor = await self.get_vendor(slug)
+                if vendor:
+                    return True
+            except Exception as e:
+                logger.warning(f"Supabase vendor check failed: {e}")
+
+        # Fallback to JSON knowledge base
+        from src.knowledge import get_vendor_by_slug
+        return get_vendor_by_slug(slug) is not None
+
     def _get_vendors_from_json_with_boost(
         self,
         industry: str,

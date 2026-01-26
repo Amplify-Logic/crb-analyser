@@ -350,5 +350,27 @@
       "why_avoid": "Premature optimization when fundamentals aren't solid",
       "better_approach": "Prove 1:1 model first, then systematize what works"
     }
+  ],
+  "not_recommended": [
+    {
+      "name": "Building custom coaching platform from scratch",
+      "reason": "Expensive development for features that exist in off-the-shelf tools; maintenance burden distracts from coaching",
+      "alternative": "Use CoachAccountable, Practice Better, or Paperbell which have coaching-specific features"
+    },
+    {
+      "name": "AI-only client intake without human conversation",
+      "reason": "Coaching is relationship-based; clients need to feel heard before committing",
+      "alternative": "AI for scheduling and basic qualification, human for discovery conversations"
+    },
+    {
+      "name": "Complex CRM for solo coaches",
+      "reason": "Overkill for small client base; time spent on CRM administration vs coaching",
+      "alternative": "Simple spreadsheet or coaching-specific tool like Paperbell for under 30 clients"
+    },
+    {
+      "name": "Automated course creation before having paying 1:1 clients",
+      "reason": "Need to validate methodology with real clients before scaling; courses often fail without proven market",
+      "alternative": "Get 10-20 1:1 clients first, then productize what works into group or course format"
+    }
   ]
 }

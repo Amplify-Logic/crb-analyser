@@ -49,6 +49,7 @@ import logging
 from typing import Dict, Any, List, Optional
 
 from src.skills.base import LLMSkill, SkillContext, SkillError
+from src.utils.quiz_utils import parse_employee_count
 
 logger = logging.getLogger(__name__)
 
@@ -226,7 +227,7 @@ class ROICalculatorSkill(LLMSkill[Dict[str, Any]]):
         )
 
         # Parse team_size - handle range strings like "11-25" or "11-50"
-        team_size = self._parse_team_size(team_size_raw)
+        team_size = parse_employee_count(team_size_raw)
 
         # Determine if values came from actual data or assumptions
         hourly_rate_source = "quiz_data" if answers.get("hourly_rate") else "assumption"
@@ -241,39 +242,6 @@ class ROICalculatorSkill(LLMSkill[Dict[str, Any]]):
             "automation_efficiency": DEFAULT_ASSUMPTIONS["automation_efficiency"]["value"],
             "adoption_rate": DEFAULT_ASSUMPTIONS["adoption_rate"]["value"],
         }
-
-    def _parse_team_size(self, value: Any) -> int:
-        """Parse team size from various formats (int, string, range string).
-
-        Handles formats like:
-        - 25 (int)
-        - "25" (string)
-        - "11-25" (range string - uses midpoint)
-        - "11-50" (range string - uses midpoint)
-        """
-        if isinstance(value, int):
-            return value
-
-        if isinstance(value, str):
-            # Check for range format like "11-25" or "11-50"
-            if "-" in value:
-                try:
-                    parts = value.split("-")
-                    if len(parts) == 2:
-                        low = int(parts[0].strip())
-                        high = int(parts[1].strip())
-                        return (low + high) // 2  # Use midpoint
-                except (ValueError, IndexError):
-                    pass
-
-            # Try direct int conversion
-            try:
-                return int(value)
-            except ValueError:
-                pass
-
-        # Default fallback
-        return 5
 
     async def _estimate_time_savings(
         self,
@@ -407,6 +375,19 @@ Return ONLY a JSON object:
         else:
             roi_raw = 0
 
+        # Handle negative ROI: cap at 0% with explanation
+        # Negative ROI means costs exceed savings - this shouldn't happen for good recommendations
+        roi_warning = None
+        if roi_raw < 0:
+            roi_warning = (
+                f"Calculated ROI is negative ({roi_raw:.0f}%), indicating yearly costs "
+                f"({yearly_cost:.0f}) exceed savings ({yearly_savings:.0f}). "
+                "This may indicate time savings weren't properly estimated or costs are too high."
+            )
+            logger.warning(f"Negative ROI for finding {finding.get('id', 'unknown')}: {roi_warning}")
+            # Cap at 0% but preserve the warning
+            roi_raw = max(roi_raw, 0)
+
         # Apply confidence adjustment
         confidence = finding.get("confidence", "medium").lower()
         factor = CONFIDENCE_FACTORS.get(confidence, 0.85)
@@ -416,15 +397,25 @@ Return ONLY a JSON object:
         if net_annual > 0:
             payback_months = (implementation_cost / (net_annual / 12))
         else:
-            payback_months = 999  # Never pays back
+            # Net annual is zero or negative - payback is very long or never
+            if yearly_savings > 0:
+                # Some savings but costs exceed them
+                payback_months = 60  # Cap at 5 years
+            else:
+                payback_months = 999  # No savings at all
 
-        return {
+        result = {
             "roi_raw": round(roi_raw, 0),
             "roi_adjusted": round(roi_adjusted, 0),
             "confidence_factor": factor,
             "payback_months": round(min(payback_months, 60), 1),  # Cap at 5 years
             "net_annual_benefit": round(net_annual, 2),
         }
+
+        if roi_warning:
+            result["roi_warning"] = roi_warning
+
+        return result
 
     def _calculate_sensitivity(
         self,

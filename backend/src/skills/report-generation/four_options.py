@@ -32,6 +32,8 @@ from src.models.four_options import (
     CostEstimate,
 )
 from src.services.option_scoring import get_recommendations
+from src.services.vendor_validation_service import VendorValidationService
+from src.utils.quiz_utils import get_complexity_level, get_viable_option_types
 
 logger = logging.getLogger(__name__)
 
@@ -57,12 +59,14 @@ class FourOptionsSkill(LLMSkill[Dict[str, Any]]):
         profile: UserProfile = context.user_profile
         vendors = context.vendors or []
         industry = context.industry or "general"
+        currency_symbol = context.currency_symbol
+        quiz_answers = context.quiz_answers or {}
 
         # Format vendor context
         vendor_context = ""
         if vendors:
             vendor_list = "\n".join([
-                f"- {v.get('name', 'Unknown')}: €{v.get('monthly_price', 'N/A')}/mo"
+                f"- {v.get('name', 'Unknown')}: {currency_symbol}{v.get('monthly_price', 'N/A')}/mo"
                 for v in vendors[:10]
             ])
             vendor_context = f"\n\nRELEVANT VENDORS:\n{vendor_list}"
@@ -78,6 +82,13 @@ class FourOptionsSkill(LLMSkill[Dict[str, Any]]):
         budget_desc = "Can afford all options"
         if profile.budget.value in ["low", "moderate"]:
             budget_desc = "Budget constrained - prefer cost-effective options"
+
+        # Get complexity level and viable options
+        complexity = get_complexity_level(quiz_answers)
+        viable_options = get_viable_option_types(quiz_answers)
+
+        # Build complexity guidance
+        complexity_guidance = self._get_complexity_guidance(complexity, viable_options)
 
         return f"""Generate a 4-option recommendation for this finding.
 
@@ -100,6 +111,11 @@ The user's profile determines which options are viable:
 - Capability={profile.capability.value}: {cap_desc}
 - Preference={profile.preference.value}: User prefers {profile.preference.value.upper()} approach
 - Budget={profile.budget.value}: {budget_desc}
+
+VIABLE OPTIONS FOR THIS USER: {', '.join(viable_options).upper()}
+Non-viable options should still be included but with clear warnings about why they're not recommended.
+
+{complexity_guidance}
 
 Generate all 4 options with realistic details:
 
@@ -181,16 +197,66 @@ IMPORTANT:
 - If an option isn't viable for this user, still include it but note why in cons
 """
 
-    def _build_system_prompt(self) -> str:
+    def _get_complexity_guidance(self, complexity: str, viable_options: List[str]) -> str:
+        """Get writing guidance based on user's technical complexity level."""
+        guidance = {
+            "simple": """LANGUAGE COMPLEXITY: SIMPLE
+Write for someone who avoids anything technical:
+- Use plain English, no jargon
+- Step-by-step explanations
+- Avoid acronyms (or explain them)
+- Focus on outcomes, not implementation details
+- Example: "Click this button, then wait for the email" not "Trigger the webhook endpoint"
+""",
+            "basic": """LANGUAGE COMPLEXITY: BASIC
+Write for someone who can follow tutorials:
+- Light technical terms are OK if explained
+- Clear step-by-step instructions
+- Visual references when helpful
+- Example: "Connect the apps using Zapier (a tool that links software together)"
+""",
+            "intermediate": """LANGUAGE COMPLEXITY: INTERMEDIATE
+Write for someone comfortable with automation:
+- Technical terms like API, webhook, automation are fine
+- Can reference tools like Make, Zapier, n8n directly
+- Include integration specifics
+- Example: "Set up a Zap that triggers on new form submission"
+""",
+            "advanced": """LANGUAGE COMPLEXITY: ADVANCED
+Write for someone who codes or uses AI coding tools:
+- Full technical depth appreciated
+- Include code snippets if helpful
+- Reference specific APIs and SDKs
+- Example: "Use the Claude API with function calling to process incoming data"
+""",
+            "technical": """LANGUAGE COMPLEXITY: TECHNICAL
+Write for developers or teams with technical resources:
+- Full technical specifications welcome
+- Include architecture considerations
+- Reference specific frameworks and patterns
+- Example: "Implement an event-driven architecture using webhooks and a message queue"
+""",
+        }
+
+        base_guidance = guidance.get(complexity, guidance["basic"])
+
+        # Add warnings for non-viable options
+        non_viable = [opt for opt in ["buy", "connect", "build", "hire"] if opt not in viable_options]
+        if non_viable:
+            base_guidance += f"\n\nNON-VIABLE OPTIONS ({', '.join(non_viable).upper()}): Include these but add clear cons explaining why they're not recommended for this user's skill level."
+
+        return base_guidance
+
+    def _build_system_prompt(self, currency: str = "EUR") -> str:
         """System prompt for consistent output."""
-        return """You are a technical consultant generating implementation options.
+        return f"""You are a technical consultant generating implementation options.
 
 RULES:
 - Use ONLY real vendors and real pricing (2024-2025 data)
 - Be specific, not vague - name actual tools and platforms
 - Pros/cons must be specific to THIS user's profile
 - Never use buzzwords: seamless, robust, scalable, leverage, unlock
-- All costs in EUR
+- All costs in {currency}
 - Be honest about limitations and requirements
 - Output valid JSON only"""
 
@@ -219,16 +285,22 @@ RULES:
 
         # Get LLM-generated options
         prompt = self._build_prompt(context)
-        system = self._build_system_prompt()
+        system = self._build_system_prompt(currency=context.currency)
 
         try:
-            response = await self.call_llm_json(prompt, system_prompt=system)
+            response = await self.call_llm_json(prompt, system=system)
             options_data = response
         except SkillError:
             raise
         except Exception as e:
             logger.error(f"Failed to parse LLM response: {e}")
             raise SkillError(self.name, f"Invalid JSON from LLM: {e}")
+
+        # Validate BUY vendor against knowledge base
+        vendor_validation = self._validate_buy_vendor(
+            options_data.get("buy", {}),
+            context.industry
+        )
 
         # Build option models
         buy = BuyOption(
@@ -241,6 +313,9 @@ RULES:
             cost=CostEstimate(
                 year_one_total=options_data.get("buy", {}).get("year_one_cost", 0)
             ),
+            vendor_verified=vendor_validation.get("verified", False),
+            vendor_match_type=vendor_validation.get("match_type", "none"),
+            kb_monthly_price=vendor_validation.get("kb_price"),
         )
 
         connect_data = options_data.get("connect", {})
@@ -360,6 +435,61 @@ RULES:
             "This is a complex automation that doesn't fit standard patterns. "
             "Consider booking a consultation to discuss custom approaches."
         )
+
+    def _validate_buy_vendor(
+        self,
+        buy_data: Dict[str, Any],
+        industry: Optional[str]
+    ) -> Dict[str, Any]:
+        """
+        Validate the BUY option vendor against knowledge base.
+
+        Args:
+            buy_data: The buy option data from LLM
+            industry: Industry for context-specific lookup
+
+        Returns:
+            Validation result with verified flag and KB pricing
+        """
+        result = {
+            "verified": False,
+            "match_type": "none",
+            "kb_price": None,
+            "warnings": []
+        }
+
+        vendor_name = buy_data.get("vendor_name") or buy_data.get("vendor_slug", "")
+        if not vendor_name:
+            return result
+
+        try:
+            validator = VendorValidationService(industry=industry)
+            match = validator.lookup_vendor(vendor_name)
+
+            result["verified"] = match.found
+            result["match_type"] = match.match_type
+
+            if match.found and match.matched_vendor:
+                # Extract KB pricing for comparison
+                kb_pricing = validator._extract_kb_pricing(match.matched_vendor)
+                if kb_pricing:
+                    result["kb_price"] = kb_pricing.get("monthly")
+
+                if match.match_type == "fuzzy_name":
+                    result["warnings"].append(
+                        f"Vendor '{vendor_name}' matched via fuzzy match to '{match.matched_vendor.get('name')}'"
+                    )
+            else:
+                result["warnings"].append(
+                    f"BUY vendor '{vendor_name}' not found in knowledge base"
+                )
+                logger.warning(f"Vendor validation: BUY vendor '{vendor_name}' not in KB")
+
+        except Exception as e:
+            logger.error(f"Vendor validation failed for '{vendor_name}': {e}")
+            result["warnings"].append(f"Validation error: {str(e)}")
+
+        return result
 
 
 # For skill discovery

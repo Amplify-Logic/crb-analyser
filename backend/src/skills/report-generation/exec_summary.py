@@ -4,8 +4,8 @@ Executive Summary Skill
 Generates compelling, calibrated executive summaries for CRB reports.
 
 This skill:
-1. Analyzes quiz/interview data to extract key insights
-2. Scores AI readiness, customer value, and business health
+1. Calculates AI readiness using transparent FORMULA (not LLM guess)
+2. Uses LLM for qualitative insights (key insight, opportunities)
 3. Uses expertise data to calibrate scores to industry norms
 4. Identifies top opportunities and what NOT to recommend
 5. Provides honest, actionable assessments
@@ -13,6 +13,7 @@ This skill:
 Output Schema:
 {
     "ai_readiness_score": int (0-100),
+    "ai_readiness_breakdown": {...},  # Transparent score breakdown
     "customer_value_score": float (1-10),
     "business_health_score": float (1-10),
     "key_insight": str,
@@ -27,10 +28,12 @@ Output Schema:
 
 import json
 import logging
+import re
 from datetime import datetime
 from typing import Dict, Any, Optional, List
 
 from src.skills.base import LLMSkill, SkillContext, SkillError
+from src.skills.analysis.ai_readiness_calculator import AIReadinessCalculator
 
 logger = logging.getLogger(__name__)
 
@@ -78,17 +81,45 @@ class ExecSummarySkill(LLMSkill[Dict[str, Any]]):
         industry = context.industry
         expertise = context.expertise or {}
         interview_data = context.interview_data or {}
+        currency = context.currency
+        currency_symbol = context.currency_symbol
+
+        # Step 1: Calculate AI readiness using FORMULA (not LLM guess)
+        ai_readiness_result = self._calculate_ai_readiness(context)
+        formula_ai_score = ai_readiness_result["total_score"]
+        ai_readiness_breakdown = ai_readiness_result
+
+        logger.info(
+            f"AI readiness calculated: {formula_ai_score}/100 "
+            f"(tech={ai_readiness_result['components']['tech_stack']['score']}, "
+            f"data={ai_readiness_result['components']['data_readiness']['score']}, "
+            f"team={ai_readiness_result['components']['team_readiness']['score']}, "
+            f"process={ai_readiness_result['components']['process_maturity']['score']})"
+        )
 
         # Build expertise context for calibration
         expertise_context = self._build_expertise_context(expertise, industry)
 
-        # Generate the summary using LLM
+        # Step 2: Generate qualitative summary using LLM (but NOT the AI score)
         summary = await self._generate_summary(
             answers=answers,
             industry=industry,
             expertise_context=expertise_context,
             interview_data=interview_data,
+            currency=currency,
+            currency_symbol=currency_symbol,
+            formula_ai_score=formula_ai_score,  # Pass the calculated score
         )
+
+        # Step 3: Override LLM's AI readiness score with formula-based score
+        summary["ai_readiness_score"] = formula_ai_score
+        summary["ai_readiness_breakdown"] = ai_readiness_breakdown
+
+        # Step 4: Sort top_opportunities by value (highest first)
+        if summary.get("top_opportunities"):
+            summary["top_opportunities"] = self._sort_opportunities_by_value(
+                summary["top_opportunities"]
+            )
 
         # Apply expertise calibration if available
         if expertise:
@@ -105,6 +136,77 @@ class ExecSummarySkill(LLMSkill[Dict[str, Any]]):
             }
 
         return summary
+
+    def _calculate_ai_readiness(self, context: SkillContext) -> Dict[str, Any]:
+        """Calculate AI readiness using the formula-based calculator."""
+        calculator = AIReadinessCalculator()
+        result = calculator.execute_sync(context)
+        return result.to_dict()
+
+    def _sort_opportunities_by_value(
+        self,
+        opportunities: List[Dict[str, Any]]
+    ) -> List[Dict[str, Any]]:
+        """
+        Sort opportunities by value potential (highest first).
+
+        Extracts numeric value from value_potential strings like:
+        - "€10K-20K/year" → 15000 (midpoint)
+        - "5 hrs/week × €50 = €13K" → 13000
+        - "$25,000-$40,000" → 32500
+        """
+        def extract_value(opp: Dict[str, Any]) -> float:
+            value_str = opp.get("value_potential", "0")
+            if not isinstance(value_str, str):
+                return 0
+
+            # Check for "= €XXK" pattern (final result after calculation)
+            final_result = re.search(r'=\s*[€$£]\s*(\d+(?:\.\d+)?)\s*[Kk]', value_str)
+            if final_result:
+                return float(final_result.group(1)) * 1000
+
+            final_result = re.search(r'=\s*[€$£]\s*([\d,]+)', value_str)
+            if final_result:
+                return float(final_result.group(1).replace(',', ''))
+
+            # Check for range pattern: €XK-YK or €X-Y or $X,XXX-$Y,XXX
+            range_match = re.search(
+                r'[€$£]\s*(\d+(?:\.\d+)?)\s*[Kk]?\s*[-–]\s*(\d+(?:\.\d+)?)\s*[Kk]?',
+                value_str
+            )
+            if range_match:
+                val1 = float(range_match.group(1))
+                val2 = float(range_match.group(2))
+                # Check if K suffix present (look at original string around match)
+                match_str = range_match.group(0)
+                if 'K' in match_str or 'k' in match_str:
+                    val1 *= 1000
+                    val2 *= 1000
+                return (val1 + val2) / 2
+
+            # Check for single currency amount with K
+            single_k = re.search(r'[€$£]\s*(\d+(?:\.\d+)?)\s*[Kk]', value_str)
+            if single_k:
+                return float(single_k.group(1)) * 1000
+
+            # Check for single currency amount
+            single = re.search(r'[€$£]\s*([\d,]+(?:\.\d+)?)', value_str)
+            if single:
+                return float(single.group(1).replace(',', ''))
+
+            # Fallback: find the largest number with K suffix
+            k_numbers = re.findall(r'(\d+(?:\.\d+)?)\s*[Kk]', value_str)
+            if k_numbers:
+                return max(float(n) * 1000 for n in k_numbers)
+
+            # Final fallback: largest number
+            numbers = re.findall(r'[\d,]+(?:\.\d+)?', value_str)
+            if numbers:
+                return max(float(n.replace(',', '')) for n in numbers)
+
+            return 0
+
+        return sorted(opportunities, key=extract_value, reverse=True)[:5]
 
     def _build_expertise_context(
         self,
@@ -143,9 +245,15 @@ class ExecSummarySkill(LLMSkill[Dict[str, Any]]):
         industry: str,
         expertise_context: Dict[str, Any],
         interview_data: Dict[str, Any],
+        currency: str = "EUR",
+        currency_symbol: str = "€",
+        formula_ai_score: int = 50,
     ) -> Dict[str, Any]:
         """
         Generate the executive summary using Claude.
+
+        Note: ai_readiness_score is calculated by formula, not by LLM.
+        The LLM generates qualitative content (insights, opportunities).
         """
         # Build expertise injection for prompt
         expertise_injection = ""
@@ -181,25 +289,31 @@ QUIZ ANSWERS:
 {json.dumps(answers, indent=2)}
 
 INDUSTRY: {industry}
+CURRENCY: {currency} (use {currency_symbol} symbol for all monetary values)
+
+IMPORTANT - AI READINESS SCORE:
+The AI readiness score has already been calculated by formula: {formula_ai_score}/100
+Use this score in your assessment. Do NOT generate a different score.
 {expertise_injection}
 {interview_injection}
 
 Generate a JSON executive summary with this EXACT structure:
 {{
-    "ai_readiness_score": <number 0-100, based on current tech adoption and team readiness>,
+    "ai_readiness_score": {formula_ai_score},
     "customer_value_score": <number 1-10, how AI would benefit their customers>,
     "business_health_score": <number 1-10, how AI would improve operations>,
-    "key_insight": "<MUST include at least one specific number from quiz or benchmark. MUST be falsifiable. Example: 'Your 18% no-show rate costs ~€3,600/month; automated reminders typically reduce this to 8%'>",
+    "key_insight": "<MUST include at least one specific number from quiz or benchmark. MUST be falsifiable. Example: 'Your 18% no-show rate costs ~{currency_symbol}3,600/month; automated reminders typically reduce this to 8%'>",
     "total_value_potential": {{
-        "min": <conservative estimate in euros>,
-        "max": <optimistic estimate in euros>,
+        "min": <conservative estimate in {currency}>,
+        "max": <optimistic estimate in {currency}>,
         "projection_years": 3,
-        "calculation": "<REQUIRED: Show the math. Example: '3 opportunities × €12K avg impact = €36K/year × 3 years = €108K'>"
+        "currency": "{currency}",
+        "calculation": "<REQUIRED: Show the math. Example: '3 opportunities × {currency_symbol}12K avg impact = {currency_symbol}36K/year × 3 years = {currency_symbol}108K'>"
     }},
     "top_opportunities": [
         {{
             "title": "<specific opportunity - MUST reference user's actual process or tool>",
-            "value_potential": "<range WITH calculation: 'X hrs/week × €Y rate × 52 weeks = €Z'>",
+            "value_potential": "<range WITH calculation: 'X hrs/week × {currency_symbol}Y rate × 52 weeks = {currency_symbol}Z'>",
             "time_horizon": "short (0-4 weeks)|mid (1-3 months)|long (3-12 months)",
             "data_source": "<quiz question or benchmark that supports this>"
         }}
@@ -207,13 +321,13 @@ Generate a JSON executive summary with this EXACT structure:
     "not_recommended": [
         {{
             "title": "<what they should NOT do>",
-            "reason": "<honest reason with specific risk or cost: 'Migration costs €X + 6 months disruption'>"
+            "reason": "<honest reason with specific risk or cost: 'Migration costs {currency_symbol}X + 6 months disruption'>"
         }}
     ],
     "recommended_investment": {{
-        "year_1_min": <conservative first-year investment>,
-        "year_1_max": <maximum first-year investment>,
-        "breakdown": "<what this covers: 'Tools: €X, Implementation: €Y, Training: €Z'>"
+        "year_1_min": <conservative first-year investment in {currency}>,
+        "year_1_max": <maximum first-year investment in {currency}>,
+        "breakdown": "<what this covers: 'Tools: {currency_symbol}X, Implementation: {currency_symbol}Y, Training: {currency_symbol}Z'>"
     }}
 }}
 

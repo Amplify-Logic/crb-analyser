@@ -1,7 +1,7 @@
 {
   "type": "trend",
   "description": "AI and industry trends backed by data from research institutions and analysts",
-  "last_updated": "2026-01-15",
+  "last_updated": "2026-01-22",
   "insights": [
     {
       "id": "trend-2026-ai-models-commoditized",
@@ -59,7 +59,9 @@
         "type": "youtube"
       },
       "extracted_at": "2026-01-15",
-      "reviewed": true
+      "reviewed": true,
+      "audience_relevance": "medium",
+      "relevance_reason": null
     },
     {
       "id": "trend-2026-workflows-over-agents",
@@ -117,7 +119,9 @@
         "type": "youtube"
       },
       "extracted_at": "2026-01-15",
-      "reviewed": true
+      "reviewed": true,
+      "audience_relevance": "medium",
+      "relevance_reason": null
     },
     {
       "id": "trend-2026-technical-divide-closing",
@@ -175,7 +179,9 @@
         "type": "youtube"
       },
       "extracted_at": "2026-01-15",
-      "reviewed": false
+      "reviewed": false,
+      "audience_relevance": "medium",
+      "relevance_reason": null
     },
     {
       "id": "trend-2026-context-over-prompting",
@@ -218,7 +224,9 @@
         "type": "youtube"
       },
       "extracted_at": "2026-01-15",
-      "reviewed": false
+      "reviewed": false,
+      "audience_relevance": "medium",
+      "relevance_reason": null
     },
     {
       "id": "trend-2026-software-to-physical-ai",
@@ -275,7 +283,9 @@
         "type": "youtube"
       },
       "extracted_at": "2026-01-15",
-      "reviewed": false
+      "reviewed": false,
+      "audience_relevance": "medium",
+      "relevance_reason": null
     },
     {
       "id": "trend-context-over-prompting",
@@ -318,7 +328,9 @@
         "type": "youtube"
       },
       "extracted_at": "2026-01-15",
-      "reviewed": false
+      "reviewed": false,
+      "audience_relevance": "medium",
+      "relevance_reason": null
     },
     {
       "id": "trend-capital-assets-software-endpoints",
@@ -366,7 +378,9 @@
         "type": "youtube"
       },
       "extracted_at": "2026-01-15",
-      "reviewed": false
+      "reviewed": false,
+      "audience_relevance": "medium",
+      "relevance_reason": null
     },
     {
       "id": "trend-ai-adoption-window-closing",
@@ -409,7 +423,9 @@
         "type": "youtube"
       },
       "extracted_at": "2026-01-15",
-      "reviewed": false
+      "reviewed": false,
+      "audience_relevance": "medium",
+      "relevance_reason": null
     },
     {
       "id": "trend-2026-agent-ai-accessible",
@@ -427,10 +443,23 @@
       ],
       "actionable_insight": "If you've been waiting for AI tools that don't require technical skills, the wait is over. Try Claude Co-work for tasks like organizing receipts, preparing for meetings, or processing documents.",
       "tags": {
-        "topics": ["ai-tools", "productivity", "accessibility"],
-        "industries": ["all"],
-        "use_in": ["landing", "quiz_results", "report"],
-        "user_stages": ["considering", "early_adopter"]
+        "topics": [
+          "ai-tools",
+          "productivity",
+          "accessibility"
+        ],
+        "industries": [
+          "all"
+        ],
+        "use_in": [
+          "landing",
+          "quiz_results",
+          "report"
+        ],
+        "user_stages": [
+          "considering",
+          "early_adopter"
+        ]
       },
       "source": {
         "title": "Claude Co-work Launch Analysis",
@@ -460,10 +489,23 @@
       ],
       "actionable_insight": "Stop using AI to generate drafts you then manually fix. Use agent AI to produce finished work. If you're still copy-pasting AI output into documents, you're using 2024 workflows in 2026.",
       "tags": {
-        "topics": ["productivity", "workflows", "ai-tools"],
-        "industries": ["all"],
-        "use_in": ["landing", "quiz_results", "report"],
-        "user_stages": ["considering", "early_adopter"]
+        "topics": [
+          "productivity",
+          "workflows",
+          "ai-tools"
+        ],
+        "industries": [
+          "all"
+        ],
+        "use_in": [
+          "landing",
+          "quiz_results",
+          "report"
+        ],
+        "user_stages": [
+          "considering",
+          "early_adopter"
+        ]
       },
       "source": {
         "title": "Claude Co-work Launch Analysis",

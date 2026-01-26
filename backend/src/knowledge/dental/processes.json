@@ -151,5 +151,76 @@
     "Managing multiple insurance plans",
     "Patient anxiety and fear of dentistry",
     "Recall compliance (patients not returning for cleanings)"
+  ],
+  "pain_points": [
+    {
+      "id": "no-shows",
+      "name": "Patient No-Shows",
+      "description": "Patients miss appointments without canceling, leading to lost revenue and scheduling gaps",
+      "impact": "15-20% of appointments result in no-shows, costing €500-1000/day in lost revenue",
+      "current_solutions": "Phone call reminders, deposit requirements",
+      "ai_potential": "Automated multi-channel reminders reduce no-shows by 30-50%"
+    },
+    {
+      "id": "treatment-acceptance",
+      "name": "Low Treatment Acceptance",
+      "description": "Patients decline recommended treatment due to cost, fear, or poor communication",
+      "impact": "Only 30-50% of treatment plans are accepted, leaving significant revenue on table",
+      "current_solutions": "In-chair presentations, payment plans",
+      "ai_potential": "Visual treatment simulators and financing options increase acceptance by 20-30%"
+    },
+    {
+      "id": "recare-compliance",
+      "name": "Recall/Recare Compliance",
+      "description": "Patients don't return for regular cleanings and checkups",
+      "impact": "40-60% of patients are overdue for hygiene visits",
+      "current_solutions": "Postcards, phone calls",
+      "ai_potential": "Automated personalized recall campaigns recover 15-25% of lapsed patients"
+    },
+    {
+      "id": "insurance-complexity",
+      "name": "Insurance Administration Burden",
+      "description": "Verifying benefits, submitting claims, handling denials takes significant staff time",
+      "impact": "4-6 hours/day spent on insurance-related tasks",
+      "current_solutions": "Manual phone calls, clearinghouse software",
+      "ai_potential": "Real-time eligibility verification and AI claim scrubbing reduce denials by 20-30%"
+    }
+  ],
+  "key_metrics": [
+    {
+      "id": "production-per-hour",
+      "name": "Production per Provider Hour",
+      "description": "Revenue generated per hour of provider time",
+      "benchmark": "€250-500/hour for general dentistry",
+      "how_to_improve": "Optimize scheduling, reduce no-shows, increase case acceptance"
+    },
+    {
+      "id": "hygiene-reappointment",
+      "name": "Hygiene Reappointment Rate",
+      "description": "Percentage of hygiene patients who schedule their next cleaning before leaving",
+      "benchmark": "85-95% is excellent, <70% needs improvement",
+      "how_to_improve": "Pre-book next appointment, automated reminders, membership programs"
+    },
+    {
+      "id": "case-acceptance",
+      "name": "Case Acceptance Rate",
+      "description": "Percentage of treatment plans that are accepted and scheduled",
+      "benchmark": "70-80% is excellent, <50% needs improvement",
+      "how_to_improve": "Visual presentations, financing options, treatment coordinator training"
+    },
+    {
+      "id": "new-patient-flow",
+      "name": "New Patient Flow",
+      "description": "Number of new patients per month",
+      "benchmark": "25-50 new patients/month for solo practice",
+      "how_to_improve": "Online booking, reputation management, SEO optimization"
+    },
+    {
+      "id": "no-show-rate",
+      "name": "No-Show/Cancellation Rate",
+      "description": "Percentage of appointments that result in no-show or same-day cancellation",
+      "benchmark": "<10% is excellent, >20% is problematic",
+      "how_to_improve": "Automated reminders, confirmation texting, waitlist management"
+    }
   ]
 }
