@@ -8,6 +8,8 @@ Industry-specific variations supported.
 from typing import List, Dict, Any, Optional
 from enum import Enum
 
+from src.skills.base import LOCATION_OPTIONS, COUNTRY_CURRENCY_MAP
+
 
 class QuestionType(str, Enum):
     TEXT = "text"
@@ -33,14 +35,8 @@ QUESTIONNAIRE_SECTIONS = [
                 "type": QuestionType.SELECT,
                 "required": True,
                 "options": [
-                    {"value": "NL", "label": "Netherlands", "currency": "EUR"},
-                    {"value": "DE", "label": "Germany", "currency": "EUR"},
-                    {"value": "UK", "label": "United Kingdom", "currency": "GBP"},
-                    {"value": "AU", "label": "Australia", "currency": "AUD"},
-                    {"value": "NZ", "label": "New Zealand", "currency": "NZD"},
-                    {"value": "IE", "label": "Ireland", "currency": "EUR"},
-                    {"value": "US", "label": "United States", "currency": "USD"},
-                    {"value": "OTHER", "label": "Other", "currency": "EUR"},
+                    {**opt, "currency": COUNTRY_CURRENCY_MAP.get(opt["value"], "EUR")}
+                    for opt in LOCATION_OPTIONS
                 ],
             },
             {

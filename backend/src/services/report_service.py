@@ -78,6 +78,7 @@ from src.knowledge import (
 )
 from src.expertise import get_self_improve_service, get_expertise_store
 from src.skills import get_skill, SkillContext
+from src.skills.base import currency_for_country
 from src.skills.analysis.platform_consolidation import (
     identify_platform_opportunities,
     get_platform_for_finding,
@@ -280,14 +281,7 @@ class ReportGenerator:
         # Priority 1: Quiz answer for company_location
         location = answers.get("company_location")
         if location:
-            location_currency_map = {
-                "NL": "EUR", "DE": "EUR", "IE": "EUR", "OTHER": "EUR",
-                "UK": "GBP",
-                "AU": "AUD",
-                "NZ": "NZD",
-                "US": "USD",
-            }
-            currency = location_currency_map.get(location, "EUR")
+            currency = currency_for_country(location)
         else:
             # Priority 2: Company profile (from website research)
             company_profile = self.context.get("company_profile", {})

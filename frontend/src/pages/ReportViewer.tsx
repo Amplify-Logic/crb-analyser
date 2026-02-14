@@ -349,9 +349,11 @@ export default function ReportViewer() {
 
     try {
       let response
-      if (reportId === 'sample') {
-        // Load sample demo report
-        response = await apiClient.get<Report>(`/api/reports/sample`)
+      if (reportId?.startsWith('sample')) {
+        // Load sample demo report - supports sample, sample-dental, sample-ecommerce
+        const industryMatch = reportId.match(/^sample-(.+)$/)
+        const industryParam = industryMatch ? `?industry=${industryMatch[1]}` : ''
+        response = await apiClient.get<Report>(`/api/reports/sample${industryParam}`)
       } else if (reportId) {
         response = await apiClient.get<Report>(`/api/reports/public/${reportId}`)
       } else if (quizSessionId) {

@@ -36,21 +36,41 @@ REPORT_GENERATION_LOCK_TTL = 300
 
 router = APIRouter()
 
-# Load sample report at startup
-SAMPLE_REPORT_PATH = Path(__file__).parent.parent / "data" / "sample_report.json"
-_sample_report = None
+# Load sample reports (cached per industry)
+SAMPLE_DATA_DIR = Path(__file__).parent.parent / "data"
+_sample_reports: dict = {}
 
-def get_sample_report():
-    """Load sample report from file (cached)."""
-    global _sample_report
-    if _sample_report is None:
+# Industry slug → sample report filename
+SAMPLE_REPORT_FILES = {
+    "professional-services": "sample_report.json",
+    "dental": "sample_report_dental.json",
+    "ecommerce": "sample_report_ecommerce.json",
+}
+
+# Default sample report industry
+DEFAULT_SAMPLE_INDUSTRY = "professional-services"
+
+
+def get_sample_report(industry: Optional[str] = None) -> dict:
+    """Load sample report from file (cached). Supports per-industry samples."""
+    industry = industry or DEFAULT_SAMPLE_INDUSTRY
+    filename = SAMPLE_REPORT_FILES.get(industry)
+
+    if not filename:
+        # Fall back to default
+        filename = SAMPLE_REPORT_FILES[DEFAULT_SAMPLE_INDUSTRY]
+        industry = DEFAULT_SAMPLE_INDUSTRY
+
+    if industry not in _sample_reports:
         try:
-            with open(SAMPLE_REPORT_PATH) as f:
-                _sample_report = json.load(f)
+            filepath = SAMPLE_DATA_DIR / filename
+            with open(filepath) as f:
+                _sample_reports[industry] = json.load(f)
         except Exception as e:
-            logger.error(f"Failed to load sample report: {e}")
-            _sample_report = {}
-    return _sample_report
+            logger.error(f"Failed to load sample report for {industry}: {e}")
+            _sample_reports[industry] = {}
+
+    return _sample_reports[industry]
 
 
 # ============================================================================
@@ -58,12 +78,15 @@ def get_sample_report():
 # ============================================================================
 
 @router.get("/sample")
-async def get_sample_report_endpoint():
+async def get_sample_report_endpoint(industry: Optional[str] = None):
     """
     Get a sample demo report to showcase the analysis.
     No authentication required.
+
+    Query params:
+        industry: Optional industry slug (professional-services, dental, ecommerce)
     """
-    report = get_sample_report()
+    report = get_sample_report(industry)
     if not report:
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,

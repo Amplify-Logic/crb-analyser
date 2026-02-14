@@ -50,6 +50,61 @@ CURRENCY_SYMBOLS = {
     "ZAR": "R",
 }
 
+# Country code → currency code mapping
+# Used by quiz flow to determine currency from company location
+COUNTRY_CURRENCY_MAP = {
+    "NL": "EUR", "DE": "EUR", "FR": "EUR", "ES": "EUR", "IT": "EUR",
+    "BE": "EUR", "AT": "EUR", "IE": "EUR", "PT": "EUR", "FI": "EUR",
+    "GR": "EUR", "LU": "EUR", "EE": "EUR", "LV": "EUR", "LT": "EUR",
+    "SK": "EUR", "SI": "EUR", "MT": "EUR", "CY": "EUR",
+    "UK": "GBP", "GB": "GBP",
+    "US": "USD",
+    "CA": "CAD",
+    "AU": "AUD",
+    "NZ": "NZD",
+    "CH": "CHF",
+    "SE": "SEK",
+    "NO": "NOK",
+    "DK": "DKK",
+    "PL": "PLN",
+    "CZ": "CZK",
+    "JP": "JPY",
+    "CN": "CNY",
+    "IN": "INR",
+    "SG": "SGD",
+    "HK": "HKD",
+    "MX": "MXN",
+    "BR": "BRL",
+    "ZA": "ZAR",
+}
+
+# Quiz question options for company location (reusable across quiz flows)
+LOCATION_OPTIONS = [
+    {"value": "NL", "label": "Netherlands"},
+    {"value": "DE", "label": "Germany"},
+    {"value": "UK", "label": "United Kingdom"},
+    {"value": "IE", "label": "Ireland"},
+    {"value": "US", "label": "United States"},
+    {"value": "CA", "label": "Canada"},
+    {"value": "AU", "label": "Australia"},
+    {"value": "NZ", "label": "New Zealand"},
+    {"value": "FR", "label": "France"},
+    {"value": "ES", "label": "Spain"},
+    {"value": "IT", "label": "Italy"},
+    {"value": "BE", "label": "Belgium"},
+    {"value": "CH", "label": "Switzerland"},
+    {"value": "SE", "label": "Sweden"},
+    {"value": "NO", "label": "Norway"},
+    {"value": "DK", "label": "Denmark"},
+    {"value": "OTHER_EUR", "label": "Other (Europe)"},
+    {"value": "OTHER", "label": "Other"},
+]
+
+
+def currency_for_country(country_code: str) -> str:
+    """Get currency code for a country code. Defaults to EUR."""
+    return COUNTRY_CURRENCY_MAP.get(country_code.upper(), "EUR")
+
 
 class SkillContext(BaseModel):
     """Context passed to skill execution."""

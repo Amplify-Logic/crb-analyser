@@ -26,6 +26,7 @@ from src.config.questionnaire import (
     get_section_count,
 )
 from src.agents.pre_research_agent import PreResearchAgent, start_company_research
+from src.skills.base import LOCATION_OPTIONS
 from src.models.research import StartResearchRequest, DynamicQuestionnaire
 from src.services.teaser_service import generate_teaser_report
 from src.services.email import send_teaser_report_email
@@ -1251,16 +1252,40 @@ async def get_dynamic_questions(session_id: str):
         dynamic_questionnaire = session.get("dynamic_questionnaire")
 
         if research_status == "complete" and dynamic_questionnaire:
-            # Return dynamic questions
+            questions = dynamic_questionnaire.get("questions", [])
+
+            # Inject company_location question if not already present
+            has_location = any(q.get("id") == "company_location" for q in questions)
+            if not has_location:
+                # Try to pre-fill from research headquarters
+                company_profile = session.get("company_profile", {})
+                prefilled = _detect_country_from_profile(company_profile)
+
+                location_question = {
+                    "id": "company_location",
+                    "question": "Where is your business based?",
+                    "type": "select",
+                    "purpose": "clarify",
+                    "rationale": "Determines currency for cost estimates in your report",
+                    "options": LOCATION_OPTIONS,
+                    "required": True,
+                    "section": "Company Overview",
+                    "priority": 0,
+                }
+                if prefilled:
+                    location_question["prefilled_value"] = prefilled
+
+                questions.insert(0, location_question)
+
             return {
                 "type": "dynamic",
                 "research_complete": True,
                 "company_name": session.get("company_name"),
                 "research_summary": dynamic_questionnaire.get("research_summary"),
                 "confirmed_facts": dynamic_questionnaire.get("confirmed_facts", []),
-                "questions": dynamic_questionnaire.get("questions", []),
+                "questions": questions,
                 "sections": dynamic_questionnaire.get("sections", []),
-                "total_questions": dynamic_questionnaire.get("total_questions", 0),
+                "total_questions": dynamic_questionnaire.get("total_questions", 0) + (0 if has_location else 1),
                 "estimated_time_minutes": dynamic_questionnaire.get("estimated_time_minutes", 10),
             }
 
@@ -1285,6 +1310,92 @@ async def get_dynamic_questions(session_id: str):
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail="Failed to get dynamic questions"
         )
+
+
+# Country name → country code mapping for auto-detection from research
+# Ordered longest-first to avoid substring false matches (e.g. "us" in "australia")
+_COUNTRY_NAME_TO_CODE = [
+    ("the netherlands", "NL"),
+    ("netherlands", "NL"),
+    ("holland", "NL"),
+    ("deutschland", "DE"),
+    ("germany", "DE"),
+    ("united kingdom", "UK"),
+    ("great britain", "UK"),
+    ("england", "UK"),
+    ("ireland", "IE"),
+    ("united states", "US"),
+    ("america", "US"),
+    ("canada", "CA"),
+    ("australia", "AU"),
+    ("new zealand", "NZ"),
+    ("france", "FR"),
+    ("españa", "ES"),
+    ("spain", "ES"),
+    ("italia", "IT"),
+    ("italy", "IT"),
+    ("belgique", "BE"),
+    ("belgium", "BE"),
+    ("österreich", "AT"),
+    ("austria", "AT"),
+    ("switzerland", "CH"),
+    ("schweiz", "CH"),
+    ("suisse", "CH"),
+    ("sverige", "SE"),
+    ("sweden", "SE"),
+    ("norge", "NO"),
+    ("norway", "NO"),
+    ("danmark", "DK"),
+    ("denmark", "DK"),
+    ("polska", "PL"),
+    ("poland", "PL"),
+    ("czech republic", "CZ"),
+    ("czechia", "CZ"),
+    ("portugal", "PT"),
+    ("finland", "FI"),
+    ("suomi", "FI"),
+    ("japan", "JP"),
+    ("china", "CN"),
+    ("india", "IN"),
+    ("singapore", "SG"),
+    ("hong kong", "HK"),
+    ("méxico", "MX"),
+    ("mexico", "MX"),
+    ("brasil", "BR"),
+    ("brazil", "BR"),
+    ("south africa", "ZA"),
+]
+
+
+def _detect_country_from_profile(company_profile: Dict[str, Any]) -> Optional[str]:
+    """
+    Try to detect country code from research company profile headquarters.
+
+    Returns country code (e.g. "NL", "US") or None if not detected.
+    """
+    if not company_profile:
+        return None
+
+    basics = company_profile.get("basics", {})
+    hq = basics.get("headquarters", {})
+
+    # headquarters can be a dict with value/confidence or a string
+    hq_value = ""
+    if isinstance(hq, dict):
+        hq_value = str(hq.get("value", ""))
+    elif isinstance(hq, str):
+        hq_value = hq
+
+    if not hq_value:
+        return None
+
+    # Try to match country name in headquarters string
+    hq_lower = hq_value.lower().strip()
+    for country_name, code in _COUNTRY_NAME_TO_CODE:
+        if country_name in hq_lower:
+            return code
+
+    return None
 
 
 # ============================================================================

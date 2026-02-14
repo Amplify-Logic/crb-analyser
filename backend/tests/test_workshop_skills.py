@@ -2,7 +2,7 @@
 """Tests for workshop skills."""
 
 import pytest
-from unittest.mock import MagicMock, AsyncMock
+from unittest.mock import MagicMock, AsyncMock, patch
 from src.skills import SkillContext
 from src.skills.workshop.signal_detector import AdaptiveSignalDetectorSkill
 from src.skills.workshop.question_skill import WorkshopQuestionSkill
@@ -215,7 +215,7 @@ class TestMilestoneSynthesisSkill:
         assert "potential_savings" in result.data["roi"]
 
     @pytest.mark.asyncio
-    async def test_includes_vendors(self, skill, synthesis_context, mocker):
+    async def test_includes_vendors(self, skill, synthesis_context):
         # Mock vendor service to return test vendors
         mock_vendors = [
             {
@@ -233,19 +233,18 @@ class TestMilestoneSynthesisSkill:
                 "pricing": {"starting_price": 199, "currency": "USD"},
             },
         ]
-        mocker.patch(
+        with patch(
             "src.skills.workshop.milestone_skill.vendor_service.get_vendors_with_tier_boost",
             new_callable=AsyncMock,
             return_value=mock_vendors,
-        )
-
-        result = await skill.run(synthesis_context)
-        assert result.success is True
-        assert "vendors" in result.data
-        assert len(result.data["vendors"]) > 0
-        # Verify vendor data structure
-        assert result.data["vendors"][0]["name"] == "Databox"
-        assert result.data["vendors"][0]["fit"] == "high"  # Tier 1 = high fit
+        ):
+            result = await skill.run(synthesis_context)
+            assert result.success is True
+            assert "vendors" in result.data
+            assert len(result.data["vendors"]) > 0
+            # Verify vendor data structure
+            assert result.data["vendors"][0]["name"] == "Databox"
+            assert result.data["vendors"][0]["fit"] == "high"  # Tier 1 = high fit
 
     @pytest.mark.asyncio
     async def test_includes_pain_point_id(self, skill, synthesis_context):

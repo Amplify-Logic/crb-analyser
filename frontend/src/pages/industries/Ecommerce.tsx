@@ -240,7 +240,7 @@ export default function Ecommerce() {
             ))}
           </div>
 
-          <div className="text-center mt-8">
+          <div className="text-center mt-8 flex flex-col sm:flex-row items-center justify-center gap-4">
             <Link
               to="/quiz"
               className="inline-flex items-center gap-2 text-primary-600 font-medium hover:text-primary-700"
@@ -248,6 +248,16 @@ export default function Ecommerce() {
               Get your personalized report
               <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+              </svg>
+            </Link>
+            <span className="text-gray-300 hidden sm:inline">|</span>
+            <Link
+              to="/report/sample-ecommerce"
+              className="inline-flex items-center gap-2 text-gray-500 font-medium hover:text-gray-700"
+            >
+              See a sample report
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
               </svg>
             </Link>
           </div>
