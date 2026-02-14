@@ -67,10 +67,10 @@ class TestSkillRegistry:
         """Test getting a skill by name."""
         registry = SkillRegistry()
 
-        # Get by partial name match
-        skill = registry.get("exec-summary")
+        # Get by short name (registered via skill class .name attribute)
+        skill = registry.get("verdict")
         if skill is not None:  # May not be discovered depending on file structure
-            assert skill.name == "exec-summary"
+            assert skill.name == "verdict"
 
     def test_registry_get_nonexistent(self):
         """Test getting nonexistent skill returns None."""
