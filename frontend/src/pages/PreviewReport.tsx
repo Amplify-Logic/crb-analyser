@@ -15,6 +15,7 @@
 import { useState, useEffect } from 'react'
 import { Link, useNavigate, useSearchParams } from 'react-router-dom'
 import { motion } from 'framer-motion'
+import { logger } from '../utils/logger'
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8383'
 
@@ -176,7 +177,7 @@ export default function PreviewReport() {
             return
           }
         } catch (err) {
-          console.warn('Dev preview endpoint failed:', err)
+          logger.warn('Dev preview endpoint failed:', err)
         }
       }
 
@@ -201,7 +202,7 @@ export default function PreviewReport() {
             return
           }
         } catch (err) {
-          console.warn('Backend preview failed:', err)
+          logger.warn('Backend preview failed:', err)
         }
       }
 
@@ -209,7 +210,7 @@ export default function PreviewReport() {
       setError('Unable to generate preview. Please try again.')
       setIsLoading(false)
     } catch (err) {
-      console.error('Preview generation error:', err)
+      logger.error('Preview generation error:', err)
       setError('Failed to generate preview')
       setIsLoading(false)
     }

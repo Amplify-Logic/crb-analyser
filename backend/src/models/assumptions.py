@@ -193,10 +193,10 @@ STANDARD_ASSUMPTIONS = {
     "hourly_rate": Assumption(
         id="std-hourly-rate",
         category=AssumptionCategory.FINANCIAL,
-        statement="Hourly labor cost is €50/hour",
-        reason="Industry standard for SMB professional work",
+        statement="Hourly labor cost uses industry-specific default (varies by industry)",
+        reason="Industry-specific rate for SMB professional work; overridden when user provides explicit rate",
         source=AssumptionSource.INDUSTRY_BENCHMARK,
-        source_detail="European SMB labor cost benchmarks 2024",
+        source_detail="Industry-specific hourly rates from CRB calculation service",
         confidence="medium",
         sensitivity="high",
         validation_question="What is the approximate hourly cost of your team's time (including overhead)?",

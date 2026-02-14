@@ -117,12 +117,136 @@ class PlatformRecommendation:
 
 
 @dataclass
+class CategoryRedundancy:
+    """A detected redundancy where existing tool and recommendation overlap in category."""
+    existing_tool_name: str
+    existing_tool_slug: str
+    existing_tool_category: str
+    recommended_vendor: str
+    platform_category: str
+    note: str  # e.g., "You already have HubSpot (CRM). Salesforce is also a CRM."
+
+
+@dataclass
 class ConsolidationResult:
     """Result of platform consolidation analysis."""
     platform_recommendations: List[PlatformRecommendation]
     point_solution_findings: List[str]  # Finding IDs that need point solutions
     already_covered_findings: Set[str]  # Finding IDs covered by platforms
     consolidation_savings: str  # e.g., "Using one FSM instead of 3 tools saves €200/mo"
+    category_redundancies: List[CategoryRedundancy] = field(default_factory=list)
+
+
+# Map platform category slugs to the existing_stack category names they overlap with.
+# The existing_stack categories come from existing_stack.py (e.g., "CRM", "Scheduling",
+# "Practice Management", "Job Management", etc.)
+PLATFORM_TO_STACK_CATEGORIES: Dict[str, List[str]] = {
+    "field-service-management": [
+        "job management", "dispatch", "estimating", "scheduling",
+    ],
+    "dental-practice-management": [
+        "practice management",
+    ],
+    "professional-services-automation": [
+        "practice management", "time & billing", "project management",
+    ],
+    "all-in-one-crm": [
+        "crm", "email marketing",
+    ],
+}
+
+# Also map point solution categories
+POINT_SOLUTION_TO_STACK_CATEGORIES: Dict[str, List[str]] = {
+    "reputation-management": ["reviews", "patient communication"],
+    "call-handling": ["phone & sms"],
+    "automation-integration": [],  # Too generic to map
+    "payments-financing": ["payments", "billing"],
+}
+
+
+def _get_existing_stack_categories(existing_stack: List[Dict[str, Any]]) -> Dict[str, List[Dict[str, Any]]]:
+    """
+    Build a lookup from normalized category name to the tools in that category.
+
+    Args:
+        existing_stack: User's current software tools (each with slug, name, category)
+
+    Returns:
+        Dict mapping lowercase category -> list of tools in that category
+    """
+    category_map: Dict[str, List[Dict[str, Any]]] = {}
+    for tool in existing_stack:
+        cat = tool.get("category", "").lower().strip()
+        if cat:
+            if cat not in category_map:
+                category_map[cat] = []
+            category_map[cat].append(tool)
+    return category_map
+
+
+def _detect_category_redundancies(
+    platform_recommendations: List[PlatformRecommendation],
+    existing_stack: Optional[List[Dict[str, Any]]],
+) -> List[CategoryRedundancy]:
+    """
+    Detect when a recommended platform overlaps in category with the user's
+    existing tools. For example, recommending Salesforce CRM when the user
+    already has HubSpot CRM.
+
+    Args:
+        platform_recommendations: The platform recommendations to check
+        existing_stack: User's current software tools
+
+    Returns:
+        List of detected category redundancies
+    """
+    if not existing_stack:
+        return []
+
+    stack_by_category = _get_existing_stack_categories(existing_stack)
+    redundancies: List[CategoryRedundancy] = []
+    seen_pairs: Set[tuple] = set()  # Avoid duplicate entries
+
+    for rec in platform_recommendations:
+        platform_slug = rec.category
+        # Get the existing-stack categories that this platform type overlaps with
+        overlapping_categories = PLATFORM_TO_STACK_CATEGORIES.get(platform_slug, [])
+
+        for stack_cat in overlapping_categories:
+            if stack_cat in stack_by_category:
+                for tool in stack_by_category[stack_cat]:
+                    tool_slug = tool.get("slug", "")
+                    pair_key = (tool_slug, rec.recommended_vendor)
+                    if pair_key in seen_pairs:
+                        continue
+                    seen_pairs.add(pair_key)
+
+                    # Check if the recommended vendor IS the existing tool (not redundant, good)
+                    if tool_slug.lower() == rec.recommended_vendor.lower():
+                        continue
+
+                    tool_name = tool.get("name", tool_slug)
+                    tool_category = tool.get("category", stack_cat)
+                    redundancies.append(CategoryRedundancy(
+                        existing_tool_name=tool_name,
+                        existing_tool_slug=tool_slug,
+                        existing_tool_category=tool_category,
+                        recommended_vendor=rec.recommended_vendor,
+                        platform_category=rec.display_name,
+                        note=(
+                            f"You already have {tool_name} ({tool_category}). "
+                            f"Consider whether {rec.recommended_vendor} replaces it "
+                            f"or if you should keep {tool_name} and skip this recommendation."
+                        ),
+                    ))
+
+    if redundancies:
+        logger.info(
+            f"Detected {len(redundancies)} category redundancies: "
+            f"{[(r.existing_tool_name, r.recommended_vendor) for r in redundancies]}"
+        )
+
+    return redundancies
 
 
 def normalize_text(text: str) -> str:
@@ -231,6 +355,12 @@ def identify_platform_opportunities(
             if fid not in covered_findings:
                 point_solution_finding_ids.append(fid)
 
+    # Detect category redundancies: when recommended platform overlaps
+    # with user's existing tools by category (not just by vendor name)
+    category_redundancies = _detect_category_redundancies(
+        platform_recommendations, existing_stack
+    )
+
     # Calculate consolidation savings message
     total_consolidated = len(covered_findings)
     savings_msg = ""
@@ -246,6 +376,7 @@ def identify_platform_opportunities(
         point_solution_findings=point_solution_finding_ids,
         already_covered_findings=covered_findings,
         consolidation_savings=savings_msg,
+        category_redundancies=category_redundancies,
     )
 
 
@@ -313,6 +444,7 @@ __all__ = [
     "get_platform_for_finding",
     "PlatformRecommendation",
     "ConsolidationResult",
+    "CategoryRedundancy",
     "PLATFORM_CATEGORIES",
     "POINT_SOLUTION_CATEGORIES",
 ]

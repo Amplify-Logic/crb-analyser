@@ -17,6 +17,8 @@ from typing import Any, Dict, List, Optional, TypeVar, Generic
 from pydantic import BaseModel, Field
 import logging
 
+from src.config.model_routing import get_model_for_task, CLAUDE_MODELS
+
 logger = logging.getLogger(__name__)
 
 
@@ -185,7 +187,7 @@ class BaseSkill(ABC, Generic[T]):
         Returns:
             SkillResult with success/failure and data
         """
-        start_time = datetime.now()
+        start_time = datetime.utcnow()
         warnings = []
 
         # Validate requirements
@@ -207,7 +209,7 @@ class BaseSkill(ABC, Generic[T]):
             result_data = await self.execute(context)
 
             # Calculate execution time
-            execution_time = (datetime.now() - start_time).total_seconds() * 1000
+            execution_time = (datetime.utcnow() - start_time).total_seconds() * 1000
 
             self._execution_count += 1
 
@@ -224,7 +226,7 @@ class BaseSkill(ABC, Generic[T]):
             raise  # Re-raise skill errors as-is
 
         except Exception as e:
-            execution_time = (datetime.now() - start_time).total_seconds() * 1000
+            execution_time = (datetime.utcnow() - start_time).total_seconds() * 1000
             logger.error(f"Skill '{self.name}' failed: {e}", exc_info=True)
 
             return SkillResult(
@@ -350,9 +352,16 @@ class LLMSkill(BaseSkill[T]):
 
     requires_llm: bool = True
 
-    # Default model settings
-    default_model: str = "claude-sonnet-4-5-20250929"  # Claude Sonnet 4.5
+    # Default model settings - resolved via model_routing.py
+    # Subclasses should override default_task to route to the appropriate model
+    default_task: str = "generate_findings"  # Task name for model routing lookup
+    default_tier: str = "quick"  # Report tier for model routing
     default_max_tokens: int = 4000
+
+    @property
+    def default_model(self) -> str:
+        """Resolve model via centralized model routing."""
+        return get_model_for_task(self.default_task, self.default_tier)
 
     async def call_llm(
         self,

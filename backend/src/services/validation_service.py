@@ -466,7 +466,7 @@ def validate_ai_readiness_breakdown(report: Dict[str, Any]) -> ValidationResult:
 # Main Validation Function
 # ============================================================================
 
-def validate_report(report: Dict[str, Any]) -> ValidationResult:
+def validate_report(report: Dict[str, Any], default_hourly_rate: float = 50) -> ValidationResult:
     """
     Run all deterministic validations on a report.
 
@@ -474,6 +474,7 @@ def validate_report(report: Dict[str, Any]) -> ValidationResult:
 
     Args:
         report: The full report dictionary
+        default_hourly_rate: Industry-aware hourly rate for math validation
 
     Returns:
         ValidationResult with is_valid, errors, and warnings
@@ -486,7 +487,7 @@ def validate_report(report: Dict[str, Any]) -> ValidationResult:
 
     # 2. Math validation for findings
     for finding in report.get("findings", []):
-        finding_result = validate_finding_math(finding)
+        finding_result = validate_finding_math(finding, default_hourly_rate=default_hourly_rate)
         result = result.merge(finding_result)
 
     # 3. Math validation for recommendations

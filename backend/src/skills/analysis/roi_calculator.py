@@ -16,6 +16,7 @@ Output Schema:
     "roi_confidence_adjusted": 153,
     "payback_months": 4,
     "confidence": "medium",
+    "is_not_recommended": false,
     "time_savings": {
         "hours_per_week": 10,
         "hours_per_month": 43,
@@ -31,18 +32,17 @@ Output Schema:
     "sensitivity": {
         "best_case": {"roi": 250, "payback_months": 2},
         "expected": {"roi": 180, "payback_months": 4},
-        "worst_case": {"roi": 95, "payback_months": 8}
+        "worst_case": {"roi": -25, "payback_months": 60}
     },
-    "assumptions": [
-        {
-            "statement": "Hourly labor cost is €50",
-            "source": "industry_benchmark",
-            "sensitivity": "high",
-            "if_wrong": "ROI varies by 20-40%"
-        }
-    ],
-    "calculation_breakdown": "Step-by-step explanation"
+    "assumptions": [...],
+    "calculation_breakdown": "Step-by-step explanation",
+    "roi_warning": "Only present when ROI is negative",
+    "not_recommended_reason": "Only present when is_not_recommended is true"
 }
+
+Note: ROI can be negative. When roi_percentage < 0, is_not_recommended=true
+and not_recommended_reason explains why. Currency symbols in the breakdown
+use the currency from SkillContext (defaults to EUR).
 """
 
 import logging
@@ -50,6 +50,7 @@ from typing import Dict, Any, List, Optional
 
 from src.skills.base import LLMSkill, SkillContext, SkillError
 from src.utils.quiz_utils import parse_employee_count
+from src.services.crb_calculation_service import get_effective_hourly_rate
 
 logger = logging.getLogger(__name__)
 
@@ -137,13 +138,16 @@ class ROICalculatorSkill(LLMSkill[Dict[str, Any]]):
                 - metadata.company_context: Company size, budget, etc.
                 - quiz_answers: For company-specific data
                 - expertise: Industry patterns for calibration
+                - currency: Currency code (e.g., "EUR", "GBP", "USD")
 
         Returns:
-            ROI calculation with assumptions and sensitivity
+            ROI calculation with assumptions and sensitivity.
+            Includes is_not_recommended=True when ROI is negative.
         """
         finding = context.metadata.get("finding", {})
         recommendation = context.metadata.get("recommendation", {})
         company_context = context.metadata.get("company_context", {})
+        currency_symbol = context.currency_symbol
 
         if not finding:
             raise SkillError(
@@ -152,8 +156,10 @@ class ROICalculatorSkill(LLMSkill[Dict[str, Any]]):
                 recoverable=False
             )
 
-        # Get company-specific values from quiz answers
-        company_data = self._extract_company_data(context.quiz_answers, company_context)
+        # Get company-specific values from quiz answers (industry-aware)
+        company_data = self._extract_company_data(
+            context.quiz_answers, company_context, industry=context.industry
+        )
 
         # Calculate time savings
         time_savings = await self._estimate_time_savings(
@@ -173,6 +179,9 @@ class ROICalculatorSkill(LLMSkill[Dict[str, Any]]):
         # Calculate ROI metrics
         roi_metrics = self._calculate_roi_metrics(financial, finding)
 
+        # Determine if this option should be flagged as not recommended based on ROI
+        is_not_recommended = roi_metrics["roi_raw"] < 0
+
         # Generate sensitivity analysis
         sensitivity = self._calculate_sensitivity(
             base_metrics=roi_metrics,
@@ -181,7 +190,7 @@ class ROICalculatorSkill(LLMSkill[Dict[str, Any]]):
         )
 
         # Build assumptions list
-        assumptions = self._build_assumptions_list(company_data)
+        assumptions = self._build_assumptions_list(company_data, currency_symbol=currency_symbol)
 
         # Generate calculation breakdown
         breakdown = self._generate_breakdown(
@@ -189,13 +198,15 @@ class ROICalculatorSkill(LLMSkill[Dict[str, Any]]):
             financial=financial,
             roi_metrics=roi_metrics,
             company_data=company_data,
+            currency_symbol=currency_symbol,
         )
 
-        return {
+        result: Dict[str, Any] = {
             "roi_percentage": roi_metrics["roi_raw"],
             "roi_confidence_adjusted": roi_metrics["roi_adjusted"],
             "payback_months": roi_metrics["payback_months"],
             "confidence": finding.get("confidence", "medium"),
+            "is_not_recommended": is_not_recommended,
             "time_savings": time_savings,
             "financial_impact": financial,
             "sensitivity": sensitivity,
@@ -203,21 +214,44 @@ class ROICalculatorSkill(LLMSkill[Dict[str, Any]]):
             "calculation_breakdown": breakdown,
         }
 
+        if roi_metrics.get("roi_warning"):
+            result["roi_warning"] = roi_metrics["roi_warning"]
+
+        if is_not_recommended:
+            result["not_recommended_reason"] = (
+                f"Negative ROI ({roi_metrics['roi_raw']:.0f}%): yearly costs "
+                f"({currency_symbol}{financial['yearly_cost']:,.0f}) exceed estimated savings "
+                f"({currency_symbol}{financial['yearly_savings']:,.0f}). "
+                "This option is NOT recommended based on ROI analysis."
+            )
+
+        return result
+
     def _extract_company_data(
         self,
         quiz_answers: Optional[Dict[str, Any]],
-        company_context: Dict[str, Any]
+        company_context: Dict[str, Any],
+        industry: str = "",
     ) -> Dict[str, Any]:
-        """Extract company-specific values, falling back to defaults."""
+        """Extract company-specific values, falling back to industry defaults."""
         answers = quiz_answers or {}
 
-        # Try to get from quiz answers first, then company context, then defaults
-        hourly_rate = (
-            answers.get("hourly_rate") or
-            answers.get("labor_cost") or
-            company_context.get("hourly_rate") or
-            DEFAULT_ASSUMPTIONS["hourly_rate"]["value"]
+        # Use centralized hourly rate resolution (quiz > salary > industry > fallback)
+        hourly_rate, rate_source = get_effective_hourly_rate(
+            industry=industry,
+            quiz_answers=answers,
         )
+
+        # If company_context has an explicit rate, prefer it over industry default
+        # (but not over quiz-provided data)
+        if rate_source.startswith("industry default") or rate_source.startswith("default estimate"):
+            context_rate = company_context.get("hourly_rate")
+            if context_rate:
+                try:
+                    hourly_rate = float(context_rate)
+                    rate_source = "company context"
+                except (ValueError, TypeError):
+                    pass
 
         team_size_raw = (
             answers.get("team_size") or
@@ -230,12 +264,13 @@ class ROICalculatorSkill(LLMSkill[Dict[str, Any]]):
         team_size = parse_employee_count(team_size_raw)
 
         # Determine if values came from actual data or assumptions
-        hourly_rate_source = "quiz_data" if answers.get("hourly_rate") else "assumption"
+        hourly_rate_source = "quiz_data" if "provided by user" in rate_source else "assumption"
         team_size_source = "quiz_data" if answers.get("team_size") else "assumption"
 
         return {
             "hourly_rate": float(hourly_rate),
             "hourly_rate_source": hourly_rate_source,
+            "hourly_rate_detail": rate_source,
             "team_size": team_size,
             "team_size_source": team_size_source,
             "work_weeks": DEFAULT_ASSUMPTIONS["work_weeks_per_year"]["value"],
@@ -375,18 +410,16 @@ Return ONLY a JSON object:
         else:
             roi_raw = 0
 
-        # Handle negative ROI: cap at 0% with explanation
-        # Negative ROI means costs exceed savings - this shouldn't happen for good recommendations
+        # Keep negative ROI visible - don't hide bad recommendations
+        # Negative ROI means costs exceed savings, which flags this as not recommended
         roi_warning = None
         if roi_raw < 0:
             roi_warning = (
                 f"Calculated ROI is negative ({roi_raw:.0f}%), indicating yearly costs "
                 f"({yearly_cost:.0f}) exceed savings ({yearly_savings:.0f}). "
-                "This may indicate time savings weren't properly estimated or costs are too high."
+                "This option is not recommended based on ROI analysis."
             )
             logger.warning(f"Negative ROI for finding {finding.get('id', 'unknown')}: {roi_warning}")
-            # Cap at 0% but preserve the warning
-            roi_raw = max(roi_raw, 0)
 
         # Apply confidence adjustment
         confidence = finding.get("confidence", "medium").lower()
@@ -447,7 +480,7 @@ Return ONLY a JSON object:
                 "scenario": "Base case with standard assumptions"
             },
             "worst_case": {
-                "roi": round(max(0, worst_case_roi), 0),
+                "roi": round(worst_case_roi, 0),
                 "payback_months": round(min(60, worst_case_payback), 1),
                 "scenario": "Lower adoption, implementation delays"
             }
@@ -455,16 +488,22 @@ Return ONLY a JSON object:
 
     def _build_assumptions_list(
         self,
-        company_data: Dict[str, Any]
+        company_data: Dict[str, Any],
+        currency_symbol: str = "\u20ac",
     ) -> List[Dict[str, Any]]:
         """Build list of assumptions used in calculation."""
         assumptions = []
+        cs = currency_symbol
 
-        # Hourly rate assumption
+        # Hourly rate assumption - always include with source detail
+        rate_detail = company_data.get("hourly_rate_detail", "assumption")
+        rate_value = company_data["hourly_rate"]
         if company_data["hourly_rate_source"] == "assumption":
             assumptions.append({
                 **DEFAULT_ASSUMPTIONS["hourly_rate"],
-                "value": company_data["hourly_rate"]
+                "value": rate_value,
+                "statement": f"Hourly labor cost is {cs}{rate_value:.0f} ({rate_detail})",
+                "source_detail": rate_detail,
             })
 
         # Always include these assumptions
@@ -486,8 +525,16 @@ Return ONLY a JSON object:
         financial: Dict[str, Any],
         roi_metrics: Dict[str, Any],
         company_data: Dict[str, Any],
+        currency_symbol: str = "\u20ac",
     ) -> str:
         """Generate human-readable calculation breakdown."""
+        cs = currency_symbol
+        not_recommended_note = ""
+        if roi_metrics["roi_raw"] < 0:
+            not_recommended_note = (
+                "\n\n   ** NOT RECOMMENDED: Negative ROI indicates costs exceed savings. **"
+            )
+
         return f"""ROI Calculation Breakdown:
 
 1. TIME SAVINGS
@@ -497,26 +544,26 @@ Return ONLY a JSON object:
    - Yearly: {time_savings['hours_per_year']:.1f} hours
 
 2. FINANCIAL VALUE
-   - Hourly rate: €{company_data['hourly_rate']:.0f}
-   - Monthly savings: €{financial['monthly_savings']:,.0f}
-   - Yearly savings: €{financial['yearly_savings']:,.0f}
+   - Hourly rate: {cs}{company_data['hourly_rate']:.0f}
+   - Monthly savings: {cs}{financial['monthly_savings']:,.0f}
+   - Yearly savings: {cs}{financial['yearly_savings']:,.0f}
 
 3. COSTS
-   - Implementation: €{financial['implementation_cost']:,.0f}
-   - Monthly ongoing: €{financial['monthly_cost']:,.0f}
-   - Yearly ongoing: €{financial['yearly_cost']:,.0f}
+   - Implementation: {cs}{financial['implementation_cost']:,.0f}
+   - Monthly ongoing: {cs}{financial['monthly_cost']:,.0f}
+   - Yearly ongoing: {cs}{financial['yearly_cost']:,.0f}
 
 4. ROI CALCULATION
-   - Net annual benefit: €{roi_metrics['net_annual_benefit']:,.0f}
-   - First year investment: €{financial['implementation_cost'] + financial['yearly_cost']:,.0f}
+   - Net annual benefit: {cs}{roi_metrics['net_annual_benefit']:,.0f}
+   - First year investment: {cs}{financial['implementation_cost'] + financial['yearly_cost']:,.0f}
    - ROI: {roi_metrics['roi_raw']:.0f}%
    - Confidence-adjusted ROI: {roi_metrics['roi_adjusted']:.0f}% (factor: {roi_metrics['confidence_factor']})
-   - Payback period: {roi_metrics['payback_months']:.1f} months
+   - Payback period: {roi_metrics['payback_months']:.1f} months{not_recommended_note}
 
 5. THREE-YEAR PROJECTION
-   - Gross savings: €{financial['three_year_gross_savings']:,.0f}
-   - Total costs: €{financial['three_year_total_cost']:,.0f}
-   - Net value: €{financial['three_year_net']:,.0f}"""
+   - Gross savings: {cs}{financial['three_year_gross_savings']:,.0f}
+   - Total costs: {cs}{financial['three_year_total_cost']:,.0f}
+   - Net value: {cs}{financial['three_year_net']:,.0f}"""
 
 
 # For skill discovery

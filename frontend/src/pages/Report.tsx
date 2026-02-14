@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import { useParams, Link } from 'react-router-dom'
 import apiClient from '../services/apiClient'
+import { logger } from '../utils/logger'
 
 interface Audit {
   id: string
@@ -73,7 +74,7 @@ export default function Report() {
       setFindings(findingsRes.data.data || [])
       setRecommendations(recsRes.data.data || [])
     } catch (err) {
-      console.error('Failed to load report:', err)
+      logger.error('Failed to load report:', err)
     } finally {
       setLoading(false)
     }

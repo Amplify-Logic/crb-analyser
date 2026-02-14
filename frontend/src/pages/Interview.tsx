@@ -4,6 +4,7 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { useInterviewVoice } from '../hooks/useInterviewVoice'
 import { Logo } from '../components/Logo'
 import { sanitizeHtml } from '../utils/sanitize'
+import { logger } from '../utils/logger'
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8383'
 
@@ -138,7 +139,7 @@ export default function Interview() {
         setError('Unable to load interview context. Please complete the quiz first.')
 
       } catch (err) {
-        console.error('Failed to load context:', err)
+        logger.error('Failed to load context:', err)
         setError('Failed to load interview context.')
       }
     }
@@ -243,7 +244,7 @@ Let's start with the big picture: **What's the main challenge or opportunity tha
       }
 
     } catch (err) {
-      console.error('Message error:', err)
+      logger.error('Message error:', err)
       // Fallback response if backend fails
       const fallbackMessage: Message = {
         id: `assistant-${Date.now()}`,
@@ -284,7 +285,7 @@ Let's start with the big picture: **What's the main challenge or opportunity tha
 
       setPhase('complete')
     } catch (err) {
-      console.error('Failed to complete interview:', err)
+      logger.error('Failed to complete interview:', err)
       setPhase('complete') // Continue anyway
     } finally {
       setIsProcessing(false)

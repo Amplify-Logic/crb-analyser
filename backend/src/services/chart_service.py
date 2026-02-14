@@ -299,7 +299,9 @@ def create_roi_comparison_chart(
         # Color based on ROI value
         colors = []
         for roi in rois:
-            if roi >= 200:
+            if roi < 0:
+                colors.append(COLORS["danger"])
+            elif roi >= 200:
                 colors.append(COLORS["success"])
             elif roi >= 100:
                 colors.append(COLORS["primary"])

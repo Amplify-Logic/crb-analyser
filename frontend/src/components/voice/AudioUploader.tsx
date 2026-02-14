@@ -7,6 +7,7 @@
 
 import { useState, useRef, useCallback } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
+import { logger } from '../../utils/logger'
 
 interface AudioUploaderProps {
   onAudioReady: (audioBlob: Blob, source: 'upload' | 'recording') => void
@@ -118,7 +119,7 @@ export default function AudioUploader({
       }, 1000)
 
     } catch (err) {
-      console.error('Recording error:', err)
+      logger.error('Recording error:', err)
       setError('Could not access microphone. Please check permissions.')
     }
   }

@@ -15,6 +15,7 @@ import { motion, AnimatePresence } from 'framer-motion'
 import VoiceRecorder from '../components/voice/VoiceRecorder'
 import StructuredInput from '../components/quiz/StructuredInput'
 import ConfidenceProgress, { ConfidenceProgressMini } from '../components/quiz/ConfidenceProgress'
+import { logger } from '../utils/logger'
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8383'
 
@@ -102,7 +103,7 @@ function saveQuizState(state: SavedQuizState) {
   try {
     sessionStorage.setItem(QUIZ_STATE_KEY, JSON.stringify(state))
   } catch (err) {
-    console.warn('Failed to save quiz state:', err)
+    logger.warn('Failed to save quiz state:', err)
   }
 }
 
@@ -120,7 +121,7 @@ function loadQuizState(sessionId: string): SavedQuizState | null {
 
     return state
   } catch (err) {
-    console.warn('Failed to load quiz state:', err)
+    logger.warn('Failed to load quiz state:', err)
     return null
   }
 }
@@ -130,7 +131,7 @@ function clearQuizState() {
   try {
     sessionStorage.removeItem(QUIZ_STATE_KEY)
   } catch (err) {
-    console.warn('Failed to clear quiz state:', err)
+    logger.warn('Failed to clear quiz state:', err)
   }
 }
 
@@ -287,7 +288,7 @@ export default function AdaptiveQuiz() {
       }
 
     } catch (err) {
-      console.error('Start quiz error:', err)
+      logger.error('Start quiz error:', err)
       setError(err instanceof Error ? err.message : 'Failed to start quiz. Please try again.')
     } finally {
       setIsProcessing(false)
@@ -361,7 +362,7 @@ export default function AdaptiveQuiz() {
       }
 
     } catch (err) {
-      console.error('Submit answer error:', err)
+      logger.error('Submit answer error:', err)
       setError(err instanceof Error ? err.message : 'Failed to submit answer. Please try again.')
     } finally {
       setIsProcessing(false)
@@ -383,7 +384,7 @@ export default function AdaptiveQuiz() {
       })
 
       if (!response.ok) {
-        console.warn('TTS not available')
+        logger.warn('TTS not available')
         setIsSpeaking(false)
         return
       }
@@ -398,7 +399,7 @@ export default function AdaptiveQuiz() {
         await audioRef.current.play()
       }
     } catch (err) {
-      console.warn('TTS error:', err)
+      logger.warn('TTS error:', err)
       setIsSpeaking(false)
     }
   }, [])
@@ -434,7 +435,7 @@ export default function AdaptiveQuiz() {
         setError('Could not understand. Please try again.')
       }
     } catch (err) {
-      console.error('Voice processing error:', err)
+      logger.error('Voice processing error:', err)
       setError('Voice processing failed. Try typing instead.')
       setIsProcessing(false)
     }

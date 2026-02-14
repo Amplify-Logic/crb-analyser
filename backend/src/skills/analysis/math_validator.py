@@ -65,6 +65,7 @@ from typing import Dict, Any, List, Optional, Tuple
 from decimal import Decimal, ROUND_HALF_UP
 
 from src.skills.base import SyncSkill, SkillContext, SkillError
+from src.services.crb_calculation_service import get_effective_hourly_rate
 
 logger = logging.getLogger(__name__)
 
@@ -155,8 +156,8 @@ class MathValidatorSkill(SyncSkill[Dict[str, Any]]):
         verified = []
         unverified = []
 
-        # Extract company context for cross-reference
-        company_context = self._extract_company_context(quiz_answers)
+        # Extract company context for cross-reference (industry-aware)
+        company_context = self._extract_company_context(quiz_answers, context.industry)
 
         # 1. Validate internal consistency
         consistency_issues = self._check_internal_consistency(
@@ -204,8 +205,8 @@ class MathValidatorSkill(SyncSkill[Dict[str, Any]]):
             },
         }
 
-    def _extract_company_context(self, quiz_answers: Dict[str, Any]) -> Dict[str, Any]:
-        """Extract relevant company data for validation."""
+    def _extract_company_context(self, quiz_answers: Dict[str, Any], industry: str = "") -> Dict[str, Any]:
+        """Extract relevant company data for validation (industry-aware)."""
         context = {}
 
         # Team size / employees
@@ -240,12 +241,9 @@ class MathValidatorSkill(SyncSkill[Dict[str, Any]]):
             else:
                 context["annual_revenue"] = float(revenue)
 
-        # Hourly rate
-        hourly_rate = quiz_answers.get("hourly_rate") or quiz_answers.get("labor_cost")
-        if hourly_rate:
-            context["hourly_rate"] = float(hourly_rate)
-        else:
-            context["hourly_rate"] = 50  # Default
+        # Hourly rate (industry-aware resolution)
+        rate, _source = get_effective_hourly_rate(industry=industry, quiz_answers=quiz_answers)
+        context["hourly_rate"] = rate
 
         # Work hours per week
         work_hours = quiz_answers.get("work_hours_per_week")

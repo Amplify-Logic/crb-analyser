@@ -111,7 +111,7 @@ class InsightService:
             data = {
                 "type": collection.type.value if isinstance(collection.type, InsightType) else collection.type,
                 "description": collection.description,
-                "last_updated": datetime.now().strftime("%Y-%m-%d"),
+                "last_updated": datetime.utcnow().strftime("%Y-%m-%d"),
                 "insights": [
                     insight.model_dump(exclude={"embedding"})
                     for insight in collection.insights
@@ -134,7 +134,7 @@ class InsightService:
     def _maybe_refresh_cache(self) -> None:
         """Refresh cache if expired."""
         if self._cache_time:
-            elapsed = (datetime.now() - self._cache_time).total_seconds()
+            elapsed = (datetime.utcnow() - self._cache_time).total_seconds()
             if elapsed < self._cache_ttl_seconds:
                 return
 
@@ -142,7 +142,7 @@ class InsightService:
         self._cache = {}
         for insight_type in InsightType:
             self._cache[insight_type] = self._load_collection(insight_type)
-        self._cache_time = datetime.now()
+        self._cache_time = datetime.utcnow()
 
     def get_all_insights(self, reviewed_only: bool = True) -> List[Insight]:
         """Get all insights across all types."""

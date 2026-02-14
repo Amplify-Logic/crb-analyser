@@ -7,6 +7,7 @@
 
 import { useState, useRef, useEffect, useCallback } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
+import { logger } from '../../utils/logger'
 
 interface VoiceRecorderProps {
   onRecordingComplete: (audioBlob: Blob) => void
@@ -147,7 +148,7 @@ export default function VoiceRecorder({
       analyzeAudio(analyser)
 
     } catch (err) {
-      console.error('Recording error:', err)
+      logger.error('Recording error:', err)
       setError('Could not access microphone. Please check permissions.')
       setState('idle')
     }

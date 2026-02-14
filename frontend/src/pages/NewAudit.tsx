@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import apiClient from '../services/apiClient'
+import { logger } from '../utils/logger'
 
 interface Client {
   id: string
@@ -95,7 +96,7 @@ export default function NewAudit() {
       const { data } = await apiClient.get<{ data: Client[] }>('/api/clients')
       setClients(data.data || [])
     } catch (err) {
-      console.error('Failed to load clients:', err)
+      logger.error('Failed to load clients:', err)
     }
   }
 

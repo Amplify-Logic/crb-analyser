@@ -19,6 +19,7 @@ import {
 } from '../components/workshop'
 import AudioUploader from '../components/voice/AudioUploader'
 import { Logo } from '../components/Logo'
+import { logger } from '../utils/logger'
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8383'
 
@@ -115,7 +116,7 @@ export default function Workshop() {
       // Start new workshop
       setPhase('welcome')
     } catch (err) {
-      console.error('Initialize error:', err)
+      logger.error('Initialize error:', err)
       setPhase('welcome')
     }
   }
@@ -167,7 +168,7 @@ export default function Workshop() {
 
       setPhase('confirmation')
     } catch (err: any) {
-      console.error('Start error:', err)
+      logger.error('Start error:', err)
       setError(err.message || 'Failed to start workshop')
       setPhase('welcome')
     }
@@ -208,7 +209,7 @@ export default function Workshop() {
 
       setPhase('deepdive')
     } catch (err) {
-      console.error('Confirm error:', err)
+      logger.error('Confirm error:', err)
     }
   }
 
@@ -266,7 +267,7 @@ export default function Workshop() {
         navigate(`/report/${sessionId}/progress`)
       }, 3000)
     } catch (err) {
-      console.error('Complete error:', err)
+      logger.error('Complete error:', err)
     }
   }
 
@@ -290,7 +291,7 @@ export default function Workshop() {
       // Complete workshop with uploaded audio
       await handleComplete({ audio_upload: true })
     } catch (err) {
-      console.error('Upload error:', err)
+      logger.error('Upload error:', err)
       setPhase('welcome')
     }
   }

@@ -294,7 +294,7 @@ def get_freshness_status(verified_at: datetime) -> str:
         'fresh' (< 7 days), 'current' (< 30 days),
         'aging' (< 90 days), 'stale' (> 90 days)
     """
-    days_old = (datetime.now() - verified_at).days
+    days_old = (datetime.utcnow() - verified_at).days
 
     if days_old <= 7:
         return "fresh"

@@ -19,7 +19,7 @@ from fastapi import APIRouter, HTTPException, Query, status, Depends, Background
 from pydantic import BaseModel, Field
 
 from src.config.supabase_client import get_async_supabase
-from src.middleware.auth import require_workspace, CurrentUser
+from src.middleware.auth import require_admin, CurrentUser
 from src.services.embedding_service import (
     get_embedding_service,
     EmbeddingContent,
@@ -163,7 +163,7 @@ async def list_knowledge_items(
     search: Optional[str] = None,
     page: int = Query(1, ge=1),
     page_size: int = Query(50, ge=1, le=100),
-    current_user: CurrentUser = Depends(require_workspace),
+    current_user: CurrentUser = Depends(require_admin),
 ):
     """
     List knowledge base items with optional filtering.
@@ -210,7 +210,7 @@ async def search_knowledge(
     content_type: Optional[ContentType] = None,
     industry: Optional[str] = None,
     limit: int = Query(20, ge=1, le=50),
-    current_user: CurrentUser = Depends(require_workspace),
+    current_user: CurrentUser = Depends(require_admin),
 ):
     """
     Semantic search across knowledge base.
@@ -245,7 +245,7 @@ async def search_knowledge(
 
 @router.get("/types")
 async def get_content_types(
-    current_user: CurrentUser = Depends(require_workspace),
+    current_user: CurrentUser = Depends(require_admin),
 ):
     """Get available content types and their counts."""
     supabase = await get_async_supabase()
@@ -272,7 +272,7 @@ async def get_content_types(
 
 @router.get("/industries")
 async def get_industries(
-    current_user: CurrentUser = Depends(require_workspace),
+    current_user: CurrentUser = Depends(require_admin),
 ):
     """Get supported industries."""
     return {"industries": list_supported_industries()}
@@ -286,7 +286,7 @@ async def get_industries(
 async def get_knowledge_item(
     content_type: ContentType,
     content_id: str,
-    current_user: CurrentUser = Depends(require_workspace),
+    current_user: CurrentUser = Depends(require_admin),
 ):
     """Get a single knowledge item."""
     supabase = await get_async_supabase()
@@ -325,7 +325,7 @@ async def create_knowledge_item(
     content_type: ContentType,
     item: KnowledgeItemCreate,
     embed: bool = Query(True, description="Generate embedding immediately"),
-    current_user: CurrentUser = Depends(require_workspace),
+    current_user: CurrentUser = Depends(require_admin),
 ):
     """Create a new knowledge item."""
     supabase = await get_async_supabase()
@@ -395,7 +395,7 @@ async def update_knowledge_item(
     content_id: str,
     updates: KnowledgeItemUpdate,
     re_embed: bool = Query(True, description="Re-generate embedding if content changed"),
-    current_user: CurrentUser = Depends(require_workspace),
+    current_user: CurrentUser = Depends(require_admin),
 ):
     """Update a knowledge item."""
     supabase = await get_async_supabase()
@@ -462,7 +462,7 @@ async def update_knowledge_item(
 async def delete_knowledge_item(
     content_type: ContentType,
     content_id: str,
-    current_user: CurrentUser = Depends(require_workspace),
+    current_user: CurrentUser = Depends(require_admin),
 ):
     """Delete a knowledge item and its embedding."""
     supabase = await get_async_supabase()
@@ -496,7 +496,7 @@ async def delete_knowledge_item(
 
 @router.get("/stats/embeddings", response_model=EmbeddingStats)
 async def get_embedding_stats(
-    current_user: CurrentUser = Depends(require_workspace),
+    current_user: CurrentUser = Depends(require_admin),
 ):
     """Get embedding statistics."""
     embedding_service = await get_embedding_service()
@@ -523,7 +523,7 @@ async def get_embedding_stats(
 async def embed_single_item(
     content_type: ContentType,
     content_id: str,
-    current_user: CurrentUser = Depends(require_workspace),
+    current_user: CurrentUser = Depends(require_admin),
 ):
     """Re-embed a single knowledge item."""
     supabase = await get_async_supabase()
@@ -569,7 +569,7 @@ async def embed_single_item(
 async def embed_all_items(
     background_tasks: BackgroundTasks,
     force: bool = Query(False, description="Re-embed even if unchanged"),
-    current_user: CurrentUser = Depends(require_workspace),
+    current_user: CurrentUser = Depends(require_admin),
 ):
     """
     Trigger re-embedding of all knowledge items.
@@ -596,7 +596,7 @@ async def embed_by_type(
     content_type: ContentType,
     background_tasks: BackgroundTasks,
     force: bool = Query(False),
-    current_user: CurrentUser = Depends(require_workspace),
+    current_user: CurrentUser = Depends(require_admin),
 ):
     """Re-embed all items of a specific type."""
     async def run_vectorization():
@@ -617,7 +617,7 @@ async def embed_by_type(
 @router.post("/embed/outdated")
 async def embed_outdated(
     background_tasks: BackgroundTasks,
-    current_user: CurrentUser = Depends(require_workspace),
+    current_user: CurrentUser = Depends(require_admin),
 ):
     """Re-embed only items that have changed (needs_update=true)."""
     async def run_vectorization():
@@ -666,7 +666,7 @@ async def test_similarity_search(
     q: str = Query(..., min_length=2),
     industry: Optional[str] = None,
     limit: int = Query(10, ge=1, le=20),
-    current_user: CurrentUser = Depends(require_workspace),
+    current_user: CurrentUser = Depends(require_admin),
 ):
     """
     Test similarity search to debug vector retrieval.
@@ -710,7 +710,7 @@ async def test_similarity_search(
 @router.post("/sync")
 async def sync_knowledge_from_files(
     background_tasks: BackgroundTasks,
-    current_user: CurrentUser = Depends(require_workspace),
+    current_user: CurrentUser = Depends(require_admin),
 ):
     """
     Sync knowledge from JSON files to database.
@@ -733,7 +733,7 @@ async def sync_knowledge_from_files(
 
 @router.get("/sync/sources")
 async def get_knowledge_sources(
-    current_user: CurrentUser = Depends(require_workspace),
+    current_user: CurrentUser = Depends(require_admin),
 ):
     """Get information about knowledge source files."""
     sources = []

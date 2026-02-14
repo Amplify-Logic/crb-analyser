@@ -12,6 +12,7 @@ import KnowledgeSidebar from '../../components/admin/KnowledgeSidebar'
 import KnowledgeList from '../../components/admin/KnowledgeList'
 import KnowledgeEditor from '../../components/admin/KnowledgeEditor'
 import KnowledgeStats from '../../components/admin/KnowledgeStats'
+import { logger } from '../../utils/logger'
 
 // Types
 export interface KnowledgeItem {
@@ -85,7 +86,7 @@ export default function KnowledgeBase() {
       const { data } = await apiClient.get<{ types: Record<string, ContentTypeInfo> }>('/api/admin/knowledge/types')
       setContentTypes(data.types || {})
     } catch (err) {
-      console.error('Failed to load content types:', err)
+      logger.error('Failed to load content types:', err)
     }
   }
 
@@ -101,7 +102,7 @@ export default function KnowledgeBase() {
       const { data } = await apiClient.get<{ items: KnowledgeItem[] }>(`/api/admin/knowledge/?${params}`)
       setItems(data.items || [])
     } catch (err) {
-      console.error('Failed to load items:', err)
+      logger.error('Failed to load items:', err)
     } finally {
       setLoading(false)
     }
@@ -144,7 +145,7 @@ export default function KnowledgeBase() {
         })) || []
       )
     } catch (err) {
-      console.error('Search failed:', err)
+      logger.error('Search failed:', err)
     } finally {
       setLoading(false)
     }
@@ -204,7 +205,7 @@ export default function KnowledgeBase() {
       loadItems()
       loadContentTypes()
     } catch (err) {
-      console.error('Save failed:', err)
+      logger.error('Save failed:', err)
       throw err
     }
   }
@@ -233,7 +234,7 @@ export default function KnowledgeBase() {
       loadItems()
       loadContentTypes()
     } catch (err) {
-      console.error('Delete failed:', err)
+      logger.error('Delete failed:', err)
     }
   }
 
@@ -242,7 +243,7 @@ export default function KnowledgeBase() {
       await apiClient.post(`/api/admin/knowledge/embed/${item.content_type}/${item.content_id}`)
       loadItems()
     } catch (err) {
-      console.error('Re-embed failed:', err)
+      logger.error('Re-embed failed:', err)
     }
   }
 

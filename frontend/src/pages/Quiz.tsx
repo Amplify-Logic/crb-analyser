@@ -3,6 +3,7 @@ import { Link, useNavigate } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
 import { ShimmerButton } from '../components/magicui'
 import { formatCompanyName } from '../lib/formatCompanyName'
+import { logger } from '../utils/logger'
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8383'
 
@@ -544,7 +545,7 @@ function DevModeTestGenerator({ navigate }: DevModeTestGeneratorProps) {
             } catch (parseErr) {
               // Only log if it's not a JSON parse error for empty/malformed data
               if (line.trim() !== 'data: ') {
-                console.warn('Failed to parse SSE event:', line, parseErr)
+                logger.warn('Failed to parse SSE event:', line, parseErr)
               }
             }
           }
@@ -561,7 +562,7 @@ function DevModeTestGenerator({ navigate }: DevModeTestGeneratorProps) {
         throw new Error('Report generation completed but no report ID received')
       }
     } catch (err: any) {
-      console.error('Failed to generate test report:', err)
+      logger.error('Failed to generate test report:', err)
       setError(err.message || 'Failed to generate report')
       setIsGenerating(false)
     }
@@ -816,7 +817,7 @@ export default function Quiz() {
         }
       }
     } catch (e) {
-      console.warn('Failed to load quiz progress from localStorage:', e)
+      logger.warn('Failed to load quiz progress from localStorage:', e)
     }
   }, [])
 
@@ -841,7 +842,7 @@ export default function Quiz() {
         }
         localStorage.setItem(QUIZ_STORAGE_KEY, JSON.stringify(progress))
       } catch (e) {
-        console.warn('Failed to save quiz progress to localStorage:', e)
+        logger.warn('Failed to save quiz progress to localStorage:', e)
       }
     }, 500)
 
@@ -1064,10 +1065,10 @@ export default function Quiz() {
           setSessionId(data.session_id)
           localStorage.setItem('crb_session_id', data.session_id)
         } else {
-          console.error('Failed to create session:', await response.text())
+          logger.error('Failed to create session:', await response.text())
         }
       } catch (error) {
-        console.error('Session init error:', error)
+        logger.error('Session init error:', error)
         // Clear bad session data
         localStorage.removeItem('crb_session_id')
       }
@@ -1093,7 +1094,7 @@ export default function Quiz() {
           setSoftwareCategories(data.categories || [])
         }
       } catch (error) {
-        console.error('Failed to fetch software options:', error)
+        logger.error('Failed to fetch software options:', error)
       }
     }
 
@@ -1136,10 +1137,10 @@ export default function Quiz() {
 
       if (response.ok) {
         setExistingStackSaved(true)
-        console.log('Saved existing stack:', existingStack.length, 'tools')
+        logger.log('Saved existing stack:', existingStack.length, 'tools')
       }
     } catch (error) {
-      console.error('Failed to save existing stack:', error)
+      logger.error('Failed to save existing stack:', error)
     }
   }, [sessionId, selectedSoftware, otherSoftware])
 
@@ -1217,7 +1218,7 @@ export default function Quiz() {
             setResearchError(update.error || 'Research failed')
           }
         } catch (e) {
-          console.error('Parse error:', e)
+          logger.error('Parse error:', e)
         }
       }
 
@@ -1229,7 +1230,7 @@ export default function Quiz() {
         }
       }
     } catch (error) {
-      console.error('Research error:', error)
+      logger.error('Research error:', error)
       setResearchError('Failed to start research. Please try again.')
     }
   }, [sessionId, websiteUrl, extractFindingsFromProfile, researchProgress])
@@ -2597,7 +2598,7 @@ export default function Quiz() {
         // Navigate to voice interview
         navigate(`/quiz/interview?session_id=${sessionId}`)
       } catch (error) {
-        console.error('Email save error:', error)
+        logger.error('Email save error:', error)
         // Still proceed even if save fails
         navigate(`/quiz/interview?session_id=${sessionId}`)
       } finally {

@@ -34,6 +34,18 @@ from src.models.four_options import (
 from src.services.option_scoring import get_recommendations
 from src.services.vendor_validation_service import VendorValidationService
 from src.utils.quiz_utils import get_complexity_level, get_viable_option_types
+from src.knowledge import (
+    get_vendor_recommendations,
+    load_vendor_category,
+    search_vendors,
+    normalize_industry,
+    VENDOR_CATEGORIES,
+)
+from src.skills.report_generation_utils import (
+    format_vendors_for_prompt,
+    get_relevant_vendor_categories,
+    load_kb_vendors_for_finding,
+)
 
 logger = logging.getLogger(__name__)
 
@@ -54,7 +66,7 @@ class FourOptionsSkill(LLMSkill[Dict[str, Any]]):
     requires_knowledge = True
 
     def _build_prompt(self, context: SkillContext) -> str:
-        """Build LLM prompt with user profile and finding."""
+        """Build LLM prompt with user profile, finding, and KB vendor data."""
         finding = context.finding or {}
         profile: UserProfile = context.user_profile
         vendors = context.vendors or []
@@ -62,14 +74,17 @@ class FourOptionsSkill(LLMSkill[Dict[str, Any]]):
         currency_symbol = context.currency_symbol
         quiz_answers = context.quiz_answers or {}
 
-        # Format vendor context
-        vendor_context = ""
-        if vendors:
-            vendor_list = "\n".join([
-                f"- {v.get('name', 'Unknown')}: {currency_symbol}{v.get('monthly_price', 'N/A')}/mo"
-                for v in vendors[:10]
-            ])
-            vendor_context = f"\n\nRELEVANT VENDORS:\n{vendor_list}"
+        # Load KB vendor data relevant to this finding
+        kb_vendors = load_kb_vendors_for_finding(
+            finding=finding,
+            industry=industry,
+            context_vendors=vendors,
+            max_vendors=15,
+        )
+        vendor_context = format_vendors_for_prompt(
+            kb_vendors,
+            currency_symbol=currency_symbol,
+        )
 
         # Determine capability description
         cap_desc = "Can handle any option"
@@ -104,6 +119,7 @@ USER PROFILE:
 - Urgency: {profile.urgency.value if profile.urgency else 'not specified'}
 - Industry: {industry}
 - Existing Stack API-Ready: {profile.existing_stack_api_ready}
+
 {vendor_context}
 
 SCORING CONTEXT:
@@ -120,9 +136,10 @@ Non-viable options should still be included but with clear warnings about why th
 Generate all 4 options with realistic details:
 
 1. BUY: A specific SaaS product that solves this
-   - Use real vendor from list if applicable
-   - Include actual pricing
+   - MUST use a vendor from the VENDOR CATALOG above if one fits
+   - Use the exact pricing from the catalog
    - Setup time should be realistic (hours to days)
+   - If no vendor from the catalog fits, say "Custom development required" in vendor_name
 
 2. CONNECT: How to integrate their existing tools
    - Specify Make, n8n, or Zapier
@@ -191,7 +208,9 @@ OUTPUT FORMAT (JSON):
 }}
 
 IMPORTANT:
-- Use REAL vendors with REAL pricing
+- For BUY: ONLY recommend vendors from the VENDOR CATALOG above. Use their exact pricing.
+- If no vendor fits this finding, set vendor_name to "No matching vendor" and explain in cons.
+- Do NOT invent vendor names or prices. Every vendor and price must come from the catalog.
 - Be specific about what gets connected/built
 - Pros/cons must reference user's specific situation
 - If an option isn't viable for this user, still include it but note why in cons
@@ -252,7 +271,7 @@ Write for developers or teams with technical resources:
         return f"""You are a technical consultant generating implementation options.
 
 RULES:
-- Use ONLY real vendors and real pricing (2024-2025 data)
+- For BUY options: ONLY use vendors and pricing from the VENDOR CATALOG provided in the prompt. Never invent vendors or prices.
 - Be specific, not vague - name actual tools and platforms
 - Pros/cons must be specific to THIS user's profile
 - Never use buzzwords: seamless, robust, scalable, leverage, unlock

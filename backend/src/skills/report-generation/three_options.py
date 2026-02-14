@@ -40,6 +40,17 @@ from typing import Dict, Any, List, Optional
 
 from src.skills.base import LLMSkill, SkillContext, SkillError
 from src.services.vendor_validation_service import VendorValidationService
+from src.knowledge import (
+    get_vendor_recommendations,
+    load_vendor_category,
+    normalize_industry,
+    VENDOR_CATEGORIES,
+)
+from src.skills.report_generation_utils import (
+    format_vendors_for_prompt,
+    get_relevant_vendor_categories,
+    load_kb_vendors_for_finding,
+)
 
 logger = logging.getLogger(__name__)
 
@@ -176,18 +187,26 @@ class ThreeOptionsSkill(LLMSkill[Dict[str, Any]]):
         exclude_vendors: Optional[List[str]] = None,
     ) -> Dict[str, Any]:
         """Generate recommendation using Claude."""
-        # Filter vendors relevant to finding category
-        category = finding.get("category", "efficiency")
-
         # Build set of excluded vendors (already used in other recommendations)
         excluded = set(v.lower() for v in (exclude_vendors or []))
 
+        # Filter context vendors
         relevant_vendors = [
             v for v in vendors
-            if (category in v.get("categories", []) or not v.get("categories"))
-            and v.get("slug", "").lower() not in excluded
+            if v.get("slug", "").lower() not in excluded
             and v.get("name", "").lower().replace(" ", "-") not in excluded
-        ][:10]
+        ]
+
+        # Load KB vendor data relevant to this finding
+        kb_vendors = load_kb_vendors_for_finding(
+            finding=finding,
+            industry=industry,
+            context_vendors=relevant_vendors,
+            max_vendors=15,
+        )
+
+        # Format vendor catalog for prompt
+        vendor_catalog = format_vendors_for_prompt(kb_vendors, currency_symbol="€")
 
         # Note for LLM about excluded vendors
         exclude_note = ""
@@ -208,8 +227,7 @@ COMPANY CONTEXT:
 - Tech Comfort: {company_context['tech_comfort']}
 - Budget Range: €{company_context['budget_range']}
 
-AVAILABLE VENDORS:
-{json.dumps(relevant_vendors, indent=2) if relevant_vendors else "Use general market vendors"}{exclude_note}
+{vendor_catalog}{exclude_note}
 
 {ai_tools_context}
 
@@ -345,11 +363,12 @@ USE: "Connects to HubSpot via native integration, syncs in <5 minutes"
 ═══════════════════════════════════════════════════════════════════════════════
 KEY PRINCIPLES
 ═══════════════════════════════════════════════════════════════════════════════
-1. REAL VENDORS: Use actual product names and realistic 2024/2025 pricing
+1. VENDOR CATALOG: For off-the-shelf and best-in-class options, ONLY use vendors from the VENDOR CATALOG provided in the prompt. Use their exact pricing. Never invent vendor names or prices.
 2. HONEST TRADE-OFFS: Every option has pros AND cons - never all positive
 3. CONTEXT-AWARE: Recommendation MUST match company size, budget, tech comfort
 4. TRANSPARENT ROI: Show calculation with all assumptions and sources
 5. COMPLETE OPTIONS: All three options must be fully specified with real numbers
+6. If no vendor from the catalog fits, say "No matching vendor in catalog" rather than making one up
 
 ═══════════════════════════════════════════════════════════════════════════════
 NOTE: roi_percentage and payback_months will be calculated by the ROI Calculator Skill.

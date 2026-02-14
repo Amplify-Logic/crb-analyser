@@ -11,7 +11,7 @@ from fastapi import APIRouter, HTTPException, status, Depends, Query
 from pydantic import BaseModel, Field
 
 from src.config.supabase_client import get_async_supabase
-from src.middleware.auth import require_workspace, CurrentUser
+from src.middleware.auth import require_admin, CurrentUser
 from src.services.vendor_service import vendor_service
 from src.services.embedding_service import get_embedding_service
 
@@ -199,7 +199,7 @@ async def list_vendors(
     search: Optional[str] = None,
     page: int = Query(1, ge=1),
     page_size: int = Query(20, ge=1, le=100),
-    current_user: CurrentUser = Depends(require_workspace),
+    current_user: CurrentUser = Depends(require_admin),
 ):
     """
     List all vendors with filtering and pagination.
@@ -250,7 +250,7 @@ async def list_vendors(
 
 @router.get("/vendors/categories")
 async def list_categories(
-    current_user: CurrentUser = Depends(require_workspace),
+    current_user: CurrentUser = Depends(require_admin),
 ):
     """
     Get all vendor categories with counts.
@@ -278,7 +278,7 @@ async def list_categories(
 
 @router.get("/vendors/industries")
 async def list_industries(
-    current_user: CurrentUser = Depends(require_workspace),
+    current_user: CurrentUser = Depends(require_admin),
 ):
     """
     Get all supported industries.
@@ -292,7 +292,7 @@ async def list_industries(
 
 @router.get("/vendors/stats")
 async def get_vendor_stats(
-    current_user: CurrentUser = Depends(require_workspace),
+    current_user: CurrentUser = Depends(require_admin),
 ):
     """
     Get vendor database statistics.
@@ -349,7 +349,7 @@ async def get_vendor_stats(
 @router.get("/vendors/{slug}", response_model=VendorResponse)
 async def get_vendor(
     slug: str,
-    current_user: CurrentUser = Depends(require_workspace),
+    current_user: CurrentUser = Depends(require_admin),
 ):
     """
     Get a single vendor by slug.
@@ -379,7 +379,7 @@ async def get_vendor(
 @router.post("/vendors")
 async def create_vendor(
     vendor: VendorCreate,
-    current_user: CurrentUser = Depends(require_workspace),
+    current_user: CurrentUser = Depends(require_admin),
 ):
     """
     Create a new vendor.
@@ -439,7 +439,7 @@ async def create_vendor(
 async def update_vendor(
     slug: str,
     vendor_update: VendorUpdate,
-    current_user: CurrentUser = Depends(require_workspace),
+    current_user: CurrentUser = Depends(require_admin),
 ):
     """
     Update an existing vendor.
@@ -517,7 +517,7 @@ async def update_vendor(
 async def delete_vendor(
     slug: str,
     hard_delete: bool = False,
-    current_user: CurrentUser = Depends(require_workspace),
+    current_user: CurrentUser = Depends(require_admin),
 ):
     """
     Delete a vendor (soft delete by default - sets status to 'deprecated').
@@ -566,7 +566,7 @@ async def delete_vendor(
 @router.post("/vendors/{slug}/verify")
 async def verify_vendor(
     slug: str,
-    current_user: CurrentUser = Depends(require_workspace),
+    current_user: CurrentUser = Depends(require_admin),
 ):
     """
     Mark a vendor as verified (updates verified_at timestamp).
@@ -598,7 +598,7 @@ async def verify_vendor(
 @router.get("/vendors/industries/{industry}/tiers")
 async def get_industry_tiers(
     industry: str,
-    current_user: CurrentUser = Depends(require_workspace),
+    current_user: CurrentUser = Depends(require_admin),
 ):
     """
     Get all vendors in tiers for an industry.
@@ -635,7 +635,7 @@ async def set_vendor_tier(
     industry: str,
     vendor_id: str,
     assignment: VendorTierAssignment,
-    current_user: CurrentUser = Depends(require_workspace),
+    current_user: CurrentUser = Depends(require_admin),
 ):
     """
     Set or update a vendor's tier for an industry.
@@ -661,7 +661,7 @@ async def set_vendor_tier(
 async def remove_vendor_tier(
     industry: str,
     vendor_id: str,
-    current_user: CurrentUser = Depends(require_workspace),
+    current_user: CurrentUser = Depends(require_admin),
 ):
     """
     Remove a vendor from an industry's tier list.
@@ -688,7 +688,7 @@ async def get_audit_log(
     changed_by: Optional[str] = None,
     page: int = Query(1, ge=1),
     page_size: int = Query(50, ge=1, le=100),
-    current_user: CurrentUser = Depends(require_workspace),
+    current_user: CurrentUser = Depends(require_admin),
 ):
     """
     Get the vendor audit log with filtering.
@@ -732,7 +732,7 @@ async def get_stale_vendors(
     days: int = Query(90, ge=1, le=365),
     page: int = Query(1, ge=1),
     page_size: int = Query(20, ge=1, le=100),
-    current_user: CurrentUser = Depends(require_workspace),
+    current_user: CurrentUser = Depends(require_admin),
 ):
     """
     Get vendors that haven't been verified in a specified number of days.
@@ -780,7 +780,7 @@ async def semantic_search_vendors(
     company_size: Optional[str] = None,
     limit: int = Query(10, ge=1, le=50),
     threshold: float = Query(0.5, ge=0.0, le=1.0, description="Minimum similarity score"),
-    current_user: CurrentUser = Depends(require_workspace),
+    current_user: CurrentUser = Depends(require_admin),
 ):
     """
     Search vendors using semantic similarity.
@@ -847,7 +847,7 @@ async def semantic_search_vendors(
 
 @router.post("/vendors/regenerate-embeddings")
 async def regenerate_all_embeddings(
-    current_user: CurrentUser = Depends(require_workspace),
+    current_user: CurrentUser = Depends(require_admin),
 ):
     """
     Regenerate embeddings for all active vendors.

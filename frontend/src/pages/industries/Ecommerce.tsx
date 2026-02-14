@@ -129,13 +129,13 @@ export default function Ecommerce() {
               </ShimmerButton>
 
               <Link
-                to="/report/sample"
+                to="/quiz"
                 className="px-6 py-3 text-gray-700 font-medium hover:text-primary-600 transition flex items-center gap-2"
               >
                 <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
                 </svg>
-                See Sample Report
+                See What You Get
               </Link>
             </div>
 
@@ -242,10 +242,10 @@ export default function Ecommerce() {
 
           <div className="text-center mt-8">
             <Link
-              to="/report/sample"
+              to="/quiz"
               className="inline-flex items-center gap-2 text-primary-600 font-medium hover:text-primary-700"
             >
-              View full sample report
+              Get your personalized report
               <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
               </svg>

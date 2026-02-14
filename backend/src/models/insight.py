@@ -130,7 +130,7 @@ class Insight(BaseModel):
     )
     source: InsightSource = Field(..., description="Original source of the insight")
     extracted_at: str = Field(
-        default_factory=lambda: datetime.now().strftime("%Y-%m-%d"),
+        default_factory=lambda: datetime.utcnow().strftime("%Y-%m-%d"),
         description="When this insight was extracted"
     )
     reviewed: bool = Field(
@@ -159,7 +159,7 @@ class InsightCollection(BaseModel):
     type: InsightType
     description: str
     last_updated: str = Field(
-        default_factory=lambda: datetime.now().strftime("%Y-%m-%d")
+        default_factory=lambda: datetime.utcnow().strftime("%Y-%m-%d")
     )
     insights: list[Insight] = Field(default_factory=list)
 
@@ -169,7 +169,7 @@ class ExtractedInsights(BaseModel):
     source: InsightSource
     raw_content_path: Optional[str] = None
     extracted_at: str = Field(
-        default_factory=lambda: datetime.now().strftime("%Y-%m-%d")
+        default_factory=lambda: datetime.utcnow().strftime("%Y-%m-%d")
     )
     insights: list[Insight] = Field(default_factory=list)
     extraction_notes: Optional[str] = None

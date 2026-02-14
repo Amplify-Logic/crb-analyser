@@ -79,7 +79,7 @@ class MilestoneSynthesisSkill(LLMSkill[Dict[str, Any]]):
     description = "Synthesize deep-dive into finding with ROI"
     version = "1.1.0"  # Updated for vendor database integration
 
-    default_model = "claude-sonnet-4-20250514"  # Quality matters
+    default_task = "generate_findings"  # Balanced model for quality synthesis (Sonnet for quick tier)
     default_max_tokens = 2000
 
     async def execute(self, context: SkillContext) -> Dict[str, Any]:

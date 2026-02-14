@@ -504,7 +504,7 @@ class VendorMatchingSkill(LLMSkill[Dict[str, Any]]):
                 verified_date = verified_at
 
             # Calculate days old
-            now = datetime.now(verified_date.tzinfo) if verified_date.tzinfo else datetime.now()
+            now = datetime.now(verified_date.tzinfo) if verified_date.tzinfo else datetime.utcnow()
             days_old = (now - verified_date).days
 
             # Determine freshness status
@@ -698,6 +698,8 @@ class VendorMatchingSkill(LLMSkill[Dict[str, Any]]):
                 reasons.append("Default recommendation")
 
             # Boost for matching recommended_for tags
+            # Track affinity boosts separately to apply diminishing returns
+            tag_boost = 0
             recommended_for = vendor.get("recommended_for", [])
             finding_text = " ".join([
                 str(finding.get("title", "")),
@@ -706,7 +708,7 @@ class VendorMatchingSkill(LLMSkill[Dict[str, Any]]):
             ]).lower()
             for tag in recommended_for:
                 if tag.replace("_", " ") in finding_text or tag in finding_text:
-                    score += 10
+                    tag_boost = 10
                     reasons.append(f"Recommended for {tag}")
                     break  # Only count once
 
@@ -783,13 +785,24 @@ class VendorMatchingSkill(LLMSkill[Dict[str, Any]]):
                     limitations.append(condition)
                     break
 
-            # NEW: Score integration compatibility with existing stack
+            # Score integration compatibility with existing stack
             integration_boost, integration_matches = self._score_integration_compatibility(
                 vendor, existing_stack
             )
             if integration_boost > 0:
-                score += integration_boost
                 reasons.append(f"Integrates with {', '.join(integration_matches[:3])}")
+
+            # Apply affinity boosts (tag match + integration) with diminishing returns.
+            # If a vendor matches BOTH tags and integrations, the second boost is halved
+            # to prevent double-boosting. Cap combined affinity at 25 points.
+            if tag_boost > 0 and integration_boost > 0:
+                # Both match: full tag boost + halved integration boost
+                combined_affinity = tag_boost + (integration_boost // 2)
+                combined_affinity = min(combined_affinity, 25)
+                score += combined_affinity
+            else:
+                # Only one matches: apply full boost
+                score += tag_boost + integration_boost
 
             # NEW: Check pricing freshness
             freshness_info = self._check_pricing_freshness(vendor)

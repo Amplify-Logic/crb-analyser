@@ -8,6 +8,7 @@ import { Link } from 'react-router-dom'
 import { useAuth } from '../contexts/AuthContext'
 import apiClient from '../services/apiClient'
 import { Logo } from '../components/Logo'
+import { logger } from '../utils/logger'
 
 interface Audit {
   id: string
@@ -52,7 +53,7 @@ export default function Dashboard() {
         inProgress,
       })
     } catch (err) {
-      console.error('Failed to load audits:', err)
+      logger.error('Failed to load audits:', err)
     } finally {
       setLoading(false)
     }

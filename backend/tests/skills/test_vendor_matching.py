@@ -30,7 +30,7 @@ class TestVendorMatchingSkill:
         skill = VendorMatchingSkill()
         assert skill.name == "vendor-matching"
         assert skill.description == "Match findings to specific vendor solutions"
-        assert skill.version == "1.0.0"
+        assert skill.version == "1.1.0"
         assert skill.requires_llm is True
         assert skill.requires_knowledge is True
 

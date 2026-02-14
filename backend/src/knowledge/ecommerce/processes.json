@@ -1,0 +1,231 @@
+{
+  "industry": "ecommerce",
+  "description": "E-commerce businesses including DTC brands, online retailers, and multi-channel sellers",
+  "common_processes": [
+    {
+      "id": "order-management",
+      "name": "Order Management & Processing",
+      "description": "Receiving, processing, and tracking orders from multiple channels (website, marketplaces, wholesale)",
+      "typical_time_spent": "3-5 hours/day",
+      "pain_level": "high",
+      "automation_potential": 85,
+      "ai_opportunities": [
+        "Automated order routing and fulfillment assignment",
+        "AI-powered fraud detection on incoming orders",
+        "Smart order prioritization based on shipping deadlines",
+        "Automated split-shipment optimization",
+        "Predictive delivery date estimation"
+      ]
+    },
+    {
+      "id": "inventory-management",
+      "name": "Inventory Management & Forecasting",
+      "description": "Tracking stock levels, reordering, managing multiple warehouses, and preventing stockouts or overstock",
+      "typical_time_spent": "2-4 hours/day",
+      "pain_level": "very high",
+      "automation_potential": 80,
+      "ai_opportunities": [
+        "AI-powered demand forecasting",
+        "Automated reorder point calculation",
+        "Multi-channel inventory sync",
+        "Seasonal trend prediction",
+        "Dead stock identification and markdown recommendations"
+      ]
+    },
+    {
+      "id": "customer-service",
+      "name": "Customer Service & Support",
+      "description": "Handling inquiries, complaints, returns, exchanges, and order status updates",
+      "typical_time_spent": "4-6 hours/day",
+      "pain_level": "very high",
+      "automation_potential": 75,
+      "ai_opportunities": [
+        "AI chatbot for common questions (order status, shipping, returns)",
+        "Automated ticket routing and prioritization",
+        "AI-suggested responses for support agents",
+        "Proactive outreach for delayed shipments",
+        "Sentiment analysis on customer interactions"
+      ]
+    },
+    {
+      "id": "product-listing",
+      "name": "Product Listing & Content Management",
+      "description": "Creating product descriptions, photography, SEO optimization, and multi-channel listing management",
+      "typical_time_spent": "2-4 hours/day",
+      "pain_level": "medium",
+      "automation_potential": 70,
+      "ai_opportunities": [
+        "AI-generated product descriptions and titles",
+        "Automated image background removal and enhancement",
+        "SEO keyword optimization for product pages",
+        "Multi-channel listing sync and formatting",
+        "AI-powered A/B testing of product copy"
+      ]
+    },
+    {
+      "id": "fulfillment-shipping",
+      "name": "Fulfillment & Shipping",
+      "description": "Picking, packing, shipping, and tracking orders; managing carrier relationships",
+      "typical_time_spent": "3-5 hours/day",
+      "pain_level": "high",
+      "automation_potential": 75,
+      "ai_opportunities": [
+        "Automated carrier selection for best rate/speed",
+        "Smart warehouse pick-path optimization",
+        "Predictive shipping cost estimation",
+        "Automated shipping label generation",
+        "Delivery exception prediction and proactive customer notification"
+      ]
+    },
+    {
+      "id": "returns-processing",
+      "name": "Returns & Exchanges Processing",
+      "description": "Managing return requests, processing refunds, restocking, and analyzing return reasons",
+      "typical_time_spent": "1-3 hours/day",
+      "pain_level": "high",
+      "automation_potential": 70,
+      "ai_opportunities": [
+        "Self-service returns portal with AI recommendations",
+        "Automated return approval for low-risk cases",
+        "AI analysis of return reasons to improve product listings",
+        "Smart exchange suggestions to retain revenue",
+        "Fraud detection on serial returners"
+      ]
+    },
+    {
+      "id": "marketing-email",
+      "name": "Email Marketing & Customer Retention",
+      "description": "Email campaigns, automated flows, segmentation, and lifecycle marketing",
+      "typical_time_spent": "2-4 hours/day",
+      "pain_level": "medium",
+      "automation_potential": 85,
+      "ai_opportunities": [
+        "AI-powered email subject line optimization",
+        "Automated abandoned cart recovery sequences",
+        "Predictive customer segmentation",
+        "Personalized product recommendations in emails",
+        "Send-time optimization per subscriber"
+      ]
+    },
+    {
+      "id": "pricing-promotions",
+      "name": "Pricing & Promotions Management",
+      "description": "Setting prices, running promotions, managing discounts, and competitive price monitoring",
+      "typical_time_spent": "1-2 hours/day",
+      "pain_level": "medium",
+      "automation_potential": 65,
+      "ai_opportunities": [
+        "Dynamic pricing based on demand and competition",
+        "AI-optimized discount strategies",
+        "Automated competitor price monitoring",
+        "Margin-aware promotional calendar",
+        "Price elasticity analysis"
+      ]
+    }
+  ],
+  "typical_team_structure": {
+    "solo_founder": {
+      "size": "1-2",
+      "roles": ["Founder/Owner (does everything)", "Virtual Assistant (part-time)"]
+    },
+    "small_team": {
+      "size": "3-8",
+      "roles": ["Founder/CEO", "Marketing Manager", "Customer Service Rep", "Warehouse/Fulfillment", "Content Creator"]
+    },
+    "growth_stage": {
+      "size": "10-30",
+      "roles": ["CEO", "Head of Marketing", "Head of Operations", "Customer Service Team", "Content Team", "Warehouse Manager", "Data/Analytics", "Developer/Technical"]
+    }
+  },
+  "common_tools": [
+    "Shopify", "WooCommerce", "BigCommerce", "Magento",
+    "Klaviyo", "Mailchimp", "Omnisend",
+    "Gorgias", "Zendesk", "Freshdesk",
+    "Google Analytics", "Triple Whale", "Lifetimely",
+    "ShipStation", "ShipBob", "Easyship",
+    "Canva", "Adobe Creative Suite",
+    "Google Ads", "Meta Ads", "TikTok Ads",
+    "Yotpo", "Judge.me", "Loox"
+  ],
+  "industry_specific_challenges": [
+    "High cart abandonment rates (70% industry average)",
+    "Rising customer acquisition costs across paid channels",
+    "Managing inventory across multiple sales channels",
+    "Increasing return rates especially in fashion/apparel",
+    "Competing with Amazon and large marketplace sellers",
+    "Shipping cost pressure and customer free-shipping expectations",
+    "Maintaining margins while running promotions",
+    "Building customer loyalty and repeat purchases"
+  ],
+  "pain_points": [
+    {
+      "id": "cart-abandonment",
+      "name": "Cart Abandonment",
+      "description": "Shoppers add items to cart but leave without completing purchase",
+      "impact": "70% of carts are abandoned, representing massive lost revenue",
+      "current_solutions": "Basic email reminders, exit-intent popups",
+      "ai_potential": "AI-powered multi-channel recovery campaigns can recapture 10-15% of abandoned carts"
+    },
+    {
+      "id": "high-cac",
+      "name": "Rising Customer Acquisition Cost",
+      "description": "Cost to acquire new customers through paid channels continues to increase",
+      "impact": "CAC has increased 50-100% over the past 3 years for most e-commerce brands",
+      "current_solutions": "Diversifying channels, organic content, referral programs",
+      "ai_potential": "AI audience targeting, lookalike modeling, and creative optimization can reduce CAC by 15-30%"
+    },
+    {
+      "id": "customer-service-volume",
+      "name": "Customer Service Overload",
+      "description": "High volume of repetitive inquiries about order status, shipping, returns",
+      "impact": "60-70% of support tickets are repetitive questions that could be automated",
+      "current_solutions": "FAQ pages, basic chatbots, support team scaling",
+      "ai_potential": "AI chatbots can handle 40-60% of inquiries automatically, reducing support costs by 30-50%"
+    },
+    {
+      "id": "inventory-mismanagement",
+      "name": "Inventory Mismanagement",
+      "description": "Stockouts on popular items while overstocking slow-movers ties up capital",
+      "impact": "Stockouts cause 4-8% revenue loss; overstock ties up 20-30% more capital than needed",
+      "current_solutions": "Manual spreadsheets, basic reorder points, gut feeling",
+      "ai_potential": "AI demand forecasting reduces stockouts by 30-50% and overstock by 20-30%"
+    }
+  ],
+  "key_metrics": [
+    {
+      "id": "conversion-rate",
+      "name": "Website Conversion Rate",
+      "description": "Percentage of website visitors who complete a purchase",
+      "benchmark": "2-3% average, 5%+ is excellent",
+      "how_to_improve": "Optimize checkout, improve product pages, personalized recommendations, A/B testing"
+    },
+    {
+      "id": "average-order-value",
+      "name": "Average Order Value (AOV)",
+      "description": "Average amount spent per transaction",
+      "benchmark": "Varies by niche, typically EUR 50-120",
+      "how_to_improve": "Bundles, upsells, cross-sells, free shipping thresholds, loyalty programs"
+    },
+    {
+      "id": "customer-lifetime-value",
+      "name": "Customer Lifetime Value (CLV)",
+      "description": "Total revenue expected from a customer over their lifetime",
+      "benchmark": "Should be 3x+ customer acquisition cost",
+      "how_to_improve": "Retention marketing, subscription models, loyalty programs, post-purchase engagement"
+    },
+    {
+      "id": "cart-abandonment-rate",
+      "name": "Cart Abandonment Rate",
+      "description": "Percentage of shoppers who add items to cart but don't complete purchase",
+      "benchmark": "<60% is good, >75% needs improvement",
+      "how_to_improve": "Simplify checkout, offer guest checkout, abandoned cart emails, transparent pricing"
+    },
+    {
+      "id": "return-rate",
+      "name": "Return Rate",
+      "description": "Percentage of orders that are returned",
+      "benchmark": "<15% is good for most categories, fashion averages 25-30%",
+      "how_to_improve": "Better product photos, accurate descriptions, size guides, quality control"
+    }
+  ]
+}

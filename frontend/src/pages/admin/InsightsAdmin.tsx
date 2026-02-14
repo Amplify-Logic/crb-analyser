@@ -8,6 +8,7 @@
 import { useState, useEffect, useCallback } from 'react'
 import { Link, useSearchParams } from 'react-router-dom'
 import apiClient from '../../services/apiClient'
+import { logger } from '../../utils/logger'
 
 // Types
 interface SupportingData {
@@ -455,7 +456,7 @@ export default function InsightsAdmin() {
       const response = await apiClient.get<InsightsListResponse>(`/api/admin/insights/list?${params.toString()}`)
       setInsights(response.data.data)
     } catch (err) {
-      console.error('Failed to fetch insights:', err)
+      logger.error('Failed to fetch insights:', err)
     } finally {
       setLoading(false)
     }
@@ -470,7 +471,7 @@ export default function InsightsAdmin() {
       await apiClient.post(`/api/admin/insights/${insight.id}/review?reviewed=true`)
       fetchInsights()
     } catch (err) {
-      console.error('Failed to mark as reviewed:', err)
+      logger.error('Failed to mark as reviewed:', err)
     }
   }
 
@@ -482,7 +483,7 @@ export default function InsightsAdmin() {
       setSelectedInsight(null)
       fetchInsights()
     } catch (err) {
-      console.error('Failed to save insight:', err)
+      logger.error('Failed to save insight:', err)
     }
   }
 
@@ -495,7 +496,7 @@ export default function InsightsAdmin() {
       setSelectedInsight(null)
       fetchInsights()
     } catch (err) {
-      console.error('Failed to delete insight:', err)
+      logger.error('Failed to delete insight:', err)
     }
   }
 

@@ -230,9 +230,9 @@ async def generate_timeline(
         try:
             start_date = datetime.strptime(start_date_str, "%Y-%m-%d")
         except ValueError:
-            start_date = datetime.now() + timedelta(days=30)
+            start_date = datetime.utcnow() + timedelta(days=30)
     else:
-        start_date = datetime.now() + timedelta(days=30)
+        start_date = datetime.utcnow() + timedelta(days=30)
 
     # Default implementation durations by type
     duration_map = {

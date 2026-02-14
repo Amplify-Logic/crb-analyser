@@ -49,7 +49,7 @@ async def main():
     print("\n" + "="*80)
     print("VENDOR DATABASE AUDIT")
     print("="*80)
-    print(f"Audit Date: {datetime.now().isoformat()}")
+    print(f"Audit Date: {datetime.utcnow().isoformat()}")
     print("="*80 + "\n")
 
     # Get all vendors
@@ -161,7 +161,7 @@ async def main():
 
     # Output JSON for programmatic use
     output = {
-        "audit_date": datetime.now().isoformat(),
+        "audit_date": datetime.utcnow().isoformat(),
         "total_vendors": len(vendors),
         "industry_counts": industry_counts,
         "tier_counts": tier_counts,

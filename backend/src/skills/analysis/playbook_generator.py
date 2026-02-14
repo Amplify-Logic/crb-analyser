@@ -160,7 +160,7 @@ class PlaybookGeneratorSkill(LLMSkill[Dict[str, Any]]):
         skills = self._get_skills_required(option_chosen, option)
 
         # Generate success metrics
-        metrics = self._generate_success_metrics(recommendation, option)
+        metrics = self._generate_success_metrics(recommendation, option, currency_symbol=context.currency_symbol)
 
         # Generate risks and mitigations
         risks = self._generate_risks(option_chosen, company_context)
@@ -363,9 +363,11 @@ Return ONLY a JSON object:
         self,
         recommendation: Dict[str, Any],
         option: Dict[str, Any],
+        currency_symbol: str = "\u20ac",
     ) -> List[Dict[str, Any]]:
         """Generate success metrics."""
         metrics = []
+        cs = currency_symbol
 
         # Time-based metric
         roi_detail = recommendation.get("roi_detail", {})
@@ -391,8 +393,8 @@ Return ONLY a JSON object:
         if financial.get("monthly_savings"):
             metrics.append({
                 "metric": "Monthly cost savings",
-                "baseline": "€0",
-                "target": f"€{financial['monthly_savings']:,.0f}",
+                "baseline": f"{cs}0",
+                "target": f"{cs}{financial['monthly_savings']:,.0f}",
                 "measurement": "Monthly financial review",
             })
 

@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from 'react'
+import { logger } from '../../utils/logger'
 
 interface CompanyResearchStepProps {
   onComplete: (data: {
@@ -134,7 +135,7 @@ export default function CompanyResearchStep({ onComplete, initialData }: Company
                 return
               }
             } catch (e) {
-              console.error('Failed to parse research update:', e, line)
+              logger.error('Failed to parse research update:', e, line)
             }
           }
         }

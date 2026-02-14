@@ -364,6 +364,142 @@ class EndpointRateLimiter:
 endpoint_limiter = EndpointRateLimiter()
 
 
+class EmailRateLimiter:
+    """
+    Per-email rate limiter for endpoints that accept email as input.
+
+    Prevents email enumeration by rate-limiting per normalized email address,
+    combined with the client IP for additional protection.
+
+    Usage:
+        limiter = EmailRateLimiter()
+
+        @router.get("/resume")
+        async def resume(request: Request, email: str):
+            await limiter.check(request, email, limit=5, window=900)
+            # ... endpoint logic
+    """
+
+    RATE_LIMIT_KEY = "ratelimit:email:{endpoint}:{identifier}"
+
+    def __init__(self) -> None:
+        self._redis = None
+        self._memory: Dict[str, list] = defaultdict(list)
+
+    async def _get_redis(self):
+        """Lazy load Redis client."""
+        if not self._redis:
+            try:
+                from src.config.redis_client import get_redis
+                self._redis = await get_redis()
+            except Exception:
+                pass
+        return self._redis
+
+    async def check(
+        self,
+        request: Request,
+        email: str,
+        limit: int = 5,
+        window: int = 900,
+        endpoint: str = "email_lookup",
+    ) -> None:
+        """
+        Check rate limit for an email-based lookup.
+
+        Rate limits by both email and IP to prevent enumeration.
+        Raises HTTPException if limit exceeded.
+
+        Args:
+            request: FastAPI request
+            email: Email address being looked up
+            limit: Max requests per window (default: 5)
+            window: Time window in seconds (default: 900 = 15 minutes)
+            endpoint: Endpoint identifier for key namespacing
+        """
+        normalized_email = email.lower().strip()
+        client_ip = self._get_client_ip(request)
+        redis = await self._get_redis()
+
+        # Check both email-based and IP-based limits
+        for identifier in [f"email:{normalized_email}", f"ip:{client_ip}"]:
+            if redis:
+                is_limited, retry_after = await self._check_redis(
+                    redis, endpoint, identifier, limit, window
+                )
+            else:
+                is_limited, retry_after = self._check_memory(
+                    endpoint, identifier, limit, window
+                )
+
+            if is_limited:
+                logger.warning(
+                    f"Email rate limit exceeded: endpoint={endpoint}, "
+                    f"identifier={identifier[:20]}..., ip={client_ip}"
+                )
+                raise HTTPException(
+                    status_code=status.HTTP_429_TOO_MANY_REQUESTS,
+                    detail={
+                        "error": "rate_limited",
+                        "message": "Too many attempts. Please try again later.",
+                        "retry_after": retry_after,
+                    }
+                )
+
+    async def _check_redis(
+        self, redis, endpoint: str, identifier: str, limit: int, window: int
+    ) -> tuple[bool, int]:
+        """Check rate limit using Redis."""
+        try:
+            safe_id = escape_redis_key(identifier)
+            key = self.RATE_LIMIT_KEY.format(endpoint=endpoint, identifier=safe_id)
+            current = await redis.incr(key)
+
+            if current == 1:
+                await redis.expire(key, window)
+
+            if current > limit:
+                ttl = await redis.ttl(key)
+                return True, max(ttl, 1)
+
+            return False, 0
+        except Exception:
+            return self._check_memory(endpoint, identifier, limit, window)
+
+    def _check_memory(
+        self, endpoint: str, identifier: str, limit: int, window: int
+    ) -> tuple[bool, int]:
+        """Check rate limit using in-memory storage."""
+        key = f"{endpoint}:{identifier}"
+        current_time = time.time()
+
+        self._memory[key] = [
+            t for t in self._memory[key] if current_time - t < window
+        ]
+
+        if len(self._memory[key]) >= limit:
+            oldest = min(self._memory[key]) if self._memory[key] else current_time
+            retry_after = int(window - (current_time - oldest)) + 1
+            return True, max(retry_after, 1)
+
+        self._memory[key].append(current_time)
+        return False, 0
+
+    def _get_client_ip(self, request: Request) -> str:
+        """Extract client IP from request."""
+        forwarded = request.headers.get("X-Forwarded-For")
+        if forwarded:
+            return forwarded.split(",")[0].strip()
+        real_ip = request.headers.get("X-Real-IP")
+        if real_ip:
+            return real_ip
+        return request.client.host if request.client else "unknown"
+
+
+# Singleton email rate limiter
+email_limiter = EmailRateLimiter()
+
+
 class SecurityHeadersMiddleware(BaseHTTPMiddleware):
     """Add security headers to all responses."""
 

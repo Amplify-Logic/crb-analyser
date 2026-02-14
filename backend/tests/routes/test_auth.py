@@ -1,5 +1,8 @@
 """
 Tests for authentication routes.
+
+NOTE: Tests using mocked Supabase calls target `get_async_supabase` which is the
+actual function used in auth.py. Some mocks may need updating as the auth module evolves.
 """
 
 import pytest
@@ -40,22 +43,24 @@ class TestSignup:
 
     def test_signup_creates_user(self):
         """Test user signup flow with mocked Supabase."""
-        with patch('src.routes.auth.get_supabase_admin') as mock_supabase:
-            # Mock Supabase auth response
-            mock_auth = MagicMock()
-            mock_auth.sign_up.return_value = MagicMock(
+        with patch('src.routes.auth.get_async_supabase') as mock_get_supabase:
+            mock_client = AsyncMock()
+            mock_client.auth.sign_up.return_value = MagicMock(
                 user=MagicMock(id="test-user-id", email="newuser@test.com"),
                 session=MagicMock(access_token="test-token", refresh_token="test-refresh")
             )
-            mock_supabase.return_value.auth = mock_auth
+            mock_client.table.return_value.insert.return_value.execute = AsyncMock(
+                return_value=MagicMock(data=[{"id": "ws-1"}])
+            )
+            mock_get_supabase.return_value = mock_client
 
             response = client.post("/api/auth/signup", json={
                 "email": "newuser@test.com",
                 "password": "SecurePass123!"
             })
 
-            # Should succeed or fail gracefully
-            assert response.status_code in [200, 201, 400, 500]
+            # Should succeed or fail with auth error (not 500)
+            assert response.status_code in [200, 201, 400]
 
 
 class TestLogin:
@@ -88,37 +93,37 @@ class TestLogin:
 
     def test_login_rejects_invalid_credentials(self):
         """Test invalid credentials are rejected."""
-        with patch('src.routes.auth.get_supabase_admin') as mock_supabase:
-            # Mock failed login
-            mock_auth = MagicMock()
-            mock_auth.sign_in_with_password.side_effect = Exception("Invalid login credentials")
-            mock_supabase.return_value.auth = mock_auth
+        with patch('src.routes.auth.get_async_supabase') as mock_get_supabase:
+            mock_client = AsyncMock()
+            mock_client.auth.sign_in_with_password.side_effect = Exception("Invalid login credentials")
+            mock_get_supabase.return_value = mock_client
 
             response = client.post("/api/auth/login", json={
                 "email": "nonexistent@test.com",
                 "password": "wrongpassword"
             })
 
-            # Should be rejected with 401 or 400
+            # Should be rejected (401 or 400, not 500)
             assert response.status_code in [400, 401]
 
     def test_login_returns_token(self):
         """Test login returns JWT token on success."""
-        with patch('src.routes.auth.get_supabase_admin') as mock_supabase:
-            # Mock successful login
-            mock_auth = MagicMock()
-            mock_auth.sign_in_with_password.return_value = MagicMock(
+        with patch('src.routes.auth.get_async_supabase') as mock_get_supabase:
+            mock_client = AsyncMock()
+            mock_client.auth.sign_in_with_password.return_value = MagicMock(
                 user=MagicMock(id="test-user-id", email="user@test.com"),
                 session=MagicMock(access_token="test-jwt-token", refresh_token="test-refresh")
             )
-            mock_supabase.return_value.auth = mock_auth
+            mock_client.table.return_value.select.return_value.eq.return_value.single.return_value.execute = AsyncMock(
+                return_value=MagicMock(data={"id": "test-user-id", "email": "user@test.com", "role": "user"})
+            )
+            mock_get_supabase.return_value = mock_client
 
             response = client.post("/api/auth/login", json={
                 "email": "user@test.com",
                 "password": "correctpassword"
             })
 
-            # Should succeed
             if response.status_code == 200:
                 data = response.json()
                 assert "access_token" in data or "token" in data or "session" in data
@@ -132,7 +137,7 @@ class TestLogout:
         response = client.post("/api/auth/logout")
 
         # Logout should work even without auth (just clears cookies)
-        assert response.status_code in [200, 204, 401]
+        assert response.status_code in [200, 204]
 
 
 class TestCurrentUser:
@@ -143,17 +148,10 @@ class TestCurrentUser:
         response = client.get("/api/auth/me")
 
         # Should require auth
-        assert response.status_code in [401, 403]
+        assert response.status_code == 401
 
     def test_me_returns_user_with_valid_token(self):
-        """Test /me returns user info with valid token."""
-        with patch('src.middleware.auth.verify_token') as mock_verify:
-            mock_verify.return_value = {
-                "sub": "test-user-id",
-                "email": "user@test.com"
-            }
-
-            # This would require setting up proper auth headers
-            # For now, just verify the endpoint exists
-            response = client.get("/api/auth/me")
-            assert response.status_code in [200, 401, 403]
+        """Test /me requires proper auth headers."""
+        # Without proper auth headers in the request, auth middleware rejects
+        response = client.get("/api/auth/me")
+        assert response.status_code in [401, 403]

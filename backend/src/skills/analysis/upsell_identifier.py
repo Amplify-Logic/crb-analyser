@@ -150,6 +150,7 @@ class UpsellIdentifierSkill(LLMSkill[Dict[str, Any]]):
             signals=signals,
             report=report,
             industry=context.industry,
+            currency_symbol=context.currency_symbol,
         )
 
         # Determine timing
@@ -161,6 +162,7 @@ class UpsellIdentifierSkill(LLMSkill[Dict[str, Any]]):
             pitch_points=pitch_points,
             industry=context.industry,
             company_name=company.get("name", "the customer"),
+            currency_symbol=context.currency_symbol,
         )
 
         return {
@@ -313,9 +315,11 @@ class UpsellIdentifierSkill(LLMSkill[Dict[str, Any]]):
         signals: Dict[str, Any],
         report: Dict[str, Any],
         industry: str,
+        currency_symbol: str = "\u20ac",
     ) -> List[Dict[str, str]]:
         """Generate pitch points based on signals."""
         points = []
+        cs = currency_symbol
 
         if signals["custom_dev_needed"]:
             points.append({
@@ -334,7 +338,7 @@ class UpsellIdentifierSkill(LLMSkill[Dict[str, Any]]):
         if signals["high_value_opportunity"]:
             roi = signals["total_roi_potential"]
             points.append({
-                "point": f"Your €{roi:,} annual ROI potential deserves protection",
+                "point": f"Your {cs}{roi:,} annual ROI potential deserves protection",
                 "evidence": "Human guidance ensures you capture maximum value",
                 "template": "high_value",
             })
@@ -381,6 +385,7 @@ class UpsellIdentifierSkill(LLMSkill[Dict[str, Any]]):
         pitch_points: List[Dict[str, str]],
         industry: str,
         company_name: str,
+        currency_symbol: str = "\u20ac",
     ) -> str:
         """Generate personalized approach recommendation."""
         if not self.client:
@@ -392,7 +397,7 @@ COMPANY: {company_name}
 SIGNALS:
 - Complexity: {signals['complexity_score']}/10
 - Custom dev needed: {signals['custom_dev_needed']}
-- ROI potential: €{signals['total_roi_potential']:,}
+- ROI potential: {currency_symbol}{signals['total_roi_potential']:,}
 - Stuck: {signals['stuck_indicators']}
 
 PITCH POINTS:

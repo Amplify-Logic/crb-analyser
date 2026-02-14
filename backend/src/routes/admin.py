@@ -9,7 +9,7 @@ from datetime import datetime
 from typing import Optional
 from fastapi import APIRouter, HTTPException, status, Depends
 from pydantic import BaseModel
-from src.middleware.auth import require_workspace, CurrentUser
+from src.middleware.auth import require_admin, CurrentUser
 
 logger = logging.getLogger(__name__)
 
@@ -41,7 +41,7 @@ class ModelUpdateAction(BaseModel):
 
 @router.post("/jobs/follow-up-emails")
 async def trigger_follow_up_emails(
-    current_user: CurrentUser = Depends(require_workspace),
+    current_user: CurrentUser = Depends(require_admin),
 ):
     """
     Manually trigger the follow-up email job.
@@ -61,7 +61,7 @@ async def trigger_follow_up_emails(
 
 @router.post("/jobs/storage-cleanup")
 async def trigger_storage_cleanup(
-    current_user: CurrentUser = Depends(require_workspace),
+    current_user: CurrentUser = Depends(require_admin),
 ):
     """
     Manually trigger the storage cleanup job.
@@ -81,7 +81,7 @@ async def trigger_storage_cleanup(
 
 @router.post("/jobs/quiz-cleanup")
 async def trigger_quiz_cleanup(
-    current_user: CurrentUser = Depends(require_workspace),
+    current_user: CurrentUser = Depends(require_admin),
 ):
     """
     Manually trigger the expired quiz session cleanup job.
@@ -101,7 +101,7 @@ async def trigger_quiz_cleanup(
 
 @router.get("/jobs/status")
 async def get_scheduler_status(
-    current_user: CurrentUser = Depends(require_workspace),
+    current_user: CurrentUser = Depends(require_admin),
 ):
     """
     Get the status of all scheduled jobs.
@@ -138,7 +138,7 @@ async def get_scheduler_status(
 
 @router.get("/system/storage-stats")
 async def get_storage_stats(
-    current_user: CurrentUser = Depends(require_workspace),
+    current_user: CurrentUser = Depends(require_admin),
 ):
     """
     Get storage usage statistics.
@@ -169,7 +169,7 @@ async def get_storage_stats(
 
 @router.get("/system/email-stats")
 async def get_email_stats(
-    current_user: CurrentUser = Depends(require_workspace),
+    current_user: CurrentUser = Depends(require_admin),
 ):
     """
     Get email sending statistics.
@@ -215,7 +215,7 @@ async def get_email_stats(
 async def list_model_updates(
     status_filter: str = "pending",
     limit: int = 50,
-    current_user: CurrentUser = Depends(require_workspace),
+    current_user: CurrentUser = Depends(require_admin),
 ):
     """List model updates pending review."""
     from src.config.supabase_client import get_async_supabase
@@ -238,7 +238,7 @@ async def list_model_updates(
 @router.post("/model-updates/{update_id}/approve")
 async def approve_model_update(
     update_id: str,
-    current_user: CurrentUser = Depends(require_workspace),
+    current_user: CurrentUser = Depends(require_admin),
 ):
     """Approve a model update and apply it to knowledge base."""
     from src.config.supabase_client import get_async_supabase
@@ -278,7 +278,7 @@ async def approve_model_update(
 @router.post("/model-updates/{update_id}/dismiss")
 async def dismiss_model_update(
     update_id: str,
-    current_user: CurrentUser = Depends(require_workspace),
+    current_user: CurrentUser = Depends(require_admin),
 ):
     """Dismiss a model update without applying."""
     from src.config.supabase_client import get_async_supabase
@@ -310,7 +310,7 @@ async def dismiss_model_update(
 
 @router.post("/jobs/model-freshness")
 async def trigger_freshness_check(
-    current_user: CurrentUser = Depends(require_workspace),
+    current_user: CurrentUser = Depends(require_admin),
 ):
     """Manually trigger a model freshness check."""
     try:

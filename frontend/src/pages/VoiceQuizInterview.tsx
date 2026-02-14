@@ -18,6 +18,7 @@ import { ShimmerButton } from '../components/magicui'
 import { Logo } from '../components/Logo'
 import { sanitizeHtml } from '../utils/sanitize'
 import {
+import { logger } from '../utils/logger'
   processAnswer,
   getFirstQuestion,
 } from '../services/interviewApi'
@@ -198,7 +199,7 @@ export default function VoiceQuizInterview() {
         profile = JSON.parse(profileStr)
         setCompanyProfile(profile)
       } catch (e) {
-        console.warn('Failed to parse company profile:', e)
+        logger.warn('Failed to parse company profile:', e)
       }
     }
 
@@ -226,7 +227,7 @@ export default function VoiceQuizInterview() {
       })
 
       if (!response.ok) {
-        console.warn('TTS not available, skipping voice')
+        logger.warn('TTS not available, skipping voice')
         setIsSpeaking(false)
         return
       }
@@ -242,7 +243,7 @@ export default function VoiceQuizInterview() {
         await audioRef.current.play()
       }
     } catch (err) {
-      console.warn('TTS error:', err)
+      logger.warn('TTS error:', err)
       setIsSpeaking(false)
     }
   }, [])
@@ -260,7 +261,7 @@ export default function VoiceQuizInterview() {
       // Speak the question
       await speakText(question)
     } catch (error) {
-      console.error('Failed to start conversation:', error)
+      logger.error('Failed to start conversation:', error)
       // Fallback to hardcoded first question
       const fallbackQuestion = "What's the one thing in your business that costs you the most time or money right now?"
       setCurrentQuestion(fallbackQuestion)
@@ -284,7 +285,7 @@ export default function VoiceQuizInterview() {
 
       if (!transcribeResponse.ok) {
         const error = await transcribeResponse.json()
-        console.error('Transcription error:', error)
+        logger.error('Transcription error:', error)
         throw new Error('Transcription failed')
       }
 
@@ -296,7 +297,7 @@ export default function VoiceQuizInterview() {
         setIsProcessing(false)
       }
     } catch (err) {
-      console.error('Voice processing error:', err)
+      logger.error('Voice processing error:', err)
       setIsProcessing(false)
     }
   }
@@ -382,7 +383,7 @@ export default function VoiceQuizInterview() {
       await speakText(`${result.acknowledgment} ${result.next_question}`)
 
     } catch (error) {
-      console.error('Error processing answer:', error)
+      logger.error('Error processing answer:', error)
       // Fallback behavior - use legacy flow
       const ack = getSmartAcknowledgment(text, currentTopic)
       setMessages(prev => [...prev, {
@@ -454,7 +455,7 @@ export default function VoiceQuizInterview() {
 
       await finishInterview()
     } catch (err) {
-      console.error('Upload error:', err)
+      logger.error('Upload error:', err)
       setPhase('conversation')
     }
   }

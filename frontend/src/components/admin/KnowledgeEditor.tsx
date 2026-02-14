@@ -7,6 +7,7 @@
 
 import { useState, useEffect } from 'react'
 import { KnowledgeItem } from '../../pages/admin/KnowledgeBase'
+import { logger } from '../../utils/logger'
 
 interface KnowledgeEditorProps {
   item: KnowledgeItem
@@ -107,7 +108,7 @@ export default function KnowledgeEditor({
       await onSave(formData)
       clearDraft() // Clear draft on successful save
     } catch (err) {
-      console.error('Save failed:', err)
+      logger.error('Save failed:', err)
     } finally {
       setSaving(false)
     }

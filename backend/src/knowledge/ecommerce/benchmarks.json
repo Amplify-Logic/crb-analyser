@@ -1,0 +1,242 @@
+{
+  "industry": "ecommerce",
+  "last_updated": "2026-02",
+  "verification_status": "UNVERIFIED",
+  "verified_date": "2026-02-14",
+  "verification_sources": [
+    "https://www.statista.com/topics/871/online-shopping/",
+    "https://baymard.com/lists/cart-abandonment-rate",
+    "https://www.shopify.com/blog/ecommerce-statistics"
+  ],
+  "verification_note": "Initial data compiled from industry reports. Pricing and vendor data require manual verification.",
+  "benchmarks": {
+    "financial": {
+      "annual_revenue": {
+        "micro_store": {"min": 50000, "max": 250000, "median": 120000, "currency": "EUR"},
+        "small_store": {"min": 250000, "max": 1000000, "median": 500000, "currency": "EUR"},
+        "mid_market_store": {"min": 1000000, "max": 10000000, "median": 3000000, "currency": "EUR"},
+        "source": "Shopify Commerce Reports, 2025",
+        "status": "ESTIMATE",
+        "note": "Varies significantly by niche, product type, and marketing spend"
+      },
+      "profit_margin": {
+        "healthy": {"min": 20, "max": 40, "unit": "percent"},
+        "average": {"min": 10, "max": 20, "unit": "percent"},
+        "struggling": {"min": 2, "max": 10, "unit": "percent"},
+        "source": "NYU Stern Business School Industry Margins, 2025",
+        "status": "ESTIMATE",
+        "note": "Margins vary widely by product category (apparel ~10%, digital products ~60%)"
+      },
+      "average_order_value": {
+        "overall_average": {"min": 50, "max": 120, "median": 85, "currency": "EUR"},
+        "fashion_apparel": {"min": 60, "max": 150, "median": 95, "currency": "EUR"},
+        "electronics": {"min": 100, "max": 300, "median": 180, "currency": "EUR"},
+        "health_beauty": {"min": 40, "max": 90, "median": 60, "currency": "EUR"},
+        "home_garden": {"min": 80, "max": 200, "median": 120, "currency": "EUR"},
+        "source": "Dynamic Yield E-commerce Benchmarks, 2025",
+        "status": "ESTIMATE",
+        "note": "EUR converted from USD, varies significantly by niche"
+      },
+      "customer_acquisition_cost": {
+        "organic_seo": {"min": 5, "max": 30, "currency": "EUR"},
+        "paid_social": {"min": 15, "max": 80, "currency": "EUR"},
+        "google_ads": {"min": 20, "max": 100, "currency": "EUR"},
+        "email_marketing": {"min": 2, "max": 15, "currency": "EUR"},
+        "average_all_sources": {"min": 20, "max": 80, "median": 45, "currency": "EUR"},
+        "source": "Shopify & HubSpot Marketing Reports, 2025",
+        "status": "ESTIMATE",
+        "note": "CAC varies enormously by niche, competition level, and marketing maturity"
+      },
+      "customer_lifetime_value": {
+        "one_time_buyers": {"min": 50, "max": 120, "median": 85, "currency": "EUR"},
+        "repeat_customers": {"min": 200, "max": 800, "median": 400, "currency": "EUR"},
+        "loyal_subscribers": {"min": 500, "max": 2000, "median": 1000, "currency": "EUR"},
+        "source": "Klaviyo E-commerce Benchmarks, 2025",
+        "status": "ESTIMATE",
+        "note": "CLV highly dependent on retention strategy and product replenishment cycle"
+      },
+      "shipping_cost_as_revenue_percent": {
+        "average": 12,
+        "good": {"min": 5, "max": 10, "unit": "percent"},
+        "high": {"min": 15, "max": 25, "unit": "percent"},
+        "source": "Pitney Bowes Parcel Shipping Index, 2025",
+        "status": "ESTIMATE",
+        "note": "Heavy/bulky items skew higher; digital products have zero shipping cost"
+      }
+    },
+    "operational": {
+      "cart_abandonment_rate": {
+        "industry_average": 70,
+        "good": 60,
+        "excellent": 50,
+        "unit": "percent",
+        "source": "Baymard Institute, 2025",
+        "source_url": "https://baymard.com/lists/cart-abandonment-rate",
+        "verified": false
+      },
+      "conversion_rate": {
+        "industry_average": 2.5,
+        "good": 3.5,
+        "excellent": 5.0,
+        "top_performers": 8.0,
+        "unit": "percent",
+        "source": "Littledata E-commerce Benchmarks, 2025",
+        "verified": false
+      },
+      "return_rate": {
+        "overall_average": 20,
+        "fashion_apparel": 30,
+        "electronics": 15,
+        "health_beauty": 5,
+        "home_garden": 10,
+        "unit": "percent",
+        "source": "National Retail Federation Returns Survey, 2025",
+        "status": "ESTIMATE",
+        "note": "Fashion/apparel returns are significantly higher due to fit issues"
+      },
+      "order_fulfillment_time": {
+        "same_day": {"description": "Order processed and shipped same day"},
+        "next_day": {"description": "Shipped within 24 hours"},
+        "industry_average_days": 2.5,
+        "customer_expectation_days": 2,
+        "source": "ShipBob Fulfillment Benchmarks, 2025",
+        "status": "ESTIMATE"
+      },
+      "email_open_rate": {
+        "average": 15,
+        "good": 20,
+        "excellent": 30,
+        "unit": "percent",
+        "source": "Klaviyo E-commerce Email Benchmarks, 2025",
+        "verified": false
+      },
+      "email_click_rate": {
+        "average": 2.5,
+        "good": 4,
+        "excellent": 6,
+        "unit": "percent",
+        "source": "Klaviyo E-commerce Email Benchmarks, 2025",
+        "verified": false
+      },
+      "customer_service_tickets_per_100_orders": {
+        "average": 15,
+        "good": 8,
+        "excellent": 5,
+        "source": "Gorgias E-commerce Support Benchmarks, 2025",
+        "status": "ESTIMATE"
+      }
+    },
+    "ai_adoption": {
+      "ecommerce_ai_usage": {
+        "product_recommendations": 40,
+        "chatbots_customer_service": 25,
+        "dynamic_pricing": 15,
+        "personalized_email": 35,
+        "inventory_forecasting": 20,
+        "fraud_detection": 30,
+        "unit": "percent",
+        "source": "Salesforce State of Commerce, 2025",
+        "status": "ESTIMATE"
+      },
+      "ai_feature_adoption": {
+        "automated_email_flows": 55,
+        "product_recommendations": 40,
+        "chatbots": 25,
+        "ai_product_descriptions": 15,
+        "dynamic_pricing": 10,
+        "ai_image_generation": 12,
+        "unit": "percent",
+        "source": "Shopify Commerce Trends, 2025",
+        "status": "ESTIMATE"
+      },
+      "productivity_gains_reported": {
+        "automated_email_marketing": {"average": 40, "range": "25-60", "unit": "percent"},
+        "ai_customer_service": {"average": 35, "range": "20-50", "unit": "percent"},
+        "ai_product_descriptions": {"average": 60, "range": "40-80", "unit": "percent"},
+        "source": "Vendor case studies and e-commerce surveys"
+      }
+    },
+    "customer_metrics": {
+      "repeat_purchase_rate": {
+        "average": 27,
+        "good": 35,
+        "excellent": 50,
+        "unit": "percent",
+        "source": "Klaviyo E-commerce Benchmarks, 2025",
+        "status": "ESTIMATE",
+        "note": "Consumable products tend to have higher repeat rates"
+      },
+      "customer_retention_rate": {
+        "average": 30,
+        "good": 45,
+        "excellent": 60,
+        "unit": "percent",
+        "source": "Omniconvert E-commerce Retention Report, 2025",
+        "status": "ESTIMATE",
+        "note": "Retention measured as customers who purchase again within 12 months"
+      },
+      "net_promoter_score": {
+        "average": 40,
+        "good": 55,
+        "excellent": 70,
+        "source": "Retently NPS Benchmarks, 2025",
+        "status": "ESTIMATE"
+      },
+      "review_rate": {
+        "average": 5,
+        "good": 10,
+        "excellent": 20,
+        "unit": "percent_of_orders",
+        "description": "Percentage of orders that result in a product review",
+        "source": "Yotpo E-commerce Review Benchmarks, 2025",
+        "status": "ESTIMATE"
+      }
+    },
+    "staffing": {
+      "team_size_by_revenue": {
+        "under_500k": {"min": 1, "max": 3, "description": "Founder + 1-2 part-time"},
+        "500k_to_2m": {"min": 3, "max": 8, "description": "Small team with specialization"},
+        "2m_to_10m": {"min": 8, "max": 25, "description": "Departmental structure"},
+        "source": "E-commerce Fuel State of the Merchant, 2025",
+        "status": "ESTIMATE"
+      },
+      "staff_turnover": {
+        "industry_average": 30,
+        "good_companies": 18,
+        "excellent": 12,
+        "unit": "percent_annual",
+        "source": "Bureau of Labor Statistics (Retail/E-commerce), 2025",
+        "status": "ESTIMATE",
+        "note": "Warehouse and fulfillment roles have higher turnover than office roles"
+      },
+      "customer_service_time": {
+        "average": 40,
+        "with_automation": 20,
+        "unit": "percent_of_day",
+        "description": "Percentage of team time spent on customer support tasks",
+        "source": "Gorgias E-commerce Support Reports, 2025",
+        "status": "ESTIMATE"
+      }
+    }
+  },
+  "roi_calculation_factors": {
+    "average_order_value": {
+      "typical": 85,
+      "range": {"min": 50, "max": 150},
+      "currency": "EUR"
+    },
+    "customer_service_hourly_cost": {
+      "typical_range": {"min": 18, "max": 30, "currency": "EUR"},
+      "fully_loaded": {"min": 25, "max": 40, "currency": "EUR"}
+    },
+    "cost_of_abandoned_cart": {
+      "description": "Lost revenue from abandoned carts that could have been recovered",
+      "calculation": "Average order value x cart abandonment rate x recovery potential (10-15%)",
+      "typical": {"min": 5, "max": 15, "currency": "EUR", "unit": "per_abandoned_cart"}
+    },
+    "cost_of_lost_customer": {
+      "description": "Lifetime value of customer lost to competitor or poor experience",
+      "typical": {"min": 200, "max": 800, "currency": "EUR"}
+    }
+  }
+}

@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { Link, useSearchParams, useNavigate } from 'react-router-dom'
 import { motion } from 'framer-motion'
+import { logger } from '../utils/logger'
 
 export default function CheckoutSuccess() {
   const [searchParams] = useSearchParams()
@@ -12,6 +13,7 @@ export default function CheckoutSuccess() {
 
   const [isVerifying, setIsVerifying] = useState(true)
   const [isVerified, setIsVerified] = useState(false)
+  const [verificationError, setVerificationError] = useState(false)
   const [error, setError] = useState<string | null>(null)
 
   const hasStrategyCall = selectedTier === 'report_plus_call'
@@ -36,9 +38,8 @@ export default function CheckoutSuccess() {
         sessionStorage.removeItem('companyProfile')
         // Keep companyName and quizSessionId for workshop
       } catch (err: unknown) {
-        console.error('Verification error:', err)
-        // Still show success - webhook handles the real verification
-        setIsVerified(true)
+        logger.error('Verification error:', err)
+        setVerificationError(true)
         setIsVerifying(false)
       }
     }
@@ -90,6 +91,43 @@ export default function CheckoutSuccess() {
             >
               Try Again
             </Link>
+          </div>
+        </div>
+      </div>
+    )
+  }
+
+  if (verificationError) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center px-4">
+        <div className="max-w-md w-full">
+          <div className="bg-white rounded-2xl p-8 shadow-sm border border-gray-100 text-center">
+            <div className="w-16 h-16 bg-amber-100 rounded-full flex items-center justify-center mx-auto mb-4">
+              <svg className="w-8 h-8 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4.5c-.77-.833-2.694-.833-3.464 0L3.34 16.5c-.77.833.192 2.5 1.732 2.5z" />
+              </svg>
+            </div>
+            <h1 className="text-2xl font-bold text-gray-900 mb-2">Confirming your payment</h1>
+            <p className="text-gray-600 mb-4">
+              We're having trouble confirming your payment right now. Don't worry — if you were charged, your report is being prepared.
+            </p>
+            <p className="text-sm text-gray-500 mb-6">
+              You can try refreshing this page, or contact us if the issue persists.
+            </p>
+            <div className="space-y-3">
+              <button
+                onClick={() => window.location.reload()}
+                className="w-full px-6 py-3 bg-primary-600 text-white font-semibold rounded-xl hover:bg-primary-700 transition"
+              >
+                Retry Verification
+              </button>
+              <a
+                href="mailto:support@readypath.ai"
+                className="block w-full px-6 py-3 border-2 border-gray-200 text-gray-700 font-semibold rounded-xl hover:border-primary-300 hover:text-primary-700 transition"
+              >
+                Contact Support
+              </a>
+            </div>
           </div>
         </div>
       </div>

@@ -33,6 +33,7 @@ from src.models.assumptions import (
     AssumptionSource,
     STANDARD_ASSUMPTIONS,
 )
+from src.services.crb_calculation_service import get_effective_hourly_rate
 
 logger = logging.getLogger(__name__)
 
@@ -371,16 +372,18 @@ def extract_assumptions_from_quiz(
 
     # Standard assumptions that always need validation
 
-    # 1. Hourly rate
+    # 1. Hourly rate (industry-aware)
     hourly_rate = answers.get("hourly_rate")
     if not hourly_rate:
+        industry = answers.get("industry", "")
+        rate, rate_source = get_effective_hourly_rate(industry=industry, quiz_answers=answers)
         assumptions.append(Assumption(
             id="assum-hourly-rate",
             category=AssumptionCategory.FINANCIAL,
             status=AssumptionStatus.PENDING_VALIDATION,
-            statement="We're using €50/hour as the hourly labor cost",
+            statement=f"We're using \u20ac{rate:.0f}/hour as the hourly labor cost ({rate_source})",
             reason="This is used to calculate the value of time saved",
-            source=AssumptionSource.DEFAULT_VALUE,
+            source=AssumptionSource.DEFAULT_VALUE if "default" in rate_source else AssumptionSource.INDUSTRY_BENCHMARK,
             sensitivity="high",
             validation_question="What's the approximate hourly cost of your team's time (including overhead, benefits, etc.)? A rough estimate is fine.",
             if_wrong="All time-savings calculations would change proportionally",

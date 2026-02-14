@@ -1,0 +1,490 @@
+{
+  "industry": "ecommerce",
+  "ai_opportunities": [
+    {
+      "id": "ai-customer-service-chatbot",
+      "name": "AI Customer Service Chatbot",
+      "description": "AI-powered chatbot that handles common customer inquiries 24/7 including order status, shipping questions, returns, and product recommendations",
+      "category": "efficiency",
+      "impact": {
+        "value_saved": {
+          "time_hours_per_week": 25,
+          "description": "Reduces support ticket volume by handling 40-60% of inquiries automatically"
+        },
+        "value_created": {
+          "description": "24/7 instant customer support, improved CSAT scores, faster response times",
+          "potential_revenue_impact": "5-10% increase in conversion from instant answers to pre-purchase questions"
+        }
+      },
+      "customer_value_score": 9,
+      "business_health_score": 9,
+      "implementation": {
+        "complexity": "medium",
+        "timeline_weeks": 3,
+        "required_data": ["Product catalog", "FAQ content", "Order tracking integration", "Return policy"]
+      },
+      "options": {
+        "off_the_shelf": {
+          "tools": ["Gorgias Automate", "Tidio AI", "Intercom Fin"],
+          "cost_range": "EUR 200-500/month",
+          "pros": ["Quick setup", "Pre-trained on e-commerce", "Integrates with Shopify/WooCommerce", "No coding needed"],
+          "cons": ["Monthly fees", "Limited customization", "May not handle complex cases"]
+        },
+        "best_in_class": {
+          "tools": ["Gorgias + Automate Pro", "Zendesk AI"],
+          "cost_range": "EUR 400-800/month",
+          "pros": ["Deep e-commerce integration", "Multi-channel support", "Advanced analytics", "Agent assist features"],
+          "cons": ["Higher cost", "Requires configuration", "Contract commitments"]
+        },
+        "custom_solution": {
+          "approach": "Custom AI chatbot using Claude API integrated with your order management and product database",
+          "cost_range": "EUR 5,000-15,000 one-time + EUR 100-300/month",
+          "pros": ["Fully customized to your brand voice", "Deep product knowledge", "Handles unique workflows"],
+          "cons": ["Development required", "Needs ongoing tuning", "Maintenance burden"]
+        }
+      },
+      "roi_example": {
+        "scenario": "E-commerce store handling 500 support tickets/week, 3 support agents",
+        "cost": "EUR 400/month",
+        "value_created": "Automate 40-60% of tickets, reduce support headcount or reallocate to high-value tasks",
+        "roi_analysis": {
+          "conservative": {"roi_percentage": 200, "payback_months": 3, "note": "30% ticket reduction"},
+          "expected": {"roi_percentage": 400, "payback_months": 2, "note": "45% ticket reduction"},
+          "optimistic": {"roi_percentage": 600, "payback_months": 1, "note": "60% ticket reduction"}
+        },
+        "assumptions": "Not all ticket types can be automated; complex issues still need human agents; setup and training period of 2-4 weeks"
+      },
+      "jevons_effect": {
+        "applies": true,
+        "mechanism": "Faster support response times lead to higher customer satisfaction, which increases repeat purchases and referrals",
+        "demand_expansion_potential": "15% increase in repeat purchase rate from improved support experience"
+      }
+    },
+    {
+      "id": "ai-product-descriptions",
+      "name": "AI-Generated Product Descriptions & Content",
+      "description": "Use AI to generate compelling product descriptions, titles, meta tags, and marketing copy at scale",
+      "category": "efficiency",
+      "impact": {
+        "value_saved": {
+          "time_hours_per_week": 15,
+          "description": "Eliminate manual copywriting for standard product listings"
+        },
+        "value_created": {
+          "description": "Faster product launches, SEO-optimized content, consistent brand voice",
+          "potential_revenue_impact": "10-20% improvement in organic search traffic from better SEO content"
+        }
+      },
+      "customer_value_score": 7,
+      "business_health_score": 8,
+      "implementation": {
+        "complexity": "low",
+        "timeline_weeks": 1,
+        "required_data": ["Product specifications", "Brand voice guidelines", "Target keywords", "Competitor examples"]
+      },
+      "options": {
+        "off_the_shelf": {
+          "tools": ["Jasper", "Copy.ai", "Shopify Magic"],
+          "cost_range": "EUR 50-200/month",
+          "pros": ["Easy to use", "Templates available", "Bulk generation", "SEO features"],
+          "cons": ["Generic output without tuning", "May need editing", "Quality varies"]
+        },
+        "best_in_class": {
+          "tools": ["Jasper for E-commerce", "Describely"],
+          "cost_range": "EUR 150-400/month",
+          "pros": ["E-commerce specific", "Brand voice training", "Multi-channel output", "Bulk operations"],
+          "cons": ["Higher cost", "Learning curve for best results"]
+        },
+        "custom_solution": {
+          "approach": "Custom content pipeline using Claude API with brand-specific fine-tuning and direct CMS integration",
+          "cost_range": "EUR 3,000-8,000 one-time + EUR 50-150/month API costs",
+          "pros": ["Perfect brand voice", "Direct CMS integration", "Custom workflows", "Unlimited scale"],
+          "cons": ["Development needed", "Needs prompt engineering", "API cost management"]
+        }
+      },
+      "roi_example": {
+        "scenario": "Store with 500 products needing descriptions, adding 20 new products/month",
+        "cost": "EUR 150/month",
+        "value_created": "Reduce content creation time from 30 min to 5 min per product",
+        "roi_analysis": {
+          "conservative": {"roi_percentage": 200, "payback_months": 2, "note": "50% time savings on content"},
+          "expected": {"roi_percentage": 400, "payback_months": 1, "note": "70% time savings + better SEO"},
+          "optimistic": {"roi_percentage": 600, "payback_months": 1, "note": "80% time savings + 15% organic traffic boost"}
+        },
+        "assumptions": "AI-generated content still needs human review; brand voice consistency requires initial setup"
+      }
+    },
+    {
+      "id": "abandoned-cart-recovery",
+      "name": "AI-Powered Abandoned Cart Recovery",
+      "description": "Multi-channel abandoned cart recovery using AI-optimized timing, messaging, and personalized incentives",
+      "category": "growth",
+      "impact": {
+        "value_saved": {
+          "time_hours_per_week": 5,
+          "description": "Automated recovery campaigns replace manual follow-up"
+        },
+        "value_created": {
+          "description": "Recover 10-15% of abandoned carts through personalized multi-channel outreach",
+          "potential_revenue_impact": "5-15% increase in revenue from recovered carts"
+        }
+      },
+      "customer_value_score": 10,
+      "business_health_score": 10,
+      "implementation": {
+        "complexity": "low",
+        "timeline_weeks": 2,
+        "required_data": ["Customer email/phone", "Cart data", "Purchase history", "Product catalog"]
+      },
+      "options": {
+        "off_the_shelf": {
+          "tools": ["Klaviyo", "Omnisend", "Shopify Email"],
+          "cost_range": "EUR 50-300/month",
+          "pros": ["Easy setup", "Pre-built flows", "Multi-channel (email + SMS)", "Analytics"],
+          "cons": ["Template-based", "Limited personalization without higher tiers"]
+        },
+        "best_in_class": {
+          "tools": ["Klaviyo Pro", "Attentive (SMS)"],
+          "cost_range": "EUR 300-700/month",
+          "pros": ["AI send-time optimization", "Deep segmentation", "Predictive analytics", "SMS + email"],
+          "cons": ["Higher cost", "Complexity in setup"]
+        },
+        "custom_solution": {
+          "approach": "Custom recovery system with AI-personalized messaging, dynamic discount offers, and multi-channel orchestration",
+          "cost_range": "EUR 5,000-12,000 one-time + EUR 100-200/month",
+          "pros": ["Fully personalized offers", "Custom discount logic", "Integrated with your stack"],
+          "cons": ["Development time", "Needs testing and optimization"]
+        }
+      },
+      "roi_example": {
+        "scenario": "Store with EUR 100K/month revenue, 70% cart abandonment rate",
+        "cost": "EUR 200/month",
+        "value_created": "Recover abandoned carts through automated email and SMS sequences",
+        "roi_analysis": {
+          "conservative": {"roi_percentage": 500, "payback_months": 1, "note": "5% cart recovery rate"},
+          "expected": {"roi_percentage": 1000, "payback_months": 1, "note": "10% cart recovery rate"},
+          "optimistic": {"roi_percentage": 1500, "payback_months": 0.5, "note": "15% cart recovery rate"}
+        },
+        "assumptions": "Recovery rates depend on product type, price point, and existing email marketing maturity"
+      }
+    },
+    {
+      "id": "personalized-recommendations",
+      "name": "AI-Powered Product Recommendations",
+      "description": "Personalized product recommendations on site, in emails, and during checkout based on browsing and purchase behavior",
+      "category": "growth",
+      "impact": {
+        "value_saved": {
+          "time_hours_per_week": 3,
+          "description": "Replace manual merchandising and cross-sell setup"
+        },
+        "value_created": {
+          "description": "Increase AOV through relevant upsells and cross-sells, improve customer experience",
+          "potential_revenue_impact": "10-30% increase in average order value"
+        }
+      },
+      "customer_value_score": 9,
+      "business_health_score": 9,
+      "implementation": {
+        "complexity": "medium",
+        "timeline_weeks": 3,
+        "required_data": ["Product catalog", "Purchase history", "Browsing behavior", "Customer segments"]
+      },
+      "options": {
+        "off_the_shelf": {
+          "tools": ["Nosto", "LimeSpot", "Rebuy"],
+          "cost_range": "EUR 100-500/month",
+          "pros": ["Easy Shopify integration", "AI-powered", "Multiple placement options", "A/B testing"],
+          "cons": ["Revenue-based pricing can get expensive", "May slow site speed"]
+        },
+        "best_in_class": {
+          "tools": ["Nosto Enterprise", "Dynamic Yield"],
+          "cost_range": "EUR 500-2000/month",
+          "pros": ["Advanced personalization", "Full site personalization", "Segmentation", "Omnichannel"],
+          "cons": ["Enterprise pricing", "Complex setup", "Requires data maturity"]
+        },
+        "custom_solution": {
+          "approach": "Custom recommendation engine using collaborative filtering and purchase data analysis",
+          "cost_range": "EUR 10,000-25,000 one-time + EUR 100-300/month",
+          "pros": ["Fully customized algorithms", "No revenue sharing", "Deep integration"],
+          "cons": ["Significant development", "Needs large dataset", "Ongoing ML maintenance"]
+        }
+      },
+      "roi_example": {
+        "scenario": "Store with EUR 80 AOV, 10,000 orders/month",
+        "cost": "EUR 300/month",
+        "value_created": "Increase AOV through personalized upsells and cross-sells",
+        "roi_analysis": {
+          "conservative": {"roi_percentage": 300, "payback_months": 2, "note": "5% AOV increase"},
+          "expected": {"roi_percentage": 600, "payback_months": 1, "note": "10% AOV increase"},
+          "optimistic": {"roi_percentage": 1000, "payback_months": 1, "note": "15% AOV increase"}
+        },
+        "assumptions": "AOV lift varies by catalog size and product diversity; requires minimum traffic for algorithm effectiveness"
+      },
+      "jevons_effect": {
+        "applies": true,
+        "mechanism": "Better recommendations lead to more browsing, more product discovery, and larger baskets",
+        "demand_expansion_potential": "20% increase in pages viewed per session"
+      }
+    },
+    {
+      "id": "inventory-forecasting",
+      "name": "AI Demand Forecasting & Inventory Optimization",
+      "description": "AI-powered demand prediction to optimize inventory levels, reduce stockouts, and minimize overstock",
+      "category": "efficiency",
+      "impact": {
+        "value_saved": {
+          "time_hours_per_week": 10,
+          "description": "Eliminate manual inventory planning and spreadsheet forecasting"
+        },
+        "value_created": {
+          "description": "Reduce stockouts (lost sales) and overstock (tied-up capital), improve cash flow",
+          "potential_revenue_impact": "5-10% revenue increase from fewer stockouts + 20-30% less capital in excess inventory"
+        }
+      },
+      "customer_value_score": 7,
+      "business_health_score": 10,
+      "implementation": {
+        "complexity": "medium",
+        "timeline_weeks": 4,
+        "required_data": ["Historical sales data (12+ months)", "Seasonal patterns", "Supplier lead times", "Current inventory levels"]
+      },
+      "options": {
+        "off_the_shelf": {
+          "tools": ["Inventory Planner", "Stocky (Shopify)", "Brightpearl"],
+          "cost_range": "EUR 100-400/month",
+          "pros": ["Shopify integration", "Visual forecasts", "Reorder recommendations", "Easy setup"],
+          "cons": ["Basic algorithms", "Limited customization", "May not handle complex patterns"]
+        },
+        "best_in_class": {
+          "tools": ["Inventory Planner Pro", "Netstock"],
+          "cost_range": "EUR 400-1000/month",
+          "pros": ["Advanced forecasting", "Multi-warehouse", "Supplier management", "Custom algorithms"],
+          "cons": ["Higher cost", "Complex setup", "Requires clean historical data"]
+        },
+        "custom_solution": {
+          "approach": "Custom ML demand forecasting model trained on your sales data, incorporating external factors (weather, trends, marketing calendar)",
+          "cost_range": "EUR 15,000-40,000 one-time + EUR 200-500/month",
+          "pros": ["Highest accuracy", "Incorporates unique factors", "Full automation"],
+          "cons": ["Needs data science expertise", "Requires 12+ months data", "Ongoing model maintenance"]
+        }
+      },
+      "roi_example": {
+        "scenario": "Store with EUR 500K inventory, 8% stockout rate, 25% overstock",
+        "cost": "EUR 300/month",
+        "value_created": "Reduce stockouts and optimize inventory levels",
+        "roi_analysis": {
+          "conservative": {"roi_percentage": 200, "payback_months": 4, "note": "3% stockout reduction, 10% overstock reduction"},
+          "expected": {"roi_percentage": 400, "payback_months": 2, "note": "5% stockout reduction, 20% overstock reduction"},
+          "optimistic": {"roi_percentage": 700, "payback_months": 1, "note": "7% stockout reduction, 30% overstock reduction"}
+        },
+        "assumptions": "Forecast accuracy depends on data quality and product type; new products lack historical data for prediction"
+      }
+    },
+    {
+      "id": "dynamic-pricing",
+      "name": "AI-Powered Dynamic Pricing",
+      "description": "Automatically adjust prices based on demand, competition, inventory levels, and customer segments",
+      "category": "growth",
+      "impact": {
+        "value_saved": {
+          "time_hours_per_week": 5,
+          "description": "Eliminate manual competitive price checking and adjustment"
+        },
+        "value_created": {
+          "description": "Optimize margins across catalog, respond to market changes in real-time",
+          "potential_revenue_impact": "5-15% margin improvement through optimized pricing"
+        }
+      },
+      "customer_value_score": 6,
+      "business_health_score": 8,
+      "implementation": {
+        "complexity": "high",
+        "timeline_weeks": 6,
+        "required_data": ["Product costs", "Competitor prices", "Historical sales at different price points", "Demand elasticity data"]
+      },
+      "options": {
+        "off_the_shelf": {
+          "tools": ["Prisync", "Competera", "Intelligence Node"],
+          "cost_range": "EUR 200-600/month",
+          "pros": ["Competitor monitoring", "Rule-based repricing", "Dashboard", "Alerts"],
+          "cons": ["Basic optimization", "Rules-based not AI", "Limited SKU counts on lower tiers"]
+        },
+        "best_in_class": {
+          "tools": ["Competera AI", "7Learnings"],
+          "cost_range": "EUR 500-2000/month",
+          "pros": ["True AI pricing", "Elasticity modeling", "Margin optimization", "Market intelligence"],
+          "cons": ["Enterprise pricing", "Complex implementation", "Needs significant data"]
+        },
+        "custom_solution": {
+          "approach": "Custom pricing engine using ML models trained on your sales data and competitive intelligence",
+          "cost_range": "EUR 20,000-50,000 one-time + EUR 300-600/month",
+          "pros": ["Fully customized to your market", "Proprietary advantage", "Deep integration"],
+          "cons": ["Significant investment", "Needs data science team", "Risk of pricing errors"]
+        }
+      },
+      "roi_example": {
+        "scenario": "Store with 1,000 SKUs, EUR 2M annual revenue, 25% average margin",
+        "cost": "EUR 400/month",
+        "value_created": "Optimize pricing across catalog to maximize margins while remaining competitive",
+        "roi_analysis": {
+          "conservative": {"roi_percentage": 200, "payback_months": 4, "note": "2% margin improvement"},
+          "expected": {"roi_percentage": 500, "payback_months": 2, "note": "5% margin improvement"},
+          "optimistic": {"roi_percentage": 800, "payback_months": 1, "note": "8% margin improvement"}
+        },
+        "assumptions": "Dynamic pricing works best with large catalogs and sufficient competition data; may not suit luxury/brand-image-focused products"
+      }
+    },
+    {
+      "id": "automated-email-marketing",
+      "name": "AI-Powered Email Marketing Automation",
+      "description": "Automated lifecycle email flows with AI-optimized content, timing, and segmentation",
+      "category": "growth",
+      "impact": {
+        "value_saved": {
+          "time_hours_per_week": 10,
+          "description": "Automate campaign creation, segmentation, and optimization"
+        },
+        "value_created": {
+          "description": "Higher email revenue through personalization and optimal timing",
+          "potential_revenue_impact": "Email should drive 25-40% of total e-commerce revenue"
+        }
+      },
+      "customer_value_score": 9,
+      "business_health_score": 10,
+      "implementation": {
+        "complexity": "low",
+        "timeline_weeks": 2,
+        "required_data": ["Customer email list", "Purchase history", "Product catalog", "Browsing behavior"]
+      },
+      "options": {
+        "off_the_shelf": {
+          "tools": ["Klaviyo", "Omnisend", "Mailchimp"],
+          "cost_range": "EUR 50-300/month",
+          "pros": ["E-commerce focused", "Pre-built flows", "Easy integration", "Good analytics"],
+          "cons": ["Pricing scales with list size", "Template-dependent", "Limited AI on lower tiers"]
+        },
+        "best_in_class": {
+          "tools": ["Klaviyo Pro", "Drip"],
+          "cost_range": "EUR 300-800/month",
+          "pros": ["Advanced AI features", "Deep segmentation", "Predictive analytics", "Revenue attribution"],
+          "cons": ["Higher cost", "Complexity", "Requires strategy knowledge"]
+        },
+        "custom_solution": {
+          "approach": "Custom email system with AI-generated content, predictive send times, and advanced segmentation",
+          "cost_range": "EUR 8,000-20,000 one-time + EUR 100-300/month",
+          "pros": ["Full control", "Custom AI features", "No per-subscriber pricing"],
+          "cons": ["Deliverability management", "Compliance burden (GDPR)", "Development time"]
+        }
+      },
+      "roi_example": {
+        "scenario": "Store with 20,000 email subscribers, currently generating 15% of revenue from email",
+        "cost": "EUR 200/month",
+        "value_created": "Increase email revenue contribution from 15% to 25-35% through automated flows",
+        "roi_analysis": {
+          "conservative": {"roi_percentage": 300, "payback_months": 2, "note": "20% of revenue from email"},
+          "expected": {"roi_percentage": 600, "payback_months": 1, "note": "30% of revenue from email"},
+          "optimistic": {"roi_percentage": 1000, "payback_months": 1, "note": "40% of revenue from email"}
+        },
+        "assumptions": "Results depend on list quality, product type, and existing email maturity"
+      }
+    },
+    {
+      "id": "review-management",
+      "name": "Automated Review Collection & Management",
+      "description": "Systematically collect, manage, and respond to product reviews to build social proof and improve SEO",
+      "category": "growth",
+      "impact": {
+        "value_saved": {
+          "time_hours_per_week": 5,
+          "description": "Automated review requests, AI response drafting, no manual follow-up"
+        },
+        "value_created": {
+          "description": "More reviews increase conversion rates, SEO rankings, and customer trust",
+          "potential_revenue_impact": "Products with reviews convert 270% better than those without"
+        }
+      },
+      "customer_value_score": 8,
+      "business_health_score": 8,
+      "implementation": {
+        "complexity": "low",
+        "timeline_weeks": 1,
+        "required_data": ["Customer email", "Order completion data", "Product catalog"]
+      },
+      "options": {
+        "off_the_shelf": {
+          "tools": ["Judge.me", "Yotpo", "Loox"],
+          "cost_range": "EUR 15-100/month",
+          "pros": ["Easy Shopify integration", "Photo/video reviews", "SEO snippets", "Social proof widgets"],
+          "cons": ["Feature limits on free tiers", "Advanced features cost more"]
+        },
+        "best_in_class": {
+          "tools": ["Yotpo Premium", "Okendo"],
+          "cost_range": "EUR 200-500/month",
+          "pros": ["UGC platform", "Loyalty integration", "Advanced analytics", "Multi-channel syndication"],
+          "cons": ["Higher cost", "Feature overlap with other tools"]
+        },
+        "custom_solution": {
+          "approach": "Custom review collection system with AI sentiment analysis and automated response generation",
+          "cost_range": "EUR 2,000-5,000 one-time + minimal ongoing",
+          "pros": ["No monthly fees", "Custom display", "Full data ownership"],
+          "cons": ["Basic features", "No SEO schema markup built-in", "Development time"]
+        }
+      },
+      "roi_example": {
+        "scenario": "Store with 200 products, averaging 2 reviews per product",
+        "cost": "EUR 50/month",
+        "value_created": "Increase review volume to improve conversion rates and SEO",
+        "roi_analysis": {
+          "conservative": {"roi_percentage": 200, "payback_months": 4, "note": "5x review volume, 3% conversion lift"},
+          "expected": {"roi_percentage": 400, "payback_months": 2, "note": "8x review volume, 5% conversion lift"},
+          "optimistic": {"roi_percentage": 700, "payback_months": 1, "note": "12x review volume, 8% conversion lift"}
+        },
+        "assumptions": "Review impact on conversion varies by product category; photo reviews have higher impact than text-only"
+      }
+    }
+  ],
+  "quick_wins": [
+    {
+      "name": "Set up abandoned cart email recovery",
+      "time_to_implement": "1 day",
+      "cost": "Often included in email platform or EUR 50-100/month",
+      "impact": "Recover 5-15% of abandoned carts"
+    },
+    {
+      "name": "Add AI chatbot for common customer questions",
+      "time_to_implement": "1 week",
+      "cost": "EUR 50-200/month",
+      "impact": "Reduce support tickets by 30-50%"
+    },
+    {
+      "name": "Implement automated review request emails",
+      "time_to_implement": "1 day",
+      "cost": "EUR 15-50/month or included",
+      "impact": "5-10x more product reviews"
+    },
+    {
+      "name": "Use AI for product description generation",
+      "time_to_implement": "1 day",
+      "cost": "EUR 50-100/month",
+      "impact": "Reduce content creation time by 60-80%"
+    }
+  ],
+  "not_recommended": [
+    {
+      "name": "Building a custom e-commerce platform",
+      "reason": "Shopify, WooCommerce, and BigCommerce are mature and cost-effective; custom platforms cost 10-100x more to build and maintain",
+      "alternative": "Use established platforms and customize with apps/plugins"
+    },
+    {
+      "name": "Custom fraud detection system",
+      "reason": "Fraud patterns evolve constantly; established providers have larger datasets for training ML models",
+      "alternative": "Use Shopify Protect, Signifyd, or Riskified for fraud prevention"
+    },
+    {
+      "name": "Building your own email marketing platform",
+      "reason": "Email deliverability, compliance (GDPR/CAN-SPAM), and infrastructure are complex; established platforms handle this",
+      "alternative": "Use Klaviyo, Omnisend, or Mailchimp with custom integrations"
+    }
+  ]
+}

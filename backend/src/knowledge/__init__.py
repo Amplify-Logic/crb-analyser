@@ -70,6 +70,29 @@ INDUSTRY_MAPPING = {
     "cpa": "professional-services",
     "bookkeeping": "professional-services",
 
+    # Dental (Practices & DSOs)
+    "dental": "dental",
+    "dentist": "dental",
+    "dental_practice": "dental",
+    "dental practice": "dental",
+    "dso": "dental",
+    "orthodontics": "dental",
+    "oral_surgery": "dental",
+
+    # E-commerce (Launch Priority)
+    "ecommerce": "ecommerce",
+    "e-commerce": "ecommerce",
+    "e_commerce": "ecommerce",
+    "online_retail": "ecommerce",
+    "dtc": "ecommerce",
+    "d2c": "ecommerce",
+    "online_store": "ecommerce",
+    "shopify": "ecommerce",
+
+    # ==========================================================================
+    # SECONDARY INDUSTRIES (Phase 2) - Placeholders for future
+    # ==========================================================================
+
     # Home Services (HVAC, Plumbing, Electrical)
     "home-services": "home-services",
     "home_services": "home-services",
@@ -83,19 +106,6 @@ INDUSTRY_MAPPING = {
     "home_improvement": "home-services",
     "field_service": "home-services",
     "trades": "home-services",
-
-    # Dental (Practices & DSOs)
-    "dental": "dental",
-    "dentist": "dental",
-    "dental_practice": "dental",
-    "dental practice": "dental",
-    "dso": "dental",
-    "orthodontics": "dental",
-    "oral_surgery": "dental",
-
-    # ==========================================================================
-    # SECONDARY INDUSTRIES (Phase 2) - Placeholders for future
-    # ==========================================================================
 
     # Recruiting/Staffing
     "recruiting": "recruiting",
@@ -146,14 +156,6 @@ INDUSTRY_MAPPING = {
     "advertising": "marketing-agencies",
     "digital_marketing": "marketing-agencies",
 
-    # E-commerce (DROPPED - not passion-driven service)
-    "ecommerce": "ecommerce",
-    "e-commerce": "ecommerce",
-    "e_commerce": "ecommerce",
-    "online_retail": "ecommerce",
-    "dtc": "ecommerce",
-    "d2c": "ecommerce",
-
     # Retail (DROPPED - not passion-driven service)
     "retail": "retail",
     "brick_and_mortar": "retail",
@@ -180,12 +182,13 @@ INDUSTRY_MAPPING = {
 # Primary target industries with full knowledge bases
 PRIMARY_INDUSTRIES = [
     "professional-services",
-    "home-services",
     "dental",
+    "ecommerce",
 ]
 
 # Secondary industries (Phase 2) - knowledge bases to be built
 SECONDARY_INDUSTRIES = [
+    "home-services",
     "recruiting",
     "coaching",
     "veterinary",
@@ -200,7 +203,6 @@ EXPANSION_INDUSTRIES = [
 # Legacy industries (still supported but not target market)
 LEGACY_INDUSTRIES = [
     "marketing-agencies",
-    "ecommerce",
     "retail",
     "tech-companies",
     "music-studios",

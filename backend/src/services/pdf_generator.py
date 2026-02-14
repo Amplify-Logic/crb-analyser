@@ -567,9 +567,15 @@ REPORT_TEMPLATE = """
         </table>
         {% endif %}
 
-        {% if rec.roi_percentage or rec.payback_months %}
-        <div class="roi-box">
-            {% if rec.roi_percentage %}ROI: {{ rec.roi_percentage }}%{% endif %}
+        {% if rec.roi_percentage is defined or rec.payback_months %}
+        <div class="roi-box" {% if rec.roi_percentage is defined and rec.roi_percentage < 0 %}style="background: #fef2f2; border-color: #ef4444; color: #991b1b;"{% endif %}>
+            {% if rec.roi_percentage is defined %}
+                {% if rec.roi_percentage < 0 %}
+                    ROI: {{ rec.roi_percentage }}% (NOT RECOMMENDED)
+                {% else %}
+                    ROI: {{ rec.roi_percentage }}%
+                {% endif %}
+            {% endif %}
             {% if rec.payback_months %} | Payback: {{ rec.payback_months }} months{% endif %}
         </div>
         {% endif %}
@@ -699,8 +705,8 @@ async def generate_pdf_report(audit_id: str) -> io.BytesIO:
 
     template_data = {
         "tier_name": audit.get("tier", "Professional"),
-        "report_date": datetime.now().strftime("%B %d, %Y"),
-        "year": datetime.now().year,
+        "report_date": datetime.utcnow().strftime("%B %d, %Y"),
+        "year": datetime.utcnow().year,
         "ai_readiness_score": audit.get("ai_readiness_score", 0),
         "customer_value_score": executive_summary.get("customer_value_score", 5),
         "business_health_score": executive_summary.get("business_health_score", 5),
@@ -764,8 +770,8 @@ async def generate_pdf_from_report_data(report: Dict[str, Any], include_charts: 
 
     template_data = {
         "tier_name": tier_names.get(report.get("tier"), report.get("tier", "Report")),
-        "report_date": datetime.now().strftime("%B %d, %Y"),
-        "year": datetime.now().year,
+        "report_date": datetime.utcnow().strftime("%B %d, %Y"),
+        "year": datetime.utcnow().year,
         "ai_readiness_score": executive_summary.get("ai_readiness_score", 0),
         "customer_value_score": executive_summary.get("customer_value_score", 5),
         "business_health_score": executive_summary.get("business_health_score", 5),

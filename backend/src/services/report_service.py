@@ -90,18 +90,10 @@ from src.services.insights_generator import InsightsGenerator
 from src.services.review_service import ReviewService
 from src.services.retrieval_service import get_retrieval_service
 from src.models.generation_trace import TraceCollector
+from src.skills.analysis.roi_calculator import CONFIDENCE_FACTORS
+from src.services.crb_calculation_service import get_effective_hourly_rate
 
 logger = logging.getLogger(__name__)
-
-# Confidence-Adjusted ROI factors
-# HIGH confidence: Full ROI estimate (100%)
-# MEDIUM confidence: Moderate adjustment (85%)
-# LOW confidence: Conservative adjustment (70%)
-CONFIDENCE_FACTORS = {
-    "high": 1.0,
-    "medium": 0.85,
-    "low": 0.70
-}
 
 
 def extract_vendor_mentions(recommendations: List[Dict[str, Any]]) -> Dict[str, Any]:
@@ -215,6 +207,42 @@ class ReportGenerator:
         self.context["model_strategy"] = self.model_strategy
         self.context["effective_tier"] = self.tier
 
+    def _get_effective_hourly_rate(self) -> float:
+        """
+        Get industry-aware hourly rate for this report.
+
+        Resolution order:
+        1. Explicit hourly_rate from quiz answers
+        2. Salary from quiz answers (converted via / 2080)
+        3. Industry-specific default
+        4. Global fallback (EUR 50)
+
+        The rate and its source are cached on self.context for transparency.
+        """
+        # Return cached value if already resolved
+        cached = self.context.get("_effective_hourly_rate")
+        if cached is not None:
+            return cached
+
+        industry = self.context.get("industry", "")
+        answers = self.context.get("answers", {})
+        rate, source = get_effective_hourly_rate(industry=industry, quiz_answers=answers)
+
+        # Cache for reuse within this report generation
+        self.context["_effective_hourly_rate"] = rate
+        self.context["_hourly_rate_source"] = source
+
+        logger.info(
+            f"[HOURLY_RATE] Using {rate} EUR/hr for industry={industry} (source: {source})"
+        )
+        return rate
+
+    def _get_hourly_rate_source(self) -> str:
+        """Get human-readable source of the hourly rate used."""
+        # Ensure rate is resolved first
+        self._get_effective_hourly_rate()
+        return self.context.get("_hourly_rate_source", "default estimate")
+
     def _get_skill_context(self) -> SkillContext:
         """
         Build SkillContext from current report context.
@@ -227,8 +255,8 @@ class ReportGenerator:
         try:
             store = get_expertise_store()
             expertise = store.get_all_expertise_context(industry)
-        except Exception as e:
-            logger.warning(f"Could not load expertise for {industry}: {e}")
+        except (KeyError, ValueError, RuntimeError) as e:
+            logger.warning("expertise_load_failed", industry=industry, error=str(e))
             expertise = None
 
         # Build user profile from quiz answers for four-options scoring
@@ -242,8 +270,8 @@ class ReportGenerator:
 
         try:
             user_profile = UserProfile.from_quiz_answers(answers, existing_stack_api_ready=api_ready)
-        except Exception as e:
-            logger.warning(f"Could not build user profile: {e}")
+        except (KeyError, ValueError, TypeError) as e:
+            logger.warning("user_profile_build_failed", error=str(e))
             user_profile = None
 
         # Extract currency - check quiz answer first, then company profile
@@ -420,14 +448,14 @@ class ReportGenerator:
             except Exception as optional_err:
                 if "column" in str(optional_err).lower() and "schema cache" in str(optional_err).lower():
                     # Some columns don't exist, use minimal update
-                    logger.warning(f"Some columns missing in partial save: {optional_err}")
+                    logger.warning("partial_save_columns_missing", error=str(optional_err), report_id=self.report_id)
                     await supabase.table("reports").update(partial_report).eq("id", self.report_id).execute()
                 else:
                     raise
 
             logger.info(f"Saved partial report {self.report_id} with data: {list(self._partial_data.keys())}")
         except Exception as save_error:
-            logger.error(f"Failed to save partial report: {save_error}")
+            logger.error("partial_report_save_failed", report_id=self.report_id, error=str(save_error), partial_keys=list(self._partial_data.keys()))
 
     def _categorize_error(self, error: Exception) -> Dict[str, Any]:
         """Categorize error for frontend display."""
@@ -709,9 +737,9 @@ class ReportGenerator:
                     self.context["semantic_prompt"] = ""
                     logger.info("No query content for semantic retrieval")
 
-            except Exception as e:
+            except (ConnectionError, TimeoutError, RuntimeError, ValueError) as e:
                 # Semantic retrieval is enhancement - continue without it
-                logger.warning(f"Semantic retrieval failed (non-critical): {e}")
+                logger.warning("semantic_retrieval_failed", error=str(e), error_type=type(e).__name__)
                 self.context["semantic_retrieval"] = {}
                 self.context["semantic_prompt"] = ""
                 self.trace_collector.log_error(f"Semantic retrieval failed: {str(e)}")
@@ -830,9 +858,10 @@ class ReportGenerator:
                     f"Findings: {len(findings)}, Added: {findings_added}"
                 )
 
-            except Exception as review_error:
-                logger.warning(f"Review step failed, using original findings: {review_error}")
+            except (APIError, APIConnectionError, RateLimitError, ValueError, RuntimeError) as review_error:
+                logger.warning("review_step_failed", error=str(review_error), error_type=type(review_error).__name__, findings_count=len(findings))
                 self.trace_collector.log_error(f"Review failed: {str(review_error)}")
+                quality_scores = {}
                 yield {"phase": "review", "step": "Review skipped (using original)", "progress": 58}
 
             self.trace_collector.end_phase("review", f"Quality score: {quality_scores.get('overall', 'N/A') if 'quality_scores' in dir() else 'skipped'}/10")
@@ -917,12 +946,13 @@ class ReportGenerator:
                 }).eq("id", self.report_id).execute()
             except Exception as db_err:
                 if "column" in str(db_err).lower() and "schema cache" in str(db_err).lower():
-                    logger.warning(f"Some columns missing, saving without math_validation: {db_err}")
+                    logger.warning("db_columns_missing_math_validation", error=str(db_err), report_id=self.report_id)
                     await supabase.table("reports").update({
                         "recommendations": recommendations,
                         "findings": findings,
                     }).eq("id", self.report_id).execute()
                 else:
+                    logger.error("db_update_failed_math_validation", error=str(db_err), report_id=self.report_id)
                     raise
 
             # Phase 5b: Identify quick wins
@@ -1013,7 +1043,7 @@ class ReportGenerator:
                 }).eq("id", self.report_id).execute()
             except Exception as db_err:
                 if "column" in str(db_err).lower() and "schema cache" in str(db_err).lower():
-                    logger.warning(f"Some columns missing, saving core data only: {db_err}")
+                    logger.warning("db_columns_missing_enhanced_data", error=str(db_err), report_id=self.report_id)
                     try:
                         await supabase.table("reports").update({
                             "playbooks": playbooks,
@@ -1021,10 +1051,12 @@ class ReportGenerator:
                             "industry_insights": industry_insights,
                             "automation_summary": automation_summary,
                         }).eq("id", self.report_id).execute()
-                    except Exception:
-                        # Last resort - save nothing extra
-                        logger.warning("Could not save enhanced report data, continuing anyway")
+                    except Exception as fallback_db_err:
+                        # Last resort - save nothing extra, set flag for upstream awareness
+                        logger.error("enhanced_report_data_save_failed", error=str(fallback_db_err), report_id=self.report_id, sections_lost=["playbooks", "system_architecture", "industry_insights", "automation_summary"])
+                        self._partial_data["_enhanced_save_failed"] = True
                 else:
+                    logger.error("db_update_failed_enhanced_data", error=str(db_err), report_id=self.report_id)
                     raise
 
             # Phase 7: Finalize
@@ -1107,7 +1139,7 @@ class ReportGenerator:
             except Exception as update_err:
                 if "column" in str(update_err).lower() and "schema cache" in str(update_err).lower():
                     # Column doesn't exist, try without generation_trace
-                    logger.warning(f"[FINALIZE] Some columns missing, trying without generation_trace: {update_err}")
+                    logger.warning("finalize_columns_missing_generation_trace", error=str(update_err), report_id=self.report_id)
                     try:
                         await supabase.table("reports").update({
                             **update_data,
@@ -1115,10 +1147,12 @@ class ReportGenerator:
                             "assumption_log": assumption_log,
                         }).eq("id", self.report_id).execute()
                         logger.info(f"[FINALIZE] Report status updated without generation_trace")
-                    except Exception:
+                    except Exception as fallback_update_err:
+                        logger.error("finalize_fallback_update_failed", error=str(fallback_update_err), report_id=self.report_id, sections_lost=["token_usage", "assumption_log"])
                         await supabase.table("reports").update(update_data).eq("id", self.report_id).execute()
                         logger.info(f"[FINALIZE] Report status updated with minimal data")
                 else:
+                    logger.error("finalize_db_update_failed", error=str(update_err), report_id=self.report_id)
                     raise
 
             # Update quiz session - pending QA review
@@ -1154,8 +1188,8 @@ class ReportGenerator:
                     execution_metrics=execution_metrics,
                 )
                 logger.info(f"[FINALIZE] Expertise updated from report {self.report_id}")
-            except Exception as learn_err:
-                logger.warning(f"[FINALIZE] Expertise learning failed (non-critical): {learn_err}")
+            except (ValueError, RuntimeError, KeyError) as learn_err:
+                logger.warning("expertise_learning_failed", error=str(learn_err), error_type=type(learn_err).__name__, report_id=self.report_id)
 
             logger.info(f"[FINALIZE] All finalize steps complete, yielding completion event for report {self.report_id}")
             yield {
@@ -1282,8 +1316,8 @@ class ReportGenerator:
                         f"ExecSummarySkill failed, using legacy method: "
                         f"{result.warnings}"
                     )
-            except Exception as e:
-                logger.warning(f"Skill execution failed, using legacy: {e}")
+            except (ValueError, KeyError, TypeError, RuntimeError) as e:
+                logger.warning("exec_summary_skill_failed", error=str(e), error_type=type(e).__name__)
 
         # Fall back to legacy method
         return await self._generate_executive_summary_legacy()
@@ -1362,8 +1396,8 @@ Return ONLY the JSON, no explanation."""
             # Add report date at the top
             summary["report_date"] = datetime.utcnow().strftime("%B %d, %Y")
             return summary
-        except Exception as e:
-            logger.error(f"Failed to parse executive summary: {e}")
+        except (APIError, APIConnectionError, RateLimitError, json.JSONDecodeError, ValueError, KeyError) as e:
+            logger.error("executive_summary_generation_failed", error=str(e), error_type=type(e).__name__)
             default_summary["report_date"] = datetime.utcnow().strftime("%B %d, %Y")
             return default_summary
 
@@ -1397,8 +1431,8 @@ Return ONLY the JSON, no explanation."""
                         f"FindingGenerationSkill failed, using legacy method: "
                         f"{result.warnings}"
                     )
-            except Exception as e:
-                logger.warning(f"Skill execution failed, using legacy: {e}")
+            except (ValueError, KeyError, TypeError, RuntimeError) as e:
+                logger.warning("finding_generation_skill_failed", error=str(e), error_type=type(e).__name__)
 
         # Fall back to legacy method
         return await self._generate_findings_legacy()
@@ -1504,8 +1538,8 @@ Generate a JSON array with this structure:
     "current_state": "How they're doing this now (from quiz answers)",
     "value_saved": {{
         "hours_per_week": <REQUIRED: estimate hours saved 1-20>,
-        "hourly_rate": 50,
-        "annual_savings": <REQUIRED: hours * 50 * 52>
+        "hourly_rate": {self._get_effective_hourly_rate()},
+        "annual_savings": <REQUIRED: hours * {self._get_effective_hourly_rate()} * 52>
     }},
     "value_created": {{
         "description": "How this creates new value",
@@ -1530,7 +1564,7 @@ CRITICAL - VALUE_SAVED IS REQUIRED:
   * Scheduling/coordination: 2-4 hours/week
   * Reporting/admin: 2-6 hours/week
   * Research/lookup: 1-3 hours/week
-- Calculate annual_savings = hours_per_week * 50 * 52
+- Calculate annual_savings = hours_per_week * {self._get_effective_hourly_rate()} * 52
 
 For NOT-RECOMMENDED findings, set:
 - is_not_recommended: true
@@ -1606,16 +1640,17 @@ IMPORTANT:
                     finding["confidence"] = "low"  # Downgrade confidence if no sources
 
                 # Ensure value_saved has defaults with DETERMINISTIC recalculation
+                _eff_hourly_rate = self._get_effective_hourly_rate()
                 if not isinstance(finding.get("value_saved"), dict):
                     finding["value_saved"] = {
                         "hours_per_week": 0,
-                        "hourly_rate": 50,
+                        "hourly_rate": _eff_hourly_rate,
                         "annual_savings": 0
                     }
                 else:
                     vs = finding["value_saved"]
                     hours_per_week = vs.get("hours_per_week", 0) or 0
-                    hourly_rate = vs.get("hourly_rate", 50) or 50
+                    hourly_rate = vs.get("hourly_rate", _eff_hourly_rate) or _eff_hourly_rate
                     # ALWAYS recalculate annual_savings deterministically
                     annual_savings = hours_per_week * hourly_rate * 52
                     finding["value_saved"] = {
@@ -1651,8 +1686,8 @@ IMPORTANT:
                 logger.info(f"Not-recommended findings: {not_recommended_count}/{total}")
 
             return validated_findings[:max_findings]
-        except Exception as e:
-            logger.error(f"Failed to parse findings: {e}")
+        except (APIError, APIConnectionError, RateLimitError, json.JSONDecodeError, ValueError, KeyError, TypeError) as e:
+            logger.error("findings_generation_failed", error=str(e), error_type=type(e).__name__, tier=self.tier)
             return []
 
     async def _generate_recommendations(self, findings: List[Dict]) -> List[Dict[str, Any]]:
@@ -1688,6 +1723,13 @@ IMPORTANT:
                     logger.info(
                         f"Platform consolidation: {len(consolidation.platform_recommendations)} platforms "
                         f"cover {len(consolidation.already_covered_findings)} findings"
+                    )
+
+                if consolidation.category_redundancies:
+                    logger.warning(
+                        f"Category redundancies detected: {len(consolidation.category_redundancies)} "
+                        f"overlaps between existing stack and recommendations - "
+                        f"{[(r.existing_tool_name, r.recommended_vendor) for r in consolidation.category_redundancies]}"
                     )
 
                 # Group by priority (excluding already-covered findings for individual recs)
@@ -1833,8 +1875,8 @@ IMPORTANT:
                                 rec["roi_percentage"] = 0
                                 rec["payback_months"] = 0
                                 rec["roi_warning"] = "ROI calculation failed - requires manual review"
-                        except Exception as roi_e:
-                            logger.warning(f"ROI calculation failed for platform {platform_rec.category}: {roi_e}")
+                        except (ValueError, KeyError, TypeError, RuntimeError) as roi_e:
+                            logger.warning("platform_roi_calculation_failed", platform=platform_rec.category, error=str(roi_e), error_type=type(roi_e).__name__)
                             rec["roi_percentage"] = 0
                             rec["payback_months"] = 0
                             rec["roi_warning"] = f"ROI calculation error: {roi_e}"
@@ -1917,8 +1959,8 @@ IMPORTANT:
                                                 if alt.get("slug", "").lower() not in used_vendors
                                             ],
                                         }
-                                except Exception as vendor_e:
-                                    logger.debug(f"Vendor matching skipped for {finding.get('id')}: {vendor_e}")
+                                except (ValueError, KeyError, TypeError, RuntimeError) as vendor_e:
+                                    logger.warning("vendor_matching_failed", finding_id=finding.get("id"), error=str(vendor_e), error_type=type(vendor_e).__name__)
 
                             # Enrich with detailed ROI analysis
                             if roi_skill:
@@ -1944,23 +1986,23 @@ IMPORTANT:
                                             rec["roi_percentage"] = roi_result.data["roi_percentage"]
                                             rec["roi_confidence_adjusted"] = roi_result.data.get("roi_confidence_adjusted")
                                             rec["payback_months"] = roi_result.data.get("payback_months")
-                                except Exception as roi_e:
-                                    logger.debug(f"ROI calculation skipped for {finding.get('id')}: {roi_e}")
+                                except (ValueError, KeyError, TypeError, RuntimeError) as roi_e:
+                                    logger.warning("roi_calculation_skipped", finding_id=finding.get("id"), error=str(roi_e), error_type=type(roi_e).__name__)
 
                             # Validate ROI values
                             roi = rec.get("roi_percentage", 0) or 0
                             assumptions = rec.get("assumptions", [])
 
-                            # Handle negative ROI (costs exceed benefits)
+                            # Handle negative ROI - preserve the actual value, flag as not recommended
                             if roi < 0:
-                                logger.warning(f"Negative ROI ({roi}%) for {rec.get('title')} - capping at 0%")
-                                rec["roi_percentage"] = 0
-                                rec["roi_warning"] = f"Originally calculated as {roi}% - costs may exceed estimated benefits"
-                                assumptions.append(f"ROI adjusted from {roi}% to 0% - requires detailed cost/benefit analysis")
+                                logger.warning(f"Negative ROI ({roi}%) for {rec.get('title')} - flagging as not recommended")
+                                rec["roi_warning"] = f"ROI is {roi}% - costs exceed estimated benefits"
+                                rec["is_not_recommended_by_roi"] = True
+                                assumptions.append(f"Negative ROI ({roi}%) - this option is not recommended based on cost-benefit analysis")
                                 # Downgrade priority for negative ROI recommendations
                                 if rec.get("priority") == "high":
                                     rec["priority"] = "medium"
-                                    assumptions.append("Priority adjusted from high to medium due to uncertain ROI")
+                                    assumptions.append("Priority adjusted from high to medium due to negative ROI")
 
                             # Cap unrealistic ROI values (max 500%)
                             elif roi > 500:
@@ -1970,6 +2012,59 @@ IMPORTANT:
                                 assumptions.append(f"ROI capped at 500% (original estimate: {roi}%)")
 
                             rec["assumptions"] = assumptions
+
+                            # Calculate NET SCORE for option comparison
+                            net_score_skill = get_skill("net-score-calculator")
+                            if net_score_skill:
+                                try:
+                                    ns_context = self._get_skill_context()
+                                    ns_context.metadata["recommendation"] = rec
+                                    ns_result = await net_score_skill.run(ns_context)
+                                    if ns_result.success:
+                                        net_score_data = ns_result.data
+                                        rec["net_scores"] = {
+                                            "options": [
+                                                {
+                                                    "option_type": o.option_type,
+                                                    "label": o.label,
+                                                    "net_score": o.net_score,
+                                                    "verdict": o.verdict,
+                                                    "verdict_label": o.verdict_label,
+                                                    "benefit_score": o.benefit_score,
+                                                    "cost_score": o.cost_score,
+                                                    "risk_score": o.risk_score,
+                                                    "formula_display": o.formula_display,
+                                                }
+                                                for o in net_score_data.options
+                                            ],
+                                            "recommended_option": net_score_data.recommended_option,
+                                            "recommended_label": net_score_data.recommended_label,
+                                            "score_gap": net_score_data.score_gap,
+                                            "comparison_summary": net_score_data.comparison_summary,
+                                        }
+                                        # Update our_recommendation if NET SCORE disagrees
+                                        current_rec = rec.get("our_recommendation", "")
+                                        net_rec = net_score_data.recommended_option
+                                        if current_rec and net_rec and current_rec != net_rec:
+                                            logger.info(
+                                                f"NET SCORE recommends '{net_rec}' over LLM's '{current_rec}' "
+                                                f"for {rec.get('title')} (gap: {net_score_data.score_gap:.1f})"
+                                            )
+                                            # Only override if the score gap is significant (>5 points)
+                                            if net_score_data.score_gap > 5:
+                                                rec["our_recommendation"] = net_rec
+                                                rec["recommendation_source"] = "net_score"
+                                            else:
+                                                rec["recommendation_source"] = "llm_confirmed"
+                                        else:
+                                            rec["recommendation_source"] = "llm_confirmed"
+                                        logger.debug(
+                                            f"NET SCORE calculated for {finding.get('id')}: "
+                                            f"recommended={net_score_data.recommended_option}, "
+                                            f"gap={net_score_data.score_gap}"
+                                        )
+                                except (ValueError, KeyError, TypeError, RuntimeError) as ns_e:
+                                    logger.warning("net_score_calculation_failed", finding_id=finding.get("id"), error=str(ns_e), error_type=type(ns_e).__name__)
 
                             # Enrich with four-options personalized recommendations
                             four_options_skill = get_skill("four-options", client=self.client)
@@ -1984,8 +2079,8 @@ IMPORTANT:
                                     if four_result.success:
                                         rec["four_options"] = four_result.data
                                         logger.debug(f"Four-options generated for {finding.get('id')}")
-                                except Exception as four_e:
-                                    logger.debug(f"Four-options skipped for {finding.get('id')}: {four_e}")
+                                except (ValueError, KeyError, TypeError, RuntimeError) as four_e:
+                                    logger.warning("four_options_failed", finding_id=finding.get("id"), error=str(four_e), error_type=type(four_e).__name__)
 
                             # Add automation insight from finding's connect_path
                             # This ensures automation workflows are surfaced, not just software
@@ -2019,8 +2114,8 @@ IMPORTANT:
                             recommendations.append(rec)
                         else:
                             logger.warning(f"ThreeOptionsSkill failed for finding {finding.get('id')}: {result.warnings}")
-                    except Exception as e:
-                        logger.warning(f"Skill failed for finding {finding.get('id')}: {e}")
+                    except (ValueError, KeyError, TypeError, RuntimeError) as e:
+                        logger.warning("three_options_skill_failed", finding_id=finding.get("id"), error=str(e), error_type=type(e).__name__)
 
                 if recommendations:
                     logger.info(
@@ -2031,8 +2126,8 @@ IMPORTANT:
                     )
                     return recommendations
 
-            except Exception as e:
-                logger.warning(f"Skill execution failed, using legacy: {e}")
+            except (ValueError, KeyError, TypeError, RuntimeError) as e:
+                logger.warning("recommendations_skill_failed", error=str(e), error_type=type(e).__name__, findings_count=len(findings))
 
         # Fall back to legacy method
         return await self._generate_recommendations_legacy(findings)
@@ -2244,8 +2339,8 @@ Generate 5-10 recommendations. Return ONLY the JSON array."""
                             rec["roi_percentage"] = 0
                             rec["payback_months"] = 0
                             rec["roi_warning"] = f"Finding {finding_id} not found for ROI calculation"
-                    except Exception as roi_e:
-                        logger.warning(f"ROI calculation failed for {rec.get('title')}: {roi_e}")
+                    except (ValueError, KeyError, TypeError, RuntimeError) as roi_e:
+                        logger.warning("legacy_roi_calculation_failed", recommendation=rec.get("title"), error=str(roi_e), error_type=type(roi_e).__name__)
                         rec["roi_percentage"] = 0
                         rec["payback_months"] = 0
                         rec["roi_warning"] = f"ROI calculation error: {roi_e}"
@@ -2258,16 +2353,16 @@ Generate 5-10 recommendations. Return ONLY the JSON array."""
                 roi = rec.get("roi_percentage", 0) or 0
                 assumptions = rec.get("assumptions", [])
 
-                # Handle negative ROI (costs exceed benefits)
+                # Handle negative ROI - preserve the actual value, flag as not recommended
                 if roi < 0:
-                    logger.warning(f"Negative ROI ({roi}%) for {rec.get('title')} - capping at 0%")
-                    rec["roi_percentage"] = 0
-                    rec["roi_warning"] = f"Originally calculated as {roi}% - costs may exceed estimated benefits"
-                    assumptions.append(f"ROI adjusted from {roi}% to 0% - requires detailed cost/benefit analysis")
+                    logger.warning(f"Negative ROI ({roi}%) for {rec.get('title')} - flagging as not recommended")
+                    rec["roi_warning"] = f"ROI is {roi}% - costs exceed estimated benefits"
+                    rec["is_not_recommended_by_roi"] = True
+                    assumptions.append(f"Negative ROI ({roi}%) - this option is not recommended based on cost-benefit analysis")
                     # Downgrade priority for negative ROI recommendations
                     if rec.get("priority") == "high":
                         rec["priority"] = "medium"
-                        assumptions.append("Priority adjusted from high to medium due to uncertain ROI")
+                        assumptions.append("Priority adjusted from high to medium due to negative ROI")
 
                 # Cap unrealistic ROI values (max 500%)
                 elif roi > 500:
@@ -2280,8 +2375,8 @@ Generate 5-10 recommendations. Return ONLY the JSON array."""
                 validated_recommendations.append(rec)
 
             return validated_recommendations
-        except Exception as e:
-            logger.error(f"Failed to parse recommendations: {e}")
+        except (APIError, APIConnectionError, RateLimitError, json.JSONDecodeError, ValueError, KeyError, TypeError) as e:
+            logger.error("recommendations_generation_failed", error=str(e), error_type=type(e).__name__)
             return []
 
     def _enrich_build_it_yourself(self, recommendation_title: str, custom: Dict[str, Any]) -> Dict[str, Any]:
@@ -2424,8 +2519,8 @@ Return ONLY the JSON."""
             if not isinstance(roadmap, dict):
                 return {"short_term": [], "mid_term": [], "long_term": []}
             return roadmap
-        except Exception as e:
-            logger.error(f"Failed to parse roadmap: {e}")
+        except (APIError, APIConnectionError, RateLimitError, json.JSONDecodeError, ValueError) as e:
+            logger.error("roadmap_generation_failed", error=str(e), error_type=type(e).__name__)
             return {"short_term": [], "mid_term": [], "long_term": []}
 
     def _calculate_value_summary(self, findings: List[Dict], recommendations: List[Dict]) -> Dict[str, Any]:
@@ -2450,7 +2545,7 @@ Return ONLY the JSON."""
             total_hours_saved_raw += hours
             total_hours_saved_adjusted += hours * factor
 
-        hourly_rate = 50  # Default hourly rate
+        hourly_rate = self._get_effective_hourly_rate()
         time_savings_raw = total_hours_saved_raw * hourly_rate * 52  # Annual
         time_savings_adjusted = total_hours_saved_adjusted * hourly_rate * 52
 
@@ -2553,6 +2648,7 @@ Return ONLY the JSON."""
             "projection_years": 3,
             "confidence_adjustment_applied": True,
             "confidence_note": "Values are confidence-adjusted: HIGH=100%, MEDIUM=85%, LOW=70%",
+            "hourly_rate_assumption": f"Based on an estimated hourly rate of €{hourly_rate:.0f}/hr ({self._get_hourly_rate_source()})",
         }
 
     def _generate_methodology_notes(self) -> Dict[str, Any]:
@@ -2565,7 +2661,7 @@ Return ONLY the JSON."""
                 "AI/automation adoption studies",
             ],
             "assumptions": [
-                f"Hourly rate assumed at €50 unless specified",
+                f"Hourly rate: €{self._get_effective_hourly_rate():.0f}/hr ({self._get_hourly_rate_source()})",
                 "3-year projection period for ROI calculations",
                 "All estimates include ±20% uncertainty range",
                 "Vendor pricing as of report generation date",
@@ -2673,8 +2769,8 @@ Return ONLY the JSON."""
                         f"VerdictSkill failed, using legacy method: "
                         f"{result.warnings}"
                     )
-            except Exception as e:
-                logger.warning(f"Skill execution failed, using legacy: {e}")
+            except (ValueError, KeyError, TypeError, RuntimeError) as e:
+                logger.warning("verdict_skill_failed", error=str(e), error_type=type(e).__name__)
 
         # Fall back to legacy method
         return self._generate_verdict_legacy(executive_summary, findings, recommendations, value_summary)
@@ -2879,8 +2975,8 @@ Return ONLY the JSON."""
                     industry_context=self.context.get("industry_knowledge", {}),
                 )
                 playbooks.append(playbook.model_dump(mode='json'))
-            except Exception as e:
-                logger.warning(f"Failed to generate playbook for {rec.get('id')}: {e}")
+            except (ValueError, KeyError, TypeError, RuntimeError) as e:
+                logger.warning("playbook_generation_failed", recommendation_id=rec.get("id"), error=str(e), error_type=type(e).__name__)
 
         return playbooks
 
@@ -2948,8 +3044,8 @@ Return ONLY the JSON."""
                         finding["validation_issues"] = validation.get("issues", [])
                         finding["validation_warnings"] = validation.get("warnings", [])
 
-            except Exception as e:
-                logger.warning(f"Math validation failed for finding {finding.get('id')}: {e}")
+            except (ValueError, KeyError, TypeError, RuntimeError) as e:
+                logger.warning("math_validation_failed", finding_id=finding.get("id"), error=str(e), error_type=type(e).__name__)
 
         # Also update recommendations with adjusted confidence
         for rec in recommendations:
@@ -3014,8 +3110,8 @@ Return ONLY the JSON."""
                     )
                     return result.data
 
-            except Exception as e:
-                logger.warning(f"QuickWinIdentifierSkill failed: {e}")
+            except (ValueError, KeyError, TypeError, RuntimeError) as e:
+                logger.warning("quick_win_skill_failed", error=str(e), error_type=type(e).__name__)
 
         # Fallback: simple quick win detection
         quick_wins = []
@@ -3074,8 +3170,8 @@ Return ONLY the JSON."""
                         f"adoption, risk={competitor_result.data.get('risk_assessment', {}).get('risk_level')}"
                     )
 
-            except Exception as e:
-                logger.debug(f"Competitor analysis skipped: {e}")
+            except (ValueError, KeyError, TypeError, RuntimeError) as e:
+                logger.warning("competitor_analysis_failed", error=str(e), error_type=type(e).__name__)
 
         # Enrich with industry benchmarking
         benchmarker_skill = get_skill("industry-benchmarker", client=self.client)
@@ -3091,8 +3187,8 @@ Return ONLY the JSON."""
                         f"percentile={benchmarker_result.data.get('ai_readiness', {}).get('percentile')}"
                     )
 
-            except Exception as e:
-                logger.debug(f"Industry benchmarking skipped: {e}")
+            except (ValueError, KeyError, TypeError, RuntimeError) as e:
+                logger.warning("industry_benchmarking_failed", error=str(e), error_type=type(e).__name__)
 
         return result
 
@@ -3145,8 +3241,8 @@ Return ONLY the JSON."""
                 logger.warning(f"AutomationSummarySkill failed: {result.warnings}")
                 return {}
 
-        except Exception as e:
-            logger.warning(f"Automation summary generation failed: {e}")
+        except (ValueError, KeyError, TypeError, RuntimeError) as e:
+            logger.warning("automation_summary_failed", error=str(e), error_type=type(e).__name__)
             return {}
 
     async def _generate_post_report_metadata(
@@ -3187,8 +3283,8 @@ Return ONLY the JSON."""
                         f"complexity={followup_result.data.get('complexity')}"
                     )
 
-            except Exception as e:
-                logger.debug(f"Follow-up scheduler skipped: {e}")
+            except (ValueError, KeyError, TypeError, RuntimeError) as e:
+                logger.warning("followup_scheduler_failed", error=str(e), error_type=type(e).__name__)
                 # Provide minimal fallback
                 result["follow_up_schedule"] = {
                     "follow_up_schedule": [
@@ -3223,8 +3319,8 @@ Return ONLY the JSON."""
                         else:
                             logger.info("No upsell recommended for this customer")
 
-                except Exception as e:
-                    logger.debug(f"Upsell identifier skipped: {e}")
+                except (ValueError, KeyError, TypeError, RuntimeError) as e:
+                    logger.warning("upsell_identifier_failed", error=str(e), error_type=type(e).__name__)
                     result["upsell_analysis"] = {
                         "upsell_recommended": False,
                         "reason": "Analysis not available",

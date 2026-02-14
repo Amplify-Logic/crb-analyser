@@ -39,7 +39,7 @@ class WorkshopQuestionSkill(LLMSkill[Dict[str, Any]]):
     description = "Generate adaptive workshop questions"
     version = "1.0.0"
 
-    default_model = "claude-haiku-4-5-20251001"  # Fast for questions
+    default_task = "classify_finding"  # Fast model for quick question generation
     default_max_tokens = 500
 
     async def execute(self, context: SkillContext) -> Dict[str, Any]:

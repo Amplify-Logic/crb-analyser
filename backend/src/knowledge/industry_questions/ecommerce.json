@@ -1,0 +1,281 @@
+{
+  "industry": "ecommerce",
+  "display_name": "E-Commerce Business",
+  "questions": [
+    {
+      "id": "monthly_order_volume",
+      "question": "How many orders does your store process per month?",
+      "input_type": "number",
+      "placeholder": "e.g., 500",
+      "target_categories": ["quantifiable_metrics", "industry_context"],
+      "expected_boosts": {"quantifiable_metrics": 20, "industry_context": 15},
+      "priority": 1,
+      "tags": ["volume", "scale"]
+    },
+    {
+      "id": "cart_abandonment_rate",
+      "question": "What's your approximate cart abandonment rate?",
+      "input_type": "select",
+      "options": [
+        {"value": "under_50", "label": "Under 50%"},
+        {"value": "50_60", "label": "50-60%"},
+        {"value": "60_70", "label": "60-70%"},
+        {"value": "70_80", "label": "70-80%"},
+        {"value": "over_80", "label": "Over 80%"},
+        {"value": "not_tracked", "label": "We don't track this"}
+      ],
+      "target_categories": ["pain_points", "quantifiable_metrics"],
+      "expected_boosts": {"pain_points": 15, "quantifiable_metrics": 15},
+      "priority": 2,
+      "tags": ["conversion", "revenue_loss"],
+      "deep_dive_triggers": ["70_80", "over_80"]
+    },
+    {
+      "id": "ecommerce_platform",
+      "question": "What e-commerce platform do you use?",
+      "input_type": "select",
+      "options": [
+        {"value": "shopify", "label": "Shopify"},
+        {"value": "woocommerce", "label": "WooCommerce"},
+        {"value": "bigcommerce", "label": "BigCommerce"},
+        {"value": "magento", "label": "Magento / Adobe Commerce"},
+        {"value": "squarespace", "label": "Squarespace"},
+        {"value": "wix", "label": "Wix"},
+        {"value": "custom", "label": "Custom built"},
+        {"value": "other", "label": "Other"}
+      ],
+      "target_categories": ["tech_stack"],
+      "expected_boosts": {"tech_stack": 25},
+      "priority": 1,
+      "tags": ["software", "integration"]
+    },
+    {
+      "id": "sales_channels",
+      "question": "Which sales channels do you currently sell on?",
+      "input_type": "multi_select",
+      "options": [
+        {"value": "own_website", "label": "Own website/store"},
+        {"value": "amazon", "label": "Amazon"},
+        {"value": "ebay", "label": "eBay"},
+        {"value": "etsy", "label": "Etsy"},
+        {"value": "social_commerce", "label": "Instagram/Facebook Shop"},
+        {"value": "tiktok_shop", "label": "TikTok Shop"},
+        {"value": "wholesale_b2b", "label": "Wholesale/B2B"},
+        {"value": "retail_popup", "label": "Retail/Pop-up stores"}
+      ],
+      "target_categories": ["operations", "tech_stack"],
+      "expected_boosts": {"operations": 15, "tech_stack": 10},
+      "priority": 2,
+      "tags": ["channels", "distribution"]
+    },
+    {
+      "id": "customer_service_volume",
+      "question": "How many customer support tickets or inquiries do you handle per week?",
+      "input_type": "select",
+      "options": [
+        {"value": "under_20", "label": "Under 20"},
+        {"value": "20_50", "label": "20-50"},
+        {"value": "50_100", "label": "50-100"},
+        {"value": "100_300", "label": "100-300"},
+        {"value": "over_300", "label": "Over 300"}
+      ],
+      "target_categories": ["pain_points", "quantifiable_metrics"],
+      "expected_boosts": {"pain_points": 15, "quantifiable_metrics": 15},
+      "priority": 2,
+      "tags": ["support", "customer_service"],
+      "deep_dive_triggers": ["100_300", "over_300"]
+    },
+    {
+      "id": "fulfillment_method",
+      "question": "How do you handle order fulfillment?",
+      "input_type": "select",
+      "options": [
+        {"value": "in_house", "label": "In-house (we ship ourselves)"},
+        {"value": "3pl", "label": "Third-party logistics (3PL)"},
+        {"value": "dropship", "label": "Dropshipping"},
+        {"value": "amazon_fba", "label": "Amazon FBA"},
+        {"value": "hybrid", "label": "Mix of methods"},
+        {"value": "digital", "label": "Digital products only"}
+      ],
+      "target_categories": ["operations", "company_basics"],
+      "expected_boosts": {"operations": 20, "company_basics": 10},
+      "priority": 1,
+      "tags": ["logistics", "fulfillment"]
+    },
+    {
+      "id": "marketing_tools",
+      "question": "What marketing and email tools do you currently use?",
+      "input_type": "multi_select",
+      "options": [
+        {"value": "klaviyo", "label": "Klaviyo"},
+        {"value": "mailchimp", "label": "Mailchimp"},
+        {"value": "omnisend", "label": "Omnisend"},
+        {"value": "meta_ads", "label": "Meta (Facebook/Instagram) Ads"},
+        {"value": "google_ads", "label": "Google Ads"},
+        {"value": "tiktok_ads", "label": "TikTok Ads"},
+        {"value": "influencer", "label": "Influencer marketing"},
+        {"value": "none", "label": "No marketing tools yet"}
+      ],
+      "target_categories": ["tech_stack", "operations"],
+      "expected_boosts": {"tech_stack": 15, "operations": 10},
+      "priority": 2,
+      "tags": ["marketing", "acquisition"]
+    },
+    {
+      "id": "biggest_operational_challenge",
+      "question": "What's the most time-consuming or frustrating part of running your e-commerce business?",
+      "input_type": "voice",
+      "target_categories": ["pain_points", "operations"],
+      "expected_boosts": {"pain_points": 25, "operations": 15},
+      "priority": 1,
+      "tags": ["bottleneck", "efficiency"]
+    },
+    {
+      "id": "return_rate",
+      "question": "What is your approximate return rate?",
+      "input_type": "select",
+      "options": [
+        {"value": "under_5", "label": "Under 5%"},
+        {"value": "5_10", "label": "5-10%"},
+        {"value": "10_20", "label": "10-20%"},
+        {"value": "20_30", "label": "20-30%"},
+        {"value": "over_30", "label": "Over 30%"},
+        {"value": "not_applicable", "label": "Not applicable (digital products)"}
+      ],
+      "target_categories": ["quantifiable_metrics", "pain_points"],
+      "expected_boosts": {"quantifiable_metrics": 15, "pain_points": 10},
+      "priority": 2,
+      "tags": ["returns", "logistics"],
+      "deep_dive_triggers": ["20_30", "over_30"]
+    },
+    {
+      "id": "team_size",
+      "question": "How many people work in your e-commerce business?",
+      "input_type": "select",
+      "options": [
+        {"value": "solo", "label": "Just me"},
+        {"value": "2_5", "label": "2-5 people"},
+        {"value": "6_15", "label": "6-15 people"},
+        {"value": "16_50", "label": "16-50 people"},
+        {"value": "over_50", "label": "Over 50 people"}
+      ],
+      "target_categories": ["company_basics", "quantifiable_metrics"],
+      "expected_boosts": {"company_basics": 15, "quantifiable_metrics": 10},
+      "priority": 1,
+      "tags": ["staffing", "scale"]
+    },
+    {
+      "id": "inventory_management",
+      "question": "How do you currently manage your inventory?",
+      "input_type": "select",
+      "options": [
+        {"value": "platform_builtin", "label": "Built into our e-commerce platform"},
+        {"value": "spreadsheets", "label": "Spreadsheets / manual tracking"},
+        {"value": "dedicated_software", "label": "Dedicated inventory software"},
+        {"value": "erp", "label": "ERP system"},
+        {"value": "not_applicable", "label": "Not applicable (digital/dropship)"}
+      ],
+      "target_categories": ["tech_stack", "operations"],
+      "expected_boosts": {"tech_stack": 15, "operations": 15},
+      "priority": 2,
+      "tags": ["inventory", "operations"]
+    },
+    {
+      "id": "growth_priority",
+      "question": "What's your main priority for the next 12 months?",
+      "input_type": "select",
+      "options": [
+        {"value": "increase_revenue", "label": "Increase revenue and sales"},
+        {"value": "reduce_costs", "label": "Reduce operational costs"},
+        {"value": "improve_margins", "label": "Improve profit margins"},
+        {"value": "customer_retention", "label": "Improve customer retention"},
+        {"value": "expand_channels", "label": "Expand to new sales channels"},
+        {"value": "automate_operations", "label": "Automate manual processes"}
+      ],
+      "target_categories": ["goals_priorities"],
+      "expected_boosts": {"goals_priorities": 30},
+      "priority": 1,
+      "tags": ["strategy", "direction"]
+    },
+    {
+      "id": "ai_readiness",
+      "question": "How would you describe your experience with AI or automation tools?",
+      "input_type": "select",
+      "options": [
+        {"value": "none", "label": "Haven't tried any yet"},
+        {"value": "exploring", "label": "Exploring options"},
+        {"value": "some", "label": "Using a few automated tools"},
+        {"value": "advanced", "label": "Already using AI for several tasks"}
+      ],
+      "target_categories": ["buying_signals", "tech_stack"],
+      "expected_boosts": {"buying_signals": 15, "tech_stack": 10},
+      "priority": 3,
+      "tags": ["readiness", "adoption"]
+    },
+    {
+      "id": "budget_timeline",
+      "question": "If you found a solution that could save significant time or grow revenue, when would you want to implement it?",
+      "input_type": "select",
+      "options": [
+        {"value": "immediately", "label": "As soon as possible"},
+        {"value": "3_months", "label": "Within 3 months"},
+        {"value": "6_months", "label": "Within 6 months"},
+        {"value": "next_year", "label": "Sometime next year"},
+        {"value": "just_exploring", "label": "Just exploring for now"}
+      ],
+      "target_categories": ["buying_signals"],
+      "expected_boosts": {"buying_signals": 25},
+      "priority": 3,
+      "tags": ["timeline", "urgency"]
+    }
+  ],
+  "woven_confirmation_templates": [
+    {
+      "id": "confirm_platform",
+      "condition": "tech_stack.ecommerce_platform",
+      "template": "How's {tech_stack.ecommerce_platform} working for your store? Any pain points with the platform?",
+      "target_categories": ["tech_stack", "pain_points"],
+      "expected_boosts": {"tech_stack": 10, "pain_points": 15}
+    },
+    {
+      "id": "confirm_channels",
+      "condition": "operations.sales_channels",
+      "template": "Selling across multiple channels can be complex. What's the biggest challenge with managing {operations.sales_channels}?",
+      "target_categories": ["operations", "pain_points"],
+      "expected_boosts": {"operations": 15, "pain_points": 20}
+    },
+    {
+      "id": "confirm_team_size",
+      "condition": "company_basics.team_size",
+      "template": "With a team of {company_basics.team_size}, how do you divide up responsibilities between marketing, fulfillment, and customer service?",
+      "target_categories": ["operations"],
+      "expected_boosts": {"operations": 15}
+    }
+  ],
+  "deep_dive_templates": [
+    {
+      "id": "cart_abandonment_deep_dive",
+      "trigger_question": "cart_abandonment_rate",
+      "trigger_values": ["70_80", "over_80"],
+      "template": "That's a significant amount of lost revenue. Have you tried any recovery strategies like abandoned cart emails? What do you think is causing shoppers to leave?",
+      "target_categories": ["operations", "pain_points"],
+      "expected_boosts": {"operations": 15, "pain_points": 15}
+    },
+    {
+      "id": "support_volume_deep_dive",
+      "trigger_question": "customer_service_volume",
+      "trigger_values": ["100_300", "over_300"],
+      "template": "That's a lot of inquiries. What are the most common types of questions you receive - order status, returns, product questions?",
+      "target_categories": ["operations", "pain_points", "quantifiable_metrics"],
+      "expected_boosts": {"operations": 10, "pain_points": 15, "quantifiable_metrics": 10}
+    },
+    {
+      "id": "return_rate_deep_dive",
+      "trigger_question": "return_rate",
+      "trigger_values": ["20_30", "over_30"],
+      "template": "A high return rate can really eat into margins. What are the main reasons customers return products - sizing, quality, or not matching expectations?",
+      "target_categories": ["pain_points", "industry_context"],
+      "expected_boosts": {"pain_points": 15, "industry_context": 10}
+    }
+  ]
+}

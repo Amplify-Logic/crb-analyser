@@ -45,6 +45,7 @@ from src.models.crb import (
     MonthlyCostBreakdown,
     HiddenCosts,
 )
+from src.services.crb_calculation_service import get_effective_hourly_rate
 
 logger = logging.getLogger(__name__)
 
@@ -146,22 +147,22 @@ class FindingGenerationSkill(LLMSkill[List[Dict[str, Any]]]):
         currency = context.currency
         currency_symbol = context.currency_symbol
 
-        # Extract hourly_rate from quiz answers or use default
-        # Check multiple possible sources for hourly rate
-        hourly_rate = 50  # Default
-        if answers.get("hourly_rate"):
-            try:
-                hourly_rate = float(answers["hourly_rate"])
-            except (ValueError, TypeError):
-                pass
-        elif context.metadata.get("hourly_rate"):
+        # Extract hourly_rate using industry-aware resolution
+        hourly_rate, hourly_rate_source = get_effective_hourly_rate(
+            industry=industry,
+            quiz_answers=answers,
+        )
+        # Also check metadata override (e.g., from workshop or admin)
+        if context.metadata.get("hourly_rate"):
             try:
                 hourly_rate = float(context.metadata["hourly_rate"])
+                hourly_rate_source = "metadata override"
             except (ValueError, TypeError):
                 pass
 
-        # Store for use in validation
+        # Store for use in validation and downstream reporting
         context.metadata["effective_hourly_rate"] = hourly_rate
+        context.metadata["hourly_rate_source"] = hourly_rate_source
 
         # Get opportunities and benchmarks from knowledge
         opportunities_data = knowledge.get("opportunities", {})
@@ -573,7 +574,13 @@ Generate a JSON array with this structure:
                 "hidden": {{
                     "training_hours": <number>,
                     "productivity_dip_weeks": <number>
-                }}
+                }},
+                "opportunity_cost": <number in EUR, what you can't do while implementing>,
+                "opportunity_cost_description": "e.g., Delays CRM migration by 3 months",
+                "complexity_cost": <number in EUR, integration complexity and maintenance burden>,
+                "complexity_cost_description": "e.g., Requires connecting 3 systems with ongoing API maintenance",
+                "brand_trust_cost": <number in EUR, risk to brand/customer trust during transition>,
+                "brand_trust_cost_description": "e.g., Customers may experience slower responses during 2-week migration"
             }},
 
             "risk": {{
@@ -603,7 +610,13 @@ Generate a JSON array with this structure:
             "cost": {{
                 "monthly": <number>,
                 "setup_one_time": <number>,
-                "migration_estimate": <number or 0>
+                "migration_estimate": <number or 0>,
+                "opportunity_cost": <number in EUR, what you can't do while migrating>,
+                "opportunity_cost_description": "e.g., Team focused on migration instead of client work for 4 weeks",
+                "complexity_cost": <number in EUR, migration complexity and data mapping effort>,
+                "complexity_cost_description": "e.g., Data migration from 3 legacy systems, custom field mapping required",
+                "brand_trust_cost": <number in EUR, risk to brand/customer trust during switchover>,
+                "brand_trust_cost_description": "e.g., 1-week service disruption risk during data migration"
             }},
 
             "risk": {{
@@ -711,6 +724,20 @@ ROI REALITY CHECKS - APPLY TO EVERY FINDING
 4. DEFAULT TO CONSERVATIVE estimates when uncertain
 
 ═══════════════════════════════════════════════════════════════════════════════
+THE 6 COST DIMENSIONS (6C FRAMEWORK) - INCLUDE IN EVERY PATH
+═══════════════════════════════════════════════════════════════════════════════
+Every cost analysis must address all 6 cost dimensions:
+1. Financial Cost - implementation + ongoing (captured in implementation_diy/professional + monthly_ongoing)
+2. Time Cost - learning curve, training (captured in hidden.training_hours + hidden.productivity_dip_weeks)
+3. Opportunity Cost - what they CAN'T do while implementing (opportunity_cost + opportunity_cost_description)
+4. Complexity Cost - integration difficulty, maintenance burden (complexity_cost + complexity_cost_description)
+5. Risk Cost - captured separately in the risk section
+6. Brand/Trust Cost - customer-facing risk during transition (brand_trust_cost + brand_trust_cost_description)
+
+For opportunity_cost, complexity_cost, brand_trust_cost: estimate in EUR. Use 0 if truly negligible.
+Always provide a description explaining the cost even when the EUR value is 0.
+
+═══════════════════════════════════════════════════════════════════════════════
 CONNECT VS REPLACE GUIDANCE
 ═══════════════════════════════════════════════════════════════════════════════
 - If existing tools have good APIs (score 4-5), prefer Connect
@@ -773,17 +800,18 @@ CONNECT VS REPLACE GUIDANCE
 
         return findings
 
-    def _parse_cost_breakdown(self, cost_data: Dict[str, Any]) -> Dict[str, Any]:
-        """Parse CRB cost breakdown from LLM output."""
+    def _parse_cost_breakdown(self, cost_data: Dict[str, Any], default_hourly_rate: float = 50) -> Dict[str, Any]:
+        """Parse CRB cost breakdown from LLM output, including 6C dimensions."""
         result = {}
 
         # Implementation DIY
         if cost_data.get("implementation_diy"):
             diy = cost_data["implementation_diy"]
+            rate = diy.get("hourly_rate", default_hourly_rate)
             result["implementation_diy"] = {
                 "hours": diy.get("hours", 0),
-                "hourly_rate": diy.get("hourly_rate", 50),
-                "total": diy.get("total", diy.get("hours", 0) * diy.get("hourly_rate", 50)),
+                "hourly_rate": rate,
+                "total": diy.get("total", diy.get("hours", 0) * rate),
                 "description": diy.get("description", ""),
             }
 
@@ -818,14 +846,28 @@ CONNECT VS REPLACE GUIDANCE
                 "productivity_dip_weeks": hidden.get("productivity_dip_weeks", 0),
             }
 
+        # 6C additional cost dimensions (opportunity, complexity, brand/trust)
+        result["opportunity_cost"] = cost_data.get("opportunity_cost", 0)
+        result["opportunity_cost_description"] = cost_data.get("opportunity_cost_description", "")
+        result["complexity_cost"] = cost_data.get("complexity_cost", 0)
+        result["complexity_cost_description"] = cost_data.get("complexity_cost_description", "")
+        result["brand_trust_cost"] = cost_data.get("brand_trust_cost", 0)
+        result["brand_trust_cost_description"] = cost_data.get("brand_trust_cost_description", "")
+
         return result
 
     def _parse_replace_cost(self, cost_data: Dict[str, Any]) -> Dict[str, Any]:
-        """Parse CRB cost for Replace path."""
+        """Parse CRB cost for Replace path, including 6C dimensions."""
         return {
             "monthly": cost_data.get("monthly", 0),
             "setup_one_time": cost_data.get("setup_one_time", 0),
             "migration_estimate": cost_data.get("migration_estimate", 0),
+            "opportunity_cost": cost_data.get("opportunity_cost", 0),
+            "opportunity_cost_description": cost_data.get("opportunity_cost_description", ""),
+            "complexity_cost": cost_data.get("complexity_cost", 0),
+            "complexity_cost_description": cost_data.get("complexity_cost_description", ""),
+            "brand_trust_cost": cost_data.get("brand_trust_cost", 0),
+            "brand_trust_cost_description": cost_data.get("brand_trust_cost_description", ""),
         }
 
     def _parse_risk_assessment(self, risk_data: Dict[str, Any]) -> Dict[str, Any]:
@@ -973,7 +1015,7 @@ CONNECT VS REPLACE GUIDANCE
 
                 # Parse CRB structure if present
                 if cp.get("cost") and isinstance(cp["cost"], dict):
-                    validated_connect["cost"] = self._parse_cost_breakdown(cp["cost"])
+                    validated_connect["cost"] = self._parse_cost_breakdown(cp["cost"], default_hourly_rate=default_hourly_rate)
                 if cp.get("risk") and isinstance(cp["risk"], dict):
                     validated_connect["risk"] = self._parse_risk_assessment(cp["risk"])
                 if cp.get("benefit") and isinstance(cp["benefit"], dict):

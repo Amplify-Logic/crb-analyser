@@ -9,10 +9,11 @@ from datetime import datetime
 from typing import Any, Dict, List, Optional
 
 from anthropic import Anthropic
-from fastapi import APIRouter, HTTPException, status, Query, Body
+from fastapi import APIRouter, Depends, HTTPException, status, Query, Body
 from pydantic import BaseModel, Field
 
 from src.config.settings import settings
+from src.middleware.auth import require_admin, CurrentUser
 
 from src.models.insight import (
     CredibilityLevel,
@@ -111,7 +112,9 @@ class StatsResponse(BaseModel):
 # =============================================================================
 
 @router.get("/stats")
-async def get_stats() -> StatsResponse:
+async def get_stats(
+    current_user: CurrentUser = Depends(require_admin),
+) -> StatsResponse:
     """Get insight collection statistics."""
     service = get_insight_service()
     stats = service.get_stats()
@@ -150,6 +153,7 @@ async def list_insights(
     type: Optional[str] = Query(None, description="Filter by type"),
     reviewed_only: bool = Query(False, description="Only show reviewed insights"),
     limit: int = Query(100, ge=1, le=500),
+    current_user: CurrentUser = Depends(require_admin),
 ) -> InsightsListResponse:
     """List all insights with optional filtering."""
     service = get_insight_service()
@@ -177,7 +181,10 @@ async def list_insights(
 
 
 @router.get("/{insight_id}")
-async def get_insight(insight_id: str) -> InsightResponse:
+async def get_insight(
+    insight_id: str,
+    current_user: CurrentUser = Depends(require_admin),
+) -> InsightResponse:
     """Get a specific insight by ID."""
     service = get_insight_service()
     insight = service.get_insight_by_id(insight_id)
@@ -192,7 +199,10 @@ async def get_insight(insight_id: str) -> InsightResponse:
 
 
 @router.post("/search")
-async def search_insights(request: SearchRequest) -> InsightsListResponse:
+async def search_insights(
+    request: SearchRequest,
+    current_user: CurrentUser = Depends(require_admin),
+) -> InsightsListResponse:
     """Search insights with filtering and semantic matching."""
     service = get_insight_service()
 
@@ -224,7 +234,10 @@ async def search_insights(request: SearchRequest) -> InsightsListResponse:
 
 
 @router.post("/create")
-async def create_insight(request: InsightCreateRequest) -> InsightResponse:
+async def create_insight(
+    request: InsightCreateRequest,
+    current_user: CurrentUser = Depends(require_admin),
+) -> InsightResponse:
     """Create a new insight manually."""
     service = get_insight_service()
 
@@ -271,7 +284,11 @@ async def create_insight(request: InsightCreateRequest) -> InsightResponse:
 
 
 @router.put("/{insight_id}")
-async def update_insight(insight_id: str, request: InsightUpdateRequest) -> InsightResponse:
+async def update_insight(
+    insight_id: str,
+    request: InsightUpdateRequest,
+    current_user: CurrentUser = Depends(require_admin),
+) -> InsightResponse:
     """Update an existing insight."""
     service = get_insight_service()
 
@@ -320,7 +337,8 @@ async def update_insight(insight_id: str, request: InsightUpdateRequest) -> Insi
 @router.post("/{insight_id}/review")
 async def mark_reviewed(
     insight_id: str,
-    reviewed: bool = Query(True, description="Set reviewed status")
+    reviewed: bool = Query(True, description="Set reviewed status"),
+    current_user: CurrentUser = Depends(require_admin),
 ) -> InsightResponse:
     """Mark an insight as reviewed or unreviewed."""
     service = get_insight_service()
@@ -345,7 +363,10 @@ async def mark_reviewed(
 
 
 @router.delete("/{insight_id}")
-async def delete_insight(insight_id: str) -> InsightResponse:
+async def delete_insight(
+    insight_id: str,
+    current_user: CurrentUser = Depends(require_admin),
+) -> InsightResponse:
     """Delete an insight."""
     service = get_insight_service()
 
@@ -366,7 +387,10 @@ async def delete_insight(insight_id: str) -> InsightResponse:
 
 
 @router.post("/extract")
-async def extract_insights(request: ExtractionRequest) -> Dict[str, Any]:
+async def extract_insights(
+    request: ExtractionRequest,
+    current_user: CurrentUser = Depends(require_admin),
+) -> Dict[str, Any]:
     """
     Extract insights from raw content using AI.
 
@@ -412,7 +436,8 @@ async def extract_insights(request: ExtractionRequest) -> Dict[str, Any]:
 
 @router.post("/save-extracted")
 async def save_extracted_insights(
-    insights: List[Dict[str, Any]] = Body(..., description="List of insights to save")
+    insights: List[Dict[str, Any]] = Body(..., description="List of insights to save"),
+    current_user: CurrentUser = Depends(require_admin),
 ) -> Dict[str, Any]:
     """
     Save extracted insights after review.
@@ -451,7 +476,9 @@ async def save_extracted_insights(
 # =============================================================================
 
 @router.get("/dashboard/summary")
-async def get_dashboard_summary() -> Dict[str, Any]:
+async def get_dashboard_summary(
+    current_user: CurrentUser = Depends(require_admin),
+) -> Dict[str, Any]:
     """
     Get summary data for the admin dashboard.
 
@@ -474,7 +501,7 @@ async def get_dashboard_summary() -> Dict[str, Any]:
         "data": {
             "insights": insight_stats,
             "vendors": vendor_stats,
-            "last_updated": datetime.now().isoformat(),
+            "last_updated": datetime.utcnow().isoformat(),
         }
     }
 
@@ -561,7 +588,9 @@ def parse_product_insight_markdown(filepath: str) -> Optional[ProductInsightSumm
 
 
 @router.get("/product-insights")
-async def list_product_insights() -> ProductInsightsResponse:
+async def list_product_insights(
+    current_user: CurrentUser = Depends(require_admin),
+) -> ProductInsightsResponse:
     """
     List all product strategy insights from docs/video-insights/.
 
@@ -591,7 +620,10 @@ async def list_product_insights() -> ProductInsightsResponse:
 
 
 @router.get("/product-insights/{filename}")
-async def get_product_insight(filename: str) -> Dict[str, Any]:
+async def get_product_insight(
+    filename: str,
+    current_user: CurrentUser = Depends(require_admin),
+) -> Dict[str, Any]:
     """
     Get the full content of a specific product insight.
     """
@@ -622,7 +654,8 @@ async def get_product_insight(filename: str) -> Dict[str, Any]:
 @router.post("/product-insights/{filename}/toggle-action")
 async def toggle_product_insight_action(
     filename: str,
-    action_index: int = Query(..., description="Index of the action to toggle")
+    action_index: int = Query(..., description="Index of the action to toggle"),
+    current_user: CurrentUser = Depends(require_admin),
 ) -> Dict[str, Any]:
     """
     Toggle the completion status of an action item in a product insight.

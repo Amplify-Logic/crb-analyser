@@ -146,6 +146,29 @@ class TestROICalculatorSkill:
         # Medium confidence = 0.85 factor
         assert metrics["roi_adjusted"] == round(metrics["roi_raw"] * 0.85, 0)
 
+    def test_negative_roi_not_capped(self):
+        """Test that negative ROI is preserved, not capped to 0."""
+        skill = ROICalculatorSkill()
+
+        financial = {
+            "yearly_savings": 3000,     # Low savings
+            "yearly_cost": 6000,        # High ongoing cost
+            "implementation_cost": 5000, # High implementation cost
+        }
+
+        finding = {"id": "neg-roi-test", "confidence": "medium"}
+
+        metrics = skill._calculate_roi_metrics(financial, finding)
+
+        # Net annual = 3000 - 6000 = -3000
+        # First year investment = 5000 + 6000 = 11000
+        # ROI = (-3000 / 11000) * 100 = -27.3%
+        assert metrics["roi_raw"] < 0, "Negative ROI should not be capped to 0"
+        assert metrics["roi_adjusted"] < 0, "Adjusted ROI should also be negative"
+        assert metrics["roi_warning"] is not None, "Warning should be set for negative ROI"
+        assert "negative" in metrics["roi_warning"].lower()
+        assert metrics["payback_months"] == 60  # Capped at 5 years for negative net annual
+
     def test_calculate_sensitivity(self):
         """Test sensitivity analysis generation."""
         skill = ROICalculatorSkill()
@@ -219,13 +242,58 @@ class TestROICalculatorSkill:
             "automation_efficiency": 0.70,
         }
 
+        # Default currency symbol (EUR)
         breakdown = skill._generate_breakdown(time_savings, financial, roi_metrics, company_data)
 
         assert "TIME SAVINGS" in breakdown
         assert "FINANCIAL VALUE" in breakdown
         assert "ROI CALCULATION" in breakdown
         assert "THREE-YEAR PROJECTION" in breakdown
-        assert "€50" in breakdown  # Hourly rate
+        assert "\u20ac50" in breakdown  # Hourly rate with EUR symbol
+
+        # Custom currency symbol (GBP)
+        breakdown_gbp = skill._generate_breakdown(
+            time_savings, financial, roi_metrics, company_data, currency_symbol="\u00a3"
+        )
+        assert "\u00a350" in breakdown_gbp  # Hourly rate with GBP symbol
+        assert "\u20ac" not in breakdown_gbp  # No EUR symbol
+
+    def test_generate_breakdown_negative_roi(self):
+        """Test calculation breakdown includes NOT RECOMMENDED for negative ROI."""
+        skill = ROICalculatorSkill()
+
+        time_savings = {
+            "raw_hours_before_efficiency": 2.0,
+            "hours_per_week": 1.4,
+            "hours_per_month": 6.1,
+            "hours_per_year": 67.2,
+        }
+        financial = {
+            "monthly_savings": 305,
+            "yearly_savings": 3360,
+            "implementation_cost": 5000,
+            "monthly_cost": 500,
+            "yearly_cost": 6000,
+            "three_year_gross_savings": 10080,
+            "three_year_total_cost": 23000,
+            "three_year_net": -12920,
+        }
+        roi_metrics = {
+            "roi_raw": -24,
+            "roi_adjusted": -20,
+            "confidence_factor": 0.85,
+            "payback_months": 60,
+            "net_annual_benefit": -2640,
+        }
+        company_data = {
+            "hourly_rate": 50,
+            "automation_efficiency": 0.70,
+        }
+
+        breakdown = skill._generate_breakdown(time_savings, financial, roi_metrics, company_data)
+
+        assert "NOT RECOMMENDED" in breakdown
+        assert "-24%" in breakdown  # Negative ROI shown
 
     @pytest.mark.asyncio
     async def test_skill_execution_success(self):
@@ -321,6 +389,126 @@ class TestROICalculatorSkill:
         # 5.6 * 4.33 = 24.25 hrs/month
         # 24.25 * €100 = €2425
         assert result.data["financial_impact"]["monthly_savings"] > 2000
+
+
+    @pytest.mark.asyncio
+    async def test_is_not_recommended_flag_on_negative_roi(self):
+        """Test that is_not_recommended is set when ROI is negative."""
+        mock_client = MagicMock()
+        mock_response = MagicMock()
+        mock_response.content = [MagicMock(text='{"hours_per_week": 2, "reasoning": "minimal savings"}')]
+        mock_client.messages.create.return_value = mock_response
+
+        skill = ROICalculatorSkill(client=mock_client)
+
+        context = SkillContext(
+            industry="dental",
+            quiz_answers={"hourly_rate": 30},
+            metadata={
+                "finding": {
+                    "id": "finding-neg",
+                    "title": "Marginal improvement",
+                    "hours_per_week": 2,  # Very low savings
+                    "confidence": "medium",
+                },
+                "recommendation": {
+                    "our_recommendation": "best_in_class",
+                    "options": {
+                        "best_in_class": {
+                            "implementation_cost": 10000,
+                            "monthly_cost": 500,  # High monthly cost
+                        }
+                    }
+                },
+                "company_context": {},
+            }
+        )
+
+        result = await skill.run(context)
+        assert result.success is True
+        assert result.data["is_not_recommended"] is True
+        assert result.data["roi_percentage"] < 0
+        assert "not_recommended_reason" in result.data
+        assert "NOT recommended" in result.data["not_recommended_reason"]
+
+    @pytest.mark.asyncio
+    async def test_is_not_recommended_flag_on_positive_roi(self):
+        """Test that is_not_recommended is false when ROI is positive."""
+        mock_client = MagicMock()
+        mock_response = MagicMock()
+        mock_response.content = [MagicMock(text='{"hours_per_week": 10, "reasoning": "good savings"}')]
+        mock_client.messages.create.return_value = mock_response
+
+        skill = ROICalculatorSkill(client=mock_client)
+
+        context = SkillContext(
+            industry="dental",
+            quiz_answers={"hourly_rate": 50},
+            metadata={
+                "finding": {
+                    "id": "finding-pos",
+                    "title": "Good improvement",
+                    "hours_per_week": 10,
+                    "confidence": "high",
+                },
+                "recommendation": {
+                    "our_recommendation": "off_the_shelf",
+                    "options": {
+                        "off_the_shelf": {
+                            "implementation_cost": 500,
+                            "monthly_cost": 50,
+                        }
+                    }
+                },
+                "company_context": {},
+            }
+        )
+
+        result = await skill.run(context)
+        assert result.success is True
+        assert result.data["is_not_recommended"] is False
+        assert result.data["roi_percentage"] > 0
+        assert "not_recommended_reason" not in result.data
+
+    @pytest.mark.asyncio
+    async def test_currency_symbol_in_breakdown(self):
+        """Test that currency symbol from context is used in breakdown."""
+        mock_client = MagicMock()
+        mock_response = MagicMock()
+        mock_response.content = [MagicMock(text='{"hours_per_week": 10, "reasoning": "test"}')]
+        mock_client.messages.create.return_value = mock_response
+
+        skill = ROICalculatorSkill(client=mock_client)
+
+        context = SkillContext(
+            industry="dental",
+            currency="GBP",
+            quiz_answers={"hourly_rate": 40},
+            metadata={
+                "finding": {
+                    "id": "finding-gbp",
+                    "title": "UK practice scheduling",
+                    "hours_per_week": 10,
+                    "confidence": "medium",
+                },
+                "recommendation": {
+                    "our_recommendation": "off_the_shelf",
+                    "options": {
+                        "off_the_shelf": {
+                            "implementation_cost": 500,
+                            "monthly_cost": 50,
+                        }
+                    }
+                },
+                "company_context": {},
+            }
+        )
+
+        result = await skill.run(context)
+        assert result.success is True
+        breakdown = result.data["calculation_breakdown"]
+        assert "\u00a3" in breakdown  # GBP symbol in breakdown
+        assert "\u20ac" not in breakdown  # No EUR symbol
 
 
 class TestROICalculatorIntegration:

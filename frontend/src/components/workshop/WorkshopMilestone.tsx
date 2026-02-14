@@ -8,6 +8,7 @@
 
 import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
+import { logger } from '../../utils/logger'
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8383'
 
@@ -120,7 +121,7 @@ export default function WorkshopMilestone({
           dataGaps: data.data_gaps || [],
         })
       } catch (err) {
-        console.error('Milestone error:', err)
+        logger.error('Milestone error:', err)
         setError('Failed to generate summary. Please try again.')
       } finally {
         setIsLoading(false)
@@ -150,7 +151,7 @@ export default function WorkshopMilestone({
 
       onContinue()
     } catch (err) {
-      console.error('Feedback error:', err)
+      logger.error('Feedback error:', err)
       // Continue anyway
       onContinue()
     } finally {

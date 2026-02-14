@@ -6,6 +6,7 @@
 
 import React, { createContext, useContext, useState, useEffect, useCallback, useMemo } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
+import { logger } from '../utils/logger'
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8383';
 
@@ -72,7 +73,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         sessionStorage.removeItem('crb_workspace_id');
       }
     } catch (error) {
-      console.error('Failed to fetch user:', error);
+      logger.error('Failed to fetch user:', error);
       setUser(null);
     } finally {
       setLoading(false);
@@ -108,7 +109,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       const from = (location.state as { from?: { pathname: string } })?.from?.pathname || '/dashboard';
       navigate(from, { replace: true });
     } catch (error) {
-      console.error('Login error:', error);
+      logger.error('Login error:', error);
       throw error;
     }
   }, [navigate, fetchUser, location.state]);
@@ -140,7 +141,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 
       return data.user;
     } catch (error) {
-      console.error('Signup error:', error);
+      logger.error('Signup error:', error);
       throw error;
     }
   }, [navigate, fetchUser]);
@@ -156,7 +157,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         },
       });
     } catch (error) {
-      console.error('Logout error:', error);
+      logger.error('Logout error:', error);
     } finally {
       setUser(null);
       sessionStorage.removeItem('crb_workspace_id');

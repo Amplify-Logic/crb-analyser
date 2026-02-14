@@ -7,6 +7,7 @@
 
 import { useState, useEffect } from 'react'
 import apiClient from '../../services/apiClient'
+import { logger } from '../../utils/logger'
 
 const API_BASE = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8383'
 
@@ -77,12 +78,12 @@ export default function VendorResearchButtons({
       if (category) params.set('category', category)
       if (industry) params.set('industry', industry)
 
-      console.log('[VendorResearch] Fetching stale count...', { category, industry })
+      logger.log('[VendorResearch] Fetching stale count...', { category, industry })
       const response = await apiClient.get<{ count: number }>(`/api/admin/research/stale-count?${params}`)
-      console.log('[VendorResearch] Stale count:', response.data.count)
+      logger.log('[VendorResearch] Stale count:', response.data.count)
       setStaleCount(response.data.count)
     } catch (error) {
-      console.error('[VendorResearch] Failed to fetch stale count:', error)
+      logger.error('[VendorResearch] Failed to fetch stale count:', error)
     }
   }
 
@@ -130,7 +131,7 @@ export default function VendorResearchButtons({
         }
       }
     } catch (error) {
-      console.error('Refresh failed:', error)
+      logger.error('Refresh failed:', error)
       setRefreshProgress('Error: ' + (error as Error).message)
     } finally {
       setIsRefreshing(false)
@@ -206,7 +207,7 @@ export default function VendorResearchButtons({
         }
       }
     } catch (error) {
-      console.error('Discover failed:', error)
+      logger.error('Discover failed:', error)
       setDiscoverProgress('Error: ' + (error as Error).message)
     } finally {
       setIsDiscovering(false)
@@ -250,7 +251,7 @@ export default function VendorResearchButtons({
       fetchStaleCount()
       onComplete?.()
     } catch (error) {
-      console.error('Failed to apply updates:', error)
+      logger.error('Failed to apply updates:', error)
       alert('Failed to apply updates')
     }
   }
@@ -269,7 +270,7 @@ export default function VendorResearchButtons({
       setShowDiscoverModal(false)
       onComplete?.()
     } catch (error) {
-      console.error('Failed to add vendors:', error)
+      logger.error('Failed to add vendors:', error)
       alert('Failed to add vendors')
     }
   }

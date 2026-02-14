@@ -8,6 +8,7 @@
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import apiClient from '../../services/apiClient'
+import { logger } from '../../utils/logger'
 
 // Types
 interface SupportingData {
@@ -382,7 +383,7 @@ export default function InsightExtractor() {
       setExtractionNotes(response.data.data.extraction_notes)
       setStep('review')
     } catch (err: unknown) {
-      console.error('Extraction failed:', err)
+      logger.error('Extraction failed:', err)
       // Handle both Error instances and ApiError objects from apiClient
       const message =
         (err as { message?: string })?.message ||
@@ -418,7 +419,7 @@ export default function InsightExtractor() {
       setSaveResult(response.data.data)
       setStep('done')
     } catch (err: unknown) {
-      console.error('Save failed:', err)
+      logger.error('Save failed:', err)
       // Handle both Error instances and ApiError objects from apiClient
       const message =
         (err as { message?: string })?.message ||

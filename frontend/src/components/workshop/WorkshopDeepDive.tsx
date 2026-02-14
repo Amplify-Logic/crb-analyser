@@ -10,6 +10,7 @@ import { useState, useEffect, useRef } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import VoiceRecorder from '../voice/VoiceRecorder'
 import { sanitizeHtml } from '../../utils/sanitize'
+import { logger } from '../../utils/logger'
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8383'
 
@@ -116,7 +117,7 @@ Walk me through how this works today - what's the current process?`,
         setIsProcessing(false)
       }
     } catch (err) {
-      console.error('Voice processing error:', err)
+      logger.error('Voice processing error:', err)
       setIsProcessing(false)
     }
   }
@@ -179,7 +180,7 @@ Walk me through how this works today - what's the current process?`,
       }
 
     } catch (err) {
-      console.error('Message error:', err)
+      logger.error('Message error:', err)
       const fallback: Message = {
         id: `assistant-${Date.now()}`,
         role: 'assistant',

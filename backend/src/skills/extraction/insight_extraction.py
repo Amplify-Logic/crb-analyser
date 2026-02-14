@@ -57,7 +57,7 @@ class InsightExtractionSkill(LLMSkill[ExtractedInsights]):
     description = "Extract structured insights from raw content"
     version = "1.0.0"
 
-    default_model = "claude-sonnet-4-5-20250929"  # Claude Sonnet 4.5
+    default_task = "generate_findings"  # Balanced model for insight extraction (Sonnet for quick tier)
     default_max_tokens = 8000
 
     EXTRACTION_SYSTEM_PROMPT = """You are an expert at extracting valuable insights for a SPECIFIC audience.
@@ -265,7 +265,7 @@ Quality over quantity. Extract 3-8 highly relevant insights, not 15 marginal one
 
         return ExtractedInsights(
             source=source,
-            extracted_at=datetime.now().strftime("%Y-%m-%d"),
+            extracted_at=datetime.utcnow().strftime("%Y-%m-%d"),
             insights=insights,
             extraction_notes=extraction_notes.strip() if extraction_notes else None,
         )
@@ -334,7 +334,7 @@ Quality over quantity. Extract 3-8 highly relevant insights, not 15 marginal one
         )
 
         return Insight(
-            id=raw.get("id", f"insight-{datetime.now().timestamp()}"),
+            id=raw.get("id", f"insight-{datetime.utcnow().timestamp()}"),
             type=InsightType(raw.get("type", "trend")),
             title=raw.get("title", "Untitled"),
             content=raw.get("content", ""),

@@ -508,7 +508,7 @@ async def download_public_pdf(report_id: str):
         except Exception as storage_err:
             logger.warning(f"Failed to cache PDF in storage: {storage_err}")
 
-        filename = f"CRB_Report_{datetime.now().strftime('%Y%m%d')}.pdf"
+        filename = f"CRB_Report_{datetime.utcnow().strftime('%Y%m%d')}.pdf"
 
         return StreamingResponse(
             io.BytesIO(pdf_bytes),
@@ -640,7 +640,7 @@ async def download_pdf(
             )
 
         client_name = audit.get("clients", {}).get("name", "client")
-        filename = f"CRB_Report_{client_name}_{datetime.now().strftime('%Y%m%d')}.pdf"
+        filename = f"CRB_Report_{client_name}_{datetime.utcnow().strftime('%Y%m%d')}.pdf"
 
         # Check if PDF is already cached in storage
         storage = get_storage_service()

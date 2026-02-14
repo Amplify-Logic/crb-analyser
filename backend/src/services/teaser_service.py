@@ -100,7 +100,7 @@ def _is_stale(verified_date: str, months: int = 18) -> bool:
         else:  # YYYY-MM-DD
             check_date = datetime.fromisoformat(verified_date.replace("Z", ""))
 
-        cutoff = datetime.now() - relativedelta(months=months)
+        cutoff = datetime.utcnow() - relativedelta(months=months)
         return check_date < cutoff
     except (ValueError, AttributeError):
         return True  # If we can't parse, consider it stale

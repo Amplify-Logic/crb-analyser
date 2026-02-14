@@ -52,7 +52,7 @@ class AcknowledgmentGeneratorSkill(LLMSkill[Dict[str, Any]]):
     version = "1.0.0"
 
     requires_llm = True
-    default_model = "claude-haiku-4-5-20251001"  # Fast model for quick responses
+    default_task = "classify_finding"  # Fast model for quick acknowledgment generation
     default_max_tokens = 150
 
     def __init__(self, client=None):

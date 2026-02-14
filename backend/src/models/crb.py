@@ -78,8 +78,13 @@ class CostBreakdown(BaseModel):
     """
     Complete cost analysis for a recommendation.
 
-    Includes one-time implementation costs (DIY vs professional),
-    ongoing monthly costs, and hidden costs that affect true ROI.
+    Covers all 6 cost dimensions from the CRB framework:
+    1. Financial Cost - implementation (DIY vs professional) + ongoing monthly costs
+    2. Time Cost - captured via hidden costs (training_hours, productivity_dip_weeks)
+    3. Opportunity Cost - what you can't do while implementing this
+    4. Complexity Cost - integration complexity, learning curve, maintenance burden
+    5. Risk Cost - captured separately via RiskAssessment
+    6. Brand/Trust Cost - risk to brand/customer trust during transition
     """
     implementation_diy: Optional[ImplementationCostDIY] = Field(
         None,
@@ -96,6 +101,38 @@ class CostBreakdown(BaseModel):
     hidden: HiddenCosts = Field(
         default_factory=HiddenCosts,
         description="Hidden costs (training, productivity)"
+    )
+
+    # === Additional CRB cost dimensions (6C framework) ===
+
+    opportunity_cost: float = Field(
+        default=0,
+        ge=0,
+        description="Estimated EUR value of what you can't do while implementing this (e.g., delayed projects, lost revenue)"
+    )
+    opportunity_cost_description: str = Field(
+        default="",
+        description="Description of the opportunity cost (e.g., 'Delays CRM migration by 3 months')"
+    )
+
+    complexity_cost: float = Field(
+        default=0,
+        ge=0,
+        description="Estimated EUR cost of integration complexity, learning curve, and maintenance burden"
+    )
+    complexity_cost_description: str = Field(
+        default="",
+        description="Description of complexity factors (e.g., 'Requires connecting 3 systems, ongoing API maintenance')"
+    )
+
+    brand_trust_cost: float = Field(
+        default=0,
+        ge=0,
+        description="Estimated EUR cost of risk to brand/customer trust during transition"
+    )
+    brand_trust_cost_description: str = Field(
+        default="",
+        description="Description of brand/trust impact (e.g., 'Customers may experience slower responses during 2-week migration')"
     )
 
     @computed_field
@@ -119,6 +156,12 @@ class CostBreakdown(BaseModel):
     def total_monthly(self) -> float:
         """Total monthly ongoing cost."""
         return self.monthly_ongoing.total
+
+    @computed_field
+    @property
+    def total_additional_costs(self) -> float:
+        """Total of the three additional cost dimensions (opportunity + complexity + brand/trust)."""
+        return self.opportunity_cost + self.complexity_cost + self.brand_trust_cost
 
 
 class RiskAssessment(BaseModel):

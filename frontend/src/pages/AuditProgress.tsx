@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from 'react'
 import { useParams, useNavigate, Link } from 'react-router-dom'
 import apiClient from '../services/apiClient'
+import { logger } from '../utils/logger'
 
 interface Audit {
   id: string
@@ -122,7 +123,7 @@ export default function AuditProgress() {
           navigate(`/audit/${auditId}/report`)
         }
       } catch (err) {
-        console.error('Failed to parse SSE data:', err)
+        logger.error('Failed to parse SSE data:', err)
       }
     }
 

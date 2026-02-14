@@ -29,8 +29,96 @@ logger = logging.getLogger(__name__)
 # Constants for realistic validation
 MAX_CREDIBLE_ROI_PERCENT = 500  # Above this requires explanation
 MIN_CREDIBLE_PAYBACK_MONTHS = 3  # Below this is exceptional
-DEFAULT_HOURLY_RATE_EUR = 50  # Business owner time
+DEFAULT_HOURLY_RATE_EUR = 50  # Fallback when industry unknown
 PROFESSIONAL_COST_MULTIPLIER = 2.5
+
+# Industry-specific default hourly rates (EUR)
+# These represent blended average staff costs for each industry,
+# used when the user does not provide an explicit hourly rate or salary.
+INDUSTRY_HOURLY_RATES_EUR: Dict[str, float] = {
+    "professional-services": 125,  # Legal/accounting/consulting avg
+    "professional_services": 125,  # Alternate slug format
+    "dental": 85,                  # Dental practice staff avg
+    "ecommerce": 35,              # E-commerce operations avg
+    "e-commerce": 35,             # Alternate slug format
+    "home-services": 65,          # Trades avg
+    "home_services": 65,          # Alternate slug format
+    "recruiting": 75,             # Recruiter avg
+    "coaching": 100,              # Business coaching avg
+    "veterinary": 70,             # Vet practice avg
+    "music-studios": 55,          # Studio engineer avg
+    "music_studios": 55,          # Alternate slug format
+    "default": 50,                # Fallback
+}
+
+# Standard working hours per year for salary-to-hourly conversion
+ANNUAL_WORKING_HOURS = 2080  # 40 hours/week * 52 weeks
+
+
+def get_effective_hourly_rate(
+    industry: str = "",
+    quiz_answers: Optional[Dict[str, Any]] = None,
+) -> tuple[float, str]:
+    """
+    Determine the most accurate hourly rate from available data.
+
+    Resolution order:
+    1. Explicit hourly_rate from quiz answers
+    2. Salary from quiz answers (converted via / 2080)
+    3. Industry-specific default from INDUSTRY_HOURLY_RATES_EUR
+    4. Global fallback DEFAULT_HOURLY_RATE_EUR (50)
+
+    Args:
+        industry: Industry slug (e.g., "dental", "professional-services")
+        quiz_answers: Dict of quiz/interview answers
+
+    Returns:
+        Tuple of (hourly_rate, source_description) where source_description
+        explains where the rate came from for report transparency.
+    """
+    answers = quiz_answers or {}
+
+    # 1. Explicit hourly rate from quiz
+    explicit_rate = answers.get("hourly_rate") or answers.get("labor_cost")
+    if explicit_rate:
+        try:
+            rate = float(explicit_rate)
+            if 5 <= rate <= 500:  # Sanity check
+                return rate, "provided by user"
+            else:
+                logger.warning(
+                    "hourly_rate out of range",
+                    extra={"hourly_rate": rate, "industry": industry},
+                )
+        except (ValueError, TypeError):
+            logger.warning(
+                "invalid hourly_rate value",
+                extra={"hourly_rate": explicit_rate, "industry": industry},
+            )
+
+    # 2. Salary conversion
+    salary = answers.get("annual_salary") or answers.get("salary")
+    if salary:
+        try:
+            salary_val = float(salary)
+            if salary_val > 0:
+                rate = round(salary_val / ANNUAL_WORKING_HOURS, 2)
+                if 5 <= rate <= 500:
+                    return rate, f"derived from annual salary ({salary_val:,.0f} / {ANNUAL_WORKING_HOURS})"
+        except (ValueError, TypeError):
+            logger.warning(
+                "invalid salary value",
+                extra={"salary": salary, "industry": industry},
+            )
+
+    # 3. Industry default
+    industry_lower = industry.lower().strip() if industry else ""
+    if industry_lower in INDUSTRY_HOURLY_RATES_EUR:
+        rate = INDUSTRY_HOURLY_RATES_EUR[industry_lower]
+        return rate, f"industry default for {industry}"
+
+    # 4. Global fallback
+    return DEFAULT_HOURLY_RATE_EUR, "default estimate (no industry-specific data available)"
 
 
 class CRBCalculationService:
@@ -50,6 +138,13 @@ class CRBCalculationService:
         monthly_costs: List[Dict[str, Any]],
         hidden_training_hours: float = 2,
         hidden_productivity_dip_weeks: float = 1,
+        # 6C additional cost dimensions
+        opportunity_cost: float = 0,
+        opportunity_cost_description: str = "",
+        complexity_cost: float = 0,
+        complexity_cost_description: str = "",
+        brand_trust_cost: float = 0,
+        brand_trust_cost_description: str = "",
         # Risk inputs
         implementation_complexity: int = 2,
         complexity_reason: str = "Standard API integration",
@@ -65,6 +160,8 @@ class CRBCalculationService:
         confidence_reason: str = "",
         # Additional
         data_gaps: Optional[List[str]] = None,
+        # Hourly rate override (if None, uses DEFAULT_HOURLY_RATE_EUR for backward compat)
+        hourly_rate: Optional[float] = None,
     ) -> CRBAnalysis:
         """
         Build a complete CRB analysis for a Connect path.
@@ -91,14 +188,16 @@ class CRBCalculationService:
             Complete CRBAnalysis
         """
         # Build cost breakdown
+        effective_rate = hourly_rate if hourly_rate is not None else DEFAULT_HOURLY_RATE_EUR
+
         diy_cost = ImplementationCostDIY(
             hours=implementation_hours,
-            hourly_rate=DEFAULT_HOURLY_RATE_EUR,
+            hourly_rate=effective_rate,
             description="DIY implementation via n8n/Make/custom code"
         )
 
         professional_cost = ImplementationCostProfessional(
-            estimate=implementation_hours * DEFAULT_HOURLY_RATE_EUR * PROFESSIONAL_COST_MULTIPLIER,
+            estimate=implementation_hours * effective_rate * PROFESSIONAL_COST_MULTIPLIER,
             source=f"Estimated at {PROFESSIONAL_COST_MULTIPLIER}x DIY (agency/freelancer rates)"
         )
 
@@ -114,7 +213,13 @@ class CRBCalculationService:
             hidden=HiddenCosts(
                 training_hours=hidden_training_hours,
                 productivity_dip_weeks=hidden_productivity_dip_weeks
-            )
+            ),
+            opportunity_cost=opportunity_cost,
+            opportunity_cost_description=opportunity_cost_description,
+            complexity_cost=complexity_cost,
+            complexity_cost_description=complexity_cost_description,
+            brand_trust_cost=brand_trust_cost,
+            brand_trust_cost_description=brand_trust_cost_description,
         )
 
         # Build risk assessment
@@ -166,6 +271,13 @@ class CRBCalculationService:
         migration_cost: float = 0,
         hidden_training_hours: float = 4,
         hidden_productivity_dip_weeks: float = 2,
+        # 6C additional cost dimensions
+        opportunity_cost: float = 0,
+        opportunity_cost_description: str = "",
+        complexity_cost: float = 0,
+        complexity_cost_description: str = "",
+        brand_trust_cost: float = 0,
+        brand_trust_cost_description: str = "",
         # Risk inputs
         implementation_complexity: int = 3,
         complexity_reason: str = "Requires data migration",
@@ -208,7 +320,13 @@ class CRBCalculationService:
                 training_hours=hidden_training_hours,
                 productivity_dip_weeks=hidden_productivity_dip_weeks,
                 notes="New software often requires more training than connecting existing tools"
-            )
+            ),
+            opportunity_cost=opportunity_cost,
+            opportunity_cost_description=opportunity_cost_description,
+            complexity_cost=complexity_cost,
+            complexity_cost_description=complexity_cost_description,
+            brand_trust_cost=brand_trust_cost,
+            brand_trust_cost_description=brand_trust_cost_description,
         )
 
         # Build risk assessment
@@ -507,4 +625,6 @@ __all__ = [
     "build_connect_crb",
     "build_replace_crb",
     "validate_crb",
+    "get_effective_hourly_rate",
+    "INDUSTRY_HOURLY_RATES_EUR",
 ]

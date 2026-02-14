@@ -6,6 +6,7 @@
 
 import { useState, useEffect } from 'react'
 import apiClient from '../../services/apiClient'
+import { logger } from '../../utils/logger'
 
 interface EmbeddingStats {
   total_items: number
@@ -58,7 +59,7 @@ export default function KnowledgeStats() {
       const { data } = await apiClient.get<EmbeddingStats>('/api/admin/knowledge/stats/embeddings')
       setStats(data)
     } catch (err) {
-      console.error('Failed to load stats:', err)
+      logger.error('Failed to load stats:', err)
     } finally {
       setLoading(false)
     }
@@ -75,7 +76,7 @@ export default function KnowledgeStats() {
       const { data } = await apiClient.get<{ results: SearchResult[] }>(`/api/admin/knowledge/test-search?${params}`)
       setSearchResults(data.results || [])
     } catch (err) {
-      console.error('Search failed:', err)
+      logger.error('Search failed:', err)
     } finally {
       setSearching(false)
     }
@@ -89,7 +90,7 @@ export default function KnowledgeStats() {
       await apiClient.post('/api/admin/knowledge/embed/all')
       await loadStats()
     } catch (err) {
-      console.error('Re-embed failed:', err)
+      logger.error('Re-embed failed:', err)
     } finally {
       setReembedding(null)
     }
@@ -101,7 +102,7 @@ export default function KnowledgeStats() {
       await apiClient.post('/api/admin/knowledge/embed/outdated')
       await loadStats()
     } catch (err) {
-      console.error('Re-embed failed:', err)
+      logger.error('Re-embed failed:', err)
     } finally {
       setReembedding(null)
     }
@@ -113,7 +114,7 @@ export default function KnowledgeStats() {
       await apiClient.post(`/api/admin/knowledge/embed/type/${type}`)
       await loadStats()
     } catch (err) {
-      console.error('Re-embed failed:', err)
+      logger.error('Re-embed failed:', err)
     } finally {
       setReembedding(null)
     }

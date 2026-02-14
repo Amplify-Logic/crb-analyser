@@ -8,6 +8,7 @@
 import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import apiClient from '../../services/apiClient'
+import { logger } from '../../utils/logger'
 
 interface DashboardStats {
   insights: {
@@ -168,7 +169,7 @@ export default function AdminDashboard() {
       const response = await apiClient.get<{ data: DashboardStats }>('/api/admin/insights/dashboard/summary')
       setStats(response.data.data)
     } catch (err) {
-      console.error('Failed to fetch dashboard stats:', err)
+      logger.error('Failed to fetch dashboard stats:', err)
       setError('Failed to load dashboard data')
     } finally {
       setLoading(false)
@@ -180,7 +181,7 @@ export default function AdminDashboard() {
       const response = await apiClient.get<{ data: ProductInsight[] }>('/api/admin/insights/product-insights')
       setProductInsights(response.data.data)
     } catch (err) {
-      console.error('Failed to fetch product insights:', err)
+      logger.error('Failed to fetch product insights:', err)
     }
   }
 
@@ -189,7 +190,7 @@ export default function AdminDashboard() {
       await apiClient.post(`/api/admin/insights/product-insights/${filename}/toggle-action?action_index=${actionIndex}`)
       fetchProductInsights() // Refresh
     } catch (err) {
-      console.error('Failed to toggle action:', err)
+      logger.error('Failed to toggle action:', err)
     }
   }
 

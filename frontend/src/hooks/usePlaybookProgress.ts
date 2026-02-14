@@ -7,6 +7,7 @@
 
 import { useState, useEffect, useCallback, useRef } from 'react'
 import apiClient from '../services/apiClient'
+import { logger } from '../utils/logger'
 
 interface TaskProgress {
   taskId: string
@@ -77,7 +78,7 @@ export function usePlaybookProgress({
         }
         setProgress(initialProgress)
       } catch (err) {
-        console.error('Failed to load playbook progress:', err)
+        logger.error('Failed to load playbook progress:', err)
         // Don't fail - just start with empty progress
       } finally {
         setIsLoading(false)
@@ -121,7 +122,7 @@ export function usePlaybookProgress({
           completed: newCompleted
         })
       } catch (err) {
-        console.error('Failed to sync task progress:', err)
+        logger.error('Failed to sync task progress:', err)
         // Revert on error
         setProgress(prev => ({
           ...prev,

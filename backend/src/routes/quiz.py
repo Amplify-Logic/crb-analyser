@@ -12,9 +12,11 @@ import logging
 from datetime import datetime, timedelta, timezone
 from typing import Optional, Dict, Any, List
 
-from fastapi import APIRouter, HTTPException, status, Query
+from fastapi import APIRouter, HTTPException, Request, status, Query
 from fastapi.responses import StreamingResponse
 from pydantic import BaseModel, EmailStr
+
+from src.middleware.security import email_limiter
 
 from src.config.supabase_client import get_async_supabase
 from src.config.redis_client import get_redis
@@ -564,12 +566,27 @@ async def complete_quiz_session(session_id: str):
 
 
 @router.get("/sessions/resume", response_model=ResumeResponse)
-async def resume_quiz_session(email: str = Query(..., description="Email to look up")):
+async def resume_quiz_session(
+    request: Request,
+    email: str = Query(..., description="Email to look up"),
+):
     """
     Find an in-progress quiz session for an email.
 
     Allows users to resume where they left off.
+
+    Rate limited to 5 attempts per email per 15 minutes to prevent
+    email enumeration attacks.
     """
+    # Per-email rate limiting: max 5 attempts per email per 15 minutes
+    await email_limiter.check(
+        request,
+        email,
+        limit=5,
+        window=900,  # 15 minutes
+        endpoint="quiz_resume",
+    )
+
     try:
         supabase = await get_async_supabase()
 
@@ -580,6 +597,7 @@ async def resume_quiz_session(email: str = Query(..., description="Email to look
         ).limit(1).execute()
 
         if not result.data:
+            # Return generic message to prevent email enumeration
             return ResumeResponse(has_progress=False)
 
         session = result.data[0]
@@ -609,6 +627,8 @@ async def resume_quiz_session(email: str = Query(..., description="Email to look
             )
         )
 
+    except HTTPException:
+        raise
     except Exception as e:
         logger.error(f"Resume lookup error: {e}")
         raise HTTPException(

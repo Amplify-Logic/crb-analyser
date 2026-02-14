@@ -2,6 +2,7 @@ import { useState, useEffect, useCallback } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import apiClient from '../services/apiClient'
 import VoiceRecorder from '../components/VoiceRecorder'
+import { logger } from '../utils/logger'
 
 interface Question {
   id: string
@@ -87,7 +88,7 @@ export default function Intake() {
         current_section: currentSection,
       })
     } catch (err) {
-      console.error('Failed to save progress:', err)
+      logger.error('Failed to save progress:', err)
     } finally {
       setSaving(false)
     }

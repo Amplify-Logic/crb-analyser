@@ -11,6 +11,7 @@
 
 import { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
+import { logger } from '../../utils/logger'
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8383'
 
@@ -247,7 +248,7 @@ export default function DevModePanel({
       setSubmitted(true)
       onFeedbackSubmitted?.()
     } catch (err) {
-      console.error('Failed to submit feedback:', err)
+      logger.error('Failed to submit feedback:', err)
       alert('Failed to submit feedback')
     } finally {
       setSubmitting(false)

@@ -530,8 +530,8 @@ class ReviewService:
                 match = re.search(r'\{[\s\S]*\}', text)
                 if match:
                     return json.loads(match.group())
-            except:
-                pass
+            except (json.JSONDecodeError, ValueError) as fallback_err:
+                logger.warning("json_fallback_parse_failed", error=str(fallback_err))
             return None
 
 

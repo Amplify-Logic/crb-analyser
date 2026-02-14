@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import { Link, useSearchParams, useNavigate } from 'react-router-dom'
 import apiClient from '../services/apiClient'
 import { Logo } from '../components/Logo'
+import { logger } from '../utils/logger'
 
 interface QuizResults {
   score: number
@@ -115,7 +116,7 @@ export default function Checkout() {
       // Redirect to Stripe checkout
       window.location.href = response.data.checkout_url
     } catch (err: any) {
-      console.error('Checkout error:', err)
+      logger.error('Checkout error:', err)
       setError(err.message || 'Failed to start checkout. Please try again.')
       setIsLoading(false)
     }

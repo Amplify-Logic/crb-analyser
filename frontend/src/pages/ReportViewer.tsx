@@ -22,6 +22,7 @@ import AutomationRoadmap from '../components/report/AutomationRoadmap'
 import usePlaybookProgress from '../hooks/usePlaybookProgress'
 import { Sidebar, SidebarItem } from '../components/report/Sidebar/Sidebar'
 import { ContentPanel } from '../components/report/ContentPanel/ContentPanel'
+import { logger } from '../utils/logger'
 
 // Premium skeleton loading component
 function SkeletonPulse({ className = '' }: { className?: string }) {
@@ -295,7 +296,7 @@ export default function ReportViewer() {
     isSyncing
   } = usePlaybookProgress({
     reportId: reportId || '',
-    onError: (err) => console.error('Playbook progress error:', err)
+    onError: (err) => logger.error('Playbook progress error:', err)
   })
 
   // Build initial completed tasks map for PlaybookTab
@@ -364,7 +365,7 @@ export default function ReportViewer() {
         setReport(response.data as Report)
       }
     } catch (err: any) {
-      console.error('Failed to load report:', err)
+      logger.error('Failed to load report:', err)
       setError(err.response?.data?.detail || 'Failed to load report')
     } finally {
       setLoading(false)

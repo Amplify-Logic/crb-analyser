@@ -9,6 +9,7 @@ import { useState, useEffect, useCallback } from 'react'
 import { useSearchParams } from 'react-router-dom'
 import apiClient from '../../services/apiClient'
 import VendorResearchButtons from '../../components/admin/VendorResearchButtons'
+import { logger } from '../../utils/logger'
 
 // Types
 interface Vendor {
@@ -830,7 +831,7 @@ function IndustryTierManager({
       )
       setTiers(data)
     } catch (err) {
-      console.error('Failed to load tiers:', err)
+      logger.error('Failed to load tiers:', err)
     } finally {
       setLoading(false)
     }
@@ -854,7 +855,7 @@ function IndustryTierManager({
       ])
       setSearchResults((data.vendors || []).filter((v) => !tierVendorIds.has(v.id)))
     } catch (err) {
-      console.error('Search failed:', err)
+      logger.error('Search failed:', err)
     } finally {
       setSearching(false)
     }
@@ -870,7 +871,7 @@ function IndustryTierManager({
       setSearchResults([])
       loadTiers()
     } catch (err) {
-      console.error('Failed to add vendor to tier:', err)
+      logger.error('Failed to add vendor to tier:', err)
     }
   }
 
@@ -880,7 +881,7 @@ function IndustryTierManager({
       await apiClient.delete(`/api/admin/vendors/industries/${selectedIndustry}/tiers/${vendorId}`)
       loadTiers()
     } catch (err) {
-      console.error('Failed to remove vendor:', err)
+      logger.error('Failed to remove vendor:', err)
     }
   }
 
@@ -894,7 +895,7 @@ function IndustryTierManager({
       setEditingVendor(null)
       loadTiers()
     } catch (err) {
-      console.error('Failed to update tier:', err)
+      logger.error('Failed to update tier:', err)
     }
   }
 
@@ -1257,7 +1258,7 @@ export default function VendorAdmin() {
       const { data } = await apiClient.get<{ categories: Category[] }>('/api/admin/vendors/categories')
       setCategories(data.categories || [])
     } catch (err) {
-      console.error('Failed to load categories:', err)
+      logger.error('Failed to load categories:', err)
     }
   }
 
@@ -1266,7 +1267,7 @@ export default function VendorAdmin() {
       const { data } = await apiClient.get<{ industries: Industry[] }>('/api/admin/vendors/industries')
       setIndustries(data.industries || [])
     } catch (err) {
-      console.error('Failed to load industries:', err)
+      logger.error('Failed to load industries:', err)
     }
   }
 
@@ -1290,7 +1291,7 @@ export default function VendorAdmin() {
       setVendors(data.vendors || [])
       setTotal(data.total || 0)
     } catch (err) {
-      console.error('Failed to load vendors:', err)
+      logger.error('Failed to load vendors:', err)
     } finally {
       setLoading(false)
     }
@@ -1301,7 +1302,7 @@ export default function VendorAdmin() {
       const { data } = await apiClient.get<VendorStats>('/api/admin/vendors/stats')
       setStats(data)
     } catch (err) {
-      console.error('Failed to load stats:', err)
+      logger.error('Failed to load stats:', err)
     }
   }
 
@@ -1336,7 +1337,7 @@ export default function VendorAdmin() {
       setSemanticResults(data.vendors || [])
       setTotal(data.total || 0)
     } catch (err) {
-      console.error('Semantic search failed:', err)
+      logger.error('Semantic search failed:', err)
       setSemanticResults([])
     } finally {
       setIsSemanticSearching(false)
@@ -1361,7 +1362,7 @@ export default function VendorAdmin() {
       setSelectedVendor(data.vendor)
       setIsEditing(true)
     } catch (err) {
-      console.error('Failed to load vendor:', err)
+      logger.error('Failed to load vendor:', err)
     }
   }
 
@@ -1397,7 +1398,7 @@ export default function VendorAdmin() {
       await apiClient.post(`/api/admin/vendors/${vendor.slug}/verify`)
       loadVendors()
     } catch (err) {
-      console.error('Failed to verify vendor:', err)
+      logger.error('Failed to verify vendor:', err)
     }
   }
 
