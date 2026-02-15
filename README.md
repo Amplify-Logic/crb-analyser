@@ -14,7 +14,7 @@ We deliver consultant-quality business audits at 1/10th the cost:
 ## Target Market
 
 Passion-driven service businesses ($500K-$20M revenue):
-- **Primary:** Professional Services, Home Services, Dental
+- **Primary:** Professional Services, Dental, E-commerce
 - **Secondary:** Recruiting, Coaching, Veterinary
 - **Markets:** Netherlands, Germany, UK, Ireland
 
@@ -43,9 +43,9 @@ brew services start redis
 ### Reference
 | Doc | Purpose |
 |-----|---------|
-| [docs/ARCHITECTURE.md](./docs/ARCHITECTURE.md) | System architecture deep-dive |
-| [SETUP_PROMPT.md](./SETUP_PROMPT.md) | Full setup instructions |
-| [PRD.md](./PRD.md) | Original product requirements |
+| [FRAMEWORK.md](./FRAMEWORK.md) | CRB analysis methodology |
+| [docs/architecture/](./docs/architecture/) | System architecture deep-dive |
+| [.claude/reference/](./.claude/reference/) | Task-specific development guides |
 
 ### Session Continuity
 | Doc | Purpose |

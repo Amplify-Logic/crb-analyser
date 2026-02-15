@@ -30,19 +30,11 @@ AI-powered business audit service delivering Cost/Risk/Benefit analysis for AI i
 
 ### Pricing Structure
 
-| Tier | Price | Delivery | Findings | Report | Best For |
-|------|-------|----------|----------|--------|----------|
-| **Starter** | €147 | Instant | 5 | Summary PDF | Testing the water |
-| **Professional** | €697 | 24h | 15-20 | Full PDF + data | Most customers |
-| **Enterprise** | €2,997 | 1 week | 30+ | Full + call | Complex businesses |
+| Tier | Price | Includes | Delivery |
+|------|-------|----------|----------|
+| **CRB Report** | €147 | Quiz + 90-min workshop + human-reviewed report | 24-48 hours |
 
-### MVP Launch
-**Launch with:** Professional tier only
-**Rationale:** Higher value, better margins, forces quality
-
-### Early Adopter Pricing
-- Professional: €497 (first 20 customers)
-- Then: €697 standard
+> **Future tiers** planned after 50+ reports delivered (e.g., Report + Strategy Call, Implementation Sprint).
 
 ---
 

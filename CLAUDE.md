@@ -61,6 +61,9 @@ Load these ONLY when working on the relevant task type:
 | Report generation, findings | `.claude/reference/report-quality.md` |
 | Vendor database, research agents | `.claude/reference/vendor-management.md` |
 | Writing or fixing tests | `.claude/reference/testing.md` |
+| Database, migrations, env vars | `.claude/reference/database.md` |
+| Skills system, agent tools | `.claude/reference/skills.md` |
+| Knowledge base, curated insights | `.claude/reference/knowledge-base.md` |
 
 **Do NOT load all references.** Only load what's relevant to the current task.
 
@@ -141,7 +144,7 @@ created → in_progress → completed → payment_pending → paid → workshop_
 
 ## CRB Analysis Framework
 
-> **Full framework details** → [PRODUCT.md](./PRODUCT.md)
+> **Full framework details** → [PRODUCT.md](./PRODUCT.md) and [FRAMEWORK.md](./FRAMEWORK.md)
 
 Core principle: **The analysis must make the best option obvious.**
 
@@ -293,9 +296,6 @@ cd frontend && npm test
 | Base | `backend/src/skills/base.py` |
 | Registry | `backend/src/skills/registry.py` |
 | Vendor Matching | `backend/src/skills/analysis/vendor_matching.py` |
-| Quick Wins | `backend/src/skills/analysis/quick_win_identifier.py` |
-| Automation Summary | `backend/src/skills/report-generation/automation_summary.py` |
-| Insight Extraction | `backend/src/skills/extraction/insight_extraction.py` |
 | **Research Agents** | |
 | Discover | `backend/src/agents/research/discover.py` |
 | Refresh | `backend/src/agents/research/refresh.py` |
@@ -313,224 +313,23 @@ cd frontend && npm test
 | Auth Context | `frontend/src/contexts/AuthContext.tsx` |
 | Quiz Page | `frontend/src/pages/Quiz.tsx` |
 | Report Viewer | `frontend/src/pages/ReportViewer.tsx` |
-| Vendor Admin | `frontend/src/pages/admin/VendorAdmin.tsx` |
 | Admin Dashboard | `frontend/src/pages/admin/AdminDashboard.tsx` |
-| Insights Admin | `frontend/src/pages/admin/InsightsAdmin.tsx` |
-| Insight Extractor | `frontend/src/pages/admin/InsightExtractor.tsx` |
-| Automation Roadmap | `frontend/src/components/report/AutomationRoadmap.tsx` |
 
 ---
 
 ## Common Tasks
 
 ### Add a new API route
-1. Create file: `backend/src/routes/<name>.py`
-2. Define Pydantic models for request/response
-3. Add auth: `current_user = Depends(get_current_user)`
-4. Register in `main.py`: `app.include_router(router, prefix="/api/<name>")`
-5. Add tests: `backend/tests/test_<name>.py`
+→ See `.claude/reference/api-development.md`
 
 ### Add a new Agent tool
-1. Define schema in `tools/schemas.py`
-2. Implement in `tools/<category>_tools.py`
-3. Register in `tool_registry.py` with phase mapping
-4. Add unit test for tool logic
-5. Update Agent Tools table below
+→ See `.claude/reference/skills.md`
 
 ### Add a new frontend page
 1. Create page: `frontend/src/pages/<Name>.tsx`
 2. Add route in `App.tsx`
 3. Create API service if needed: `frontend/src/services/<name>.ts`
 4. Add to navigation if appropriate
-
----
-
-## API Patterns
-
-> **Full patterns** → `.claude/reference/api-development.md`
-
-```python
-# Response format
-{"data": {...}, "message": "optional"}
-{"error": {"code": "...", "message": "...", "status": 400}}
-```
-
----
-
-## Agent Tools
-
-| Phase | Tools |
-|-------|-------|
-| Discovery | analyze_intake_responses, map_business_processes, identify_tech_stack |
-| Research | search_industry_benchmarks, search_vendor_solutions, scrape_vendor_pricing |
-| Analysis | score_automation_potential, calculate_finding_impact, identify_ai_opportunities |
-| Modeling | calculate_roi, compare_vendors, generate_timeline |
-| Report | generate_executive_summary, generate_full_report |
-
----
-
-## Skills System
-
-Skills are modular, testable units of AI-powered logic. They replace inline prompts with structured, reusable components.
-
-### Structure
-```
-backend/src/skills/
-├── base.py                    # BaseSkill, LLMSkill, SyncSkill classes
-├── registry.py                # Skill discovery and registration
-├── analysis/                  # Finding analysis
-│   ├── vendor_matching.py     # Match findings to vendors
-│   ├── quick_win_identifier.py
-│   └── math_validator.py      # Validate ROI calculations
-├── interview/                 # Voice interview
-│   └── confidence.py          # Track interview confidence
-├── workshop/                  # 90-minute workshop
-│   ├── question_skill.py      # Generate contextual questions
-│   ├── milestone_skill.py     # Track workshop milestones
-│   └── signal_detector.py     # Detect buying signals
-└── report-generation/         # Report sections
-    ├── exec_summary.py
-    ├── finding_generation.py
-    ├── three_options.py       # Generate 3 options per finding
-    └── verdict.py             # Go/No-Go recommendation
-```
-
-### Creating a Skill
-```python
-from src.skills.base import LLMSkill
-
-class MySkill(LLMSkill[MyOutputModel]):
-    name = "my-skill"
-    description = "What this skill does"
-
-    async def execute(self, context: SkillContext) -> MyOutputModel:
-        prompt = self._build_prompt(context)
-        return await self._call_llm(prompt, MyOutputModel)
-```
-
-### Skill Types
-| Type | Use Case |
-|------|----------|
-| `LLMSkill` | Needs Claude API (generation, analysis) |
-| `SyncSkill` | Pure logic, no async (validators, formatters) |
-| `BaseSkill` | Custom async logic (API calls, DB queries) |
-
-### Key Patterns
-- Skills return Pydantic models (type-safe outputs)
-- Skills are discovered automatically via `registry.py`
-- Test skills in `tests/skills/test_<skill_name>.py`
-
----
-
-## Database Schema
-
-```
-# Core Flow
-quiz_sessions → reports → findings, recommendations, playbook
-     ↓
-  payments (Stripe)
-
-# Vendor System (Supabase)
-vendors ← industry_vendor_tiers (T1/T2/T3 per industry)
-    ↓
-vendor_audit_log
-
-# Knowledge (Vector)
-knowledge_embeddings (pgvector for RAG)
-
-# Legacy (being deprecated)
-workspace → clients → audits
-```
-
-### Key Tables
-
-| Table | Purpose |
-|-------|---------|
-| `quiz_sessions` | Anonymous quiz responses, industry, scores |
-| `reports` | Generated reports with token_usage, generation trace |
-| `vendors` | Vendor catalog with pricing, features, ratings |
-| `industry_vendor_tiers` | Which vendors are T1/T2/T3 for each industry |
-| `knowledge_embeddings` | Vector embeddings for RAG retrieval |
-
----
-
-## Frontend Routes
-
-```
-# Public
-/                   Landing page
-/login, /signup     Auth
-/terms, /privacy    Legal pages
-
-# Anonymous Quiz Flow (main conversion path)
-/quiz               Multi-step quiz wizard
-/quiz/interview     Voice interview (optional)
-/quiz/adaptive      Adaptive follow-up questions
-/quiz/preview       Report teaser before payment
-/checkout           Stripe checkout
-/checkout/success   Post-payment redirect
-
-# Authenticated
-/dashboard          List audits
-/report/:id         Full report viewer
-/interview          90-minute workshop
-/workshop           Workshop facilitation
-
-# Admin (requires auth)
-/admin/vendors      Vendor database management
-/admin/knowledge    Knowledge base editor
-```
-
----
-
-## Environment Variables
-
-```bash
-# Backend (required)
-SUPABASE_URL=
-SUPABASE_SERVICE_KEY=
-SECRET_KEY=
-ANTHROPIC_API_KEY=
-STRIPE_SECRET_KEY=
-STRIPE_WEBHOOK_SECRET=
-
-# Backend (optional)
-REDIS_URL=redis://localhost:6379
-BRAVE_API_KEY=              # Web search
-TAVILY_API_KEY=             # Alternative search
-BREVO_API_KEY=              # Email service
-OPENAI_API_KEY=             # For embeddings/GPT
-GOOGLE_AI_API_KEY=          # Gemini models
-DEEPSEEK_API_KEY=           # Budget model option
-LOGFIRE_TOKEN=              # Observability
-
-# Frontend
-VITE_API_BASE_URL=http://localhost:8383
-VITE_STRIPE_PUBLISHABLE_KEY=
-```
-
----
-
-## Debugging
-
-```bash
-# Verbose backend logs
-uvicorn src.main:app --reload --port 8383 --log-level debug
-
-# Check Redis
-redis-cli KEYS "*"
-redis-cli GET "key_name"
-
-# Supabase logs
-# Check dashboard: https://app.supabase.com/project/_/logs
-```
-
-| Issue | Check |
-|-------|-------|
-| Auth failing | JWT token expiry, Supabase config, RLS policies |
-| Stream not updating | SSE connection, CORS headers, nginx buffering |
-| Report failing | Claude API key, tool errors in logs, rate limits |
-| Payment failing | Stripe keys (test vs live), webhook URL, event types |
 
 ---
 
@@ -546,203 +345,15 @@ Models are routed by task type using `backend/src/config/model_routing.py`.
 | Balanced | `claude-sonnet-4-5-20250929` | - | Generation tasks (quick tier) |
 | Premium | `claude-opus-4-5-20251101` | `gemini-3-pro-preview` | Complex analysis, full tier reports |
 
-### Task Routing
-
-```python
-# Fast tasks (Haiku)
-"parse_quiz_responses", "extract_industry", "validate_json", "classify_finding"
-
-# Premium tasks (Opus) - full tier only
-"generate_executive_summary", "generate_findings", "synthesize_report"
-
-# Quick tier overrides → Sonnet instead of Opus for cost savings
-```
-
 ### Usage
 ```python
-from src.config.model_routing import get_model_for_task, CLAUDE_MODELS
+from src.config.model_routing import get_model_for_task
 
 model = get_model_for_task("generate_findings", tier="quick")  # Returns Sonnet
 model = get_model_for_task("generate_findings", tier="full")   # Returns Opus
 ```
 
-### Token Tracking
-```python
-from src.config.model_routing import TokenTracker
-
-tracker = TokenTracker()
-tracker.add_usage("task_name", model_id, input_tokens, output_tokens)
-summary = tracker.get_summary()  # Includes cost estimate
-```
-
 **DO NOT use:** `claude-3-5-*`, `gemini-2.0-*`, `gemini-1.5-*`
-
----
-
-## Knowledge Base Management
-
-### Structure
-```
-backend/src/knowledge/
-├── vendors/              # Vendor pricing (refresh monthly)
-├── [industry]/           # Industry-specific data
-│   ├── processes.json
-│   ├── opportunities.json
-│   ├── benchmarks.json
-│   └── vendors.json
-└── patterns/             # Cross-industry patterns
-```
-
-### Add a New Industry
-1. Create folder: `backend/src/knowledge/<industry-slug>/`
-2. Add required files:
-   - `processes.json` - Common workflows, pain points
-   - `opportunities.json` - AI automation opportunities
-   - `benchmarks.json` - Industry metrics with sources
-   - `vendors.json` - Relevant software for this industry
-3. Register in `backend/src/knowledge/__init__.py`
-4. Add to PRODUCT.md industry list
-
-### Verify/Refresh Data
-```bash
-# Check what needs refresh
-grep -r "verified_date" backend/src/knowledge/ | grep "2024"
-
-# Update vendor pricing
-python -m backend.src.services.vendor_refresh_service
-```
-
-### Data Quality Rules
-- Every stat needs `"source"` and `"verified_date": "YYYY-MM"`
-- Unverified data: `"status": "UNVERIFIED"` → shows ⚠️ in reports
-- Pricing: verify against vendor website, not AI-generated
-
----
-
-## Curated Insights System
-
-Store and retrieve AI/industry insights from external content (YouTube, articles, reports).
-
-### Structure
-```
-backend/src/knowledge/insights/
-├── raw/                    # Original sources (transcripts, articles)
-├── curated/                # Extracted, reviewed insights by type
-│   ├── trends.json
-│   ├── frameworks.json
-│   ├── case_studies.json
-│   ├── statistics.json
-│   ├── quotes.json
-│   └── predictions.json
-└── embeddings/             # Vector embeddings (future)
-```
-
-### Insight Types
-| Type | Description |
-|------|-------------|
-| `trend` | Industry shifts backed by data |
-| `framework` | Actionable methodologies |
-| `case_study` | Real-world examples with outcomes |
-| `statistic` | Data-backed claims with sources |
-| `quote` | Memorable, quotable insights |
-| `prediction` | Forward-looking forecasts |
-
-### CLI Commands
-```bash
-cd backend
-
-# Extract from transcript/article
-python scripts/extract_insights.py \
-    --file src/knowledge/insights/raw/2026-01-source.txt \
-    --title "Title" --author "Author" --date "2026-01-14"
-
-# List all insights
-python scripts/extract_insights.py --list
-
-# Filter by type
-python scripts/extract_insights.py --list --type trend
-
-# Show stats
-python scripts/extract_insights.py --stats
-
-# Mark as reviewed
-python scripts/extract_insights.py --review <insight-id>
-```
-
-### Admin UI
-- **Dashboard**: http://localhost:5174/admin
-- **List/Edit**: http://localhost:5174/admin/insights
-- **Extract**: http://localhost:5174/admin/insights/extract
-
-### Surfaces
-Insights are surfaced in:
-- **Reports**: Trends/stats in exec summary, case studies as social proof
-- **Quiz results**: 1-2 relevant trend insights
-- **Landing page**: Rotating stats, quotes, case studies
-
-### API Endpoints
-- `GET /api/admin/insights/list` - List with filters
-- `POST /api/admin/insights/extract` - AI extraction
-- `POST /api/admin/insights/save-extracted` - Save after review
-- `PUT /api/admin/insights/{id}` - Update insight
-- `POST /api/admin/insights/{id}/review` - Mark reviewed
-
----
-
-## Vendor Database Management
-
-> **Full details** → `.claude/reference/vendor-management.md`
-
-Quick commands:
-- "Add vendor: [url]" - Research and add new vendor
-- "Refresh vendor: [slug]" - Re-fetch pricing and update
-- "List stale vendors" - Show vendors not verified in 90+ days
-
-CLI: `python -m backend.src.agents.research.cli [discover|refresh] --help`
-
-Admin UI: `http://localhost:5174/admin/vendors`
-
----
-
-## Database Migrations
-
-### Location
-```
-backend/supabase/migrations/
-├── 001_initial_schema.sql      # Core tables
-├── 002_company_research.sql    # Research data
-├── 003_quiz_sessions.sql       # Anonymous quiz
-├── 004_reports.sql             # Report storage
-├── 007_add_missing_report_columns.sql
-├── 008_vector_embeddings.sql   # pgvector for RAG
-├── 009_anonymous_flow.sql      # Anonymous user support
-├── 010_update_report_status_constraint.sql
-├── 011_add_generation_trace.sql
-├── 012_vendor_database.sql     # Vendor tables
-├── 013_adaptive_quiz.sql       # Adaptive quiz confidence
-├── 014_workshop_columns.sql    # Workshop support
-├── 015_vendor_api_openness.sql # Vendor API/integration scores
-├── 016_existing_stack.sql      # User's current tech stack
-└── 017_automation_summary.sql  # Automation roadmap data
-```
-
-### Create Migration
-```bash
-# Create new migration file
-touch backend/supabase/migrations/XXX_description.sql
-
-# Apply locally
-supabase db push
-
-# Apply to production
-supabase db push --linked
-```
-
-### Rules
-- Migrations must be reversible (include rollback comments)
-- Never delete columns in production without deprecation period
-- Test migration on local DB first
-- Backup before applying to production
 
 ---
 
@@ -750,17 +361,9 @@ supabase db push --linked
 
 > "Don't just fix the bug - fix the system that allowed the bug."
 
-After fixing any bug or issue, run `/evolve` to analyze what could prevent it:
-
-| Layer | What to Improve |
-|-------|-----------------|
-| Rules | Add constraint to CLAUDE.md or reference files |
-| Commands | Add validation step to plan-feature or execute |
-| Reference | Document the pattern in task-specific docs |
+After fixing any bug or issue, run `/evolve` to analyze what could prevent it.
 
 **Evolution log:** `docs/evolution-log.md` tracks all system improvements.
-
-**Habit:** Every bug is an opportunity to make the AI coding system stronger.
 
 ---
 

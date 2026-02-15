@@ -1,19 +1,20 @@
 # CRB Analyser - Target Industries
 
-> Decision locked: December 2024
+> Decision locked: January 2026
 
 ## Primary Industries (Launch)
 
 | Industry | Score | Key Metrics |
 |----------|-------|-------------|
 | **Professional Services** (Legal, Accounting, Consulting) | 89/100 | 71% GenAI adoption, 7.4% B2B conversion rate, 37% cost savings potential |
-| **Home Services** (HVAC, Plumbing, Electrical) | 85/100 | 70% AI adoption in FSM, 2+ hrs/day admin waste, fragmented market |
 | **Dental** (Practices & DSOs) | 85/100 | 35% using AI, $3.1B market by 2034, high margins |
+| **E-commerce** (Online Retail, DTC) | 82/100 | High automation potential, data-rich operations, strong ROI on AI tools |
 
 ## Secondary Industries (Phase 2)
 
 | Industry | Score | Key Metrics |
 |----------|-------|-------------|
+| **Home Services** (HVAC, Plumbing, Electrical) | 85/100 | 70% AI adoption in FSM, 2+ hrs/day admin waste, fragmented market |
 | **Recruiting/Staffing** | 82/100 | 87% using AI, 50% time-to-hire reduction, 30% cost savings |
 | **Coaching** (businesses, not solopreneurs) | 80/100 | $7.3B market, 70-85% admin time savings with AI |
 | **Veterinary/Pet Care** | 80/100 | 39% using AI, 30% scheduling improvements |
@@ -39,7 +40,7 @@ All target industries are **"Passion-Driven Service Businesses"**:
 
 ## Unified Positioning
 
-> "We help passion-driven service professionals - from lawyers to plumbers, dentists to dog trainers - get the AI clarity they need to stop wasting time on admin and get back to the work they love."
+> "We help passion-driven service professionals - from lawyers to e-commerce founders, dentists to consultants - get the AI clarity they need to stop wasting time on admin and get back to the work they love."
 
 ## Scoring Criteria Used
 
@@ -61,6 +62,10 @@ All target industries are **"Passion-Driven Service Businesses"**:
 - ~~Music Studios~~ (budget constraints)
 - ~~Automation Agencies~~ (DIY mentality, competitive)
 
+## Phase Changes
+
+- **Home Services**: Moved from Primary (Dec 2024) to Secondary (Jan 2026). Reason: E-commerce offers higher data density and stronger automation ROI for initial launch. Home Services remains a strong Phase 2 candidate.
+
 ---
 
-*Last updated: December 2024*
+*Last updated: February 2026*

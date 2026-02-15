@@ -35,27 +35,40 @@ frontend/src/
 
 ```
 # Public
-/                   Landing page
-/login, /signup     Auth
-/terms, /privacy    Legal pages
+/                        Landing page
+/login, /signup          Auth
+/terms, /privacy         Legal pages
+/professional-services   Professional Services industry page
+/dental                  Dental industry page
+/ecommerce               E-commerce industry page
 
 # Anonymous Quiz Flow (main conversion path)
-/quiz               Multi-step wizard
-/quiz/interview     Voice interview (optional)
-/quiz/adaptive      Adaptive follow-up questions
-/quiz/preview       Report teaser before payment
-/checkout           Stripe checkout
-/checkout/success   Post-payment redirect
+/quiz                    Multi-step quiz wizard
+/quiz/interview          Voice interview (optional)
+/quiz/adaptive           Adaptive follow-up questions
+/quiz/preview            Report teaser before payment
+/checkout                Stripe checkout
+/checkout/success        Post-payment redirect
+
+# Post-payment
+/interview               90-minute workshop
+/workshop                Workshop facilitation (same as /interview)
+/report/:id              Public report viewer (quiz-based)
+/report/:id/progress     Report generation progress
 
 # Authenticated
-/dashboard          List audits
-/report/:id         Full report viewer
-/interview          90-minute workshop
-/workshop           Workshop facilitation
+/dashboard               List audits
+/new-audit               Create new audit
+/audit/:id/intake        Audit intake questionnaire
+/audit/:id/progress      Audit progress tracking
+/audit/:id/report        Audit-based report viewer
 
 # Admin (requires auth)
-/admin/vendors      Vendor database management
-/admin/knowledge    Knowledge base editor
+/admin                   Admin dashboard
+/admin/vendors           Vendor database management
+/admin/knowledge         Knowledge base editor
+/admin/insights          Insights list and management
+/admin/insights/extract  AI-powered insight extraction
 ```
 
 ## Component Patterns
