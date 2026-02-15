@@ -30,6 +30,7 @@ Thumbs.db
 logs/
 
 # Testing
+.coverage
 coverage/
 .pytest_cache/
 htmlcov/
