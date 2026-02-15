@@ -451,9 +451,10 @@ Contents per industry:
 - `risks.json` - Industry-specific risk factors
 - `report_customization.json` - Custom sections, terminology
 
-### MVP Industries
-1. Marketing/Creative Agencies
-2. E-commerce
-3. Retail
-4. Tech Companies
-5. Music Companies/Studios
+### Launch Industries
+
+See [PRODUCT.md](./PRODUCT.md#target-industries) for current industry details.
+
+1. Professional Services (accounting, legal, consulting)
+2. Dental Practices
+3. E-commerce

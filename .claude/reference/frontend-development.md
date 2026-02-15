@@ -1,6 +1,7 @@
 # Frontend Development Reference
 
 > Load this when working on React components, pages, or frontend features.
+> NOT here: API endpoints → `api-development.md` | report content quality → `report-quality.md`
 
 ---
 

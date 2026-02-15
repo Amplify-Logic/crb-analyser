@@ -68,87 +68,25 @@ Our value proposition centers on four key themes for professional services:
 
 ## Three Options Model (3O)
 
-Every recommendation presents three options to give clients real choice:
+Every recommendation presents three options: **Off-the-Shelf** (fast, proven), **Best-in-Class** (premium, full features), **Custom Build** (full control, competitive moat).
 
-| Option | Description | Trade-off |
-|--------|-------------|-----------|
-| **A: Off-the-Shelf** | Fastest to deploy, lowest risk, proven solution | Less customization |
-| **B: Best-in-Class** | Premium vendor, full features, better support | Higher cost |
-| **C: Custom Build** | Full control, competitive advantage potential | Needs technical capability |
+When recommending Custom, include build tools, model choice, skills, dev hours, and stack.
 
-### Custom Solution Details
-When recommending Option C, include:
-- **Build tools:** Claude Code, Cursor, VS Code
-- **Model recommendation:** Which Claude model and why
-- **Skills required:** Python, API integration, frontend, etc.
-- **Dev hours estimate:** Realistic range
-- **Recommended stack:** e.g., FastAPI + React + Supabase + Railway
-- **Key APIs:** Specific integrations needed
+> **Full three-options methodology** → [FRAMEWORK.md](./FRAMEWORK.md#the-three-options-pattern)
 
 ---
 
 ## CRB Framework (Core Methodology)
 
-The Cost-Risk-Benefit framework analyzes every opportunity across **10 dimensions** to make the best option obvious.
+The Cost-Risk-Benefit framework analyzes every opportunity across **10 dimensions**:
 
-### The Six Dimensions of Cost
+- **6 Costs**: Financial, Time, Opportunity, Complexity, Risk, Brand/Trust
+- **4 Benefits**: Financial, Time, Strategic, Quality
+- **NET SCORE** = Benefit - Cost - (Risk / 10)
 
-Cost is NOT just money. We analyze what the customer will actually spend:
+Findings are prioritized as: **Quick Win** → **Strategic** → **Consider** → **Defer**
 
-| Dimension | What We Measure | Customer Question |
-|-----------|-----------------|-------------------|
-| **Financial** | Subscription, setup, hidden fees | "What will this cost me per month/year?" |
-| **Time** | Implementation, learning curve, maintenance | "How long until I see value? How much ongoing effort?" |
-| **Opportunity** | What they can't do if they do this | "What else could I spend this budget/time on?" |
-| **Complexity** | Systems touched, training needed | "How much will this disrupt my practice?" |
-| **Risk** | What could go wrong, reversibility | "What if it doesn't work? Can I undo this?" |
-| **Brand/Trust** | Client perception, team morale | "Will my clients/team notice? For better or worse?" |
-
-### The Four Dimensions of Benefit
-
-| Dimension | What We Measure | Customer Question |
-|-----------|-----------------|-------------------|
-| **Financial** | Revenue increase, cost savings | "How much will I save or earn?" |
-| **Time** | Hours freed, speed improvements | "How much time do I get back for billable work?" |
-| **Strategic** | Market position, competitive edge | "Does this help me stand out or grow?" |
-| **Quality** | Client experience, team satisfaction | "Will my clients and team be happier?" |
-
-### Risk Analysis
-
-Every recommendation includes explicit risk assessment:
-
-| Risk Type | What Could Go Wrong | How We Address It |
-|-----------|---------------------|-------------------|
-| **Implementation** | Tool doesn't work as expected | Recommend pilots, phased rollout |
-| **Adoption** | Team doesn't use it | Flag training needs, change management |
-| **Vendor** | Company disappears, prices spike | Note vendor stability, exit strategies |
-| **Security** | Data exposure, compliance issues | Flag security concerns, certifications |
-| **Integration** | Breaks existing systems | Identify integration complexity |
-| **Regulatory** | Non-compliance with professional standards | Review against industry regulations |
-
-### Scoring & Comparison
-
-Each option receives a **NET SCORE** that makes comparison objective:
-
-```
-NET SCORE = Benefit Score - Cost Score - (Risk Score / 10)
-```
-
-The comparison summary shows:
-- **Winner** with clear reasoning
-- **Trade-offs** of the recommended option
-- **When to choose alternatives** (e.g., "Choose Option B if budget is not a constraint")
-
-### Prioritization Output
-
-Findings are prioritized by combining scores with business impact:
-
-| Priority | Criteria | Action |
-|----------|----------|--------|
-| **Quick Win** | High benefit, low cost, low risk | Do this week |
-| **Strategic** | High benefit, medium cost/risk | Plan for next quarter |
-| **Consider** | Medium benefit, varies | Evaluate when capacity allows |
-| **Defer** | Low benefit or high risk | Revisit in 6-12 months |
+> **Full CRB methodology, scoring, evidence requirements, and time horizons** → [FRAMEWORK.md](./FRAMEWORK.md)
 
 ---
 
@@ -175,41 +113,19 @@ For every automation opportunity, we present two paths:
 
 ## Confidence & ROI
 
-### Confidence Levels
+Every estimate carries a confidence level that adjusts the reported value:
 
-Every estimate in the report - financial, time, or otherwise - carries a confidence level:
+| Level | Factor | Criteria |
+|-------|--------|----------|
+| HIGH | 1.0 | User-provided numbers, verified benchmark |
+| MEDIUM | 0.85 | Industry pattern likely applies, one strong data point |
+| LOW | 0.70 | Significant assumptions required |
 
-| Level | Distribution | Factor | Criteria |
-|-------|-------------|--------|----------|
-| HIGH | ~30% | 1.0 | Quiz directly mentions issue, user-provided numbers, verified benchmark |
-| MEDIUM | ~50% | 0.85 | Quiz implies issue, industry pattern likely applies, one strong data point |
-| LOW | ~20% | 0.70 | Industry pattern suggests possibility, significant assumptions required |
+`adjusted_estimate = base_estimate * confidence_factor`
 
-### Applying Confidence to All Dimensions
+**Display rules:** Always show "Estimated", always show confidence level, use ranges for LOW confidence, source every benchmark.
 
-Confidence applies to every CRB dimension, not just financial:
-
-| Dimension | HIGH Example | LOW Example |
-|-----------|--------------|-------------|
-| **Financial** | "Save €2,400/month" (user said €60/hr x 40hrs) | "Save €1,200-€2,400/month" (industry average) |
-| **Time** | "Save 10 hrs/week" (user specified tasks) | "Save 5-15 hrs/week" (typical for industry) |
-| **Risk** | "Low risk - team already uses similar tool" | "Medium risk - adoption uncertain" |
-
-### ROI Calculation
-```python
-adjusted_estimate = base_estimate * confidence_factor
-# HIGH:   €10,000 * 1.0  = €10,000
-# MEDIUM: €10,000 * 0.85 = €8,500
-# LOW:    €10,000 * 0.70 = €7,000
-```
-
-### Display Rules
-- Always show "**Estimated**" - never claim certainty
-- Show confidence level visibly next to every number
-- List key assumptions explicitly
-- Use ranges for LOW confidence: "€1,200-€1,800/month"
-- If everything is HIGH confidence, we're being dishonest about uncertainty
-- Source every benchmark (industry report, verified vendor pricing, user input)
+> **Full confidence methodology and evidence requirements** → [FRAMEWORK.md](./FRAMEWORK.md#quality-standards)
 
 ---
 
@@ -489,32 +405,11 @@ Report Delivery (24-48 hours)
 
 ## Report Structure
 
-### Executive Summary (1 page)
-- AI Readiness Score with context
-- Top 3 opportunities ranked by ROI
-- Total potential impact (conservative estimate)
-- Recommended starting point
+Executive Summary → Detailed Findings (3-5) → Implementation Roadmap → Appendices
 
-### Detailed Findings (3-5 findings)
-Each finding includes:
-- **Problem Statement** - What's costing time/money
-- **Opportunity Description** - What AI/automation could do
-- **Three Options** - Off-the-shelf, Best-in-class, Custom
-- **CRB Analysis** - Full scoring across all dimensions
-- **Recommendation** - Clear verdict with reasoning
-- **Implementation Path** - Specific next steps
+Each finding includes: Problem Statement, Opportunity, Three Options with CRB Analysis, Verdict, and Implementation Path.
 
-### Implementation Roadmap
-- Phased timeline (Week 1, Month 1, Quarter 1)
-- Dependencies between recommendations
-- Quick wins vs strategic investments
-- Resource requirements
-
-### Appendices
-- Vendor comparison details
-- Benchmark sources
-- Methodology explanation
-- Glossary
+> **Full report structure with CRB table format** → [FRAMEWORK.md](./FRAMEWORK.md#report-structure)
 
 ---
 

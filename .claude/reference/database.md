@@ -1,6 +1,7 @@
 # Database & Infrastructure Reference
 
 > Load this when working on database schema, migrations, Supabase queries, or environment setup.
+> NOT here: vendor-specific tables → `vendor-management.md` | API route patterns → `api-development.md`
 
 ---
 

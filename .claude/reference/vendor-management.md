@@ -1,6 +1,7 @@
 # Vendor Management Reference
 
 > Load this when working on vendor database, research agents, or vendor recommendations.
+> NOT here: knowledge base structure → `knowledge-base.md` | vendor matching skills → `skills.md`
 
 ---
 

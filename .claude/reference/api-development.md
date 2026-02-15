@@ -1,6 +1,7 @@
 # API Development Reference
 
 > Load this when working on backend routes, services, or API endpoints.
+> NOT here: frontend components → `frontend-development.md` | database/migrations → `database.md` | skills/agent tools → `skills.md`
 
 ---
 

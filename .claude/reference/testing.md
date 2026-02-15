@@ -1,6 +1,7 @@
 # Testing Reference
 
 > Load this when writing tests, fixing test failures, or reviewing test code.
+> NOT here: what to test in reports → `report-quality.md` | test anti-patterns → see CLAUDE.md Anti-Patterns section
 
 ---
 

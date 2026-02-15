@@ -1,6 +1,7 @@
 # Report Quality Reference
 
 > Load this when working on report generation, findings, or any user-facing analysis output.
+> NOT here: report UI components → `frontend-development.md` | report API routes → `api-development.md` | CRB methodology → `FRAMEWORK.md`
 
 ---
 

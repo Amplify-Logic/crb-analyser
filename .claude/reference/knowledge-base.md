@@ -1,6 +1,7 @@
 # Knowledge Base Reference
 
 > Load this when working on the knowledge base, curated insights, or adding new industries.
+> NOT here: vendor database (Supabase) → `vendor-management.md` | industry details → `PRODUCT.md`
 
 ---
 

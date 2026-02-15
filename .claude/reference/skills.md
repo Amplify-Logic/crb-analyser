@@ -1,6 +1,7 @@
 # Skills System Reference
 
 > Load this when working on skills (creating, modifying, or debugging AI-powered capabilities).
+> NOT here: API routes that call skills → `api-development.md` | report generation quality rules → `report-quality.md`
 
 ---
 
