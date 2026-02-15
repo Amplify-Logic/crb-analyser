@@ -18,7 +18,6 @@
 | [video-insights/](./video-insights/) | Video content analysis | Transcripts and extracted insights from video sources |
 | [reports/](./reports/) | Generated reports | Sample and analysis report outputs |
 | [research/](./research/) | Research notes | Vendor and market research |
-| [analysis/](./analysis/) | Analysis docs | System analysis documentation |
 | [archive/](./archive/) | Historical docs | Deprecated/superseded documents |
 
 ## Key Files
@@ -36,6 +35,7 @@
 | [SKILLS_STRATEGY.md](./architecture/SKILLS_STRATEGY.md) | Skills system design strategy |
 | [SKILLS_INTEGRATION_MAP.md](./architecture/SKILLS_INTEGRATION_MAP.md) | How skills integrate across the system |
 | [WORKFLOW-GUIDE.md](./architecture/WORKFLOW-GUIDE.md) | User workflow documentation |
+| [hooks-explained-simply.md](./architecture/hooks-explained-simply.md) | Claude Code hooks explained |
 
 ## Marketing Files
 
