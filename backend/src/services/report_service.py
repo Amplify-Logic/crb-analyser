@@ -1093,6 +1093,77 @@ class ReportGenerator:
                 logger.info(f"[FINALIZE] Tracked {vendor_tracking['total_mentions']} vendor mentions: {vendor_tracking['unique_vendors']}")
 
             # ================================================================
+            # ROI RECALCULATION - retry any recommendations stuck at 0%
+            # ================================================================
+            pending_roi_count = sum(
+                1 for rec in recommendations
+                if rec.get("roi_pending_calculation") and rec.get("roi_percentage", 0) == 0
+            )
+            if pending_roi_count > 0:
+                logger.info(f"[FINALIZE] Retrying ROI calculation for {pending_roi_count} pending recommendations")
+                roi_skill = get_skill("roi-calculator", client=self.client)
+                if roi_skill:
+                    for rec in recommendations:
+                        if not (rec.get("roi_pending_calculation") and rec.get("roi_percentage", 0) == 0):
+                            continue
+                        try:
+                            # Find the related finding
+                            finding_id = rec.get("finding_id")
+                            related_finding = None
+                            for f in findings:
+                                if f.get("id") == finding_id:
+                                    related_finding = f
+                                    break
+                            if not related_finding:
+                                # For platform recs, create synthetic finding
+                                if rec.get("is_platform_recommendation"):
+                                    total_hours = sum(
+                                        f.get("value_saved", {}).get("hours_per_week", 0)
+                                        for f in findings
+                                        if f.get("id") in rec.get("solves_findings", [])
+                                    )
+                                    related_finding = {
+                                        "id": f"synthetic-{rec.get('id', 'unknown')}",
+                                        "title": rec.get("title", ""),
+                                        "hours_per_week": total_hours,
+                                        "confidence": "medium",
+                                        "value_saved": {"hours_per_week": total_hours},
+                                    }
+                                else:
+                                    rec["roi_calculation_failed"] = True
+                                    logger.warning(f"[FINALIZE] No finding for ROI recalc: {rec.get('id')}")
+                                    continue
+
+                            roi_context = self._get_skill_context()
+                            roi_context.metadata["finding"] = related_finding
+                            roi_context.metadata["recommendation"] = rec
+                            roi_context.metadata["company_context"] = self.context.get("company_profile", {})
+
+                            roi_result = await roi_skill.run(roi_context)
+                            if roi_result.success and roi_result.data.get("roi_percentage") is not None:
+                                rec["roi_percentage"] = roi_result.data["roi_percentage"]
+                                rec["roi_confidence_adjusted"] = roi_result.data.get("roi_confidence_adjusted")
+                                rec["payback_months"] = roi_result.data.get("payback_months", 12)
+                                rec["roi_detail"] = {
+                                    "sensitivity": roi_result.data.get("sensitivity", {}),
+                                    "assumptions": roi_result.data.get("assumptions", []),
+                                    "calculation_breakdown": roi_result.data.get("calculation_breakdown", ""),
+                                    "time_savings": roi_result.data.get("time_savings", {}),
+                                    "financial_impact": roi_result.data.get("financial_impact", {}),
+                                }
+                                rec.pop("roi_pending_calculation", None)
+                                logger.info(f"[FINALIZE] ROI recalculated: {rec['roi_percentage']}% for {rec.get('title')}")
+                            else:
+                                rec["roi_calculation_failed"] = True
+                                rec.pop("roi_pending_calculation", None)
+                                logger.warning(f"[FINALIZE] ROI recalculation failed for {rec.get('id')}")
+                        except (ValueError, KeyError, TypeError, RuntimeError) as roi_e:
+                            rec["roi_calculation_failed"] = True
+                            rec.pop("roi_pending_calculation", None)
+                            logger.warning(f"[FINALIZE] ROI recalculation error for {rec.get('id')}: {roi_e}")
+            # ================================================================
+
+            # ================================================================
             # DETERMINISTIC VALIDATION - catches issues before QA
             # ================================================================
             from src.services.validation_service import validate_report
@@ -1118,6 +1189,26 @@ class ReportGenerator:
                 logger.info(f"[FINALIZE] Report validation passed ({len(validation_result.warnings)} warnings)")
                 if validation_result.warnings:
                     assumption_log["validation_warnings"] = validation_result.warnings
+            # ================================================================
+
+            # ================================================================
+            # QUALITY VALIDATION - catches content quality issues
+            # ================================================================
+            from src.services.quality_validator import QualityValidator
+
+            quality_result = QualityValidator.validate(full_report)
+
+            if quality_result.error_count > 0 or quality_result.warning_count > 0:
+                logger.warning(
+                    f"[FINALIZE] Quality validation: {quality_result.error_count} errors, "
+                    f"{quality_result.warning_count} warnings"
+                )
+                for issue in quality_result.issues:
+                    log_fn = logger.warning if issue.severity.value == "error" else logger.info
+                    log_fn(f"[QUALITY] [{issue.check}] {issue.location}: {issue.detail}")
+                assumption_log["quality_issues"] = quality_result.to_dict()
+            else:
+                logger.info("[FINALIZE] Quality validation passed")
             # ================================================================
 
             logger.info(f"[FINALIZE] Updating report status to qa_pending...")
@@ -1864,6 +1955,7 @@ IMPORTANT:
                                     "financial_impact": roi_result.data.get("financial_impact", {}),
                                 }
                                 rec["assumptions"].append(f"ROI calculated from {total_hours:.1f} hours/week combined savings")
+                                rec.pop("roi_pending_calculation", None)
                             else:
                                 # Fallback: set to 0 so validators can catch missing ROI
                                 rec["roi_percentage"] = 0
@@ -1975,11 +2067,12 @@ IMPORTANT:
                                             "time_savings": roi_result.data.get("time_savings", {}),
                                             "financial_impact": roi_result.data.get("financial_impact", {}),
                                         }
-                                        # Update main ROI if calculated
-                                        if roi_result.data.get("roi_percentage"):
+                                        # Update main ROI if calculated (use 'is not None' to handle 0% ROI)
+                                        if roi_result.data.get("roi_percentage") is not None:
                                             rec["roi_percentage"] = roi_result.data["roi_percentage"]
                                             rec["roi_confidence_adjusted"] = roi_result.data.get("roi_confidence_adjusted")
                                             rec["payback_months"] = roi_result.data.get("payback_months")
+                                            rec.pop("roi_pending_calculation", None)
                                 except (ValueError, KeyError, TypeError, RuntimeError) as roi_e:
                                     logger.warning("roi_calculation_skipped", finding_id=finding.get("id"), error=str(roi_e), error_type=type(roi_e).__name__)
 
@@ -2324,6 +2417,7 @@ Generate 5-10 recommendations. Return ONLY the JSON array."""
                                     "time_savings": roi_result.data.get("time_savings", {}),
                                     "financial_impact": roi_result.data.get("financial_impact", {}),
                                 }
+                                rec.pop("roi_pending_calculation", None)
                                 logger.info(f"Calculated ROI {rec['roi_percentage']}% for {rec.get('title')}")
                             else:
                                 rec["roi_percentage"] = 0

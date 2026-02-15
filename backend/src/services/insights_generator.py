@@ -3,10 +3,17 @@
 Industry Insights Generator
 
 Generates industry benchmarks and adoption statistics.
+Enriches with curated insights from InsightService when available.
 """
-from typing import List, Literal
+import logging
+from typing import Any, Dict, List, Literal, Optional
 
 from pydantic import BaseModel, Field
+
+from src.services.insight_service import get_insight_service
+from src.models.insight import InsightType, UseIn
+
+logger = logging.getLogger(__name__)
 
 
 # =============================================================================
@@ -45,6 +52,24 @@ class SocialProof(BaseModel):
     industry: str
 
 
+class CuratedInsightSummary(BaseModel):
+    """Serialized summary of a curated insight for report inclusion."""
+    id: str
+    title: str
+    content: str
+    actionable_insight: Optional[str] = None
+    source_title: str = ""
+    source_author: Optional[str] = None
+
+
+class CuratedInsights(BaseModel):
+    """Curated insights grouped by type for report surfacing."""
+    trends: List[CuratedInsightSummary] = Field(default_factory=list)
+    case_studies: List[CuratedInsightSummary] = Field(default_factory=list)
+    statistics: List[CuratedInsightSummary] = Field(default_factory=list)
+    quotes: List[CuratedInsightSummary] = Field(default_factory=list)
+
+
 class IndustryInsights(BaseModel):
     """Complete industry insights for a report."""
     industry: str
@@ -52,6 +77,7 @@ class IndustryInsights(BaseModel):
     adoption_stats: List[AdoptionStat]
     opportunity_map: OpportunityMap
     social_proof: List[SocialProof]
+    curated_insights: CuratedInsights = Field(default_factory=CuratedInsights)
 
 
 # =============================================================================
@@ -552,10 +578,64 @@ class InsightsGenerator:
                 industry=industry_key,
             ))
 
+        # Load curated insights from InsightService
+        curated = self._load_curated_insights(industry_key)
+
         return IndustryInsights(
             industry=industry_key,
             industry_display_name=data["display_name"],
             adoption_stats=adoption_stats,
             opportunity_map=opportunity_map,
             social_proof=social_proof,
+            curated_insights=curated,
+        )
+
+    def _load_curated_insights(self, industry: str) -> CuratedInsights:
+        """Load curated insights from InsightService, grouped by type."""
+        try:
+            service = get_insight_service()
+            insights = service.get_insights_for_surface(
+                use_in=UseIn.REPORT,
+                industry=industry,
+                limit=10,
+            )
+        except Exception as e:
+            logger.warning("curated_insights_load_failed: %s", str(e))
+            return CuratedInsights()
+
+        # Group by type
+        trends = []
+        case_studies = []
+        statistics = []
+        quotes = []
+
+        for insight in insights:
+            summary = CuratedInsightSummary(
+                id=insight.id,
+                title=insight.title,
+                content=insight.content,
+                actionable_insight=insight.actionable_insight,
+                source_title=insight.source.title if insight.source else "",
+                source_author=insight.source.author if insight.source else None,
+            )
+            insight_type = insight.type
+            if isinstance(insight_type, str):
+                insight_type_val = insight_type
+            else:
+                insight_type_val = insight_type.value if hasattr(insight_type, "value") else str(insight_type)
+
+            if insight_type_val == InsightType.TREND.value:
+                trends.append(summary)
+            elif insight_type_val == InsightType.CASE_STUDY.value:
+                case_studies.append(summary)
+            elif insight_type_val == InsightType.STATISTIC.value:
+                statistics.append(summary)
+            elif insight_type_val == InsightType.QUOTE.value:
+                quotes.append(summary)
+
+        return CuratedInsights(
+            trends=trends,
+            case_studies=case_studies,
+            statistics=statistics,
+            quotes=quotes,
         )
