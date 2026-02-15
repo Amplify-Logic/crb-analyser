@@ -11,9 +11,10 @@ from pathlib import Path
 from typing import Optional
 from datetime import datetime
 
-from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi import APIRouter, Depends, HTTPException, Request, status
 from fastapi.responses import StreamingResponse
 
+from src.middleware.security import endpoint_limiter
 from src.config.supabase_client import get_async_supabase
 from src.config.redis_client import get_redis
 from src.middleware.auth import require_workspace, CurrentUser, get_optional_user
@@ -256,7 +257,7 @@ async def _poll_existing_generation(quiz_session_id: str):
 
 
 @router.get("/stream/{quiz_session_id}")
-async def stream_report_generation(quiz_session_id: str, tier: str = "quick"):
+async def stream_report_generation(quiz_session_id: str, raw_request: Request, tier: str = "quick"):
     """
     Server-Sent Events stream for report generation progress.
 
@@ -276,6 +277,36 @@ async def stream_report_generation(quiz_session_id: str, tier: str = "quick"):
             // Handle progress updates
         };
     """
+    # Rate limit: 3 requests per minute (expensive LLM report generation)
+    await endpoint_limiter.check(raw_request, "report_stream", limit=3, window=60)
+
+    # Validate session exists and has been paid for
+    supabase = await get_async_supabase()
+    session_check = await supabase.table("quiz_sessions").select(
+        "id, status"
+    ).eq("id", quiz_session_id).single().execute()
+
+    if not session_check.data:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Quiz session not found"
+        )
+
+    paid_statuses = [
+        "paid", "generating", "workshop_started", "workshop_complete",
+        "report_generating", "report_delivered", "completed",
+        "qa_pending", "released",
+    ]
+    if session_check.data.get("status") not in paid_statuses:
+        logger.warning(
+            f"Stream report called with unpaid session status={session_check.data.get('status')} "
+            f"for quiz_session_id={quiz_session_id}"
+        )
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Session must be paid before generating a report"
+        )
+
     lock_key = f"report_generation:{quiz_session_id}"
 
     async def event_generator():
@@ -401,13 +432,16 @@ async def get_report_status(quiz_session_id: str):
 
 
 @router.post("/regenerate/{quiz_session_id}")
-async def regenerate_report(quiz_session_id: str, tier: Optional[str] = None):
+async def regenerate_report(quiz_session_id: str, raw_request: Request, tier: Optional[str] = None):
     """
     Regenerate a report for an existing quiz session.
 
     If the original report failed or needs to be refreshed, this endpoint
     triggers a new generation.
     """
+    # Rate limit: 3 requests per minute (expensive LLM report generation)
+    await endpoint_limiter.check(raw_request, "report_regenerate", limit=3, window=60)
+
     try:
         supabase = await get_async_supabase()
 
@@ -424,8 +458,17 @@ async def regenerate_report(quiz_session_id: str, tier: Optional[str] = None):
 
         quiz = quiz_result.data
 
-        # Check if paid
-        if quiz["status"] not in ["paid", "completed", "generating"]:
+        # Check if paid - session must have completed payment before report generation
+        paid_statuses = [
+            "paid", "completed", "generating", "workshop_started",
+            "workshop_complete", "report_generating", "report_delivered",
+            "qa_pending", "released",
+        ]
+        if quiz["status"] not in paid_statuses:
+            logger.warning(
+                f"Regenerate report called with unpaid session status={quiz['status']} "
+                f"for quiz_session_id={quiz_session_id}"
+            )
             raise HTTPException(
                 status_code=status.HTTP_402_PAYMENT_REQUIRED,
                 detail="Payment required before generating report"

@@ -15,9 +15,10 @@ import logging
 from datetime import datetime
 from typing import Any, Dict, List, Optional
 
-from fastapi import APIRouter, HTTPException, status
+from fastapi import APIRouter, HTTPException, Request, status
 from pydantic import BaseModel
 
+from src.middleware.security import endpoint_limiter
 from src.config.supabase_client import get_async_supabase
 from src.config.settings import settings
 from src.skills import get_skill, SkillContext
@@ -146,10 +147,18 @@ async def start_workshop(request: WorkshopStartRequest):
 
         session = result.data
 
-        # Verify session is paid
-        if session.get("status") not in ["paid", "workshop_confirmation", "workshop_deepdive", "workshop"]:
+        # Verify session is paid and ready for workshop
+        workshop_valid_statuses = [
+            "paid", "workshop_started", "workshop_complete",
+            "workshop_confirmation", "workshop_deepdive", "workshop",
+        ]
+        if session.get("status") not in workshop_valid_statuses:
+            logger.warning(
+                f"Workshop start called with invalid session status={session.get('status')} "
+                f"for session_id={request.session_id}"
+            )
             raise HTTPException(
-                status_code=status.HTTP_400_BAD_REQUEST,
+                status_code=status.HTTP_403_FORBIDDEN,
                 detail=f"Session not ready for workshop. Status: {session.get('status')}"
             )
 
@@ -235,13 +244,28 @@ async def save_confirmation(request: WorkshopConfirmRequest):
 
         # Get session
         result = await supabase.table("quiz_sessions").select(
-            "workshop_data, answers"
+            "workshop_data, answers, status"
         ).eq("id", request.session_id).single().execute()
 
         if not result.data:
             raise HTTPException(
                 status_code=status.HTTP_404_NOT_FOUND,
                 detail="Session not found"
+            )
+
+        # Verify session has been paid for
+        workshop_valid_statuses = [
+            "paid", "workshop_started", "workshop_complete",
+            "workshop_confirmation", "workshop_deepdive", "workshop",
+        ]
+        if result.data.get("status") not in workshop_valid_statuses:
+            logger.warning(
+                f"Workshop confirm called with invalid session status={result.data.get('status')} "
+                f"for session_id={request.session_id}"
+            )
+            raise HTTPException(
+                status_code=status.HTTP_403_FORBIDDEN,
+                detail="Session must be paid before accessing workshop"
             )
 
         workshop_data = result.data.get("workshop_data", {})
@@ -294,10 +318,13 @@ async def save_confirmation(request: WorkshopConfirmRequest):
 
 
 @router.post("/respond", response_model=WorkshopRespondResponse)
-async def workshop_respond(request: WorkshopRespondRequest):
+async def workshop_respond(request: WorkshopRespondRequest, raw_request: Request):
     """
     Process user message and return adaptive response.
     """
+    # Rate limit: 10 requests per minute (LLM-calling endpoint)
+    await endpoint_limiter.check(raw_request, "workshop_respond", limit=10, window=60)
+
     try:
         supabase = await get_async_supabase()
 
@@ -313,6 +340,22 @@ async def workshop_respond(request: WorkshopRespondRequest):
             )
 
         session = result.data
+
+        # Verify session has been paid for
+        workshop_valid_statuses = [
+            "paid", "workshop_started", "workshop_complete",
+            "workshop_confirmation", "workshop_deepdive", "workshop",
+        ]
+        if session.get("status") not in workshop_valid_statuses:
+            logger.warning(
+                f"Workshop respond called with invalid session status={session.get('status')} "
+                f"for session_id={request.session_id}"
+            )
+            raise HTTPException(
+                status_code=status.HTTP_403_FORBIDDEN,
+                detail="Session must be paid before accessing workshop"
+            )
+
         workshop_data = session.get("workshop_data", {})
         answers = session.get("answers", {})
         company_profile = session.get("company_profile", {})
@@ -468,6 +511,22 @@ async def generate_milestone(request: MilestoneRequest):
             )
 
         session = result.data
+
+        # Verify session has been paid for
+        workshop_valid_statuses = [
+            "paid", "workshop_started", "workshop_complete",
+            "workshop_confirmation", "workshop_deepdive", "workshop",
+        ]
+        if session.get("status") not in workshop_valid_statuses:
+            logger.warning(
+                f"Workshop milestone called with invalid session status={session.get('status')} "
+                f"for session_id={request.session_id}"
+            )
+            raise HTTPException(
+                status_code=status.HTTP_403_FORBIDDEN,
+                detail="Session must be paid before accessing workshop"
+            )
+
         workshop_data = session.get("workshop_data", {})
         answers = session.get("answers", {})
         company_profile = session.get("company_profile", {})
@@ -558,24 +617,42 @@ async def generate_milestone(request: MilestoneRequest):
 
 
 @router.post("/milestone/feedback")
-async def save_milestone_feedback(request: MilestoneFeedbackRequest):
+async def save_milestone_feedback(request: MilestoneFeedbackRequest, raw_request: Request):
     """
     Save user feedback on a milestone.
 
     If feedback is "needs_edit", enables re-entry to the conversation
     with targeted follow-up questions based on data gaps.
     """
+    # Rate limit: 10 requests per minute (may trigger LLM for follow-up generation)
+    await endpoint_limiter.check(raw_request, "workshop_milestone_feedback", limit=10, window=60)
+
     try:
         supabase = await get_async_supabase()
 
         result = await supabase.table("quiz_sessions").select(
-            "workshop_data, answers"
+            "workshop_data, answers, status"
         ).eq("id", request.session_id).single().execute()
 
         if not result.data:
             raise HTTPException(
                 status_code=status.HTTP_404_NOT_FOUND,
                 detail="Session not found"
+            )
+
+        # Verify session has been paid for
+        workshop_valid_statuses = [
+            "paid", "workshop_started", "workshop_complete",
+            "workshop_confirmation", "workshop_deepdive", "workshop",
+        ]
+        if result.data.get("status") not in workshop_valid_statuses:
+            logger.warning(
+                f"Workshop milestone feedback called with invalid session status={result.data.get('status')} "
+                f"for session_id={request.session_id}"
+            )
+            raise HTTPException(
+                status_code=status.HTTP_403_FORBIDDEN,
+                detail="Session must be paid before accessing workshop"
             )
 
         workshop_data = result.data.get("workshop_data", {})
@@ -658,13 +735,28 @@ async def get_workshop_state(session_id: str):
         supabase = await get_async_supabase()
 
         result = await supabase.table("quiz_sessions").select(
-            "workshop_phase, workshop_data, workshop_confidence, company_profile, answers"
+            "workshop_phase, workshop_data, workshop_confidence, company_profile, answers, status"
         ).eq("id", session_id).single().execute()
 
         if not result.data:
             raise HTTPException(
                 status_code=status.HTTP_404_NOT_FOUND,
                 detail="Session not found"
+            )
+
+        # Verify session has been paid for
+        workshop_valid_statuses = [
+            "paid", "workshop_started", "workshop_complete",
+            "workshop_confirmation", "workshop_deepdive", "workshop",
+        ]
+        if result.data.get("status") not in workshop_valid_statuses:
+            logger.warning(
+                f"Workshop state called with invalid session status={result.data.get('status')} "
+                f"for session_id={session_id}"
+            )
+            raise HTTPException(
+                status_code=status.HTTP_403_FORBIDDEN,
+                detail="Session must be paid before accessing workshop"
             )
 
         session = result.data
@@ -712,6 +804,22 @@ async def complete_workshop(request: WorkshopCompleteRequest):
             )
 
         session = result.data
+
+        # Verify session has been paid for
+        workshop_valid_statuses = [
+            "paid", "workshop_started", "workshop_complete",
+            "workshop_confirmation", "workshop_deepdive", "workshop",
+        ]
+        if session.get("status") not in workshop_valid_statuses:
+            logger.warning(
+                f"Workshop complete called with invalid session status={session.get('status')} "
+                f"for session_id={request.session_id}"
+            )
+            raise HTTPException(
+                status_code=status.HTTP_403_FORBIDDEN,
+                detail="Session must be paid before accessing workshop"
+            )
+
         workshop_data = session.get("workshop_data", {})
 
         # Enforce confidence gate

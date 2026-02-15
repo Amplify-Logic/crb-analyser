@@ -9,8 +9,7 @@
 import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
 import { logger } from '../../utils/logger'
-
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8383'
+import { API_BASE } from '../../services/apiClient'
 
 // =============================================================================
 // Types
@@ -82,7 +81,7 @@ export default function WorkshopMilestone({
       setError(null)
 
       try {
-        const response = await fetch(`${API_BASE_URL}/api/workshop/milestone`, {
+        const response = await fetch(`${API_BASE}/api/workshop/milestone`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
@@ -138,7 +137,7 @@ export default function WorkshopMilestone({
     setIsSubmitting(true)
 
     try {
-      await fetch(`${API_BASE_URL}/api/workshop/milestone/feedback`, {
+      await fetch(`${API_BASE}/api/workshop/milestone/feedback`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({

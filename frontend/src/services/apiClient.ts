@@ -4,7 +4,7 @@
  * Uses HTTP-only cookies for authentication (set by backend)
  */
 
-const API_BASE = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8383';
+export const API_BASE = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8383';
 
 interface RetryConfig {
   maxRetries?: number;

@@ -1,6 +1,7 @@
 /**
- * Development-only logger utility.
- * All logging is suppressed in production builds.
+ * Logger utility.
+ * - console.error and console.warn always output (dev and production).
+ * - console.log, console.info, and console.debug are suppressed in production.
  * Use this instead of console.log/error/warn directly.
  */
 
@@ -13,18 +14,19 @@ export const logger = {
     }
   },
   error: (...args: unknown[]) => {
-    if (isDev) {
-      console.error(...args)
-    }
+    console.error(...args)
   },
   warn: (...args: unknown[]) => {
-    if (isDev) {
-      console.warn(...args)
-    }
+    console.warn(...args)
   },
   info: (...args: unknown[]) => {
     if (isDev) {
       console.info(...args)
+    }
+  },
+  debug: (...args: unknown[]) => {
+    if (isDev) {
+      console.debug(...args)
     }
   },
 }

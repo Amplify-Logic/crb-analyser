@@ -20,6 +20,7 @@ from src.middleware.security import email_limiter
 
 from src.config.supabase_client import get_async_supabase
 from src.config.redis_client import get_redis
+from src.config.settings import settings
 from src.config.questionnaire import (
     get_questionnaire,
     get_total_questions,
@@ -824,10 +825,10 @@ async def research_software(request: ResearchSoftwareRequest):
         }
 
     except Exception as e:
-        logger.error(f"Research software error: {e}")
+        logger.error(f"Research software error: {e}", exc_info=True)
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail=f"Failed to research software: {str(e)}"
+            detail="Failed to research software"
         )
 
 
@@ -1437,10 +1438,10 @@ async def generate_dev_preview(request_data: DevPreviewRequest):
         return teaser
 
     except Exception as e:
-        logger.error(f"Generate DEV preview error: {e}")
+        logger.error(f"Generate DEV preview error: {e}", exc_info=True)
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail=f"Failed to generate preview: {str(e)}"
+            detail="Failed to generate preview"
         )
 
 
@@ -1753,10 +1754,10 @@ async def generate_test_report(request_data: DevTestReportRequest):
     except HTTPException:
         raise
     except Exception as e:
-        logger.error(f"Generate test report error: {e}")
+        logger.error(f"Generate test report error: {e}", exc_info=True)
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail=f"Failed to generate test report: {str(e)}"
+            detail="Failed to generate test report"
         )
 
 
@@ -1881,6 +1882,12 @@ async def get_session_debug_data(session_id: str):
     - Interview messages
     - Knowledge base data that would be loaded for this industry
     """
+    if settings.APP_ENV not in ("development", "dev", "local"):
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Debug endpoint only available in development mode"
+        )
+
     from src.knowledge import (
         get_industry_context,
         get_relevant_opportunities,
@@ -1944,10 +1951,10 @@ async def get_session_debug_data(session_id: str):
     except HTTPException:
         raise
     except Exception as e:
-        logger.error(f"Get session debug data error: {e}")
+        logger.error(f"Get session debug data error: {e}", exc_info=True)
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail=f"Failed to get session debug data: {str(e)}"
+            detail="Failed to get session debug data"
         )
 
 
@@ -2146,7 +2153,7 @@ async def start_adaptive_quiz(request: AdaptiveStartRequest):
         logger.error(f"Start adaptive quiz error: {e}", exc_info=True)
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail=f"Failed to start adaptive quiz: {str(e)}"
+            detail="Failed to start adaptive quiz"
         )
 
 
@@ -2320,7 +2327,7 @@ async def submit_adaptive_answer(request: AdaptiveAnswerRequest):
         logger.error(f"Submit adaptive answer error: {e}", exc_info=True)
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail=f"Failed to process answer: {str(e)}"
+            detail="Failed to process answer"
         )
 
 

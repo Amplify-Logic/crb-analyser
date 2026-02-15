@@ -11,8 +11,7 @@ import { motion, AnimatePresence } from 'framer-motion'
 import VoiceRecorder from '../voice/VoiceRecorder'
 import { sanitizeHtml } from '../../utils/sanitize'
 import { logger } from '../../utils/logger'
-
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8383'
+import { API_BASE } from '../../services/apiClient'
 
 // =============================================================================
 // Types
@@ -103,7 +102,7 @@ Walk me through how this works today - what's the current process?`,
       formData.append('audio', audioBlob, 'recording.webm')
       formData.append('session_id', sessionId)
 
-      const transcribeResponse = await fetch(`${API_BASE_URL}/api/interview/transcribe`, {
+      const transcribeResponse = await fetch(`${API_BASE}/api/interview/transcribe`, {
         method: 'POST',
         body: formData,
       })
@@ -142,7 +141,7 @@ Walk me through how this works today - what's the current process?`,
     setIsProcessing(true)
 
     try {
-      const response = await fetch(`${API_BASE_URL}/api/workshop/respond`, {
+      const response = await fetch(`${API_BASE}/api/workshop/respond`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({

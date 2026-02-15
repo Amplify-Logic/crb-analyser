@@ -1,7 +1,17 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useRef } from 'react'
 import { Link, useSearchParams, useNavigate } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import { logger } from '../utils/logger'
+import { SUPPORT_EMAIL } from '../constants'
+import apiClient from '../services/apiClient'
+
+/** Statuses the backend sets after a successful payment webhook. */
+const PAID_STATUSES = ['paid', 'generating', 'completed', 'report_delivered']
+
+/** Maximum number of polling attempts (webhook may lag behind redirect). */
+const MAX_POLL_ATTEMPTS = 10
+/** Delay between polling attempts in ms. */
+const POLL_INTERVAL_MS = 2000
 
 export default function CheckoutSuccess() {
   const [searchParams] = useSearchParams()
@@ -15,29 +25,94 @@ export default function CheckoutSuccess() {
   const [isVerified, setIsVerified] = useState(false)
   const [verificationError, setVerificationError] = useState(false)
   const [error, setError] = useState<string | null>(null)
+  const cancelledRef = useRef(false)
 
   const hasStrategyCall = selectedTier === 'report_plus_call'
 
   useEffect(() => {
+    cancelledRef.current = false
+
     const verifySession = async () => {
+      // Must have a Stripe session_id from the redirect URL
       if (!stripeSessionId) {
-        setError('No session ID found')
+        setError('No session ID found. Please check your email for order confirmation.')
         setIsVerifying(false)
         return
       }
 
-      try {
-        // Note: This endpoint would need to be updated to not require auth
-        // For now, we'll just show success based on the presence of session_id
-        // The webhook handles the actual verification
-        setIsVerified(true)
+      // Must have the quiz session ID stored from before checkout
+      if (!quizSessionId) {
+        setError(
+          'Quiz session could not be found. If you completed payment, please check your email for login credentials.'
+        )
         setIsVerifying(false)
+        return
+      }
 
-        // Keep quizSessionId for workshop access - only clear after workshop starts
-        sessionStorage.removeItem('selectedTier')
-        sessionStorage.removeItem('companyProfile')
-        // Keep companyName and quizSessionId for workshop
+      // Poll the quiz session endpoint until payment is confirmed.
+      // The Stripe webhook may take a few seconds to process after redirect.
+      try {
+        let verified = false
+
+        for (let attempt = 0; attempt < MAX_POLL_ATTEMPTS; attempt++) {
+          if (cancelledRef.current) return
+
+          try {
+            const { data } = await apiClient.get<{
+              id: string
+              status: string
+              email: string
+              tier: string
+            }>(`/api/quiz/sessions/${quizSessionId}`)
+
+            if (PAID_STATUSES.includes(data.status)) {
+              verified = true
+              break
+            }
+
+            // Session found but not yet marked as paid -- webhook likely pending.
+            // Wait before the next attempt.
+            if (attempt < MAX_POLL_ATTEMPTS - 1) {
+              await new Promise((resolve) => setTimeout(resolve, POLL_INTERVAL_MS))
+            }
+          } catch (fetchErr: unknown) {
+            // If the session is not found (404/410), stop polling immediately.
+            const status = (fetchErr as { status?: number })?.status
+            if (status === 404 || status === 410) {
+              logger.error('Quiz session not found during verification', { quizSessionId })
+              setError(
+                'Your quiz session could not be found. If you completed payment, please check your email for login credentials.'
+              )
+              setIsVerifying(false)
+              return
+            }
+
+            // For transient errors, keep trying.
+            logger.warn('Payment verification poll error, retrying...', fetchErr)
+            if (attempt < MAX_POLL_ATTEMPTS - 1) {
+              await new Promise((resolve) => setTimeout(resolve, POLL_INTERVAL_MS))
+            }
+          }
+        }
+
+        if (cancelledRef.current) return
+
+        if (verified) {
+          setIsVerified(true)
+          setIsVerifying(false)
+
+          // Keep quizSessionId for workshop access -- only clear after workshop starts
+          sessionStorage.removeItem('selectedTier')
+          sessionStorage.removeItem('companyProfile')
+          // Keep companyName and quizSessionId for workshop
+        } else {
+          // Exhausted all attempts without confirmation
+          logger.error('Payment verification timed out', { quizSessionId, stripeSessionId })
+          setVerificationError(true)
+          setIsVerifying(false)
+        }
       } catch (err: unknown) {
+        if (cancelledRef.current) return
         logger.error('Verification error:', err)
         setVerificationError(true)
         setIsVerifying(false)
@@ -45,7 +120,11 @@ export default function CheckoutSuccess() {
     }
 
     verifySession()
-  }, [stripeSessionId])
+
+    return () => {
+      cancelledRef.current = true
+    }
+  }, [stripeSessionId, quizSessionId])
 
   const handleGoToWorkshop = () => {
     if (quizSessionId) {
@@ -122,7 +201,7 @@ export default function CheckoutSuccess() {
                 Retry Verification
               </button>
               <a
-                href="mailto:support@readypath.ai"
+                href={`mailto:${SUPPORT_EMAIL}`}
                 className="block w-full px-6 py-3 border-2 border-gray-200 text-gray-700 font-semibold rounded-xl hover:border-primary-300 hover:text-primary-700 transition"
               >
                 Contact Support
@@ -268,7 +347,7 @@ export default function CheckoutSuccess() {
                 Questions? We're here to help.
               </p>
               <a
-                href="mailto:support@readypath.ai"
+                href={`mailto:${SUPPORT_EMAIL}`}
                 className="text-primary-600 hover:text-primary-700 font-medium"
               >
                 Contact Support

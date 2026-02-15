@@ -1,11 +1,12 @@
-import { useState, useEffect, useRef, useCallback } from 'react'
+import React, { useState, useEffect, useRef, useCallback, Suspense } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
 import { ShimmerButton } from '../components/magicui'
 import { formatCompanyName } from '../lib/formatCompanyName'
 import { logger } from '../utils/logger'
+import { API_BASE } from '../services/apiClient'
 
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8383'
+const DevModeTestGenerator = React.lazy(() => import('./quiz/DevModeTestGenerator'))
 
 // ============================================================================
 // Helper Functions
@@ -167,585 +168,6 @@ interface TeaserReport {
   total_findings_available: number
   company_name: string
   industry: string
-}
-
-// ============================================================================
-// Industry-Specific Test Data
-// Each industry has unique tech stacks, pain points, and interview responses
-// ============================================================================
-
-interface IndustryTestData {
-  description: string
-  businessModel: string
-  employeeRange: string
-  employeeCount: number
-  annualRevenue: string
-  techStack: string[]
-  painPoints: string[]
-  biggestChallenge: string
-  currentTools: string[]
-  automationExperience: string
-  aiBudget: string
-  manualHoursWeekly: number
-  interview: Array<{ role: string; content: string }>
-  confidenceScores: Record<string, { score: number; evidence: string[] }>
-}
-
-const industryTestData: Record<string, IndustryTestData> = {
-  dental: {
-    description: 'Multi-location dental practice offering general dentistry, orthodontics, and cosmetic procedures. Known for family-friendly care and modern treatment techniques.',
-    businessModel: 'B2C Healthcare',
-    employeeRange: '21-50',
-    employeeCount: 35,
-    annualRevenue: '€2M-5M',
-    techStack: ['Dentrix', 'Eaglesoft', 'Pearl AI Imaging', 'Weave Communications', 'Open Dental'],
-    painPoints: ['patient no-shows costing revenue', 'insurance verification delays', 'treatment plan follow-up gaps', 'recalls and reactivations falling through'],
-    biggestChallenge: 'Patients ghost us after consultations - we present a €3,000 treatment plan and never hear from them again',
-    currentTools: ['Dentrix', 'Microsoft Office', 'WhatsApp for patient comms'],
-    automationExperience: 'Basic appointment reminders via text, nothing else automated',
-    aiBudget: '10000-25000',
-    manualHoursWeekly: 25,
-    interview: [
-      { role: 'user', content: 'We lose about 15-20 patients a week to no-shows. Each missed appointment costs us around €150 in chair time.' },
-      { role: 'user', content: 'Insurance verification is a nightmare - we spend 2 hours every morning on hold with insurance companies before we can confirm coverage.' },
-      { role: 'user', content: 'Our treatment acceptance rate is only about 40%. Patients say they\'ll think about it and we never follow up systematically.' },
-      { role: 'user', content: 'I wish we had a way to automatically reach out to patients who haven\'t been in for 6 months. Right now we just hope they remember to book.' },
-      { role: 'user', content: 'The front desk is overwhelmed - they\'re answering phones, checking in patients, verifying insurance, AND trying to schedule follow-ups all at once.' },
-    ],
-    confidenceScores: {
-      operations: { score: 85, evidence: ['Detailed no-show metrics provided', 'Specific cost per missed appointment'] },
-      technology: { score: 70, evidence: ['Listed current tools', 'Mentioned Dentrix usage'] },
-      financials: { score: 75, evidence: ['Revenue range provided', 'Cost per no-show calculated'] },
-      pain_points: { score: 90, evidence: ['Multiple specific pain points', 'Clear prioritization'] },
-    },
-  },
-
-  'home-services': {
-    description: 'Residential and light commercial construction company specializing in renovations, extensions, and new builds. 15 years in business with strong local reputation.',
-    businessModel: 'B2C/B2B Services',
-    employeeRange: '11-25',
-    employeeCount: 18,
-    annualRevenue: '€1.5M-3M',
-    techStack: ['BuilderTrend', 'QuickBooks', 'Jobber', 'CoConstruct', 'Housecall Pro'],
-    painPoints: ['estimating takes too long', 'job scheduling conflicts', 'material cost tracking', 'customer communication gaps during projects'],
-    biggestChallenge: 'Creating accurate estimates takes 4-5 hours per job and we still sometimes get it wrong, eating into profits',
-    currentTools: ['Excel for estimates', 'Google Calendar', 'WhatsApp groups with crews'],
-    automationExperience: 'Tried a few apps but the lads on site don\'t use them consistently',
-    aiBudget: '5000-15000',
-    manualHoursWeekly: 30,
-    interview: [
-      { role: 'user', content: 'Every estimate takes me a full evening. I\'m measuring, calculating materials, checking supplier prices - it\'s exhausting.' },
-      { role: 'user', content: 'Last month we had three crews show up at the wrong job. The scheduling mix-up cost us €2,000 in wasted travel and delays.' },
-      { role: 'user', content: 'Customers constantly ask "when will you be done?" and I have no good answer because we don\'t track progress properly.' },
-      { role: 'user', content: 'Material costs have gone up 30% but we\'re still quoting based on old prices. By the time we finish a job, our margins are gone.' },
-      { role: 'user', content: 'I spend half my Sundays doing invoices instead of being with my family. There has to be a better way.' },
-    ],
-    confidenceScores: {
-      operations: { score: 90, evidence: ['Detailed estimating process described', 'Scheduling issues quantified'] },
-      technology: { score: 60, evidence: ['Using basic tools', 'Mentioned failed app adoption'] },
-      financials: { score: 80, evidence: ['Material cost impact stated', 'Revenue range clear'] },
-      pain_points: { score: 95, evidence: ['Emotional response about work-life balance', 'Specific cost examples'] },
-    },
-  },
-
-  recruiting: {
-    description: 'Boutique recruitment agency specializing in tech and finance placements. Works with both startups and established enterprises across the DACH region.',
-    businessModel: 'B2B Services',
-    employeeRange: '6-15',
-    employeeCount: 12,
-    annualRevenue: '€800K-1.5M',
-    techStack: ['Bullhorn', 'LinkedIn Recruiter', 'Greenhouse', 'Lever', 'HireVue'],
-    painPoints: ['sourcing quality candidates takes forever', 'candidate ghosting after interviews', 'client relationship management', 'ATS data is a mess'],
-    biggestChallenge: 'We spend 70% of our time sourcing, only 30% actually talking to candidates and clients - the ratio should be reversed',
-    currentTools: ['Bullhorn ATS', 'LinkedIn Recruiter', 'Gmail', 'Google Sheets for pipeline tracking'],
-    automationExperience: 'We have some email sequences in Bullhorn but they feel generic',
-    aiBudget: '8000-20000',
-    manualHoursWeekly: 35,
-    interview: [
-      { role: 'user', content: 'I spend 3 hours a day on LinkedIn just trying to find candidates. Boolean searches only get me so far.' },
-      { role: 'user', content: 'Our response rate to outreach is maybe 5%. Most candidates ignore our messages because they\'re getting 20 others just like it.' },
-      { role: 'user', content: 'We had a perfect candidate ghost us at the final round last week. €15,000 placement fee gone because we didn\'t nurture the relationship.' },
-      { role: 'user', content: 'Client updates are embarrassing - I have to manually check Bullhorn before every call to remember where each search stands.' },
-      { role: 'user', content: 'Our database has 50,000 candidates but half the data is outdated. People have moved jobs 3 times since we last spoke.' },
-    ],
-    confidenceScores: {
-      operations: { score: 85, evidence: ['Time allocation breakdown provided', 'Specific metrics on response rates'] },
-      technology: { score: 75, evidence: ['Listed ATS and tools', 'Understood limitations'] },
-      financials: { score: 80, evidence: ['Placement fee mentioned', 'Revenue impact clear'] },
-      pain_points: { score: 90, evidence: ['Quantified lost revenue', 'Emotional frustration evident'] },
-    },
-  },
-
-  veterinary: {
-    description: 'Full-service veterinary hospital offering wellness care, surgery, emergency services, and boarding. Serves companion animals in a busy suburban area.',
-    businessModel: 'B2C Healthcare',
-    employeeRange: '15-30',
-    employeeCount: 22,
-    annualRevenue: '€1M-2.5M',
-    techStack: ['eVetPractice', 'Idexx VetLab', 'Covetrus Pulse', 'PetDesk', 'Vetter Software'],
-    painPoints: ['prescription refill requests pile up', 'lab result communication delays', 'inventory management chaos', 'after-hours emergency coordination'],
-    biggestChallenge: 'Pet owners expect instant communication but our vets are in surgery or consultations - we can\'t respond fast enough',
-    currentTools: ['eVetPractice', 'Paper charts for some legacy records', 'Phone calls for everything'],
-    automationExperience: 'Appointment reminders are automated, rest is manual',
-    aiBudget: '8000-18000',
-    manualHoursWeekly: 28,
-    interview: [
-      { role: 'user', content: 'We get 40+ phone calls a day just for prescription refills. Each one takes 5 minutes because we have to pull records and verify.' },
-      { role: 'user', content: 'Lab results sit in our inbox for hours before someone has time to call the owner. Meanwhile they\'re anxiously waiting for news about their pet.' },
-      { role: 'user', content: 'Our vaccine reminder system is a joke - we mail postcards. Half get returned, the other half ignored. Revenue walks out the door.' },
-      { role: 'user', content: 'Inventory counts don\'t match what we actually have. Last week we had to send a pet home and reschedule surgery because we were out of anesthesia.' },
-      { role: 'user', content: 'After-hours emergencies go to an answering service that can\'t help. By the time we call back, the owner went to a competitor.' },
-    ],
-    confidenceScores: {
-      operations: { score: 90, evidence: ['Call volume quantified', 'Specific time per task'] },
-      technology: { score: 65, evidence: ['Mixed paper/digital workflow', 'Legacy systems mentioned'] },
-      financials: { score: 70, evidence: ['Revenue impact implied', 'Lost client examples'] },
-      pain_points: { score: 95, evidence: ['Life-or-death urgency conveyed', 'Multiple concrete examples'] },
-    },
-  },
-
-  coaching: {
-    description: 'Executive and leadership coaching practice working with C-suite leaders and high-potential managers. Combines 1:1 coaching with group workshops.',
-    businessModel: 'B2B/B2C Services',
-    employeeRange: '3-10',
-    employeeCount: 6,
-    annualRevenue: '€400K-800K',
-    techStack: ['Calendly', 'Zoom', 'Notion', 'CoachAccountable', 'Kajabi'],
-    painPoints: ['session prep takes too long', 'tracking client progress manually', 'content creation for workshops', 'scaling beyond 1:1 sessions'],
-    biggestChallenge: 'I can only coach 20 clients at once. To grow revenue, I need to scale but I don\'t want to sacrifice quality.',
-    currentTools: ['Calendly', 'Zoom', 'Google Docs for session notes', 'Stripe for payments'],
-    automationExperience: 'Calendar booking is automated, but session prep and follow-up is all manual',
-    aiBudget: '3000-8000',
-    manualHoursWeekly: 15,
-    interview: [
-      { role: 'user', content: 'Before each session, I spend 30 minutes reviewing notes from our last 5 conversations. I can\'t remember every client\'s journey.' },
-      { role: 'user', content: 'My clients want homework and exercises between sessions. Creating personalized materials for 20 people is impossible.' },
-      { role: 'user', content: 'I\'ve thought about group programs but the admin of managing 30 people through a 12-week program terrifies me.' },
-      { role: 'user', content: 'Clients cancel last-minute constantly. I lose €500/hour slots because there\'s no consequence for late cancellations.' },
-      { role: 'user', content: 'My best insights happen in sessions but I forget to write them down. Two weeks later, I can\'t remember what breakthrough we had.' },
-    ],
-    confidenceScores: {
-      operations: { score: 80, evidence: ['Session prep time detailed', 'Client capacity stated'] },
-      technology: { score: 70, evidence: ['Current stack listed', 'Clear gaps identified'] },
-      financials: { score: 85, evidence: ['Hourly rate implied', 'Scaling constraints clear'] },
-      pain_points: { score: 85, evidence: ['Capacity constraints', 'Quality vs scale tension'] },
-    },
-  },
-
-  'professional-services': {
-    description: 'Mid-sized accounting and advisory firm serving SMEs and owner-managed businesses. Offers audit, tax, corporate finance, and business consulting.',
-    businessModel: 'B2B Services',
-    employeeRange: '25-50',
-    employeeCount: 38,
-    annualRevenue: '€3M-6M',
-    techStack: ['Xero', 'Sage', 'CCH Axcess', 'Practice Ignition', 'Karbon'],
-    painPoints: ['client data chasing every month', 'compliance deadline management', 'knowledge silos between partners', 'scope creep on fixed-fee engagements'],
-    biggestChallenge: 'We spend 40% of engagement time chasing clients for documents instead of doing actual advisory work',
-    currentTools: ['Xero/Sage integrations', 'Outlook', 'SharePoint', 'Excel for everything else'],
-    automationExperience: 'Bank feeds and some reconciliation automated, client comms and workflow still manual',
-    aiBudget: '15000-35000',
-    manualHoursWeekly: 45,
-    interview: [
-      { role: 'user', content: 'Our managers send 50 emails a day chasing bank statements, invoices, and receipts. It\'s degrading work for qualified accountants.' },
-      { role: 'user', content: 'We missed a VAT deadline last quarter because the reminder got lost in email. €8,000 penalty for the client, and they blamed us.' },
-      { role: 'user', content: 'Every partner has their own way of doing things. When someone\'s on holiday, their clients are stuck waiting.' },
-      { role: 'user', content: 'Fixed-fee engagements are killing us. A €5,000 annual accounts job turns into €8,000 of work because the client keeps asking questions.' },
-      { role: 'user', content: 'I wish we could clone our best partner. He spots tax planning opportunities others miss, but his knowledge is all in his head.' },
-    ],
-    confidenceScores: {
-      operations: { score: 95, evidence: ['Detailed time allocation', 'Specific penalty example'] },
-      technology: { score: 75, evidence: ['Listed integrations', 'Clear gaps in workflow tools'] },
-      financials: { score: 90, evidence: ['Revenue range provided', 'Scope creep quantified'] },
-      pain_points: { score: 95, evidence: ['Multiple partners affected', 'Emotional frustration evident'] },
-    },
-  },
-}
-
-// ============================================================================
-// Dev Mode Test Generator Component
-// ============================================================================
-
-// Model strategies available for testing
-const MODEL_STRATEGIES = [
-  { id: 'anthropic_quick', label: 'Claude Sonnet (Quick)', description: 'Fast, cost-effective - Sonnet for generation' },
-  { id: 'anthropic_full', label: 'Claude Opus (Full)', description: 'Premium quality - Opus for all generation' },
-  { id: 'hybrid', label: 'Hybrid (Recommended)', description: 'Haiku → Sonnet → Opus pipeline' },
-  { id: 'gemini_primary', label: 'Gemini Primary', description: 'Flash drafts, Pro final (1501 Elo)' },
-  { id: 'cost_optimized', label: 'Cost Optimized', description: 'Flash → Sonnet → Opus (cheapest)' },
-  { id: 'multi_provider', label: 'Multi-Provider', description: 'Opus + Gemini Pro + GPT-5.2 validation' },
-  { id: 'budget', label: 'Budget (DeepSeek)', description: 'DeepSeek V3 primary (94% cheaper)' },
-] as const
-
-const TEST_COMPANIES = [
-  { name: 'Nordic Dental Group', industry: 'dental', website: 'nordicdentalgroup.com' },
-  { name: 'Green Oak Construction', industry: 'home-services', website: 'greenoakconstruction.com' },
-  { name: 'Swift Recruit Partners', industry: 'recruiting', website: 'swiftrecruit.io' },
-  { name: 'Cascade Veterinary Clinic', industry: 'veterinary', website: 'cascadevet.com' },
-  { name: 'Summit Coaching Academy', industry: 'coaching', website: 'summitcoaching.co' },
-  { name: 'Anderson & Partners LLP', industry: 'professional-services', website: 'andersonpartners.com' },
-] as const
-
-interface DevModeTestGeneratorProps {
-  navigate: (path: string) => void
-}
-
-function DevModeTestGenerator({ navigate }: DevModeTestGeneratorProps) {
-  const [isGenerating, setIsGenerating] = useState(false)
-  const [currentStep, setCurrentStep] = useState('')
-  const [selectedCompany, setSelectedCompany] = useState<typeof TEST_COMPANIES[number] | null>(null)
-  const [progress, setProgress] = useState(0)
-  const [error, setError] = useState<string | null>(null)
-
-  // Dev config options
-  const [showAdvanced, setShowAdvanced] = useState(false)
-  const [selectedStrategy, setSelectedStrategy] = useState<string>('anthropic_quick')
-  const [selectedTier, setSelectedTier] = useState<'quick' | 'full'>('quick')
-  const [companyIndex, setCompanyIndex] = useState<number>(-1) // -1 = random
-
-  const testCompanies = TEST_COMPANIES
-
-  const steps = [
-    { label: 'Creating session', icon: '📝' },
-    { label: 'Loading knowledge base', icon: '📚' },
-    { label: 'Analyzing business context', icon: '🔍' },
-    { label: 'Generating findings', icon: '💡' },
-    { label: 'Building recommendations', icon: '🎯' },
-    { label: 'Calculating ROI', icon: '📊' },
-    { label: 'Finalizing report', icon: '✨' },
-  ]
-
-  async function generateTestReport() {
-    setIsGenerating(true)
-    setError(null)
-    setProgress(0)
-
-    // Use selected company or random
-    const testCompany = companyIndex >= 0
-      ? testCompanies[companyIndex]
-      : testCompanies[Math.floor(Math.random() * testCompanies.length)]
-    setSelectedCompany(testCompany)
-
-    // Get industry-specific test data
-    const industryData = industryTestData[testCompany.industry]
-    if (!industryData) {
-      setError(`No test data configured for industry: ${testCompany.industry}`)
-      setIsGenerating(false)
-      return
-    }
-
-    const mockProfile = {
-      basics: {
-        name: { value: testCompany.name },
-        description: { value: industryData.description },
-        website: { value: testCompany.website }
-      },
-      industry: {
-        primary_industry: { value: testCompany.industry },
-        business_model: { value: industryData.businessModel }
-      },
-      size: {
-        employee_range: { value: industryData.employeeRange },
-        employee_count: { value: industryData.employeeCount },
-        annual_revenue: { value: industryData.annualRevenue }
-      },
-      tech_stack: {
-        technologies_detected: industryData.techStack.slice(0, 3).map(t => ({ value: t }))
-      }
-    }
-
-    const mockAnswers = {
-      industry: testCompany.industry,
-      company_size: industryData.employeeRange,
-      employee_count: industryData.employeeCount,
-      pain_points: industryData.painPoints,
-      biggest_challenge: industryData.biggestChallenge,
-      current_tools: industryData.currentTools,
-      automation_experience: industryData.automationExperience,
-      ai_budget: industryData.aiBudget,
-      manual_hours_weekly: industryData.manualHoursWeekly,
-      tech_comfort: 'comfortable',
-      // Include interview responses in answers for dev context
-      interview_responses: industryData.interview.map(m => m.content),
-    }
-
-    // Full interview messages with assistant questions interspersed
-    const mockInterview = industryData.interview
-
-    try {
-      // Use streaming endpoint for real-time progress updates
-      const response = await fetch(`${API_BASE_URL}/api/quiz/dev/generate-test-report/stream`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          company_profile: mockProfile,
-          quiz_answers: mockAnswers,
-          interview_messages: mockInterview,
-          confidence_scores: industryData.confidenceScores,
-          tier: selectedTier,
-          model_strategy: selectedStrategy,
-        })
-      })
-
-      if (!response.ok) {
-        const errorData = await response.json().catch(() => ({}))
-        throw new Error(errorData?.detail || errorData?.error?.message || `Failed: ${response.statusText}`)
-      }
-
-      // Read the stream for real-time progress updates
-      const reader = response.body?.getReader()
-      if (!reader) {
-        throw new Error('No response stream available')
-      }
-
-      const decoder = new TextDecoder()
-      let buffer = ''
-      let reportId: string | null = null
-
-      while (true) {
-        const { done, value } = await reader.read()
-        if (done) break
-
-        buffer += decoder.decode(value, { stream: true })
-
-        // Process SSE events in the buffer
-        const lines = buffer.split('\n')
-        buffer = lines.pop() || '' // Keep incomplete line in buffer
-
-        for (const line of lines) {
-          if (line.startsWith('data: ')) {
-            try {
-              const data = JSON.parse(line.slice(6))
-
-              // Update progress from real backend events
-              if (data.progress !== undefined) {
-                setProgress(data.progress)
-              }
-              if (data.step) {
-                setCurrentStep(data.step)
-              }
-
-              // Check for completion
-              if (data.report_id) {
-                reportId = data.report_id
-              }
-
-              // Check for errors
-              if (data.phase === 'error') {
-                throw new Error(data.error || data.step || 'Report generation failed')
-              }
-
-              // Navigate on completion
-              if ((data.phase === 'done' || data.phase === 'complete') && reportId) {
-                setProgress(100)
-                setCurrentStep('Report ready!')
-                await new Promise(r => setTimeout(r, 500))
-                navigate(`/report/${reportId}?dev=true`)
-                return
-              }
-            } catch (parseErr) {
-              // Only log if it's not a JSON parse error for empty/malformed data
-              if (line.trim() !== 'data: ') {
-                logger.warn('Failed to parse SSE event:', line, parseErr)
-              }
-            }
-          }
-        }
-      }
-
-      // If we got here without navigating, check if we have a report_id
-      if (reportId) {
-        setProgress(100)
-        setCurrentStep('Report ready!')
-        await new Promise(r => setTimeout(r, 500))
-        navigate(`/report/${reportId}?dev=true`)
-      } else {
-        throw new Error('Report generation completed but no report ID received')
-      }
-    } catch (err: any) {
-      logger.error('Failed to generate test report:', err)
-      setError(err.message || 'Failed to generate report')
-      setIsGenerating(false)
-    }
-  }
-
-  if (isGenerating) {
-    return (
-      <motion.div
-        initial={{ opacity: 0, y: 10 }}
-        animate={{ opacity: 1, y: 0 }}
-        className="mt-8 p-6 bg-gradient-to-br from-yellow-50 to-orange-50 border-2 border-yellow-300 rounded-2xl"
-      >
-        <div className="text-center">
-          <div className="inline-flex items-center gap-2 px-3 py-1 bg-yellow-200 text-yellow-800 rounded-full text-xs font-medium mb-4">
-            <span className="animate-pulse">●</span> DEV MODE
-          </div>
-
-          {selectedCompany && (
-            <div className="mb-4">
-              <h3 className="text-lg font-bold text-gray-900">{selectedCompany.name}</h3>
-              <p className="text-sm text-gray-500 capitalize">{selectedCompany.industry.replace('-', ' ')}</p>
-            </div>
-          )}
-
-          {/* Progress bar */}
-          <div className="w-full bg-gray-200 rounded-full h-3 mb-4 overflow-hidden">
-            <motion.div
-              className="h-full bg-gradient-to-r from-yellow-400 to-orange-500 rounded-full"
-              initial={{ width: 0 }}
-              animate={{ width: `${progress}%` }}
-              transition={{ duration: 0.5 }}
-            />
-          </div>
-
-          {/* Current step */}
-          <div className="flex items-center justify-center gap-2 text-gray-700">
-            <motion.div
-              animate={{ rotate: 360 }}
-              transition={{ duration: 1, repeat: Infinity, ease: 'linear' }}
-              className="w-5 h-5 border-2 border-yellow-500 border-t-transparent rounded-full"
-            />
-            <span className="font-medium">{currentStep || 'Starting...'}</span>
-          </div>
-
-          {/* Steps list */}
-          <div className="mt-6 grid grid-cols-2 gap-2 text-left">
-            {steps.map((step, i) => {
-              const stepProgress = (progress / 100) * steps.length
-              const isComplete = i < stepProgress
-              const isCurrent = i === Math.floor(stepProgress)
-              return (
-                <div
-                  key={step.label}
-                  className={`flex items-center gap-2 text-xs py-1 px-2 rounded ${
-                    isComplete ? 'text-green-700 bg-green-50' :
-                    isCurrent ? 'text-yellow-700 bg-yellow-100 font-medium' :
-                    'text-gray-400'
-                  }`}
-                >
-                  <span>{isComplete ? '✓' : step.icon}</span>
-                  <span>{step.label}</span>
-                </div>
-              )
-            })}
-          </div>
-
-          {error && (
-            <div className="mt-4 p-3 bg-red-100 text-red-700 rounded-lg text-sm">
-              {error}
-              <button
-                onClick={() => { setError(null); setIsGenerating(false) }}
-                className="block mt-2 text-red-800 underline text-xs"
-              >
-                Try again
-              </button>
-            </div>
-          )}
-        </div>
-      </motion.div>
-    )
-  }
-
-  return (
-    <div className="mt-8 p-4 bg-yellow-50 border border-yellow-200 rounded-xl">
-      <div className="flex items-center justify-between mb-3">
-        <p className="text-xs text-yellow-800 font-medium">🛠️ DEV MODE</p>
-        <button
-          onClick={() => setShowAdvanced(!showAdvanced)}
-          className="text-xs text-yellow-600 hover:text-yellow-800 underline"
-        >
-          {showAdvanced ? 'Hide options' : 'Show options'}
-        </button>
-      </div>
-
-      {showAdvanced && (
-        <div className="mb-4 space-y-3 p-3 bg-white/50 rounded-lg border border-yellow-200">
-          {/* Model Strategy Selector */}
-          <div>
-            <label className="block text-xs font-medium text-gray-700 mb-1">
-              Model Strategy
-            </label>
-            <select
-              value={selectedStrategy}
-              onChange={(e) => setSelectedStrategy(e.target.value)}
-              className="w-full text-sm border border-gray-300 rounded-md px-2 py-1.5 bg-white focus:ring-2 focus:ring-yellow-500 focus:border-yellow-500"
-            >
-              {MODEL_STRATEGIES.map((strategy) => (
-                <option key={strategy.id} value={strategy.id}>
-                  {strategy.label}
-                </option>
-              ))}
-            </select>
-            <p className="text-xs text-gray-500 mt-1">
-              {MODEL_STRATEGIES.find(s => s.id === selectedStrategy)?.description}
-            </p>
-          </div>
-
-          {/* Tier Selector */}
-          <div>
-            <label className="block text-xs font-medium text-gray-700 mb-1">
-              Report Tier
-            </label>
-            <div className="flex gap-2">
-              <button
-                onClick={() => setSelectedTier('quick')}
-                className={`flex-1 py-1.5 px-3 text-xs font-medium rounded-md border transition ${
-                  selectedTier === 'quick'
-                    ? 'bg-yellow-500 text-white border-yellow-500'
-                    : 'bg-white text-gray-700 border-gray-300 hover:border-yellow-400'
-                }`}
-              >
-                Quick (10-15 findings)
-              </button>
-              <button
-                onClick={() => setSelectedTier('full')}
-                className={`flex-1 py-1.5 px-3 text-xs font-medium rounded-md border transition ${
-                  selectedTier === 'full'
-                    ? 'bg-yellow-500 text-white border-yellow-500'
-                    : 'bg-white text-gray-700 border-gray-300 hover:border-yellow-400'
-                }`}
-              >
-                Full (25-50 findings)
-              </button>
-            </div>
-          </div>
-
-          {/* Company Selector */}
-          <div>
-            <label className="block text-xs font-medium text-gray-700 mb-1">
-              Test Company
-            </label>
-            <select
-              value={companyIndex}
-              onChange={(e) => setCompanyIndex(Number(e.target.value))}
-              className="w-full text-sm border border-gray-300 rounded-md px-2 py-1.5 bg-white focus:ring-2 focus:ring-yellow-500 focus:border-yellow-500"
-            >
-              <option value={-1}>🎲 Random</option>
-              {testCompanies.map((company, idx) => (
-                <option key={company.name} value={idx}>
-                  {company.name} ({company.industry})
-                </option>
-              ))}
-            </select>
-          </div>
-
-          {/* Config Summary */}
-          <div className="text-xs text-gray-600 bg-gray-100 rounded p-2">
-            <strong>Config:</strong> {MODEL_STRATEGIES.find(s => s.id === selectedStrategy)?.label} • {selectedTier} tier • {companyIndex >= 0 ? testCompanies[companyIndex].name : 'Random company'}
-          </div>
-        </div>
-      )}
-
-      <button
-        onClick={generateTestReport}
-        className="w-full py-2 bg-yellow-500 text-white font-medium rounded-lg hover:bg-yellow-600 text-sm transition"
-      >
-        Generate Test Report
-      </button>
-      <p className="text-xs text-yellow-600 mt-2 text-center">
-        Creates a real report with mock data for testing
-      </p>
-    </div>
-  )
 }
 
 // ============================================================================
@@ -1028,7 +450,7 @@ export default function Quiz() {
         const savedSession = localStorage.getItem('crb_session_id')
         if (savedSession && !forceNew) {
           // Verify the session still exists
-          const checkResponse = await fetch(`${API_BASE_URL}/api/quiz/sessions/${savedSession}/research/status`)
+          const checkResponse = await fetch(`${API_BASE}/api/quiz/sessions/${savedSession}/research/status`)
           if (checkResponse.ok) {
             const data = await checkResponse.json()
             setSessionId(savedSession)
@@ -1054,7 +476,7 @@ export default function Quiz() {
 
         // Create new session with temporary email
         const tempEmail = `quiz_${Date.now()}@example.com`
-        const response = await fetch(`${API_BASE_URL}/api/quiz/sessions`, {
+        const response = await fetch(`${API_BASE}/api/quiz/sessions`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ email: tempEmail, tier: 'full' }),
@@ -1086,7 +508,7 @@ export default function Quiz() {
 
       try {
         const response = await fetch(
-          `${API_BASE_URL}/api/quiz/software-options?industry=${encodeURIComponent(industry)}`
+          `${API_BASE}/api/quiz/software-options?industry=${encodeURIComponent(industry)}`
         )
         if (response.ok) {
           const data = await response.json()
@@ -1129,7 +551,7 @@ export default function Quiz() {
     }
 
     try {
-      const response = await fetch(`${API_BASE_URL}/api/quiz/sessions/${sessionId}`, {
+      const response = await fetch(`${API_BASE}/api/quiz/sessions/${sessionId}`, {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ existing_stack: existingStack }),
@@ -1164,7 +586,7 @@ export default function Quiz() {
       }
 
       // Start research
-      const response = await fetch(`${API_BASE_URL}/api/quiz/sessions/${sessionId}/research`, {
+      const response = await fetch(`${API_BASE}/api/quiz/sessions/${sessionId}/research`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ website_url: normalizedUrl }),
@@ -1179,7 +601,7 @@ export default function Quiz() {
 
       // Connect to SSE stream
       const eventSource = new EventSource(
-        `${API_BASE_URL}/api/quiz/sessions/${sessionId}/research/stream`
+        `${API_BASE}/api/quiz/sessions/${sessionId}/research/stream`
       )
       eventSourceRef.current = eventSource
 
@@ -1195,7 +617,7 @@ export default function Quiz() {
             eventSourceRef.current = null
 
             // Save results
-            await fetch(`${API_BASE_URL}/api/quiz/sessions/${sessionId}/research/save`, {
+            await fetch(`${API_BASE}/api/quiz/sessions/${sessionId}/research/save`, {
               method: 'POST',
               headers: { 'Content-Type': 'application/json' },
               body: JSON.stringify(update.result),
@@ -1436,7 +858,9 @@ export default function Quiz() {
 
             {/* DEV MODE: Generate test report */}
             {import.meta.env.DEV && (
-              <DevModeTestGenerator navigate={navigate} />
+              <Suspense fallback={null}>
+                <DevModeTestGenerator navigate={navigate} />
+              </Suspense>
             )}
           </motion.div>
         </div>
@@ -2576,7 +2000,7 @@ export default function Quiz() {
       setEmailSubmitting(true)
       try {
         // Save email to session via API
-        const response = await fetch(`${API_BASE_URL}/api/quiz/sessions/${sessionId}`, {
+        const response = await fetch(`${API_BASE}/api/quiz/sessions/${sessionId}`, {
           method: 'PATCH',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({

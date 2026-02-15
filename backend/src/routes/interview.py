@@ -21,10 +21,11 @@ from typing import Optional, List
 from datetime import datetime
 import json
 
-from fastapi import APIRouter, HTTPException, status, UploadFile, File
+from fastapi import APIRouter, HTTPException, Request, status, UploadFile, File
 from pydantic import BaseModel
 import anthropic
 
+from src.middleware.security import endpoint_limiter
 from src.config.supabase_client import get_async_supabase
 from src.config.settings import settings
 from src.config.system_prompt import get_interview_system_prompt, FOUNDATIONAL_LOGIC
@@ -411,7 +412,7 @@ def generate_fallback_response(
 # ============================================================================
 
 @router.post("/process-answer", response_model=ProcessAnswerResponse)
-async def process_interview_answer(request: ProcessAnswerRequest):
+async def process_interview_answer(request: ProcessAnswerRequest, raw_request: Request):
     """
     Process an interview answer and return the next question.
 
@@ -421,7 +422,38 @@ async def process_interview_answer(request: ProcessAnswerRequest):
     3. Decides: follow-up question or next anchor
     4. Returns everything needed for frontend
     """
+    # Rate limit: 10 requests per minute (LLM-calling endpoint)
+    await endpoint_limiter.check(raw_request, "interview_process_answer", limit=10, window=60)
+
     try:
+        # Validate session exists and is in a valid state
+        supabase = await get_async_supabase()
+        session_check = await supabase.table("quiz_sessions").select(
+            "id, status"
+        ).eq("id", request.session_id).single().execute()
+
+        if not session_check.data:
+            logger.warning(f"process-answer called with invalid session_id={request.session_id}")
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail="Session not found"
+            )
+
+        valid_statuses = [
+            "in_progress", "completed", "payment_pending", "paid",
+            "workshop_started", "workshop_complete", "report_generating",
+            "report_delivered",
+        ]
+        if session_check.data.get("status") not in valid_statuses:
+            logger.warning(
+                f"process-answer called with invalid session status={session_check.data.get('status')} "
+                f"for session_id={request.session_id}"
+            )
+            raise HTTPException(
+                status_code=status.HTTP_403_FORBIDDEN,
+                detail="Session is not in a valid state"
+            )
+
         # Create engine and state
         client = get_anthropic_client()
         engine = InterviewEngine(anthropic_client=client)
@@ -457,7 +489,7 @@ async def process_interview_answer(request: ProcessAnswerRequest):
         logger.error(f"Error processing answer: {e}", exc_info=True)
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail=f"Failed to process answer: {str(e)}"
+            detail="Failed to process answer"
         )
 
 
@@ -475,12 +507,43 @@ async def get_first_question(industry: str, company_name: Optional[str] = None):
 
 
 @router.post("/respond")
-async def interview_respond(request: InterviewRespondRequest):
+async def interview_respond(request: InterviewRespondRequest, raw_request: Request):
     """
     Process a user message and return an AI response.
     Uses FollowUpQuestionSkill for adaptive conversations.
     """
+    # Rate limit: 10 requests per minute (LLM-calling endpoint)
+    await endpoint_limiter.check(raw_request, "interview_respond", limit=10, window=60)
+
     try:
+        # Validate session exists and is in a valid state
+        supabase = await get_async_supabase()
+        session_check = await supabase.table("quiz_sessions").select(
+            "id, status"
+        ).eq("id", request.session_id).single().execute()
+
+        if not session_check.data:
+            logger.warning(f"interview respond called with invalid session_id={request.session_id}")
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail="Session not found"
+            )
+
+        valid_statuses = [
+            "in_progress", "completed", "payment_pending", "paid",
+            "workshop_started", "workshop_complete", "report_generating",
+            "report_delivered",
+        ]
+        if session_check.data.get("status") not in valid_statuses:
+            logger.warning(
+                f"interview respond called with invalid session status={session_check.data.get('status')} "
+                f"for session_id={request.session_id}"
+            )
+            raise HTTPException(
+                status_code=status.HTTP_403_FORBIDDEN,
+                detail="Session is not in a valid state"
+            )
+
         context = request.context or InterviewContext()
         previous_messages = context.previous_messages or []
 
@@ -534,6 +597,22 @@ async def interview_complete(request: InterviewCompleteRequest):
             )
 
         session = session_result.data
+
+        # Validate session is in a valid state
+        valid_statuses = [
+            "in_progress", "completed", "payment_pending", "paid",
+            "workshop_started", "workshop_complete", "report_generating",
+            "report_delivered",
+        ]
+        if session.get("status") not in valid_statuses:
+            logger.warning(
+                f"interview complete called with invalid session status={session.get('status')} "
+                f"for session_id={request.session_id}"
+            )
+            raise HTTPException(
+                status_code=status.HTTP_403_FORBIDDEN,
+                detail="Session is not in a valid state"
+            )
 
         # Get industry from session answers
         answers = session.get("answers", {})
@@ -604,13 +683,46 @@ async def interview_complete(request: InterviewCompleteRequest):
 
 @router.post("/transcribe")
 async def transcribe_interview_audio(
+    raw_request: Request,
     audio: UploadFile = File(...),
     session_id: Optional[str] = None,
 ):
     """
     Transcribe audio for interview (public endpoint for paid users).
     """
+    # Rate limit: 10 requests per minute (external API - Deepgram)
+    await endpoint_limiter.check(raw_request, "interview_transcribe", limit=10, window=60)
+
     try:
+        # Validate session if provided
+        if session_id:
+            supabase = await get_async_supabase()
+            session_check = await supabase.table("quiz_sessions").select(
+                "id, status"
+            ).eq("id", session_id).single().execute()
+
+            if not session_check.data:
+                logger.warning(f"transcribe called with invalid session_id={session_id}")
+                raise HTTPException(
+                    status_code=status.HTTP_404_NOT_FOUND,
+                    detail="Session not found"
+                )
+
+            valid_statuses = [
+                "in_progress", "completed", "payment_pending", "paid",
+                "workshop_started", "workshop_complete", "report_generating",
+                "report_delivered",
+            ]
+            if session_check.data.get("status") not in valid_statuses:
+                logger.warning(
+                    f"transcribe called with invalid session status={session_check.data.get('status')} "
+                    f"for session_id={session_id}"
+                )
+                raise HTTPException(
+                    status_code=status.HTTP_403_FORBIDDEN,
+                    detail="Session is not in a valid state"
+                )
+
         # Validate file type
         allowed_types = [
             "audio/webm",
@@ -678,7 +790,7 @@ class TTSRequest(BaseModel):
 
 
 @router.post("/tts")
-async def text_to_speech(request: TTSRequest):
+async def text_to_speech(request: TTSRequest, raw_request: Request):
     """
     Convert text to speech using ElevenLabs TTS.
     Returns audio as base64-encoded data.
@@ -690,6 +802,9 @@ async def text_to_speech(request: TTSRequest):
     - MF3mGyEYCl7XYWbV9V6O: Elli (friendly, warm)
     - TxGEqnHWrfWFTfGW9XjX: Josh (deep, authoritative)
     """
+    # Rate limit: 10 requests per minute (external API - ElevenLabs)
+    await endpoint_limiter.check(raw_request, "interview_tts", limit=10, window=60)
+
     import base64
 
     try:
@@ -871,6 +986,22 @@ async def trigger_report_generation(request: TriggerReportRequest):
             )
 
         session = session_result.data
+
+        # Verify session has been paid for before allowing report generation
+        paid_statuses = [
+            "paid", "workshop_started", "workshop_complete",
+            "report_generating", "report_delivered", "generating",
+        ]
+        if session.get("status") not in paid_statuses:
+            logger.warning(
+                f"trigger-report called with unpaid session status={session.get('status')} "
+                f"for session_id={request.session_id}"
+            )
+            raise HTTPException(
+                status_code=status.HTTP_403_FORBIDDEN,
+                detail="Session must be paid before generating a report"
+            )
+
         interview_data = session.get("interview_data", {})
         messages = interview_data.get("messages", [])
 

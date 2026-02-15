@@ -12,8 +12,7 @@
 import { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { logger } from '../../utils/logger'
-
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8383'
+import { API_BASE } from '../../services/apiClient'
 
 interface Finding {
   id: string
@@ -186,7 +185,7 @@ export default function DevModePanel({
     setContextError(null)
 
     try {
-      const response = await fetch(`${API_BASE_URL}/api/dev/reports/${reportId}/context?dev=true`)
+      const response = await fetch(`${API_BASE}/api/dev/reports/${reportId}/context?dev=true`)
       if (!response.ok) throw new Error('Failed to load context')
       const data = await response.json()
       setContext(data)
@@ -237,7 +236,7 @@ export default function DevModePanel({
         general_notes: generalNotes || null,
       }
 
-      const response = await fetch(`${API_BASE_URL}/api/dev/feedback`, {
+      const response = await fetch(`${API_BASE}/api/dev/feedback`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(feedback),

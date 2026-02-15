@@ -5,8 +5,7 @@ import { useInterviewVoice } from '../hooks/useInterviewVoice'
 import { Logo } from '../components/Logo'
 import { sanitizeHtml } from '../utils/sanitize'
 import { logger } from '../utils/logger'
-
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8383'
+import { API_BASE } from '../services/apiClient'
 
 // ============================================================================
 // Types
@@ -116,7 +115,7 @@ export default function Interview() {
 
         // If no session data, try to fetch from backend
         if (sessionId) {
-          const response = await fetch(`${API_BASE_URL}/api/quiz/sessions/${sessionId}/research/status`)
+          const response = await fetch(`${API_BASE}/api/quiz/sessions/${sessionId}/research/status`)
           if (response.ok) {
             const data = await response.json()
             if (data.company_profile) {
@@ -195,7 +194,7 @@ Let's start with the big picture: **What's the main challenge or opportunity tha
 
     try {
       // Send to backend for AI response
-      const response = await fetch(`${API_BASE_URL}/api/interview/respond`, {
+      const response = await fetch(`${API_BASE}/api/interview/respond`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -269,7 +268,7 @@ Let's start with the big picture: **What's the main challenge or opportunity tha
     setIsProcessing(true)
     try {
       // Save interview data
-      await fetch(`${API_BASE_URL}/api/interview/complete`, {
+      await fetch(`${API_BASE}/api/interview/complete`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({

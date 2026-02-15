@@ -17,12 +17,16 @@ from pydantic import BaseModel
 
 from src.config.settings import settings
 from src.config.supabase_client import get_async_supabase
+from src.config.redis_client import get_redis
 from src.middleware.auth import require_workspace, CurrentUser
 from src.services.report_service import generate_report_for_quiz, get_report
 from src.services.email import send_report_ready_email, send_payment_confirmation_email, send_welcome_email
 from src.services.brevo_service import get_brevo_service
 
 logger = logging.getLogger(__name__)
+
+# Lock TTL for payment processing (5 minutes - enough for account creation + DB updates)
+PAYMENT_LOCK_TTL = 300
 
 # Configure Stripe
 stripe.api_key = settings.STRIPE_SECRET_KEY
@@ -238,7 +242,7 @@ async def create_checkout_session(
         price_amount = price_mapping.get(request.tier, settings.PRICE_PROFESSIONAL_EARLY)
 
         # Default URLs
-        base_url = "http://localhost:5174"  # Would be from settings in production
+        base_url = settings.FRONTEND_URL
         success_url = request.success_url or f"{base_url}/audit/{request.audit_id}/intake"
         cancel_url = request.cancel_url or f"{base_url}/new-audit"
 
@@ -285,10 +289,10 @@ async def create_checkout_session(
         )
 
     except stripe.error.StripeError as e:
-        logger.error(f"Stripe error: {e}")
+        logger.error(f"Stripe error: {e}", exc_info=True)
         raise HTTPException(
             status_code=status.HTTP_502_BAD_GATEWAY,
-            detail=f"Payment provider error: {str(e)}"
+            detail="Failed to process payment"
         )
     except HTTPException:
         raise
@@ -400,10 +404,10 @@ async def create_guest_checkout(request: GuestCheckoutRequest):
         )
 
     except stripe.error.StripeError as e:
-        logger.error(f"Stripe error: {e}")
+        logger.error(f"Stripe error: {e}", exc_info=True)
         raise HTTPException(
             status_code=status.HTTP_502_BAD_GATEWAY,
-            detail=f"Payment provider error: {str(e)}"
+            detail="Failed to process payment"
         )
     except HTTPException:
         raise
@@ -465,7 +469,7 @@ async def stripe_webhook(
 
 
 async def handle_checkout_completed(session: dict, background_tasks: BackgroundTasks):
-    """Handle successful checkout with idempotency."""
+    """Handle successful checkout with idempotency and Redis lock."""
     supabase = await get_async_supabase()
     metadata = session.get("metadata", {})
 
@@ -480,7 +484,18 @@ async def handle_checkout_completed(session: dict, background_tasks: BackgroundT
         logger.error("No audit_id in session metadata")
         return
 
+    # Acquire Redis lock to prevent duplicate processing from concurrent webhooks
+    redis = await get_redis()
+    lock_key = f"payment_lock:audit:{audit_id}"
+    lock_acquired = False
+
     try:
+        if redis:
+            lock_acquired = await redis.set(lock_key, "1", nx=True, ex=PAYMENT_LOCK_TTL)
+            if not lock_acquired:
+                logger.info(f"Payment already being processed for audit {audit_id} (lock exists), skipping")
+                return
+
         # Idempotency check - skip if already processed
         existing = await supabase.table("audits").select("payment_status").eq(
             "id", audit_id
@@ -512,6 +527,13 @@ async def handle_checkout_completed(session: dict, background_tasks: BackgroundT
 
     except Exception as e:
         logger.error(f"Handle checkout error: {e}")
+    finally:
+        # Release lock (let it expire naturally if release fails)
+        if redis and lock_acquired:
+            try:
+                await redis.delete(lock_key)
+            except Exception as e:
+                logger.warning(f"Failed to release payment lock for audit {audit_id}: {e}")
 
 
 async def _generate_report_background(quiz_session_id: str, tier: str, email: Optional[str]):
@@ -564,7 +586,7 @@ async def _generate_report_background(quiz_session_id: str, tier: str, email: Op
 
 
 async def handle_guest_checkout_completed(session: dict, background_tasks: BackgroundTasks):
-    """Handle successful guest checkout from quiz flow with idempotency and account creation."""
+    """Handle successful guest checkout from quiz flow with Redis lock and idempotent processing."""
     supabase = await get_async_supabase()
     metadata = session.get("metadata", {})
     quiz_session_id = metadata.get("quiz_session_id")
@@ -574,26 +596,47 @@ async def handle_guest_checkout_completed(session: dict, background_tasks: Backg
         logger.error("No quiz_session_id in session metadata")
         return
 
+    # Acquire Redis lock to prevent duplicate processing from concurrent webhooks
+    redis = await get_redis()
+    lock_key = f"payment_lock:quiz:{quiz_session_id}"
+    lock_acquired = False
+
     try:
-        # Idempotency check - skip if already processed (check for user_id as indicator)
-        existing = await supabase.table("quiz_sessions").select("*").eq(
+        if redis:
+            lock_acquired = await redis.set(lock_key, "1", nx=True, ex=PAYMENT_LOCK_TTL)
+            if not lock_acquired:
+                logger.info(f"Payment already being processed for quiz {quiz_session_id} (lock exists), skipping")
+                return
+
+        # Conditional update: atomically claim this session for processing.
+        # Only update if status is still 'pending_payment' — prevents race conditions
+        # even without Redis (database-level idempotency).
+        claim_result = await supabase.table("quiz_sessions").update({
+            "status": "processing_payment",
+        }).eq("id", quiz_session_id).eq("status", "pending_payment").execute()
+
+        if not claim_result.data:
+            # Either session doesn't exist or status already changed (already processed)
+            # Check if it exists to provide a better log message
+            existing = await supabase.table("quiz_sessions").select("id, status, user_id").eq(
+                "id", quiz_session_id
+            ).single().execute()
+
+            if not existing.data:
+                logger.error(f"Quiz session not found: {quiz_session_id}")
+            else:
+                logger.info(
+                    f"Payment already processed for quiz {quiz_session_id} "
+                    f"(status={existing.data.get('status')}), skipping"
+                )
+            return
+
+        # Session claimed successfully — load full data for account creation
+        session_result = await supabase.table("quiz_sessions").select("*").eq(
             "id", quiz_session_id
         ).single().execute()
 
-        if not existing.data:
-            logger.error(f"Quiz session not found: {quiz_session_id}")
-            return
-
-        quiz_data = existing.data
-
-        if quiz_data.get("user_id"):
-            logger.info(f"Payment already processed for quiz {quiz_session_id}, skipping")
-            return
-
-        if quiz_data.get("status") in ["paid", "generating", "completed"]:
-            logger.info(f"Payment already processed for quiz {quiz_session_id}, skipping")
-            return
-
+        quiz_data = session_result.data
         email = quiz_data.get("email")
         company_name = quiz_data.get("company_name", "My Company")
         amount = session.get("amount_total", 0) / 100
@@ -603,7 +646,7 @@ async def handle_guest_checkout_completed(session: dict, background_tasks: Backg
         try:
             account_data = await create_user_from_quiz_session(supabase, quiz_data, tier)
 
-            # Update quiz session with links
+            # Update quiz session with account links and payment info
             await supabase.table("quiz_sessions").update({
                 "user_id": account_data["user_id"],
                 "workspace_id": account_data["workspace_id"],
@@ -662,6 +705,13 @@ async def handle_guest_checkout_completed(session: dict, background_tasks: Backg
 
     except Exception as e:
         logger.error(f"Handle guest checkout error: {e}", exc_info=True)
+    finally:
+        # Release lock (let it expire naturally if release fails)
+        if redis and lock_acquired:
+            try:
+                await redis.delete(lock_key)
+            except Exception as e:
+                logger.warning(f"Failed to release payment lock for quiz {quiz_session_id}: {e}")
 
 
 async def handle_payment_failed(payment_intent: dict):

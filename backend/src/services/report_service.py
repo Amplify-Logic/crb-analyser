@@ -197,7 +197,7 @@ class ReportGenerator:
             self.tier = "quick"  # Force quick tier (Sonnet)
         elif self.model_strategy == "anthropic_full":
             self.tier = "full"  # Force full tier (Opus)
-        elif self.model_strategy in ["hybrid", "gemini_primary", "cost_optimized", "multi_provider", "budget"]:
+        elif self.model_strategy in ["hybrid", "gemini_primary", "cost_optimized", "multi_provider", "budget", "opus46_quality"]:
             # These are multi-model strategies defined in model_routing.py
             # They'll be picked up by get_strategy_models() in the review service
             from src.config import model_routing
@@ -3452,7 +3452,8 @@ async def generate_report_streaming(
         tier: Report tier ("quick" or "full")
         model_strategy: Optional model strategy override for testing
             - "anthropic_quick": Claude Sonnet for generation
-            - "anthropic_full": Claude Opus for all generation
+            - "anthropic_full": Claude Opus 4.5 for all generation
+            - "opus46_quality": Claude Opus 4.6 for everything (latest, most capable)
             - "hybrid": Haiku → Sonnet → Opus pipeline
             - "gemini_primary": Gemini Flash/Pro
             - "cost_optimized": Flash → Sonnet → Opus

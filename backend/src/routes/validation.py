@@ -18,10 +18,11 @@ from datetime import datetime
 import json
 import uuid
 
-from fastapi import APIRouter, HTTPException, status
+from fastapi import APIRouter, HTTPException, Request, status
 from pydantic import BaseModel, Field
 import anthropic
 
+from src.middleware.security import endpoint_limiter
 from src.config.supabase_client import get_async_supabase
 from src.config.settings import settings
 from src.config.system_prompt import FOUNDATIONAL_LOGIC
@@ -128,13 +129,16 @@ WHAT NOT TO DO:
 # =============================================================================
 
 @router.post("/start")
-async def start_validation_session(request: StartValidationRequest):
+async def start_validation_session(request: StartValidationRequest, raw_request: Request):
     """
     Start a new assumption validation session.
 
     This analyzes the preliminary findings and identifies assumptions
     that need validation before generating the final report.
     """
+    # Rate limit: 10 requests per minute (LLM-calling endpoint)
+    await endpoint_limiter.check(raw_request, "validation_start", limit=10, window=60)
+
     supabase = await get_async_supabase()
 
     # Get the quiz session
@@ -149,6 +153,22 @@ async def start_validation_session(request: StartValidationRequest):
         )
 
     quiz_data = quiz_result.data
+
+    # Validate session is in a valid state
+    valid_statuses = [
+        "in_progress", "completed", "payment_pending", "paid",
+        "workshop_started", "workshop_complete", "report_generating",
+        "report_delivered", "validating_assumptions",
+    ]
+    if quiz_data.get("status") not in valid_statuses:
+        logger.warning(
+            f"Validation start called with invalid session status={quiz_data.get('status')} "
+            f"for quiz_session_id={request.quiz_session_id}"
+        )
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Session is not in a valid state for validation"
+        )
 
     # Extract assumptions from preliminary analysis
     assumptions = extract_assumptions_from_quiz(quiz_data, request.preliminary_findings)
@@ -191,10 +211,13 @@ async def start_validation_session(request: StartValidationRequest):
 
 
 @router.post("/respond")
-async def respond_to_validation(request: ValidationRespondRequest):
+async def respond_to_validation(request: ValidationRespondRequest, raw_request: Request):
     """
     Process user response and continue the validation conversation.
     """
+    # Rate limit: 10 requests per minute (LLM-calling endpoint)
+    await endpoint_limiter.check(raw_request, "validation_respond", limit=10, window=60)
+
     supabase = await get_async_supabase()
 
     # Get validation session
@@ -221,7 +244,29 @@ async def respond_to_validation(request: ValidationRespondRequest):
         "id", session["quiz_session_id"]
     ).single().execute()
 
-    quiz_data = quiz_result.data or {}
+    if not quiz_result.data:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Associated quiz session not found"
+        )
+
+    quiz_data = quiz_result.data
+
+    # Validate quiz session is in a valid state
+    valid_statuses = [
+        "in_progress", "completed", "payment_pending", "paid",
+        "workshop_started", "workshop_complete", "report_generating",
+        "report_delivered", "validating_assumptions",
+    ]
+    if quiz_data.get("status") not in valid_statuses:
+        logger.warning(
+            f"Validation respond called with invalid quiz session status={quiz_data.get('status')} "
+            f"for validation session_id={request.session_id}"
+        )
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Session is not in a valid state for validation"
+        )
 
     # Build conversation history
     messages = session.get("messages", [])
@@ -316,6 +361,34 @@ async def complete_validation(request: ValidationCompleteRequest):
 
     session = session_result.data
 
+    # Validate the underlying quiz session is in a valid state
+    quiz_session_id = session.get("quiz_session_id")
+    if quiz_session_id:
+        quiz_check = await supabase.table("quiz_sessions").select(
+            "id, status"
+        ).eq("id", quiz_session_id).single().execute()
+
+        if not quiz_check.data:
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail="Associated quiz session not found"
+            )
+
+        valid_statuses = [
+            "in_progress", "completed", "payment_pending", "paid",
+            "workshop_started", "workshop_complete", "report_generating",
+            "report_delivered", "validating_assumptions",
+        ]
+        if quiz_check.data.get("status") not in valid_statuses:
+            logger.warning(
+                f"Validation complete called with invalid quiz session status={quiz_check.data.get('status')} "
+                f"for validation session_id={request.session_id}"
+            )
+            raise HTTPException(
+                status_code=status.HTTP_403_FORBIDDEN,
+                detail="Session is not in a valid state for validation"
+            )
+
     # Update session status
     await supabase.table("validation_sessions").update({
         "status": "completed",
@@ -352,6 +425,29 @@ async def get_validation_session(session_id: str):
             status_code=status.HTTP_404_NOT_FOUND,
             detail="Validation session not found"
         )
+
+    # Validate the underlying quiz session is in a valid state
+    quiz_session_id = result.data.get("quiz_session_id")
+    if quiz_session_id:
+        quiz_check = await supabase.table("quiz_sessions").select(
+            "id, status"
+        ).eq("id", quiz_session_id).single().execute()
+
+        if quiz_check.data:
+            valid_statuses = [
+                "in_progress", "completed", "payment_pending", "paid",
+                "workshop_started", "workshop_complete", "report_generating",
+                "report_delivered", "validating_assumptions",
+            ]
+            if quiz_check.data.get("status") not in valid_statuses:
+                logger.warning(
+                    f"Validation get called with invalid quiz session status={quiz_check.data.get('status')} "
+                    f"for validation session_id={session_id}"
+                )
+                raise HTTPException(
+                    status_code=status.HTTP_403_FORBIDDEN,
+                    detail="Session is not in a valid state"
+                )
 
     return result.data
 

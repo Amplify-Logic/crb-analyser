@@ -20,8 +20,7 @@ import {
 import AudioUploader from '../components/voice/AudioUploader'
 import { Logo } from '../components/Logo'
 import { logger } from '../utils/logger'
-
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8383'
+import apiClient, { API_BASE } from '../services/apiClient'
 
 // =============================================================================
 // Types
@@ -88,29 +87,28 @@ export default function Workshop() {
   const initializeWorkshop = async () => {
     try {
       // Try to get existing workshop state
-      const stateResponse = await fetch(`${API_BASE_URL}/api/workshop/state/${sessionId}`)
+      const { data: existingState } = await apiClient.get<any>(`/api/workshop/state/${sessionId}`, {
+        timeout: 15000,
+        retry: true,
+      })
 
-      if (stateResponse.ok) {
-        const existingState = await stateResponse.json()
+      if (existingState.phase && existingState.phase !== 'confirmation') {
+        // Resume existing workshop
+        const workshopData = existingState.workshop_data || {}
 
-        if (existingState.phase && existingState.phase !== 'confirmation') {
-          // Resume existing workshop
-          const workshopData = existingState.workshop_data || {}
+        setState(prev => ({
+          ...prev,
+          companyName: existingState.company_name,
+          priorityOrder: workshopData.deep_dive_order || [],
+          currentPainPointIndex: workshopData.current_deep_dive_index || 0,
+          painPoints: (workshopData.deep_dive_order || []).map((id: string, i: number) => ({
+            id,
+            label: `Pain Point ${i + 1}`,
+          })),
+        }))
 
-          setState(prev => ({
-            ...prev,
-            companyName: existingState.company_name,
-            priorityOrder: workshopData.deep_dive_order || [],
-            currentPainPointIndex: workshopData.current_deep_dive_index || 0,
-            painPoints: (workshopData.deep_dive_order || []).map((id: string, i: number) => ({
-              id,
-              label: `Pain Point ${i + 1}`,
-            })),
-          }))
-
-          setPhase(existingState.phase as WorkshopPhase)
-          return
-        }
+        setPhase(existingState.phase as WorkshopPhase)
+        return
       }
 
       // Start new workshop
@@ -127,18 +125,12 @@ export default function Workshop() {
     setError(null)
 
     try {
-      const response = await fetch(`${API_BASE_URL}/api/workshop/start`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ session_id: sessionId }),
+      const { data } = await apiClient.post<any>('/api/workshop/start', {
+        session_id: sessionId,
+      }, {
+        timeout: 60000,
+        retry: true,
       })
-
-      if (!response.ok) {
-        const err = await response.json()
-        throw new Error(err.detail || 'Failed to start workshop')
-      }
-
-      const data = await response.json()
 
       // Transform API response
       const cards: ConfirmationCard[] = (data.confirmation_cards || []).map((card: any) => ({
@@ -181,18 +173,15 @@ export default function Workshop() {
     priorityOrder: string[]
   }) => {
     try {
-      const response = await fetch(`${API_BASE_URL}/api/workshop/confirm`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          session_id: sessionId,
-          ratings: data.ratings,
-          corrections: data.corrections,
-          priority_order: data.priorityOrder,
-        }),
+      await apiClient.post('/api/workshop/confirm', {
+        session_id: sessionId,
+        ratings: data.ratings,
+        corrections: data.corrections,
+        priority_order: data.priorityOrder,
+      }, {
+        timeout: 30000,
+        retry: true,
       })
-
-      if (!response.ok) throw new Error('Failed to save confirmation')
 
       // Update pain points based on priority order
       const orderedPainPoints = data.priorityOrder.map((id, index) => {
@@ -249,16 +238,13 @@ export default function Workshop() {
     setPhase('loading')
 
     try {
-      const response = await fetch(`${API_BASE_URL}/api/workshop/complete`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          session_id: sessionId,
-          final_answers: finalAnswers,
-        }),
+      await apiClient.post('/api/workshop/complete', {
+        session_id: sessionId,
+        final_answers: finalAnswers,
+      }, {
+        timeout: 60000,
+        retry: true,
       })
-
-      if (!response.ok) throw new Error('Failed to complete workshop')
 
       setPhase('complete')
 
@@ -281,7 +267,7 @@ export default function Workshop() {
       formData.append('audio', audioBlob, 'upload.mp3')
       if (sessionId) formData.append('session_id', sessionId)
 
-      const response = await fetch(`${API_BASE_URL}/api/interview/transcribe`, {
+      const response = await fetch(`${API_BASE}/api/interview/transcribe`, {
         method: 'POST',
         body: formData,
       })

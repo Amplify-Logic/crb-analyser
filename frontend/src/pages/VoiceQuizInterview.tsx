@@ -17,13 +17,12 @@ import { formatCompanyName } from '../lib/formatCompanyName'
 import { ShimmerButton } from '../components/magicui'
 import { Logo } from '../components/Logo'
 import { sanitizeHtml } from '../utils/sanitize'
-import {
 import { logger } from '../utils/logger'
+import {
   processAnswer,
   getFirstQuestion,
 } from '../services/interviewApi'
-
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8383'
+import { API_BASE } from '../services/apiClient'
 
 // ============================================================================
 // Types & Constants
@@ -218,7 +217,7 @@ export default function VoiceQuizInterview() {
     try {
       setIsSpeaking(true)
 
-      const response = await fetch(`${API_BASE_URL}/api/interview/tts`, {
+      const response = await fetch(`${API_BASE}/api/interview/tts`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         // Uses ElevenLabs "Sarah" voice by default (conversational)
@@ -278,7 +277,7 @@ export default function VoiceQuizInterview() {
       formData.append('audio', audioBlob, 'recording.webm')
       if (sessionId) formData.append('session_id', sessionId)
 
-      const transcribeResponse = await fetch(`${API_BASE_URL}/api/interview/transcribe`, {
+      const transcribeResponse = await fetch(`${API_BASE}/api/interview/transcribe`, {
         method: 'POST',
         body: formData,
       })
@@ -443,7 +442,7 @@ export default function VoiceQuizInterview() {
       formData.append('audio', audioBlob, source === 'upload' ? 'upload.mp3' : 'recording.webm')
       if (sessionId) formData.append('session_id', sessionId)
 
-      const response = await fetch(`${API_BASE_URL}/api/interview/transcribe`, {
+      const response = await fetch(`${API_BASE}/api/interview/transcribe`, {
         method: 'POST',
         body: formData,
       })

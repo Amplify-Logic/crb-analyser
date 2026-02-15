@@ -265,9 +265,10 @@ async def create_insight(
             reviewed=request.reviewed,
         )
     except Exception as e:
+        logger.error(f"Invalid insight data: {e}", exc_info=True)
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
-            detail=f"Invalid insight data: {e}"
+            detail="Invalid insight data"
         )
 
     if not service.add_insight(insight):
@@ -419,7 +420,7 @@ async def extract_insights(
         logger.error(f"Extraction failed: {e}", exc_info=True)
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail=f"Extraction failed: {str(e)}"
+            detail="Extraction failed"
         )
 
     return {

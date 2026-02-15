@@ -14,7 +14,7 @@ Usage:
 
     client = get_llm_client()
     response = client.generate(
-        model="claude-opus-4-5-20251202",  # or "gemini-3-flash", "gpt-5.2"
+        model="claude-opus-4-5-20251101",  # or "gemini-3-flash", "gpt-5.2"
         system="You are a helpful assistant",
         messages=[{"role": "user", "content": "Hello"}],
         max_tokens=1000

@@ -68,10 +68,10 @@ async def start_research(
     except HTTPException:
         raise
     except Exception as e:
-        logger.error(f"Start research error: {e}")
+        logger.error(f"Start research error: {e}", exc_info=True)
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail=str(e),
+            detail="Failed to start research",
         )
 
 
@@ -151,10 +151,10 @@ async def stream_research(
     except HTTPException:
         raise
     except Exception as e:
-        logger.error(f"Stream research error: {e}")
+        logger.error(f"Stream research error: {e}", exc_info=True)
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail=str(e),
+            detail="Failed to stream research data",
         )
 
 
@@ -186,10 +186,10 @@ async def get_research(
     except HTTPException:
         raise
     except Exception as e:
-        logger.error(f"Get research error: {e}")
+        logger.error(f"Get research error: {e}", exc_info=True)
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail=str(e),
+            detail="Failed to retrieve research data",
         )
 
 
@@ -322,10 +322,10 @@ async def save_research_answers(
     except HTTPException:
         raise
     except Exception as e:
-        logger.error(f"Save research answers error: {e}")
+        logger.error(f"Save research answers error: {e}", exc_info=True)
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail=str(e),
+            detail="Failed to save research answers",
         )
 
 
@@ -347,8 +347,8 @@ async def list_research(
         return {"data": result.data, "total": len(result.data)}
 
     except Exception as e:
-        logger.error(f"List research error: {e}")
+        logger.error(f"List research error: {e}", exc_info=True)
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail=str(e),
+            detail="Failed to list research data",
         )

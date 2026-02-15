@@ -27,6 +27,7 @@ class Settings(BaseSettings):
     HOST: str = "0.0.0.0"
     PORT: int = 8383
     WORKERS: int = 1  # Number of uvicorn workers (1 recommended for async)
+    FRONTEND_URL: str = "http://localhost:5174"
 
     # Security
     SECRET_KEY: str = "change-me-in-production-min-32-characters"

@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from 'react'
 import { logger } from '../../utils/logger'
+import { API_BASE } from '../../services/apiClient'
 
 interface CompanyResearchStepProps {
   onComplete: (data: {
@@ -58,7 +59,7 @@ export default function CompanyResearchStep({ onComplete, initialData }: Company
       // Step 1: Create research record via POST
       // Auth uses HTTP-only cookies, sent automatically with credentials: 'include'
       const startResponse = await fetch(
-        `${import.meta.env.VITE_API_BASE_URL}/api/research/start`,
+        `${API_BASE}/api/research/start`,
         {
           method: 'POST',
           headers: {
@@ -83,7 +84,7 @@ export default function CompanyResearchStep({ onComplete, initialData }: Company
       // Step 2: Connect to SSE stream with credentials
       // Note: EventSource doesn't support credentials, so we'll use fetch for streaming
       const streamResponse = await fetch(
-        `${import.meta.env.VITE_API_BASE_URL}/api/research/${research_id}/stream`,
+        `${API_BASE}/api/research/${research_id}/stream`,
         {
           credentials: 'include',
         }

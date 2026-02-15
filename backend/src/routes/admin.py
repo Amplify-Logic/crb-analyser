@@ -52,10 +52,10 @@ async def trigger_follow_up_emails(
         await run_job()
         return {"success": True, "message": "Follow-up email job completed"}
     except Exception as e:
-        logger.error(f"Follow-up email job failed: {e}")
+        logger.error(f"Follow-up email job failed: {e}", exc_info=True)
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail=f"Job failed: {str(e)}"
+            detail="Job failed: follow-up emails"
         )
 
 
@@ -72,10 +72,10 @@ async def trigger_storage_cleanup(
         await run_job()
         return {"success": True, "message": "Storage cleanup job completed"}
     except Exception as e:
-        logger.error(f"Storage cleanup job failed: {e}")
+        logger.error(f"Storage cleanup job failed: {e}", exc_info=True)
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail=f"Job failed: {str(e)}"
+            detail="Job failed: storage cleanup"
         )
 
 
@@ -92,10 +92,10 @@ async def trigger_quiz_cleanup(
         await run_job()
         return {"success": True, "message": "Quiz cleanup job completed"}
     except Exception as e:
-        logger.error(f"Quiz cleanup job failed: {e}")
+        logger.error(f"Quiz cleanup job failed: {e}", exc_info=True)
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail=f"Job failed: {str(e)}"
+            detail="Job failed: quiz cleanup"
         )
 
 
@@ -125,10 +125,10 @@ async def get_scheduler_status(
             "jobs": jobs,
         }
     except Exception as e:
-        logger.error(f"Failed to get scheduler status: {e}")
+        logger.error(f"Failed to get scheduler status: {e}", exc_info=True)
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail=f"Failed to get status: {str(e)}"
+            detail="Failed to get scheduler status"
         )
 
 
@@ -160,10 +160,10 @@ async def get_storage_stats(
             "total_size_mb": round(total_size / (1024 * 1024), 2),
         }
     except Exception as e:
-        logger.error(f"Failed to get storage stats: {e}")
+        logger.error(f"Failed to get storage stats: {e}", exc_info=True)
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail=f"Failed to get stats: {str(e)}"
+            detail="Failed to get storage stats"
         )
 
 
@@ -200,10 +200,10 @@ async def get_email_stats(
             "follow_ups_sent": followup_result.count or 0,
         }
     except Exception as e:
-        logger.error(f"Failed to get email stats: {e}")
+        logger.error(f"Failed to get email stats: {e}", exc_info=True)
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail=f"Failed to get stats: {str(e)}"
+            detail="Failed to get email stats"
         )
 
 
@@ -323,8 +323,8 @@ async def trigger_freshness_check(
             "result": result,
         }
     except Exception as e:
-        logger.error(f"Model freshness job failed: {e}")
+        logger.error(f"Model freshness job failed: {e}", exc_info=True)
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail=f"Job failed: {str(e)}"
+            detail="Job failed: model freshness check"
         )

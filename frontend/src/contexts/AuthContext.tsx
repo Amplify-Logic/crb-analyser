@@ -7,8 +7,7 @@
 import React, { createContext, useContext, useState, useEffect, useCallback, useMemo } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { logger } from '../utils/logger'
-
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8383';
+import apiClient from '../services/apiClient'
 
 interface User {
   id: string;
@@ -54,27 +53,22 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   // Fetch current user profile using HTTP-only cookies
   const fetchUser = useCallback(async () => {
     try {
-      const response = await fetch(`${API_BASE_URL}/api/auth/me`, {
-        credentials: 'include',
-        headers: {
-          'Content-Type': 'application/json',
-        },
+      const { data: userData } = await apiClient.get<User>('/api/auth/me', {
+        timeout: 10000,
       });
-
-      if (response.ok) {
-        const userData = await response.json();
-        setUser(userData);
-        // Store workspace_id in sessionStorage for other services
-        if (userData.workspace_id) {
-          sessionStorage.setItem('crb_workspace_id', userData.workspace_id);
-        }
-      } else if (response.status === 401) {
+      setUser(userData);
+      // Store workspace_id in sessionStorage for other services
+      if (userData.workspace_id) {
+        sessionStorage.setItem('crb_workspace_id', userData.workspace_id);
+      }
+    } catch (error: any) {
+      if (error?.status === 401) {
         setUser(null);
         sessionStorage.removeItem('crb_workspace_id');
+      } else {
+        logger.error('Failed to fetch user:', error);
+        setUser(null);
       }
-    } catch (error) {
-      logger.error('Failed to fetch user:', error);
-      setUser(null);
     } finally {
       setLoading(false);
     }
@@ -88,19 +82,9 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   // Login
   const login = useCallback(async (email: string, password: string) => {
     try {
-      const response = await fetch(`${API_BASE_URL}/api/auth/login`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        credentials: 'include',
-        body: JSON.stringify({ email, password }),
+      await apiClient.post('/api/auth/login', { email, password }, {
+        timeout: 15000,
       });
-
-      if (!response.ok) {
-        const error = await response.json();
-        throw new Error(error.detail || 'Login failed');
-      }
 
       // Fetch full user profile
       await fetchUser();
@@ -108,30 +92,20 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       // Navigate to dashboard or intended destination
       const from = (location.state as { from?: { pathname: string } })?.from?.pathname || '/dashboard';
       navigate(from, { replace: true });
-    } catch (error) {
+    } catch (error: any) {
       logger.error('Login error:', error);
-      throw error;
+      throw new Error(error?.detail || error?.message || 'Login failed');
     }
   }, [navigate, fetchUser, location.state]);
 
   // Signup
   const signup = useCallback(async (email: string, password: string, fullName?: string) => {
     try {
-      const response = await fetch(`${API_BASE_URL}/api/auth/signup`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        credentials: 'include',
-        body: JSON.stringify({ email, password, full_name: fullName }),
+      const { data } = await apiClient.post<{ user: User }>('/api/auth/signup', {
+        email, password, full_name: fullName,
+      }, {
+        timeout: 15000,
       });
-
-      if (!response.ok) {
-        const error = await response.json();
-        throw new Error(error.detail || 'Signup failed');
-      }
-
-      const data = await response.json();
 
       // Fetch full user profile
       await fetchUser();
@@ -140,21 +114,17 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       navigate('/dashboard');
 
       return data.user;
-    } catch (error) {
+    } catch (error: any) {
       logger.error('Signup error:', error);
-      throw error;
+      throw new Error(error?.detail || error?.message || 'Signup failed');
     }
   }, [navigate, fetchUser]);
 
   // Logout
   const logout = useCallback(async () => {
     try {
-      await fetch(`${API_BASE_URL}/api/auth/logout`, {
-        method: 'POST',
-        credentials: 'include',
-        headers: {
-          'Content-Type': 'application/json',
-        },
+      await apiClient.post('/api/auth/logout', undefined, {
+        timeout: 10000,
       });
     } catch (error) {
       logger.error('Logout error:', error);

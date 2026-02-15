@@ -13,8 +13,17 @@ client = TestClient(app)
 class TestProcessAnswerEndpoint:
     """Test the process-answer endpoint."""
 
-    def test_process_answer_success(self):
+    @patch("src.routes.interview.get_async_supabase")
+    def test_process_answer_success(self, mock_get_supabase):
         """Should process answer and return next question."""
+        # Mock session validation - return a valid session
+        mock_supabase = MagicMock()
+        mock_get_supabase.return_value = mock_supabase
+        mock_execute = AsyncMock(
+            return_value=MagicMock(data={"id": "test-123", "status": "in_progress"})
+        )
+        mock_supabase.table.return_value.select.return_value.eq.return_value.single.return_value.execute = mock_execute
+
         # This tests the actual endpoint with the real engine
         # but uses a vague answer to avoid needing LLM
         response = client.post(

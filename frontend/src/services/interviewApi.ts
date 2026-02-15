@@ -4,7 +4,7 @@
  * Handles communication with the SOTA interview engine backend.
  */
 
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8383'
+import { API_BASE } from './apiClient'
 
 export interface ProcessAnswerRequest {
   session_id: string
@@ -41,7 +41,7 @@ export interface FirstQuestionResponse {
 export async function processAnswer(
   request: ProcessAnswerRequest
 ): Promise<ProcessAnswerResponse> {
-  const response = await fetch(`${API_BASE_URL}/api/interview/process-answer`, {
+  const response = await fetch(`${API_BASE}/api/interview/process-answer`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(request),
@@ -66,7 +66,7 @@ export async function getFirstQuestion(
   if (companyName) params.append('company_name', companyName)
 
   const response = await fetch(
-    `${API_BASE_URL}/api/interview/first-question?${params}`
+    `${API_BASE}/api/interview/first-question?${params}`
   )
 
   if (!response.ok) {
@@ -87,7 +87,7 @@ export async function transcribeAudio(
   formData.append('audio', audioBlob, 'recording.webm')
   if (sessionId) formData.append('session_id', sessionId)
 
-  const response = await fetch(`${API_BASE_URL}/api/interview/transcribe`, {
+  const response = await fetch(`${API_BASE}/api/interview/transcribe`, {
     method: 'POST',
     body: formData,
   })

@@ -16,8 +16,7 @@ import { useState, useEffect } from 'react'
 import { Link, useNavigate, useSearchParams } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import { logger } from '../utils/logger'
-
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8383'
+import apiClient from '../services/apiClient'
 
 // New schema types
 interface ScoreBreakdown {
@@ -159,23 +158,17 @@ export default function PreviewReport() {
       const isDev = searchParams.get('dev') === 'true' || import.meta.env.DEV
       if (isDev && companyProfileStr) {
         try {
-          const response = await fetch(`${API_BASE_URL}/api/quiz/dev/preview`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-              company_profile: companyProfile,
-              quiz_answers: answers,
-              interview_messages: messages,
-            }),
+          const { data } = await apiClient.post<TeaserData>('/api/quiz/dev/preview', {
+            company_profile: companyProfile,
+            quiz_answers: answers,
+            interview_messages: messages,
+          }, {
+            timeout: 60000,
           })
-
-          if (response.ok) {
-            const data = await response.json()
-            setTeaserData(data)
-            if (data.company_name) setCompanyName(data.company_name)
-            setIsLoading(false)
-            return
-          }
+          setTeaserData(data)
+          if (data.company_name) setCompanyName(data.company_name)
+          setIsLoading(false)
+          return
         } catch (err) {
           logger.warn('Dev preview endpoint failed:', err)
         }
@@ -184,23 +177,18 @@ export default function PreviewReport() {
       // Try to get preview from backend with session
       if (sessionId) {
         try {
-          const response = await fetch(`${API_BASE_URL}/api/quiz/sessions/${sessionId}/preview`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-              company_profile: companyProfile,
-              interview_answers: answers,
-              interview_messages: messages,
-            }),
+          const { data } = await apiClient.post<TeaserData>(`/api/quiz/sessions/${sessionId}/preview`, {
+            company_profile: companyProfile,
+            interview_answers: answers,
+            interview_messages: messages,
+          }, {
+            timeout: 60000,
+            retry: true,
           })
-
-          if (response.ok) {
-            const data = await response.json()
-            setTeaserData(data)
-            if (data.company_name) setCompanyName(data.company_name)
-            setIsLoading(false)
-            return
-          }
+          setTeaserData(data)
+          if (data.company_name) setCompanyName(data.company_name)
+          setIsLoading(false)
+          return
         } catch (err) {
           logger.warn('Backend preview failed:', err)
         }

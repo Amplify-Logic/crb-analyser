@@ -746,7 +746,7 @@ export default function ReportViewer() {
           {renderContent()}
 
           {/* Dev Mode Panel - Only visible in dev mode */}
-          {(import.meta.env.DEV || searchParams.get('dev') === 'true') && report && reportId && activeItem.type === 'overview' && (
+          {import.meta.env.DEV && report && reportId && activeItem.type === 'overview' && (
             <div className="mt-8">
               <DevModePanel
                 reportId={reportId}

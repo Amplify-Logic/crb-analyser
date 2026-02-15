@@ -2,6 +2,7 @@ import { useState, useEffect, useRef } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import { Logo } from '../components/Logo'
+import { API_BASE } from '../services/apiClient'
 
 interface ProgressStep {
   id: string
@@ -61,8 +62,6 @@ export default function ReportProgress() {
 
   // SSE connection
   useEffect(() => {
-    const API_BASE = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8383'
-
     // For demo/development: simulate progress if no real endpoint
     const simulateProgress = async () => {
       for (let i = 0; i < INITIAL_STEPS.length; i++) {

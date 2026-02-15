@@ -110,7 +110,9 @@ class RateLimitMiddleware(BaseHTTPMiddleware):
         return self._redis
 
     async def dispatch(self, request: Request, call_next):
-        # Skip rate limiting for health checks
+        # Skip rate limiting for CORS preflight and health checks
+        if request.method == "OPTIONS":
+            return await call_next(request)
         if request.url.path in ["/health", "/api/health"]:
             return await call_next(request)
 
@@ -205,41 +207,46 @@ class RateLimitMiddleware(BaseHTTPMiddleware):
         return False, 0
 
     def _get_client_ip(self, request: Request) -> str:
-        """
-        Extract and validate client IP from request.
+        """Extract and validate client IP from request."""
+        return get_client_ip(request)
 
-        Validates IP format to prevent spoofing attacks.
-        """
-        ip = None
 
-        # Check for forwarded headers (behind proxy)
-        forwarded = request.headers.get("X-Forwarded-For")
-        if forwarded:
-            # Take first IP (client IP)
-            candidate = forwarded.split(",")[0].strip()
+def get_client_ip(request: Request) -> str:
+    """
+    Extract and validate client IP from request.
+
+    Shared helper used by all rate limiters to ensure consistent
+    IP extraction with validation against spoofing attacks.
+    """
+    ip = None
+
+    # Check for forwarded headers (behind proxy)
+    forwarded = request.headers.get("X-Forwarded-For")
+    if forwarded:
+        candidate = forwarded.split(",")[0].strip()
+        if validate_ip_address(candidate):
+            ip = candidate
+        else:
+            logger.warning(f"Invalid IP in X-Forwarded-For: {candidate}")
+
+    # Try X-Real-IP header
+    if not ip:
+        real_ip = request.headers.get("X-Real-IP")
+        if real_ip:
+            candidate = real_ip.strip()
             if validate_ip_address(candidate):
                 ip = candidate
             else:
-                logger.warning(f"Invalid IP in X-Forwarded-For: {candidate}")
+                logger.warning(f"Invalid IP in X-Real-IP: {candidate}")
 
-        # Try X-Real-IP header
-        if not ip:
-            real_ip = request.headers.get("X-Real-IP")
-            if real_ip:
-                candidate = real_ip.strip()
-                if validate_ip_address(candidate):
-                    ip = candidate
-                else:
-                    logger.warning(f"Invalid IP in X-Real-IP: {candidate}")
+    # Fall back to direct connection
+    if not ip:
+        if request.client and request.client.host:
+            ip = request.client.host
+        else:
+            ip = "unknown"
 
-        # Fall back to direct connection
-        if not ip:
-            if request.client and request.client.host:
-                ip = request.client.host
-            else:
-                ip = "unknown"
-
-        return ip
+    return ip
 
 
 class EndpointRateLimiter:
@@ -350,14 +357,8 @@ class EndpointRateLimiter:
         return False, 0
 
     def _get_client_ip(self, request: Request) -> str:
-        """Extract client IP from request."""
-        forwarded = request.headers.get("X-Forwarded-For")
-        if forwarded:
-            return forwarded.split(",")[0].strip()
-        real_ip = request.headers.get("X-Real-IP")
-        if real_ip:
-            return real_ip
-        return request.client.host if request.client else "unknown"
+        """Extract and validate client IP from request."""
+        return get_client_ip(request)
 
 
 # Singleton endpoint rate limiter
@@ -486,14 +487,8 @@ class EmailRateLimiter:
         return False, 0
 
     def _get_client_ip(self, request: Request) -> str:
-        """Extract client IP from request."""
-        forwarded = request.headers.get("X-Forwarded-For")
-        if forwarded:
-            return forwarded.split(",")[0].strip()
-        real_ip = request.headers.get("X-Real-IP")
-        if real_ip:
-            return real_ip
-        return request.client.host if request.client else "unknown"
+        """Extract and validate client IP from request."""
+        return get_client_ip(request)
 
 
 # Singleton email rate limiter

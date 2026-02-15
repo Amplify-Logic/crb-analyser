@@ -9,12 +9,62 @@ from datetime import datetime
 from typing import Optional, List
 from uuid import UUID
 
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends, HTTPException, status
 from pydantic import BaseModel, Field
 
 from src.config.supabase_client import get_async_supabase
 
 logger = logging.getLogger(__name__)
+
+
+async def _validate_report_belongs_to_paid_session(report_id: str) -> None:
+    """
+    Verify a report exists and belongs to a paid quiz session.
+    Raises HTTPException if not found or not paid.
+    """
+    supabase = await get_async_supabase()
+
+    # Look up the report to get its quiz_session_id
+    report_result = await supabase.table("reports").select(
+        "id, quiz_session_id"
+    ).eq("id", report_id).single().execute()
+
+    if not report_result.data:
+        logger.warning(f"Playbook endpoint called with invalid report_id={report_id}")
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Report not found"
+        )
+
+    quiz_session_id = report_result.data.get("quiz_session_id")
+    if quiz_session_id:
+        session_result = await supabase.table("quiz_sessions").select(
+            "id, status"
+        ).eq("id", quiz_session_id).single().execute()
+
+        if not session_result.data:
+            logger.warning(
+                f"Playbook endpoint: report {report_id} references missing session {quiz_session_id}"
+            )
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail="Associated session not found"
+            )
+
+        paid_statuses = [
+            "paid", "workshop_started", "workshop_complete",
+            "generating", "report_generating", "report_delivered",
+            "completed", "qa_pending", "released",
+        ]
+        if session_result.data.get("status") not in paid_statuses:
+            logger.warning(
+                f"Playbook endpoint called with unpaid session status={session_result.data.get('status')} "
+                f"for report_id={report_id}"
+            )
+            raise HTTPException(
+                status_code=status.HTTP_403_FORBIDDEN,
+                detail="Session must be paid to access playbook data"
+            )
 
 router = APIRouter()
 
@@ -76,6 +126,9 @@ async def save_task_completion(
 
     This endpoint tracks user progress through implementation playbooks.
     """
+    # Validate report belongs to a paid session
+    await _validate_report_belongs_to_paid_session(report_id)
+
     supabase = await get_async_supabase()
 
     try:
@@ -114,8 +167,8 @@ async def save_task_completion(
         )
 
     except Exception as e:
-        logger.error(f"Failed to save task completion: {e}")
-        raise HTTPException(status_code=500, detail=str(e))
+        logger.error(f"Failed to save task completion: {e}", exc_info=True)
+        raise HTTPException(status_code=500, detail="Failed to save task completion")
 
 
 @router.get("/progress/{report_id}", response_model=List[PlaybookProgressResponse])
@@ -128,6 +181,9 @@ async def get_playbook_progress(report_id: str):
     # Handle sample report - return empty progress (demo mode)
     if report_id == "sample":
         return []
+
+    # Validate report belongs to a paid session
+    await _validate_report_belongs_to_paid_session(report_id)
 
     supabase = await get_async_supabase()
 
@@ -157,8 +213,8 @@ async def get_playbook_progress(report_id: str):
         return responses
 
     except Exception as e:
-        logger.error(f"Failed to get playbook progress: {e}")
-        raise HTTPException(status_code=500, detail=str(e))
+        logger.error(f"Failed to get playbook progress: {e}", exc_info=True)
+        raise HTTPException(status_code=500, detail="Failed to get playbook progress")
 
 
 # ============================================================================
@@ -175,6 +231,9 @@ async def save_roi_scenario(
 
     Allows users to save different what-if scenarios from the ROI calculator.
     """
+    # Validate report belongs to a paid session
+    await _validate_report_belongs_to_paid_session(report_id)
+
     supabase = await get_async_supabase()
 
     try:
@@ -200,8 +259,8 @@ async def save_roi_scenario(
     except HTTPException:
         raise
     except Exception as e:
-        logger.error(f"Failed to save ROI scenario: {e}")
-        raise HTTPException(status_code=500, detail=str(e))
+        logger.error(f"Failed to save ROI scenario: {e}", exc_info=True)
+        raise HTTPException(status_code=500, detail="Failed to save ROI scenario")
 
 
 @router.get("/scenarios/{report_id}", response_model=List[ROIScenarioResponse])
@@ -209,6 +268,9 @@ async def list_roi_scenarios(report_id: str):
     """
     List all saved ROI scenarios for a report.
     """
+    # Validate report belongs to a paid session
+    await _validate_report_belongs_to_paid_session(report_id)
+
     supabase = await get_async_supabase()
 
     try:
@@ -229,8 +291,8 @@ async def list_roi_scenarios(report_id: str):
         return scenarios
 
     except Exception as e:
-        logger.error(f"Failed to list ROI scenarios: {e}")
-        raise HTTPException(status_code=500, detail=str(e))
+        logger.error(f"Failed to list ROI scenarios: {e}", exc_info=True)
+        raise HTTPException(status_code=500, detail="Failed to list ROI scenarios")
 
 
 @router.delete("/scenarios/{scenario_id}")
@@ -248,5 +310,5 @@ async def delete_roi_scenario(scenario_id: str):
         return {"success": True, "deleted_id": scenario_id}
 
     except Exception as e:
-        logger.error(f"Failed to delete ROI scenario: {e}")
-        raise HTTPException(status_code=500, detail=str(e))
+        logger.error(f"Failed to delete ROI scenario: {e}", exc_info=True)
+        raise HTTPException(status_code=500, detail="Failed to delete ROI scenario")

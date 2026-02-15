@@ -12,7 +12,7 @@ import logging
 from datetime import datetime
 from typing import Optional
 
-from fastapi import APIRouter, HTTPException, status, Query
+from fastapi import APIRouter, HTTPException, status
 from pydantic import BaseModel
 
 from src.config.supabase_client import get_async_supabase
@@ -37,7 +37,6 @@ def is_dev_mode() -> bool:
 @router.get("/reports/{report_id}/context")
 async def get_report_context(
     report_id: str,
-    dev: bool = Query(False, description="Dev mode flag"),
 ):
     """
     Get the full context that went into generating a report.
@@ -45,7 +44,7 @@ async def get_report_context(
     Returns quiz answers, company profile, interview data, research data, etc.
     Dev/admin only.
     """
-    if not is_dev_mode() and not dev:
+    if not is_dev_mode():
         raise HTTPException(
             status_code=status.HTTP_403_FORBIDDEN,
             detail="Context view only available in dev mode"

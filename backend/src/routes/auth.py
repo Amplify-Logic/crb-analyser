@@ -12,6 +12,7 @@ from typing import Optional
 from fastapi import APIRouter, Depends, HTTPException, status, Response, Request
 from fastapi.responses import JSONResponse
 
+from src.middleware.security import endpoint_limiter
 from src.config.settings import settings
 from src.config.supabase_client import get_async_supabase
 from src.middleware.auth import get_current_user, get_optional_user, CurrentUser
@@ -63,6 +64,7 @@ def clear_auth_cookie(response: Response) -> None:
 async def signup(
     request: SignupRequest,
     response: Response,
+    raw_request: Request,
 ):
     """
     Create a new user account.
@@ -70,6 +72,9 @@ async def signup(
     Creates user in Supabase Auth, creates workspace, and links user to workspace.
     Sets HTTP-only cookie with auth token.
     """
+    # Rate limit: 5 requests per minute (abuse protection)
+    await endpoint_limiter.check(raw_request, "auth_signup", limit=5, window=60)
+
     try:
         supabase = await get_async_supabase()
 
@@ -135,10 +140,10 @@ async def signup(
     except HTTPException:
         raise
     except Exception as e:
-        logger.error(f"Signup error: {e}")
+        logger.error(f"Signup error: {e}", exc_info=True)
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
-            detail=str(e)
+            detail="An error occurred during signup"
         )
 
 
@@ -146,10 +151,14 @@ async def signup(
 async def login(
     request: LoginRequest,
     response: Response,
+    raw_request: Request,
 ):
     """
     Authenticate user and set auth cookie.
     """
+    # Rate limit: 5 requests per minute (brute force protection)
+    await endpoint_limiter.check(raw_request, "auth_login", limit=5, window=60)
+
     try:
         supabase = await get_async_supabase()
 
@@ -334,10 +343,14 @@ async def update_profile(
 @router.post("/reset-password")
 async def reset_password(
     request: ResetPasswordRequest,
+    raw_request: Request,
 ):
     """
     Send password reset email.
     """
+    # Rate limit: 3 requests per minute (abuse protection)
+    await endpoint_limiter.check(raw_request, "auth_reset_password", limit=3, window=60)
+
     try:
         supabase = await get_async_supabase()
 

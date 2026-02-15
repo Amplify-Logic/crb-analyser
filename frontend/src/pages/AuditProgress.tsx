@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from 'react'
 import { useParams, useNavigate, Link } from 'react-router-dom'
-import apiClient from '../services/apiClient'
+import apiClient, { API_BASE } from '../services/apiClient'
 import { logger } from '../utils/logger'
 
 interface Audit {
@@ -95,9 +95,8 @@ export default function AuditProgress() {
   }
 
   function connectSSE() {
-    const apiBase = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8383'
     const eventSource = new EventSource(
-      `${apiBase}/api/audits/${auditId}/stream`,
+      `${API_BASE}/api/audits/${auditId}/stream`,
       { withCredentials: true }
     )
 

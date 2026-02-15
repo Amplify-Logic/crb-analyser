@@ -9,7 +9,7 @@ import logging
 from typing import Optional
 from dataclasses import dataclass
 
-from fastapi import Depends, HTTPException, status, Request
+from fastapi import Depends, HTTPException, status, Request, Query
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 from jose import JWTError, jwt
 
@@ -173,3 +173,38 @@ async def require_admin(
             detail="Admin access required"
         )
     return user
+
+
+async def require_valid_session(
+    session_id: str = Query(..., description="Quiz session ID"),
+) -> dict:
+    """
+    Validate that a quiz session exists and is in an active state.
+    Used for endpoints that don't require user auth but need session ownership.
+    """
+    from src.config.supabase_client import get_async_supabase
+
+    supabase = await get_async_supabase()
+    result = await supabase.table("quiz_sessions").select(
+        "id, status, email, created_at"
+    ).eq("id", session_id).single().execute()
+
+    if not result.data:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Session not found"
+        )
+
+    session = result.data
+    valid_statuses = [
+        "in_progress", "completed", "payment_pending", "paid",
+        "workshop_started", "workshop_complete", "report_generating",
+        "report_delivered",
+    ]
+    if session.get("status") not in valid_statuses:
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Session is not in a valid state"
+        )
+
+    return session

@@ -1,36 +1,43 @@
+import React, { Suspense } from 'react'
 import { Routes, Route, Link } from 'react-router-dom'
 import { ProtectedRoute, AnonymousRoute } from './contexts/AuthContext'
 import ErrorBoundary from './components/ErrorBoundary'
-import LandingHome from './pages/LandingHome'
-import ProfessionalServices from './pages/industries/ProfessionalServices'
-import Dental from './pages/industries/Dental'
-import Ecommerce from './pages/industries/Ecommerce'
-import Login from './pages/Login'
-import Signup from './pages/Signup'
-import Quiz from './pages/Quiz'
-import Checkout from './pages/Checkout'
-import CheckoutSuccess from './pages/CheckoutSuccess'
-import Dashboard from './pages/Dashboard'
-import NewAudit from './pages/NewAudit'
-import NewAuditV2 from './pages/NewAuditV2'
-import Intake from './pages/Intake'
-import AuditProgress from './pages/AuditProgress'
-import Report from './pages/Report'
-import ReportViewer from './pages/ReportViewer'
-import ReportProgress from './pages/ReportProgress'
-import Interview from './pages/Interview'
-import VoiceQuizInterview from './pages/VoiceQuizInterview'
-import AdaptiveQuiz from './pages/AdaptiveQuiz'
-import PreviewReport from './pages/PreviewReport'
-import ReportPreview from './pages/ReportPreview'
-import Workshop from './pages/Workshop'
-import Terms from './pages/Terms'
-import Privacy from './pages/Privacy'
-import KnowledgeBase from './pages/admin/KnowledgeBase'
-import VendorAdmin from './pages/admin/VendorAdmin'
-import AdminDashboard from './pages/admin/AdminDashboard'
-import InsightsAdmin from './pages/admin/InsightsAdmin'
-import InsightExtractor from './pages/admin/InsightExtractor'
+
+// Lazy-loaded page components (code splitting)
+const LandingHome = React.lazy(() => import('./pages/LandingHome'))
+const ProfessionalServices = React.lazy(() => import('./pages/industries/ProfessionalServices'))
+const Dental = React.lazy(() => import('./pages/industries/Dental'))
+const Ecommerce = React.lazy(() => import('./pages/industries/Ecommerce'))
+const Login = React.lazy(() => import('./pages/Login'))
+const Signup = React.lazy(() => import('./pages/Signup'))
+const Quiz = React.lazy(() => import('./pages/Quiz'))
+const Checkout = React.lazy(() => import('./pages/Checkout'))
+const CheckoutSuccess = React.lazy(() => import('./pages/CheckoutSuccess'))
+const Dashboard = React.lazy(() => import('./pages/Dashboard'))
+const NewAuditV2 = React.lazy(() => import('./pages/NewAuditV2'))
+const Intake = React.lazy(() => import('./pages/Intake'))
+const AuditProgress = React.lazy(() => import('./pages/AuditProgress'))
+const Report = React.lazy(() => import('./pages/Report'))
+const ReportViewer = React.lazy(() => import('./pages/ReportViewer'))
+const ReportProgress = React.lazy(() => import('./pages/ReportProgress'))
+const VoiceQuizInterview = React.lazy(() => import('./pages/VoiceQuizInterview'))
+const AdaptiveQuiz = React.lazy(() => import('./pages/AdaptiveQuiz'))
+const PreviewReport = React.lazy(() => import('./pages/PreviewReport'))
+const Workshop = React.lazy(() => import('./pages/Workshop'))
+const Terms = React.lazy(() => import('./pages/Terms'))
+const Privacy = React.lazy(() => import('./pages/Privacy'))
+const KnowledgeBase = React.lazy(() => import('./pages/admin/KnowledgeBase'))
+const VendorAdmin = React.lazy(() => import('./pages/admin/VendorAdmin'))
+const AdminDashboard = React.lazy(() => import('./pages/admin/AdminDashboard'))
+const InsightsAdmin = React.lazy(() => import('./pages/admin/InsightsAdmin'))
+const InsightExtractor = React.lazy(() => import('./pages/admin/InsightExtractor'))
+
+// Loading fallback for code-split pages
+const PageLoader = () => (
+  <div className="flex items-center justify-center min-h-screen">
+    <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
+  </div>
+)
 
 // 404 page
 const NotFound = () => (
@@ -48,6 +55,7 @@ const NotFound = () => (
 function App() {
   return (
     <ErrorBoundary>
+      <Suspense fallback={<PageLoader />}>
       <Routes>
       {/* Public routes */}
       <Route path="/" element={<LandingHome />} />
@@ -60,9 +68,6 @@ function App() {
       {/* Legal pages */}
       <Route path="/terms" element={<Terms />} />
       <Route path="/privacy" element={<Privacy />} />
-
-      {/* Visual Preview - Mock data only */}
-      <Route path="/preview/report" element={<ReportPreview />} />
 
       {/* Free quiz and checkout - anonymous users only */}
       <Route path="/quiz" element={
@@ -96,9 +101,6 @@ function App() {
       <Route path="/interview" element={<Workshop />} />
       <Route path="/workshop" element={<Workshop />} />
 
-      {/* Legacy interview route */}
-      <Route path="/interview-legacy" element={<Interview />} />
-
       {/* Public report viewer (for quiz-based reports) */}
       <Route path="/report/:id" element={<ReportViewer />} />
       <Route path="/report/:id/progress" element={<ReportProgress />} />
@@ -117,14 +119,6 @@ function App() {
         element={
           <ProtectedRoute>
             <NewAuditV2 />
-          </ProtectedRoute>
-        }
-      />
-      <Route
-        path="/new-audit-legacy"
-        element={
-          <ProtectedRoute>
-            <NewAudit />
           </ProtectedRoute>
         }
       />
@@ -198,6 +192,7 @@ function App() {
       {/* 404 */}
       <Route path="*" element={<NotFound />} />
       </Routes>
+      </Suspense>
     </ErrorBoundary>
   )
 }

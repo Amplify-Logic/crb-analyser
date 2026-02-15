@@ -8,7 +8,7 @@ Routes different tasks to appropriate models based on:
 - Latency needs
 
 Supported Providers:
-- Anthropic: Haiku (fast), Sonnet (balanced), Opus (premium)
+- Anthropic: Haiku (fast), Sonnet (balanced), Opus 4.5 (premium), Opus 4.6 (ultra)
 - Google: Gemini Flash (fast/cheap), Gemini Pro (premium)
 - OpenAI: GPT-5.2 (balanced/premium)
 - DeepSeek: V3.2 (budget)
@@ -17,6 +17,7 @@ Model tiers:
 - Fast: Haiku, Gemini Flash - extraction, validation, simple classification
 - Balanced: Sonnet, GPT-5.2 - fallback, cost-sensitive generation
 - Premium: Opus 4.5, Gemini Pro - main generation, complex analysis
+- Ultra: Opus 4.6 - latest, most capable reasoning and analysis
 - Budget: DeepSeek V3.2 - high volume, cost-critical
 
 Verified Pricing (December 2025):
@@ -44,9 +45,10 @@ logger = logging.getLogger(__name__)
 # =============================================================================
 
 # =============================================================================
-# ANTHROPIC CLAUDE 4.5 FAMILY
+# ANTHROPIC CLAUDE 4.5/4.6 FAMILY
 # Source: https://www.anthropic.com/pricing
 # =============================================================================
+# Opus 4.6:   $15/$75 per 1M tokens - Latest, most capable reasoning
 # Opus 4.5:   $5/$25 per 1M tokens  - Complex reasoning, strategic analysis
 # Sonnet 4.5: $3/$15 per 1M tokens  - Balanced, coding, analysis
 # Haiku 4.5:  $1/$5 per 1M tokens   - Fast, matches Sonnet 4 quality
@@ -55,6 +57,7 @@ CLAUDE_MODELS = {
     "haiku": "claude-haiku-4-5-20251001",    # Fast extraction - $1/$5
     "sonnet": "claude-sonnet-4-5-20250929",  # Balanced - $3/$15
     "opus": "claude-opus-4-5-20251101",      # Premium reasoning - $5/$25
+    "opus46": "claude-opus-4-6",             # Latest premium - $15/$75
 }
 
 # =============================================================================
@@ -112,6 +115,7 @@ def get_models():
             "fast": CLAUDE_MODELS["haiku"],
             "balanced": CLAUDE_MODELS["sonnet"],
             "premium": CLAUDE_MODELS["opus"],
+            "ultra": CLAUDE_MODELS["opus46"],
             "provider": "anthropic",
         }
 
@@ -195,11 +199,20 @@ MULTI_MODEL_STRATEGIES = {
         "cross_check": False,
     },
 
-    # Strategy 2: Quality-first (Opus throughout, Gemini for validation)
+    # Strategy 2: Quality-first (Opus 4.5 throughout, Gemini for validation)
     "quality_first": {
         "draft_model": CLAUDE_MODELS["opus"],       # $5/$25 - premium drafts
         "review_model": CLAUDE_MODELS["opus"],      # $5/$25 - premium review
         "final_model": CLAUDE_MODELS["opus"],       # $5/$25 - premium final
+        "cross_check": True,
+        "cross_check_model": GEMINI_MODELS["pro"],  # Different perspective
+    },
+
+    # Strategy 2b: Ultra quality (Opus 4.6 - latest, most capable)
+    "opus46_quality": {
+        "draft_model": CLAUDE_MODELS["opus46"],     # $15/$75 - latest Opus 4.6
+        "review_model": CLAUDE_MODELS["opus46"],    # $15/$75 - latest Opus 4.6
+        "final_model": CLAUDE_MODELS["opus46"],     # $15/$75 - latest Opus 4.6
         "cross_check": True,
         "cross_check_model": GEMINI_MODELS["pro"],  # Different perspective
     },
@@ -321,6 +334,7 @@ def get_model_info(task: str, tier: str = "quick") -> dict:
 
 # Define fallback chains for each model
 MODEL_FALLBACK_CHAIN = {
+    CLAUDE_MODELS["opus46"]: [CLAUDE_MODELS["opus"], CLAUDE_MODELS["sonnet"], CLAUDE_MODELS["haiku"]],
     CLAUDE_MODELS["opus"]: [CLAUDE_MODELS["sonnet"], CLAUDE_MODELS["haiku"]],
     CLAUDE_MODELS["sonnet"]: [CLAUDE_MODELS["haiku"]],
     CLAUDE_MODELS["haiku"]: [],
@@ -424,10 +438,11 @@ class TokenTracker:
     # Pricing per 1M tokens (USD) - Verified December 2025
     # Sources: anthropic.com/pricing, ai.google.dev, platform.openai.com, api-docs.deepseek.com
     PRICING = {
-        # Anthropic Claude 4.5 Family
+        # Anthropic Claude 4.5/4.6 Family
         CLAUDE_MODELS["haiku"]: {"input": 1.00, "output": 5.00},
         CLAUDE_MODELS["sonnet"]: {"input": 3.00, "output": 15.00},
         CLAUDE_MODELS["opus"]: {"input": 5.00, "output": 25.00},
+        CLAUDE_MODELS["opus46"]: {"input": 15.00, "output": 75.00},
         # Google Gemini 3 Family
         GEMINI_MODELS["flash"]: {"input": 0.50, "output": 3.00},
         GEMINI_MODELS["pro"]: {"input": 2.00, "output": 12.00},  # $4/$18 for >200K

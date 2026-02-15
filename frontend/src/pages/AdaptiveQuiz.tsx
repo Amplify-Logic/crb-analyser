@@ -16,8 +16,7 @@ import VoiceRecorder from '../components/voice/VoiceRecorder'
 import StructuredInput from '../components/quiz/StructuredInput'
 import ConfidenceProgress, { ConfidenceProgressMini } from '../components/quiz/ConfidenceProgress'
 import { logger } from '../utils/logger'
-
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8383'
+import { API_BASE } from '../services/apiClient'
 
 // Storage key for quiz state
 const QUIZ_STATE_KEY = 'adaptiveQuizState'
@@ -252,7 +251,7 @@ export default function AdaptiveQuiz() {
       setError(null)
 
       const response = await fetchWithRetry(
-        `${API_BASE_URL}/api/quiz/adaptive/start`,
+        `${API_BASE}/api/quiz/adaptive/start`,
         {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
@@ -304,7 +303,7 @@ export default function AdaptiveQuiz() {
       setError(null)
 
       const response = await fetchWithRetry(
-        `${API_BASE_URL}/api/quiz/adaptive/answer`,
+        `${API_BASE}/api/quiz/adaptive/answer`,
         {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
@@ -377,7 +376,7 @@ export default function AdaptiveQuiz() {
     try {
       setIsSpeaking(true)
 
-      const response = await fetch(`${API_BASE_URL}/api/interview/tts`, {
+      const response = await fetch(`${API_BASE}/api/interview/tts`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ text }),
@@ -417,7 +416,7 @@ export default function AdaptiveQuiz() {
       formData.append('audio', audioBlob, 'recording.webm')
       if (sessionId) formData.append('session_id', sessionId)
 
-      const response = await fetch(`${API_BASE_URL}/api/interview/transcribe`, {
+      const response = await fetch(`${API_BASE}/api/interview/transcribe`, {
         method: 'POST',
         body: formData,
       })

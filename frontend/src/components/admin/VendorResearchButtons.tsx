@@ -6,10 +6,8 @@
  */
 
 import { useState, useEffect } from 'react'
-import apiClient from '../../services/apiClient'
+import apiClient, { API_BASE } from '../../services/apiClient'
 import { logger } from '../../utils/logger'
-
-const API_BASE = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8383'
 
 // Types
 interface FieldChange {
