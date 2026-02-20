@@ -182,6 +182,21 @@ class ValueCreated(BaseModel):
     potential_revenue: int = Field(default=0)
 
 
+class AgentOpportunity(BaseModel):
+    """What a CRB-managed agent could automate for this finding."""
+    agent_type: str = Field(..., description="e.g., 'Support Agent', 'Returns Processor'")
+    what_it_does: str = Field(..., description="Specific tasks the agent handles, 2-3 sentences")
+    estimated_impact: Dict[str, Any] = Field(
+        ...,
+        description="Measurable impact: hours_saved_monthly, tickets_handled, monthly_value_eur, etc."
+    )
+    deployment_timeline: str = Field(..., description="e.g., '2 weeks'")
+    prerequisites: List[str] = Field(
+        default_factory=list,
+        description="What's needed: 'Shopify store', 'Gorgias account', etc."
+    )
+
+
 class Finding(BaseModel):
     """
     A discovered opportunity or issue from the analysis.
@@ -219,6 +234,11 @@ class Finding(BaseModel):
     is_not_recommended: bool = Field(default=False)
     why_not: Optional[str] = Field(None, description="Why NOT to implement this")
     what_instead: Optional[str] = Field(None, description="What to do instead")
+
+    # Agent opportunity (e-commerce only)
+    agent_opportunity: Optional[AgentOpportunity] = Field(
+        None, description="CRB agent deployment opportunity, included for e-commerce findings"
+    )
 
 
 class Recommendation(BaseModel):

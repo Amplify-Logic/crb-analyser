@@ -1,14 +1,14 @@
 {
   "industry": "ecommerce",
   "last_updated": "2026-02",
-  "verification_status": "UNVERIFIED",
-  "verified_date": "2026-02-14",
+  "verification_status": "VERIFIED",
+  "verified_date": "2026-02-20",
   "verification_sources": [
     "https://www.statista.com/topics/871/online-shopping/",
     "https://baymard.com/lists/cart-abandonment-rate",
     "https://www.shopify.com/blog/ecommerce-statistics"
   ],
-  "verification_note": "Initial data compiled from industry reports. Pricing and vendor data require manual verification.",
+  "verification_note": "Verified 2026-02-20 against Baymard, Shopify, Klaviyo, NRF sources. AOV figures are EUR/European market. Email open rates updated. Conversion top-tier adjusted.",
   "benchmarks": {
     "financial": {
       "annual_revenue": {
@@ -72,16 +72,17 @@
         "unit": "percent",
         "source": "Baymard Institute, 2025",
         "source_url": "https://baymard.com/lists/cart-abandonment-rate",
-        "verified": false
+        "verified": true
       },
       "conversion_rate": {
         "industry_average": 2.5,
         "good": 3.5,
         "excellent": 5.0,
-        "top_performers": 8.0,
+        "top_performers": 5.0,
         "unit": "percent",
-        "source": "Littledata E-commerce Benchmarks, 2025",
-        "verified": false
+        "source": "Littledata E-commerce Benchmarks, 2025; Shopify Conversion Rate Benchmarks",
+        "verified": true,
+        "note": "Top 10% of Shopify stores reach ~4.7%. Varies by category: Food & Beverage 6%, Luxury <1%"
       },
       "return_rate": {
         "overall_average": 20,
@@ -103,12 +104,13 @@
         "status": "ESTIMATE"
       },
       "email_open_rate": {
-        "average": 15,
-        "good": 20,
-        "excellent": 30,
+        "average": 20,
+        "good": 25,
+        "excellent": 35,
         "unit": "percent",
-        "source": "Klaviyo E-commerce Email Benchmarks, 2025",
-        "verified": false
+        "source": "Klaviyo E-commerce Email Benchmarks, 2025; MailerLite 2025 Benchmarks",
+        "verified": true,
+        "note": "Open rates are less reliable since Apple Mail Privacy Protection (2024+). CTR is now a better engagement metric."
       },
       "email_click_rate": {
         "average": 2.5,
@@ -116,7 +118,7 @@
         "excellent": 6,
         "unit": "percent",
         "source": "Klaviyo E-commerce Email Benchmarks, 2025",
-        "verified": false
+        "verified": true
       },
       "customer_service_tickets_per_100_orders": {
         "average": 15,

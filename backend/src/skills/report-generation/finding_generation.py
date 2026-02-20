@@ -105,6 +105,8 @@ class FindingGenerationSkill(LLMSkill[List[Dict[str, Any]]]):
         "is_not_recommended": False,
         "why_not": None,
         "what_instead": None,
+        # Agent opportunity (e-commerce only)
+        "agent_opportunity": None,
         # Phase 2C fields
         "impact_monthly": 0,
         "relevant_stack": [],
@@ -398,6 +400,50 @@ USE THIS EXPERTISE:
 - AVOID anti-patterns in your findings
 """
 
+        # Build agent opportunity prompt for e-commerce
+        agent_opportunity_prompt = ""
+        if industry.lower() in ("ecommerce", "e-commerce", "ecom"):
+            agent_opps = []
+            for opp in opportunities:
+                if "agent_opportunity" in opp:
+                    agent_opps.append({
+                        "opportunity_id": opp.get("id"),
+                        "agent_type": opp["agent_opportunity"]["agent_type"],
+                        "what_it_does": opp["agent_opportunity"]["what_it_does"],
+                        "estimated_impact": opp["agent_opportunity"]["estimated_impact"],
+                        "deployment_timeline": opp["agent_opportunity"]["deployment_timeline"],
+                        "prerequisites": opp["agent_opportunity"]["prerequisites"],
+                    })
+
+            if agent_opps:
+                agent_opportunity_prompt = f"""
+===============================================================================
+AGENT OPPORTUNITY (E-COMMERCE ONLY)
+===============================================================================
+
+For e-commerce findings, some opportunities can be handled by a CRB-managed AI agent.
+When a finding matches one of the agent opportunities below, include the agent_opportunity
+field in that finding's JSON output.
+
+AVAILABLE AGENT OPPORTUNITIES:
+{json.dumps(agent_opps, indent=2)}
+
+For findings that match an agent opportunity, add this field to the finding JSON:
+"agent_opportunity": {{
+  "agent_type": "<from the matching opportunity>",
+  "what_it_does": "<from the matching opportunity, adjusted to client context>",
+  "estimated_impact": {{<adjust estimates based on quiz answers — company size, ticket volume, etc.>}},
+  "deployment_timeline": "<from the matching opportunity>",
+  "prerequisites": [<from matching opportunity, filtered to what client doesn't already have>]
+}}
+
+IMPORTANT:
+- Only include agent_opportunity when the finding genuinely matches an available agent
+- Adjust impact estimates based on the client's actual numbers from quiz answers
+- Remove prerequisites the client already has (check their existing stack)
+- Do NOT add agent_opportunity to every finding — only where it's genuinely applicable
+"""
+
         # Format existing stack for prompt
         stack_context = self._format_existing_stack(existing_stack)
         has_stack = bool(existing_stack)
@@ -424,6 +470,7 @@ INDUSTRY BENCHMARKS:
 {stack_context}
 {tool_categories_context}
 {expertise_injection}
+{agent_opportunity_prompt}
 
 ===============================================================================
 FINDING REQUIREMENTS
@@ -1050,6 +1097,17 @@ CONNECT VS REPLACE GUIDANCE
                 validated_finding["replace_path"] = validated_replace
             else:
                 validated_finding["replace_path"] = None
+
+            # Parse agent opportunity if present
+            agent_opp = finding.get("agent_opportunity")
+            if agent_opp and isinstance(agent_opp, dict):
+                validated_finding["agent_opportunity"] = {
+                    "agent_type": agent_opp.get("agent_type", ""),
+                    "what_it_does": agent_opp.get("what_it_does", ""),
+                    "estimated_impact": agent_opp.get("estimated_impact", {}),
+                    "deployment_timeline": agent_opp.get("deployment_timeline", ""),
+                    "prerequisites": agent_opp.get("prerequisites", []),
+                }
 
             # Handle why_replace (for low API score recommendations)
             if finding.get("why_replace") and isinstance(finding["why_replace"], dict):

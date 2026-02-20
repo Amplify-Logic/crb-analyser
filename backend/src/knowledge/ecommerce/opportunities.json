@@ -58,6 +58,18 @@
         "applies": true,
         "mechanism": "Faster support response times lead to higher customer satisfaction, which increases repeat purchases and referrals",
         "demand_expansion_potential": "15% increase in repeat purchase rate from improved support experience"
+      },
+      "agent_opportunity": {
+        "agent_type": "CRB Support Agent",
+        "what_it_does": "Handles tier-1 support tickets: order status, return policy, shipping questions, FAQs. Pulls real-time order data from Shopify to personalize every response. Starts in draft mode (agent suggests, human approves) and graduates to autonomous for routine queries.",
+        "estimated_impact": {
+          "tickets_handled_monthly": "200-400",
+          "hours_saved_monthly": 35,
+          "monthly_value_eur": 1400,
+          "response_time_reduction": "4 hours to under 15 minutes"
+        },
+        "deployment_timeline": "2 weeks",
+        "prerequisites": ["Shopify store", "Support tool (Gorgias, Zendesk, or email inbox)", "Product catalog accessible via API"]
       }
     },
     {
@@ -166,6 +178,18 @@
           "optimistic": {"roi_percentage": 1500, "payback_months": 0.5, "note": "15% cart recovery rate"}
         },
         "assumptions": "Recovery rates depend on product type, price point, and existing email marketing maturity"
+      },
+      "agent_opportunity": {
+        "agent_type": "CRB Recovery Agent",
+        "what_it_does": "Monitors abandoned carts in real-time. Sends personalized recovery sequences across email and SMS with AI-optimized timing and dynamic incentives based on cart value and customer history.",
+        "estimated_impact": {
+          "carts_recovered_monthly": "30-80",
+          "hours_saved_monthly": 10,
+          "monthly_value_eur": 2500,
+          "recovery_rate_improvement": "From 5% to 12-15%"
+        },
+        "deployment_timeline": "2 weeks",
+        "prerequisites": ["Shopify store", "Email platform (Klaviyo or Omnisend)", "Customer email collection"]
       }
     },
     {
@@ -441,6 +465,18 @@
           "optimistic": {"roi_percentage": 700, "payback_months": 1, "note": "12x review volume, 8% conversion lift"}
         },
         "assumptions": "Review impact on conversion varies by product category; photo reviews have higher impact than text-only"
+      },
+      "agent_opportunity": {
+        "agent_type": "CRB Review Agent",
+        "what_it_does": "Monitors new reviews across platforms, drafts personalized responses matching your brand voice, flags negative reviews for human attention. Runs daily review sweeps automatically.",
+        "estimated_impact": {
+          "reviews_responded_monthly": "50-150",
+          "hours_saved_monthly": 15,
+          "monthly_value_eur": 600,
+          "response_rate_improvement": "From 20% to 95% of reviews responded"
+        },
+        "deployment_timeline": "1 week",
+        "prerequisites": ["Review platform (Yotpo, Judge.me, or Google Business)", "Brand voice guidelines"]
       }
     }
   ],

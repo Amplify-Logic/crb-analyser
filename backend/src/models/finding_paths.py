@@ -13,7 +13,7 @@ See:
 - docs/handoffs/2026-01-07-master-roadmap.md (CRB Framework)
 """
 
-from typing import Optional, List, Literal
+from typing import Any, Dict, Optional, List, Literal
 
 from pydantic import BaseModel, Field
 
@@ -297,6 +297,11 @@ class FindingWithPaths(BaseModel):
     verdict_reasoning: str = Field(
         default="",
         description="Explanation of why this verdict was chosen"
+    )
+
+    # Agent opportunity (e-commerce only)
+    agent_opportunity: Optional[Dict[str, Any]] = Field(
+        None, description="CRB agent deployment opportunity"
     )
 
     # Why Replace reasoning (when verdict is REPLACE and API score < 3)

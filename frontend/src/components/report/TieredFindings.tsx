@@ -1,6 +1,14 @@
 import { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 
+interface AgentOpportunity {
+  agent_type: string
+  what_it_does: string
+  estimated_impact: Record<string, string | number>
+  deployment_timeline: string
+  prerequisites: string[]
+}
+
 interface Finding {
   id: string
   title: string
@@ -11,6 +19,7 @@ interface Finding {
   time_horizon: 'short' | 'mid' | 'long'
   value_saved?: { hours_per_week: number; hourly_rate: number; annual_savings: number }
   value_created?: { description: string; potential_revenue: number }
+  agent_opportunity?: AgentOpportunity
 }
 
 // Derive verdict from scores - aligns with landing page promise
@@ -28,6 +37,48 @@ interface TieredFindingsProps {
   findings: Finding[]
   heroCount?: number
   compactCount?: number
+}
+
+function AgentOpportunityCard({ opportunity }: { opportunity: AgentOpportunity }) {
+  return (
+    <div className="mt-4 p-4 bg-indigo-50 dark:bg-indigo-900/20 border border-indigo-200 dark:border-indigo-800 rounded-lg">
+      <div className="flex items-center gap-2 mb-2">
+        <span className="px-2 py-0.5 bg-indigo-600 text-white text-[10px] font-bold rounded uppercase tracking-wide">
+          Agent Available
+        </span>
+        <span className="text-sm font-medium text-indigo-700 dark:text-indigo-300">
+          {opportunity.agent_type}
+        </span>
+      </div>
+      <p className="text-sm text-gray-600 dark:text-gray-400 mb-3">
+        {opportunity.what_it_does}
+      </p>
+      <div className="flex flex-wrap gap-4 text-sm">
+        {opportunity.estimated_impact.monthly_value_eur && (
+          <div>
+            <span className="text-gray-500">Est. monthly value</span>
+            <p className="font-semibold text-indigo-700 dark:text-indigo-300">
+              {new Intl.NumberFormat('de-DE', { style: 'currency', currency: 'EUR', maximumFractionDigits: 0 }).format(Number(opportunity.estimated_impact.monthly_value_eur))}
+            </p>
+          </div>
+        )}
+        {opportunity.estimated_impact.hours_saved_monthly && (
+          <div>
+            <span className="text-gray-500">Hours saved</span>
+            <p className="font-semibold text-indigo-700 dark:text-indigo-300">
+              {opportunity.estimated_impact.hours_saved_monthly}h/month
+            </p>
+          </div>
+        )}
+        <div>
+          <span className="text-gray-500">Deployment</span>
+          <p className="font-semibold text-indigo-700 dark:text-indigo-300">
+            {opportunity.deployment_timeline}
+          </p>
+        </div>
+      </div>
+    </div>
+  )
 }
 
 function HeroFindingCard({ finding, index }: { finding: Finding; index: number }) {
@@ -79,6 +130,9 @@ function HeroFindingCard({ finding, index }: { finding: Finding; index: number }
           )}
         </div>
       )}
+      {finding.agent_opportunity && (
+        <AgentOpportunityCard opportunity={finding.agent_opportunity} />
+      )}
     </motion.div>
   )
 }
@@ -101,6 +155,12 @@ function CompactFindingCard({ finding }: { finding: Finding }) {
         <span className={`font-medium ${finding.confidence === 'high' ? 'text-green-600' : 'text-yellow-600'}`}>
           {finding.confidence} confidence
         </span>
+        {finding.agent_opportunity && (
+          <>
+            <span className="text-gray-300">•</span>
+            <span className="font-medium text-indigo-600">Agent available</span>
+          </>
+        )}
       </div>
     </div>
   )
