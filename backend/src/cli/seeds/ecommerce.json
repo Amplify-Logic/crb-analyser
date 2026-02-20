@@ -1,0 +1,467 @@
+{
+  "industry": "ecommerce",
+  "description": "Real e-commerce businesses for CRB report generation",
+  "tiers": {
+    "small": {
+      "description": "1-10 staff, 100-500 orders/month, basic stack",
+      "defaults": {
+        "budget": 500,
+        "hourly_cost": 40,
+        "pain_points": ["manual order processing", "customer service volume", "no email automation"]
+      }
+    },
+    "mid": {
+      "description": "11-50 staff, 500-5000 orders/month, integrated stack",
+      "defaults": {
+        "budget": 2000,
+        "hourly_cost": 50,
+        "pain_points": ["scaling bottlenecks", "inventory sync issues", "tool sprawl", "returns volume"]
+      }
+    },
+    "scaling": {
+      "description": "51-200 staff, 5000-50000 orders/month, multi-channel + ERP",
+      "defaults": {
+        "budget": 5000,
+        "hourly_cost": 60,
+        "pain_points": ["multi-channel complexity", "data silos", "warehouse automation", "international expansion"]
+      }
+    }
+  },
+  "seeds": [
+    {
+      "name": "BonBon Boutique",
+      "website": "https://www.bonbonboutique.nl",
+      "country": "NL",
+      "profile": {
+        "tier": "small",
+        "staff_size": "1-10",
+        "monthly_orders": 250,
+        "platform": "shopify",
+        "product_category": "jewelry",
+        "has_erp": false,
+        "current_tools": ["shopify", "google-analytics", "meta-pixel"],
+        "pain_points": ["manual order processing", "manual product content", "no email automation"]
+      }
+    },
+    {
+      "name": "The Gathershop",
+      "website": "https://www.gathershop.nl",
+      "country": "NL",
+      "profile": {
+        "tier": "small",
+        "staff_size": "1-10",
+        "monthly_orders": 200,
+        "platform": "shopify",
+        "product_category": "home",
+        "has_erp": false,
+        "current_tools": ["shopify", "mailchimp", "google-analytics"],
+        "pain_points": ["manual order processing", "manual product content", "customer service volume"]
+      }
+    },
+    {
+      "name": "Coos Cosmetics",
+      "website": "https://www.coos-cosmetics.com",
+      "country": "NL",
+      "profile": {
+        "tier": "small",
+        "staff_size": "1-10",
+        "monthly_orders": 350,
+        "platform": "shopify",
+        "product_category": "beauty",
+        "has_erp": false,
+        "current_tools": ["shopify", "klarna", "google-analytics", "meta-pixel"],
+        "pain_points": ["customer service volume", "abandoned cart loss", "returns processing"]
+      }
+    },
+    {
+      "name": "Fashionology",
+      "website": "https://fashionology.nl",
+      "country": "NL",
+      "profile": {
+        "tier": "small",
+        "staff_size": "1-10",
+        "monthly_orders": 400,
+        "platform": "shopify",
+        "product_category": "jewelry",
+        "has_erp": false,
+        "current_tools": ["shopify", "mailchimp", "google-analytics"],
+        "pain_points": ["manual order processing", "customer service volume", "no email automation"]
+      }
+    },
+    {
+      "name": "Be More Bob",
+      "website": "https://bemorebob.co.uk",
+      "country": "UK",
+      "profile": {
+        "tier": "small",
+        "staff_size": "1-10",
+        "monthly_orders": 150,
+        "platform": "shopify",
+        "product_category": "pets",
+        "has_erp": false,
+        "current_tools": ["shopify", "google-analytics"],
+        "pain_points": ["manual order processing", "customer service volume", "no email automation"]
+      }
+    },
+    {
+      "name": "Resident Artisan",
+      "website": "https://residentartisan.com",
+      "country": "UK",
+      "profile": {
+        "tier": "small",
+        "staff_size": "1-10",
+        "monthly_orders": 200,
+        "platform": "shopify",
+        "product_category": "food",
+        "has_erp": false,
+        "current_tools": ["shopify", "klaviyo", "google-analytics"],
+        "pain_points": ["manual order processing", "manual product content", "returns processing"]
+      }
+    },
+    {
+      "name": "The Passage Pantry",
+      "website": "https://thepassagepantry.com",
+      "country": "UK",
+      "profile": {
+        "tier": "small",
+        "staff_size": "1-10",
+        "monthly_orders": 180,
+        "platform": "shopify",
+        "product_category": "food",
+        "has_erp": false,
+        "current_tools": ["shopify", "google-analytics"],
+        "pain_points": ["manual order processing", "no email automation", "manual product content"]
+      }
+    },
+    {
+      "name": "Dandelion Jewelry",
+      "website": "https://dandelionjewelry.com",
+      "country": "US",
+      "profile": {
+        "tier": "small",
+        "staff_size": "1-10",
+        "monthly_orders": 300,
+        "platform": "shopify",
+        "product_category": "jewelry",
+        "has_erp": false,
+        "current_tools": ["shopify", "klaviyo", "google-analytics", "meta-pixel"],
+        "pain_points": ["customer service volume", "abandoned cart loss", "manual product content"]
+      }
+    },
+    {
+      "name": "Farm to Pet",
+      "website": "https://farmtopettreats.com",
+      "country": "US",
+      "profile": {
+        "tier": "small",
+        "staff_size": "1-10",
+        "monthly_orders": 450,
+        "platform": "shopify",
+        "product_category": "pets",
+        "has_erp": false,
+        "current_tools": ["shopify", "klaviyo", "gorgias", "google-analytics"],
+        "pain_points": ["customer service volume", "returns processing", "manual order processing"]
+      }
+    },
+    {
+      "name": "Dutch Health Store",
+      "website": "https://dutchhealthstore.com",
+      "country": "NL",
+      "profile": {
+        "tier": "small",
+        "staff_size": "1-10",
+        "monthly_orders": 300,
+        "platform": "woocommerce",
+        "product_category": "health",
+        "has_erp": false,
+        "current_tools": ["woocommerce", "google-analytics"],
+        "pain_points": ["manual order processing", "no email automation", "abandoned cart loss"]
+      }
+    },
+    {
+      "name": "Filling Pieces",
+      "website": "https://www.fillingpieces.com",
+      "country": "NL",
+      "profile": {
+        "tier": "mid",
+        "staff_size": "11-50",
+        "monthly_orders": 3000,
+        "platform": "shopify",
+        "product_category": "fashion",
+        "has_erp": false,
+        "current_tools": ["shopify", "klaviyo", "google-analytics"],
+        "pain_points": ["scaling bottlenecks", "inventory sync issues", "tool sprawl"]
+      }
+    },
+    {
+      "name": "BALR",
+      "website": "https://www.balr.com",
+      "country": "NL",
+      "profile": {
+        "tier": "mid",
+        "staff_size": "11-50",
+        "monthly_orders": 2500,
+        "platform": "shopify",
+        "product_category": "fashion",
+        "has_erp": false,
+        "current_tools": ["shopify", "klaviyo", "google-analytics"],
+        "pain_points": ["scaling bottlenecks", "inventory sync issues", "customer service volume"]
+      }
+    },
+    {
+      "name": "Naif",
+      "website": "https://naifcare.com",
+      "country": "NL",
+      "profile": {
+        "tier": "mid",
+        "staff_size": "11-50",
+        "monthly_orders": 1500,
+        "platform": "shopify",
+        "product_category": "beauty",
+        "has_erp": false,
+        "current_tools": ["shopify", "klaviyo", "google-analytics"],
+        "pain_points": ["scaling bottlenecks", "manual order processing", "tool sprawl"]
+      }
+    },
+    {
+      "name": "Patta",
+      "website": "https://patta.nl",
+      "country": "NL",
+      "profile": {
+        "tier": "mid",
+        "staff_size": "11-50",
+        "monthly_orders": 3500,
+        "platform": "shopify",
+        "product_category": "fashion",
+        "has_erp": true,
+        "current_tools": ["shopify", "google-analytics"],
+        "pain_points": ["inventory sync issues", "tool sprawl", "scaling bottlenecks"]
+      }
+    },
+    {
+      "name": "Wild",
+      "website": "https://wearewild.com",
+      "country": "UK",
+      "profile": {
+        "tier": "mid",
+        "staff_size": "11-50",
+        "monthly_orders": 4000,
+        "platform": "shopify",
+        "product_category": "beauty",
+        "has_erp": false,
+        "current_tools": ["shopify", "klaviyo", "recharge"],
+        "pain_points": ["scaling bottlenecks", "customer service volume", "manual order processing"]
+      }
+    },
+    {
+      "name": "Passenger",
+      "website": "https://www.passengerclothing.com",
+      "country": "UK",
+      "profile": {
+        "tier": "mid",
+        "staff_size": "11-50",
+        "monthly_orders": 2000,
+        "platform": "shopify",
+        "product_category": "fashion",
+        "has_erp": false,
+        "current_tools": ["shopify", "klaviyo", "brightpearl"],
+        "pain_points": ["inventory sync issues", "scaling bottlenecks", "tool sprawl"]
+      }
+    },
+    {
+      "name": "Beardbrand",
+      "website": "https://www.beardbrand.com",
+      "country": "US",
+      "profile": {
+        "tier": "mid",
+        "staff_size": "11-50",
+        "monthly_orders": 1500,
+        "platform": "shopify",
+        "product_category": "beauty",
+        "has_erp": false,
+        "current_tools": ["shopify", "klaviyo", "recharge", "shipstation"],
+        "pain_points": ["tool sprawl", "manual order processing", "customer service volume"]
+      }
+    },
+    {
+      "name": "Ridge",
+      "website": "https://www.ridge.com",
+      "country": "US",
+      "profile": {
+        "tier": "mid",
+        "staff_size": "11-50",
+        "monthly_orders": 4500,
+        "platform": "shopify",
+        "product_category": "fashion",
+        "has_erp": false,
+        "current_tools": ["shopify", "klaviyo", "gorgias", "shipstation"],
+        "pain_points": ["scaling bottlenecks", "customer service volume", "returns volume"]
+      }
+    },
+    {
+      "name": "MVMT",
+      "website": "https://www.mvmt.com",
+      "country": "US",
+      "profile": {
+        "tier": "mid",
+        "staff_size": "11-50",
+        "monthly_orders": 3000,
+        "platform": "shopify",
+        "product_category": "jewelry",
+        "has_erp": false,
+        "current_tools": ["shopify", "klaviyo", "gorgias", "google-analytics"],
+        "pain_points": ["inventory sync issues", "returns volume", "tool sprawl"]
+      }
+    },
+    {
+      "name": "Loavies",
+      "website": "https://www.loavies.com",
+      "country": "NL",
+      "profile": {
+        "tier": "scaling",
+        "staff_size": "51-200",
+        "monthly_orders": 18000,
+        "platform": "shopify_plus",
+        "product_category": "fashion",
+        "has_erp": false,
+        "current_tools": ["shopify_plus", "klaviyo", "google-analytics", "channable"],
+        "pain_points": ["international expansion", "multi-channel complexity", "inventory sync issues"]
+      }
+    },
+    {
+      "name": "Ace & Tate",
+      "website": "https://www.aceandtate.com",
+      "country": "NL",
+      "profile": {
+        "tier": "scaling",
+        "staff_size": "51-200",
+        "monthly_orders": 25000,
+        "platform": "custom",
+        "product_category": "health",
+        "has_erp": true,
+        "current_tools": ["custom_nextjs", "react", "aws", "vercel", "segment"],
+        "pain_points": ["multi-channel complexity", "international expansion", "data silos"]
+      }
+    },
+    {
+      "name": "Omoda",
+      "website": "https://www.omoda.nl",
+      "country": "NL",
+      "profile": {
+        "tier": "scaling",
+        "staff_size": "51-200",
+        "monthly_orders": 45000,
+        "platform": "custom",
+        "product_category": "fashion",
+        "has_erp": true,
+        "current_tools": ["salesforce_commerce_cloud", "google_cloud", "hotjar"],
+        "pain_points": ["multi-channel complexity", "data silos", "warehouse automation"]
+      }
+    },
+    {
+      "name": "Veloretti",
+      "website": "https://www.veloretti.com",
+      "country": "NL",
+      "profile": {
+        "tier": "scaling",
+        "staff_size": "51-200",
+        "monthly_orders": 5000,
+        "platform": "shopify_plus",
+        "product_category": "sports",
+        "has_erp": false,
+        "current_tools": ["shopify_plus", "klaviyo", "aftership", "google-analytics"],
+        "pain_points": ["international expansion", "inventory sync issues", "customer service volume"]
+      }
+    },
+    {
+      "name": "Snag Tights",
+      "website": "https://snagtights.com",
+      "country": "UK",
+      "profile": {
+        "tier": "scaling",
+        "staff_size": "51-200",
+        "monthly_orders": 40000,
+        "platform": "shopify_plus",
+        "product_category": "fashion",
+        "has_erp": false,
+        "current_tools": ["shopify_plus", "klaviyo", "cloudflare"],
+        "pain_points": ["warehouse automation", "international expansion", "customer service volume"]
+      }
+    },
+    {
+      "name": "Represent",
+      "website": "https://representclo.com",
+      "country": "UK",
+      "profile": {
+        "tier": "scaling",
+        "staff_size": "51-200",
+        "monthly_orders": 35000,
+        "platform": "shopify_plus",
+        "product_category": "fashion",
+        "has_erp": true,
+        "current_tools": ["shopify_plus", "klaviyo", "netsuite", "google-analytics"],
+        "pain_points": ["international expansion", "multi-channel complexity", "warehouse automation"]
+      }
+    },
+    {
+      "name": "Simba Sleep",
+      "website": "https://simbasleep.com",
+      "country": "UK",
+      "profile": {
+        "tier": "scaling",
+        "staff_size": "51-200",
+        "monthly_orders": 12000,
+        "platform": "shopify_plus",
+        "product_category": "home",
+        "has_erp": true,
+        "current_tools": ["shopify_plus", "klaviyo", "zendesk", "google-analytics"],
+        "pain_points": ["international expansion", "data silos", "multi-channel complexity"]
+      }
+    },
+    {
+      "name": "Caraway Home",
+      "website": "https://www.carawayhome.com",
+      "country": "US",
+      "profile": {
+        "tier": "scaling",
+        "staff_size": "51-200",
+        "monthly_orders": 30000,
+        "platform": "shopify_plus",
+        "product_category": "home",
+        "has_erp": true,
+        "current_tools": ["shopify_plus", "klaviyo", "attentive", "gladly", "segment"],
+        "pain_points": ["multi-channel complexity", "warehouse automation", "inventory sync issues"]
+      }
+    },
+    {
+      "name": "Brooklinen",
+      "website": "https://www.brooklinen.com",
+      "country": "US",
+      "profile": {
+        "tier": "scaling",
+        "staff_size": "51-200",
+        "monthly_orders": 25000,
+        "platform": "shopify_plus",
+        "product_category": "home",
+        "has_erp": true,
+        "current_tools": ["shopify_plus", "klaviyo", "gorgias", "netsuite", "google-analytics"],
+        "pain_points": ["multi-channel complexity", "warehouse automation", "data silos"]
+      }
+    },
+    {
+      "name": "HexClad",
+      "website": "https://hexclad.com",
+      "country": "US",
+      "profile": {
+        "tier": "scaling",
+        "staff_size": "51-200",
+        "monthly_orders": 50000,
+        "platform": "shopify_plus",
+        "product_category": "home",
+        "has_erp": true,
+        "current_tools": ["shopify_plus", "klaviyo", "google-analytics"],
+        "pain_points": ["multi-channel complexity", "international expansion", "warehouse automation"]
+      }
+    }
+  ]
+}
