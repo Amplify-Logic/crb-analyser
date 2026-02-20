@@ -31,6 +31,7 @@ from src.models.quiz_confidence import (
     update_confidence_from_analysis,
 )
 from src.models.research import CompanyProfile
+from src.skills import get_skill, SkillContext
 
 logger = logging.getLogger(__name__)
 
@@ -491,7 +492,7 @@ OUTPUT FORMAT (JSON only):
         self.profile = profile
         self.industry = industry
         self.client = Anthropic(api_key=settings.ANTHROPIC_API_KEY)
-        self.model = "claude-sonnet-4-5-20250929"  # Smarter model for generation
+        self.model = "claude-sonnet-4-6"  # Sonnet 4.6 for generation
         self.conversation_history: List[Dict[str, Any]] = []
         self.asked_question_ids: List[str] = []  # Track which industry questions we've asked
 
@@ -640,9 +641,120 @@ OUTPUT FORMAT (JSON only):
         confidence: ConfidenceState,
         last_answer: Optional[str] = None,
     ) -> AdaptiveQuestion:
-        """Generate question targeting biggest gaps."""
+        """Generate question targeting biggest gaps.
+
+        Uses the skills framework for expertise-enhanced question selection.
+        Falls back to legacy method if skill fails.
+        """
         sorted_gaps = confidence.get_sorted_gaps()
 
+        # Try skill-based generation first
+        skill = get_skill("quiz-optimization", client=self.client)
+
+        if skill:
+            try:
+                # Get expertise data for this industry
+                try:
+                    from src.expertise import get_expertise_store
+                    store = get_expertise_store()
+                    expertise = store.get_all_expertise_context(self.industry)
+                except (KeyError, ValueError, RuntimeError, ImportError) as e:
+                    logger.warning("quiz_expertise_load_failed", error=str(e))
+                    expertise = None
+
+                # Build confidence state dict for skill
+                confidence_dict = {
+                    cat.value: score
+                    for cat, score in confidence.scores.items()
+                }
+
+                # Extract company info from profile
+                company_name = "Unknown"
+                company_size = "Unknown"
+                if self.profile.basics and self.profile.basics.name:
+                    name_val = self.profile.basics.name
+                    company_name = name_val.value if hasattr(name_val, 'value') else str(name_val)
+                if self.profile.size and self.profile.size.employee_range:
+                    size_val = self.profile.size.employee_range
+                    company_size = size_val.value if hasattr(size_val, 'value') else str(size_val)
+
+                context = SkillContext(
+                    industry=self.industry,
+                    company_name=company_name,
+                    company_size=company_size,
+                    expertise=expertise,
+                    metadata={
+                        "confidence_state": confidence_dict,
+                        "conversation_history": self.conversation_history[-5:],
+                        "last_answer": last_answer or "(First question)",
+                        "company_name": company_name,
+                        "company_size": company_size,
+                    },
+                )
+
+                result = await skill.run(context)
+
+                if result.success and result.data:
+                    data = result.data
+                    logger.info(
+                        f"Quiz question generated via skill "
+                        f"(expertise_applied={result.expertise_applied}, "
+                        f"execution_time={result.execution_time_ms:.0f}ms)"
+                    )
+
+                    # Convert skill output to AdaptiveQuestion
+                    target_cats = []
+                    for cat_str in data.get("target_categories", []):
+                        try:
+                            target_cats.append(ConfidenceCategory(cat_str))
+                        except ValueError:
+                            pass
+
+                    expected_boosts = {}
+                    for cat_str, boost in data.get("expected_boosts", {}).items():
+                        try:
+                            expected_boosts[ConfidenceCategory(cat_str)] = int(boost)
+                        except (ValueError, TypeError):
+                            pass
+
+                    question = AdaptiveQuestion(
+                        id=f"q_{uuid.uuid4().hex[:8]}",
+                        question=data.get("question", "Tell me more about your business."),
+                        acknowledgment=data.get("acknowledgment"),
+                        question_type=data.get("question_type", "voice"),
+                        input_type=data.get("input_type", "voice"),
+                        options=data.get("options"),
+                        target_categories=target_cats or ([sorted_gaps[0]] if sorted_gaps else []),
+                        expected_boosts=expected_boosts,
+                        rationale=data.get("rationale", ""),
+                        is_deep_dive=False,
+                        industry=self.industry,
+                    )
+
+                    self.conversation_history.append({
+                        "question": question.question,
+                        "target": [c.value for c in question.target_categories],
+                    })
+
+                    return question
+                else:
+                    logger.warning(
+                        f"QuizOptimizationSkill failed, using legacy method: "
+                        f"{result.warnings}"
+                    )
+            except (ValueError, KeyError, TypeError, RuntimeError) as e:
+                logger.warning("quiz_skill_failed", error=str(e), error_type=type(e).__name__)
+
+        # Fall back to legacy method
+        return await self._generate_gap_question_legacy(confidence, last_answer, sorted_gaps)
+
+    async def _generate_gap_question_legacy(
+        self,
+        confidence: ConfidenceState,
+        last_answer: Optional[str],
+        sorted_gaps: List[ConfidenceCategory],
+    ) -> AdaptiveQuestion:
+        """Generate question targeting biggest gaps using direct LLM calls (legacy method)."""
         prompt = self.GENERATION_PROMPT.format(
             profile_summary=self._format_profile(),
             confidence_summary=self._format_confidence(confidence),

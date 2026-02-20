@@ -8,16 +8,15 @@ Routes different tasks to appropriate models based on:
 - Latency needs
 
 Supported Providers:
-- Anthropic: Haiku (fast), Sonnet (balanced), Opus 4.5 (premium), Opus 4.6 (ultra)
+- Anthropic: Haiku 4.5 (fast), Sonnet 4.6 (balanced/generation), Opus 4.6 (premium/review)
 - Google: Gemini Flash (fast/cheap), Gemini Pro (premium)
 - OpenAI: GPT-5.2 (balanced/premium)
 - DeepSeek: V3.2 (budget)
 
 Model tiers:
-- Fast: Haiku, Gemini Flash - extraction, validation, simple classification
-- Balanced: Sonnet, GPT-5.2 - fallback, cost-sensitive generation
-- Premium: Opus 4.5, Gemini Pro - main generation, complex analysis
-- Ultra: Opus 4.6 - latest, most capable reasoning and analysis
+- Fast: Haiku 4.5, Gemini Flash - extraction, validation, simple classification
+- Balanced: Sonnet 4.6, GPT-5.2 - generation tasks
+- Premium: Opus 4.6, Gemini Pro - review, checks, complex analysis
 - Budget: DeepSeek V3.2 - high volume, cost-critical
 
 Verified Pricing (December 2025):
@@ -48,16 +47,14 @@ logger = logging.getLogger(__name__)
 # ANTHROPIC CLAUDE 4.5/4.6 FAMILY
 # Source: https://www.anthropic.com/pricing
 # =============================================================================
-# Opus 4.6:   $15/$75 per 1M tokens - Latest, most capable reasoning
-# Opus 4.5:   $5/$25 per 1M tokens  - Complex reasoning, strategic analysis
-# Sonnet 4.5: $3/$15 per 1M tokens  - Balanced, coding, analysis
-# Haiku 4.5:  $1/$5 per 1M tokens   - Fast, matches Sonnet 4 quality
+# Opus 4.6:   $15/$75 per 1M tokens - Review, checks, complex analysis
+# Sonnet 4.6: $3/$15 per 1M tokens  - Generation, coding, balanced
+# Haiku 4.5:  $1/$5 per 1M tokens   - Fast extraction, validation
 # Context: 200K tokens for all models
 CLAUDE_MODELS = {
     "haiku": "claude-haiku-4-5-20251001",    # Fast extraction - $1/$5
-    "sonnet": "claude-sonnet-4-5-20250929",  # Balanced - $3/$15
-    "opus": "claude-opus-4-5-20251101",      # Premium reasoning - $5/$25
-    "opus46": "claude-opus-4-6",             # Latest premium - $15/$75
+    "sonnet": "claude-sonnet-4-6",           # Balanced generation - $3/$15
+    "opus": "claude-opus-4-6",               # Premium review/checks - $15/$75
 }
 
 # =============================================================================
@@ -113,9 +110,8 @@ def get_models():
     else:  # anthropic (default)
         return {
             "fast": CLAUDE_MODELS["haiku"],
-            "balanced": CLAUDE_MODELS["sonnet"],
-            "premium": CLAUDE_MODELS["opus"],
-            "ultra": CLAUDE_MODELS["opus46"],
+            "balanced": CLAUDE_MODELS["sonnet"],   # Sonnet 4.6 - generation
+            "premium": CLAUDE_MODELS["opus"],      # Opus 4.6 - review/checks
             "provider": "anthropic",
         }
 
@@ -138,18 +134,18 @@ MODEL_ROUTING = {
     "extract_metrics": MODELS["fast"],
 
     # -------------------------------------------------------------------------
-    # MAIN GENERATION TASKS - Use premium (Opus 4.5) for best quality
+    # MAIN GENERATION TASKS - Sonnet 4.6 (balanced) for generation
     # -------------------------------------------------------------------------
-    "generate_executive_summary": MODELS["premium"],
-    "generate_findings": MODELS["premium"],
-    "generate_recommendations": MODELS["premium"],
-    "generate_roadmap": MODELS["premium"],
-    "generate_verdict": MODELS["premium"],
-    "generate_methodology": MODELS["premium"],
-    "generate_playbook": MODELS["premium"],
+    "generate_executive_summary": MODELS["balanced"],
+    "generate_findings": MODELS["balanced"],
+    "generate_recommendations": MODELS["balanced"],
+    "generate_roadmap": MODELS["balanced"],
+    "generate_verdict": MODELS["balanced"],
+    "generate_methodology": MODELS["balanced"],
+    "generate_playbook": MODELS["balanced"],
 
     # -------------------------------------------------------------------------
-    # COMPLEX SYNTHESIS - Always premium
+    # REVIEW & SYNTHESIS - Opus 4.6 (premium) for quality checks
     # -------------------------------------------------------------------------
     "synthesize_report": MODELS["premium"],
     "complex_analysis": MODELS["premium"],
@@ -167,19 +163,21 @@ MODEL_ROUTING = {
 # TIER-BASED OVERRIDES
 # =============================================================================
 
-# For premium/full tier reports, all main tasks use premium (Opus 4.5)
-# For quick tier, use balanced (Sonnet) for cost savings
+# Quick tier: Sonnet 4.6 for generation (default routing)
+# Full tier: Opus 4.6 for ALL tasks (premium upgrade)
 TIER_OVERRIDES = {
-    "full": {
-        # Full tier uses premium for everything - already set in MODEL_ROUTING
-    },
     "quick": {
-        # Quick tier downgrades generation tasks to balanced for cost savings
-        "generate_executive_summary": MODELS["balanced"],
-        "generate_findings": MODELS["balanced"],
-        "generate_recommendations": MODELS["balanced"],
-        "generate_roadmap": MODELS["balanced"],
-        "generate_playbook": MODELS["balanced"],
+        # Quick uses balanced (Sonnet 4.6) - already default in MODEL_ROUTING
+    },
+    "full": {
+        # Full tier upgrades all generation to Opus 4.6 for review-grade quality
+        "generate_executive_summary": MODELS["premium"],
+        "generate_findings": MODELS["premium"],
+        "generate_recommendations": MODELS["premium"],
+        "generate_roadmap": MODELS["premium"],
+        "generate_verdict": MODELS["premium"],
+        "generate_methodology": MODELS["premium"],
+        "generate_playbook": MODELS["premium"],
     },
 }
 
@@ -208,11 +206,11 @@ MULTI_MODEL_STRATEGIES = {
         "cross_check_model": GEMINI_MODELS["pro"],  # Different perspective
     },
 
-    # Strategy 2b: Ultra quality (Opus 4.6 - latest, most capable)
+    # Strategy 2b: Ultra quality (Opus 4.6 throughout)
     "opus46_quality": {
-        "draft_model": CLAUDE_MODELS["opus46"],     # $15/$75 - latest Opus 4.6
-        "review_model": CLAUDE_MODELS["opus46"],    # $15/$75 - latest Opus 4.6
-        "final_model": CLAUDE_MODELS["opus46"],     # $15/$75 - latest Opus 4.6
+        "draft_model": CLAUDE_MODELS["opus"],       # $15/$75 - Opus 4.6
+        "review_model": CLAUDE_MODELS["opus"],      # $15/$75 - Opus 4.6
+        "final_model": CLAUDE_MODELS["opus"],       # $15/$75 - Opus 4.6
         "cross_check": True,
         "cross_check_model": GEMINI_MODELS["pro"],  # Different perspective
     },
@@ -334,7 +332,6 @@ def get_model_info(task: str, tier: str = "quick") -> dict:
 
 # Define fallback chains for each model
 MODEL_FALLBACK_CHAIN = {
-    CLAUDE_MODELS["opus46"]: [CLAUDE_MODELS["opus"], CLAUDE_MODELS["sonnet"], CLAUDE_MODELS["haiku"]],
     CLAUDE_MODELS["opus"]: [CLAUDE_MODELS["sonnet"], CLAUDE_MODELS["haiku"]],
     CLAUDE_MODELS["sonnet"]: [CLAUDE_MODELS["haiku"]],
     CLAUDE_MODELS["haiku"]: [],
@@ -440,9 +437,8 @@ class TokenTracker:
     PRICING = {
         # Anthropic Claude 4.5/4.6 Family
         CLAUDE_MODELS["haiku"]: {"input": 1.00, "output": 5.00},
-        CLAUDE_MODELS["sonnet"]: {"input": 3.00, "output": 15.00},
-        CLAUDE_MODELS["opus"]: {"input": 5.00, "output": 25.00},
-        CLAUDE_MODELS["opus46"]: {"input": 15.00, "output": 75.00},
+        CLAUDE_MODELS["sonnet"]: {"input": 3.00, "output": 15.00},   # Sonnet 4.6
+        CLAUDE_MODELS["opus"]: {"input": 15.00, "output": 75.00},    # Opus 4.6
         # Google Gemini 3 Family
         GEMINI_MODELS["flash"]: {"input": 0.50, "output": 3.00},
         GEMINI_MODELS["pro"]: {"input": 2.00, "output": 12.00},  # $4/$18 for >200K

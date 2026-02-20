@@ -3484,9 +3484,9 @@ async def generate_report_streaming(
         quiz_session_id: The quiz session ID
         tier: Report tier ("quick" or "full")
         model_strategy: Optional model strategy override for testing
-            - "anthropic_quick": Claude Sonnet for generation
-            - "anthropic_full": Claude Opus 4.5 for all generation
-            - "opus46_quality": Claude Opus 4.6 for everything (latest, most capable)
+            - "anthropic_quick": Sonnet 4.6 for generation
+            - "anthropic_full": Opus 4.6 for all generation
+            - "opus46_quality": Opus 4.6 for everything
             - "hybrid": Haiku → Sonnet → Opus pipeline
             - "gemini_primary": Gemini Flash/Pro
             - "cost_optimized": Flash → Sonnet → Opus
