@@ -1,99 +1,211 @@
 {
   "industry": "ecommerce",
-  "last_updated": "2026-02-20T00:00:00",
-  "total_analyses": 0,
+  "last_updated": "2026-02-20T21:19:04.653938",
+  "total_analyses": 1,
   "confidence": "low",
   "pain_points": {
     "manual_order_processing": {
       "name": "Manual order processing and fulfillment",
       "frequency": 1,
       "avg_impact": "high",
-      "typical_causes": ["No automation rules in Shopify", "Manual copy-paste to shipping provider", "No order routing logic"],
-      "effective_solutions": ["Shopify Flow automation", "Mesa/Alloy integration platform", "ShipStation/Sendcloud for shipping"],
+      "typical_causes": [
+        "No automation rules in Shopify",
+        "Manual copy-paste to shipping provider",
+        "No order routing logic"
+      ],
+      "effective_solutions": [
+        "Shopify Flow automation",
+        "Mesa/Alloy integration platform",
+        "ShipStation/Sendcloud for shipping"
+      ],
       "last_seen": "2026-02-20T00:00:00"
     },
     "customer_service_volume": {
       "name": "High volume of repetitive customer service inquiries",
       "frequency": 1,
       "avg_impact": "high",
-      "typical_causes": ["No self-service order tracking", "Manual response to where-is-my-order", "No chatbot for FAQs", "Returns handled via email"],
-      "effective_solutions": ["Gorgias AI agent", "Tidio chatbot", "Self-service order tracking page", "Automated return portal (Returnly/Loop)"],
+      "typical_causes": [
+        "No self-service order tracking",
+        "Manual response to where-is-my-order",
+        "No chatbot for FAQs",
+        "Returns handled via email"
+      ],
+      "effective_solutions": [
+        "Gorgias AI agent",
+        "Tidio chatbot",
+        "Self-service order tracking page",
+        "Automated return portal (Returnly/Loop)"
+      ],
       "last_seen": "2026-02-20T00:00:00"
     },
     "abandoned_cart_loss": {
       "name": "Revenue lost to abandoned carts",
       "frequency": 1,
       "avg_impact": "high",
-      "typical_causes": ["No recovery email flow", "Generic messaging", "No SMS follow-up", "Checkout friction"],
-      "effective_solutions": ["Klaviyo abandoned cart flow", "Omnisend multi-channel recovery", "Exit-intent popups", "Checkout optimization"],
+      "typical_causes": [
+        "No recovery email flow",
+        "Generic messaging",
+        "No SMS follow-up",
+        "Checkout friction"
+      ],
+      "effective_solutions": [
+        "Klaviyo abandoned cart flow",
+        "Omnisend multi-channel recovery",
+        "Exit-intent popups",
+        "Checkout optimization"
+      ],
       "last_seen": "2026-02-20T00:00:00"
     },
     "inventory_sync_errors": {
       "name": "Inventory discrepancies across channels",
       "frequency": 1,
       "avg_impact": "high",
-      "typical_causes": ["Manual stock updates", "Multi-channel without sync", "No safety stock rules", "Spreadsheet-based tracking"],
-      "effective_solutions": ["Stocky/Shopify inventory", "Skubana/Extensiv for multi-channel", "Real-time sync via API", "Automated reorder points"],
+      "typical_causes": [
+        "Manual stock updates",
+        "Multi-channel without sync",
+        "No safety stock rules",
+        "Spreadsheet-based tracking"
+      ],
+      "effective_solutions": [
+        "Stocky/Shopify inventory",
+        "Skubana/Extensiv for multi-channel",
+        "Real-time sync via API",
+        "Automated reorder points"
+      ],
       "last_seen": "2026-02-20T00:00:00"
     },
     "manual_product_content": {
       "name": "Time-consuming product listing and content creation",
       "frequency": 1,
       "avg_impact": "medium",
-      "typical_causes": ["Manual product descriptions", "No SEO optimization", "Photo editing bottleneck", "Inconsistent brand voice"],
-      "effective_solutions": ["AI product descriptions (Shopify Magic/Jasper)", "Bulk SEO optimization", "AI image editing", "Content templates"],
+      "typical_causes": [
+        "Manual product descriptions",
+        "No SEO optimization",
+        "Photo editing bottleneck",
+        "Inconsistent brand voice"
+      ],
+      "effective_solutions": [
+        "AI product descriptions (Shopify Magic/Jasper)",
+        "Bulk SEO optimization",
+        "AI image editing",
+        "Content templates"
+      ],
       "last_seen": "2026-02-20T00:00:00"
     },
     "returns_processing": {
       "name": "Manual and costly returns processing",
       "frequency": 1,
       "avg_impact": "medium",
-      "typical_causes": ["Email-based return requests", "No self-service portal", "Manual refund processing", "No return analytics"],
-      "effective_solutions": ["Loop Returns / Returnly portal", "Automated refund rules", "Return reason analytics", "Exchange-first policies"],
+      "typical_causes": [
+        "Email-based return requests",
+        "No self-service portal",
+        "Manual refund processing",
+        "No return analytics"
+      ],
+      "effective_solutions": [
+        "Loop Returns / Returnly portal",
+        "Automated refund rules",
+        "Return reason analytics",
+        "Exchange-first policies"
+      ],
       "last_seen": "2026-02-20T00:00:00"
     }
   },
   "processes": {
     "order_management": {
       "process_name": "Order Management",
-      "automation_potential_observed": [85],
-      "common_tools_used": ["shopify_flow", "mesa", "alloy"],
-      "common_blockers": ["Custom fulfillment logic", "Multi-warehouse routing"],
+      "automation_potential_observed": [
+        85
+      ],
+      "common_tools_used": [
+        "shopify_flow",
+        "mesa",
+        "alloy"
+      ],
+      "common_blockers": [
+        "Custom fulfillment logic",
+        "Multi-warehouse routing"
+      ],
       "quick_win_potential": true
     },
     "customer_service": {
       "process_name": "Customer Service",
-      "automation_potential_observed": [75],
-      "common_tools_used": ["gorgias", "tidio", "zendesk"],
-      "common_blockers": ["Complex product questions", "Warranty claims"],
+      "automation_potential_observed": [
+        75
+      ],
+      "common_tools_used": [
+        "gorgias",
+        "tidio",
+        "zendesk"
+      ],
+      "common_blockers": [
+        "Complex product questions",
+        "Warranty claims"
+      ],
       "quick_win_potential": true
     },
     "email_marketing": {
       "process_name": "Email Marketing & Retention",
-      "automation_potential_observed": [85],
-      "common_tools_used": ["klaviyo", "omnisend", "mailchimp"],
-      "common_blockers": ["Data quality", "Segmentation setup time"],
+      "automation_potential_observed": [
+        85
+      ],
+      "common_tools_used": [
+        "klaviyo",
+        "omnisend",
+        "mailchimp"
+      ],
+      "common_blockers": [
+        "Data quality",
+        "Segmentation setup time"
+      ],
       "quick_win_potential": true
     },
     "inventory_management": {
       "process_name": "Inventory Management",
-      "automation_potential_observed": [80],
-      "common_tools_used": ["stocky", "skubana", "cin7"],
-      "common_blockers": ["Multi-channel sync", "Supplier lead times"],
+      "automation_potential_observed": [
+        80
+      ],
+      "common_tools_used": [
+        "stocky",
+        "skubana",
+        "cin7"
+      ],
+      "common_blockers": [
+        "Multi-channel sync",
+        "Supplier lead times"
+      ],
       "quick_win_potential": false
     },
     "fulfillment_shipping": {
       "process_name": "Fulfillment & Shipping",
-      "automation_potential_observed": [75],
-      "common_tools_used": ["shipstation", "sendcloud", "shipbob"],
-      "common_blockers": ["International shipping rules", "Custom packaging"],
+      "automation_potential_observed": [
+        75
+      ],
+      "common_tools_used": [
+        "shipstation",
+        "sendcloud",
+        "shipbob"
+      ],
+      "common_blockers": [
+        "International shipping rules",
+        "Custom packaging"
+      ],
       "quick_win_potential": true
     },
     "returns_processing": {
       "process_name": "Returns Processing",
-      "automation_potential_observed": [70],
-      "common_tools_used": ["loop_returns", "returnly", "aftership"],
-      "common_blockers": ["Inspection requirements", "Partial refund logic"],
+      "automation_potential_observed": [
+        70
+      ],
+      "common_tools_used": [
+        "loop_returns",
+        "returnly",
+        "aftership"
+      ],
+      "common_blockers": [
+        "Inspection requirements",
+        "Partial refund logic"
+      ],
       "quick_win_potential": false
     }
   },
@@ -102,35 +214,50 @@
       "pattern": "AI chatbot handles order status, shipping, and return inquiries automatically",
       "recommendation": "Deploy Gorgias or Tidio AI agent for tier-1 support",
       "frequency": 1,
-      "context": {"min_orders_per_month": 200, "company_size": "any"}
+      "context": {
+        "min_orders_per_month": 200,
+        "company_size": "any"
+      }
     },
     {
       "pattern": "Multi-step abandoned cart recovery with email + SMS",
       "recommendation": "Implement Klaviyo 3-email + 1-SMS abandoned cart flow",
       "frequency": 1,
-      "context": {"min_orders_per_month": 100, "company_size": "any"}
+      "context": {
+        "min_orders_per_month": 100,
+        "company_size": "any"
+      }
     },
     {
       "pattern": "AI-generated product descriptions at catalog scale",
       "recommendation": "Use Shopify Magic or Jasper for stores with 100+ SKUs",
       "frequency": 1,
-      "context": {"min_skus": 100, "company_size": "any"}
+      "context": {
+        "min_skus": 100,
+        "company_size": "any"
+      }
     },
     {
       "pattern": "Automated order routing based on location and stock",
       "recommendation": "Shopify Flow for single-warehouse, Mesa/Alloy for multi-warehouse",
       "frequency": 1,
-      "context": {"min_orders_per_month": 500, "company_size": "11-50+"}
+      "context": {
+        "min_orders_per_month": 500,
+        "company_size": "11-50+"
+      }
     },
     {
       "pattern": "Self-service returns portal reduces support tickets by 40-60%",
       "recommendation": "Deploy Loop Returns for stores with >5% return rate",
       "frequency": 1,
-      "context": {"min_return_rate": 0.05, "company_size": "any"}
+      "context": {
+        "min_return_rate": 0.05,
+        "company_size": "any"
+      }
     }
   ],
   "anti_patterns": [
-    "Full ERP replacement for stores under 1000 orders/month — ROI doesn't justify complexity",
+    "Full ERP replacement for stores under 1000 orders/month \u2014 ROI doesn't justify complexity",
     "Custom-built chatbot when Gorgias/Tidio exist with native Shopify integration",
     "AI pricing optimization without at least 6 months of historical sales data",
     "Multi-channel expansion before core single-channel operations are automated",
@@ -141,23 +268,62 @@
     "1-10": {
       "avg_ai_readiness": 35,
       "avg_potential_savings": 15000,
-      "typical_priorities": ["customer_service", "abandoned_cart", "email_marketing"],
-      "common_stack": ["shopify", "mailchimp"]
+      "typical_priorities": [
+        "customer_service",
+        "abandoned_cart",
+        "email_marketing"
+      ],
+      "common_stack": [
+        "shopify",
+        "mailchimp"
+      ]
     },
     "11-50": {
       "avg_ai_readiness": 50,
       "avg_potential_savings": 45000,
-      "typical_priorities": ["inventory", "order_routing", "customer_service", "returns"],
-      "common_stack": ["shopify", "klaviyo", "gorgias", "shipstation"]
+      "typical_priorities": [
+        "inventory",
+        "order_routing",
+        "customer_service",
+        "returns"
+      ],
+      "common_stack": [
+        "shopify",
+        "klaviyo",
+        "gorgias",
+        "shipstation"
+      ]
     },
     "51-200": {
       "avg_ai_readiness": 65,
       "avg_potential_savings": 120000,
-      "typical_priorities": ["multi_channel_sync", "warehouse_automation", "data_analytics"],
-      "common_stack": ["shopify_plus", "klaviyo", "gorgias", "erp", "warehouse_mgmt"]
+      "typical_priorities": [
+        "multi_channel_sync",
+        "warehouse_automation",
+        "data_analytics"
+      ],
+      "common_stack": [
+        "shopify_plus",
+        "klaviyo",
+        "gorgias",
+        "erp",
+        "warehouse_mgmt"
+      ]
+    },
+    "unknown": {
+      "count": 1,
+      "avg_readiness": 60.0,
+      "common_pain_points": []
     }
   },
-  "avg_ai_readiness": 50.0,
-  "avg_potential_savings": 60000.0,
-  "common_tech_stacks": ["shopify", "klaviyo", "gorgias", "mailchimp", "shipstation", "sendcloud"]
+  "avg_ai_readiness": 60.0,
+  "avg_potential_savings": 97200.0,
+  "common_tech_stacks": [
+    "shopify",
+    "klaviyo",
+    "gorgias",
+    "mailchimp",
+    "shipstation",
+    "sendcloud"
+  ]
 }
