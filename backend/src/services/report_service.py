@@ -7,7 +7,7 @@ Implements the two pillars methodology from FRAMEWORK.md.
 
 import asyncio
 import json
-import logging
+import structlog
 import re
 import uuid
 from datetime import datetime
@@ -94,7 +94,7 @@ from src.models.generation_trace import TraceCollector
 from src.skills.analysis.roi_calculator import CONFIDENCE_FACTORS
 from src.services.crb_calculation_service import get_effective_hourly_rate
 
-logger = logging.getLogger(__name__)
+logger = structlog.get_logger(__name__)
 
 
 def extract_vendor_mentions(recommendations: List[Dict[str, Any]]) -> Dict[str, Any]:
@@ -1516,7 +1516,7 @@ Return ONLY the JSON, no explanation."""
                         f"FindingGenerationSkill failed, using legacy method: "
                         f"{result.warnings}"
                     )
-            except (ValueError, KeyError, TypeError, RuntimeError) as e:
+            except Exception as e:
                 logger.warning("finding_generation_skill_failed", error=str(e), error_type=type(e).__name__)
 
         # Fall back to legacy method
@@ -2561,7 +2561,40 @@ Generate 5-10 recommendations. Return ONLY the JSON array."""
         return custom
 
     async def _generate_roadmap(self, recommendations: List[Dict]) -> Dict[str, Any]:
-        """Generate implementation roadmap from recommendations."""
+        """Generate implementation roadmap from recommendations.
+
+        Uses the skills framework for expertise-enhanced roadmaps.
+        Falls back to legacy method if skill fails.
+        """
+        # Try skill-based generation first
+        skill = get_skill("roadmap-generator", client=self.client)
+
+        if skill:
+            try:
+                context = self._get_skill_context()
+                context.metadata["recommendations"] = recommendations
+                result = await skill.run(context)
+
+                if result.success:
+                    logger.info(
+                        f"Roadmap generated via skill "
+                        f"(expertise_applied={result.expertise_applied}, "
+                        f"execution_time={result.execution_time_ms:.0f}ms)"
+                    )
+                    return result.data
+                else:
+                    logger.warning(
+                        f"RoadmapSkill failed, using legacy method: "
+                        f"{result.warnings}"
+                    )
+            except (ValueError, KeyError, TypeError, RuntimeError) as e:
+                logger.warning("roadmap_skill_failed", error=str(e), error_type=type(e).__name__)
+
+        # Fall back to legacy method
+        return await self._generate_roadmap_legacy(recommendations)
+
+    async def _generate_roadmap_legacy(self, recommendations: List[Dict]) -> Dict[str, Any]:
+        """Generate implementation roadmap using direct LLM calls (legacy method)."""
         prompt = f"""Based on these recommendations, create an implementation roadmap.
 
 RECOMMENDATIONS:
