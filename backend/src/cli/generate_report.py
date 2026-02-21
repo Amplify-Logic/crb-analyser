@@ -90,6 +90,7 @@ async def generate_single_report(
     report_tier: str = "quick",
     scrape: bool = True,
     skip_review: bool = False,
+    use_playwright: bool = False,
 ) -> Optional[Dict[str, Any]]:
     """
     Generate a single report from a seed.
@@ -112,13 +113,31 @@ async def generate_single_report(
     scraped_data = None
     if scrape and seed.get("website"):
         print("  Scraping website...", end="", flush=True)
-        scraped_data = await scrape_ecommerce_site(seed["website"])
-        if scraped_data.get("success"):
-            tech = scraped_data.get("visible_tech", [])
-            print(f" done ({len(tech)} technologies detected)")
+        if use_playwright:
+            from src.skills.browser.enhanced_scraper import EnhancedScraperSkill
+            from src.skills.base import SkillContext
+            scraper = EnhancedScraperSkill()
+            scrape_context = SkillContext(
+                industry="ecommerce",
+                metadata={"url": seed["website"]}
+            )
+            result = await scraper.run(scrape_context)
+            if result.success:
+                scraped_data = result.data
+                tech = scraped_data.get("visible_tech", [])
+                method = scraped_data.get("scrape_method", "unknown")
+                print(f" done via {method} ({len(tech)} technologies detected)")
+            else:
+                print(f" failed, using seed data only")
+                scraped_data = None
         else:
-            print(f" failed ({scraped_data.get('error', 'unknown')}), using seed data only")
-            scraped_data = None
+            scraped_data = await scrape_ecommerce_site(seed["website"])
+            if scraped_data.get("success"):
+                tech = scraped_data.get("visible_tech", [])
+                print(f" done ({len(tech)} technologies detected)")
+            else:
+                print(f" failed ({scraped_data.get('error', 'unknown')}), using seed data only")
+                scraped_data = None
 
     # Step 2: Fabricate quiz session
     session_data = fabricate_quiz_session(seed, tier_defaults, scraped_data, report_tier)
@@ -194,6 +213,7 @@ async def generate_from_url(
     staff_size: str = "11-50",
     report_tier: str = "quick",
     skip_review: bool = False,
+    use_playwright: bool = False,
 ) -> Optional[Dict[str, Any]]:
     """Generate a report from a custom URL."""
     # Create a synthetic seed from URL
@@ -220,7 +240,7 @@ async def generate_from_url(
                                              "manual processes"]}}
     }}
 
-    return await generate_single_report(seed, seeds_data, report_tier, scrape=True, skip_review=skip_review)
+    return await generate_single_report(seed, seeds_data, report_tier, scrape=True, skip_review=skip_review, use_playwright=use_playwright)
 
 
 async def cmd_single(args: argparse.Namespace) -> None:
@@ -232,11 +252,12 @@ async def cmd_single(args: argparse.Namespace) -> None:
             staff_size=args.staff,
             report_tier=args.report_tier,
             skip_review=args.no_review,
+            use_playwright=args.playwright,
         )
     else:
         seeds_data = load_seeds()
         seed = pick_seed(seeds_data, args.tier)
-        result = await generate_single_report(seed, seeds_data, args.report_tier, skip_review=args.no_review)
+        result = await generate_single_report(seed, seeds_data, args.report_tier, skip_review=args.no_review, use_playwright=args.playwright)
 
     if not result:
         sys.exit(1)
@@ -256,7 +277,7 @@ async def cmd_batch(args: argparse.Namespace) -> None:
         print(f"{'\u2500' * 50}")
 
         seed = pick_seed(seeds_data, args.tier)
-        result = await generate_single_report(seed, seeds_data, args.report_tier, skip_review=args.no_review)
+        result = await generate_single_report(seed, seeds_data, args.report_tier, skip_review=args.no_review, use_playwright=args.playwright)
 
         if result:
             results.append(result)
@@ -297,6 +318,8 @@ def main() -> None:
                         help="Report tier (default: quick)")
     parser.add_argument("--no-scrape", action="store_true", help="Skip website scraping")
     parser.add_argument("--no-review", action="store_true", help="Skip review/validation phase for faster iteration")
+    parser.add_argument("--playwright", action="store_true",
+                        help="Use Playwright for JS-rendered scraping (more thorough but slower)")
     parser.add_argument("-v", "--verbose", action="store_true", help="Verbose logging")
 
     args = parser.parse_args()
