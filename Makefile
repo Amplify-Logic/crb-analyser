@@ -1,4 +1,4 @@
-.PHONY: test test-backend test-frontend lint typecheck dev generate-report
+.PHONY: test test-backend test-frontend lint typecheck dev generate-report ui-test ui-test-headed
 
 test: test-backend test-frontend
 
@@ -23,3 +23,10 @@ dev:
 
 generate-report:
 	cd backend && python -m src.cli.generate_report $(ARGS)
+
+ui-test:
+	@echo "Run: /ui-test in Claude Code to execute agentic UI tests"
+	@echo "Or manually: cd backend && python -m pytest tests/ui/ -v"
+
+ui-test-headed:
+	@echo "Run: /ui-test --headed in Claude Code"
