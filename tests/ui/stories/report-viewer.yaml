@@ -1,0 +1,31 @@
+name: Report Viewer - Rendering
+description: Verify report renders all sections correctly
+url: http://localhost:5174/report/{report_id}
+priority: critical
+requires:
+  report_id: "a valid report ID from the database"
+
+steps:
+  - name: Load report page
+    action: navigate to report URL
+    expect: Report loads without errors, executive summary visible
+
+  - name: Check executive summary
+    action: scroll to executive summary section
+    expect: AI readiness score, key metrics, and summary text visible
+
+  - name: Check findings section
+    action: scroll to findings/recommendations
+    expect: At least 3 findings displayed with CRB options
+
+  - name: Check charts
+    action: look for chart/visualization elements
+    expect: At least one chart or data visualization renders
+
+  - name: Check navigation
+    action: click table of contents or section links
+    expect: Page scrolls to correct section
+
+  - name: Responsive check
+    action: resize viewport to 375px width (mobile)
+    expect: Content reflows properly, no horizontal scroll

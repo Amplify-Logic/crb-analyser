@@ -1,0 +1,19 @@
+name: Checkout Flow
+description: Test payment flow UI (not actual payment)
+url: http://localhost:5174/checkout/{session_id}
+priority: critical
+requires:
+  session_id: "a completed quiz session ID"
+
+steps:
+  - name: Load checkout page
+    action: navigate to checkout URL
+    expect: Price displayed (EUR 147), order summary visible
+
+  - name: Verify pricing
+    action: check displayed price
+    expect: EUR 147 shown, no other hidden fees
+
+  - name: Check Stripe elements
+    action: look for Stripe payment form
+    expect: Card input fields visible (Stripe Elements loaded)

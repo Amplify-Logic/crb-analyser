@@ -1,0 +1,21 @@
+name: Landing Page
+description: Test landing page loads and CTA works
+url: http://localhost:5174/
+priority: high
+
+steps:
+  - name: Load landing page
+    action: navigate to root URL
+    expect: Page loads, hero section visible
+
+  - name: Check CTA button
+    action: find main call-to-action button
+    expect: "Start Quiz" or similar CTA button visible
+
+  - name: Click CTA
+    action: click the primary CTA button
+    expect: Navigates to /quiz page
+
+  - name: Check mobile nav
+    action: resize to 375px width
+    expect: Hamburger menu visible, content reflows

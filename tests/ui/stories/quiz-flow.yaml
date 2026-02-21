@@ -1,0 +1,29 @@
+name: Quiz Flow - Complete Journey
+description: Test the main conversion path from landing to quiz completion
+url: http://localhost:5174/quiz
+priority: critical
+
+steps:
+  - name: Load quiz page
+    action: navigate
+    expect: Quiz page loads with first question visible
+
+  - name: Answer industry question
+    action: click option containing "E-commerce" or first available option
+    expect: Next question appears, progress bar advances
+
+  - name: Answer company size question
+    action: click option for company size
+    expect: Next question appears
+
+  - name: Complete remaining questions
+    action: answer all remaining questions by clicking first available option
+    expect: Each question advances to next, progress increases
+
+  - name: View results
+    action: wait for results/score page
+    expect: AI readiness score displayed, teaser report preview visible
+
+  - name: CTA visible
+    action: check for purchase/checkout button
+    expect: Call-to-action button is visible and clickable

@@ -1,0 +1,19 @@
+name: Admin Dashboard
+description: Test admin pages load and display data
+url: http://localhost:5174/admin
+priority: high
+requires:
+  auth: "admin user session"
+
+steps:
+  - name: Load admin dashboard
+    action: navigate to admin URL
+    expect: Dashboard loads with stats/metrics
+
+  - name: Check vendor admin
+    action: navigate to vendor management
+    expect: Vendor list loads, search/filter available
+
+  - name: Check knowledge base admin
+    action: navigate to knowledge base
+    expect: Knowledge categories listed, entries viewable
