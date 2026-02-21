@@ -1,4 +1,4 @@
-.PHONY: test test-backend test-frontend lint typecheck dev generate-report ui-test ui-test-headed
+.PHONY: test test-backend test-frontend lint typecheck dev generate-report ui-test ui-test-headed playwright-install generate-report-playwright research-vendor test-all
 
 test: test-backend test-frontend
 
@@ -24,9 +24,26 @@ dev:
 generate-report:
 	cd backend && python -m src.cli.generate_report $(ARGS)
 
+# Browser automation
+playwright-install:
+	cd backend && playwright install chromium
+
+# UI testing
 ui-test:
 	@echo "Run: /ui-test in Claude Code to execute agentic UI tests"
 	@echo "Or manually: cd backend && python -m pytest tests/ui/ -v"
 
 ui-test-headed:
 	@echo "Run: /ui-test --headed in Claude Code"
+
+# Enhanced report generation
+generate-report-playwright:
+	cd backend && python -m src.cli.generate_report --playwright $(ARGS)
+
+# Vendor research
+research-vendor:
+	@echo "Use /research-vendor in Claude Code"
+	@echo "Category: $(CATEGORY), Industry: $(INDUSTRY)"
+
+# Full test suite (including UI)
+test-all: test ui-test
