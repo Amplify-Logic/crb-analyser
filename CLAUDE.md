@@ -266,6 +266,52 @@ cd frontend && npm test
 
 ---
 
+## Browser Automation
+
+Playwright-based browser automation for UI testing, enhanced scraping, and vendor research.
+
+### Setup
+```bash
+pip install playwright
+playwright install chromium
+# Or: make playwright-install
+```
+
+### Skills
+
+| Skill | Purpose | LLM? |
+|-------|---------|------|
+| `playwright-browser` | Core browser automation (navigate, screenshot, scrape) | No |
+| `enhanced-scraper` | Site scraping with Playwright + httpx fallback | No |
+| `vendor-site-scraper` | Vendor pricing extraction via Playwright + Claude | Yes |
+
+### Commands
+
+| Command | Purpose |
+|---------|---------|
+| `/ui-test` | Run agentic UI tests against user stories |
+| `/research-vendor` | Discover and scrape vendor pricing |
+
+### CLI Flag
+```bash
+# Use Playwright for JS-rendered scraping in report generation
+cd backend && python -m src.cli.generate_report --playwright --url https://example.com
+# Or: make generate-report-playwright ARGS="--url https://example.com"
+```
+
+### User Stories
+UI test stories live in `tests/ui/stories/*.yaml`. Add new stories by creating a YAML file — they're auto-discovered by `/ui-test`.
+
+### Makefile Targets
+```bash
+make playwright-install          # Install Chromium
+make ui-test                     # Run UI tests
+make generate-report-playwright  # Generate report with Playwright scraping
+make test-all                    # Full test suite including UI
+```
+
+---
+
 ## Anti-Patterns (Don't Do This)
 
 ### Code
@@ -308,6 +354,9 @@ cd frontend && npm test
 | Base | `backend/src/skills/base.py` |
 | Registry | `backend/src/skills/registry.py` |
 | Vendor Matching | `backend/src/skills/analysis/vendor_matching.py` |
+| Browser (Playwright) | `backend/src/skills/browser/playwright_browser.py` |
+| Enhanced Scraper | `backend/src/skills/browser/enhanced_scraper.py` |
+| Vendor Scraper | `backend/src/skills/browser/vendor_scraper.py` |
 | **Research Agents** | |
 | Discover | `backend/src/agents/research/discover.py` |
 | Refresh | `backend/src/agents/research/refresh.py` |
