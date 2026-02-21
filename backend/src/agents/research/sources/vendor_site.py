@@ -812,14 +812,81 @@ async def scrape_vendor_pricing(
             "attempts": attempts,
             "urls_tried": urls_to_try[:3],
         }
-    else:
-        return {
-            "success": False,
-            "error": "; ".join(all_errors) if all_errors else "Unknown error",
-            "error_type": "extraction",
-            "attempts": attempts,
-            "urls_tried": urls_to_try[:3],
-        }
+
+    # Fallback: try Playwright-based scraper for JS-heavy pricing pages
+    playwright_result = await _try_playwright_fallback(url, vendor_name)
+    if playwright_result:
+        return playwright_result
+
+    return {
+        "success": False,
+        "error": "; ".join(all_errors) if all_errors else "Unknown error",
+        "error_type": "extraction",
+        "attempts": attempts,
+        "urls_tried": urls_to_try[:3],
+    }
+
+
+# =============================================================================
+# Playwright Fallback
+# =============================================================================
+
+async def _try_playwright_fallback(url: str, vendor_name: str) -> Optional[dict]:
+    """
+    Try Playwright-based vendor scraper as fallback for JS-heavy pricing pages.
+
+    Returns a result dict compatible with scrape_vendor_pricing output,
+    or None if Playwright is not available or fails.
+    """
+    try:
+        from src.skills.browser.vendor_scraper import VendorSiteScraperSkill
+        from src.skills.base import SkillContext
+        from anthropic import Anthropic
+
+        client = Anthropic()
+        skill = VendorSiteScraperSkill(client=client)
+        context = SkillContext(
+            industry="ecommerce",
+            metadata={
+                "vendor_url": url,
+                "vendor_name": vendor_name,
+            }
+        )
+
+        result = await skill.run(context)
+        if result.success and result.data.get("tiers"):
+            logger.info(
+                "playwright_fallback_success",
+                vendor=vendor_name,
+                tiers=len(result.data["tiers"]),
+            )
+            # Convert to scrape_vendor_pricing format
+            tiers = result.data["tiers"]
+            starting_price = None
+            prices = [t.get("price_monthly") for t in tiers if t.get("price_monthly")]
+            if prices:
+                starting_price = min(prices)
+
+            return {
+                "success": True,
+                "data": {
+                    "starting_price": starting_price,
+                    "tiers": tiers,
+                    "has_free_tier": result.data.get("has_free_tier", False),
+                    "pricing_model": result.data.get("pricing_model", "unknown"),
+                },
+                "confidence": 0.5,  # Lower confidence for Playwright fallback
+                "extraction_notes": "Extracted via Playwright fallback (JS-rendered)",
+                "attempts": 1,
+                "urls_tried": [url],
+            }
+
+    except ImportError:
+        logger.debug("playwright_not_available", vendor=vendor_name)
+    except Exception as e:
+        logger.debug("playwright_fallback_failed", vendor=vendor_name, error=str(e))
+
+    return None
 
 
 # =============================================================================
