@@ -7,22 +7,32 @@ interface Recommendation {
   description: string
   priority: 'high' | 'medium' | 'low'
   roi_percentage: number
+  roi_calculation_failed?: boolean
+  roi_calculation_note?: string
   payback_months: number
   options: {
-    off_the_shelf: { name: string; vendor: string; monthly_cost: number; implementation_weeks: number }
-    best_in_class: { name: string; vendor: string; monthly_cost: number; implementation_weeks: number }
+    off_the_shelf: { name: string; vendor: string; monthly_cost: number; implementation_weeks: number; vendor_verified?: boolean; pricing_source?: string }
+    best_in_class: { name: string; vendor: string; monthly_cost: number; implementation_weeks: number; vendor_verified?: boolean; pricing_source?: string }
     custom_solution: { approach: string; estimated_cost: { min: number; max: number }; implementation_weeks: number }
   }
   our_recommendation: string
   recommendation_rationale: string
   assumptions: string[]
+  net_scores?: {
+    off_the_shelf?: number
+    best_in_class?: number
+    custom_solution?: number
+    comparison_summary?: string
+  }
 }
 
 interface NumberedRecommendationsProps {
   recommendations: Recommendation[]
+  totalCount?: number
+  startIndex?: number
 }
 
-export default function NumberedRecommendations({ recommendations }: NumberedRecommendationsProps) {
+export default function NumberedRecommendations({ recommendations, totalCount, startIndex }: NumberedRecommendationsProps) {
   const [expandedId, setExpandedId] = useState<string | null>(recommendations[0]?.id || null)
 
   const formatCurrency = (value: number) =>
@@ -35,7 +45,10 @@ export default function NumberedRecommendations({ recommendations }: NumberedRec
           What To Do
         </h2>
         <p className="text-gray-600 dark:text-gray-400">
-          {recommendations.length} recommendations prioritized by impact
+          {totalCount != null && startIndex != null
+            ? `Action ${startIndex + 1} of ${totalCount}, prioritized by impact`
+            : `${recommendations.length} ${recommendations.length === 1 ? 'recommendation' : 'recommendations'} prioritized by impact`
+          }
         </p>
       </div>
 
@@ -52,25 +65,29 @@ export default function NumberedRecommendations({ recommendations }: NumberedRec
               <div className="flex items-start gap-4">
                 {/* Number Badge */}
                 <div className="flex-shrink-0 w-8 h-8 rounded-full bg-primary-100 dark:bg-primary-900/30 text-primary-700 dark:text-primary-300 flex items-center justify-center font-bold text-sm">
-                  {index + 1}
+                  {(startIndex ?? 0) + index + 1}
                 </div>
 
                 <div className="flex-1">
                   <div className="flex items-center gap-2 mb-2">
                     <span className={`px-2 py-1 text-xs font-medium rounded ${
-                      rec.priority === 'high' ? 'bg-red-100 text-red-700' :
-                      rec.priority === 'medium' ? 'bg-yellow-100 text-yellow-700' :
-                      'bg-gray-100 text-gray-600'
+                      rec.priority === 'high' ? 'bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-400' :
+                      rec.priority === 'medium' ? 'bg-yellow-100 dark:bg-yellow-900/30 text-yellow-700 dark:text-yellow-400' :
+                      'bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-400'
                     }`}>
                       {rec.priority} priority
                     </span>
-                    {rec.roi_percentage && (
-                      <span className="px-2 py-1 text-xs font-medium rounded bg-green-100 text-green-700">
+                    {rec.roi_calculation_failed ? (
+                      <span className="px-2 py-1 text-xs font-medium rounded bg-amber-100 dark:bg-amber-900/30 text-amber-700 dark:text-amber-400" title={rec.roi_calculation_note}>
+                        ROI Estimated
+                      </span>
+                    ) : rec.roi_percentage > 0 ? (
+                      <span className="px-2 py-1 text-xs font-medium rounded bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400">
                         {rec.roi_percentage}% ROI
                       </span>
-                    )}
+                    ) : null}
                     {rec.payback_months && (
-                      <span className="px-2 py-1 text-xs font-medium rounded bg-blue-100 text-blue-700">
+                      <span className="px-2 py-1 text-xs font-medium rounded bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-400">
                         {rec.payback_months}mo payback
                       </span>
                     )}
@@ -124,6 +141,18 @@ export default function NumberedRecommendations({ recommendations }: NumberedRec
                             )}
                             <p className="font-semibold mt-1 text-gray-700 dark:text-gray-300">Option A: Off-the-Shelf</p>
                             <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">{rec.options.off_the_shelf.name}</p>
+                            {rec.options.off_the_shelf.vendor_verified === true && (
+                              <span className="inline-block mt-1 px-2 py-0.5 text-xs font-medium rounded bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400">Verified vendor</span>
+                            )}
+                            {rec.options.off_the_shelf.vendor_verified === false && (
+                              <span className="inline-block mt-1 px-2 py-0.5 text-xs font-medium rounded bg-amber-100 dark:bg-amber-900/30 text-amber-700 dark:text-amber-400">Unverified vendor</span>
+                            )}
+                            {rec.options.off_the_shelf.pricing_source === 'estimated' && (
+                              <span className="inline-block mt-1 px-2 py-0.5 text-xs font-medium rounded bg-gray-100 dark:bg-gray-700 text-gray-500 dark:text-gray-400">Estimated pricing</span>
+                            )}
+                            {rec.options.off_the_shelf.pricing_source === 'verified' && (
+                              <span className="inline-block mt-1 px-2 py-0.5 text-xs font-medium rounded bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400">Verified pricing</span>
+                            )}
                             <p className="text-lg font-bold mt-2 text-gray-900 dark:text-white">
                               {formatCurrency(rec.options.off_the_shelf.monthly_cost)}/mo
                             </p>
@@ -142,6 +171,18 @@ export default function NumberedRecommendations({ recommendations }: NumberedRec
                             )}
                             <p className="font-semibold mt-1 text-gray-700 dark:text-gray-300">Option B: Best-in-Class</p>
                             <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">{rec.options.best_in_class.name}</p>
+                            {rec.options.best_in_class.vendor_verified === true && (
+                              <span className="inline-block mt-1 px-2 py-0.5 text-xs font-medium rounded bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400">Verified vendor</span>
+                            )}
+                            {rec.options.best_in_class.vendor_verified === false && (
+                              <span className="inline-block mt-1 px-2 py-0.5 text-xs font-medium rounded bg-amber-100 dark:bg-amber-900/30 text-amber-700 dark:text-amber-400">Unverified vendor</span>
+                            )}
+                            {rec.options.best_in_class.pricing_source === 'estimated' && (
+                              <span className="inline-block mt-1 px-2 py-0.5 text-xs font-medium rounded bg-gray-100 dark:bg-gray-700 text-gray-500 dark:text-gray-400">Estimated pricing</span>
+                            )}
+                            {rec.options.best_in_class.pricing_source === 'verified' && (
+                              <span className="inline-block mt-1 px-2 py-0.5 text-xs font-medium rounded bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400">Verified pricing</span>
+                            )}
                             <p className="text-lg font-bold mt-2 text-gray-900 dark:text-white">
                               {formatCurrency(rec.options.best_in_class.monthly_cost)}/mo
                             </p>
@@ -169,6 +210,33 @@ export default function NumberedRecommendations({ recommendations }: NumberedRec
                       </div>
                     )}
 
+                    {/* NET SCORE display */}
+                    {rec.net_scores && (
+                      <div className="mt-3 p-3 bg-gray-50 dark:bg-gray-700/50 rounded-lg">
+                        <p className="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wide mb-2">NET Score (Benefit - Cost - Risk/10)</p>
+                        <div className="flex gap-4 text-sm">
+                          {rec.net_scores.off_the_shelf != null && (
+                            <span className={rec.our_recommendation === 'off_the_shelf' ? 'font-bold text-primary-700 dark:text-primary-300' : 'text-gray-600 dark:text-gray-400'}>
+                              A: {rec.net_scores.off_the_shelf.toFixed(1)}
+                            </span>
+                          )}
+                          {rec.net_scores.best_in_class != null && (
+                            <span className={rec.our_recommendation === 'best_in_class' ? 'font-bold text-primary-700 dark:text-primary-300' : 'text-gray-600 dark:text-gray-400'}>
+                              B: {rec.net_scores.best_in_class.toFixed(1)}
+                            </span>
+                          )}
+                          {rec.net_scores.custom_solution != null && (
+                            <span className={rec.our_recommendation === 'custom_solution' ? 'font-bold text-primary-700 dark:text-primary-300' : 'text-gray-600 dark:text-gray-400'}>
+                              C: {rec.net_scores.custom_solution.toFixed(1)}
+                            </span>
+                          )}
+                        </div>
+                        {rec.net_scores.comparison_summary && (
+                          <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">{rec.net_scores.comparison_summary}</p>
+                        )}
+                      </div>
+                    )}
+
                     {/* Why we recommend */}
                     {rec.recommendation_rationale && (
                       <div className="mt-4 p-4 bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-xl">
@@ -179,7 +247,7 @@ export default function NumberedRecommendations({ recommendations }: NumberedRec
 
                     {/* Assumptions */}
                     {rec.assumptions && rec.assumptions.length > 0 && (
-                      <div className="mt-4 text-sm text-gray-500">
+                      <div className="mt-4 text-sm text-gray-500 dark:text-gray-400">
                         <p className="font-medium mb-1">Assumptions:</p>
                         <ul className="list-disc list-inside space-y-1">
                           {rec.assumptions.map((assumption, i) => (

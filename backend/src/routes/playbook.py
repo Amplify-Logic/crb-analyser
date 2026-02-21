@@ -166,6 +166,10 @@ async def save_task_completion(
             completed_at=datetime.fromisoformat(completed_at) if completed_at else None,
         )
 
+    except HTTPException:
+        raise
+    except ValueError as e:
+        raise HTTPException(status_code=400, detail=str(e))
     except Exception as e:
         logger.error(f"Failed to save task completion: {e}", exc_info=True)
         raise HTTPException(status_code=500, detail="Failed to save task completion")
@@ -179,7 +183,7 @@ async def get_playbook_progress(report_id: str):
     Returns completed tasks grouped by playbook.
     """
     # Handle sample report - return empty progress (demo mode)
-    if report_id == "sample":
+    if report_id.startswith("sample"):
         return []
 
     # Validate report belongs to a paid session
@@ -212,6 +216,8 @@ async def get_playbook_progress(report_id: str):
 
         return responses
 
+    except HTTPException:
+        raise
     except Exception as e:
         logger.error(f"Failed to get playbook progress: {e}", exc_info=True)
         raise HTTPException(status_code=500, detail="Failed to get playbook progress")
@@ -290,6 +296,8 @@ async def list_roi_scenarios(report_id: str):
 
         return scenarios
 
+    except HTTPException:
+        raise
     except Exception as e:
         logger.error(f"Failed to list ROI scenarios: {e}", exc_info=True)
         raise HTTPException(status_code=500, detail="Failed to list ROI scenarios")
@@ -309,6 +317,8 @@ async def delete_roi_scenario(scenario_id: str):
 
         return {"success": True, "deleted_id": scenario_id}
 
+    except HTTPException:
+        raise
     except Exception as e:
         logger.error(f"Failed to delete ROI scenario: {e}", exc_info=True)
         raise HTTPException(status_code=500, detail="Failed to delete ROI scenario")

@@ -148,6 +148,8 @@ interface Finding {
   confidence: 'high' | 'medium' | 'low'
   sources: string[]
   time_horizon: 'short' | 'mid' | 'long'
+  connect_path?: string
+  replace_path?: string
 }
 
 interface Recommendation {
@@ -162,15 +164,23 @@ interface Recommendation {
     benefit: { short_term: any; mid_term: any; long_term: any; total: number }
   }
   options: {
-    off_the_shelf: { name: string; vendor: string; monthly_cost: number; implementation_weeks: number; pros: string[]; cons: string[] }
-    best_in_class: { name: string; vendor: string; monthly_cost: number; implementation_weeks: number; pros: string[]; cons: string[] }
+    off_the_shelf: { name: string; vendor: string; monthly_cost: number; implementation_weeks: number; pros: string[]; cons: string[]; vendor_verified?: boolean; pricing_source?: string }
+    best_in_class: { name: string; vendor: string; monthly_cost: number; implementation_weeks: number; pros: string[]; cons: string[]; vendor_verified?: boolean; pricing_source?: string }
     custom_solution: { approach: string; estimated_cost: { min: number; max: number }; implementation_weeks: number; pros: string[]; cons: string[] }
   }
   our_recommendation: string
   recommendation_rationale: string
   roi_percentage: number
+  roi_calculation_failed?: boolean
+  roi_calculation_note?: string
   payback_months: number
   assumptions: string[]
+  net_scores?: {
+    off_the_shelf?: number
+    best_in_class?: number
+    custom_solution?: number
+    comparison_summary?: string
+  }
 }
 
 interface Roadmap {
@@ -262,10 +272,17 @@ interface CompanyProfile {
   location?: string
 }
 
+interface MathValidation {
+  issues_found: number
+  confidence_adjustments: number | string[]
+  warnings?: { location: string; issue: string }[]
+}
+
 interface Report {
   id: string
   tier: string
   status: string
+  company_name?: string
   company_profile?: CompanyProfile
   executive_summary: ExecutiveSummary
   value_summary: ValueSummary
@@ -277,7 +294,13 @@ interface Report {
   playbooks?: Playbook[]
   system_architecture?: SystemArchitecture
   industry_insights?: IndustryInsights
-  automation_summary?: AutomationSummary
+  automation_summary?: AutomationSummary & { _generation_failed?: boolean }
+  math_validation?: MathValidation
+  workshop_summary?: {
+    completed: boolean
+    topics_covered?: string[]
+    message_count?: number
+  }
 }
 
 export default function ReportViewer() {
@@ -290,6 +313,7 @@ export default function ReportViewer() {
   const [report, setReport] = useState<Report | null>(null)
   const [activeItem, setActiveItem] = useState<SidebarItem>({ type: 'overview', id: null })
   const [refinerOpen, setRefinerOpen] = useState(false)
+  const [mobileSidebarOpen, setMobileSidebarOpen] = useState(false)
 
   // Playbook progress tracking
   const {
@@ -322,12 +346,32 @@ export default function ReportViewer() {
   }, [reportId, quizSessionId])
 
   // Prepare sidebar data - must be before early returns (Rules of Hooks)
+  // Enrich findings with connect/replace paths from automation_summary
+  const enrichedFindings = useMemo(() => {
+    if (!report?.findings) return []
+    const opportunities = report?.automation_summary?.opportunities || []
+    return report.findings.map(f => {
+      const opp = opportunities.find(o => o.finding_id === f.id)
+      if (opp && !f.connect_path && !f.replace_path) {
+        const enriched = { ...f }
+        if (opp.approach === 'Connect' || opp.approach === 'Either') {
+          enriched.connect_path = opp.tools_involved?.join(' + ') || 'Connect'
+        }
+        if (opp.approach === 'Replace' || opp.approach === 'Either') {
+          enriched.replace_path = opp.tools_involved?.join(' + ') || 'Replace'
+        }
+        return enriched
+      }
+      return f
+    })
+  }, [report?.findings, report?.automation_summary?.opportunities])
+
   const sidebarFindings = useMemo(() =>
-    (report?.findings || []).map(f => ({
+    (enrichedFindings || []).map(f => ({
       id: f.id,
       title: f.title,
       status: 'pending' as const,
-    })), [report?.findings])
+    })), [enrichedFindings])
 
   const sidebarActions = useMemo(() =>
     (report?.recommendations || []).map(r => ({
@@ -336,15 +380,31 @@ export default function ReportViewer() {
       priority: r.priority,
     })), [report?.recommendations])
 
+  // Map playbook recommendation_id -> recommendation title for labels
+  const recommendationTitles = useMemo(() => {
+    const titles: Record<string, string> = {}
+    for (const rec of (report?.recommendations || [])) {
+      titles[rec.id] = rec.title
+    }
+    return titles
+  }, [report?.recommendations])
+
+  const getPlaybookLabel = (playbookId: string, index?: number): string => {
+    const pb = report?.playbooks?.find(p => p.id === playbookId)
+    if (!pb) return `Phase ${(index ?? 0) + 1}`
+    const recTitle = recommendationTitles[pb.recommendation_id]
+    return recTitle || `Phase ${(index ?? 0) + 1}`
+  }
+
   const sidebarPlaybookPhases = useMemo(() => {
     if (!report?.playbooks || report.playbooks.length === 0) return []
     return report.playbooks.map((pb, index) => ({
       id: pb.id,
-      title: `Phase ${index + 1}`,
+      title: getPlaybookLabel(pb.id, index),
       completedTasks: getCompletedTasks(pb.id).length,
       totalTasks: pb.phases?.reduce((sum: number, phase: any) => sum + (phase.tasks?.length || 0), 0) || 0,
     }))
-  }, [report?.playbooks, getCompletedTasks])
+  }, [report?.playbooks, getCompletedTasks, recommendationTitles])
 
   async function loadReport() {
     setLoading(true)
@@ -367,7 +427,17 @@ export default function ReportViewer() {
       }
 
       if (response?.data) {
-        setReport(response.data as Report)
+        const reportData = response.data as Report
+        // Check report status for partial/failed states
+        if (reportData.status === 'generating' || reportData.status === 'partial') {
+          setError('generating')
+          return
+        }
+        if (reportData.status === 'failed') {
+          setError('failed')
+          return
+        }
+        setReport(reportData)
       }
     } catch (err: any) {
       logger.error('Failed to load report:', err)
@@ -379,6 +449,69 @@ export default function ReportViewer() {
 
   if (loading) {
     return <LoadingSkeleton />
+  }
+
+  if (error === 'generating') {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-blue-50/20 dark:from-gray-900 dark:via-gray-900 dark:to-blue-950/20 flex items-center justify-center p-4">
+        <motion.div
+          initial={{ opacity: 0, scale: 0.95, y: 20 }}
+          animate={{ opacity: 1, scale: 1, y: 0 }}
+          transition={{ duration: 0.5 }}
+          className="text-center max-w-md bg-white/80 dark:bg-gray-800/80 backdrop-blur-xl rounded-3xl p-8 shadow-premium border border-gray-200/50 dark:border-gray-700/50"
+        >
+          <div className="w-20 h-20 bg-gradient-to-br from-blue-400 to-blue-500 rounded-2xl flex items-center justify-center mx-auto mb-6 shadow-lg shadow-blue-500/25">
+            <svg className="w-10 h-10 text-white animate-spin" fill="none" viewBox="0 0 24 24">
+              <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+              <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
+            </svg>
+          </div>
+          <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-3">Report is Being Generated</h2>
+          <p className="text-gray-600 dark:text-gray-400 mb-6 leading-relaxed">Your report is still being generated. This usually takes a few minutes. Please check back shortly.</p>
+          <button
+            onClick={() => { setError(null); loadReport() }}
+            className="px-6 py-3 bg-blue-600 text-white rounded-xl font-medium hover:bg-blue-700 transition"
+          >
+            Refresh
+          </button>
+        </motion.div>
+      </div>
+    )
+  }
+
+  if (error === 'failed') {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-red-50/20 dark:from-gray-900 dark:via-gray-900 dark:to-red-950/20 flex items-center justify-center p-4">
+        <motion.div
+          initial={{ opacity: 0, scale: 0.95, y: 20 }}
+          animate={{ opacity: 1, scale: 1, y: 0 }}
+          transition={{ duration: 0.5 }}
+          className="text-center max-w-md bg-white/80 dark:bg-gray-800/80 backdrop-blur-xl rounded-3xl p-8 shadow-premium border border-gray-200/50 dark:border-gray-700/50"
+        >
+          <div className="w-20 h-20 bg-gradient-to-br from-red-400 to-red-500 rounded-2xl flex items-center justify-center mx-auto mb-6 shadow-lg shadow-red-500/25">
+            <svg className="w-10 h-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L4.082 16.5c-.77.833.192 2.5 1.732 2.5z" />
+            </svg>
+          </div>
+          <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-3">Report Generation Failed</h2>
+          <p className="text-gray-600 dark:text-gray-400 mb-6 leading-relaxed">Something went wrong while generating your report. Please contact support for assistance.</p>
+          <div className="flex gap-3 justify-center">
+            <button
+              onClick={() => { setError(null); loadReport() }}
+              className="px-6 py-3 bg-gray-600 text-white rounded-xl font-medium hover:bg-gray-700 transition"
+            >
+              Try Again
+            </button>
+            <a
+              href="mailto:support@crbanalyser.com"
+              className="px-6 py-3 bg-red-600 text-white rounded-xl font-medium hover:bg-red-700 transition"
+            >
+              Contact Support
+            </a>
+          </div>
+        </motion.div>
+      </div>
+    )
   }
 
   if (error || !report) {
@@ -418,7 +551,8 @@ export default function ReportViewer() {
     )
   }
 
-  const { executive_summary: summary, value_summary, findings, recommendations } = report
+  const { executive_summary: summary, value_summary, recommendations } = report
+  const findings = enrichedFindings
 
   // Calculate total investment from recommendations
   const totalInvestment = recommendations?.reduce(
@@ -464,7 +598,7 @@ export default function ReportViewer() {
 
   const rawProfile = report.company_profile
   const companyProfile = {
-    company_name: rawProfile?.company_name || '',
+    company_name: rawProfile?.company_name || report.company_name || '',
     industry: extractIndustry(rawProfile) || report.industry_insights?.industry_display_name || '',
     industry_display: rawProfile?.industry_display || report.industry_insights?.industry_display_name || '',
     team_size: rawProfile?.team_size || '',
@@ -485,7 +619,7 @@ export default function ReportViewer() {
         const action = recommendations?.find(r => r.id === activeItem.id)
         return ['Actions', action?.title || '']
       }
-      case 'playbook': return ['Playbook', `Phase ${activeItem.id}`]
+      case 'playbook': return ['Playbook', getPlaybookLabel(activeItem.id || '')]
       case 'tool': {
         const toolNames: Record<string, string> = { roi: 'ROI Calculator', stack: 'Stack Analysis', insights: 'Industry Insights' }
         return ['Tools', toolNames[activeItem.id || ''] || '']
@@ -519,7 +653,7 @@ export default function ReportViewer() {
       case 'overview': return 'Overview'
       case 'finding': return findings?.find(f => f.id === item.id)?.title
       case 'action': return recommendations?.find(r => r.id === item.id)?.title
-      case 'playbook': return `Phase ${item.id}`
+      case 'playbook': return getPlaybookLabel(item.id || '')
       case 'tool': {
         const toolNames: Record<string, string> = { roi: 'ROI Calculator', stack: 'Stack Analysis', insights: 'Industry Insights' }
         return toolNames[item.id || '']
@@ -559,6 +693,7 @@ export default function ReportViewer() {
                     AI Readiness Score
                   </p>
                   <AIReadinessGauge
+                    key={`gauge-${activeItem.type}-${activeItem.id}`}
                     score={summary?.ai_readiness_score || 0}
                     size="md"
                     breakdown={summary?.ai_readiness_breakdown}
@@ -569,6 +704,7 @@ export default function ReportViewer() {
                     The Two Pillars
                   </p>
                   <TwoPillarsChart
+                    key={`pillars-${activeItem.type}-${activeItem.id}`}
                     customerValue={summary?.customer_value_score || 0}
                     businessHealth={summary?.business_health_score || 0}
                   />
@@ -582,18 +718,92 @@ export default function ReportViewer() {
               returnMin={value_summary?.total?.min || 0}
               returnMax={value_summary?.total?.max || 0}
             />
+
+            {/* Not Recommended */}
+            {summary?.not_recommended && summary.not_recommended.length > 0 && (
+              <div className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-4">
+                <h3 className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-3">Not Recommended</h3>
+                <div className="space-y-2">
+                  {summary.not_recommended.map((item, i) => (
+                    <div key={i} className="flex items-start gap-2">
+                      <svg className="w-5 h-5 text-red-500 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                      </svg>
+                      <div>
+                        <p className="text-sm font-medium text-gray-900 dark:text-white">{item.title}</p>
+                        <p className="text-xs text-gray-500 dark:text-gray-400">{item.reason}</p>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {/* Workshop Insights */}
+            {report.workshop_summary?.completed && (
+              <div className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-4">
+                <div className="flex items-center gap-2 mb-2">
+                  <svg className="w-5 h-5 text-purple-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z" />
+                  </svg>
+                  <span className="text-sm font-medium text-gray-700 dark:text-gray-300">Workshop Insights</span>
+                  <span className="text-xs text-gray-500 dark:text-gray-400">
+                    {report.workshop_summary.message_count} exchanges
+                  </span>
+                </div>
+                {report.workshop_summary.topics_covered && report.workshop_summary.topics_covered.length > 0 && (
+                  <div className="flex flex-wrap gap-1.5">
+                    {report.workshop_summary.topics_covered.map((topic, i) => (
+                      <span key={i} className="px-2 py-0.5 text-xs rounded-full bg-purple-100 text-purple-700 dark:bg-purple-900/30 dark:text-purple-300">
+                        {topic}
+                      </span>
+                    ))}
+                  </div>
+                )}
+              </div>
+            )}
+
+            {/* Data Quality Indicator */}
+            {report.math_validation && (
+              <div className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-4">
+                <div className="flex items-center gap-2">
+                  <span className={`w-2.5 h-2.5 rounded-full ${report.math_validation.issues_found === 0 ? 'bg-green-500' : 'bg-amber-500'}`} />
+                  <span className="text-sm font-medium text-gray-700 dark:text-gray-300">Data Quality</span>
+                  <span className="text-sm text-gray-500 dark:text-gray-400">
+                    {report.math_validation.issues_found === 0
+                      ? 'All checks passed'
+                      : `${report.math_validation.issues_found} issue(s) detected`}
+                  </span>
+                </div>
+              </div>
+            )}
+
+            {/* Upgrade CTA */}
+            {reportId && (
+              <UpgradeCTA
+                currentTier={report.tier as 'quick' | 'full'}
+                reportId={reportId}
+              />
+            )}
           </div>
         )
 
       case 'finding':
         const finding = findings?.find(f => f.id === activeItem.id)
         if (!finding) return <div>Finding not found</div>
+        // Sort findings by combined score (same as TieredFindings) to get correct index
+        const sortedForIndex = [...(findings || [])].sort(
+          (a: any, b: any) => (b.customer_value_score + b.business_health_score) - (a.customer_value_score + a.business_health_score)
+        )
+        const findingGlobalIndex = sortedForIndex.findIndex((f: any) => f.id === activeItem.id)
         return (
           <div className="space-y-6">
             <TieredFindings
               findings={[finding] as any}
               heroCount={1}
               compactCount={0}
+              totalCount={findings?.length}
+              currentIndex={findingGlobalIndex >= 0 ? findingGlobalIndex : undefined}
             />
           </div>
         )
@@ -601,9 +811,14 @@ export default function ReportViewer() {
       case 'action':
         const action = recommendations?.find(r => r.id === activeItem.id)
         if (!action) return <div>Action not found</div>
+        const actionIndex = recommendations?.findIndex(r => r.id === activeItem.id) ?? 0
         return (
           <div className="space-y-6">
-            <NumberedRecommendations recommendations={[action] as any} />
+            <NumberedRecommendations
+              recommendations={[action] as any}
+              totalCount={recommendations?.length}
+              startIndex={actionIndex >= 0 ? actionIndex : undefined}
+            />
           </div>
         )
 
@@ -646,6 +861,8 @@ export default function ReportViewer() {
                   reportId={reportId}
                   onTaskComplete={handleTaskComplete}
                   initialCompletedTasks={getInitialCompletedTasks()}
+                  recommendationTitles={recommendationTitles}
+                  activePlaybookId={activeItem.id || undefined}
                 />
               </div>
             )}
@@ -697,37 +914,73 @@ export default function ReportViewer() {
     }
   }
 
+  // Close mobile sidebar when navigating
+  const handleMobileItemClick = (item: SidebarItem) => {
+    setActiveItem(item)
+    setMobileSidebarOpen(false)
+  }
+
   return (
     <div className="h-screen flex flex-col bg-gray-50 dark:bg-gray-900">
       {/* Compact Header */}
-      <header className="flex-shrink-0 h-14 border-b border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 flex items-center px-4 gap-4">
+      <header className="flex-shrink-0 h-14 border-b border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 flex items-center px-3 md:px-4 gap-2 md:gap-4">
+        {/* Mobile hamburger */}
+        <button
+          onClick={() => setMobileSidebarOpen(!mobileSidebarOpen)}
+          className="md:hidden p-1.5 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-600 dark:text-gray-400 relative z-50"
+          aria-label={mobileSidebarOpen ? "Close navigation" : "Open navigation"}
+        >
+          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+          </svg>
+        </button>
         <a href="/" className="text-lg font-semibold text-primary-600 dark:text-primary-400">
           Ready Path
         </a>
-        <span className="text-gray-300 dark:text-gray-600">|</span>
-        <span className="text-sm text-gray-600 dark:text-gray-400 truncate">
+        <span className="text-gray-300 dark:text-gray-600 hidden md:inline">|</span>
+        <span className="text-sm text-gray-600 dark:text-gray-400 truncate hidden md:inline">
           {companyProfile.company_name || 'AI Readiness Report'}
         </span>
         <div className="ml-auto flex items-center gap-2">
           <button
             onClick={() => window.print()}
-            className="px-3 py-1.5 text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors"
+            className="px-3 py-1.5 text-sm font-medium text-white bg-gradient-to-r from-primary-600 to-indigo-600 rounded-lg hover:from-primary-700 hover:to-indigo-700 transition-all flex items-center gap-1.5"
           >
-            Export PDF
+            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+            </svg>
+            <span className="hidden sm:inline">Export PDF</span>
           </button>
-          {reportId && (
-            <UpgradeCTA
-              currentTier={report.tier as 'quick' | 'full'}
-              reportId={reportId}
-            />
-          )}
         </div>
       </header>
 
       {/* Two-Panel Layout */}
       <div className="flex-1 flex overflow-hidden">
-        {/* Sidebar */}
+        {/* Mobile Sidebar Overlay */}
+        {mobileSidebarOpen && (
+          <div className="fixed inset-0 z-40 md:hidden">
+            <div
+              className="absolute inset-0 bg-black/50"
+              onClick={() => setMobileSidebarOpen(false)}
+            />
+            <div className="relative z-50 h-full">
+              <Sidebar
+                companyName={companyProfile.company_name || 'AI Readiness Report'}
+                industry={companyProfile.industry_display || companyProfile.industry || 'Business'}
+                score={summary?.ai_readiness_score || 0}
+                findings={sidebarFindings}
+                actions={sidebarActions}
+                playbookPhases={sidebarPlaybookPhases}
+                activeItem={activeItem}
+                onItemClick={handleMobileItemClick}
+              />
+            </div>
+          </div>
+        )}
+
+        {/* Desktop Sidebar */}
         <Sidebar
+          className="hidden md:flex"
           companyName={companyProfile.company_name || 'AI Readiness Report'}
           industry={companyProfile.industry_display || companyProfile.industry || 'Business'}
           score={summary?.ai_readiness_score || 0}
@@ -760,7 +1013,7 @@ export default function ReportViewer() {
           )}
 
           {/* Automation Opportunities Matrix - show on overview */}
-          {report.automation_summary && report.automation_summary.opportunities.length > 0 && activeItem.type === 'overview' && (
+          {report.automation_summary && !report.automation_summary._generation_failed && report.automation_summary.opportunities?.length > 0 && activeItem.type === 'overview' && (
             <div className="mt-8">
               <AutomationMatrix
                 opportunities={report.automation_summary.opportunities}
@@ -770,9 +1023,46 @@ export default function ReportViewer() {
           )}
 
           {/* Automation Roadmap Summary - show on overview */}
-          {report.automation_summary && activeItem.type === 'overview' && (
+          {report.automation_summary && !report.automation_summary._generation_failed && activeItem.type === 'overview' && (
             <div className="mt-8">
               <AutomationRoadmap summary={report.automation_summary} />
+            </div>
+          )}
+
+          {/* Methodology Notes */}
+          {report.methodology_notes && (
+            <div className="mt-8 bg-gray-50 dark:bg-gray-800/50 rounded-xl border border-gray-200 dark:border-gray-700 p-4">
+              <h3 className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-3">Methodology</h3>
+              {report.methodology_notes.data_sources && report.methodology_notes.data_sources.length > 0 && (
+                <div className="mb-2">
+                  <p className="text-xs font-medium text-gray-500 dark:text-gray-400 mb-1">Data Sources</p>
+                  <ul className="list-disc list-inside text-xs text-gray-600 dark:text-gray-400 space-y-0.5">
+                    {report.methodology_notes.data_sources.map((source: string, i: number) => (
+                      <li key={i}>{source}</li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+              {report.methodology_notes.assumptions && report.methodology_notes.assumptions.length > 0 && (
+                <div className="mb-2">
+                  <p className="text-xs font-medium text-gray-500 dark:text-gray-400 mb-1">Assumptions</p>
+                  <ul className="list-disc list-inside text-xs text-gray-600 dark:text-gray-400 space-y-0.5">
+                    {report.methodology_notes.assumptions.map((assumption: string, i: number) => (
+                      <li key={i}>{assumption}</li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+              {report.methodology_notes.confidence_level && (
+                <p className="text-xs text-gray-500 dark:text-gray-400">
+                  <span className="font-medium">Confidence:</span> {report.methodology_notes.confidence_level}
+                </p>
+              )}
+              {report.methodology_notes.last_updated && (
+                <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
+                  <span className="font-medium">Last Updated:</span> {report.methodology_notes.last_updated}
+                </p>
+              )}
             </div>
           )}
 

@@ -107,6 +107,21 @@ export default function StackTab({ architecture }: StackTabProps) {
     high: 'text-red-600 bg-red-100',
   }
 
+  const getCategoryIcon = (category: string, name: string): string => {
+    const cat = category?.toLowerCase() || ''
+    const n = name?.toLowerCase() || ''
+    if (cat.includes('support') || cat.includes('helpdesk') || n.includes('support') || n.includes('gorgias')) return '💬'
+    if (cat.includes('inventory') || cat.includes('forecast') || n.includes('inventory')) return '📦'
+    if (cat.includes('content') || cat.includes('copywriting') || n.includes('content') || n.includes('hypotenuse')) return '✍️'
+    if (cat.includes('ecommerce') || cat.includes('commerce') || n.includes('shopify')) return '🛒'
+    if (cat.includes('email') || cat.includes('marketing') || n.includes('klaviyo')) return '📧'
+    if (cat.includes('analytics') || n.includes('analytics') || n.includes('ga4')) return '📊'
+    if (cat.includes('shipping') || n.includes('ship')) return '🚚'
+    if (cat.includes('returns') || n.includes('return') || n.includes('loop')) return '↩️'
+    if (cat.includes('ai') || cat.includes('intelligence') || n.includes('siena')) return '🤖'
+    return '⚡'
+  }
+
   return (
     <div className="space-y-6">
       {/* Toggle */}
@@ -157,8 +172,11 @@ export default function StackTab({ architecture }: StackTabProps) {
                   onClick={() => setSelectedNode(tool)}
                   className="p-4 bg-gray-50 rounded-xl border-2 border-gray-200 cursor-pointer hover:border-primary-300 transition"
                 >
-                  <p className="font-medium text-gray-900">{tool.name}</p>
-                  <p className="text-xs text-gray-500">Already owned</p>
+                  <div className="flex items-center gap-2">
+                    <span className="text-lg">{getCategoryIcon(tool.category, tool.name)}</span>
+                    <p className="font-medium text-gray-900">{tool.name}</p>
+                  </div>
+                  <p className="text-xs text-gray-500 ml-8">Already owned</p>
                 </motion.div>
               ))}
             </div>
@@ -175,9 +193,16 @@ export default function StackTab({ architecture }: StackTabProps) {
                   onClick={() => setSelectedNode(tool)}
                   className="p-4 bg-purple-50 rounded-xl border-2 border-purple-200 cursor-pointer hover:border-purple-400 transition"
                 >
-                  <p className="font-medium text-purple-900">{tool.name}</p>
+                  <div className="flex items-center gap-2">
+                    <span className="text-lg">{getCategoryIcon(tool.category, tool.name)}</span>
+                    <p className="font-medium text-purple-900">{tool.name}</p>
+                  </div>
                   <p className="text-sm text-purple-600 font-medium">
-                    {formatCurrency(tool.monthly_cost)}/mo
+                    {tool.monthly_cost != null && !isNaN(tool.monthly_cost)
+                      ? `${formatCurrency(tool.monthly_cost)}/mo`
+                      : tool.one_time_cost != null && !isNaN(tool.one_time_cost) && tool.one_time_cost > 0
+                        ? `${formatCurrency(tool.one_time_cost)} setup`
+                        : 'Included'}
                   </p>
                 </motion.div>
               ))}
@@ -202,6 +227,9 @@ export default function StackTab({ architecture }: StackTabProps) {
                 >
                   <p className="font-medium text-green-900 text-sm">{auto.name}</p>
                   <p className="text-xs text-green-600 mt-1">{auto.trigger}</p>
+                  {auto.action && (
+                    <p className="text-xs text-green-700 mt-1">{auto.action}</p>
+                  )}
                 </div>
               ))}
             </div>
@@ -228,6 +256,7 @@ export default function StackTab({ architecture }: StackTabProps) {
             </button>
           </div>
 
+          {selectedNode.crb ? (
           <div className="grid grid-cols-3 gap-4">
             <div className="p-4 bg-gray-50 rounded-xl">
               <p className="text-xs text-gray-500 mb-1">COST</p>
@@ -242,8 +271,11 @@ export default function StackTab({ architecture }: StackTabProps) {
               <p className="font-medium text-green-800">{selectedNode.crb.benefit}</p>
             </div>
           </div>
+          ) : (
+          <p className="text-sm text-gray-500">No CRB analysis available for this tool.</p>
+          )}
 
-          {selectedNode.crb.powers.length > 0 && (
+          {selectedNode.crb?.powers && selectedNode.crb.powers.length > 0 && (
             <div className="mt-4">
               <p className="text-sm text-gray-500 mb-2">Powers these automations:</p>
               <div className="flex flex-wrap gap-2">

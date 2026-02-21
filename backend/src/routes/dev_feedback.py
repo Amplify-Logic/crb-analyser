@@ -51,17 +51,22 @@ async def get_report_context(
         )
 
     # Handle sample report - return mock context for demo
-    if report_id == "sample":
+    if report_id.startswith("sample"):
+        # Determine sample type from report_id
+        is_ecommerce = "ecommerce" in report_id
+        is_dental = "dental" in report_id
+        sample_name = "Nordic Outdoor Co." if is_ecommerce else "Bright Smiles Dental" if is_dental else "Morrison & Clarke Legal"
+        sample_industry = "ecommerce" if is_ecommerce else "dental" if is_dental else "professional-services"
         return ReportContext(
-            session_id="sample-session",
+            session_id=f"{report_id}-session",
             email=None,
-            company_name="TechFlow Solutions",
+            company_name=sample_name,
             quiz_answers={
-                "industry": "b2b_saas",
+                "industry": sample_industry,
                 "team_size": "11-50",
-                "main_pain_points": ["manual_processes", "scaling_support"],
+                "main_pain_points": ["manual_processes", "document_management"],
             },
-            company_profile={"name": "TechFlow Solutions", "industry": "B2B SaaS"},
+            company_profile={"name": sample_name, "industry": sample_industry},
             interview_data={},
             interview_transcript=[],
             research_data={},

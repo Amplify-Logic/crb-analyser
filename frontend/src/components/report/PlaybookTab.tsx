@@ -9,7 +9,7 @@
  * - Print/export functionality
  */
 
-import { useState, useMemo, useRef } from 'react'
+import { useState, useMemo, useRef, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 
 // ============================================================================
@@ -106,6 +106,10 @@ interface PlaybookTabProps {
   completedTasks?: Record<string, string[]> // playbookId -> taskIds
   /** @deprecated Use completedTasks for controlled mode. Only used as fallback for initial state. */
   initialCompletedTasks?: Record<string, string[]> // playbookId -> taskIds
+  /** Map recommendation_id -> title for meaningful playbook selector labels */
+  recommendationTitles?: Record<string, string>
+  /** Active playbook ID from sidebar navigation */
+  activePlaybookId?: string
 }
 
 // ============================================================================
@@ -198,9 +202,11 @@ function TimelineRoadmap({
 
                   <div className="mt-3 text-center">
                     <p className={`font-semibold text-sm ${isActive ? 'text-primary-600 dark:text-primary-400' : 'text-gray-900 dark:text-white'}`}>
-                      {phase.title}
+                      {phase.title || phase.name || `Week ${phase.week ?? i + 1}`}
                     </p>
-                    <p className="text-xs text-gray-500 dark:text-gray-400">{phase.duration_weeks} weeks</p>
+                    {phase.duration_weeks && (
+                      <p className="text-xs text-gray-500 dark:text-gray-400">{phase.duration_weeks} {phase.duration_weeks === 1 ? 'week' : 'weeks'}</p>
+                    )}
                     <p className="text-xs text-gray-400 dark:text-gray-500 mt-1">
                       {progress.completed}/{progress.total} tasks
                     </p>
@@ -244,7 +250,7 @@ function TimelineRoadmap({
               </div>
 
               <div className="flex-1 text-left">
-                <p className="font-semibold text-gray-900 dark:text-white">{phase.title}</p>
+                <p className="font-semibold text-gray-900 dark:text-white">{phase.title || phase.name || `Week ${phase.week ?? i + 1}`}</p>
                 <div className="flex items-center gap-2 mt-1.5">
                   <div className="flex-1 bg-gray-200 dark:bg-gray-700 rounded-full h-2 overflow-hidden">
                     <motion.div
@@ -619,12 +625,12 @@ function PhaseCard({
                     : 'bg-gray-100 text-gray-500'
                 }`}
               >
-                {isComplete ? '✓' : phase.phase_number}
+                {isComplete ? '✓' : (phase.phase_number ?? phase.week ?? '')}
               </span>
               <div>
-                <h4 className="text-lg font-semibold text-gray-900">{phase.title}</h4>
+                <h4 className="text-lg font-semibold text-gray-900">{phase.title || phase.name || `Week ${phase.week}`}</h4>
                 <p className="text-sm text-gray-500">
-                  {phase.duration_weeks} weeks • {completedCount}/{allTasks.length} tasks
+                  {phase.duration_weeks ? `${phase.duration_weeks} weeks • ` : ''}{completedCount}/{allTasks.length} tasks
                 </p>
               </div>
             </div>
@@ -769,9 +775,28 @@ export default function PlaybookTab({
   reportId: _reportId, // Reserved for future use with direct API calls
   onTaskComplete,
   completedTasks: controlledCompletedTasks,
-  initialCompletedTasks = {}
+  initialCompletedTasks = {},
+  recommendationTitles = {},
+  activePlaybookId
 }: PlaybookTabProps) {
-  const [selectedPlaybook, setSelectedPlaybook] = useState(0)
+  const [selectedPlaybook, setSelectedPlaybook] = useState(() => {
+    if (activePlaybookId) {
+      const idx = playbooks.findIndex(pb => pb.id === activePlaybookId)
+      return idx >= 0 ? idx : 0
+    }
+    return 0
+  })
+  // Sync selectedPlaybook when activePlaybookId changes from sidebar navigation
+  useEffect(() => {
+    if (activePlaybookId) {
+      const idx = playbooks.findIndex(pb => pb.id === activePlaybookId)
+      if (idx >= 0 && idx !== selectedPlaybook) {
+        setSelectedPlaybook(idx)
+        setExpandedPhase(1) // Reset expanded phase when switching
+      }
+    }
+  }, [activePlaybookId, playbooks])
+
   const [expandedPhase, setExpandedPhase] = useState<number | null>(1)
   // Internal state only used when not in controlled mode
   const [internalCompletedTasks, setInternalCompletedTasks] = useState<Record<string, Set<string>>>(() => {
@@ -924,7 +949,7 @@ export default function PlaybookTab({
                     : 'bg-white border border-gray-200 hover:bg-gray-50 text-gray-700'
                 }`}
               >
-                {formatOptionType(pb.option_type)}
+                {recommendationTitles[pb.recommendation_id] || formatOptionType(pb.option_type)}
               </button>
             ))}
           </div>

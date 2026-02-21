@@ -20,23 +20,27 @@ interface Finding {
   value_saved?: { hours_per_week: number; hourly_rate: number; annual_savings: number }
   value_created?: { description: string; potential_revenue: number }
   agent_opportunity?: AgentOpportunity
+  connect_path?: string
+  replace_path?: string
 }
 
 // Derive verdict from scores - aligns with landing page promise
 function getVerdict(finding: Finding): { label: string; color: string; bgColor: string } {
   const combined = finding.customer_value_score + finding.business_health_score
   if (combined >= 14) {
-    return { label: 'Proceed', color: 'text-emerald-700', bgColor: 'bg-emerald-50 border-emerald-200' }
+    return { label: 'Proceed', color: 'text-emerald-700 dark:text-emerald-400', bgColor: 'bg-emerald-50 dark:bg-emerald-900/30 border-emerald-200 dark:border-emerald-800' }
   } else if (combined >= 8) {
-    return { label: 'Wait', color: 'text-amber-700', bgColor: 'bg-amber-50 border-amber-200' }
+    return { label: 'Wait', color: 'text-amber-700 dark:text-amber-400', bgColor: 'bg-amber-50 dark:bg-amber-900/30 border-amber-200 dark:border-amber-800' }
   }
-  return { label: 'Skip', color: 'text-gray-600', bgColor: 'bg-gray-100 border-gray-200' }
+  return { label: 'Skip', color: 'text-gray-600 dark:text-gray-400', bgColor: 'bg-gray-100 dark:bg-gray-700 border-gray-200 dark:border-gray-600' }
 }
 
 interface TieredFindingsProps {
   findings: Finding[]
   heroCount?: number
   compactCount?: number
+  totalCount?: number
+  currentIndex?: number
 }
 
 function AgentOpportunityCard({ opportunity }: { opportunity: AgentOpportunity }) {
@@ -81,7 +85,13 @@ function AgentOpportunityCard({ opportunity }: { opportunity: AgentOpportunity }
   )
 }
 
-function HeroFindingCard({ finding, index }: { finding: Finding; index: number }) {
+function getImpactLabel(globalIndex: number): string {
+  if (globalIndex <= 1) return 'Highest Impact'
+  if (globalIndex <= 3) return 'High Impact'
+  return 'Moderate Impact'
+}
+
+function HeroFindingCard({ finding, index, globalIndex }: { finding: Finding; index: number; globalIndex: number }) {
   const formatCurrency = (value: number) =>
     new Intl.NumberFormat('de-DE', { style: 'currency', currency: 'EUR', maximumFractionDigits: 0 }).format(value)
   const verdict = getVerdict(finding)
@@ -99,12 +109,26 @@ function HeroFindingCard({ finding, index }: { finding: Finding; index: number }
             {verdict.label}
           </span>
           <span className="px-2 py-1 bg-primary-100 dark:bg-primary-900/30 text-primary-700 dark:text-primary-300 text-xs font-medium rounded">
-            Highest Impact
+            {getImpactLabel(globalIndex)}
           </span>
         </div>
         <div className="flex gap-2">
-          <span className="px-2 py-1 text-xs font-medium rounded bg-blue-100 text-blue-700 capitalize">
+          {finding.connect_path && finding.replace_path ? (
+            <span className="px-2 py-1 text-xs font-medium rounded bg-purple-100 dark:bg-purple-900/30 text-purple-700 dark:text-purple-400">Either</span>
+          ) : finding.connect_path ? (
+            <span className="px-2 py-1 text-xs font-medium rounded bg-teal-100 dark:bg-teal-900/30 text-teal-700 dark:text-teal-400">Connect</span>
+          ) : finding.replace_path ? (
+            <span className="px-2 py-1 text-xs font-medium rounded bg-orange-100 dark:bg-orange-900/30 text-orange-700 dark:text-orange-400">Replace</span>
+          ) : null}
+          <span className="px-2 py-1 text-xs font-medium rounded bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-400 capitalize">
             {finding.time_horizon}
+          </span>
+          <span className={`px-2 py-1 text-xs font-medium rounded ${
+            finding.confidence === 'high' ? 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400' :
+            finding.confidence === 'medium' ? 'bg-yellow-100 text-yellow-700 dark:bg-yellow-900/30 dark:text-yellow-400' :
+            'bg-gray-100 text-gray-600 dark:bg-gray-700 dark:text-gray-400'
+          }`}>
+            {finding.confidence} confidence
           </span>
         </div>
       </div>
@@ -145,6 +169,13 @@ function CompactFindingCard({ finding }: { finding: Finding }) {
         <span className={`px-2 py-0.5 text-[10px] font-bold rounded-full border uppercase tracking-wide ${verdict.bgColor} ${verdict.color}`}>
           {verdict.label}
         </span>
+        {finding.connect_path && finding.replace_path ? (
+          <span className="px-1.5 py-0.5 text-[10px] font-medium rounded bg-purple-100 dark:bg-purple-900/30 text-purple-700 dark:text-purple-400">Either</span>
+        ) : finding.connect_path ? (
+          <span className="px-1.5 py-0.5 text-[10px] font-medium rounded bg-teal-100 dark:bg-teal-900/30 text-teal-700 dark:text-teal-400">Connect</span>
+        ) : finding.replace_path ? (
+          <span className="px-1.5 py-0.5 text-[10px] font-medium rounded bg-orange-100 dark:bg-orange-900/30 text-orange-700 dark:text-orange-400">Replace</span>
+        ) : null}
       </div>
       <h4 className="font-medium text-gray-900 dark:text-white mb-1 line-clamp-2">
         {finding.title}
@@ -166,7 +197,7 @@ function CompactFindingCard({ finding }: { finding: Finding }) {
   )
 }
 
-export default function TieredFindings({ findings, heroCount = 3, compactCount = 4 }: TieredFindingsProps) {
+export default function TieredFindings({ findings, heroCount = 3, compactCount = 4, totalCount, currentIndex }: TieredFindingsProps) {
   const [showAll, setShowAll] = useState(false)
 
   // Sort by combined score
@@ -185,14 +216,17 @@ export default function TieredFindings({ findings, heroCount = 3, compactCount =
           What We Found
         </h2>
         <p className="text-gray-600 dark:text-gray-400">
-          {findings.length} findings from your analysis, prioritized by impact
+          {totalCount != null && currentIndex != null
+            ? `Finding ${currentIndex + 1} of ${totalCount}, prioritized by impact`
+            : `${findings.length} ${findings.length === 1 ? 'finding' : 'findings'} from your analysis, prioritized by impact`
+          }
         </p>
       </div>
 
       {/* Hero Findings */}
       <div className="space-y-4 mb-6">
         {heroFindings.map((finding, i) => (
-          <HeroFindingCard key={finding.id} finding={finding} index={i} />
+          <HeroFindingCard key={finding.id} finding={finding} index={i} globalIndex={currentIndex ?? i} />
         ))}
       </div>
 
