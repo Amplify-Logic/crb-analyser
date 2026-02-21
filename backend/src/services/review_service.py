@@ -12,7 +12,7 @@ This service ensures:
 """
 
 import json
-import logging
+import structlog
 import re
 from typing import Dict, Any, List, Optional
 from datetime import datetime
@@ -29,7 +29,7 @@ from src.knowledge import (
 )
 from src.expertise import get_self_improve_service, get_expertise_store
 
-logger = logging.getLogger(__name__)
+logger = structlog.get_logger(__name__)
 
 
 def json_serializer(obj):

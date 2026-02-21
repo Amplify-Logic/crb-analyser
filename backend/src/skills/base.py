@@ -470,6 +470,7 @@ class LLMSkill(BaseSkill[T]):
         prompt: str,
         system: Optional[str] = None,
         model: Optional[str] = None,
+        max_tokens: Optional[int] = None,
     ) -> Dict[str, Any]:
         """
         Call Claude and parse response as JSON.
@@ -478,6 +479,7 @@ class LLMSkill(BaseSkill[T]):
             prompt: The user message (should request JSON output)
             system: Optional system prompt
             model: Model to use
+            max_tokens: Max tokens for response
 
         Returns:
             Parsed JSON response
@@ -488,7 +490,7 @@ class LLMSkill(BaseSkill[T]):
         import json
         import re
 
-        response = await self.call_llm(prompt, system, model)
+        response = await self.call_llm(prompt, system, model, max_tokens)
 
         # Try to extract JSON from response
         try:

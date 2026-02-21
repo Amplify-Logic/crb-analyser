@@ -162,10 +162,11 @@ class ReportGenerator:
     MAX_RETRIES = 3
     RETRY_DELAYS = [1, 2, 4]  # Exponential backoff delays in seconds
 
-    def __init__(self, quiz_session_id: str, tier: str = "quick", model_strategy: Optional[str] = None):
+    def __init__(self, quiz_session_id: str, tier: str = "quick", model_strategy: Optional[str] = None, skip_review: bool = False):
         self.quiz_session_id = quiz_session_id
         self.tier = tier
         self.model_strategy = model_strategy  # Optional strategy override for dev testing
+        self.skip_review = skip_review
         self.client = Anthropic(api_key=settings.ANTHROPIC_API_KEY)
         self.context: Dict[str, Any] = {}
         self.report_id: Optional[str] = None
@@ -811,54 +812,59 @@ class ReportGenerator:
             yield {"phase": "findings", "step": f"Generated {len(findings)} findings", "progress": 50}
 
             # Phase 4b: Review & Refine findings with multi-model validation
-            self.trace_collector.start_phase("review")
-            yield {"phase": "review", "step": "Validating findings with research...", "progress": 52}
+            quality_scores = {}
+            if self.skip_review:
+                logger.info("review_skipped", reason="skip_review flag set")
+                yield {"phase": "review", "step": "Review skipped (--no-review)", "progress": 58}
+            else:
+                self.trace_collector.start_phase("review")
+                yield {"phase": "review", "step": "Validating findings with research...", "progress": 52}
 
-            # Build original sources for review
-            original_sources = {
-                "quiz": self.context.get("answers", {}),
-                "interview": self.context.get("interview", {}),
-                "research": self.context.get("industry_knowledge", {}),
-            }
-
-            # Review and refine findings
-            try:
-                review_result = await self.review_service.review_and_refine(
-                    content={"findings": findings},
-                    content_type="findings",
-                    original_sources=original_sources,
-                    industry=self.context.get("industry", "general"),
-                )
-
-                # Use refined findings
-                findings = review_result.get("content", findings)
-                quality_scores = review_result.get("review_scores", {})
-                findings_added = review_result.get("findings_added", 0)
-
-                # Update executive summary if needed
-                exec_updates = review_result.get("executive_summary_updates", {})
-                if exec_updates:
-                    executive_summary.update(exec_updates)
-
-                yield {
-                    "phase": "review",
-                    "step": f"Validated: {quality_scores.get('overall', '?')}/10 quality, +{findings_added} findings",
-                    "progress": 58,
-                    "quality_scores": quality_scores,
+                # Build original sources for review
+                original_sources = {
+                    "quiz": self.context.get("answers", {}),
+                    "interview": self.context.get("interview", {}),
+                    "research": self.context.get("industry_knowledge", {}),
                 }
 
-                logger.info(
-                    f"Review complete - Quality: {quality_scores.get('overall', '?')}/10, "
-                    f"Findings: {len(findings)}, Added: {findings_added}"
-                )
+                # Review and refine findings
+                try:
+                    review_result = await self.review_service.review_and_refine(
+                        content={"findings": findings},
+                        content_type="findings",
+                        original_sources=original_sources,
+                        industry=self.context.get("industry", "general"),
+                    )
 
-            except (APIError, APIConnectionError, RateLimitError, ValueError, RuntimeError) as review_error:
-                logger.warning("review_step_failed", error=str(review_error), error_type=type(review_error).__name__, findings_count=len(findings))
-                self.trace_collector.log_error(f"Review failed: {str(review_error)}")
-                quality_scores = {}
-                yield {"phase": "review", "step": "Review skipped (using original)", "progress": 58}
+                    # Use refined findings
+                    findings = review_result.get("content", findings)
+                    quality_scores = review_result.get("review_scores", {})
+                    findings_added = review_result.get("findings_added", 0)
 
-            self.trace_collector.end_phase("review", f"Quality score: {quality_scores.get('overall', 'N/A') if 'quality_scores' in dir() else 'skipped'}/10")
+                    # Update executive summary if needed
+                    exec_updates = review_result.get("executive_summary_updates", {})
+                    if exec_updates:
+                        executive_summary.update(exec_updates)
+
+                    yield {
+                        "phase": "review",
+                        "step": f"Validated: {quality_scores.get('overall', '?')}/10 quality, +{findings_added} findings",
+                        "progress": 58,
+                        "quality_scores": quality_scores,
+                    }
+
+                    logger.info(
+                        f"Review complete - Quality: {quality_scores.get('overall', '?')}/10, "
+                        f"Findings: {len(findings)}, Added: {findings_added}"
+                    )
+
+                except (APIError, APIConnectionError, RateLimitError, ValueError, RuntimeError) as review_error:
+                    logger.warning("review_step_failed", error=str(review_error), error_type=type(review_error).__name__, findings_count=len(findings))
+                    self.trace_collector.log_error(f"Review failed: {str(review_error)}")
+                    quality_scores = {}
+                    yield {"phase": "review", "step": "Review skipped (using original)", "progress": 58}
+
+                self.trace_collector.end_phase("review", f"Quality score: {quality_scores.get('overall', 'N/A') if 'quality_scores' in dir() else 'skipped'}/10")
             self._partial_data["findings"] = findings  # Update with refined findings
 
             await supabase.table("reports").update({
@@ -1531,8 +1537,8 @@ Return ONLY the JSON, no explanation."""
         semantic_retrieval = self.context.get("semantic_retrieval", {})
 
         # Request fewer findings for more reliable JSON output
-        max_findings = 10 if self.tier == "quick" else 15
-        min_not_recommended = 3
+        max_findings = 7 if self.tier == "quick" else 15
+        min_not_recommended = 2 if self.tier == "quick" else 3
 
         # Build list of valid sources from retrieval
         valid_sources = []
@@ -1830,7 +1836,8 @@ IMPORTANT:
                 ]
 
                 # Top findings for individual recommendations
-                priority_findings = high_priority[:5] + other[:5]
+                max_recs = 5 if self.tier == "quick" else 10
+                priority_findings = (high_priority + other)[:max_recs]
 
                 recommendations = []
                 roi_skill = get_skill("roi-calculator", client=self.client)
@@ -1975,75 +1982,45 @@ IMPORTANT:
                     recommendations.append(rec)
                     logger.info(f"Generated platform recommendation: {platform_rec.recommended_vendor} (covers {len(platform_rec.solves_findings)} findings, ROI: {rec.get('roi_percentage', 'N/A')}%)")
 
-                for i, finding in enumerate(priority_findings):
-                    try:
-                        context = self._get_skill_context()
-                        context.metadata["finding"] = finding
-                        # Pass used vendors to avoid duplicates across recommendations
-                        context.metadata["exclude_vendors"] = list(used_vendors)
+                # Process findings in parallel with concurrency limit
+                sem = asyncio.Semaphore(3)
 
-                        result = await skill.run(context)
+                async def _process_finding(i: int, finding: Dict[str, Any]) -> Optional[Dict[str, Any]]:
+                    async with sem:
+                        try:
+                            ctx = self._get_skill_context()
+                            ctx.metadata["finding"] = finding
+                            ctx.metadata["exclude_vendors"] = list(used_vendors)
 
-                        if result.success:
+                            result = await skill.run(ctx)
+
+                            if not result.success:
+                                logger.warning(f"ThreeOptionsSkill failed for finding {finding.get('id')}: {result.warnings}")
+                                return None
+
                             rec = result.data
                             rec["id"] = f"rec-{i+1:03d}"
 
-                            # Track vendors from the three_options output to avoid duplicates
-                            options = rec.get("options", {})
-                            for option_key in ["off_the_shelf", "best_in_class"]:
-                                option = options.get(option_key, {})
-                                vendor_name = option.get("vendor", "").lower().replace(" ", "-")
-                                product_name = option.get("name", "").lower().replace(" ", "-")
-                                if vendor_name:
-                                    used_vendors.add(vendor_name)
-                                if product_name and product_name != vendor_name:
-                                    used_vendors.add(product_name)
-
-                            # Enrich with specific vendor matches (avoiding duplicates)
+                            # Enrich with specific vendor matches
                             if vendor_skill:
                                 try:
                                     vendor_context = self._get_skill_context()
                                     vendor_context.metadata["finding"] = finding
                                     vendor_context.metadata["company_context"] = self.context.get("company_profile", {})
-                                    # Pass used vendors to avoid recommending same vendor twice
                                     vendor_context.metadata["exclude_vendors"] = list(used_vendors)
 
                                     vendor_result = await vendor_skill.run(vendor_context)
 
                                     if vendor_result.success:
                                         vendor_data = vendor_result.data
-                                        # Enhance options with specific vendor info
                                         if vendor_data.get("off_the_shelf") and rec.get("options", {}).get("off_the_shelf"):
-                                            off_shelf_vendor = vendor_data["off_the_shelf"]
-                                            vendor_slug = off_shelf_vendor.get("slug", "").lower()
-                                            # Skip if vendor already used
-                                            if vendor_slug and vendor_slug not in used_vendors:
-                                                rec["options"]["off_the_shelf"]["matched_vendor"] = off_shelf_vendor
-                                                used_vendors.add(vendor_slug)
-                                            else:
-                                                # Try alternatives
-                                                for alt in vendor_data.get("alternatives", []):
-                                                    alt_slug = alt.get("slug", "").lower()
-                                                    if alt_slug and alt_slug not in used_vendors:
-                                                        rec["options"]["off_the_shelf"]["matched_vendor"] = alt
-                                                        used_vendors.add(alt_slug)
-                                                        break
-
+                                            rec["options"]["off_the_shelf"]["matched_vendor"] = vendor_data["off_the_shelf"]
                                         if vendor_data.get("best_in_class") and rec.get("options", {}).get("best_in_class"):
-                                            best_vendor = vendor_data["best_in_class"]
-                                            vendor_slug = best_vendor.get("slug", "").lower()
-                                            # Skip if vendor already used
-                                            if vendor_slug and vendor_slug not in used_vendors:
-                                                rec["options"]["best_in_class"]["matched_vendor"] = best_vendor
-                                                used_vendors.add(vendor_slug)
-
+                                            rec["options"]["best_in_class"]["matched_vendor"] = vendor_data["best_in_class"]
                                         rec["vendor_match"] = {
                                             "category": vendor_data.get("category"),
                                             "confidence": vendor_data.get("match_confidence"),
-                                            "alternatives": [
-                                                alt for alt in vendor_data.get("alternatives", [])
-                                                if alt.get("slug", "").lower() not in used_vendors
-                                            ],
+                                            "alternatives": vendor_data.get("alternatives", []),
                                         }
                                 except (ValueError, KeyError, TypeError, RuntimeError) as vendor_e:
                                     logger.warning("vendor_matching_failed", finding_id=finding.get("id"), error=str(vendor_e), error_type=type(vendor_e).__name__)
@@ -2059,7 +2036,6 @@ IMPORTANT:
                                     roi_result = await roi_skill.run(roi_context)
 
                                     if roi_result.success:
-                                        # Add detailed ROI data
                                         rec["roi_detail"] = {
                                             "sensitivity": roi_result.data.get("sensitivity", {}),
                                             "assumptions": roi_result.data.get("assumptions", []),
@@ -2067,7 +2043,6 @@ IMPORTANT:
                                             "time_savings": roi_result.data.get("time_savings", {}),
                                             "financial_impact": roi_result.data.get("financial_impact", {}),
                                         }
-                                        # Update main ROI if calculated (use 'is not None' to handle 0% ROI)
                                         if roi_result.data.get("roi_percentage") is not None:
                                             rec["roi_percentage"] = roi_result.data["roi_percentage"]
                                             rec["roi_confidence_adjusted"] = roi_result.data.get("roi_confidence_adjusted")
@@ -2080,18 +2055,14 @@ IMPORTANT:
                             roi = rec.get("roi_percentage", 0) or 0
                             assumptions = rec.get("assumptions", [])
 
-                            # Handle negative ROI - preserve the actual value, flag as not recommended
                             if roi < 0:
                                 logger.warning(f"Negative ROI ({roi}%) for {rec.get('title')} - flagging as not recommended")
                                 rec["roi_warning"] = f"ROI is {roi}% - costs exceed estimated benefits"
                                 rec["is_not_recommended_by_roi"] = True
                                 assumptions.append(f"Negative ROI ({roi}%) - this option is not recommended based on cost-benefit analysis")
-                                # Downgrade priority for negative ROI recommendations
                                 if rec.get("priority") == "high":
                                     rec["priority"] = "medium"
                                     assumptions.append("Priority adjusted from high to medium due to negative ROI")
-
-                            # Cap unrealistic ROI values (max 500%)
                             elif roi > 500:
                                 logger.info(f"Capping ROI from {roi}% to 500% for {rec.get('title')}")
                                 rec["roi_percentage"] = 500
@@ -2129,7 +2100,6 @@ IMPORTANT:
                                             "score_gap": net_score_data.score_gap,
                                             "comparison_summary": net_score_data.comparison_summary,
                                         }
-                                        # Update our_recommendation if NET SCORE disagrees
                                         current_rec = rec.get("our_recommendation", "")
                                         net_rec = net_score_data.recommended_option
                                         if current_rec and net_rec and current_rec != net_rec:
@@ -2137,7 +2107,6 @@ IMPORTANT:
                                                 f"NET SCORE recommends '{net_rec}' over LLM's '{current_rec}' "
                                                 f"for {rec.get('title')} (gap: {net_score_data.score_gap:.1f})"
                                             )
-                                            # Only override if the score gap is significant (>5 points)
                                             if net_score_data.score_gap > 5:
                                                 rec["our_recommendation"] = net_rec
                                                 rec["recommendation_source"] = "net_score"
@@ -2145,17 +2114,12 @@ IMPORTANT:
                                                 rec["recommendation_source"] = "llm_confirmed"
                                         else:
                                             rec["recommendation_source"] = "llm_confirmed"
-                                        logger.debug(
-                                            f"NET SCORE calculated for {finding.get('id')}: "
-                                            f"recommended={net_score_data.recommended_option}, "
-                                            f"gap={net_score_data.score_gap}"
-                                        )
                                 except (ValueError, KeyError, TypeError, RuntimeError) as ns_e:
                                     logger.warning("net_score_calculation_failed", finding_id=finding.get("id"), error=str(ns_e), error_type=type(ns_e).__name__)
 
                             # Enrich with four-options personalized recommendations
                             four_options_skill = get_skill("four-options", client=self.client)
-                            if four_options_skill and context.user_profile:
+                            if four_options_skill and ctx.user_profile:
                                 try:
                                     four_context = self._get_skill_context()
                                     four_context.finding = finding
@@ -2165,12 +2129,10 @@ IMPORTANT:
 
                                     if four_result.success:
                                         rec["four_options"] = four_result.data
-                                        logger.debug(f"Four-options generated for {finding.get('id')}")
                                 except (ValueError, KeyError, TypeError, RuntimeError) as four_e:
                                     logger.warning("four_options_failed", finding_id=finding.get("id"), error=str(four_e), error_type=type(four_e).__name__)
 
                             # Add automation insight from finding's connect_path
-                            # This ensures automation workflows are surfaced, not just software
                             connect_path = finding.get("connect_path")
                             if connect_path:
                                 rec["automation_insight"] = {
@@ -2186,23 +2148,47 @@ IMPORTANT:
                                     "verdict_reasoning": finding.get("verdict_reasoning", ""),
                                 }
                             elif finding.get("verdict") == "CONNECT":
-                                # If verdict is CONNECT but no path, generate generic insight
                                 rec["automation_insight"] = {
                                     "approach": "CONNECT (Use Existing Tools)",
                                     "integration_flow": "Your existing tools can be connected via Make/Zapier/n8n",
                                     "what_it_does": "Automate this workflow without buying new software",
                                     "tools_used": ["Make", "n8n", "Zapier"],
                                     "estimated_hours": 4,
-                                    "monthly_cost": 29,  # Typical Make Pro cost
+                                    "monthly_cost": 29,
                                     "verdict": "CONNECT",
                                     "verdict_reasoning": "Your existing stack has good API support for automation",
                                 }
 
-                            recommendations.append(rec)
-                        else:
-                            logger.warning(f"ThreeOptionsSkill failed for finding {finding.get('id')}: {result.warnings}")
-                    except (ValueError, KeyError, TypeError, RuntimeError) as e:
-                        logger.warning("three_options_skill_failed", finding_id=finding.get("id"), error=str(e), error_type=type(e).__name__)
+                            return rec
+                        except (ValueError, KeyError, TypeError, RuntimeError) as e:
+                            logger.warning("three_options_skill_failed", finding_id=finding.get("id"), error=str(e), error_type=type(e).__name__)
+                            return None
+
+                # Launch all findings in parallel (semaphore limits concurrency to 3)
+                tasks = [_process_finding(i, f) for i, f in enumerate(priority_findings)]
+                results = await asyncio.gather(*tasks, return_exceptions=True)
+
+                for result in results:
+                    if isinstance(result, Exception):
+                        logger.warning("finding_processing_exception", error=str(result))
+                    elif result is not None:
+                        recommendations.append(result)
+
+                # Post-process: deduplicate vendors across recommendations
+                seen_vendors: set[str] = set()
+                for rec in recommendations:
+                    options = rec.get("options", {})
+                    for option_key in ["off_the_shelf", "best_in_class"]:
+                        option = options.get(option_key, {})
+                        vendor_name = option.get("vendor", "").lower().replace(" ", "-")
+                        if vendor_name:
+                            seen_vendors.add(vendor_name)
+                    # Filter vendor_match alternatives to exclude seen vendors
+                    if "vendor_match" in rec:
+                        rec["vendor_match"]["alternatives"] = [
+                            alt for alt in rec["vendor_match"].get("alternatives", [])
+                            if alt.get("slug", "").lower() not in seen_vendors
+                        ]
 
                 if recommendations:
                     logger.info(
@@ -3475,7 +3461,8 @@ async def generate_report_for_quiz(quiz_session_id: str, tier: str = "quick") ->
 async def generate_report_streaming(
     quiz_session_id: str,
     tier: str = "quick",
-    model_strategy: Optional[str] = None
+    model_strategy: Optional[str] = None,
+    skip_review: bool = False,
 ) -> AsyncGenerator[str, None]:
     """
     Generate a report with SSE streaming updates.
@@ -3492,10 +3479,11 @@ async def generate_report_streaming(
             - "cost_optimized": Flash → Sonnet → Opus
             - "multi_provider": Cross-provider validation
             - "budget": DeepSeek V3 primary
+        skip_review: Skip the review/validation phase for faster iteration
 
     Yields SSE-formatted events.
     """
-    generator = ReportGenerator(quiz_session_id, tier, model_strategy=model_strategy)
+    generator = ReportGenerator(quiz_session_id, tier, model_strategy=model_strategy, skip_review=skip_review)
 
     async for update in generator.generate_report():
         yield f"data: {json.dumps(update)}\n\n"

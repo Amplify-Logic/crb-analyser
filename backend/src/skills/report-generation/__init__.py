@@ -10,11 +10,13 @@ Available Skills:
 - ThreeOptionsSkill: Format recommendations in Three Options pattern
 - VerdictSkill: Generate Go/Caution/Wait/No verdicts
 - AutomationSummarySkill: Generate automation roadmap summary from findings
+- RoadmapSkill: Generate implementation roadmap from recommendations
 """
 
 from .automation_summary import AutomationSummarySkill
 from .exec_summary import ExecSummarySkill
 from .finding_generation import FindingGenerationSkill
+from .roadmap import RoadmapSkill
 from .three_options import ThreeOptionsSkill
 from .verdict import VerdictSkill
 
@@ -22,6 +24,7 @@ __all__ = [
     "AutomationSummarySkill",
     "ExecSummarySkill",
     "FindingGenerationSkill",
+    "RoadmapSkill",
     "ThreeOptionsSkill",
     "VerdictSkill",
 ]

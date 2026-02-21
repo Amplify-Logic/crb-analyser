@@ -89,6 +89,7 @@ async def generate_single_report(
     seeds_data: Dict[str, Any],
     report_tier: str = "quick",
     scrape: bool = True,
+    skip_review: bool = False,
 ) -> Optional[Dict[str, Any]]:
     """
     Generate a single report from a seed.
@@ -136,7 +137,7 @@ async def generate_single_report(
     last_phase = None
     error = None
 
-    async for event in generate_report_streaming(session_id, report_tier):
+    async for event in generate_report_streaming(session_id, report_tier, skip_review=skip_review):
         if not event.startswith("data: "):
             continue
 
@@ -192,6 +193,7 @@ async def generate_from_url(
     country: str = "NL",
     staff_size: str = "11-50",
     report_tier: str = "quick",
+    skip_review: bool = False,
 ) -> Optional[Dict[str, Any]]:
     """Generate a report from a custom URL."""
     # Create a synthetic seed from URL
@@ -218,7 +220,7 @@ async def generate_from_url(
                                              "manual processes"]}}
     }}
 
-    return await generate_single_report(seed, seeds_data, report_tier, scrape=True)
+    return await generate_single_report(seed, seeds_data, report_tier, scrape=True, skip_review=skip_review)
 
 
 async def cmd_single(args: argparse.Namespace) -> None:
@@ -229,11 +231,12 @@ async def cmd_single(args: argparse.Namespace) -> None:
             country=args.country,
             staff_size=args.staff,
             report_tier=args.report_tier,
+            skip_review=args.no_review,
         )
     else:
         seeds_data = load_seeds()
         seed = pick_seed(seeds_data, args.tier)
-        result = await generate_single_report(seed, seeds_data, args.report_tier)
+        result = await generate_single_report(seed, seeds_data, args.report_tier, skip_review=args.no_review)
 
     if not result:
         sys.exit(1)
@@ -253,7 +256,7 @@ async def cmd_batch(args: argparse.Namespace) -> None:
         print(f"{'\u2500' * 50}")
 
         seed = pick_seed(seeds_data, args.tier)
-        result = await generate_single_report(seed, seeds_data, args.report_tier)
+        result = await generate_single_report(seed, seeds_data, args.report_tier, skip_review=args.no_review)
 
         if result:
             results.append(result)
@@ -293,6 +296,7 @@ def main() -> None:
     parser.add_argument("--report-tier", choices=["quick", "full"], default="quick",
                         help="Report tier (default: quick)")
     parser.add_argument("--no-scrape", action="store_true", help="Skip website scraping")
+    parser.add_argument("--no-review", action="store_true", help="Skip review/validation phase for faster iteration")
     parser.add_argument("-v", "--verbose", action="store_true", help="Verbose logging")
 
     args = parser.parse_args()

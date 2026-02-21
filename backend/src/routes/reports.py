@@ -158,6 +158,8 @@ async def get_public_report(report_id: str):
             "playbooks": report.get("playbooks", []),
             "system_architecture": report.get("system_architecture", {}),
             "industry_insights": report.get("industry_insights", {}),
+            # Automation summary (Connect vs Replace)
+            "automation_summary": report.get("automation_summary", {}),
             # Company information from quiz session
             "company_profile": company_profile,
             "company_name": company_name,

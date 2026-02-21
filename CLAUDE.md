@@ -167,27 +167,12 @@ When working on report generation, load `.claude/reference/report-quality.md`.
 - **Test critical paths** - Auth, payments, report generation require 80%+ coverage
 
 ### Error Handling
-```python
-# All custom errors inherit from base
-class CRBError(Exception):
-    def __init__(self, message: str, code: str, status: int = 500):
-        self.message = message
-        self.code = code  # e.g., "VENDOR_NOT_FOUND"
-        self.status = status
-
-# Routes return consistent format
-{"error": {"code": "VENDOR_NOT_FOUND", "message": "...", "status": 404}}
-```
+> See `.claude/reference/api-development.md` for error handling patterns.
+> Key: use `APIError` subclasses from `backend/src/middleware/error_handler.py` (`NotFoundError`, `ValidationErrorAPI`, `AuthorizationError`).
 
 ### Logging
-```python
-import structlog
-logger = structlog.get_logger()
-
-# Always include context
-logger.info("analysis_started", audit_id=audit_id, industry=industry)
-logger.error("vendor_fetch_failed", vendor_id=vendor_id, error=str(e))
-```
+> See `.claude/reference/api-development.md` for logging patterns.
+> Key: use `structlog.get_logger()` and always include context kwargs.
 
 ### Security
 - RLS on all Supabase tables
@@ -201,6 +186,33 @@ logger.error("vendor_fetch_failed", vendor_id=vendor_id, error=str(e))
 - Never cache user-specific data without key isolation
 - Stream long operations with SSE
 - Lazy load findings (paginate)
+
+---
+
+## Active Hooks
+
+Claude Code hooks are configured in `.claude/settings.local.json`. These run automatically and may block operations.
+
+### PreToolUse (runs before tool execution)
+
+| Hook | Triggers On | Purpose |
+|------|-------------|---------|
+| `enforce-pnpm.sh` | Bash | Blocks npm commands, enforces pnpm |
+| `protect-secrets.sh` | Bash, Read, Edit, Write | Blocks access to `.env`, credentials, secrets |
+
+### PostToolUse (runs after tool execution)
+
+| Hook | Triggers On | Purpose |
+|------|-------------|---------|
+| `audit-commands.sh` | Bash | Logs executed commands |
+| `report_validator.py` | Write, Edit | Validates report JSON structure and quality |
+| `vendor_validator.py` | Write, Edit | Validates vendor data format |
+| `roi_math_validator.py` | Write, Edit | Validates ROI/financial calculations |
+| `benchmark_source_validator.py` | Write, Edit | Checks benchmark data sources |
+| `playbook_validator.py` | Write, Edit | Validates implementation playbooks |
+| `industry_data_validator.py` | Write, Edit | Validates industry-specific data |
+
+**If a hook blocks your operation:** Check which validator failed and fix the data issue. Don't try to bypass hooks.
 
 ---
 

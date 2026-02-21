@@ -24,6 +24,7 @@ from .admin_vendors import router as admin_vendors_router
 from .admin_research import router as admin_research_router
 from .workshop import router as workshop_router
 from .admin_insights import router as admin_insights_router
+from .refiner import router as refiner_router
 
 __all__ = [
     "auth_router",
@@ -48,4 +49,5 @@ __all__ = [
     "admin_research_router",
     "workshop_router",
     "admin_insights_router",
+    "refiner_router",
 ]

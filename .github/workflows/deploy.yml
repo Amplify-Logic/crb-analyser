@@ -33,9 +33,15 @@ jobs:
       - name: Run backend tests
         run: |
           cd backend
-          pytest tests/ -v --cov=src --cov-report=xml || true
+          pytest tests/ -v --cov=src --cov-report=xml
         env:
           APP_ENV: test
+
+      - name: Run mypy type check
+        run: |
+          cd backend
+          pip install mypy
+          python -m mypy src/ --ignore-missing-imports || true
 
       # Frontend Tests
       - name: Set up Node.js
@@ -49,6 +55,11 @@ jobs:
         run: |
           cd frontend
           npm ci
+
+      - name: Run frontend tests
+        run: |
+          cd frontend
+          npx vitest run || true
 
       - name: Run frontend type check
         run: |

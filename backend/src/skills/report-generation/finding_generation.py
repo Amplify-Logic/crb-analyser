@@ -20,7 +20,7 @@ See: docs/plans/2026-01-07-connect-vs-replace-design.md
 """
 
 import json
-import logging
+import structlog
 from typing import Dict, Any, List, Optional
 from statistics import mean
 
@@ -47,7 +47,7 @@ from src.models.crb import (
 )
 from src.services.crb_calculation_service import get_effective_hourly_rate
 
-logger = logging.getLogger(__name__)
+logger = structlog.get_logger(__name__)
 
 
 # Categories that map to different types of existing software
@@ -137,8 +137,8 @@ class FindingGenerationSkill(LLMSkill[List[Dict[str, Any]]]):
         """
         # Get configuration from metadata
         tier = context.metadata.get("tier", "quick")
-        max_findings = 10 if tier == "quick" else 15
-        min_not_recommended = 3
+        max_findings = 7 if tier == "quick" else 15
+        min_not_recommended = 2 if tier == "quick" else 3
 
         # Extract data from context
         answers = context.quiz_answers or {}
@@ -706,6 +706,7 @@ Return ONLY the JSON array, no explanation."""
             response = await self.call_llm_json(
                 prompt=prompt,
                 system=self._get_system_prompt(),
+                max_tokens=10000,
             )
 
             if isinstance(response, list):

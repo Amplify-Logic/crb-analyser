@@ -157,12 +157,13 @@ class Phase(BaseModel):
 
     @model_validator(mode='after')
     def validate_week_count(self) -> 'Phase':
-        """Validate that week count matches duration_weeks."""
+        """Validate and auto-correct week count vs duration_weeks."""
         if len(self.weeks) != self.duration_weeks:
-            logger.warning(
-                f"Phase '{self.title}' has {len(self.weeks)} weeks "
-                f"but duration_weeks={self.duration_weeks}"
+            logger.info(
+                f"Phase '{self.title}': adjusting duration_weeks from "
+                f"{self.duration_weeks} to {len(self.weeks)} (actual weeks)"
             )
+            self.duration_weeks = len(self.weeks)
         return self
 
 
@@ -291,13 +292,14 @@ class Playbook(BaseModel):
                 f"Circular dependency detected: {' -> '.join(cycle)}"
             )
 
-        # Validate total_weeks matches phase durations
+        # Auto-correct total_weeks to match actual phase durations
         phase_weeks = sum(p.duration_weeks for p in self.phases)
         if phase_weeks != self.total_weeks:
-            logger.warning(
-                f"Playbook total_weeks={self.total_weeks} but "
-                f"sum of phase durations={phase_weeks}"
+            logger.info(
+                f"Playbook: adjusting total_weeks from {self.total_weeks} "
+                f"to {phase_weeks} (sum of phase durations)"
             )
+            self.total_weeks = phase_weeks
 
         # Validate executor assignments for solo teams
         if self.personalization_context.team_size == "solo":

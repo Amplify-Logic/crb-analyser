@@ -58,3 +58,6 @@ crawl4ai==0.4.247
 # Testing
 pytest==7.4.4
 pytest-asyncio==0.23.3
+
+# Linting
+ruff==0.4.4

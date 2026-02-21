@@ -29,6 +29,8 @@ from src.models.playbook import (
     MIN_TASK_MINUTES,
     MAX_TASK_MINUTES,
 )
+from src.skills import get_skill, SkillContext
+from src.expertise import get_expertise_store
 
 logger = logging.getLogger(__name__)
 
@@ -422,7 +424,147 @@ Return ONLY valid JSON, no explanation."""
         quiz_answers: Dict[str, Any],
         industry_context: Dict[str, Any],
     ) -> Playbook:
-        """Generate a complete playbook for a recommendation option."""
+        """Generate a complete playbook for a recommendation option.
+
+        Uses the skills framework for consistent output and expertise integration.
+        Falls back to legacy method if skill fails.
+        """
+        # Try skill-based generation first
+        skill = get_skill("playbook-generator", client=self.client)
+
+        if skill:
+            try:
+                industry = industry_context.get("industry", "general")
+
+                # Get expertise data for this industry
+                try:
+                    store = get_expertise_store()
+                    expertise = store.get_all_expertise_context(industry)
+                except (KeyError, ValueError, RuntimeError) as e:
+                    logger.warning("playbook_expertise_load_failed", error=str(e))
+                    expertise = None
+
+                context = SkillContext(
+                    industry=industry,
+                    quiz_answers=quiz_answers,
+                    expertise=expertise,
+                    metadata={
+                        "recommendation": recommendation,
+                        "option_chosen": option_type,
+                        "company_context": industry_context,
+                    },
+                )
+                result = await skill.run(context)
+
+                if result.success:
+                    logger.info(
+                        f"Playbook generated via skill "
+                        f"(expertise_applied={result.expertise_applied}, "
+                        f"execution_time={result.execution_time_ms:.0f}ms)"
+                    )
+                    return self._skill_result_to_playbook(
+                        result.data, recommendation, option_type, quiz_answers, industry_context
+                    )
+                else:
+                    logger.warning(
+                        f"PlaybookGeneratorSkill failed, using legacy method: "
+                        f"{result.warnings}"
+                    )
+            except (ValueError, KeyError, TypeError, RuntimeError) as e:
+                logger.warning("playbook_skill_failed", error=str(e), error_type=type(e).__name__)
+
+        # Fall back to legacy method
+        return await self._generate_playbook_legacy(
+            recommendation, option_type, quiz_answers, industry_context
+        )
+
+    def _skill_result_to_playbook(
+        self,
+        skill_data: Dict[str, Any],
+        recommendation: Dict[str, Any],
+        option_type: str,
+        quiz_answers: Dict[str, Any],
+        industry_context: Dict[str, Any],
+    ) -> Playbook:
+        """Bridge skill output (simpler dict) to the richer Playbook Pydantic model."""
+        context = self._extract_personalization_context(quiz_answers)
+        option = recommendation.get("options", {}).get(option_type, {})
+
+        # The skill returns a timeline with phases — convert to Playbook format
+        timeline = skill_data.get("timeline", {})
+        total_weeks = timeline.get("total_weeks", self._get_week_count(context.urgency, option_type))
+
+        phases: List[Phase] = []
+        for pi, phase_data in enumerate(timeline.get("phases", [])):
+            phase_num = phase_data.get("phase", pi + 1)
+
+            # Skill returns flat task lists per phase, wrap them into a single week
+            tasks_list = phase_data.get("tasks", [])
+            playbook_tasks: List[PlaybookTask] = []
+
+            for ti, task_text in enumerate(tasks_list):
+                task_id = f"p{phase_num}-w1-t{ti + 1}"
+                playbook_tasks.append(PlaybookTask(
+                    id=task_id,
+                    title=task_text if isinstance(task_text, str) else task_text.get("title", f"Task {ti + 1}"),
+                    description=task_text if isinstance(task_text, str) else task_text.get("description", ""),
+                    time_estimate_minutes=60,
+                    difficulty="medium",
+                    executor="owner",
+                    tools=[],
+                    dependencies=[],
+                    crb=TaskCRB(cost="TBD", risk="low", benefit="TBD"),
+                ))
+
+            # Parse weeks range from phase
+            weeks_str = phase_data.get("weeks", str(phase_num))
+            week_num = phase_num  # Use phase number as week start
+
+            weeks = [Week(
+                week_number=week_num,
+                theme=phase_data.get("name", f"Phase {phase_num}"),
+                tasks=playbook_tasks,
+                checkpoint=phase_data.get("deliverables", ["Review progress"])[0]
+                if phase_data.get("deliverables") else "Review progress",
+            )]
+
+            phases.append(Phase(
+                phase_number=phase_num,
+                title=phase_data.get("name", f"Phase {phase_num}"),
+                duration_weeks=phase_data.get("duration_weeks", 2),
+                outcome=phase_data.get("focus", ""),
+                crb_summary=PhaseCRBSummary(
+                    total_cost="€0",
+                    monthly_cost="€0",
+                    setup_hours=0,
+                    risks=[],
+                    benefits=[],
+                    crb_score=5.0,
+                ),
+                weeks=weeks,
+            ))
+
+        # Extract immediate first step
+        immediate_step = self._extract_immediate_first_step(phases, option, option_type)
+
+        return Playbook(
+            id=f"playbook-{uuid.uuid4().hex[:8]}",
+            recommendation_id=recommendation.get("id", ""),
+            option_type=option_type,
+            total_weeks=total_weeks,
+            immediate_first_step=immediate_step,
+            phases=phases,
+            personalization_context=context,
+        )
+
+    async def _generate_playbook_legacy(
+        self,
+        recommendation: Dict[str, Any],
+        option_type: str,
+        quiz_answers: Dict[str, Any],
+        industry_context: Dict[str, Any],
+    ) -> Playbook:
+        """Generate a complete playbook using direct LLM calls (legacy method)."""
         context = self._extract_personalization_context(quiz_answers)
         total_weeks = self._get_week_count(context.urgency, option_type)
 

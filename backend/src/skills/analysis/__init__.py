@@ -14,6 +14,7 @@ Available Skills:
 - PlaybookGeneratorSkill: Generate implementation playbooks
 - FollowupSchedulerSkill: Schedule optimal follow-up touchpoints
 - UpsellIdentifierSkill: Identify upsell opportunities
+- QuizOptimizationSkill: Optimize question selection using confidence gaps
 """
 
 from .roi_calculator import ROICalculatorSkill
@@ -25,6 +26,7 @@ from .industry_benchmarker import IndustryBenchmarkerSkill
 from .competitor_analyzer import CompetitorAnalyzerSkill
 from .playbook_generator import PlaybookGeneratorSkill
 from .followup_scheduler import FollowupSchedulerSkill
+from .quiz_optimization import QuizOptimizationSkill
 from .upsell_identifier import UpsellIdentifierSkill
 
 __all__ = [
@@ -37,5 +39,6 @@ __all__ = [
     "CompetitorAnalyzerSkill",
     "PlaybookGeneratorSkill",
     "FollowupSchedulerSkill",
+    "QuizOptimizationSkill",
     "UpsellIdentifierSkill",
 ]

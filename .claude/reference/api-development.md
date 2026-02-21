@@ -34,26 +34,26 @@ backend/src/routes/
 {"data": {...}, "message": "optional"}
 
 # Error
-{"error": {"code": "VENDOR_NOT_FOUND", "message": "...", "status": 404}}
+{"error": {"type": "not_found", "message": "Vendor with id 'xxx' not found", "status_code": 404}}
 ```
 
 ## Error Handling
 
 ```python
-from src.config.errors import CRBError
+from src.middleware.error_handler import APIError, NotFoundError, ValidationErrorAPI, AuthorizationError
 
-class CRBError(Exception):
-    def __init__(self, message: str, code: str, status: int = 500):
-        self.message = message
-        self.code = code  # e.g., "VENDOR_NOT_FOUND"
-        self.status = status
+# Use specific error subclasses
+raise NotFoundError("Vendor", vendor_id)         # 404
+raise ValidationErrorAPI("Invalid email format")  # 422
+raise AuthorizationError()                         # 403
+raise APIError("Custom error", status_code=400, error_type="custom_error")
 
 # In routes - catch specific errors, not bare Exception
 @router.get("/vendors/{slug}")
 async def get_vendor(slug: str):
     vendor = await vendor_service.get(slug)
     if not vendor:
-        raise CRBError("Vendor not found", "VENDOR_NOT_FOUND", 404)
+        raise NotFoundError("Vendor", slug)
     return {"data": vendor}
 ```
 

@@ -12,6 +12,7 @@ import {
   NumberedRecommendations,
   ValueSummary,
   UpgradeCTA,
+  AutomationMatrix,
 } from '../components/report'
 import PlaybookTab from '../components/report/PlaybookTab'
 import StackTab from '../components/report/StackTab'
@@ -22,6 +23,7 @@ import AutomationRoadmap from '../components/report/AutomationRoadmap'
 import usePlaybookProgress from '../hooks/usePlaybookProgress'
 import { Sidebar, SidebarItem } from '../components/report/Sidebar/Sidebar'
 import { ContentPanel } from '../components/report/ContentPanel/ContentPanel'
+import { RefinerButton, RefinerSidebar } from '../components/report/Refiner'
 import { logger } from '../utils/logger'
 
 // Premium skeleton loading component
@@ -287,6 +289,7 @@ export default function ReportViewer() {
   const [error, setError] = useState<string | null>(null)
   const [report, setReport] = useState<Report | null>(null)
   const [activeItem, setActiveItem] = useState<SidebarItem>({ type: 'overview', id: null })
+  const [refinerOpen, setRefinerOpen] = useState(false)
 
   // Playbook progress tracking
   const {
@@ -756,6 +759,16 @@ export default function ReportViewer() {
             </div>
           )}
 
+          {/* Automation Opportunities Matrix - show on overview */}
+          {report.automation_summary && report.automation_summary.opportunities.length > 0 && activeItem.type === 'overview' && (
+            <div className="mt-8">
+              <AutomationMatrix
+                opportunities={report.automation_summary.opportunities}
+                companyName={report.company_profile?.company_name}
+              />
+            </div>
+          )}
+
           {/* Automation Roadmap Summary - show on overview */}
           {report.automation_summary && activeItem.type === 'overview' && (
             <div className="mt-8">
@@ -776,6 +789,21 @@ export default function ReportViewer() {
           </div>
         </ContentPanel>
       </div>
+
+      {/* Report Refiner */}
+      {report && (
+        <>
+          <RefinerButton
+            onClick={() => setRefinerOpen(true)}
+            isOpen={refinerOpen}
+          />
+          <RefinerSidebar
+            reportId={report.id}
+            isOpen={refinerOpen}
+            onClose={() => setRefinerOpen(false)}
+          />
+        </>
+      )}
 
       {/* Print styles */}
       <style>{`

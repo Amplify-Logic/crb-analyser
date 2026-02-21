@@ -171,13 +171,15 @@ class SkillRegistry:
 
                 # Look for classes that inherit from BaseSkill
                 # Exclude base classes themselves (BaseSkill, SyncSkill, LLMSkill)
+                # Only match classes DEFINED in this module (not imported ones)
                 for name, obj in vars(module).items():
                     if (
                         isinstance(obj, type) and
                         issubclass(obj, BaseSkill) and
                         obj not in _BASE_CLASSES and
                         not name.startswith('_') and
-                        name not in ('BaseSkill', 'SyncSkill', 'LLMSkill')
+                        name not in ('BaseSkill', 'SyncSkill', 'LLMSkill') and
+                        getattr(obj, '__module__', None) == module.__name__
                     ):
                         return obj
 
