@@ -1,0 +1,218 @@
+{
+  "industry": "b2b-platforms",
+  "last_updated": "2026-02-26",
+  "verification_status": "UNVERIFIED",
+  "verification_note": "Initial vendor data based on market research. Pricing needs verification from vendor websites.",
+  "vendor_categories": [
+    {
+      "category": "iot-platforms",
+      "name": "IoT Platforms",
+      "description": "Platforms for managing connected device fleets, data ingestion, and device lifecycle",
+      "vendors": [
+        {
+          "name": "Azure IoT Hub",
+          "website": "azure.microsoft.com/services/iot-hub",
+          "pricing": {
+            "basic": {"price": 10, "currency": "EUR", "period": "month", "per": "unit", "features": ["Device-to-cloud messaging", "Device management"]},
+            "standard_s1": {"price": 25, "currency": "EUR", "period": "month", "per": "unit", "features": ["400K messages/day", "Device twins", "Direct methods"]},
+            "standard_s3": {"price": 2500, "currency": "EUR", "period": "month", "per": "unit", "features": ["300M messages/day", "All S1 features", "Enterprise scale"]}
+          },
+          "best_for": "Enterprise IoT with Microsoft ecosystem",
+          "integrations": ["Azure Functions", "Power BI", "Dynamics 365"],
+          "verification_status": "UNVERIFIED"
+        },
+        {
+          "name": "AWS IoT Core",
+          "website": "aws.amazon.com/iot-core",
+          "pricing": {
+            "connectivity": {"price": 0.08, "currency": "USD", "per": "million_minutes", "features": ["Device connectivity", "MQTT/HTTP/WebSocket"]},
+            "messaging": {"price": 1.0, "currency": "USD", "per": "million_messages", "features": ["Message routing", "Rules engine"]}
+          },
+          "best_for": "Pay-per-use IoT with AWS ecosystem",
+          "integrations": ["Lambda", "S3", "SageMaker", "QuickSight"],
+          "verification_status": "UNVERIFIED"
+        }
+      ]
+    },
+    {
+      "category": "field-service",
+      "name": "Field Service Management",
+      "description": "Tools for scheduling, dispatching, and managing field technicians and service operations",
+      "vendors": [
+        {
+          "name": "Salesforce Field Service",
+          "website": "salesforce.com/products/field-service",
+          "pricing": {
+            "dispatcher": {"price": 150, "currency": "EUR", "period": "month", "per": "user", "features": ["Scheduling", "Dispatching", "Work orders"]},
+            "technician": {"price": 150, "currency": "EUR", "period": "month", "per": "user", "features": ["Mobile app", "Offline access", "Knowledge base"]}
+          },
+          "best_for": "Enterprise field service with Salesforce CRM",
+          "integrations": ["Salesforce CRM", "Einstein AI", "MuleSoft"],
+          "verification_status": "UNVERIFIED"
+        },
+        {
+          "name": "ServiceMax",
+          "website": "servicemax.com",
+          "pricing": {
+            "contact_sales": true,
+            "estimated_range": {"min": 100, "max": 200, "currency": "EUR", "period": "month", "per": "user"}
+          },
+          "best_for": "Complex equipment service management",
+          "integrations": ["Salesforce", "SAP", "Oracle"],
+          "verification_status": "UNVERIFIED"
+        },
+        {
+          "name": "Zuper",
+          "website": "zuper.co",
+          "pricing": {
+            "starter": {"price": 30, "currency": "USD", "period": "month", "per": "user", "features": ["Scheduling", "Dispatching", "Mobile app"]},
+            "growth": {"price": 50, "currency": "USD", "period": "month", "per": "user", "features": ["Route optimization", "Inventory", "Invoicing"]}
+          },
+          "best_for": "SMB field service with modern UX",
+          "integrations": ["HubSpot", "Salesforce", "QuickBooks", "Zapier"],
+          "verification_status": "UNVERIFIED"
+        }
+      ]
+    },
+    {
+      "category": "subscription-billing",
+      "name": "Subscription Billing",
+      "description": "Platforms for managing recurring billing, usage-based pricing, and revenue operations",
+      "vendors": [
+        {
+          "name": "Chargebee",
+          "website": "chargebee.com",
+          "pricing": {
+            "starter": {"price": 0, "currency": "EUR", "period": "month", "features": ["Up to $250K revenue", "Basic billing"]},
+            "performance": {"price": 599, "currency": "EUR", "period": "month", "features": ["Revenue recognition", "Advanced analytics", "Custom pricing models"]},
+            "enterprise": {"price": "custom", "features": ["Usage metering", "Multi-entity", "Advanced integrations"]}
+          },
+          "best_for": "B2B SaaS and subscription businesses",
+          "integrations": ["Stripe", "HubSpot", "Salesforce", "NetSuite", "Xero"],
+          "verification_status": "UNVERIFIED"
+        },
+        {
+          "name": "Zuora",
+          "website": "zuora.com",
+          "pricing": {
+            "contact_sales": true,
+            "estimated_range": {"min": 1000, "max": 5000, "currency": "EUR", "period": "month"}
+          },
+          "best_for": "Enterprise subscription management with complex pricing",
+          "integrations": ["Salesforce", "NetSuite", "SAP"],
+          "verification_status": "UNVERIFIED"
+        },
+        {
+          "name": "Stripe Billing",
+          "website": "stripe.com/billing",
+          "pricing": {
+            "standard": {"price": 0.5, "currency": "percent", "per": "transaction", "features": ["Recurring billing", "Usage metering", "Customer portal"]},
+            "plus": {"price": 0.8, "currency": "percent", "per": "transaction", "features": ["Revenue recognition", "Multi-currency", "Advanced invoicing"]}
+          },
+          "best_for": "Developer-friendly billing with usage metering",
+          "integrations": ["Any API", "Webhooks", "Most accounting tools"],
+          "verification_status": "UNVERIFIED"
+        }
+      ]
+    },
+    {
+      "category": "partner-management",
+      "name": "Partner Relationship Management",
+      "description": "Platforms for managing partner channels, deal registration, and co-selling",
+      "vendors": [
+        {
+          "name": "Impartner",
+          "website": "impartner.com",
+          "pricing": {
+            "contact_sales": true,
+            "estimated_range": {"min": 1000, "max": 5000, "currency": "EUR", "period": "month"}
+          },
+          "best_for": "Enterprise partner management with portal",
+          "integrations": ["Salesforce", "HubSpot", "Microsoft Dynamics"],
+          "verification_status": "UNVERIFIED"
+        },
+        {
+          "name": "PartnerStack",
+          "website": "partnerstack.com",
+          "pricing": {
+            "essentials": {"price": 800, "currency": "USD", "period": "month", "features": ["Partner portal", "Deal registration", "Referral tracking"]},
+            "growth": {"price": "custom", "features": ["Marketplace", "Advanced analytics", "Custom workflows"]}
+          },
+          "best_for": "B2B SaaS partner programs",
+          "integrations": ["HubSpot", "Salesforce", "Stripe"],
+          "verification_status": "UNVERIFIED"
+        }
+      ]
+    },
+    {
+      "category": "supply-chain",
+      "name": "Supply Chain & Inventory",
+      "description": "Tools for managing parts inventory, procurement, and supply chain operations",
+      "vendors": [
+        {
+          "name": "Katana",
+          "website": "katanamrp.com",
+          "pricing": {
+            "starter": {"price": 199, "currency": "EUR", "period": "month", "features": ["Inventory management", "Sales orders", "1 warehouse"]},
+            "standard": {"price": 399, "currency": "EUR", "period": "month", "features": ["Manufacturing", "Multi-warehouse", "Barcode scanning"]}
+          },
+          "best_for": "Manufacturing and inventory for hardware companies",
+          "integrations": ["Shopify", "QuickBooks", "Xero", "WooCommerce"],
+          "verification_status": "UNVERIFIED"
+        },
+        {
+          "name": "inFlow",
+          "website": "inflowinventory.com",
+          "pricing": {
+            "entrepreneur": {"price": 110, "currency": "USD", "period": "month", "features": ["Inventory tracking", "2 team members", "100 orders/month"]},
+            "small_business": {"price": 279, "currency": "USD", "period": "month", "features": ["5 team members", "1000 orders/month", "Reorder points"]}
+          },
+          "best_for": "SMB inventory management",
+          "integrations": ["Shopify", "QuickBooks", "Amazon"],
+          "verification_status": "UNVERIFIED"
+        }
+      ]
+    },
+    {
+      "category": "customer-success",
+      "name": "Customer Success Platforms",
+      "description": "Tools for managing customer health, churn prevention, and expansion revenue",
+      "vendors": [
+        {
+          "name": "Gainsight",
+          "website": "gainsight.com",
+          "pricing": {
+            "contact_sales": true,
+            "estimated_range": {"min": 2000, "max": 10000, "currency": "EUR", "period": "month"}
+          },
+          "best_for": "Enterprise customer success with health scoring",
+          "integrations": ["Salesforce", "HubSpot", "Slack", "Snowflake"],
+          "verification_status": "UNVERIFIED"
+        },
+        {
+          "name": "Vitally",
+          "website": "vitally.io",
+          "pricing": {
+            "contact_sales": true,
+            "estimated_range": {"min": 500, "max": 2000, "currency": "EUR", "period": "month"}
+          },
+          "best_for": "B2B SaaS customer success for growing teams",
+          "integrations": ["HubSpot", "Salesforce", "Intercom", "Segment"],
+          "verification_status": "UNVERIFIED"
+        },
+        {
+          "name": "Planhat",
+          "website": "planhat.com",
+          "pricing": {
+            "contact_sales": true,
+            "estimated_range": {"min": 500, "max": 3000, "currency": "EUR", "period": "month"}
+          },
+          "best_for": "European B2B customer success platform",
+          "integrations": ["HubSpot", "Salesforce", "Stripe", "Segment"],
+          "verification_status": "UNVERIFIED"
+        }
+      ]
+    }
+  ],
+  "custom_solution_partners": []
+}

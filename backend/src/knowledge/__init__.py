@@ -21,6 +21,7 @@ from src.utils.quiz_utils import get_monthly_budget_range
 logger = logging.getLogger(__name__)
 
 KNOWLEDGE_BASE_PATH = Path(__file__).parent
+PLATFORMS_DIR = KNOWLEDGE_BASE_PATH / "platforms"
 
 # =============================================================================
 # VENDOR CATEGORIES (new category-based vendor files)
@@ -88,6 +89,24 @@ INDUSTRY_MAPPING = {
     "d2c": "ecommerce",
     "online_store": "ecommerce",
     "shopify": "ecommerce",
+
+    # B2B Platforms (Hardware-to-Platform, IoT, Connected Devices)
+    "b2b-platforms": "b2b-platforms",
+    "b2b-platform": "b2b-platforms",
+    "b2b_platforms": "b2b-platforms",
+    "b2b platforms": "b2b-platforms",
+    "iot": "b2b-platforms",
+    "iot-platform": "b2b-platforms",
+    "iot_platform": "b2b-platforms",
+    "hardware-platform": "b2b-platforms",
+    "hardware_platform": "b2b-platforms",
+    "connected-devices": "b2b-platforms",
+    "connected_devices": "b2b-platforms",
+    "device-platform": "b2b-platforms",
+    "saas-hardware": "b2b-platforms",
+    "water-tech": "b2b-platforms",
+    "cleantech": "b2b-platforms",
+    "hydration": "b2b-platforms",
 
     # ==========================================================================
     # SECONDARY INDUSTRIES (Phase 2) - Placeholders for future
@@ -184,6 +203,7 @@ PRIMARY_INDUSTRIES = [
     "professional-services",
     "dental",
     "ecommerce",
+    "b2b-platforms",
 ]
 
 # Secondary industries (Phase 2) - knowledge bases to be built
@@ -250,11 +270,31 @@ def load_industry_data(industry: str, data_type: str) -> Optional[Dict[str, Any]
     normalized = normalize_industry(industry)
 
     if normalized == "general" or normalized not in SUPPORTED_INDUSTRIES:
-        logger.warning(f"Industry '{industry}' not found, using general fallback")
+        # Phase 3 expansion industries (physical-therapy, medspa, etc.) may not have KB data yet
+        logger.warning(
+            f"Industry '{industry}' (normalized: '{normalized}') has no knowledge base data. "
+            f"Phase 3 expansion - using general benchmarks."
+        )
         return None
 
     file_path = KNOWLEDGE_BASE_PATH / normalized / f"{data_type}.json"
     return _load_json_file(file_path)
+
+
+def load_industry_workflows(industry: str) -> Optional[List[Dict[str, Any]]]:
+    """
+    Load AI workflow templates for an industry.
+
+    Args:
+        industry: Industry name (will be normalized)
+
+    Returns:
+        List of workflow templates or None if not found
+    """
+    normalized = normalize_industry(industry)
+    file_path = KNOWLEDGE_BASE_PATH / normalized / "workflows.json"
+    data = _load_json_file(file_path)
+    return data.get("workflows", []) if data else None
 
 
 # =============================================================================
@@ -517,6 +557,7 @@ def get_industry_context(industry: str) -> Dict[str, Any]:
         "opportunities": load_industry_data(industry, "opportunities"),
         "benchmarks": load_industry_data(industry, "benchmarks"),
         "vendors": load_industry_data(industry, "vendors"),
+        "workflows": load_industry_workflows(industry),
     }
 
     # Add summary stats
@@ -758,6 +799,129 @@ def get_industry_priority(industry: str) -> str:
 def list_vendor_categories() -> List[str]:
     """List all vendor categories."""
     return VENDOR_CATEGORIES.copy()
+
+
+# =============================================================================
+# PLATFORM DATA LOADING
+# =============================================================================
+
+@lru_cache(maxsize=16)
+def load_platform_data(platform_slug: str) -> dict:
+    """
+    Load a platform JSON file from knowledge/platforms/{slug}.json.
+
+    Args:
+        platform_slug: Platform identifier (e.g., 'claude_code', 'mcp_ecosystem')
+
+    Returns:
+        Parsed JSON dict, or empty dict if not found
+    """
+    file_path = PLATFORMS_DIR / f"{platform_slug}.json"
+
+    if not file_path.exists():
+        logger.warning(f"Platform file not found: {file_path}")
+        return {}
+
+    try:
+        with open(file_path, "r") as f:
+            return json.load(f)
+    except json.JSONDecodeError as e:
+        logger.error(f"Failed to parse platform file {file_path}: {e}")
+        return {}
+
+
+def get_claude_code_capabilities() -> dict:
+    """
+    Get the capabilities section from the Claude Code platform data.
+
+    Returns:
+        Capabilities dict, or empty dict if not found
+    """
+    data = load_platform_data("claude_code")
+    return data.get("capabilities", {})
+
+
+def get_mcp_servers(
+    category: Optional[str] = None,
+    industry: Optional[str] = None,
+) -> List[Dict[str, Any]]:
+    """
+    Get MCP servers from the ecosystem data, optionally filtered.
+
+    Args:
+        category: Filter by category key (e.g., 'crm', 'payments')
+        industry: Filter by industry tag (e.g., 'dental', 'ecommerce')
+
+    Returns:
+        Flat list of server dicts matching the filters.
+        Returns all servers if no filters are provided.
+    """
+    data = load_platform_data("mcp_ecosystem")
+    categories = data.get("categories", {})
+
+    if not categories:
+        return []
+
+    # Determine which categories to scan
+    if category:
+        cat_data = categories.get(category)
+        if not cat_data:
+            logger.debug(f"MCP category not found: {category}")
+            return []
+        category_items = {category: cat_data}
+    else:
+        category_items = categories
+
+    servers: List[Dict[str, Any]] = []
+
+    for cat_key, cat_data in category_items.items():
+        for server in cat_data.get("servers", []):
+            if industry:
+                server_industries = server.get("industries", [])
+                if industry not in server_industries:
+                    continue
+            servers.append(server)
+
+    return servers
+
+
+def get_claude_code_building_path(
+    opportunity_id: str,
+    industry: str,
+) -> Optional[Dict[str, Any]]:
+    """
+    Get the Claude Code building path for a specific opportunity in an industry.
+
+    Loads the industry's opportunities.json, finds the opportunity by ID,
+    and returns its claude_code_path field if present.
+
+    Args:
+        opportunity_id: Opportunity ID (e.g., 'ai-voice-receptionist')
+        industry: Industry name (will be normalized)
+
+    Returns:
+        The claude_code_path dict for the opportunity, or None if not found
+    """
+    opportunities_data = load_industry_data(industry, "opportunities")
+
+    if not opportunities_data:
+        return None
+
+    for opp in opportunities_data.get("ai_opportunities", []):
+        if opp.get("id") == opportunity_id:
+            # claude_code_path can be at top level or inside options
+            path = opp.get("claude_code_path")
+            if not path:
+                path = opp.get("options", {}).get("claude_code_path")
+            if path:
+                return path
+            logger.debug(
+                f"Opportunity '{opportunity_id}' in '{industry}' has no claude_code_path"
+            )
+            return None
+
+    logger.debug(f"Opportunity '{opportunity_id}' not found in '{industry}'")
+    return None
 
 
 # =============================================================================

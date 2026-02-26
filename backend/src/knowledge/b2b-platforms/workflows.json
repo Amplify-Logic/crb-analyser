@@ -1,0 +1,106 @@
+{
+  "industry": "b2b-platforms",
+  "description": "Pre-built AI workflow templates for B2B hardware-to-platform businesses",
+  "workflows": [
+    {
+      "id": "crm-erp-deal-sync",
+      "name": "CRM-to-ERP Deal Sync",
+      "description": "Deal closes in HubSpot → auto-generate invoice in Exact Online → update all systems",
+      "trigger": "Deal stage changes to 'Closed Won' in HubSpot",
+      "connects": ["hubspot", "exact_online"],
+      "mcp_servers": [],
+      "build_time_hours": 8,
+      "complexity": "medium",
+      "steps": [
+        "Monitor HubSpot deal pipeline via webhook for 'Closed Won' events",
+        "Extract deal details: company, amount, products, payment terms",
+        "Map HubSpot products to Exact Online invoice lines",
+        "Create invoice in Exact Online via API",
+        "Update HubSpot deal with invoice number and link",
+        "Notify finance team of new invoice via Slack/email"
+      ],
+      "prerequisites": ["HubSpot CRM with API access", "Exact Online with API access", "Product mapping between systems"],
+      "estimated_monthly_value": 2000
+    },
+    {
+      "id": "iot-usage-cs-alert",
+      "name": "IoT Usage Alert → CS Notification",
+      "description": "Usage drops significantly → alert CS team with context → suggest intervention",
+      "trigger": "Device usage drops >30% compared to 30-day average",
+      "connects": ["iot_platform", "crm", "slack"],
+      "mcp_servers": [],
+      "build_time_hours": 6,
+      "complexity": "low",
+      "steps": [
+        "Monitor device usage metrics from IoT platform API",
+        "Calculate rolling 30-day usage average per customer",
+        "Detect significant drops (>30% below average)",
+        "Pull customer context from CRM (contract tier, health score, last contact)",
+        "Generate alert with suggested CS action based on usage pattern",
+        "Send to CS team via Slack channel or CRM task"
+      ],
+      "prerequisites": ["IoT platform with usage data API", "CRM with customer data", "Slack or notification channel"],
+      "estimated_monthly_value": 4000
+    },
+    {
+      "id": "partner-install-provision",
+      "name": "Partner Install → Auto-Provision",
+      "description": "Partner submits install request → provision device → setup billing → confirm to all parties",
+      "trigger": "Partner submits installation request via portal",
+      "connects": ["partner_portal", "iot_platform", "erp", "email"],
+      "mcp_servers": [],
+      "build_time_hours": 12,
+      "complexity": "medium",
+      "steps": [
+        "Receive installation request from partner portal webhook",
+        "Validate request: customer details, location, device type, contract terms",
+        "Provision device in IoT platform (assign serial, configure settings)",
+        "Create billing record in ERP with correct tier and start date",
+        "Schedule installation with field service team",
+        "Send confirmation to partner, customer, and internal teams"
+      ],
+      "prerequisites": ["Partner portal with API/webhooks", "IoT platform device provisioning API", "ERP billing API"],
+      "estimated_monthly_value": 1500
+    },
+    {
+      "id": "usage-invoice-generation",
+      "name": "Usage Data → Invoice Generation",
+      "description": "Aggregate monthly usage per customer → calculate tier pricing → generate invoice in ERP",
+      "trigger": "Monthly billing cycle (1st of month) or on-demand",
+      "connects": ["iot_platform", "billing_system", "erp"],
+      "mcp_servers": [],
+      "build_time_hours": 10,
+      "complexity": "medium",
+      "steps": [
+        "Pull monthly usage data per customer from IoT platform",
+        "Look up customer contract tier and pricing rules",
+        "Calculate billable amount based on usage vs tier",
+        "Detect anomalies (usage spikes, zero usage, tier overage)",
+        "Generate invoice draft in ERP with line-item detail",
+        "Route for finance approval, then auto-send to customer"
+      ],
+      "prerequisites": ["IoT platform with usage aggregation API", "Contract/tier data accessible via API", "ERP with invoice creation API"],
+      "estimated_monthly_value": 3000
+    },
+    {
+      "id": "device-health-maintenance",
+      "name": "Device Health → Maintenance Ticket",
+      "description": "Device reports error or degraded performance → auto-create maintenance ticket → route to nearest technician",
+      "trigger": "Device health metric crosses alert threshold",
+      "connects": ["iot_platform", "field_service_app", "parts_inventory"],
+      "mcp_servers": [],
+      "build_time_hours": 8,
+      "complexity": "medium",
+      "steps": [
+        "Monitor device health metrics from IoT platform (connectivity, error codes, performance)",
+        "Detect when metrics cross predefined alert thresholds",
+        "Create maintenance ticket with device details, error code, and diagnostics",
+        "Check parts inventory for required components",
+        "Route to nearest available technician with matching skills",
+        "Notify customer of scheduled maintenance with ETA"
+      ],
+      "prerequisites": ["IoT platform with health monitoring API", "Field service scheduling system", "Parts inventory system"],
+      "estimated_monthly_value": 2500
+    }
+  ]
+}

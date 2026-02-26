@@ -1,0 +1,54 @@
+{
+  "industry": "b2b-platforms",
+  "description": "B2B hardware-to-platform businesses for CRB report generation",
+  "tiers": {
+    "scaling": {
+      "description": "40-100 staff, IoT fleet + partner channel, custom apps + ERP + CRM",
+      "defaults": {
+        "budget": 5000,
+        "hourly_cost": 55,
+        "pain_points": ["system integration gaps", "scaling operations", "partner management complexity", "field service coordination"]
+      }
+    },
+    "growth": {
+      "description": "100-250 staff, multi-country operations, platform revenue model",
+      "defaults": {
+        "budget": 15000,
+        "hourly_cost": 65,
+        "pain_points": ["data silos across countries", "manual billing reconciliation", "partner onboarding bottleneck", "knowledge stuck in people's heads"]
+      }
+    }
+  },
+  "seeds": [
+    {
+      "name": "HydraFlow",
+      "website": "https://www.hydraflow.example.com",
+      "country": "NL",
+      "profile": {
+        "tier": "scaling",
+        "staff_size": "51-100",
+        "device_fleet_size": 2500,
+        "countries": 16,
+        "partner_count": 45,
+        "revenue_model": "pay-per-use subscription",
+        "has_custom_iot": true,
+        "has_custom_billing": true,
+        "has_custom_field_service_app": true,
+        "current_tools": ["hubspot", "exact-online", "custom-iot-platform", "asana", "notion", "apollo", "claude-teams"],
+        "pain_points": ["manual data sync between HubSpot and Exact", "supply chain scaling", "partner onboarding bottleneck", "CS scaling beyond manual account management"]
+      },
+      "workshop_transcript": [
+        {"role": "assistant", "content": "Tell me about HydraFlow \u2014 what do you sell and who are your customers?"},
+        {"role": "user", "content": "We make smart water dispensers for offices and hotels. Each dispenser is IoT-connected, tracks usage, and serves still, sparkling, and flavored water. We operate in 16 European countries through a partner channel \u2014 about 45 distributors. Revenue model is pay-per-drink: customers pay a monthly fee for a tier of drinks, and our margins are better when they buy a tier above their actual usage."},
+        {"role": "assistant", "content": "Walk me through your tech stack \u2014 what systems do you use day to day?"},
+        {"role": "user", "content": "HubSpot for CRM and CS tracking, Exact Online for finance, Apollo for outbound sales. Our IoT platform is fully custom \u2014 devices connect via KPN network to our databases, and we built AURA, our fleet management platform, for device monitoring and partner access. We also built a custom field service app with AI for technician routing. Billing is custom too \u2014 tracks per-drink usage and generates invoices based on contracted tiers. We use Asana for project management and Notion as our knowledge base. We're heavy Claude users \u2014 Teams plan."},
+        {"role": "assistant", "content": "Where are the biggest bottlenecks as you scale?"},
+        {"role": "user", "content": "Three areas. First, supply chain and ops \u2014 coordinating parts inventory, installations, and maintenance across 16 countries with growing device fleet. Second, customer success \u2014 we have amazing usage data but CS is still mostly manual. We know when usage drops but we don't act on it systematically. Third, the gap between systems \u2014 HubSpot doesn't talk to Exact, which doesn't talk to our IoT data. So much manual reconciliation. A deal closes in HubSpot but someone has to manually create the invoice in Exact, provision the device in AURA, and schedule the installation."},
+        {"role": "assistant", "content": "You mentioned your margins are better when customers buy above their usage. How does that pricing work?"},
+        {"role": "user", "content": "We have tiered drink bundles \u2014 Small (500 drinks), Medium (1000), Large (2000), Enterprise (5000+). We try to sell them into the tier above what they'd naturally use. Margins are significantly better on the excess. The challenge is we don't systematically track usage vs tier across the fleet to know who to upsell, who's at risk of downgrading, and who might churn because they're paying but not really using the dispenser."},
+        {"role": "assistant", "content": "What's the team size and where's the growth heading?"},
+        {"role": "user", "content": "60 people now. Goal is \u20ac100M revenue with fewer than 100 employees by 2028. That means we need to 10x revenue without 10x-ing headcount. Everything that's manual today has to be automated or AI-driven. We're already AI-forward \u2014 built custom apps, use Claude daily \u2014 but we need the architecture to connect it all. Right now it's held together with human glue."}
+      ]
+    }
+  ]
+}

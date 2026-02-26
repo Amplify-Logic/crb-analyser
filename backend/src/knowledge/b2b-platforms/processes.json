@@ -1,0 +1,178 @@
+{
+  "industry": "b2b-platforms",
+  "description": "B2B hardware-to-platform businesses including IoT devices, connected products, and subscription hardware companies",
+  "common_processes": [
+    {
+      "id": "b2b-sales-crm",
+      "name": "B2B Sales & CRM Pipeline",
+      "description": "Managing complex B2B sales cycles with multiple stakeholders, from lead generation through deal closure, including partner-sourced deals",
+      "typical_time_spent": "3-5 hours/day",
+      "pain_level": "high",
+      "automation_potential": 75,
+      "ai_opportunities": [
+        "Automated lead scoring based on company fit and engagement signals",
+        "AI-powered deal-to-invoice sync between CRM and ERP",
+        "Smart follow-up scheduling based on deal stage and buyer behavior",
+        "Automated pipeline reporting and forecasting",
+        "Lead enrichment from multiple data sources"
+      ]
+    },
+    {
+      "id": "partner-channel-management",
+      "name": "Partner/Channel Management",
+      "description": "Onboarding, managing, and supporting distribution partners across multiple countries and regions",
+      "typical_time_spent": "2-4 hours/day",
+      "pain_level": "very high",
+      "automation_potential": 70,
+      "ai_opportunities": [
+        "Automated partner onboarding workflows",
+        "Self-service partner portal for orders and reporting",
+        "AI-powered partner performance scoring",
+        "Automated commission calculation and reporting",
+        "Multi-language partner communication automation"
+      ]
+    },
+    {
+      "id": "field-service-logistics",
+      "name": "Field Service & Logistics",
+      "description": "Scheduling installations, maintenance, and repairs across geographies with technician routing and parts management",
+      "typical_time_spent": "3-6 hours/day",
+      "pain_level": "very high",
+      "automation_potential": 80,
+      "ai_opportunities": [
+        "AI-optimized technician routing and scheduling",
+        "Predictive maintenance from IoT device data",
+        "Automated parts inventory and reorder triggers",
+        "Installation workflow automation with checklists",
+        "Real-time field service status tracking"
+      ]
+    },
+    {
+      "id": "subscription-billing",
+      "name": "Subscription Billing & Revenue Ops",
+      "description": "Managing usage-based and tiered subscription billing, invoice generation, and revenue recognition across multiple contract types",
+      "typical_time_spent": "2-4 hours/day",
+      "pain_level": "high",
+      "automation_potential": 85,
+      "ai_opportunities": [
+        "Automated usage-to-invoice generation from IoT data",
+        "AI-powered tier optimization recommendations",
+        "Automated dunning and payment collection",
+        "Revenue recognition automation for mixed contracts",
+        "Usage anomaly detection for billing accuracy"
+      ]
+    },
+    {
+      "id": "iot-device-management",
+      "name": "IoT Device Management",
+      "description": "Monitoring device health, connectivity, firmware updates, and fleet analytics across thousands of deployed units",
+      "typical_time_spent": "2-3 hours/day",
+      "pain_level": "high",
+      "automation_potential": 85,
+      "ai_opportunities": [
+        "Predictive device failure detection",
+        "Automated firmware rollout management",
+        "Usage pattern analytics for product improvement",
+        "Automated alert routing and escalation",
+        "Device lifecycle management automation"
+      ]
+    },
+    {
+      "id": "customer-success",
+      "name": "Customer Success & Retention",
+      "description": "Managing customer health, preventing churn, driving adoption, and identifying upsell opportunities using product usage data",
+      "typical_time_spent": "2-4 hours/day",
+      "pain_level": "high",
+      "automation_potential": 75,
+      "ai_opportunities": [
+        "AI-powered health scoring from usage data",
+        "Automated CS playbooks triggered by usage patterns",
+        "Predictive churn detection from engagement signals",
+        "Automated upsell recommendations based on usage vs tier",
+        "Customer journey analytics and milestone tracking"
+      ]
+    },
+    {
+      "id": "marketing-lead-gen",
+      "name": "Marketing & Lead Generation",
+      "description": "Generating and qualifying leads for B2B sales, including content marketing, events, and partner referrals",
+      "typical_time_spent": "2-3 hours/day",
+      "pain_level": "medium",
+      "automation_potential": 70,
+      "ai_opportunities": [
+        "AI-powered content generation for technical audiences",
+        "Automated lead nurture sequences based on engagement",
+        "Smart event follow-up workflows",
+        "Partner referral tracking and attribution",
+        "Intent signal detection from website behavior"
+      ]
+    }
+  ],
+  "typical_team_structure": {
+    "small": {
+      "size": "20-50",
+      "roles": ["CEO/Founder", "CTO", "Sales", "Operations", "Support", "Engineering"],
+      "characteristics": "Everyone wears multiple hats, founder-led sales, custom tools built by engineering"
+    },
+    "medium": {
+      "size": "50-100",
+      "roles": ["CEO", "CTO", "VP Sales", "VP Operations", "CS Team", "Field Service", "Engineering", "Marketing"],
+      "characteristics": "Specialized roles emerging, partner channel growing, scaling pains in operations"
+    },
+    "large": {
+      "size": "100-250",
+      "roles": ["C-Suite", "Regional Sales Directors", "Partner Managers", "CS Managers", "Service Operations", "Product", "Engineering", "Data"],
+      "characteristics": "Multi-country operations, complex org structure, need for automation at scale"
+    }
+  },
+  "common_tools": {
+    "crm": ["HubSpot", "Salesforce", "Pipedrive"],
+    "erp": ["Exact Online", "NetSuite", "Odoo", "SAP Business One"],
+    "iot_platform": ["Azure IoT Hub", "AWS IoT Core", "Custom platform"],
+    "field_service": ["Salesforce FSL", "ServiceMax", "Zuper", "Custom app"],
+    "billing": ["Chargebee", "Zuora", "Stripe Billing", "Custom billing"],
+    "project_management": ["Asana", "Monday.com", "Jira"],
+    "knowledge_base": ["Notion", "Confluence"],
+    "outbound_sales": ["Apollo", "Outreach", "HubSpot Sequences"],
+    "communication": ["Slack", "Teams"]
+  },
+  "industry_specific_challenges": [
+    "Custom IoT platform creates integration silos — data trapped in proprietary systems",
+    "Usage-based billing requires real-time data pipeline from devices to invoicing",
+    "Multi-country partner channel requires localized workflows and compliance",
+    "Field service coordination across geographies with varying parts availability",
+    "Scaling from founder-led to process-driven operations without losing speed"
+  ],
+  "pain_points": [
+    {
+      "name": "System Integration Gaps",
+      "description": "CRM, ERP, IoT, and billing systems don't communicate, requiring manual data sync",
+      "impact": "10-20 hours/week of manual reconciliation, error-prone, delays",
+      "frequency": "daily"
+    },
+    {
+      "name": "Partner Onboarding Bottleneck",
+      "description": "Each new distributor requires manual setup across multiple systems",
+      "impact": "2-4 weeks per partner, limits growth velocity",
+      "frequency": "weekly"
+    },
+    {
+      "name": "Usage Data Underutilization",
+      "description": "Rich IoT usage data exists but isn't connected to CS, billing, or sales actions",
+      "impact": "Missed upsell opportunities, delayed churn detection",
+      "frequency": "continuous"
+    },
+    {
+      "name": "Knowledge in People's Heads",
+      "description": "Processes, playbooks, and institutional knowledge not documented or systematized",
+      "impact": "Scaling blocked by key-person dependencies",
+      "frequency": "continuous"
+    }
+  ],
+  "key_metrics": {
+    "revenue": ["ARR", "MRR", "Net Revenue Retention", "Revenue per Employee"],
+    "operations": ["Device Uptime %", "Cost per Install", "Mean Time to Repair", "Parts Availability %"],
+    "growth": ["Partner Activation Rate", "Countries of Operation", "Fleet Size Growth"],
+    "customer": ["Churn Rate", "Usage vs Contracted Tier", "NPS", "Support Tickets per Device"]
+  }
+}

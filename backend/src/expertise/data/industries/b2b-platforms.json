@@ -1,0 +1,46 @@
+{
+  "industry": "b2b-platforms",
+  "last_updated": "2026-02-26T12:00:00Z",
+  "total_analyses": 1,
+  "confidence": "low",
+  "pain_points": {
+    "system_integration_gaps": {
+      "name": "Manual data sync between CRM, ERP, IoT, and billing systems",
+      "frequency": 1,
+      "avg_impact": "very high",
+      "typical_causes": ["No native integrations between custom and SaaS tools", "Rapid growth outpacing system architecture"],
+      "effective_solutions": ["Claude workflow connecting APIs", "MCP servers for each system", "Central context layer"],
+      "last_seen": "2026-02-26T00:00:00Z"
+    },
+    "scaling_operations": {
+      "name": "Processes that worked at 20 people breaking at 100",
+      "frequency": 1,
+      "avg_impact": "high",
+      "typical_causes": ["Knowledge in people's heads", "Manual handoffs between teams", "No documented playbooks"],
+      "effective_solutions": ["AI-powered knowledge capture", "Automated workflow triggers", "Self-service partner portal"],
+      "last_seen": "2026-02-26T00:00:00Z"
+    },
+    "cs_scaling": {
+      "name": "Customer success beyond manual account management",
+      "frequency": 1,
+      "avg_impact": "high",
+      "typical_causes": ["Usage data exists but isn't acted on", "No predictive churn detection", "CS team linearly scaling with accounts"],
+      "effective_solutions": ["Usage-based health scoring", "Automated CS playbooks", "Predictive churn AI agent"],
+      "last_seen": "2026-02-26T00:00:00Z"
+    }
+  },
+  "processes": {},
+  "effective_patterns": [
+    "Connect-first approach: wire existing tools before recommending replacements",
+    "Custom IoT + custom billing already in place — build AI layer on top",
+    "Partner channel is key revenue driver — automate onboarding and self-service"
+  ],
+  "anti_patterns": [
+    "Recommending enterprise ERP migration to companies with working custom systems",
+    "Suggesting generic CRM replacement when HubSpot + custom integrations work"
+  ],
+  "size_specific": {},
+  "avg_ai_readiness": 72.0,
+  "avg_potential_savings": 120000.0,
+  "common_tech_stacks": ["HubSpot + Exact Online + Custom IoT + Custom Billing"]
+}

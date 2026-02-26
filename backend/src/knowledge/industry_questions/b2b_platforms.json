@@ -1,0 +1,136 @@
+{
+  "industry": "b2b-platforms",
+  "display_name": "B2B Platform / IoT Business",
+  "questions": [
+    {
+      "id": "device_fleet_size",
+      "question": "How many connected devices do you have deployed?",
+      "input_type": "number",
+      "placeholder": "e.g., 2500",
+      "target_categories": ["quantifiable_metrics", "industry_context"],
+      "expected_boosts": {"quantifiable_metrics": 20, "industry_context": 15},
+      "priority": 1,
+      "tags": ["scale", "iot", "fleet"]
+    },
+    {
+      "id": "countries_of_operation",
+      "question": "How many countries do you operate in?",
+      "input_type": "number",
+      "placeholder": "e.g., 16",
+      "target_categories": ["quantifiable_metrics", "operations"],
+      "expected_boosts": {"quantifiable_metrics": 15, "operations": 10},
+      "priority": 1,
+      "tags": ["geography", "scale"]
+    },
+    {
+      "id": "partner_count",
+      "question": "How many distribution partners or resellers do you work with?",
+      "input_type": "number",
+      "placeholder": "e.g., 45",
+      "target_categories": ["quantifiable_metrics", "operations"],
+      "expected_boosts": {"quantifiable_metrics": 15, "operations": 15},
+      "priority": 1,
+      "tags": ["partners", "channel"]
+    },
+    {
+      "id": "iot_platform",
+      "question": "What IoT platform do you use for device management?",
+      "input_type": "select",
+      "options": [
+        {"value": "azure_iot", "label": "Azure IoT Hub"},
+        {"value": "aws_iot", "label": "AWS IoT Core"},
+        {"value": "custom_built", "label": "Custom-built platform"},
+        {"value": "google_iot", "label": "Google Cloud IoT"},
+        {"value": "other_saas", "label": "Other SaaS platform"},
+        {"value": "none", "label": "No IoT platform yet"}
+      ],
+      "target_categories": ["tech_stack", "industry_context"],
+      "expected_boosts": {"tech_stack": 20, "industry_context": 10},
+      "priority": 2,
+      "tags": ["iot", "infrastructure"]
+    },
+    {
+      "id": "biggest_bottleneck",
+      "question": "What's your biggest operational bottleneck right now?",
+      "input_type": "select",
+      "options": [
+        {"value": "supply_chain", "label": "Supply chain & parts management"},
+        {"value": "field_service", "label": "Field service & installations"},
+        {"value": "billing", "label": "Billing & revenue operations"},
+        {"value": "customer_success", "label": "Customer success & retention"},
+        {"value": "system_integration", "label": "System integration / data sync"},
+        {"value": "partner_management", "label": "Partner channel management"}
+      ],
+      "target_categories": ["pain_points", "operations"],
+      "expected_boosts": {"pain_points": 25, "operations": 15},
+      "priority": 1,
+      "tags": ["bottleneck", "pain_point"],
+      "deep_dive_triggers": ["supply_chain", "field_service", "billing", "system_integration"]
+    },
+    {
+      "id": "integration_pain",
+      "question": "How much time does your team spend on manual data sync between systems (CRM, ERP, IoT, billing)?",
+      "input_type": "select",
+      "options": [
+        {"value": "minimal", "label": "Less than 2 hours/week"},
+        {"value": "moderate", "label": "2-5 hours/week"},
+        {"value": "significant", "label": "5-15 hours/week"},
+        {"value": "severe", "label": "15+ hours/week"},
+        {"value": "unknown", "label": "Not sure — it's spread across the team"}
+      ],
+      "target_categories": ["pain_points", "quantifiable_metrics"],
+      "expected_boosts": {"pain_points": 20, "quantifiable_metrics": 15},
+      "priority": 2,
+      "tags": ["integration", "manual_work"],
+      "deep_dive_triggers": ["significant", "severe"]
+    },
+    {
+      "id": "technical_capability",
+      "question": "What's your team's technical capability for building custom solutions?",
+      "input_type": "select",
+      "options": [
+        {"value": "build_custom", "label": "We build custom apps and integrations in-house"},
+        {"value": "use_tools", "label": "We use automation tools (Zapier, Make, n8n)"},
+        {"value": "some_technical", "label": "We have some technical people but outsource complex builds"},
+        {"value": "non_technical", "label": "We're mostly non-technical, prefer SaaS tools"}
+      ],
+      "target_categories": ["tech_stack", "readiness"],
+      "expected_boosts": {"tech_stack": 15, "readiness": 20},
+      "priority": 2,
+      "tags": ["capability", "readiness"]
+    },
+    {
+      "id": "revenue_model",
+      "question": "What's your primary revenue model?",
+      "input_type": "select",
+      "options": [
+        {"value": "fixed_subscription", "label": "Fixed monthly/annual subscription"},
+        {"value": "usage_based", "label": "Pay-per-use / consumption-based"},
+        {"value": "hybrid", "label": "Hybrid (base fee + usage)"},
+        {"value": "one_time_hardware", "label": "One-time hardware sale + service"}
+      ],
+      "target_categories": ["industry_context", "operations"],
+      "expected_boosts": {"industry_context": 15, "operations": 10},
+      "priority": 2,
+      "tags": ["pricing", "revenue"]
+    },
+    {
+      "id": "current_crm_erp",
+      "question": "What CRM and ERP tools does your team use?",
+      "input_type": "voice",
+      "target_categories": ["tech_stack", "operations"],
+      "expected_boosts": {"tech_stack": 25, "operations": 10},
+      "priority": 3,
+      "tags": ["tools", "stack"]
+    },
+    {
+      "id": "scaling_ambition",
+      "question": "What's your growth target for the next 2-3 years?",
+      "input_type": "voice",
+      "target_categories": ["industry_context", "readiness"],
+      "expected_boosts": {"industry_context": 15, "readiness": 15},
+      "priority": 3,
+      "tags": ["growth", "ambition"]
+    }
+  ]
+}

@@ -1,12 +1,65 @@
 {
   "industry": "general",
-  "last_updated": "2026-01-08T19:41:41.696277",
+  "last_updated": "2026-02-26T12:00:00Z",
   "total_analyses": 1,
   "confidence": "low",
-  "pain_points": {},
+  "pain_points": {
+    "crm_data_quality": {
+      "name": "CRM data quality issues — duplicates, missing fields, stale contacts",
+      "frequency": 1,
+      "avg_impact": "high",
+      "typical_causes": ["No data entry standards", "Multiple people entering data differently", "No automated validation"],
+      "effective_solutions": ["AI-powered data cleaning workflow", "Automated validation on entry", "Duplicate detection agent"],
+      "last_seen": "2026-02-26T00:00:00Z"
+    },
+    "manual_reporting": {
+      "name": "Manual reporting and data aggregation from multiple sources",
+      "frequency": 1,
+      "avg_impact": "high",
+      "typical_causes": ["Systems don't integrate", "Data lives in spreadsheets", "No central dashboard"],
+      "effective_solutions": ["Claude workflow connecting data sources to unified report", "API-based data aggregation", "Automated dashboard generation"],
+      "last_seen": "2026-02-26T00:00:00Z"
+    },
+    "email_overload": {
+      "name": "Email overload and communication silos",
+      "frequency": 1,
+      "avg_impact": "medium",
+      "typical_causes": ["No structured communication workflow", "Information trapped in email threads", "No task extraction from messages"],
+      "effective_solutions": ["AI email triage and routing", "Automated task extraction from emails", "Structured communication channels"],
+      "last_seen": "2026-02-26T00:00:00Z"
+    },
+    "onboarding_friction": {
+      "name": "Onboarding friction for employees and customers",
+      "frequency": 1,
+      "avg_impact": "medium",
+      "typical_causes": ["Manual onboarding checklist", "Knowledge in people's heads", "No self-service resources"],
+      "effective_solutions": ["Automated onboarding workflow", "AI-generated onboarding guides from existing docs", "Self-service portal"],
+      "last_seen": "2026-02-26T00:00:00Z"
+    },
+    "tool_sprawl": {
+      "name": "Tool sprawl without integration — 5-10+ SaaS tools that don't talk to each other",
+      "frequency": 1,
+      "avg_impact": "high",
+      "typical_causes": ["Each department chose their own tool", "No integration strategy", "No central IT coordination"],
+      "effective_solutions": ["API-first integration layer", "Claude workflows connecting existing tools", "Consolidate where overlapping"],
+      "last_seen": "2026-02-26T00:00:00Z"
+    }
+  },
   "processes": {},
-  "effective_patterns": [],
-  "anti_patterns": [],
+  "effective_patterns": [
+    "Connect existing tools before replacing — most businesses get 80% of value from integration",
+    "Start with highest-ROI automation first — quick wins build momentum",
+    "Build on tools the team already knows — adoption is the hardest part",
+    "Automate data sync between core systems — eliminates most manual work",
+    "AI workflows for repetitive tasks first, then expand to complex ones"
+  ],
+  "anti_patterns": [
+    "Recommending enterprise tools to SMBs — overkill and budget-breaking",
+    "Suggesting migration when integration would work — disruption without benefit",
+    "Automating processes that are broken — fix the process first",
+    "Building custom when SaaS exists and fits — don't reinvent the wheel",
+    "Ignoring team capability — recommending builds to non-technical teams"
+  ],
   "size_specific": {
     "unknown": {
       "count": 1,
@@ -14,7 +67,7 @@
       "common_pain_points": []
     }
   },
-  "avg_ai_readiness": 35.0,
+  "avg_ai_readiness": 45.0,
   "avg_potential_savings": 84000.0,
-  "common_tech_stacks": []
+  "common_tech_stacks": ["HubSpot + Google Workspace", "Salesforce + Office 365", "HubSpot + Xero/QuickBooks"]
 }

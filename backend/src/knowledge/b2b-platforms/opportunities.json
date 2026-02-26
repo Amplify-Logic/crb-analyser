@@ -1,0 +1,600 @@
+{
+  "industry": "b2b-platforms",
+  "ai_opportunities": [
+    {
+      "id": "cross-system-sync-engine",
+      "name": "Cross-System Sync Engine",
+      "description": "Wire HubSpot ↔ ERP ↔ IoT ↔ billing with AI workflows — eliminate manual data sync between systems",
+      "category": "efficiency",
+      "impact": {
+        "value_saved": {
+          "time_hours_per_week": 15,
+          "description": "Eliminates manual data reconciliation between CRM, ERP, and billing systems"
+        },
+        "value_created": {
+          "description": "Real-time data consistency across systems, faster deal-to-delivery cycle",
+          "potential_revenue_impact": "10-15% faster revenue recognition from automated invoicing"
+        }
+      },
+      "customer_value_score": 9,
+      "business_health_score": 10,
+      "implementation": {
+        "complexity": "medium",
+        "timeline_weeks": 2,
+        "required_data": ["CRM API access", "ERP API access", "Deal-to-invoice mapping rules"]
+      },
+      "options": {
+        "connect_and_automate": {
+          "approach": "Build a Claude workflow that monitors HubSpot deal closures via webhook, auto-generates invoices in Exact Online via API, provisions devices in IoT platform, and updates all systems in real-time",
+          "build_time": "12-16 hours",
+          "tools_used": ["Claude Code", "HubSpot API", "Exact Online API", "Custom IoT API"],
+          "mcp_servers": [],
+          "monthly_cost": "EUR 100-200 (API usage)",
+          "pros": ["Uses your existing HubSpot + Exact stack", "Ships in days", "Fully customized to your deal flow", "Zero migration"],
+          "cons": ["Requires API access to all systems", "Custom mapping for edge cases", "Needs maintenance as processes evolve"]
+        },
+        "enhance_with_ai": {
+          "approach": "Deploy AI orchestration layer that learns your deal patterns, auto-detects sync errors, handles exception cases, and provides a unified data dashboard across all systems",
+          "build_time": "3-4 weeks",
+          "tools_used": ["Claude API", "HubSpot", "Exact Online", "Custom dashboarding"],
+          "monthly_cost": "EUR 300-500",
+          "pros": ["Handles edge cases automatically", "Self-healing sync errors", "Unified visibility across systems"],
+          "cons": ["More complex initial setup", "Needs training data from historical deals"]
+        },
+        "targeted_upgrade": {
+          "when_needed": "Only if your ERP has no API or your CRM fundamentally cannot handle B2B deal structures",
+          "tools": ["HubSpot Operations Hub", "Make.com", "Workato"],
+          "cost_range": "EUR 500-1500/month",
+          "migration_time": "4-8 weeks",
+          "pros": ["Pre-built integrations", "Visual workflow builder", "Vendor support"],
+          "cons": ["Monthly SaaS cost", "Limited customization for complex billing", "Another tool to manage"]
+        }
+      },
+      "our_recommendation": "connect_and_automate",
+      "recommendation_rationale": "Your HubSpot and Exact Online both have full API access. A Claude workflow connecting deal closures to invoice generation ships in under a week and eliminates 15+ hours of manual reconciliation per week.",
+      "roi_example": {
+        "scenario": "B2B platform company with 50+ deals/month, 3 people doing manual data sync",
+        "cost": "EUR 150/month (API usage)",
+        "value_created": "Eliminate 15 hours/week of manual sync, reduce invoice errors by 90%",
+        "roi_analysis": {
+          "conservative": {"roi_percentage": 500, "payback_months": 1, "note": "10 hours/week saved"},
+          "expected": {"roi_percentage": 800, "payback_months": 1, "note": "15 hours/week saved + fewer errors"},
+          "optimistic": {"roi_percentage": 1200, "payback_months": 1, "note": "Full automation + faster revenue recognition"}
+        },
+        "assumptions": "Assumes API access to CRM and ERP, typical deal complexity, some edge cases still need human review"
+      },
+      "agent_opportunity": {
+        "agent_type": "CRB Sync Orchestrator",
+        "what_it_does": "Monitors deal events in HubSpot, auto-generates Exact Online invoices, provisions IoT devices, and reconciles discrepancies. Starts in approval mode, graduates to autonomous for standard deals.",
+        "estimated_impact": {
+          "syncs_handled_monthly": "200-500",
+          "hours_saved_monthly": 60,
+          "monthly_value_eur": 3300,
+          "error_reduction": "90% fewer data inconsistencies"
+        },
+        "deployment_timeline": "2 weeks",
+        "prerequisites": ["HubSpot API access", "Exact Online API access", "Deal-to-invoice mapping documentation"]
+      }
+    },
+    {
+      "id": "predictive-parts-inventory",
+      "name": "Predictive Parts Inventory",
+      "description": "Use IoT usage data to forecast consumable needs and auto-trigger reorders before stockouts",
+      "category": "efficiency",
+      "impact": {
+        "value_saved": {
+          "time_hours_per_week": 8,
+          "description": "Eliminates manual inventory checks and emergency orders"
+        },
+        "value_created": {
+          "description": "Reduced stockouts, optimized inventory levels, lower carrying costs",
+          "potential_revenue_impact": "5-10% reduction in emergency shipping costs"
+        }
+      },
+      "customer_value_score": 8,
+      "business_health_score": 8,
+      "implementation": {
+        "complexity": "medium",
+        "timeline_weeks": 3,
+        "required_data": ["IoT usage data", "Parts consumption history", "Supplier lead times"]
+      },
+      "options": {
+        "connect_and_automate": {
+          "approach": "Build a Claude workflow that pulls device usage data from IoT platform, calculates consumption rates, forecasts when parts will be needed, and auto-generates purchase orders",
+          "build_time": "16-24 hours",
+          "tools_used": ["Claude Code", "IoT Platform API", "ERP API", "Supplier portal"],
+          "mcp_servers": [],
+          "monthly_cost": "EUR 100-200 (API usage)",
+          "pros": ["Uses your existing IoT data", "Custom to your parts catalog", "Ships in 1-2 weeks"],
+          "cons": ["Needs historical consumption data for accuracy", "Requires supplier API or email integration"]
+        },
+        "enhance_with_ai": {
+          "approach": "Deploy predictive AI model that learns from device-specific usage patterns, seasonal trends, and failure rates to optimize inventory across all locations",
+          "build_time": "4-6 weeks",
+          "tools_used": ["Claude API", "IoT Platform", "ML forecasting model"],
+          "monthly_cost": "EUR 300-500",
+          "pros": ["Learns and improves over time", "Handles seasonal patterns", "Multi-location optimization"],
+          "cons": ["Needs 6+ months of historical data", "More complex deployment"]
+        },
+        "targeted_upgrade": {
+          "when_needed": "Only if you have no IoT usage data or your inventory is purely spreadsheet-based",
+          "tools": ["Katana", "inFlow", "NetSuite Inventory"],
+          "cost_range": "EUR 300-800/month",
+          "migration_time": "4-6 weeks",
+          "pros": ["Pre-built inventory management", "Reporting included"],
+          "cons": ["Monthly cost", "May not integrate with custom IoT", "Generic, not device-specific"]
+        }
+      },
+      "our_recommendation": "connect_and_automate",
+      "recommendation_rationale": "You already have rich IoT usage data. A Claude workflow connecting device consumption patterns to your ERP's purchase order system ships in under 2 weeks and prevents stockouts."
+    },
+    {
+      "id": "smart-technician-routing",
+      "name": "Smart Technician Routing",
+      "description": "AI-optimized field service scheduling that considers location, skills, parts availability, and priority",
+      "category": "efficiency",
+      "impact": {
+        "value_saved": {
+          "time_hours_per_week": 10,
+          "description": "Reduces scheduling time and optimizes technician utilization"
+        },
+        "value_created": {
+          "description": "More jobs per day, lower travel costs, faster resolution times",
+          "potential_revenue_impact": "15-25% improvement in technician utilization"
+        }
+      },
+      "customer_value_score": 8,
+      "business_health_score": 9,
+      "implementation": {
+        "complexity": "medium",
+        "timeline_weeks": 3,
+        "required_data": ["Service request data", "Technician locations and skills", "Parts inventory"]
+      },
+      "options": {
+        "connect_and_automate": {
+          "approach": "Build a Claude workflow that takes incoming service requests, matches to available technicians by location and skill, checks parts availability, and generates optimized daily routes",
+          "build_time": "16-24 hours",
+          "tools_used": ["Claude Code", "Field service app API", "Google Maps API", "Parts inventory API"],
+          "mcp_servers": [],
+          "monthly_cost": "EUR 100-200 (API + maps usage)",
+          "pros": ["Integrates with your existing field service app", "Custom to your service types", "Ships in 1-2 weeks"],
+          "cons": ["Requires API access to scheduling system", "Maps API has per-query costs"]
+        },
+        "enhance_with_ai": {
+          "approach": "Deploy AI scheduling agent that learns from historical service patterns, predicts job duration, and dynamically adjusts routes as new urgent requests come in",
+          "build_time": "4-6 weeks",
+          "tools_used": ["Claude API", "Field service platform", "Route optimization engine"],
+          "monthly_cost": "EUR 400-700",
+          "pros": ["Dynamic rescheduling", "Learns from historical data", "Handles urgent inserts"],
+          "cons": ["More complex setup", "Needs historical service data"]
+        },
+        "targeted_upgrade": {
+          "when_needed": "Only if you have no field service app or are using spreadsheets for scheduling",
+          "tools": ["Salesforce FSL", "ServiceMax", "Zuper"],
+          "cost_range": "EUR 500-2000/month",
+          "migration_time": "6-12 weeks",
+          "pros": ["Enterprise-grade field service", "Mobile apps for technicians"],
+          "cons": ["High cost", "Long implementation", "May not fit your custom workflows"]
+        }
+      },
+      "our_recommendation": "connect_and_automate",
+      "recommendation_rationale": "You already have a custom field service app. Building AI routing on top of it preserves your team's workflow while dramatically improving efficiency."
+    },
+    {
+      "id": "automated-installation-onboarding",
+      "name": "Automated Installation Onboarding",
+      "description": "Partner submits install request → auto-provision device → auto-setup billing → notify all parties",
+      "category": "efficiency",
+      "impact": {
+        "value_saved": {
+          "time_hours_per_week": 6,
+          "description": "Eliminates manual device provisioning and billing setup for new installations"
+        },
+        "value_created": {
+          "description": "Faster time-to-revenue, consistent onboarding experience, partner self-service",
+          "potential_revenue_impact": "20-30% faster time from install request to first invoice"
+        }
+      },
+      "customer_value_score": 8,
+      "business_health_score": 9,
+      "implementation": {
+        "complexity": "medium",
+        "timeline_weeks": 3,
+        "required_data": ["Installation request workflow", "Device provisioning steps", "Billing contract templates"]
+      },
+      "options": {
+        "connect_and_automate": {
+          "approach": "Build a Claude workflow that processes partner install requests, auto-provisions devices in IoT platform, creates billing records in ERP, schedules installation, and sends confirmation to all parties",
+          "build_time": "16-24 hours",
+          "tools_used": ["Claude Code", "Partner portal API", "IoT platform API", "ERP API"],
+          "mcp_servers": [],
+          "monthly_cost": "EUR 100-150 (API usage)",
+          "pros": ["End-to-end automation", "Uses existing systems", "Partners get instant confirmation"],
+          "cons": ["Requires API access to all systems", "Edge cases need handling"]
+        },
+        "enhance_with_ai": {
+          "approach": "Deploy AI agent that handles the full onboarding lifecycle including site assessment, optimal device configuration recommendations, and proactive issue resolution",
+          "build_time": "4-6 weeks",
+          "tools_used": ["Claude API", "IoT platform", "Partner portal"],
+          "monthly_cost": "EUR 300-500",
+          "pros": ["Intelligent configuration", "Proactive issue detection", "Self-improving"],
+          "cons": ["More complex to build", "Needs configuration rules"]
+        },
+        "targeted_upgrade": {
+          "when_needed": "Only if partner communication is purely email/phone with no portal or API",
+          "tools": ["ServiceNow", "Salesforce Experience Cloud"],
+          "cost_range": "EUR 1000-3000/month",
+          "migration_time": "8-12 weeks",
+          "pros": ["Enterprise portal", "Built-in workflows"],
+          "cons": ["Very high cost", "Long implementation", "May not fit your device model"]
+        }
+      },
+      "our_recommendation": "connect_and_automate",
+      "recommendation_rationale": "You already have a partner portal (AURA) and IoT platform. Connecting them with a Claude workflow eliminates the manual steps between install request and device going live."
+    },
+    {
+      "id": "usage-billing-automation",
+      "name": "Usage-Based Billing Automation",
+      "description": "IoT usage data → auto-generate invoices per contract tier → reconcile with ERP",
+      "category": "efficiency",
+      "impact": {
+        "value_saved": {
+          "time_hours_per_week": 12,
+          "description": "Eliminates manual usage calculation and invoice generation"
+        },
+        "value_created": {
+          "description": "Accurate usage-based billing, faster invoice cycles, fewer disputes",
+          "potential_revenue_impact": "5-8% revenue recovery from accurate usage tracking"
+        }
+      },
+      "customer_value_score": 9,
+      "business_health_score": 10,
+      "implementation": {
+        "complexity": "medium",
+        "timeline_weeks": 3,
+        "required_data": ["IoT usage data pipeline", "Contract tier definitions", "Billing rules per customer"]
+      },
+      "options": {
+        "connect_and_automate": {
+          "approach": "Build a Claude workflow that aggregates device usage data, matches to customer contract tiers, generates invoices with correct pricing, and pushes to ERP for approval and sending",
+          "build_time": "16-24 hours",
+          "tools_used": ["Claude Code", "IoT data API", "Billing system API", "ERP API"],
+          "mcp_servers": [],
+          "monthly_cost": "EUR 100-200 (API usage)",
+          "pros": ["Uses your existing usage data", "Custom to your pricing model", "Eliminates billing errors"],
+          "cons": ["Complex pricing rules need careful mapping", "Requires thorough testing"]
+        },
+        "enhance_with_ai": {
+          "approach": "Deploy AI billing agent that monitors usage in real-time, detects anomalies, auto-adjusts for contract changes, and provides revenue forecasting based on usage trends",
+          "build_time": "4-6 weeks",
+          "tools_used": ["Claude API", "IoT platform", "Revenue analytics"],
+          "monthly_cost": "EUR 400-600",
+          "pros": ["Real-time anomaly detection", "Revenue forecasting", "Auto-adjusts for contract changes"],
+          "cons": ["More complex deployment", "Needs contract history for training"]
+        },
+        "targeted_upgrade": {
+          "when_needed": "Only if you have no usage data pipeline or billing is entirely manual/spreadsheet",
+          "tools": ["Chargebee", "Zuora", "Stripe Billing"],
+          "cost_range": "EUR 500-2000/month",
+          "migration_time": "6-10 weeks",
+          "pros": ["Enterprise billing platform", "Usage metering built-in"],
+          "cons": ["High cost", "May not handle your specific IoT data format", "Complex migration"]
+        }
+      },
+      "our_recommendation": "connect_and_automate",
+      "recommendation_rationale": "You already have IoT usage data and custom billing. A Claude workflow connecting them to your ERP eliminates manual calculation and ensures every drink is billed correctly."
+    },
+    {
+      "id": "partner-performance-dashboard",
+      "name": "Partner Performance Dashboard",
+      "description": "Aggregate partner data from CRM, installations, and revenue into a unified performance view",
+      "category": "strategic",
+      "impact": {
+        "value_saved": {
+          "time_hours_per_week": 5,
+          "description": "Eliminates manual report compilation from multiple systems"
+        },
+        "value_created": {
+          "description": "Data-driven partner management, faster identification of underperforming partners",
+          "potential_revenue_impact": "10-15% improvement in partner channel productivity"
+        }
+      },
+      "customer_value_score": 7,
+      "business_health_score": 8,
+      "implementation": {
+        "complexity": "low",
+        "timeline_weeks": 2,
+        "required_data": ["CRM partner data", "Installation records", "Revenue by partner"]
+      },
+      "options": {
+        "connect_and_automate": {
+          "approach": "Build a Claude workflow that pulls partner data from HubSpot, installation data from IoT platform, and revenue from ERP, then generates weekly performance reports",
+          "build_time": "8-12 hours",
+          "tools_used": ["Claude Code", "HubSpot API", "IoT platform API", "ERP API"],
+          "mcp_servers": [],
+          "monthly_cost": "EUR 50-100 (API usage)",
+          "pros": ["Uses existing data sources", "Customizable metrics", "Ships in days"],
+          "cons": ["Static reports need manual refresh triggers", "Data quality depends on source systems"]
+        },
+        "enhance_with_ai": {
+          "approach": "Deploy AI agent that continuously monitors partner metrics, detects trends, predicts which partners will underperform, and recommends interventions",
+          "build_time": "3-4 weeks",
+          "tools_used": ["Claude API", "Analytics platform", "Partner data sources"],
+          "monthly_cost": "EUR 200-400",
+          "pros": ["Proactive alerts", "Trend detection", "Actionable recommendations"],
+          "cons": ["Needs historical partner data", "More complex setup"]
+        },
+        "targeted_upgrade": {
+          "when_needed": "Only if you have no CRM or partner data is completely unstructured",
+          "tools": ["Impartner", "PartnerStack", "Crossbeam"],
+          "cost_range": "EUR 500-2000/month",
+          "migration_time": "4-8 weeks",
+          "pros": ["Purpose-built PRM", "Partner portal included"],
+          "cons": ["High cost", "Yet another system to integrate"]
+        }
+      },
+      "our_recommendation": "connect_and_automate",
+      "recommendation_rationale": "All your partner data already lives in HubSpot, your IoT platform, and Exact. A Claude workflow aggregating this into a dashboard ships in a few days."
+    },
+    {
+      "id": "predictive-churn-detection",
+      "name": "Predictive Churn Detection",
+      "description": "Monitor usage drops, support ticket spikes, and engagement signals to flag at-risk accounts before they churn",
+      "category": "strategic",
+      "impact": {
+        "value_saved": {
+          "time_hours_per_week": 4,
+          "description": "Proactive intervention replaces reactive firefighting"
+        },
+        "value_created": {
+          "description": "Reduced churn rate, protected revenue, improved customer lifetime value",
+          "potential_revenue_impact": "Saving even 2-3 accounts per quarter at EUR 5,000+ ARR each"
+        }
+      },
+      "customer_value_score": 9,
+      "business_health_score": 9,
+      "implementation": {
+        "complexity": "medium",
+        "timeline_weeks": 3,
+        "required_data": ["Device usage data", "Support ticket history", "Billing and contract data"]
+      },
+      "options": {
+        "connect_and_automate": {
+          "approach": "Build a Claude workflow that monitors device usage trends, detects significant drops, cross-references with support tickets, and alerts CS team with context and suggested actions",
+          "build_time": "12-16 hours",
+          "tools_used": ["Claude Code", "IoT data API", "CRM API", "Support tool API"],
+          "mcp_servers": [],
+          "monthly_cost": "EUR 100-200 (API usage)",
+          "pros": ["Uses your rich IoT data", "Immediate value", "Custom alert thresholds"],
+          "cons": ["Rule-based initially", "May need tuning of thresholds"]
+        },
+        "enhance_with_ai": {
+          "approach": "Deploy predictive AI model that learns from historical churn patterns, scores account health in real-time, and triggers automated CS playbooks for at-risk accounts",
+          "build_time": "4-6 weeks",
+          "tools_used": ["Claude API", "IoT platform", "CS platform"],
+          "monthly_cost": "EUR 300-600",
+          "pros": ["Learns from actual churn events", "Predictive not just reactive", "Automated interventions"],
+          "cons": ["Needs churn history for training", "Takes time to calibrate"]
+        },
+        "targeted_upgrade": {
+          "when_needed": "Only if you have no usage data or CS is completely manual",
+          "tools": ["Gainsight", "Vitally", "Planhat"],
+          "cost_range": "EUR 500-2000/month",
+          "migration_time": "4-8 weeks",
+          "pros": ["Purpose-built CS platform", "Health scoring included"],
+          "cons": ["High cost", "May not handle IoT data natively"]
+        }
+      },
+      "our_recommendation": "connect_and_automate",
+      "recommendation_rationale": "You're sitting on usage data that directly predicts churn. A Claude workflow connecting IoT usage drops to CS alerts is the highest-ROI automation you can build."
+    },
+    {
+      "id": "automated-cs-playbooks",
+      "name": "Automated CS Playbooks",
+      "description": "Low usage → nudge, high usage → upsell, alert → outreach — automated customer success actions",
+      "category": "strategic",
+      "impact": {
+        "value_saved": {
+          "time_hours_per_week": 8,
+          "description": "Replaces manual CS outreach with automated, data-driven actions"
+        },
+        "value_created": {
+          "description": "Systematic CS at scale, consistent experience, higher retention",
+          "potential_revenue_impact": "10-20% improvement in upsell conversion rate"
+        }
+      },
+      "customer_value_score": 8,
+      "business_health_score": 9,
+      "implementation": {
+        "complexity": "medium",
+        "timeline_weeks": 3,
+        "required_data": ["Usage data per account", "Contract tier information", "CS playbook definitions"]
+      },
+      "options": {
+        "connect_and_automate": {
+          "approach": "Build Claude workflows that monitor usage patterns and trigger specific actions: low usage → send adoption tips, high usage approaching tier limit → suggest upgrade, usage anomaly → alert CS rep",
+          "build_time": "12-20 hours",
+          "tools_used": ["Claude Code", "IoT data API", "Email/CRM API"],
+          "mcp_servers": [],
+          "monthly_cost": "EUR 100-200 (API usage)",
+          "pros": ["Uses your existing usage data", "Custom playbooks for your model", "Ships in 1-2 weeks"],
+          "cons": ["Needs well-defined playbook rules", "Initial playbook design required"]
+        },
+        "enhance_with_ai": {
+          "approach": "Deploy AI CS agent that learns which interventions work best for different account types, personalizes messaging, and optimizes timing for maximum impact",
+          "build_time": "4-6 weeks",
+          "tools_used": ["Claude API", "IoT platform", "CS analytics"],
+          "monthly_cost": "EUR 300-500",
+          "pros": ["Learns what works", "Personalized at scale", "Optimizes timing"],
+          "cons": ["Needs outcome tracking", "Takes time to learn"]
+        },
+        "targeted_upgrade": {
+          "when_needed": "Only if you have no usage data pipeline or CS communication is purely manual",
+          "tools": ["Gainsight", "Vitally", "Planhat"],
+          "cost_range": "EUR 500-2000/month",
+          "migration_time": "6-10 weeks",
+          "pros": ["Built-in playbook engine", "Health scoring"],
+          "cons": ["High cost", "Generic playbooks may not fit IoT model"]
+        }
+      },
+      "our_recommendation": "connect_and_automate",
+      "recommendation_rationale": "Your IoT data already tells you exactly which accounts need attention. Connecting it to automated playbooks scales your CS team without adding headcount."
+    },
+    {
+      "id": "self-service-partner-portal",
+      "name": "Self-Service Partner Portal",
+      "description": "Partners handle provisioning, reporting, billing queries, and support through an AI-enhanced portal",
+      "category": "strategic",
+      "impact": {
+        "value_saved": {
+          "time_hours_per_week": 10,
+          "description": "Reduces partner management overhead as channel scales"
+        },
+        "value_created": {
+          "description": "Faster partner onboarding, better partner experience, scalable channel",
+          "potential_revenue_impact": "30-50% reduction in time-to-activate for new partners"
+        }
+      },
+      "customer_value_score": 8,
+      "business_health_score": 8,
+      "implementation": {
+        "complexity": "high",
+        "timeline_weeks": 6,
+        "required_data": ["Partner workflows", "Provisioning rules", "Reporting requirements"]
+      },
+      "options": {
+        "connect_and_automate": {
+          "approach": "Enhance your existing partner portal (AURA) with AI-powered self-service: automated provisioning, usage reporting, billing query resolution, and onboarding workflows",
+          "build_time": "2-3 weeks",
+          "tools_used": ["Claude Code", "Existing portal API", "IoT platform API", "Billing API"],
+          "mcp_servers": [],
+          "monthly_cost": "EUR 150-300 (API usage)",
+          "pros": ["Builds on existing AURA platform", "Partners already familiar with portal", "Incremental improvement"],
+          "cons": ["Depends on existing portal architecture", "Complex if portal has limited API"]
+        },
+        "enhance_with_ai": {
+          "approach": "Deploy AI concierge for partners that answers questions, handles common requests, generates custom reports, and proactively shares relevant insights",
+          "build_time": "4-8 weeks",
+          "tools_used": ["Claude API", "Partner portal", "Knowledge base"],
+          "monthly_cost": "EUR 400-700",
+          "pros": ["Natural language interface", "Handles complex queries", "Reduces support load"],
+          "cons": ["Needs comprehensive knowledge base", "Complex to deploy"]
+        },
+        "targeted_upgrade": {
+          "when_needed": "Only if you have no partner portal or current portal is fundamentally limited",
+          "tools": ["Impartner", "PartnerStack", "Salesforce Experience Cloud"],
+          "cost_range": "EUR 1000-5000/month",
+          "migration_time": "8-16 weeks",
+          "pros": ["Enterprise PRM platform", "Built-in workflows"],
+          "cons": ["Very high cost", "Long migration", "May lose custom features"]
+        }
+      },
+      "our_recommendation": "connect_and_automate",
+      "recommendation_rationale": "You already have AURA as your partner portal. Adding AI self-service capabilities on top is faster and cheaper than migrating to a PRM platform."
+    },
+    {
+      "id": "bundle-optimization-intelligence",
+      "name": "Bundle Optimization Intelligence",
+      "description": "Model optimal pricing tiers from IoT usage data — maximize margin by matching tiers to actual consumption",
+      "category": "strategic",
+      "impact": {
+        "value_saved": {
+          "time_hours_per_week": 3,
+          "description": "Replaces manual pricing analysis with data-driven optimization"
+        },
+        "value_created": {
+          "description": "Higher margins from optimized tier structure, data-driven pricing decisions",
+          "potential_revenue_impact": "5-15% margin improvement from better tier-usage alignment"
+        }
+      },
+      "customer_value_score": 7,
+      "business_health_score": 9,
+      "implementation": {
+        "complexity": "medium",
+        "timeline_weeks": 3,
+        "required_data": ["Usage data per customer", "Current tier structure", "Contract terms", "Revenue data"]
+      },
+      "options": {
+        "connect_and_automate": {
+          "approach": "Build a Claude workflow that analyzes usage data vs contracted tiers across all customers, identifies over/under-utilization patterns, and generates optimization recommendations",
+          "build_time": "12-16 hours",
+          "tools_used": ["Claude Code", "IoT data API", "Billing data API"],
+          "mcp_servers": [],
+          "monthly_cost": "EUR 50-100 (API usage)",
+          "pros": ["Uses your existing usage data", "Immediate pricing insights", "Low cost"],
+          "cons": ["Recommendations need human review", "Doesn't auto-execute pricing changes"]
+        },
+        "enhance_with_ai": {
+          "approach": "Deploy pricing AI that continuously monitors usage patterns, models optimal tier boundaries, simulates revenue impact of pricing changes, and recommends specific customer-level actions",
+          "build_time": "4-8 weeks",
+          "tools_used": ["Claude API", "Usage analytics", "Revenue modeling"],
+          "monthly_cost": "EUR 300-500",
+          "pros": ["Continuous optimization", "Revenue simulation", "Customer-level recommendations"],
+          "cons": ["Needs significant usage history", "Complex pricing model"]
+        },
+        "targeted_upgrade": {
+          "when_needed": "Only if you have no usage data or pricing is completely ad-hoc",
+          "tools": ["Chargebee", "Zuora", "Price Intelligently"],
+          "cost_range": "EUR 500-2000/month",
+          "migration_time": "4-8 weeks",
+          "pros": ["Built-in pricing analytics", "A/B testing for pricing"],
+          "cons": ["May not handle IoT usage data natively", "High cost for pricing tools"]
+        }
+      },
+      "our_recommendation": "connect_and_automate",
+      "recommendation_rationale": "You have per-device usage data and tiered pricing. A Claude workflow analyzing usage vs tier across your fleet directly tells you where margin is being left on the table."
+    },
+    {
+      "id": "institutional-knowledge-capture",
+      "name": "Institutional Knowledge Capture",
+      "description": "Extract processes from Notion/Slack into structured, searchable playbooks that new team members can follow",
+      "category": "strategic",
+      "impact": {
+        "value_saved": {
+          "time_hours_per_week": 6,
+          "description": "Reduces onboarding time and key-person dependency"
+        },
+        "value_created": {
+          "description": "Documented processes, faster onboarding, scalable operations",
+          "potential_revenue_impact": "30-50% faster new hire onboarding, reduced knowledge loss from turnover"
+        }
+      },
+      "customer_value_score": 7,
+      "business_health_score": 8,
+      "implementation": {
+        "complexity": "low",
+        "timeline_weeks": 2,
+        "required_data": ["Notion workspace access", "Slack channel history", "Process documentation"]
+      },
+      "options": {
+        "connect_and_automate": {
+          "approach": "Build a Claude workflow that reads Notion pages and Slack threads, identifies process descriptions, extracts structured playbooks, and creates a searchable knowledge base",
+          "build_time": "8-12 hours",
+          "tools_used": ["Claude Code", "Notion API", "Slack API"],
+          "mcp_servers": [],
+          "monthly_cost": "EUR 50-100 (API usage)",
+          "pros": ["Uses your existing Notion + Slack", "Immediate value", "Low effort"],
+          "cons": ["Quality depends on existing documentation", "Needs curation pass"]
+        },
+        "enhance_with_ai": {
+          "approach": "Deploy AI knowledge agent that continuously monitors Slack conversations for process updates, auto-updates playbooks, answers team questions from the knowledge base, and identifies documentation gaps",
+          "build_time": "3-4 weeks",
+          "tools_used": ["Claude API", "Notion", "Slack"],
+          "monthly_cost": "EUR 200-400",
+          "pros": ["Always up to date", "Answers questions instantly", "Identifies gaps"],
+          "cons": ["Needs initial knowledge base seed", "May surface outdated info without curation"]
+        },
+        "targeted_upgrade": {
+          "when_needed": "Only if you have no Notion/wiki or knowledge is purely in people's heads with no written trace",
+          "tools": ["Guru", "Tettra", "Slite"],
+          "cost_range": "EUR 200-500/month",
+          "migration_time": "2-4 weeks",
+          "pros": ["Purpose-built knowledge management", "Verification workflows"],
+          "cons": ["Another tool to maintain", "Still needs content creation"]
+        }
+      },
+      "our_recommendation": "connect_and_automate",
+      "recommendation_rationale": "Your Notion + Slack already contain the knowledge. A Claude workflow extracting and structuring it is the fastest path to scalable onboarding."
+    }
+  ]
+}

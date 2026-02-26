@@ -1,0 +1,125 @@
+{
+  "industry": "b2b-platforms",
+  "last_updated": "2026-02-26",
+  "verification_status": "UNVERIFIED",
+  "verified_date": "2026-02",
+  "verification_sources": [],
+  "verification_note": "Initial estimates based on B2B SaaS and IoT industry data. Requires verification against specific industry reports.",
+  "benchmarks": {
+    "financial": {
+      "net_revenue_retention": {
+        "excellent": {"min": 120, "max": 150, "unit": "percent"},
+        "good": {"min": 100, "max": 120, "unit": "percent"},
+        "poor": {"min": 70, "max": 100, "unit": "percent"},
+        "source": "OpenView SaaS Benchmarks, 2025",
+        "status": "UNVERIFIED",
+        "note": "NRR for usage-based B2B models; hardware-to-platform companies may see lower expansion"
+      },
+      "revenue_per_employee": {
+        "efficient": {"min": 200000, "max": 500000, "currency": "EUR"},
+        "average": {"min": 100000, "max": 200000, "currency": "EUR"},
+        "scaling": {"min": 50000, "max": 100000, "currency": "EUR"},
+        "source": "Industry estimate",
+        "status": "UNVERIFIED",
+        "note": "Hardware companies typically lower than pure SaaS due to field operations"
+      },
+      "gross_margin": {
+        "platform_revenue": {"min": 60, "max": 80, "unit": "percent"},
+        "hardware_revenue": {"min": 20, "max": 40, "unit": "percent"},
+        "blended": {"min": 40, "max": 60, "unit": "percent"},
+        "source": "Industry estimate",
+        "status": "UNVERIFIED",
+        "note": "Blended margin depends on hardware vs platform revenue mix"
+      }
+    },
+    "operational": {
+      "device_uptime": {
+        "excellent": {"min": 99.5, "max": 99.99, "unit": "percent"},
+        "acceptable": {"min": 98, "max": 99.5, "unit": "percent"},
+        "poor": {"min": 90, "max": 98, "unit": "percent"},
+        "source": "IoT industry standards",
+        "status": "UNVERIFIED"
+      },
+      "cost_per_install": {
+        "efficient": {"min": 100, "max": 300, "currency": "EUR"},
+        "average": {"min": 300, "max": 600, "currency": "EUR"},
+        "expensive": {"min": 600, "max": 1500, "currency": "EUR"},
+        "source": "Industry estimate",
+        "status": "UNVERIFIED",
+        "note": "Varies significantly by device complexity and geography"
+      },
+      "mean_time_to_repair": {
+        "fast": {"min": 4, "max": 24, "unit": "hours"},
+        "average": {"min": 24, "max": 72, "unit": "hours"},
+        "slow": {"min": 72, "max": 168, "unit": "hours"},
+        "source": "Field service industry data",
+        "status": "UNVERIFIED"
+      }
+    },
+    "growth": {
+      "partner_activation_rate": {
+        "excellent": {"min": 70, "max": 90, "unit": "percent"},
+        "average": {"min": 40, "max": 70, "unit": "percent"},
+        "poor": {"min": 10, "max": 40, "unit": "percent"},
+        "source": "Channel management benchmarks",
+        "status": "UNVERIFIED",
+        "note": "Percentage of signed partners generating revenue within 90 days"
+      },
+      "customer_acquisition_cost": {
+        "efficient": {"min": 500, "max": 2000, "currency": "EUR"},
+        "average": {"min": 2000, "max": 5000, "currency": "EUR"},
+        "expensive": {"min": 5000, "max": 15000, "currency": "EUR"},
+        "source": "B2B SaaS benchmarks",
+        "status": "UNVERIFIED",
+        "note": "B2B platform CAC tends to be higher due to longer sales cycles"
+      }
+    },
+    "customer_metrics": {
+      "churn_rate_annual": {
+        "excellent": {"min": 2, "max": 5, "unit": "percent"},
+        "average": {"min": 5, "max": 15, "unit": "percent"},
+        "concerning": {"min": 15, "max": 30, "unit": "percent"},
+        "source": "B2B SaaS churn benchmarks",
+        "status": "UNVERIFIED"
+      },
+      "usage_vs_contracted_tier": {
+        "upsell_opportunity": {"min": 80, "max": 100, "unit": "percent", "note": "Using 80%+ of tier — approaching limit"},
+        "healthy": {"min": 50, "max": 80, "unit": "percent"},
+        "churn_risk": {"min": 0, "max": 50, "unit": "percent", "note": "Using less than half of contracted tier"},
+        "source": "Usage-based pricing analysis",
+        "status": "UNVERIFIED"
+      },
+      "support_tickets_per_device_monthly": {
+        "excellent": {"min": 0, "max": 0.05},
+        "average": {"min": 0.05, "max": 0.15},
+        "concerning": {"min": 0.15, "max": 0.5},
+        "source": "IoT support benchmarks",
+        "status": "UNVERIFIED"
+      }
+    },
+    "ai_adoption": {
+      "ai_readiness_score": {
+        "ai_forward": {"min": 65, "max": 85, "note": "Already using AI tools, custom builds, Claude"},
+        "ai_ready": {"min": 45, "max": 65, "note": "Tech-savvy, APIs available, open to AI"},
+        "ai_curious": {"min": 25, "max": 45, "note": "Interested but limited technical capability"},
+        "source": "CRB Analyser internal assessments",
+        "status": "UNVERIFIED"
+      }
+    }
+  },
+  "roi_calculation_factors": {
+    "hourly_cost": {
+      "technical_staff": 65,
+      "operations_staff": 45,
+      "management": 85,
+      "currency": "EUR",
+      "note": "Western European rates for B2B platform companies"
+    },
+    "common_multipliers": {
+      "system_downtime_cost_per_hour": 500,
+      "customer_churn_cost": 5000,
+      "partner_onboarding_cost": 2000,
+      "currency": "EUR"
+    }
+  }
+}
