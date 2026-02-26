@@ -1,0 +1,101 @@
+{
+  "industry": "ecommerce",
+  "description": "Pre-built AI workflow templates for e-commerce businesses",
+  "workflows": [
+    {
+      "id": "order-status-automation",
+      "name": "Order Status Auto-Response",
+      "description": "Connect Shopify order data to support tool — auto-respond to WISMO queries",
+      "trigger": "Customer asks 'where is my order'",
+      "connects": ["shopify", "support_tool"],
+      "mcp_servers": ["shopify-mcp"],
+      "build_time_hours": 4,
+      "complexity": "low",
+      "steps": [
+        "Pull order status from Shopify API using order ID or email",
+        "Format tracking info into customer-friendly response",
+        "Auto-reply via support tool API or email",
+        "Log interaction for CS team visibility"
+      ],
+      "prerequisites": ["Shopify store with API access", "Support tool with API (Gorgias, Zendesk, or email)"],
+      "estimated_monthly_value": 800
+    },
+    {
+      "id": "inventory-alert-reorder",
+      "name": "Smart Inventory Alert & Reorder",
+      "description": "Monitor stock levels and trigger reorder workflows when thresholds are hit",
+      "trigger": "Stock level drops below threshold for any SKU",
+      "connects": ["shopify", "supplier_portal", "slack"],
+      "mcp_servers": ["shopify-mcp"],
+      "build_time_hours": 6,
+      "complexity": "low",
+      "steps": [
+        "Monitor Shopify inventory levels via API polling",
+        "Detect SKUs below reorder threshold",
+        "Calculate optimal reorder quantity from sales velocity",
+        "Send reorder request to supplier or alert to Slack",
+        "Update inventory forecast dashboard"
+      ],
+      "prerequisites": ["Shopify store", "Defined reorder thresholds per SKU"],
+      "estimated_monthly_value": 1200
+    },
+    {
+      "id": "return-processing-automation",
+      "name": "Automated Return Processing",
+      "description": "Customer submits return → AI evaluates policy → auto-approve or flag for review",
+      "trigger": "Customer initiates a return request",
+      "connects": ["shopify", "support_tool", "shipping_provider"],
+      "mcp_servers": ["shopify-mcp"],
+      "build_time_hours": 8,
+      "complexity": "medium",
+      "steps": [
+        "Parse return request details (order ID, reason, condition)",
+        "Check against return policy rules (timeframe, condition, value)",
+        "Auto-approve returns that meet policy criteria",
+        "Generate return shipping label via shipping provider API",
+        "Send customer confirmation with label and instructions",
+        "Flag edge cases for human review"
+      ],
+      "prerequisites": ["Shopify store", "Defined return policy rules", "Shipping provider API access"],
+      "estimated_monthly_value": 1500
+    },
+    {
+      "id": "abandoned-cart-recovery",
+      "name": "AI-Personalized Cart Recovery",
+      "description": "Detect abandoned carts and send personalized recovery messages based on browsing context",
+      "trigger": "Cart abandoned for 1+ hours",
+      "connects": ["shopify", "email_tool", "sms_tool"],
+      "mcp_servers": ["shopify-mcp"],
+      "build_time_hours": 6,
+      "complexity": "medium",
+      "steps": [
+        "Detect abandoned cart events from Shopify webhooks",
+        "Analyze cart contents and customer browsing history",
+        "Generate personalized recovery message with Claude",
+        "Send via email (Klaviyo/Omnisend API) or SMS",
+        "Track recovery rate and optimize messaging"
+      ],
+      "prerequisites": ["Shopify store", "Email or SMS tool with API"],
+      "estimated_monthly_value": 2000
+    },
+    {
+      "id": "review-response-automation",
+      "name": "Automated Review Response",
+      "description": "Monitor new reviews and draft personalized responses for owner approval",
+      "trigger": "New product review posted",
+      "connects": ["review_platform", "shopify"],
+      "mcp_servers": [],
+      "build_time_hours": 4,
+      "complexity": "low",
+      "steps": [
+        "Monitor review platforms for new reviews via API or webhook",
+        "Analyze sentiment and extract key themes",
+        "Draft personalized response matching brand voice",
+        "Route to owner for quick approval or auto-post for positive reviews",
+        "Flag negative reviews for priority human response"
+      ],
+      "prerequisites": ["Review platform with API (Google Business, Trustpilot, or Shopify reviews)"],
+      "estimated_monthly_value": 600
+    }
+  ]
+}

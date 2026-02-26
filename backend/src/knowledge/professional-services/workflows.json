@@ -1,0 +1,105 @@
+{
+  "industry": "professional-services",
+  "description": "Pre-built AI workflow templates for professional services firms",
+  "workflows": [
+    {
+      "id": "client-intake-automation",
+      "name": "Automated Client Intake",
+      "description": "Connect website form to CRM to practice management — zero manual data entry",
+      "trigger": "New client inquiry via website form or email",
+      "connects": ["website_form", "crm", "practice_management"],
+      "mcp_servers": [],
+      "build_time_hours": 6,
+      "complexity": "low",
+      "steps": [
+        "Capture intake form submission via webhook",
+        "Extract and validate client information with Claude",
+        "Create contact in CRM (Clio, HubSpot) via API",
+        "Run conflict check against existing client database",
+        "Send welcome email with engagement letter and next steps",
+        "Create initial matter/project in practice management"
+      ],
+      "prerequisites": ["Website form with webhook capability", "CRM with API access", "Practice management tool with API"],
+      "estimated_monthly_value": 1200
+    },
+    {
+      "id": "time-entry-automation",
+      "name": "AI-Powered Time Capture",
+      "description": "Sync calendar + email + project tools to auto-generate time entries",
+      "trigger": "Calendar event ends or email thread closes",
+      "connects": ["calendar", "email", "time_tracking", "billing"],
+      "mcp_servers": [],
+      "build_time_hours": 8,
+      "complexity": "medium",
+      "steps": [
+        "Monitor calendar events and email interactions via API",
+        "Match activities to client matters using AI classification",
+        "Generate time entry descriptions from meeting notes and email context",
+        "Suggest billing category and rate",
+        "Submit for professional review in time tracking tool",
+        "Track approval rate and refine classifications"
+      ],
+      "prerequisites": ["Calendar with API (Google, Outlook)", "Time tracking tool with API (Clio, Harvest)"],
+      "estimated_monthly_value": 2000
+    },
+    {
+      "id": "document-drafting-workflow",
+      "name": "AI Document Drafting",
+      "description": "Generate first drafts of standard documents from templates and client data",
+      "trigger": "New matter created requiring standard documents",
+      "connects": ["practice_management", "document_store", "template_library"],
+      "mcp_servers": [],
+      "build_time_hours": 12,
+      "complexity": "medium",
+      "steps": [
+        "Detect new matter requiring documents from practice management",
+        "Pull client data and matter details via API",
+        "Select appropriate template based on matter type",
+        "Generate personalized first draft with Claude using client context",
+        "Store draft in document management system",
+        "Notify professional for review with tracked changes"
+      ],
+      "prerequisites": ["Practice management with API", "Document templates", "Document storage with API"],
+      "estimated_monthly_value": 3000
+    },
+    {
+      "id": "billing-reconciliation",
+      "name": "Automated Billing Reconciliation",
+      "description": "Sync time entries to invoices — flag unbilled work and revenue leakage",
+      "trigger": "Weekly billing review cycle",
+      "connects": ["time_tracking", "billing", "crm"],
+      "mcp_servers": [],
+      "build_time_hours": 6,
+      "complexity": "low",
+      "steps": [
+        "Pull all time entries for billing period from time tracking API",
+        "Cross-reference with existing invoices and WIP",
+        "Flag unbilled entries and potential revenue leakage",
+        "Generate draft invoices for review",
+        "Alert partners about aging WIP and collection issues",
+        "Track billing realization rate trends"
+      ],
+      "prerequisites": ["Time tracking with API", "Billing system with API"],
+      "estimated_monthly_value": 2500
+    },
+    {
+      "id": "client-update-automation",
+      "name": "Automated Client Status Updates",
+      "description": "Generate and send periodic client updates from matter activity data",
+      "trigger": "Scheduled update cycle (weekly/bi-weekly) or milestone reached",
+      "connects": ["practice_management", "email", "client_portal"],
+      "mcp_servers": [],
+      "build_time_hours": 4,
+      "complexity": "low",
+      "steps": [
+        "Pull recent activity from practice management for each active matter",
+        "Generate client-friendly status summary with Claude",
+        "Include upcoming milestones and any items requiring client action",
+        "Send via email or update client portal",
+        "Track client engagement with updates"
+      ],
+      "prerequisites": ["Practice management with activity tracking", "Email or client portal"],
+      "estimated_monthly_value": 1000
+    }
+  ]
+}

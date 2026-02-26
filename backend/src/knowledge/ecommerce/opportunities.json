@@ -21,26 +21,79 @@
       "implementation": {
         "complexity": "medium",
         "timeline_weeks": 3,
-        "required_data": ["Product catalog", "FAQ content", "Order tracking integration", "Return policy"]
+        "required_data": [
+          "Product catalog",
+          "FAQ content",
+          "Order tracking integration",
+          "Return policy"
+        ]
       },
       "options": {
-        "off_the_shelf": {
-          "tools": ["Gorgias Automate", "Tidio AI", "Intercom Fin"],
+        "connect_and_automate": {
+          "approach": "Build custom support chatbot with Claude Code using Shopify MCP for real-time order lookups and product data. Deploy as embeddable widget with brand-specific knowledge base and escalation rules.",
+          "build_time": "12-18 hours",
+          "mcp_servers": [
+            "shopify-mcp",
+            "supabase-mcp"
+          ],
+          "tools_used": [
+            "Claude Code",
+            "shopify-mcp",
+            "supabase-mcp"
+          ],
+          "monthly_cost": "EUR 50-150 (API usage)",
+          "pros": [
+            "Fully customized to your brand voice",
+            "Deep product knowledge",
+            "Handles unique workflows"
+          ],
+          "cons": [
+            "Development required",
+            "Needs ongoing tuning",
+            "Maintenance burden"
+          ]
+        },
+        "enhance_with_ai": {
+          "approach": "Handles tier-1 support tickets: order status, return policy, shipping questions, FAQs. Pulls real-time order data from Shopify to personalize every response. Starts in draft mode (agent suggests, human approves) and graduates to autonomous for routine queries.",
+          "build_time": "2 weeks",
+          "tools_used": [
+            "Claude API",
+            "Shopify store",
+            "Support tool (Gorgias, Zendesk, or email inbox)"
+          ],
+          "monthly_cost": "EUR 1400-2800 (value generated)",
+          "pros": [
+            "Deep e-commerce integration",
+            "Multi-channel support",
+            "Advanced analytics",
+            "Agent assist features"
+          ],
+          "cons": [
+            "Higher cost",
+            "Requires configuration",
+            "Contract commitments"
+          ]
+        },
+        "targeted_upgrade": {
+          "when_needed": "Only if your current tools have no API or are fundamentally broken for ai customer service chatbot",
+          "tools": [
+            "Gorgias Automate",
+            "Tidio AI",
+            "Intercom Fin"
+          ],
           "cost_range": "EUR 200-500/month",
-          "pros": ["Quick setup", "Pre-trained on e-commerce", "Integrates with Shopify/WooCommerce", "No coding needed"],
-          "cons": ["Monthly fees", "Limited customization", "May not handle complex cases"]
-        },
-        "best_in_class": {
-          "tools": ["Gorgias + Automate Pro", "Zendesk AI"],
-          "cost_range": "EUR 400-800/month",
-          "pros": ["Deep e-commerce integration", "Multi-channel support", "Advanced analytics", "Agent assist features"],
-          "cons": ["Higher cost", "Requires configuration", "Contract commitments"]
-        },
-        "custom_solution": {
-          "approach": "Custom AI chatbot using Claude API integrated with your order management and product database",
-          "cost_range": "EUR 5,000-15,000 one-time + EUR 100-300/month",
-          "pros": ["Fully customized to your brand voice", "Deep product knowledge", "Handles unique workflows"],
-          "cons": ["Development required", "Needs ongoing tuning", "Maintenance burden"]
+          "migration_time": "3-5 weeks",
+          "pros": [
+            "Quick setup",
+            "Pre-trained on e-commerce",
+            "Integrates with Shopify/WooCommerce",
+            "No coding needed"
+          ],
+          "cons": [
+            "Monthly fees",
+            "Limited customization",
+            "May not handle complex cases"
+          ]
         }
       },
       "roi_example": {
@@ -48,9 +101,21 @@
         "cost": "EUR 400/month",
         "value_created": "Automate 40-60% of tickets, reduce support headcount or reallocate to high-value tasks",
         "roi_analysis": {
-          "conservative": {"roi_percentage": 200, "payback_months": 3, "note": "30% ticket reduction"},
-          "expected": {"roi_percentage": 400, "payback_months": 2, "note": "45% ticket reduction"},
-          "optimistic": {"roi_percentage": 600, "payback_months": 1, "note": "60% ticket reduction"}
+          "conservative": {
+            "roi_percentage": 200,
+            "payback_months": 3,
+            "note": "30% ticket reduction"
+          },
+          "expected": {
+            "roi_percentage": 400,
+            "payback_months": 2,
+            "note": "45% ticket reduction"
+          },
+          "optimistic": {
+            "roi_percentage": 600,
+            "payback_months": 1,
+            "note": "60% ticket reduction"
+          }
         },
         "assumptions": "Not all ticket types can be automated; complex issues still need human agents; setup and training period of 2-4 weeks"
       },
@@ -69,8 +134,14 @@
           "response_time_reduction": "4 hours to under 15 minutes"
         },
         "deployment_timeline": "2 weeks",
-        "prerequisites": ["Shopify store", "Support tool (Gorgias, Zendesk, or email inbox)", "Product catalog accessible via API"]
-      }
+        "prerequisites": [
+          "Shopify store",
+          "Support tool (Gorgias, Zendesk, or email inbox)",
+          "Product catalog accessible via API"
+        ]
+      },
+      "our_recommendation": "connect_and_automate",
+      "recommendation_rationale": "Your existing tools likely support API integration. A Claude workflow connecting them for ai customer service chatbot ships in days, not weeks, and costs a fraction of a SaaS subscription."
     },
     {
       "id": "ai-product-descriptions",
@@ -92,26 +163,78 @@
       "implementation": {
         "complexity": "low",
         "timeline_weeks": 1,
-        "required_data": ["Product specifications", "Brand voice guidelines", "Target keywords", "Competitor examples"]
+        "required_data": [
+          "Product specifications",
+          "Brand voice guidelines",
+          "Target keywords",
+          "Competitor examples"
+        ]
       },
       "options": {
-        "off_the_shelf": {
-          "tools": ["Jasper", "Copy.ai", "Shopify Magic"],
+        "connect_and_automate": {
+          "approach": "Build product description generator with Claude Code that reads product specs from Shopify MCP and generates SEO-optimized descriptions in your brand voice. Batch process entire catalog with one command.",
+          "build_time": "6-9 hours",
+          "mcp_servers": [
+            "shopify-mcp",
+            "filesystem-mcp"
+          ],
+          "tools_used": [
+            "Claude Code",
+            "shopify-mcp",
+            "filesystem-mcp"
+          ],
+          "monthly_cost": "EUR 50-150 (API usage)",
+          "pros": [
+            "Perfect brand voice",
+            "Direct CMS integration",
+            "Custom workflows",
+            "Unlimited scale"
+          ],
+          "cons": [
+            "Development needed",
+            "Needs prompt engineering",
+            "API cost management"
+          ]
+        },
+        "enhance_with_ai": {
+          "approach": "Deploy Jasper for E-commerce, Describely with advanced AI capabilities for autonomous handling",
+          "build_time": "2-4 weeks",
+          "tools_used": [
+            "Jasper for E-commerce",
+            "Describely"
+          ],
+          "monthly_cost": "EUR 150-400/month",
+          "pros": [
+            "E-commerce specific",
+            "Brand voice training",
+            "Multi-channel output",
+            "Bulk operations"
+          ],
+          "cons": [
+            "Higher cost",
+            "Learning curve for best results"
+          ]
+        },
+        "targeted_upgrade": {
+          "when_needed": "Only if your current tools have no API or are fundamentally broken for ai-generated product descriptions & content",
+          "tools": [
+            "Jasper",
+            "Copy.ai",
+            "Shopify Magic"
+          ],
           "cost_range": "EUR 50-200/month",
-          "pros": ["Easy to use", "Templates available", "Bulk generation", "SEO features"],
-          "cons": ["Generic output without tuning", "May need editing", "Quality varies"]
-        },
-        "best_in_class": {
-          "tools": ["Jasper for E-commerce", "Describely"],
-          "cost_range": "EUR 150-400/month",
-          "pros": ["E-commerce specific", "Brand voice training", "Multi-channel output", "Bulk operations"],
-          "cons": ["Higher cost", "Learning curve for best results"]
-        },
-        "custom_solution": {
-          "approach": "Custom content pipeline using Claude API with brand-specific fine-tuning and direct CMS integration",
-          "cost_range": "EUR 3,000-8,000 one-time + EUR 50-150/month API costs",
-          "pros": ["Perfect brand voice", "Direct CMS integration", "Custom workflows", "Unlimited scale"],
-          "cons": ["Development needed", "Needs prompt engineering", "API cost management"]
+          "migration_time": "1-3 weeks",
+          "pros": [
+            "Easy to use",
+            "Templates available",
+            "Bulk generation",
+            "SEO features"
+          ],
+          "cons": [
+            "Generic output without tuning",
+            "May need editing",
+            "Quality varies"
+          ]
         }
       },
       "roi_example": {
@@ -119,12 +242,26 @@
         "cost": "EUR 150/month",
         "value_created": "Reduce content creation time from 30 min to 5 min per product",
         "roi_analysis": {
-          "conservative": {"roi_percentage": 200, "payback_months": 2, "note": "50% time savings on content"},
-          "expected": {"roi_percentage": 400, "payback_months": 1, "note": "70% time savings + better SEO"},
-          "optimistic": {"roi_percentage": 600, "payback_months": 1, "note": "80% time savings + 15% organic traffic boost"}
+          "conservative": {
+            "roi_percentage": 200,
+            "payback_months": 2,
+            "note": "50% time savings on content"
+          },
+          "expected": {
+            "roi_percentage": 400,
+            "payback_months": 1,
+            "note": "70% time savings + better SEO"
+          },
+          "optimistic": {
+            "roi_percentage": 600,
+            "payback_months": 1,
+            "note": "80% time savings + 15% organic traffic boost"
+          }
         },
         "assumptions": "AI-generated content still needs human review; brand voice consistency requires initial setup"
-      }
+      },
+      "our_recommendation": "connect_and_automate",
+      "recommendation_rationale": "Your existing tools likely support API integration. A Claude workflow connecting them for ai-generated product descriptions & content ships in days, not weeks, and costs a fraction of a SaaS subscription."
     },
     {
       "id": "abandoned-cart-recovery",
@@ -146,26 +283,78 @@
       "implementation": {
         "complexity": "low",
         "timeline_weeks": 2,
-        "required_data": ["Customer email/phone", "Cart data", "Purchase history", "Product catalog"]
+        "required_data": [
+          "Customer email/phone",
+          "Cart data",
+          "Purchase history",
+          "Product catalog"
+        ]
       },
       "options": {
-        "off_the_shelf": {
-          "tools": ["Klaviyo", "Omnisend", "Shopify Email"],
+        "connect_and_automate": {
+          "approach": "Build abandoned cart recovery agent with Claude Code using Shopify MCP to monitor carts, Twilio for SMS, and Resend for email. Create AI-personalized recovery sequences with dynamic discount logic based on cart value.",
+          "build_time": "10-15 hours",
+          "mcp_servers": [
+            "shopify-mcp",
+            "twilio-mcp",
+            "resend-mcp"
+          ],
+          "tools_used": [
+            "Claude Code",
+            "shopify-mcp",
+            "twilio-mcp",
+            "resend-mcp"
+          ],
+          "monthly_cost": "EUR 50-150 (API usage)",
+          "pros": [
+            "Fully personalized offers",
+            "Custom discount logic",
+            "Integrated with your stack"
+          ],
+          "cons": [
+            "Development time",
+            "Needs testing and optimization"
+          ]
+        },
+        "enhance_with_ai": {
+          "approach": "Monitors abandoned carts in real-time. Sends personalized recovery sequences across email and SMS with AI-optimized timing and dynamic incentives based on cart value and customer history.",
+          "build_time": "2 weeks",
+          "tools_used": [
+            "Claude API",
+            "Shopify store",
+            "Email platform (Klaviyo or Omnisend)"
+          ],
+          "monthly_cost": "EUR 2500-5000 (value generated)",
+          "pros": [
+            "AI send-time optimization",
+            "Deep segmentation",
+            "Predictive analytics",
+            "SMS + email"
+          ],
+          "cons": [
+            "Higher cost",
+            "Complexity in setup"
+          ]
+        },
+        "targeted_upgrade": {
+          "when_needed": "Only if your current tools have no API or are fundamentally broken for ai-powered abandoned cart recovery",
+          "tools": [
+            "Klaviyo",
+            "Omnisend",
+            "Shopify Email"
+          ],
           "cost_range": "EUR 50-300/month",
-          "pros": ["Easy setup", "Pre-built flows", "Multi-channel (email + SMS)", "Analytics"],
-          "cons": ["Template-based", "Limited personalization without higher tiers"]
-        },
-        "best_in_class": {
-          "tools": ["Klaviyo Pro", "Attentive (SMS)"],
-          "cost_range": "EUR 300-700/month",
-          "pros": ["AI send-time optimization", "Deep segmentation", "Predictive analytics", "SMS + email"],
-          "cons": ["Higher cost", "Complexity in setup"]
-        },
-        "custom_solution": {
-          "approach": "Custom recovery system with AI-personalized messaging, dynamic discount offers, and multi-channel orchestration",
-          "cost_range": "EUR 5,000-12,000 one-time + EUR 100-200/month",
-          "pros": ["Fully personalized offers", "Custom discount logic", "Integrated with your stack"],
-          "cons": ["Development time", "Needs testing and optimization"]
+          "migration_time": "2-4 weeks",
+          "pros": [
+            "Easy setup",
+            "Pre-built flows",
+            "Multi-channel (email + SMS)",
+            "Analytics"
+          ],
+          "cons": [
+            "Template-based",
+            "Limited personalization without higher tiers"
+          ]
         }
       },
       "roi_example": {
@@ -173,9 +362,21 @@
         "cost": "EUR 200/month",
         "value_created": "Recover abandoned carts through automated email and SMS sequences",
         "roi_analysis": {
-          "conservative": {"roi_percentage": 500, "payback_months": 1, "note": "5% cart recovery rate"},
-          "expected": {"roi_percentage": 1000, "payback_months": 1, "note": "10% cart recovery rate"},
-          "optimistic": {"roi_percentage": 1500, "payback_months": 0.5, "note": "15% cart recovery rate"}
+          "conservative": {
+            "roi_percentage": 500,
+            "payback_months": 1,
+            "note": "5% cart recovery rate"
+          },
+          "expected": {
+            "roi_percentage": 1000,
+            "payback_months": 1,
+            "note": "10% cart recovery rate"
+          },
+          "optimistic": {
+            "roi_percentage": 1500,
+            "payback_months": 0.5,
+            "note": "15% cart recovery rate"
+          }
         },
         "assumptions": "Recovery rates depend on product type, price point, and existing email marketing maturity"
       },
@@ -189,8 +390,14 @@
           "recovery_rate_improvement": "From 5% to 12-15%"
         },
         "deployment_timeline": "2 weeks",
-        "prerequisites": ["Shopify store", "Email platform (Klaviyo or Omnisend)", "Customer email collection"]
-      }
+        "prerequisites": [
+          "Shopify store",
+          "Email platform (Klaviyo or Omnisend)",
+          "Customer email collection"
+        ]
+      },
+      "our_recommendation": "connect_and_automate",
+      "recommendation_rationale": "Your existing tools likely support API integration. A Claude workflow connecting them for ai-powered abandoned cart recovery ships in days, not weeks, and costs a fraction of a SaaS subscription."
     },
     {
       "id": "personalized-recommendations",
@@ -212,26 +419,73 @@
       "implementation": {
         "complexity": "medium",
         "timeline_weeks": 3,
-        "required_data": ["Product catalog", "Purchase history", "Browsing behavior", "Customer segments"]
+        "required_data": [
+          "Product catalog",
+          "Purchase history",
+          "Browsing behavior",
+          "Customer segments"
+        ]
       },
       "options": {
-        "off_the_shelf": {
-          "tools": ["Nosto", "LimeSpot", "Rebuy"],
-          "cost_range": "EUR 100-500/month",
-          "pros": ["Easy Shopify integration", "AI-powered", "Multiple placement options", "A/B testing"],
-          "cons": ["Revenue-based pricing can get expensive", "May slow site speed"]
-        },
-        "best_in_class": {
-          "tools": ["Nosto Enterprise", "Dynamic Yield"],
-          "cost_range": "EUR 500-2000/month",
-          "pros": ["Advanced personalization", "Full site personalization", "Segmentation", "Omnichannel"],
-          "cons": ["Enterprise pricing", "Complex setup", "Requires data maturity"]
-        },
-        "custom_solution": {
+        "connect_and_automate": {
           "approach": "Custom recommendation engine using collaborative filtering and purchase data analysis",
-          "cost_range": "EUR 10,000-25,000 one-time + EUR 100-300/month",
-          "pros": ["Fully customized algorithms", "No revenue sharing", "Deep integration"],
-          "cons": ["Significant development", "Needs large dataset", "Ongoing ML maintenance"]
+          "build_time": "1-2 weeks",
+          "tools_used": [
+            "Claude Code",
+            "Custom API integrations"
+          ],
+          "mcp_servers": [],
+          "monthly_cost": "EUR 100-300",
+          "pros": [
+            "Fully customized algorithms",
+            "No revenue sharing",
+            "Deep integration"
+          ],
+          "cons": [
+            "Significant development",
+            "Needs large dataset",
+            "Ongoing ML maintenance"
+          ]
+        },
+        "enhance_with_ai": {
+          "approach": "Deploy Nosto Enterprise, Dynamic Yield with advanced AI capabilities for autonomous handling",
+          "build_time": "2-4 weeks",
+          "tools_used": [
+            "Nosto Enterprise",
+            "Dynamic Yield"
+          ],
+          "monthly_cost": "EUR 500-2000/month",
+          "pros": [
+            "Advanced personalization",
+            "Full site personalization",
+            "Segmentation",
+            "Omnichannel"
+          ],
+          "cons": [
+            "Enterprise pricing",
+            "Complex setup",
+            "Requires data maturity"
+          ]
+        },
+        "targeted_upgrade": {
+          "when_needed": "Only if your current tools have no API or are fundamentally broken for ai-powered product recommendations",
+          "tools": [
+            "Nosto",
+            "LimeSpot",
+            "Rebuy"
+          ],
+          "cost_range": "EUR 100-500/month",
+          "migration_time": "3-5 weeks",
+          "pros": [
+            "Easy Shopify integration",
+            "AI-powered",
+            "Multiple placement options",
+            "A/B testing"
+          ],
+          "cons": [
+            "Revenue-based pricing can get expensive",
+            "May slow site speed"
+          ]
         }
       },
       "roi_example": {
@@ -239,9 +493,21 @@
         "cost": "EUR 300/month",
         "value_created": "Increase AOV through personalized upsells and cross-sells",
         "roi_analysis": {
-          "conservative": {"roi_percentage": 300, "payback_months": 2, "note": "5% AOV increase"},
-          "expected": {"roi_percentage": 600, "payback_months": 1, "note": "10% AOV increase"},
-          "optimistic": {"roi_percentage": 1000, "payback_months": 1, "note": "15% AOV increase"}
+          "conservative": {
+            "roi_percentage": 300,
+            "payback_months": 2,
+            "note": "5% AOV increase"
+          },
+          "expected": {
+            "roi_percentage": 600,
+            "payback_months": 1,
+            "note": "10% AOV increase"
+          },
+          "optimistic": {
+            "roi_percentage": 1000,
+            "payback_months": 1,
+            "note": "15% AOV increase"
+          }
         },
         "assumptions": "AOV lift varies by catalog size and product diversity; requires minimum traffic for algorithm effectiveness"
       },
@@ -249,7 +515,9 @@
         "applies": true,
         "mechanism": "Better recommendations lead to more browsing, more product discovery, and larger baskets",
         "demand_expansion_potential": "20% increase in pages viewed per session"
-      }
+      },
+      "our_recommendation": "connect_and_automate",
+      "recommendation_rationale": "Your existing tools likely support API integration. A Claude workflow connecting them for ai-powered product recommendations ships in days, not weeks, and costs a fraction of a SaaS subscription."
     },
     {
       "id": "inventory-forecasting",
@@ -271,26 +539,80 @@
       "implementation": {
         "complexity": "medium",
         "timeline_weeks": 4,
-        "required_data": ["Historical sales data (12+ months)", "Seasonal patterns", "Supplier lead times", "Current inventory levels"]
+        "required_data": [
+          "Historical sales data (12+ months)",
+          "Seasonal patterns",
+          "Supplier lead times",
+          "Current inventory levels"
+        ]
       },
       "options": {
-        "off_the_shelf": {
-          "tools": ["Inventory Planner", "Stocky (Shopify)", "Brightpearl"],
+        "connect_and_automate": {
+          "approach": "Build demand forecasting dashboard with Claude Code using Shopify MCP for historical sales data and Google Sheets MCP for reporting. Use Claude to analyze seasonal patterns, generate reorder alerts, and create visual forecast reports.",
+          "build_time": "12-18 hours",
+          "mcp_servers": [
+            "shopify-mcp",
+            "google-sheets-mcp",
+            "supabase-mcp"
+          ],
+          "tools_used": [
+            "Claude Code",
+            "shopify-mcp",
+            "google-sheets-mcp",
+            "supabase-mcp"
+          ],
+          "monthly_cost": "EUR 50-150 (API usage)",
+          "pros": [
+            "Highest accuracy",
+            "Incorporates unique factors",
+            "Full automation"
+          ],
+          "cons": [
+            "Needs data science expertise",
+            "Requires 12+ months data",
+            "Ongoing model maintenance"
+          ]
+        },
+        "enhance_with_ai": {
+          "approach": "Deploy Inventory Planner Pro, Netstock with advanced AI capabilities for autonomous handling",
+          "build_time": "2-4 weeks",
+          "tools_used": [
+            "Inventory Planner Pro",
+            "Netstock"
+          ],
+          "monthly_cost": "EUR 400-1000/month",
+          "pros": [
+            "Advanced forecasting",
+            "Multi-warehouse",
+            "Supplier management",
+            "Custom algorithms"
+          ],
+          "cons": [
+            "Higher cost",
+            "Complex setup",
+            "Requires clean historical data"
+          ]
+        },
+        "targeted_upgrade": {
+          "when_needed": "Only if your current tools have no API or are fundamentally broken for ai demand forecasting & inventory optimization",
+          "tools": [
+            "Inventory Planner",
+            "Stocky (Shopify)",
+            "Brightpearl"
+          ],
           "cost_range": "EUR 100-400/month",
-          "pros": ["Shopify integration", "Visual forecasts", "Reorder recommendations", "Easy setup"],
-          "cons": ["Basic algorithms", "Limited customization", "May not handle complex patterns"]
-        },
-        "best_in_class": {
-          "tools": ["Inventory Planner Pro", "Netstock"],
-          "cost_range": "EUR 400-1000/month",
-          "pros": ["Advanced forecasting", "Multi-warehouse", "Supplier management", "Custom algorithms"],
-          "cons": ["Higher cost", "Complex setup", "Requires clean historical data"]
-        },
-        "custom_solution": {
-          "approach": "Custom ML demand forecasting model trained on your sales data, incorporating external factors (weather, trends, marketing calendar)",
-          "cost_range": "EUR 15,000-40,000 one-time + EUR 200-500/month",
-          "pros": ["Highest accuracy", "Incorporates unique factors", "Full automation"],
-          "cons": ["Needs data science expertise", "Requires 12+ months data", "Ongoing model maintenance"]
+          "migration_time": "4-6 weeks",
+          "pros": [
+            "Shopify integration",
+            "Visual forecasts",
+            "Reorder recommendations",
+            "Easy setup"
+          ],
+          "cons": [
+            "Basic algorithms",
+            "Limited customization",
+            "May not handle complex patterns"
+          ]
         }
       },
       "roi_example": {
@@ -298,12 +620,26 @@
         "cost": "EUR 300/month",
         "value_created": "Reduce stockouts and optimize inventory levels",
         "roi_analysis": {
-          "conservative": {"roi_percentage": 200, "payback_months": 4, "note": "3% stockout reduction, 10% overstock reduction"},
-          "expected": {"roi_percentage": 400, "payback_months": 2, "note": "5% stockout reduction, 20% overstock reduction"},
-          "optimistic": {"roi_percentage": 700, "payback_months": 1, "note": "7% stockout reduction, 30% overstock reduction"}
+          "conservative": {
+            "roi_percentage": 200,
+            "payback_months": 4,
+            "note": "3% stockout reduction, 10% overstock reduction"
+          },
+          "expected": {
+            "roi_percentage": 400,
+            "payback_months": 2,
+            "note": "5% stockout reduction, 20% overstock reduction"
+          },
+          "optimistic": {
+            "roi_percentage": 700,
+            "payback_months": 1,
+            "note": "7% stockout reduction, 30% overstock reduction"
+          }
         },
         "assumptions": "Forecast accuracy depends on data quality and product type; new products lack historical data for prediction"
-      }
+      },
+      "our_recommendation": "connect_and_automate",
+      "recommendation_rationale": "Your existing tools likely support API integration. A Claude workflow connecting them for ai demand forecasting & inventory optimization ships in days, not weeks, and costs a fraction of a SaaS subscription."
     },
     {
       "id": "dynamic-pricing",
@@ -325,26 +661,74 @@
       "implementation": {
         "complexity": "high",
         "timeline_weeks": 6,
-        "required_data": ["Product costs", "Competitor prices", "Historical sales at different price points", "Demand elasticity data"]
+        "required_data": [
+          "Product costs",
+          "Competitor prices",
+          "Historical sales at different price points",
+          "Demand elasticity data"
+        ]
       },
       "options": {
-        "off_the_shelf": {
-          "tools": ["Prisync", "Competera", "Intelligence Node"],
-          "cost_range": "EUR 200-600/month",
-          "pros": ["Competitor monitoring", "Rule-based repricing", "Dashboard", "Alerts"],
-          "cons": ["Basic optimization", "Rules-based not AI", "Limited SKU counts on lower tiers"]
-        },
-        "best_in_class": {
-          "tools": ["Competera AI", "7Learnings"],
-          "cost_range": "EUR 500-2000/month",
-          "pros": ["True AI pricing", "Elasticity modeling", "Margin optimization", "Market intelligence"],
-          "cons": ["Enterprise pricing", "Complex implementation", "Needs significant data"]
-        },
-        "custom_solution": {
+        "connect_and_automate": {
           "approach": "Custom pricing engine using ML models trained on your sales data and competitive intelligence",
-          "cost_range": "EUR 20,000-50,000 one-time + EUR 300-600/month",
-          "pros": ["Fully customized to your market", "Proprietary advantage", "Deep integration"],
-          "cons": ["Significant investment", "Needs data science team", "Risk of pricing errors"]
+          "build_time": "1-2 weeks",
+          "tools_used": [
+            "Claude Code",
+            "Custom API integrations"
+          ],
+          "mcp_servers": [],
+          "monthly_cost": "EUR 100-300",
+          "pros": [
+            "Fully customized to your market",
+            "Proprietary advantage",
+            "Deep integration"
+          ],
+          "cons": [
+            "Significant investment",
+            "Needs data science team",
+            "Risk of pricing errors"
+          ]
+        },
+        "enhance_with_ai": {
+          "approach": "Deploy Competera AI, 7Learnings with advanced AI capabilities for autonomous handling",
+          "build_time": "2-4 weeks",
+          "tools_used": [
+            "Competera AI",
+            "7Learnings"
+          ],
+          "monthly_cost": "EUR 500-2000/month",
+          "pros": [
+            "True AI pricing",
+            "Elasticity modeling",
+            "Margin optimization",
+            "Market intelligence"
+          ],
+          "cons": [
+            "Enterprise pricing",
+            "Complex implementation",
+            "Needs significant data"
+          ]
+        },
+        "targeted_upgrade": {
+          "when_needed": "Only if your current tools have no API or are fundamentally broken for ai-powered dynamic pricing",
+          "tools": [
+            "Prisync",
+            "Competera",
+            "Intelligence Node"
+          ],
+          "cost_range": "EUR 200-600/month",
+          "migration_time": "6-8 weeks",
+          "pros": [
+            "Competitor monitoring",
+            "Rule-based repricing",
+            "Dashboard",
+            "Alerts"
+          ],
+          "cons": [
+            "Basic optimization",
+            "Rules-based not AI",
+            "Limited SKU counts on lower tiers"
+          ]
         }
       },
       "roi_example": {
@@ -352,12 +736,26 @@
         "cost": "EUR 400/month",
         "value_created": "Optimize pricing across catalog to maximize margins while remaining competitive",
         "roi_analysis": {
-          "conservative": {"roi_percentage": 200, "payback_months": 4, "note": "2% margin improvement"},
-          "expected": {"roi_percentage": 500, "payback_months": 2, "note": "5% margin improvement"},
-          "optimistic": {"roi_percentage": 800, "payback_months": 1, "note": "8% margin improvement"}
+          "conservative": {
+            "roi_percentage": 200,
+            "payback_months": 4,
+            "note": "2% margin improvement"
+          },
+          "expected": {
+            "roi_percentage": 500,
+            "payback_months": 2,
+            "note": "5% margin improvement"
+          },
+          "optimistic": {
+            "roi_percentage": 800,
+            "payback_months": 1,
+            "note": "8% margin improvement"
+          }
         },
         "assumptions": "Dynamic pricing works best with large catalogs and sufficient competition data; may not suit luxury/brand-image-focused products"
-      }
+      },
+      "our_recommendation": "connect_and_automate",
+      "recommendation_rationale": "Your existing tools likely support API integration. A Claude workflow connecting them for ai-powered dynamic pricing ships in days, not weeks, and costs a fraction of a SaaS subscription."
     },
     {
       "id": "automated-email-marketing",
@@ -379,26 +777,80 @@
       "implementation": {
         "complexity": "low",
         "timeline_weeks": 2,
-        "required_data": ["Customer email list", "Purchase history", "Product catalog", "Browsing behavior"]
+        "required_data": [
+          "Customer email list",
+          "Purchase history",
+          "Product catalog",
+          "Browsing behavior"
+        ]
       },
       "options": {
-        "off_the_shelf": {
-          "tools": ["Klaviyo", "Omnisend", "Mailchimp"],
+        "connect_and_automate": {
+          "approach": "Build email automation system with Claude Code using Resend MCP for delivery, Shopify MCP for customer and purchase data, and Supabase for segmentation. Create AI-generated lifecycle flows (welcome, post-purchase, win-back) with personalized content.",
+          "build_time": "12-18 hours",
+          "mcp_servers": [
+            "shopify-mcp",
+            "resend-mcp",
+            "supabase-mcp"
+          ],
+          "tools_used": [
+            "Claude Code",
+            "shopify-mcp",
+            "resend-mcp",
+            "supabase-mcp"
+          ],
+          "monthly_cost": "EUR 50-150 (API usage)",
+          "pros": [
+            "Full control",
+            "Custom AI features",
+            "No per-subscriber pricing"
+          ],
+          "cons": [
+            "Deliverability management",
+            "Compliance burden (GDPR)",
+            "Development time"
+          ]
+        },
+        "enhance_with_ai": {
+          "approach": "Deploy Klaviyo Pro, Drip with advanced AI capabilities for autonomous handling",
+          "build_time": "2-4 weeks",
+          "tools_used": [
+            "Klaviyo Pro",
+            "Drip"
+          ],
+          "monthly_cost": "EUR 300-800/month",
+          "pros": [
+            "Advanced AI features",
+            "Deep segmentation",
+            "Predictive analytics",
+            "Revenue attribution"
+          ],
+          "cons": [
+            "Higher cost",
+            "Complexity",
+            "Requires strategy knowledge"
+          ]
+        },
+        "targeted_upgrade": {
+          "when_needed": "Only if your current tools have no API or are fundamentally broken for ai-powered email marketing automation",
+          "tools": [
+            "Klaviyo",
+            "Omnisend",
+            "Mailchimp"
+          ],
           "cost_range": "EUR 50-300/month",
-          "pros": ["E-commerce focused", "Pre-built flows", "Easy integration", "Good analytics"],
-          "cons": ["Pricing scales with list size", "Template-dependent", "Limited AI on lower tiers"]
-        },
-        "best_in_class": {
-          "tools": ["Klaviyo Pro", "Drip"],
-          "cost_range": "EUR 300-800/month",
-          "pros": ["Advanced AI features", "Deep segmentation", "Predictive analytics", "Revenue attribution"],
-          "cons": ["Higher cost", "Complexity", "Requires strategy knowledge"]
-        },
-        "custom_solution": {
-          "approach": "Custom email system with AI-generated content, predictive send times, and advanced segmentation",
-          "cost_range": "EUR 8,000-20,000 one-time + EUR 100-300/month",
-          "pros": ["Full control", "Custom AI features", "No per-subscriber pricing"],
-          "cons": ["Deliverability management", "Compliance burden (GDPR)", "Development time"]
+          "migration_time": "2-4 weeks",
+          "pros": [
+            "E-commerce focused",
+            "Pre-built flows",
+            "Easy integration",
+            "Good analytics"
+          ],
+          "cons": [
+            "Pricing scales with list size",
+            "Template-dependent",
+            "Limited AI on lower tiers"
+          ]
         }
       },
       "roi_example": {
@@ -406,12 +858,26 @@
         "cost": "EUR 200/month",
         "value_created": "Increase email revenue contribution from 15% to 25-35% through automated flows",
         "roi_analysis": {
-          "conservative": {"roi_percentage": 300, "payback_months": 2, "note": "20% of revenue from email"},
-          "expected": {"roi_percentage": 600, "payback_months": 1, "note": "30% of revenue from email"},
-          "optimistic": {"roi_percentage": 1000, "payback_months": 1, "note": "40% of revenue from email"}
+          "conservative": {
+            "roi_percentage": 300,
+            "payback_months": 2,
+            "note": "20% of revenue from email"
+          },
+          "expected": {
+            "roi_percentage": 600,
+            "payback_months": 1,
+            "note": "30% of revenue from email"
+          },
+          "optimistic": {
+            "roi_percentage": 1000,
+            "payback_months": 1,
+            "note": "40% of revenue from email"
+          }
         },
         "assumptions": "Results depend on list quality, product type, and existing email maturity"
-      }
+      },
+      "our_recommendation": "connect_and_automate",
+      "recommendation_rationale": "Your existing tools likely support API integration. A Claude workflow connecting them for ai-powered email marketing automation ships in days, not weeks, and costs a fraction of a SaaS subscription."
     },
     {
       "id": "review-management",
@@ -433,26 +899,78 @@
       "implementation": {
         "complexity": "low",
         "timeline_weeks": 1,
-        "required_data": ["Customer email", "Order completion data", "Product catalog"]
+        "required_data": [
+          "Customer email",
+          "Order completion data",
+          "Product catalog"
+        ]
       },
       "options": {
-        "off_the_shelf": {
-          "tools": ["Judge.me", "Yotpo", "Loox"],
+        "connect_and_automate": {
+          "approach": "Build review collection and response system with Claude Code using Shopify MCP for order completion triggers, Twilio for review request SMS/email, and Supabase for review storage. Add AI-powered sentiment analysis and auto-drafted responses.",
+          "build_time": "8-12 hours",
+          "mcp_servers": [
+            "shopify-mcp",
+            "twilio-mcp",
+            "supabase-mcp"
+          ],
+          "tools_used": [
+            "Claude Code",
+            "shopify-mcp",
+            "twilio-mcp",
+            "supabase-mcp"
+          ],
+          "monthly_cost": "EUR 50-150 (API usage)",
+          "pros": [
+            "No monthly fees",
+            "Custom display",
+            "Full data ownership"
+          ],
+          "cons": [
+            "Basic features",
+            "No SEO schema markup built-in",
+            "Development time"
+          ]
+        },
+        "enhance_with_ai": {
+          "approach": "Monitors new reviews across platforms, drafts personalized responses matching your brand voice, flags negative reviews for human attention. Runs daily review sweeps automatically.",
+          "build_time": "1 week",
+          "tools_used": [
+            "Claude API",
+            "Review platform (Yotpo, Judge.me, or Google Business)",
+            "Brand voice guidelines"
+          ],
+          "monthly_cost": "EUR 600-1200 (value generated)",
+          "pros": [
+            "UGC platform",
+            "Loyalty integration",
+            "Advanced analytics",
+            "Multi-channel syndication"
+          ],
+          "cons": [
+            "Higher cost",
+            "Feature overlap with other tools"
+          ]
+        },
+        "targeted_upgrade": {
+          "when_needed": "Only if your current tools have no API or are fundamentally broken for automated review collection & management",
+          "tools": [
+            "Judge.me",
+            "Yotpo",
+            "Loox"
+          ],
           "cost_range": "EUR 15-100/month",
-          "pros": ["Easy Shopify integration", "Photo/video reviews", "SEO snippets", "Social proof widgets"],
-          "cons": ["Feature limits on free tiers", "Advanced features cost more"]
-        },
-        "best_in_class": {
-          "tools": ["Yotpo Premium", "Okendo"],
-          "cost_range": "EUR 200-500/month",
-          "pros": ["UGC platform", "Loyalty integration", "Advanced analytics", "Multi-channel syndication"],
-          "cons": ["Higher cost", "Feature overlap with other tools"]
-        },
-        "custom_solution": {
-          "approach": "Custom review collection system with AI sentiment analysis and automated response generation",
-          "cost_range": "EUR 2,000-5,000 one-time + minimal ongoing",
-          "pros": ["No monthly fees", "Custom display", "Full data ownership"],
-          "cons": ["Basic features", "No SEO schema markup built-in", "Development time"]
+          "migration_time": "1-3 weeks",
+          "pros": [
+            "Easy Shopify integration",
+            "Photo/video reviews",
+            "SEO snippets",
+            "Social proof widgets"
+          ],
+          "cons": [
+            "Feature limits on free tiers",
+            "Advanced features cost more"
+          ]
         }
       },
       "roi_example": {
@@ -460,9 +978,21 @@
         "cost": "EUR 50/month",
         "value_created": "Increase review volume to improve conversion rates and SEO",
         "roi_analysis": {
-          "conservative": {"roi_percentage": 200, "payback_months": 4, "note": "5x review volume, 3% conversion lift"},
-          "expected": {"roi_percentage": 400, "payback_months": 2, "note": "8x review volume, 5% conversion lift"},
-          "optimistic": {"roi_percentage": 700, "payback_months": 1, "note": "12x review volume, 8% conversion lift"}
+          "conservative": {
+            "roi_percentage": 200,
+            "payback_months": 4,
+            "note": "5x review volume, 3% conversion lift"
+          },
+          "expected": {
+            "roi_percentage": 400,
+            "payback_months": 2,
+            "note": "8x review volume, 5% conversion lift"
+          },
+          "optimistic": {
+            "roi_percentage": 700,
+            "payback_months": 1,
+            "note": "12x review volume, 8% conversion lift"
+          }
         },
         "assumptions": "Review impact on conversion varies by product category; photo reviews have higher impact than text-only"
       },
@@ -476,8 +1006,512 @@
           "response_rate_improvement": "From 20% to 95% of reviews responded"
         },
         "deployment_timeline": "1 week",
-        "prerequisites": ["Review platform (Yotpo, Judge.me, or Google Business)", "Brand voice guidelines"]
-      }
+        "prerequisites": [
+          "Review platform (Yotpo, Judge.me, or Google Business)",
+          "Brand voice guidelines"
+        ]
+      },
+      "our_recommendation": "connect_and_automate",
+      "recommendation_rationale": "Your existing tools likely support API integration. A Claude workflow connecting them for automated review collection & management ships in days, not weeks, and costs a fraction of a SaaS subscription."
+    },
+    {
+      "id": "ai-visual-search",
+      "name": "AI-Powered Visual Search & Product Discovery",
+      "description": "Allow customers to search by uploading images, using camera snap, or finding visually similar products to improve product discovery",
+      "category": "growth",
+      "impact": {
+        "value_saved": {
+          "time_hours_per_week": 3,
+          "description": "Reduces manual product tagging and categorization effort"
+        },
+        "value_created": {
+          "description": "Customers who use visual search convert 2-3x higher; reduces search abandonment",
+          "potential_revenue_impact": "5-10% lift in conversion from improved product discovery"
+        }
+      },
+      "customer_value_score": 8,
+      "business_health_score": 7,
+      "implementation": {
+        "complexity": "medium",
+        "timeline_weeks": 4,
+        "required_data": [
+          "Product images (high-quality)",
+          "Product catalog with attributes",
+          "Category taxonomy"
+        ]
+      },
+      "options": {
+        "connect_and_automate": {
+          "approach": "Custom visual search using CLIP embeddings or Google Vision API with product matching pipeline",
+          "build_time": "1-2 weeks",
+          "tools_used": [
+            "Claude Code",
+            "Custom API integrations"
+          ],
+          "mcp_servers": [],
+          "monthly_cost": "EUR 100-300",
+          "pros": [
+            "Fully customized to your catalog",
+            "No per-search pricing",
+            "Combine with text search"
+          ],
+          "cons": [
+            "Significant development",
+            "Needs ML expertise",
+            "Ongoing model updates"
+          ]
+        },
+        "enhance_with_ai": {
+          "approach": "Deploy Syte Enterprise, Algolia AI Search with advanced AI capabilities for autonomous handling",
+          "build_time": "2-4 weeks",
+          "tools_used": [
+            "Syte Enterprise",
+            "Algolia AI Search"
+          ],
+          "monthly_cost": "EUR 500-1500/month",
+          "pros": [
+            "Multi-modal search (text + image)",
+            "Recommendation engine included",
+            "Full analytics",
+            "A/B testing"
+          ],
+          "cons": [
+            "Enterprise pricing",
+            "Complex integration",
+            "Requires strong product data"
+          ]
+        },
+        "targeted_upgrade": {
+          "when_needed": "Only if your current tools have no API or are fundamentally broken for ai-powered visual search & product discovery",
+          "tools": [
+            "Syte",
+            "ViSenze",
+            "Google Cloud Vision API"
+          ],
+          "cost_range": "EUR 200-600/month",
+          "migration_time": "4-6 weeks",
+          "pros": [
+            "Pre-trained models",
+            "Easy widget integration",
+            "Works with Shopify and custom stores",
+            "Camera search included"
+          ],
+          "cons": [
+            "Accuracy depends on image quality",
+            "Monthly fees scale with searches",
+            "Limited customization"
+          ]
+        }
+      },
+      "roi_example": {
+        "scenario": "Fashion store with 2,000 SKUs, 50,000 monthly visitors, 2.5% conversion rate",
+        "cost": "EUR 400/month",
+        "value_created": "Improve product discovery for visually-driven shoppers, reduce search abandonment",
+        "roi_analysis": {
+          "conservative": {
+            "roi_percentage": 150,
+            "payback_months": 5,
+            "note": "3% conversion lift on visual search users"
+          },
+          "expected": {
+            "roi_percentage": 300,
+            "payback_months": 3,
+            "note": "5% conversion lift, 15% of visitors using visual search"
+          },
+          "optimistic": {
+            "roi_percentage": 500,
+            "payback_months": 2,
+            "note": "8% conversion lift, 25% visual search adoption"
+          }
+        },
+        "assumptions": "Visual search works best for fashion, home decor, and lifestyle products; less effective for commodity goods"
+      },
+      "jevons_effect": {
+        "applies": true,
+        "mechanism": "Easier product discovery leads to more browsing, more items added to cart, and higher AOV",
+        "demand_expansion_potential": "15% increase in products viewed per session"
+      },
+      "our_recommendation": "connect_and_automate",
+      "recommendation_rationale": "Your existing tools likely support API integration. A Claude workflow connecting them for ai-powered visual search & product discovery ships in days, not weeks, and costs a fraction of a SaaS subscription."
+    },
+    {
+      "id": "ai-fraud-detection",
+      "name": "AI-Powered Fraud Detection & Prevention",
+      "description": "Machine learning models that detect and prevent fraudulent orders, chargebacks, and account takeovers in real-time",
+      "category": "efficiency",
+      "impact": {
+        "value_saved": {
+          "time_hours_per_week": 8,
+          "description": "Eliminate manual order review for suspicious transactions"
+        },
+        "value_created": {
+          "description": "Reduce chargebacks by 50-80%, approve more legitimate orders that would be falsely declined",
+          "potential_revenue_impact": "2-5% revenue recovery from false decline reduction + chargeback savings"
+        }
+      },
+      "customer_value_score": 7,
+      "business_health_score": 10,
+      "implementation": {
+        "complexity": "medium",
+        "timeline_weeks": 3,
+        "required_data": [
+          "Order history (12+ months)",
+          "Chargeback records",
+          "Customer data",
+          "Transaction metadata"
+        ]
+      },
+      "options": {
+        "connect_and_automate": {
+          "approach": "Custom ML fraud scoring model using transaction data with rule engine for business-specific patterns",
+          "build_time": "1-2 weeks",
+          "tools_used": [
+            "Claude Code",
+            "Custom API integrations"
+          ],
+          "mcp_servers": [],
+          "monthly_cost": "EUR 100-300",
+          "pros": [
+            "Tailored to your fraud patterns",
+            "No revenue share",
+            "Full control over thresholds"
+          ],
+          "cons": [
+            "Needs data science expertise",
+            "Smaller training dataset than platforms",
+            "Ongoing model updates required"
+          ]
+        },
+        "enhance_with_ai": {
+          "approach": "Deploy Riskified, Forter with advanced AI capabilities for autonomous handling",
+          "build_time": "2-4 weeks",
+          "tools_used": [
+            "Riskified",
+            "Forter"
+          ],
+          "monthly_cost": "EUR 500-2000/month or 0.5-1% of GMV",
+          "pros": [
+            "Highest approval rates",
+            "Full chargeback guarantee",
+            "Global coverage",
+            "Identity-based decisions"
+          ],
+          "cons": [
+            "Enterprise pricing",
+            "Volume minimums",
+            "Long contract terms"
+          ]
+        },
+        "targeted_upgrade": {
+          "when_needed": "Only if your current tools have no API or are fundamentally broken for ai-powered fraud detection & prevention",
+          "tools": [
+            "Shopify Protect",
+            "Signifyd",
+            "ClearSale"
+          ],
+          "cost_range": "EUR 0-500/month or % of approved orders",
+          "migration_time": "3-5 weeks",
+          "pros": [
+            "Instant integration",
+            "Chargeback guarantee options",
+            "No manual review needed",
+            "Large fraud network"
+          ],
+          "cons": [
+            "Revenue-share pricing can be expensive",
+            "May decline legitimate orders",
+            "Less control over rules"
+          ]
+        }
+      },
+      "roi_example": {
+        "scenario": "Store with EUR 500K/month revenue, 1.5% chargeback rate, 3% manual review rate",
+        "cost": "EUR 300/month or 0.6% of approved orders",
+        "value_created": "Reduce chargebacks and manual review while approving more legitimate orders",
+        "roi_analysis": {
+          "conservative": {
+            "roi_percentage": 200,
+            "payback_months": 3,
+            "note": "40% chargeback reduction"
+          },
+          "expected": {
+            "roi_percentage": 400,
+            "payback_months": 2,
+            "note": "60% chargeback reduction + 2% false decline recovery"
+          },
+          "optimistic": {
+            "roi_percentage": 700,
+            "payback_months": 1,
+            "note": "80% chargeback reduction + 4% false decline recovery"
+          }
+        },
+        "assumptions": "Effectiveness depends on fraud type mix; CNP fraud more detectable than friendly fraud; results improve over time"
+      },
+      "our_recommendation": "connect_and_automate",
+      "recommendation_rationale": "Your existing tools likely support API integration. A Claude workflow connecting them for ai-powered fraud detection & prevention ships in days, not weeks, and costs a fraction of a SaaS subscription."
+    },
+    {
+      "id": "ai-personalized-marketing",
+      "name": "AI-Powered Personalized Marketing & Ad Optimization",
+      "description": "AI-driven audience segmentation, creative optimization, and cross-channel personalized campaigns that adapt to individual customer behavior",
+      "category": "growth",
+      "impact": {
+        "value_saved": {
+          "time_hours_per_week": 12,
+          "description": "Automate audience building, creative testing, and campaign optimization"
+        },
+        "value_created": {
+          "description": "Lower CAC through smarter targeting, higher ROAS through personalized creatives and offers",
+          "potential_revenue_impact": "15-30% improvement in ad ROAS and 10-20% reduction in customer acquisition cost"
+        }
+      },
+      "customer_value_score": 8,
+      "business_health_score": 9,
+      "implementation": {
+        "complexity": "medium",
+        "timeline_weeks": 4,
+        "required_data": [
+          "Customer purchase history",
+          "Website behavior data",
+          "Ad account access",
+          "Product catalog",
+          "Customer segments"
+        ]
+      },
+      "options": {
+        "connect_and_automate": {
+          "approach": "Custom marketing data platform with AI audience scoring, creative generation, and cross-channel orchestration",
+          "build_time": "1-2 weeks",
+          "tools_used": [
+            "Claude Code",
+            "Custom API integrations"
+          ],
+          "mcp_servers": [],
+          "monthly_cost": "EUR 100-300",
+          "pros": [
+            "Full data ownership",
+            "Custom attribution models",
+            "AI creative generation",
+            "No platform dependency"
+          ],
+          "cons": [
+            "Significant build effort",
+            "Needs marketing data engineer",
+            "Constant channel API changes"
+          ]
+        },
+        "enhance_with_ai": {
+          "approach": "Monitors ad performance daily, generates audience recommendations, drafts ad copy variants, and flags underperforming campaigns. Integrates with Meta, Google, and Klaviyo for cross-channel insights.",
+          "build_time": "3 weeks",
+          "tools_used": [
+            "Claude API",
+            "Ad account access (Meta, Google)",
+            "Analytics platform (GA4, Triple Whale)"
+          ],
+          "monthly_cost": "EUR 2000-4000 (value generated)",
+          "pros": [
+            "Cross-channel orchestration",
+            "Predictive CLV targeting",
+            "Dynamic creative optimization",
+            "Real-time personalization"
+          ],
+          "cons": [
+            "Higher cost",
+            "Complex setup across channels",
+            "Requires clean first-party data"
+          ]
+        },
+        "targeted_upgrade": {
+          "when_needed": "Only if your current tools have no API or are fundamentally broken for ai-powered personalized marketing & ad optimization",
+          "tools": [
+            "Triple Whale",
+            "Elevar",
+            "Northbeam"
+          ],
+          "cost_range": "EUR 100-400/month",
+          "migration_time": "4-6 weeks",
+          "pros": [
+            "Attribution clarity",
+            "Audience insights",
+            "Easy Shopify integration",
+            "Creative analytics"
+          ],
+          "cons": [
+            "Measurement focused, not execution",
+            "Requires ad platform knowledge",
+            "Data sampling on lower tiers"
+          ]
+        }
+      },
+      "roi_example": {
+        "scenario": "Store spending EUR 10,000/month on ads with 3x ROAS, EUR 45 CAC",
+        "cost": "EUR 300/month for attribution + tools",
+        "value_created": "Improve ad targeting efficiency and reduce wasted spend through better attribution and AI optimization",
+        "roi_analysis": {
+          "conservative": {
+            "roi_percentage": 200,
+            "payback_months": 3,
+            "note": "10% ROAS improvement"
+          },
+          "expected": {
+            "roi_percentage": 500,
+            "payback_months": 2,
+            "note": "20% ROAS improvement + 15% CAC reduction"
+          },
+          "optimistic": {
+            "roi_percentage": 800,
+            "payback_months": 1,
+            "note": "30% ROAS improvement + 25% CAC reduction"
+          }
+        },
+        "assumptions": "Results depend on current ad maturity; stores with no attribution see biggest improvements; creative quality still matters"
+      },
+      "agent_opportunity": {
+        "agent_type": "CRB Marketing Agent",
+        "what_it_does": "Monitors ad performance daily, generates audience recommendations, drafts ad copy variants, and flags underperforming campaigns. Integrates with Meta, Google, and Klaviyo for cross-channel insights.",
+        "estimated_impact": {
+          "campaigns_optimized_monthly": "15-30",
+          "hours_saved_monthly": 25,
+          "monthly_value_eur": 2000,
+          "roas_improvement": "15-25% improvement in return on ad spend"
+        },
+        "deployment_timeline": "3 weeks",
+        "prerequisites": [
+          "Ad account access (Meta, Google)",
+          "Analytics platform (GA4, Triple Whale)",
+          "Email platform (Klaviyo)"
+        ]
+      },
+      "our_recommendation": "connect_and_automate",
+      "recommendation_rationale": "Your existing tools likely support API integration. A Claude workflow connecting them for ai-powered personalized marketing & ad optimization ships in days, not weeks, and costs a fraction of a SaaS subscription."
+    },
+    {
+      "id": "ai-voice-commerce",
+      "name": "AI Voice Commerce & Conversational Shopping",
+      "description": "Voice-enabled shopping assistants and conversational commerce via WhatsApp, SMS, or website chat that guide customers through product selection and purchase",
+      "category": "growth",
+      "impact": {
+        "value_saved": {
+          "time_hours_per_week": 5,
+          "description": "Automate pre-sale product guidance and shopping assistance"
+        },
+        "value_created": {
+          "description": "New sales channel for voice-first and mobile shoppers; higher conversion through guided selling",
+          "potential_revenue_impact": "3-8% incremental revenue from conversational commerce channel"
+        }
+      },
+      "customer_value_score": 7,
+      "business_health_score": 6,
+      "implementation": {
+        "complexity": "high",
+        "timeline_weeks": 6,
+        "required_data": [
+          "Product catalog with rich attributes",
+          "Sizing/fit data",
+          "Common customer questions",
+          "Inventory levels"
+        ]
+      },
+      "options": {
+        "connect_and_automate": {
+          "approach": "Build conversational shopping assistant with Claude Code using Shopify MCP for product catalog and cart integration, Twilio for WhatsApp/SMS channel. Create product matching logic based on customer preferences and purchase history.",
+          "build_time": "16-24 hours",
+          "mcp_servers": [
+            "shopify-mcp",
+            "twilio-mcp",
+            "supabase-mcp"
+          ],
+          "tools_used": [
+            "Claude Code",
+            "shopify-mcp",
+            "twilio-mcp",
+            "supabase-mcp"
+          ],
+          "monthly_cost": "EUR 50-150 (API usage)",
+          "pros": [
+            "Fully branded experience",
+            "Deep product knowledge",
+            "Voice + text + WhatsApp",
+            "Custom recommendation logic"
+          ],
+          "cons": [
+            "Significant development",
+            "Voice UX is challenging",
+            "Needs continuous training"
+          ]
+        },
+        "enhance_with_ai": {
+          "approach": "Deploy Rep AI Pro, Charles (WhatsApp Commerce) with advanced AI capabilities for autonomous handling",
+          "build_time": "2-4 weeks",
+          "tools_used": [
+            "Rep AI Pro",
+            "Charles (WhatsApp Commerce)"
+          ],
+          "monthly_cost": "EUR 500-1500/month",
+          "pros": [
+            "True conversational AI",
+            "Multi-language support",
+            "Checkout in-chat",
+            "Analytics dashboard"
+          ],
+          "cons": [
+            "Higher cost",
+            "Requires product data optimization",
+            "Channel-specific limitations"
+          ]
+        },
+        "targeted_upgrade": {
+          "when_needed": "Only if your current tools have no API or are fundamentally broken for ai voice commerce & conversational shopping",
+          "tools": [
+            "Certainly",
+            "Rep AI",
+            "Octane AI"
+          ],
+          "cost_range": "EUR 200-600/month",
+          "migration_time": "6-8 weeks",
+          "pros": [
+            "Pre-built shopping flows",
+            "WhatsApp/SMS support",
+            "Quiz-based product matching",
+            "Shopify integration"
+          ],
+          "cons": [
+            "Limited voice capabilities",
+            "Scripted conversation flows",
+            "Monthly fees scale with conversations"
+          ]
+        }
+      },
+      "roi_example": {
+        "scenario": "Store with 30,000 monthly visitors, complex product selection (e.g., supplements, skincare)",
+        "cost": "EUR 400/month",
+        "value_created": "Guide undecided shoppers to purchase through conversational product matching",
+        "roi_analysis": {
+          "conservative": {
+            "roi_percentage": 100,
+            "payback_months": 6,
+            "note": "2% of visitors engage, 10% of those convert"
+          },
+          "expected": {
+            "roi_percentage": 250,
+            "payback_months": 3,
+            "note": "5% engagement, 15% conversion of engaged users"
+          },
+          "optimistic": {
+            "roi_percentage": 400,
+            "payback_months": 2,
+            "note": "8% engagement, 20% conversion of engaged users"
+          }
+        },
+        "assumptions": "Best for products requiring guidance (beauty, nutrition, electronics); less effective for commodity goods; WhatsApp commerce strong in EU/LATAM markets"
+      },
+      "jevons_effect": {
+        "applies": true,
+        "mechanism": "Easier shopping experience attracts mobile-first shoppers and repeat buyers who prefer chat over browsing",
+        "demand_expansion_potential": "10% increase in mobile conversion rate"
+      },
+      "our_recommendation": "connect_and_automate",
+      "recommendation_rationale": "Your existing tools likely support API integration. A Claude workflow connecting them for ai voice commerce & conversational shopping ships in days, not weeks, and costs a fraction of a SaaS subscription."
     }
   ],
   "quick_wins": [

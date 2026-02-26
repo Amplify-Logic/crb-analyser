@@ -21,26 +21,76 @@
       "implementation": {
         "complexity": "medium",
         "timeline_weeks": 3,
-        "required_data": ["Service types", "Insurance accepted", "Provider schedules", "Common FAQs"]
+        "required_data": [
+          "Service types",
+          "Insurance accepted",
+          "Provider schedules",
+          "Common FAQs"
+        ]
       },
       "options": {
-        "off_the_shelf": {
-          "tools": ["Smith.ai", "Ruby Receptionist", "Nexa"],
+        "connect_and_automate": {
+          "approach": "Build AI voice receptionist with Claude Code using Twilio MCP for call handling and Google Calendar MCP for appointment scheduling. Configure call routing, FAQ responses, and after-hours booking logic.",
+          "build_time": "16-24 hours",
+          "mcp_servers": [
+            "twilio-mcp",
+            "google-calendar-mcp"
+          ],
+          "tools_used": [
+            "Claude Code",
+            "twilio-mcp",
+            "google-calendar-mcp"
+          ],
+          "monthly_cost": "EUR 50-150 (API usage)",
+          "pros": [
+            "Fully customized for your practice",
+            "Speaks your brand voice",
+            "24/7 AI booking"
+          ],
+          "cons": [
+            "Development required",
+            "HIPAA compliance work",
+            "Needs tuning"
+          ]
+        },
+        "enhance_with_ai": {
+          "approach": "Deploy Weave Phones, RevenueWell Phone with advanced AI capabilities for autonomous handling",
+          "build_time": "2-4 weeks",
+          "tools_used": [
+            "Weave Phones",
+            "RevenueWell Phone",
+            "Mango Voice"
+          ],
+          "monthly_cost": "€200-500/month",
+          "pros": [
+            "Dental-specific",
+            "PM integration",
+            "Call tracking",
+            "AI features"
+          ],
+          "cons": [
+            "May require phone system change"
+          ]
+        },
+        "targeted_upgrade": {
+          "when_needed": "Only if your current tools have no API or are fundamentally broken for ai voice receptionist & call handling",
+          "tools": [
+            "Smith.ai",
+            "Ruby Receptionist",
+            "Nexa"
+          ],
           "cost_range": "€250-600/month",
-          "pros": ["Human + AI hybrid", "HIPAA compliant", "Immediate setup", "Professional"],
-          "cons": ["Per-call pricing adds up", "Less dental-specific"]
-        },
-        "best_in_class": {
-          "tools": ["Weave Phones", "RevenueWell Phone", "Mango Voice"],
-          "cost_range": "€200-500/month",
-          "pros": ["Dental-specific", "PM integration", "Call tracking", "AI features"],
-          "cons": ["May require phone system change"]
-        },
-        "custom_solution": {
-          "approach": "AI voice agent using Claude API + Twilio, integrated with dental PM system",
-          "cost_range": "€5,000-15,000 one-time + €150-300/month",
-          "pros": ["Fully customized for your practice", "Speaks your brand voice", "24/7 AI booking"],
-          "cons": ["Development required", "HIPAA compliance work", "Needs tuning"]
+          "migration_time": "3-5 weeks",
+          "pros": [
+            "Human + AI hybrid",
+            "HIPAA compliant",
+            "Immediate setup",
+            "Professional"
+          ],
+          "cons": [
+            "Per-call pricing adds up",
+            "Less dental-specific"
+          ]
         }
       },
       "roi_example": {
@@ -48,9 +98,21 @@
         "cost": "€400/month",
         "value_created": "Capture additional appointments from missed/after-hours calls",
         "roi_analysis": {
-          "conservative": {"roi_percentage": 200, "payback_months": 4, "note": "5 extra appointments/month"},
-          "expected": {"roi_percentage": 400, "payback_months": 2, "note": "10 extra appointments/month"},
-          "optimistic": {"roi_percentage": 600, "payback_months": 1, "note": "15 extra appointments/month"}
+          "conservative": {
+            "roi_percentage": 200,
+            "payback_months": 4,
+            "note": "5 extra appointments/month"
+          },
+          "expected": {
+            "roi_percentage": 400,
+            "payback_months": 2,
+            "note": "10 extra appointments/month"
+          },
+          "optimistic": {
+            "roi_percentage": 600,
+            "payback_months": 1,
+            "note": "15 extra appointments/month"
+          }
         },
         "assumptions": "Not all captured calls convert to appointments; assumes €200-250 avg appointment value"
       },
@@ -59,7 +121,9 @@
         "mechanism": "24/7 booking + no missed calls → capture more patients → may need more hygienists/providers",
         "demand_expansion_potential": "20% more patient capacity utilized"
       },
-      "yc_reference": "Similar to Barti (eye care) which raised $12M Series A for AI receptionist + operating system"
+      "yc_reference": "Similar to Barti (eye care) which raised $12M Series A for AI receptionist + operating system",
+      "our_recommendation": "connect_and_automate",
+      "recommendation_rationale": "Your existing tools likely support API integration. A Claude workflow connecting them for ai voice receptionist & call handling ships in days, not weeks, and costs a fraction of a SaaS subscription."
     },
     {
       "id": "automated-patient-communication",
@@ -81,26 +145,73 @@
       "implementation": {
         "complexity": "low",
         "timeline_weeks": 2,
-        "required_data": ["Patient contact info", "Appointment data", "Practice management integration"]
+        "required_data": [
+          "Patient contact info",
+          "Appointment data",
+          "Practice management integration"
+        ]
       },
       "options": {
-        "off_the_shelf": {
-          "tools": ["Weave", "Lighthouse 360", "Solutionreach"],
+        "connect_and_automate": {
+          "approach": "Build automated reminder and recall system with Claude Code using Twilio MCP for SMS/email and Supabase for patient data. Set up scheduled reminder workflows and two-way text response handling.",
+          "build_time": "8-12 hours",
+          "mcp_servers": [
+            "twilio-mcp",
+            "supabase-mcp"
+          ],
+          "tools_used": [
+            "Claude Code",
+            "twilio-mcp",
+            "supabase-mcp"
+          ],
+          "monthly_cost": "EUR 50-150 (API usage)",
+          "pros": [
+            "Full customization",
+            "Lower ongoing cost",
+            "Unique messaging"
+          ],
+          "cons": [
+            "Development required",
+            "HIPAA compliance burden"
+          ]
+        },
+        "enhance_with_ai": {
+          "approach": "Deploy Weave Complete, RevenueWell with advanced AI capabilities for autonomous handling",
+          "build_time": "2-4 weeks",
+          "tools_used": [
+            "Weave Complete",
+            "RevenueWell"
+          ],
+          "monthly_cost": "€400-700/month",
+          "pros": [
+            "VoIP included",
+            "Reviews",
+            "Forms",
+            "Analytics"
+          ],
+          "cons": [
+            "Higher cost",
+            "May replace existing phone system"
+          ]
+        },
+        "targeted_upgrade": {
+          "when_needed": "Only if your current tools have no API or are fundamentally broken for automated patient communication system",
+          "tools": [
+            "Weave",
+            "Lighthouse 360",
+            "Solutionreach"
+          ],
           "cost_range": "€300-500/month",
-          "pros": ["All-in-one communication", "HIPAA compliant", "Easy setup"],
-          "cons": ["Monthly commitment", "Feature overlap potential"]
-        },
-        "best_in_class": {
-          "tools": ["Weave Complete", "RevenueWell"],
-          "cost_range": "€400-700/month",
-          "pros": ["VoIP included", "Reviews", "Forms", "Analytics"],
-          "cons": ["Higher cost", "May replace existing phone system"]
-        },
-        "custom_solution": {
-          "approach": "Custom SMS/email automation using Twilio + practice management API",
-          "cost_range": "€3,000-8,000 one-time + €50-100/month",
-          "pros": ["Full customization", "Lower ongoing cost", "Unique messaging"],
-          "cons": ["Development required", "HIPAA compliance burden"]
+          "migration_time": "2-4 weeks",
+          "pros": [
+            "All-in-one communication",
+            "HIPAA compliant",
+            "Easy setup"
+          ],
+          "cons": [
+            "Monthly commitment",
+            "Feature overlap potential"
+          ]
         }
       },
       "roi_example": {
@@ -108,12 +219,26 @@
         "cost": "€400/month",
         "value_created": "Reduce no-shows through automated reminders and confirmations",
         "roi_analysis": {
-          "conservative": {"roi_percentage": 200, "payback_months": 3, "note": "20% no-show reduction"},
-          "expected": {"roi_percentage": 350, "payback_months": 2, "note": "35% no-show reduction"},
-          "optimistic": {"roi_percentage": 500, "payback_months": 1.5, "note": "50% no-show reduction"}
+          "conservative": {
+            "roi_percentage": 200,
+            "payback_months": 3,
+            "note": "20% no-show reduction"
+          },
+          "expected": {
+            "roi_percentage": 350,
+            "payback_months": 2,
+            "note": "35% no-show reduction"
+          },
+          "optimistic": {
+            "roi_percentage": 500,
+            "payback_months": 1.5,
+            "note": "50% no-show reduction"
+          }
         },
         "assumptions": "No-show reduction varies by patient demographics; some slots may not be refillable"
-      }
+      },
+      "our_recommendation": "connect_and_automate",
+      "recommendation_rationale": "Your existing tools likely support API integration. A Claude workflow connecting them for automated patient communication system ships in days, not weeks, and costs a fraction of a SaaS subscription."
     },
     {
       "id": "ai-insurance-verification",
@@ -135,26 +260,66 @@
       "implementation": {
         "complexity": "medium",
         "timeline_weeks": 4,
-        "required_data": ["Patient insurance info", "Practice management system access"]
+        "required_data": [
+          "Patient insurance info",
+          "Practice management system access"
+        ]
       },
       "options": {
-        "off_the_shelf": {
-          "tools": ["Vyne Dental", "Dentrix Ascend verification"],
-          "cost_range": "€200-400/month",
-          "pros": ["Integrated with PM", "Instant verification", "Benefits breakdown"],
-          "cons": ["Not all payers", "Accuracy varies"]
-        },
-        "best_in_class": {
-          "tools": ["Dental Intelligence", "Jarvis Analytics"],
-          "cost_range": "€400-800/month",
-          "pros": ["Advanced analytics", "Production tracking", "AI insights"],
-          "cons": ["Higher cost", "Learning curve"]
-        },
-        "custom_solution": {
+        "connect_and_automate": {
           "approach": "RPA bot + AI for insurance verification across multiple portals",
-          "cost_range": "€10,000-25,000 one-time",
-          "pros": ["Works with any payer", "Full automation", "Major time savings"],
-          "cons": ["Complex build", "Needs maintenance as portals change"]
+          "build_time": "1-2 weeks",
+          "tools_used": [
+            "Claude Code",
+            "Custom API integrations"
+          ],
+          "mcp_servers": [],
+          "monthly_cost": "EUR 100-300",
+          "pros": [
+            "Works with any payer",
+            "Full automation",
+            "Major time savings"
+          ],
+          "cons": [
+            "Complex build",
+            "Needs maintenance as portals change"
+          ]
+        },
+        "enhance_with_ai": {
+          "approach": "Deploy Dental Intelligence, Jarvis Analytics with advanced AI capabilities for autonomous handling",
+          "build_time": "2-4 weeks",
+          "tools_used": [
+            "Dental Intelligence",
+            "Jarvis Analytics"
+          ],
+          "monthly_cost": "€400-800/month",
+          "pros": [
+            "Advanced analytics",
+            "Production tracking",
+            "AI insights"
+          ],
+          "cons": [
+            "Higher cost",
+            "Learning curve"
+          ]
+        },
+        "targeted_upgrade": {
+          "when_needed": "Only if your current tools have no API or are fundamentally broken for ai-powered insurance verification",
+          "tools": [
+            "Vyne Dental",
+            "Dentrix Ascend verification"
+          ],
+          "cost_range": "€200-400/month",
+          "migration_time": "4-6 weeks",
+          "pros": [
+            "Integrated with PM",
+            "Instant verification",
+            "Benefits breakdown"
+          ],
+          "cons": [
+            "Not all payers",
+            "Accuracy varies"
+          ]
         }
       },
       "roi_example": {
@@ -162,12 +327,26 @@
         "cost": "€350/month",
         "value_created": "Reduce manual verification time and improve claim accuracy",
         "roi_analysis": {
-          "conservative": {"roi_percentage": 200, "payback_months": 3, "note": "10 hrs/week saved"},
-          "expected": {"roi_percentage": 350, "payback_months": 2, "note": "18 hrs/week saved"},
-          "optimistic": {"roi_percentage": 500, "payback_months": 1, "note": "25 hrs/week saved"}
+          "conservative": {
+            "roi_percentage": 200,
+            "payback_months": 3,
+            "note": "10 hrs/week saved"
+          },
+          "expected": {
+            "roi_percentage": 350,
+            "payback_months": 2,
+            "note": "18 hrs/week saved"
+          },
+          "optimistic": {
+            "roi_percentage": 500,
+            "payback_months": 1,
+            "note": "25 hrs/week saved"
+          }
         },
         "assumptions": "Savings depend on current manual process efficiency; not all verifications automate equally"
-      }
+      },
+      "our_recommendation": "connect_and_automate",
+      "recommendation_rationale": "Your existing tools likely support API integration. A Claude workflow connecting them for ai-powered insurance verification ships in days, not weeks, and costs a fraction of a SaaS subscription."
     },
     {
       "id": "online-scheduling",
@@ -189,26 +368,71 @@
       "implementation": {
         "complexity": "low",
         "timeline_weeks": 2,
-        "required_data": ["Schedule availability", "Appointment types", "Provider preferences"]
+        "required_data": [
+          "Schedule availability",
+          "Appointment types",
+          "Provider preferences"
+        ]
       },
       "options": {
-        "off_the_shelf": {
-          "tools": ["LocalMed", "Zocdoc", "NexHealth"],
+        "connect_and_automate": {
+          "approach": "Build custom booking widget with Claude Code as a React component. Connect to Google Calendar MCP for availability and Supabase for patient records. Embed on practice website with custom scheduling rules.",
+          "build_time": "12-18 hours",
+          "mcp_servers": [
+            "google-calendar-mcp",
+            "supabase-mcp"
+          ],
+          "tools_used": [
+            "Claude Code",
+            "google-calendar-mcp",
+            "supabase-mcp"
+          ],
+          "monthly_cost": "EUR 50-150 (API usage)",
+          "pros": [
+            "Fully branded",
+            "Custom rules",
+            "No monthly fees"
+          ],
+          "cons": [
+            "Development time",
+            "Integration complexity"
+          ]
+        },
+        "enhance_with_ai": {
+          "approach": "Deploy NexHealth Pro, Dental Intelligence scheduling with advanced AI capabilities for autonomous handling",
+          "build_time": "2-4 weeks",
+          "tools_used": [
+            "NexHealth Pro",
+            "Dental Intelligence scheduling"
+          ],
+          "monthly_cost": "€400-700/month",
+          "pros": [
+            "Smart scheduling rules",
+            "Waitlist management",
+            "Analytics"
+          ],
+          "cons": [
+            "Higher cost"
+          ]
+        },
+        "targeted_upgrade": {
+          "when_needed": "Only if your current tools have no API or are fundamentally broken for 24/7 online patient scheduling",
+          "tools": [
+            "LocalMed",
+            "Zocdoc",
+            "NexHealth"
+          ],
           "cost_range": "€200-500/month",
-          "pros": ["Easy patient experience", "Google integration", "Real-time sync"],
-          "cons": ["Monthly fees", "May limit customization"]
-        },
-        "best_in_class": {
-          "tools": ["NexHealth Pro", "Dental Intelligence scheduling"],
-          "cost_range": "€400-700/month",
-          "pros": ["Smart scheduling rules", "Waitlist management", "Analytics"],
-          "cons": ["Higher cost"]
-        },
-        "custom_solution": {
-          "approach": "Custom booking widget integrated with practice management",
-          "cost_range": "€5,000-12,000 one-time",
-          "pros": ["Fully branded", "Custom rules", "No monthly fees"],
-          "cons": ["Development time", "Integration complexity"]
+          "migration_time": "2-4 weeks",
+          "pros": [
+            "Easy patient experience",
+            "Google integration",
+            "Real-time sync"
+          ],
+          "cons": [
+            "Monthly fees",
+            "May limit customization"
+          ]
         }
       },
       "roi_example": {
@@ -216,12 +440,26 @@
         "cost": "€350/month",
         "value_created": "Reduce phone scheduling burden and capture after-hours bookings",
         "roi_analysis": {
-          "conservative": {"roi_percentage": 150, "payback_months": 4, "note": "5 online bookings/week"},
-          "expected": {"roi_percentage": 300, "payback_months": 2, "note": "10 online bookings/week"},
-          "optimistic": {"roi_percentage": 450, "payback_months": 1, "note": "15 online bookings/week"}
+          "conservative": {
+            "roi_percentage": 150,
+            "payback_months": 4,
+            "note": "5 online bookings/week"
+          },
+          "expected": {
+            "roi_percentage": 300,
+            "payback_months": 2,
+            "note": "10 online bookings/week"
+          },
+          "optimistic": {
+            "roi_percentage": 450,
+            "payback_months": 1,
+            "note": "15 online bookings/week"
+          }
         },
         "assumptions": "Online booking adoption varies; some patients prefer phone; requires staff training"
-      }
+      },
+      "our_recommendation": "connect_and_automate",
+      "recommendation_rationale": "Your existing tools likely support API integration. A Claude workflow connecting them for 24/7 online patient scheduling ships in days, not weeks, and costs a fraction of a SaaS subscription."
     },
     {
       "id": "ai-treatment-planning",
@@ -243,26 +481,62 @@
       "implementation": {
         "complexity": "medium",
         "timeline_weeks": 4,
-        "required_data": ["Digital X-rays", "Imaging software integration"]
+        "required_data": [
+          "Digital X-rays",
+          "Imaging software integration"
+        ]
       },
       "options": {
-        "off_the_shelf": {
-          "tools": ["Pearl", "Overjet", "Dentistry.AI"],
-          "cost_range": "€300-600/month",
-          "pros": ["FDA-cleared", "Integrates with imaging", "Second read"],
-          "cons": ["Requires digital imaging", "Learning curve"]
-        },
-        "best_in_class": {
-          "tools": ["Pearl Second Opinion + Practice Analytics"],
-          "cost_range": "€500-900/month",
-          "pros": ["Comprehensive AI", "Patient engagement tools", "Clinical insights"],
-          "cons": ["Higher cost", "Full commitment needed"]
-        },
-        "custom_solution": {
+        "connect_and_automate": {
           "approach": "Not recommended - FDA approval requirements make custom AI infeasible",
-          "cost_range": "N/A",
+          "build_time": "1-2 weeks",
+          "tools_used": [
+            "Claude Code",
+            "Custom API integrations"
+          ],
+          "mcp_servers": [],
+          "monthly_cost": "EUR 100-300",
           "pros": [],
-          "cons": ["Regulatory hurdles", "Liability concerns"]
+          "cons": [
+            "Regulatory hurdles",
+            "Liability concerns"
+          ]
+        },
+        "enhance_with_ai": {
+          "approach": "Deploy Pearl Second Opinion + Practice Analytics with advanced AI capabilities for autonomous handling",
+          "build_time": "2-4 weeks",
+          "tools_used": [
+            "Pearl Second Opinion + Practice Analytics"
+          ],
+          "monthly_cost": "€500-900/month",
+          "pros": [
+            "Comprehensive AI",
+            "Patient engagement tools",
+            "Clinical insights"
+          ],
+          "cons": [
+            "Higher cost",
+            "Full commitment needed"
+          ]
+        },
+        "targeted_upgrade": {
+          "when_needed": "Only if your current tools have no API or are fundamentally broken for ai-assisted treatment planning & imaging",
+          "tools": [
+            "Pearl",
+            "Overjet",
+            "Dentistry.AI"
+          ],
+          "cost_range": "€300-600/month",
+          "migration_time": "4-6 weeks",
+          "pros": [
+            "FDA-cleared",
+            "Integrates with imaging",
+            "Second read"
+          ],
+          "cons": [
+            "Requires digital imaging",
+            "Learning curve"
+          ]
         }
       },
       "roi_example": {
@@ -270,12 +544,26 @@
         "cost": "€500/month",
         "value_created": "Improve case acceptance through better visual communication",
         "roi_analysis": {
-          "conservative": {"roi_percentage": 200, "payback_months": 4, "note": "3% acceptance increase"},
-          "expected": {"roi_percentage": 400, "payback_months": 2, "note": "5% acceptance increase"},
-          "optimistic": {"roi_percentage": 700, "payback_months": 1, "note": "8% acceptance increase"}
+          "conservative": {
+            "roi_percentage": 200,
+            "payback_months": 4,
+            "note": "3% acceptance increase"
+          },
+          "expected": {
+            "roi_percentage": 400,
+            "payback_months": 2,
+            "note": "5% acceptance increase"
+          },
+          "optimistic": {
+            "roi_percentage": 700,
+            "payback_months": 1,
+            "note": "8% acceptance increase"
+          }
         },
         "assumptions": "Case acceptance improvement varies; requires consistent use by all providers; results take time"
-      }
+      },
+      "our_recommendation": "connect_and_automate",
+      "recommendation_rationale": "Your existing tools likely support API integration. A Claude workflow connecting them for ai-assisted treatment planning & imaging ships in days, not weeks, and costs a fraction of a SaaS subscription."
     },
     {
       "id": "patient-financing",
@@ -297,26 +585,69 @@
       "implementation": {
         "complexity": "low",
         "timeline_weeks": 2,
-        "required_data": ["Treatment costs", "Payment processing setup"]
+        "required_data": [
+          "Treatment costs",
+          "Payment processing setup"
+        ]
       },
       "options": {
-        "off_the_shelf": {
-          "tools": ["CareCredit", "Sunbit", "Proceed Finance"],
+        "connect_and_automate": {
+          "approach": "Build payment plan management system with Claude Code using Stripe MCP for recurring payments and Supabase for plan tracking. Create patient-facing payment portal and automated reminder workflows.",
+          "build_time": "10-15 hours",
+          "mcp_servers": [
+            "stripe-mcp",
+            "supabase-mcp"
+          ],
+          "tools_used": [
+            "Claude Code",
+            "stripe-mcp",
+            "supabase-mcp"
+          ],
+          "monthly_cost": "EUR 50-150 (API usage)",
+          "pros": [
+            "No third-party fees",
+            "Full control",
+            "Better margins"
+          ],
+          "cons": [
+            "Default risk",
+            "Collection burden"
+          ]
+        },
+        "enhance_with_ai": {
+          "approach": "Deploy Sunbit + in-house payment plans via Weave with advanced AI capabilities for autonomous handling",
+          "build_time": "2-4 weeks",
+          "tools_used": [
+            "Sunbit + in-house payment plans via Weave"
+          ],
+          "monthly_cost": "2-5% per transaction + software fees",
+          "pros": [
+            "Higher approval rates",
+            "Multiple options",
+            "In-house plans too"
+          ],
+          "cons": [
+            "Need to manage multiple systems"
+          ]
+        },
+        "targeted_upgrade": {
+          "when_needed": "Only if your current tools have no API or are fundamentally broken for in-house patient financing automation",
+          "tools": [
+            "CareCredit",
+            "Sunbit",
+            "Proceed Finance"
+          ],
           "cost_range": "0-4% per transaction",
-          "pros": ["No upfront cost", "Instant decisions", "Patient pays interest"],
-          "cons": ["High patient interest rates", "Not all approved"]
-        },
-        "best_in_class": {
-          "tools": ["Sunbit + in-house payment plans via Weave"],
-          "cost_range": "2-5% per transaction + software fees",
-          "pros": ["Higher approval rates", "Multiple options", "In-house plans too"],
-          "cons": ["Need to manage multiple systems"]
-        },
-        "custom_solution": {
-          "approach": "In-house payment plans with automated ACH collection",
-          "cost_range": "€2,000-5,000 setup + payment processing fees",
-          "pros": ["No third-party fees", "Full control", "Better margins"],
-          "cons": ["Default risk", "Collection burden"]
+          "migration_time": "2-4 weeks",
+          "pros": [
+            "No upfront cost",
+            "Instant decisions",
+            "Patient pays interest"
+          ],
+          "cons": [
+            "High patient interest rates",
+            "Not all approved"
+          ]
         }
       },
       "roi_example": {
@@ -324,12 +655,26 @@
         "cost": "3% average transaction fee",
         "value_created": "Convert cost-declined patients through financing options",
         "roi_analysis": {
-          "conservative": {"roi_percentage": 300, "payback_months": 1, "note": "2 patients/month converted"},
-          "expected": {"roi_percentage": 600, "payback_months": 1, "note": "4 patients/month converted"},
-          "optimistic": {"roi_percentage": 900, "payback_months": 0.5, "note": "6 patients/month converted"}
+          "conservative": {
+            "roi_percentage": 300,
+            "payback_months": 1,
+            "note": "2 patients/month converted"
+          },
+          "expected": {
+            "roi_percentage": 600,
+            "payback_months": 1,
+            "note": "4 patients/month converted"
+          },
+          "optimistic": {
+            "roi_percentage": 900,
+            "payback_months": 0.5,
+            "note": "6 patients/month converted"
+          }
         },
         "assumptions": "Conversion varies by patient demographics; transaction fees reduce margin; some patients may default"
-      }
+      },
+      "our_recommendation": "connect_and_automate",
+      "recommendation_rationale": "Your existing tools likely support API integration. A Claude workflow connecting them for in-house patient financing automation ships in days, not weeks, and costs a fraction of a SaaS subscription."
     },
     {
       "id": "reputation-reviews",
@@ -351,26 +696,67 @@
       "implementation": {
         "complexity": "low",
         "timeline_weeks": 1,
-        "required_data": ["Patient email/phone", "Appointment completion data"]
+        "required_data": [
+          "Patient email/phone",
+          "Appointment completion data"
+        ]
       },
       "options": {
-        "off_the_shelf": {
-          "tools": ["Birdeye", "Podium", "Weave (included)"],
+        "connect_and_automate": {
+          "approach": "Build automated review request system with Claude Code using Twilio MCP for SMS/email triggers after appointments. Include personalized messaging, Google review link generation, and a simple dashboard for tracking review volume.",
+          "build_time": "6-9 hours",
+          "mcp_servers": [
+            "twilio-mcp",
+            "google-maps-mcp"
+          ],
+          "tools_used": [
+            "Claude Code",
+            "twilio-mcp",
+            "google-maps-mcp"
+          ],
+          "monthly_cost": "EUR 50-150 (API usage)",
+          "pros": [
+            "Low ongoing cost",
+            "Customized messaging"
+          ],
+          "cons": [
+            "Basic features only",
+            "No reputation dashboard"
+          ]
+        },
+        "enhance_with_ai": {
+          "approach": "Deploy Birdeye + Google integration with advanced AI capabilities for autonomous handling",
+          "build_time": "2-4 weeks",
+          "tools_used": [
+            "Birdeye + Google integration"
+          ],
+          "monthly_cost": "€350-500/month",
+          "pros": [
+            "Comprehensive reputation",
+            "Competitive insights",
+            "Social integration"
+          ],
+          "cons": [
+            "Higher cost"
+          ]
+        },
+        "targeted_upgrade": {
+          "when_needed": "Only if your current tools have no API or are fundamentally broken for automated reputation & review management",
+          "tools": [
+            "Birdeye",
+            "Podium",
+            "Weave (included)"
+          ],
           "cost_range": "€200-400/month (or included in communication platform)",
-          "pros": ["Easy setup", "Multi-platform reviews", "Response templates"],
-          "cons": ["Can be expensive standalone"]
-        },
-        "best_in_class": {
-          "tools": ["Birdeye + Google integration"],
-          "cost_range": "€350-500/month",
-          "pros": ["Comprehensive reputation", "Competitive insights", "Social integration"],
-          "cons": ["Higher cost"]
-        },
-        "custom_solution": {
-          "approach": "Custom review request automation via n8n/Make",
-          "cost_range": "€1,000-2,500 one-time + minimal ongoing",
-          "pros": ["Low ongoing cost", "Customized messaging"],
-          "cons": ["Basic features only", "No reputation dashboard"]
+          "migration_time": "1-3 weeks",
+          "pros": [
+            "Easy setup",
+            "Multi-platform reviews",
+            "Response templates"
+          ],
+          "cons": [
+            "Can be expensive standalone"
+          ]
         }
       },
       "roi_example": {
@@ -378,12 +764,26 @@
         "cost": "€300/month",
         "value_created": "Improve online reputation and visibility through consistent review generation",
         "roi_analysis": {
-          "conservative": {"roi_percentage": 150, "payback_months": 6, "note": "5 reviews/month, 1 new patient"},
-          "expected": {"roi_percentage": 300, "payback_months": 3, "note": "10 reviews/month, 2-3 new patients"},
-          "optimistic": {"roi_percentage": 500, "payback_months": 2, "note": "15 reviews/month, 5 new patients"}
+          "conservative": {
+            "roi_percentage": 150,
+            "payback_months": 6,
+            "note": "5 reviews/month, 1 new patient"
+          },
+          "expected": {
+            "roi_percentage": 300,
+            "payback_months": 3,
+            "note": "10 reviews/month, 2-3 new patients"
+          },
+          "optimistic": {
+            "roi_percentage": 500,
+            "payback_months": 2,
+            "note": "15 reviews/month, 5 new patients"
+          }
         },
         "assumptions": "Attribution from reviews to new patients is indirect; results compound over time; competitive market affects impact"
-      }
+      },
+      "our_recommendation": "connect_and_automate",
+      "recommendation_rationale": "Your existing tools likely support API integration. A Claude workflow connecting them for automated reputation & review management ships in days, not weeks, and costs a fraction of a SaaS subscription."
     }
   ],
   "quick_wins": [

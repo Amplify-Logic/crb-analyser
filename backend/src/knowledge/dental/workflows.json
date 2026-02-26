@@ -1,0 +1,86 @@
+{
+  "industry": "dental",
+  "description": "Pre-built AI workflow templates for dental practices",
+  "workflows": [
+    {
+      "id": "appointment-reminder-automation",
+      "name": "Smart Appointment Reminders",
+      "description": "Connect PMS appointment data to SMS/email — personalized reminders that reduce no-shows",
+      "trigger": "Appointment scheduled or approaching (48h, 24h, 2h)",
+      "connects": ["practice_management_system", "sms_tool", "email_tool"],
+      "mcp_servers": [],
+      "build_time_hours": 4,
+      "complexity": "low",
+      "steps": [
+        "Pull upcoming appointments from PMS API",
+        "Check patient communication preferences",
+        "Generate personalized reminder with appointment details",
+        "Send via preferred channel (SMS, email, or both)",
+        "Handle confirmations and reschedule requests",
+        "Update PMS with confirmation status"
+      ],
+      "prerequisites": ["Practice management system with API (Dentrix, Open Dental, Curve)", "SMS or email service"],
+      "estimated_monthly_value": 1500
+    },
+    {
+      "id": "insurance-pre-verification",
+      "name": "Automated Insurance Pre-Verification",
+      "description": "Pull patient insurance details before visit — verify coverage and flag issues",
+      "trigger": "Patient appointment booked for next business day",
+      "connects": ["practice_management_system", "insurance_portal"],
+      "mcp_servers": [],
+      "build_time_hours": 8,
+      "complexity": "medium",
+      "steps": [
+        "Pull next-day appointments from PMS",
+        "Extract patient insurance details from records",
+        "Query insurance portal API for coverage verification",
+        "Flag coverage issues or missing information",
+        "Generate pre-visit insurance summary for front desk",
+        "Alert staff about patients needing updated insurance"
+      ],
+      "prerequisites": ["PMS with patient insurance data", "Insurance portal API access"],
+      "estimated_monthly_value": 2000
+    },
+    {
+      "id": "patient-recall-automation",
+      "name": "AI-Powered Patient Recall",
+      "description": "Identify patients overdue for visits and send personalized recall messages",
+      "trigger": "Patient passes recall date without booking",
+      "connects": ["practice_management_system", "sms_tool", "email_tool"],
+      "mcp_servers": [],
+      "build_time_hours": 6,
+      "complexity": "low",
+      "steps": [
+        "Query PMS for patients past their recall date",
+        "Segment by overdue duration and treatment type",
+        "Generate personalized recall message with Claude",
+        "Send via patient's preferred channel",
+        "Track response and escalate non-responders",
+        "Book appointments directly from patient replies"
+      ],
+      "prerequisites": ["PMS with recall tracking", "Patient communication preferences on file"],
+      "estimated_monthly_value": 3000
+    },
+    {
+      "id": "treatment-plan-presenter",
+      "name": "AI Treatment Plan Presentation",
+      "description": "Generate patient-friendly treatment plan explanations from clinical notes",
+      "trigger": "Dentist completes treatment plan in PMS",
+      "connects": ["practice_management_system", "patient_portal"],
+      "mcp_servers": [],
+      "build_time_hours": 10,
+      "complexity": "medium",
+      "steps": [
+        "Extract treatment plan details from PMS",
+        "Translate clinical terminology to patient-friendly language",
+        "Generate visual treatment timeline",
+        "Include cost breakdown with insurance coverage",
+        "Send to patient portal or email for review before visit",
+        "Track acceptance rates and follow up on pending plans"
+      ],
+      "prerequisites": ["PMS with treatment plan data", "Patient communication channel"],
+      "estimated_monthly_value": 2500
+    }
+  ]
+}

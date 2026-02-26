@@ -19,23 +19,70 @@
         "business_health": 9
       },
       "options": {
-        "off_the_shelf": {
-          "tools": ["Smith.ai", "Ruby Receptionist", "Nexa"],
+        "connect_and_automate": {
+          "approach": "Build AI voice receptionist with Claude Code using Twilio MCP for call handling, Google Calendar MCP for consultation scheduling, and Supabase for lead tracking. Configure intake qualification logic and conflict check workflows.",
+          "build_time": "16-24 hours",
+          "mcp_servers": [
+            "twilio-mcp",
+            "google-calendar-mcp",
+            "supabase-mcp"
+          ],
+          "tools_used": [
+            "Claude Code",
+            "twilio-mcp",
+            "google-calendar-mcp",
+            "supabase-mcp"
+          ],
+          "monthly_cost": "EUR 50-150 (API usage)",
+          "pros": [
+            "Custom qualification logic",
+            "Your intake process",
+            "24/7 AI handling",
+            "CRM integration"
+          ],
+          "cons": [
+            "Development required",
+            "Needs workflow design"
+          ]
+        },
+        "enhance_with_ai": {
+          "approach": "Deploy Clio Grow + AI, Lawmatics with advanced AI capabilities for autonomous handling",
+          "build_time": "2-4 weeks",
+          "tools_used": [
+            "Clio Grow + AI",
+            "Lawmatics",
+            "Intaker"
+          ],
+          "monthly_cost": "€200-500/month",
+          "pros": [
+            "Legal/professional-specific",
+            "CRM integration",
+            "Conflict checking",
+            "AI features"
+          ],
+          "cons": [
+            "May require workflow changes"
+          ]
+        },
+        "targeted_upgrade": {
+          "when_needed": "Only if your current tools have no API or are fundamentally broken for ai voice receptionist & client intake",
+          "tools": [
+            "Smith.ai",
+            "Ruby Receptionist",
+            "Nexa"
+          ],
           "cost_range": "€300-700/month",
-          "pros": ["Human + AI hybrid", "Professional handling", "Quick setup", "Lead qualification"],
-          "cons": ["Per-call pricing", "Less industry-specific"]
-        },
-        "best_in_class": {
-          "tools": ["Clio Grow + AI", "Lawmatics", "Intaker"],
-          "cost_range": "€200-500/month",
-          "pros": ["Legal/professional-specific", "CRM integration", "Conflict checking", "AI features"],
-          "cons": ["May require workflow changes"]
-        },
-        "custom_solution": {
-          "approach": "AI voice agent using Claude API + Twilio integrated with practice management",
-          "cost_range": "€8,000-20,000 one-time + €200-400/month",
-          "pros": ["Custom qualification logic", "Your intake process", "24/7 AI handling", "CRM integration"],
-          "cons": ["Development required", "Needs workflow design"]
+          "migration_time": "4-6 weeks",
+          "pros": [
+            "Human + AI hybrid",
+            "Professional handling",
+            "Quick setup",
+            "Lead qualification"
+          ],
+          "cons": [
+            "Per-call pricing",
+            "Less industry-specific"
+          ]
         }
       },
       "roi_example": {
@@ -49,13 +96,15 @@
         "mechanism": "24/7 lead capture + qualification → more cases → more billable work → may need more associates",
         "demand_expansion_potential": "30% more client capacity utilized"
       },
-      "yc_reference": "Similar to MDHub (mental health) and Auto Ace (car dealerships) for AI receptionist"
+      "yc_reference": "Similar to MDHub (mental health) and Auto Ace (car dealerships) for AI receptionist",
+      "our_recommendation": "connect_and_automate",
+      "recommendation_rationale": "Your existing tools likely support API integration. A Claude workflow connecting them for ai voice receptionist & client intake ships in days, not weeks, and costs a fraction of a SaaS subscription."
     },
     {
       "id": "ai-time-capture",
       "name": "AI-Powered Time Capture",
       "category": "billing",
-      "description": "Automatically capture billable time from calendar, email, and document activity",
+      "description": "Automatically capture billable time from calendar, email, and document activity to recover lost revenue and reduce end-of-day time reconstruction",
       "typical_roi": {
         "time_saved_hours_weekly": 5,
         "revenue_increase_percentage": 15,
@@ -67,13 +116,128 @@
       "two_pillars": {
         "customer_value": 6,
         "business_health": 9
-      }
+      },
+      "impact": {
+        "value_saved": {
+          "time_hours_per_week": 5,
+          "description": "Eliminates manual time entry and end-of-day reconstruction"
+        },
+        "value_created": {
+          "description": "Recover 10-15% of billable time that goes unrecorded, improving realization rates",
+          "potential_revenue_impact": "10-15% increase in billed revenue from captured time"
+        }
+      },
+      "implementation": {
+        "complexity": "medium",
+        "timeline_weeks": 3,
+        "required_data": [
+          "Calendar access",
+          "Email integration",
+          "Practice management system access",
+          "Matter/client list"
+        ]
+      },
+      "options": {
+        "connect_and_automate": {
+          "approach": "Build AI time capture agent with Claude Code using Google Calendar MCP and Gmail MCP to monitor professional activity. Auto-generate time entries with billing narratives and store in Supabase. Run as scheduled agent that suggests entries for daily review.",
+          "build_time": "12-18 hours",
+          "mcp_servers": [
+            "google-calendar-mcp",
+            "gmail-mcp",
+            "supabase-mcp"
+          ],
+          "tools_used": [
+            "Claude Code",
+            "google-calendar-mcp",
+            "gmail-mcp",
+            "supabase-mcp"
+          ],
+          "monthly_cost": "EUR 50-150 (API usage)",
+          "pros": [
+            "Works with existing tools",
+            "Custom billing rules",
+            "AI-generated narratives",
+            "No per-user pricing"
+          ],
+          "cons": [
+            "Development required",
+            "Privacy considerations for email monitoring",
+            "Integration complexity"
+          ]
+        },
+        "enhance_with_ai": {
+          "approach": "Deploy Clio Manage + Time Tracking, CARET Legal with advanced AI capabilities for autonomous handling",
+          "build_time": "2-4 weeks",
+          "tools_used": [
+            "Clio Manage + Time Tracking",
+            "CARET Legal",
+            "BigTime"
+          ],
+          "monthly_cost": "€50-100/user/month",
+          "pros": [
+            "Legal/professional-specific",
+            "AI billing narratives",
+            "Trust accounting",
+            "LEDES billing support"
+          ],
+          "cons": [
+            "Higher cost per user",
+            "Requires practice management migration if switching"
+          ]
+        },
+        "targeted_upgrade": {
+          "when_needed": "Only if your current tools have no API or are fundamentally broken for ai-powered time capture",
+          "tools": [
+            "Timely",
+            "Harvest AI",
+            "Toggl Track"
+          ],
+          "cost_range": "€10-30/user/month",
+          "migration_time": "3-5 weeks",
+          "pros": [
+            "Calendar integration",
+            "Automatic time suggestions",
+            "Easy adoption",
+            "Mobile apps"
+          ],
+          "cons": [
+            "Not legal-specific",
+            "Limited billing narrative generation",
+            "May need manual matter assignment"
+          ]
+        }
+      },
+      "roi_example": {
+        "scenario": "5-person law firm with €300/hour average rate, each professional losing 30 min/day to unrecorded time",
+        "cost": "€250/month (5 users × €50)",
+        "value_created": "Recover lost billable time through automatic capture and AI-suggested time entries",
+        "roi_analysis": {
+          "conservative": {
+            "roi_percentage": 400,
+            "payback_months": 1,
+            "note": "Recover 15 min/day per professional"
+          },
+          "expected": {
+            "roi_percentage": 800,
+            "payback_months": 1,
+            "note": "Recover 25 min/day per professional"
+          },
+          "optimistic": {
+            "roi_percentage": 1200,
+            "payback_months": 1,
+            "note": "Recover 30 min/day per professional"
+          }
+        },
+        "assumptions": "Not all recovered time will be billable; adoption varies by professional; results improve as AI learns patterns"
+      },
+      "our_recommendation": "connect_and_automate",
+      "recommendation_rationale": "Your existing tools likely support API integration. A Claude workflow connecting them for ai-powered time capture ships in days, not weeks, and costs a fraction of a SaaS subscription."
     },
     {
       "id": "document-drafting-ai",
       "name": "AI Document Drafting & Templates",
       "category": "productivity",
-      "description": "Use AI to draft first versions of contracts, letters, and documents from templates",
+      "description": "Use AI to draft first versions of contracts, letters, memos, and documents from templates and precedents, with firm-specific clause libraries",
       "typical_roi": {
         "time_saved_hours_weekly": 8,
         "cost_reduction_percentage": 25,
@@ -85,13 +249,127 @@
       "two_pillars": {
         "customer_value": 7,
         "business_health": 8
-      }
+      },
+      "impact": {
+        "value_saved": {
+          "time_hours_per_week": 8,
+          "description": "Reduce first-draft creation time from hours to minutes for standard documents"
+        },
+        "value_created": {
+          "description": "Faster turnaround for clients, more consistent quality, free up junior staff for higher-value work",
+          "potential_revenue_impact": "25% reduction in document production cost, ability to handle 20% more matters"
+        }
+      },
+      "implementation": {
+        "complexity": "medium",
+        "timeline_weeks": 4,
+        "required_data": [
+          "Template library",
+          "Clause bank",
+          "Precedent documents",
+          "Firm style guide",
+          "Client matter data"
+        ]
+      },
+      "options": {
+        "connect_and_automate": {
+          "approach": "Build document drafting system with Claude Code using filesystem MCP to access template library and clause bank. Create matter-aware prompts that generate first drafts from structured inputs. Store generated documents and track versions in Supabase.",
+          "build_time": "10-15 hours",
+          "mcp_servers": [
+            "filesystem-mcp",
+            "supabase-mcp"
+          ],
+          "tools_used": [
+            "Claude Code",
+            "filesystem-mcp",
+            "supabase-mcp"
+          ],
+          "monthly_cost": "EUR 50-150 (API usage)",
+          "pros": [
+            "Fully customized to firm templates",
+            "No per-user cost",
+            "Deep PM integration",
+            "Clause library control"
+          ],
+          "cons": [
+            "Development required",
+            "Needs ongoing prompt tuning",
+            "Must maintain clause library"
+          ]
+        },
+        "enhance_with_ai": {
+          "approach": "Deploy Harvey AI Enterprise, Luminance Corporate with advanced AI capabilities for autonomous handling",
+          "build_time": "2-4 weeks",
+          "tools_used": [
+            "Harvey AI Enterprise",
+            "Luminance Corporate"
+          ],
+          "monthly_cost": "€200-500/user/month",
+          "pros": [
+            "Firm-specific training",
+            "Precedent learning",
+            "Multi-jurisdiction support",
+            "Quality scoring"
+          ],
+          "cons": [
+            "Enterprise pricing",
+            "Onboarding period",
+            "Requires template library investment"
+          ]
+        },
+        "targeted_upgrade": {
+          "when_needed": "Only if your current tools have no API or are fundamentally broken for ai document drafting & templates",
+          "tools": [
+            "Spellbook (Rally)",
+            "Harvey AI",
+            "CoCounsel (Thomson Reuters)"
+          ],
+          "cost_range": "€80-200/user/month",
+          "migration_time": "4-6 weeks",
+          "pros": [
+            "Pre-trained on legal language",
+            "Template integration",
+            "Clause suggestions",
+            "Version tracking"
+          ],
+          "cons": [
+            "Generic templates need customization",
+            "May not match firm voice",
+            "Per-user pricing adds up"
+          ]
+        }
+      },
+      "roi_example": {
+        "scenario": "Mid-size firm producing 40 standard documents/week (engagement letters, NDAs, contracts)",
+        "cost": "€800/month (8 users × €100)",
+        "value_created": "Reduce first-draft time from 2 hours to 15 minutes per document",
+        "roi_analysis": {
+          "conservative": {
+            "roi_percentage": 200,
+            "payback_months": 3,
+            "note": "50% time reduction on standard docs"
+          },
+          "expected": {
+            "roi_percentage": 400,
+            "payback_months": 2,
+            "note": "70% time reduction, better consistency"
+          },
+          "optimistic": {
+            "roi_percentage": 600,
+            "payback_months": 1,
+            "note": "80% time reduction, handle 25% more matters"
+          }
+        },
+        "assumptions": "AI drafts always need human review; complex bespoke documents see less benefit; adoption takes 2-4 weeks"
+      },
+      "our_recommendation": "connect_and_automate",
+      "recommendation_rationale": "Your existing tools likely support API integration. A Claude workflow connecting them for ai document drafting & templates ships in days, not weeks, and costs a fraction of a SaaS subscription."
     },
     {
       "id": "contract-review-ai",
       "name": "AI Contract Review & Analysis",
       "category": "productivity",
-      "description": "AI-powered review of contracts to identify risks, missing clauses, and deviations",
+      "description": "AI-powered review of contracts to identify risks, missing clauses, non-standard terms, and deviations from firm playbooks",
       "typical_roi": {
         "time_saved_hours_weekly": 10,
         "error_reduction_percentage": 40,
@@ -103,13 +381,122 @@
       "two_pillars": {
         "customer_value": 8,
         "business_health": 8
-      }
+      },
+      "impact": {
+        "value_saved": {
+          "time_hours_per_week": 10,
+          "description": "Reduce initial contract review time by 60-80%, flag issues automatically"
+        },
+        "value_created": {
+          "description": "Catch risks that human review might miss, ensure compliance with firm standards, improve negotiation positioning",
+          "potential_revenue_impact": "Handle 30% more contract reviews without additional headcount"
+        }
+      },
+      "implementation": {
+        "complexity": "high",
+        "timeline_weeks": 6,
+        "required_data": [
+          "Contract playbooks",
+          "Approved clause library",
+          "Risk tolerance guidelines",
+          "Historical reviewed contracts"
+        ]
+      },
+      "options": {
+        "connect_and_automate": {
+          "approach": "Custom contract analysis pipeline using Claude API with firm-specific playbooks, clause extraction, and risk scoring",
+          "build_time": "1-2 weeks",
+          "tools_used": [
+            "Claude Code",
+            "Custom API integrations"
+          ],
+          "mcp_servers": [],
+          "monthly_cost": "EUR 100-300",
+          "pros": [
+            "Fully aligned to firm playbooks",
+            "Custom risk scoring",
+            "No per-contract pricing",
+            "Integrates with DMS"
+          ],
+          "cons": [
+            "Significant development",
+            "Needs legal + technical expertise",
+            "Ongoing maintenance as standards evolve"
+          ]
+        },
+        "enhance_with_ai": {
+          "approach": "Deploy Luminance Enterprise, Onit ReviewAI with advanced AI capabilities for autonomous handling",
+          "build_time": "2-4 weeks",
+          "tools_used": [
+            "Luminance Enterprise",
+            "Onit ReviewAI"
+          ],
+          "monthly_cost": "€1,000-3,000/month",
+          "pros": [
+            "Custom playbook integration",
+            "Learning from firm's review patterns",
+            "M&A due diligence support",
+            "Multi-language"
+          ],
+          "cons": [
+            "Enterprise pricing",
+            "6-8 week onboarding",
+            "Requires dedicated admin"
+          ]
+        },
+        "targeted_upgrade": {
+          "when_needed": "Only if your current tools have no API or are fundamentally broken for ai contract review & analysis",
+          "tools": [
+            "Luminance",
+            "Kira Systems",
+            "LawGeex"
+          ],
+          "cost_range": "€500-1500/month",
+          "migration_time": "6-8 weeks",
+          "pros": [
+            "Pre-trained on legal contracts",
+            "Risk scoring",
+            "Clause comparison",
+            "Multi-format support"
+          ],
+          "cons": [
+            "May not match firm-specific standards",
+            "Learning curve",
+            "Subscription costs"
+          ]
+        }
+      },
+      "roi_example": {
+        "scenario": "Firm reviewing 30 contracts/month, average 3 hours per review at €250/hour",
+        "cost": "€1,000/month",
+        "value_created": "Reduce first-pass review time and catch more issues through automated analysis",
+        "roi_analysis": {
+          "conservative": {
+            "roi_percentage": 300,
+            "payback_months": 3,
+            "note": "40% review time reduction"
+          },
+          "expected": {
+            "roi_percentage": 500,
+            "payback_months": 2,
+            "note": "60% review time reduction, fewer missed issues"
+          },
+          "optimistic": {
+            "roi_percentage": 800,
+            "payback_months": 1,
+            "note": "75% review time reduction, handle 30% more volume"
+          }
+        },
+        "assumptions": "AI review supplements but does not replace attorney judgment; bespoke contracts benefit less than standard agreements"
+      },
+      "our_recommendation": "connect_and_automate",
+      "recommendation_rationale": "Your existing tools likely support API integration. A Claude workflow connecting them for ai contract review & analysis ships in days, not weeks, and costs a fraction of a SaaS subscription."
     },
     {
       "id": "client-intake-automation",
       "name": "Automated Client Intake & Onboarding",
       "category": "client_experience",
-      "description": "Digital intake forms, automated conflict checks, e-signatures for engagement letters",
+      "description": "Digital intake forms, automated conflict checks, e-signatures for engagement letters, and streamlined onboarding workflows",
       "typical_roi": {
         "time_saved_hours_weekly": 4,
         "conversion_increase_percentage": 20,
@@ -121,13 +508,126 @@
       "two_pillars": {
         "customer_value": 8,
         "business_health": 7
-      }
+      },
+      "impact": {
+        "value_saved": {
+          "time_hours_per_week": 4,
+          "description": "Eliminate manual data entry, paper forms, and back-and-forth for engagement letters"
+        },
+        "value_created": {
+          "description": "Faster intake means fewer lost leads, professional first impression, immediate conflict clearance",
+          "potential_revenue_impact": "20% improvement in lead-to-client conversion from faster intake"
+        }
+      },
+      "implementation": {
+        "complexity": "low",
+        "timeline_weeks": 2,
+        "required_data": [
+          "Intake questionnaire fields",
+          "Conflict check database",
+          "Engagement letter templates",
+          "Fee schedule"
+        ]
+      },
+      "options": {
+        "connect_and_automate": {
+          "approach": "Build client intake portal with Claude Code as a React app. Use Supabase MCP for intake form storage and conflict checking against existing client database. Add automated engagement letter generation and email notifications via Resend MCP.",
+          "build_time": "10-15 hours",
+          "mcp_servers": [
+            "supabase-mcp",
+            "resend-mcp"
+          ],
+          "tools_used": [
+            "Claude Code",
+            "supabase-mcp",
+            "resend-mcp"
+          ],
+          "monthly_cost": "EUR 50-150 (API usage)",
+          "pros": [
+            "Fully branded experience",
+            "Custom intake logic",
+            "No per-user pricing",
+            "Works with existing PM"
+          ],
+          "cons": [
+            "Development time",
+            "Conflict check logic complexity",
+            "Maintenance burden"
+          ]
+        },
+        "enhance_with_ai": {
+          "approach": "Deploy Lawmatics + Clio Manage, PracticePanther Complete with advanced AI capabilities for autonomous handling",
+          "build_time": "2-4 weeks",
+          "tools_used": [
+            "Lawmatics + Clio Manage",
+            "PracticePanther Complete"
+          ],
+          "monthly_cost": "€100-250/user/month",
+          "pros": [
+            "Full CRM + intake + PM integration",
+            "Automated follow-up sequences",
+            "Pipeline analytics",
+            "Client portal included"
+          ],
+          "cons": [
+            "Higher cost",
+            "May require PM migration",
+            "Learning curve for full features"
+          ]
+        },
+        "targeted_upgrade": {
+          "when_needed": "Only if your current tools have no API or are fundamentally broken for automated client intake & onboarding",
+          "tools": [
+            "Clio Grow",
+            "Lawmatics",
+            "Intaker"
+          ],
+          "cost_range": "€50-150/user/month",
+          "migration_time": "2-4 weeks",
+          "pros": [
+            "Legal-specific intake flows",
+            "Conflict checking",
+            "E-signature built-in",
+            "CRM features"
+          ],
+          "cons": [
+            "May overlap with existing PM",
+            "Per-user pricing",
+            "Template limits on lower tiers"
+          ]
+        }
+      },
+      "roi_example": {
+        "scenario": "Firm receiving 20 new inquiries/week, currently taking 3-5 days for full intake",
+        "cost": "€400/month (4 users × €100)",
+        "value_created": "Reduce intake time from days to hours, capture more leads before they go to competitors",
+        "roi_analysis": {
+          "conservative": {
+            "roi_percentage": 200,
+            "payback_months": 3,
+            "note": "10% more leads converted"
+          },
+          "expected": {
+            "roi_percentage": 400,
+            "payback_months": 2,
+            "note": "20% more leads converted, 80% less intake time"
+          },
+          "optimistic": {
+            "roi_percentage": 600,
+            "payback_months": 1,
+            "note": "30% more leads converted, same-day onboarding"
+          }
+        },
+        "assumptions": "Speed of intake matters most for consumer-facing practices; B2B matters less time-sensitive; conflict checking accuracy is critical"
+      },
+      "our_recommendation": "connect_and_automate",
+      "recommendation_rationale": "Your existing tools likely support API integration. A Claude workflow connecting them for automated client intake & onboarding ships in days, not weeks, and costs a fraction of a SaaS subscription."
     },
     {
       "id": "ai-legal-research",
       "name": "AI-Powered Legal/Regulatory Research",
       "category": "productivity",
-      "description": "AI tools for faster legal research, case law analysis, and regulatory tracking",
+      "description": "AI tools for faster legal research, case law analysis, regulatory tracking, and due diligence that deliver answers instead of just search results",
       "typical_roi": {
         "time_saved_hours_weekly": 6,
         "quality_improvement_percentage": 30,
@@ -139,13 +639,122 @@
       "two_pillars": {
         "customer_value": 7,
         "business_health": 7
-      }
+      },
+      "impact": {
+        "value_saved": {
+          "time_hours_per_week": 6,
+          "description": "Reduce research time from hours to minutes for common legal questions and regulatory lookups"
+        },
+        "value_created": {
+          "description": "More comprehensive research, fewer missed precedents, better-informed legal strategy",
+          "potential_revenue_impact": "Handle more matters per professional, reduce write-offs from excessive research time"
+        }
+      },
+      "implementation": {
+        "complexity": "medium",
+        "timeline_weeks": 3,
+        "required_data": [
+          "Practice area focus",
+          "Jurisdiction requirements",
+          "Research database subscriptions",
+          "Firm precedent library"
+        ]
+      },
+      "options": {
+        "connect_and_automate": {
+          "approach": "Custom research assistant using Claude API with RAG over firm's precedent library and public legal databases",
+          "build_time": "1-2 weeks",
+          "tools_used": [
+            "Claude Code",
+            "Custom API integrations"
+          ],
+          "mcp_servers": [],
+          "monthly_cost": "EUR 100-300",
+          "pros": [
+            "Searches firm precedents + public law",
+            "Custom for practice area",
+            "No per-user pricing",
+            "Integrates with DMS"
+          ],
+          "cons": [
+            "Needs legal database API access",
+            "Citation verification complexity",
+            "Ongoing maintenance"
+          ]
+        },
+        "enhance_with_ai": {
+          "approach": "Deploy CoCounsel Enterprise, Harvey AI (research mode) with advanced AI capabilities for autonomous handling",
+          "build_time": "2-4 weeks",
+          "tools_used": [
+            "CoCounsel Enterprise",
+            "Harvey AI (research mode)"
+          ],
+          "monthly_cost": "€200-500/user/month",
+          "pros": [
+            "Multi-jurisdiction",
+            "Verified citations",
+            "Due diligence automation",
+            "Regulatory tracking"
+          ],
+          "cons": [
+            "Enterprise pricing",
+            "Requires training for best results",
+            "Firm-wide license expectations"
+          ]
+        },
+        "targeted_upgrade": {
+          "when_needed": "Only if your current tools have no API or are fundamentally broken for ai-powered legal/regulatory research",
+          "tools": [
+            "CoCounsel (Thomson Reuters)",
+            "Lexis+ AI",
+            "vLex Vincent AI"
+          ],
+          "cost_range": "€100-300/user/month",
+          "migration_time": "3-5 weeks",
+          "pros": [
+            "Trained on verified legal databases",
+            "Citation checking",
+            "Jurisdiction-aware",
+            "Integrated with existing research platforms"
+          ],
+          "cons": [
+            "Adds to existing Westlaw/Lexis costs",
+            "Per-user pricing",
+            "May hallucinate citations without proper guardrails"
+          ]
+        }
+      },
+      "roi_example": {
+        "scenario": "3 associates spending 8 hours/week each on legal research at €200/hour",
+        "cost": "€600/month (3 users × €200)",
+        "value_created": "Reduce research time while improving comprehensiveness and accuracy",
+        "roi_analysis": {
+          "conservative": {
+            "roi_percentage": 200,
+            "payback_months": 3,
+            "note": "30% research time reduction"
+          },
+          "expected": {
+            "roi_percentage": 400,
+            "payback_months": 2,
+            "note": "50% research time reduction, better coverage"
+          },
+          "optimistic": {
+            "roi_percentage": 600,
+            "payback_months": 1,
+            "note": "60% research time reduction, fewer missed precedents"
+          }
+        },
+        "assumptions": "AI research supplements but does not replace legal judgment; citation verification is essential; results vary by practice area complexity"
+      },
+      "our_recommendation": "connect_and_automate",
+      "recommendation_rationale": "Your existing tools likely support API integration. A Claude workflow connecting them for ai-powered legal/regulatory research ships in days, not weeks, and costs a fraction of a SaaS subscription."
     },
     {
       "id": "client-portal",
       "name": "Client Portal & Self-Service",
       "category": "client_experience",
-      "description": "Secure portal for document sharing, status updates, and billing transparency",
+      "description": "Secure portal for document sharing, matter status updates, billing transparency, and self-service scheduling that reduces status-check calls",
       "typical_roi": {
         "time_saved_hours_weekly": 3,
         "client_satisfaction_increase": 25,
@@ -157,13 +766,125 @@
       "two_pillars": {
         "customer_value": 9,
         "business_health": 6
-      }
+      },
+      "impact": {
+        "value_saved": {
+          "time_hours_per_week": 3,
+          "description": "Reduce status update calls and emails, eliminate manual document sharing via email"
+        },
+        "value_created": {
+          "description": "Clients feel informed and in control, fewer complaints, higher retention and referrals",
+          "potential_revenue_impact": "15-25% improvement in client satisfaction scores, 10% increase in referrals"
+        }
+      },
+      "implementation": {
+        "complexity": "medium",
+        "timeline_weeks": 3,
+        "required_data": [
+          "Client contact information",
+          "Matter status workflow",
+          "Document categories",
+          "Billing data"
+        ]
+      },
+      "options": {
+        "connect_and_automate": {
+          "approach": "Build branded client portal with Claude Code as a React + Supabase app. Include matter status tracking, secure document sharing with RLS, billing transparency, and automated status update notifications via Resend MCP.",
+          "build_time": "16-24 hours",
+          "mcp_servers": [
+            "supabase-mcp",
+            "resend-mcp"
+          ],
+          "tools_used": [
+            "Claude Code",
+            "supabase-mcp",
+            "resend-mcp"
+          ],
+          "monthly_cost": "EUR 50-150 (API usage)",
+          "pros": [
+            "Fully branded experience",
+            "Custom workflow stages",
+            "Integrated with any PM",
+            "Competitive differentiator"
+          ],
+          "cons": [
+            "Development time",
+            "Security requirements (SOC 2, encryption)",
+            "Ongoing maintenance"
+          ]
+        },
+        "enhance_with_ai": {
+          "approach": "Deploy Clio + Clio Connect, PracticePanther Client Portal with advanced AI capabilities for autonomous handling",
+          "build_time": "2-4 weeks",
+          "tools_used": [
+            "Clio + Clio Connect",
+            "PracticePanther Client Portal"
+          ],
+          "monthly_cost": "€50-150/user/month (PM inclusive)",
+          "pros": [
+            "Full PM integration",
+            "Real-time status updates",
+            "Payment processing",
+            "Document requests"
+          ],
+          "cons": [
+            "Requires PM commitment",
+            "Portal quality depends on data discipline"
+          ]
+        },
+        "targeted_upgrade": {
+          "when_needed": "Only if your current tools have no API or are fundamentally broken for client portal & self-service",
+          "tools": [
+            "Clio Connect",
+            "MyCase Client Portal",
+            "Smokeball Portal"
+          ],
+          "cost_range": "€0-50/month (often included in PM)",
+          "migration_time": "3-5 weeks",
+          "pros": [
+            "Included with PM system",
+            "Secure document sharing",
+            "Billing access",
+            "Mobile-friendly"
+          ],
+          "cons": [
+            "Limited branding",
+            "Basic features",
+            "Tied to PM vendor"
+          ]
+        }
+      },
+      "roi_example": {
+        "scenario": "Firm handling 100 active matters, receiving 30+ status inquiry calls/week",
+        "cost": "€0-150/month (typically included in PM)",
+        "value_created": "Reduce status inquiry calls and improve client experience through self-service access",
+        "roi_analysis": {
+          "conservative": {
+            "roi_percentage": 200,
+            "payback_months": 4,
+            "note": "30% fewer status calls"
+          },
+          "expected": {
+            "roi_percentage": 400,
+            "payback_months": 2,
+            "note": "50% fewer status calls, improved client NPS"
+          },
+          "optimistic": {
+            "roi_percentage": 600,
+            "payback_months": 1,
+            "note": "70% fewer status calls, 10% more referrals"
+          }
+        },
+        "assumptions": "Client adoption varies; older clients may prefer phone; portal value compounds as clients learn to self-serve"
+      },
+      "our_recommendation": "connect_and_automate",
+      "recommendation_rationale": "Your existing tools likely support API integration. A Claude workflow connecting them for client portal & self-service ships in days, not weeks, and costs a fraction of a SaaS subscription."
     },
     {
       "id": "email-ai-assistant",
       "name": "AI Email Drafting & Triage",
       "category": "productivity",
-      "description": "AI assistance for drafting client emails, triaging inbox, and summarizing threads",
+      "description": "AI assistance for drafting client emails, triaging inbox, summarizing long threads, and extracting action items from correspondence",
       "typical_roi": {
         "time_saved_hours_weekly": 5,
         "response_time_improvement": 40,
@@ -175,13 +896,126 @@
       "two_pillars": {
         "customer_value": 7,
         "business_health": 7
-      }
+      },
+      "impact": {
+        "value_saved": {
+          "time_hours_per_week": 5,
+          "description": "Reduce email drafting time by 50-70%, auto-prioritize inbox, extract action items"
+        },
+        "value_created": {
+          "description": "Faster client response times improve satisfaction, fewer dropped follow-ups",
+          "potential_revenue_impact": "40% improvement in average response time, 15% fewer missed follow-ups"
+        }
+      },
+      "implementation": {
+        "complexity": "low",
+        "timeline_weeks": 1,
+        "required_data": [
+          "Email access (Outlook/Gmail)",
+          "Client/matter list",
+          "Communication templates",
+          "Tone/style preferences"
+        ]
+      },
+      "options": {
+        "connect_and_automate": {
+          "approach": "Build email drafting assistant with Claude Code using Gmail MCP for inbox access and thread context. Create matter-aware email templates, automated triage rules, and AI-drafted responses that match firm tone. Store action items in Supabase.",
+          "build_time": "8-12 hours",
+          "mcp_servers": [
+            "gmail-mcp",
+            "supabase-mcp"
+          ],
+          "tools_used": [
+            "Claude Code",
+            "gmail-mcp",
+            "supabase-mcp"
+          ],
+          "monthly_cost": "EUR 50-150 (API usage)",
+          "pros": [
+            "Firm-specific tone and templates",
+            "Matter-aware drafting",
+            "No per-user pricing",
+            "Full data control"
+          ],
+          "cons": [
+            "Development needed",
+            "Email integration complexity",
+            "Needs secure deployment"
+          ]
+        },
+        "enhance_with_ai": {
+          "approach": "Deploy Harvey AI (email mode), Copilot for Microsoft 365 + Clio integration with advanced AI capabilities for autonomous handling",
+          "build_time": "2-4 weeks",
+          "tools_used": [
+            "Harvey AI (email mode)",
+            "Copilot for Microsoft 365 + Clio integration"
+          ],
+          "monthly_cost": "€50-150/user/month",
+          "pros": [
+            "Legal-aware drafting",
+            "Matter context integration",
+            "Privileged communication awareness",
+            "Action item extraction"
+          ],
+          "cons": [
+            "Higher cost",
+            "Requires M365 or Google Workspace",
+            "Training period for best results"
+          ]
+        },
+        "targeted_upgrade": {
+          "when_needed": "Only if your current tools have no API or are fundamentally broken for ai email drafting & triage",
+          "tools": [
+            "Microsoft Copilot for Outlook",
+            "Google Gemini for Workspace",
+            "Superhuman AI"
+          ],
+          "cost_range": "€20-50/user/month",
+          "migration_time": "1-3 weeks",
+          "pros": [
+            "Integrated into existing email client",
+            "Instant setup",
+            "Draft suggestions",
+            "Thread summaries"
+          ],
+          "cons": [
+            "Generic tone, not legal-specific",
+            "Privacy concerns with cloud AI",
+            "Limited customization"
+          ]
+        }
+      },
+      "roi_example": {
+        "scenario": "5 professionals spending 1.5 hours/day on email, at €250/hour average",
+        "cost": "€250/month (5 users × €50)",
+        "value_created": "Reduce email time through AI drafting and inbox triage",
+        "roi_analysis": {
+          "conservative": {
+            "roi_percentage": 300,
+            "payback_months": 1,
+            "note": "30 min/day saved per professional"
+          },
+          "expected": {
+            "roi_percentage": 600,
+            "payback_months": 1,
+            "note": "45 min/day saved, faster responses"
+          },
+          "optimistic": {
+            "roi_percentage": 900,
+            "payback_months": 1,
+            "note": "1 hr/day saved, zero missed follow-ups"
+          }
+        },
+        "assumptions": "Professionals still review all AI-drafted emails before sending; confidential communications need extra care; results improve with usage"
+      },
+      "our_recommendation": "connect_and_automate",
+      "recommendation_rationale": "Your existing tools likely support API integration. A Claude workflow connecting them for ai email drafting & triage ships in days, not weeks, and costs a fraction of a SaaS subscription."
     },
     {
       "id": "proposal-automation",
       "name": "AI-Assisted Proposal & RFP Response",
       "category": "business_development",
-      "description": "Automate RFP responses, pitch decks, and proposal generation",
+      "description": "Automate RFP responses, pitch decks, and proposal generation using AI to pull from firm credentials, past wins, and team bios",
       "typical_roi": {
         "time_saved_hours_weekly": 4,
         "win_rate_increase_percentage": 15,
@@ -193,13 +1027,129 @@
       "two_pillars": {
         "customer_value": 5,
         "business_health": 8
-      }
+      },
+      "impact": {
+        "value_saved": {
+          "time_hours_per_week": 4,
+          "description": "Reduce proposal creation time from days to hours by auto-pulling credentials and generating first drafts"
+        },
+        "value_created": {
+          "description": "Respond to more RFPs, higher quality proposals, consistent firm positioning",
+          "potential_revenue_impact": "15% improvement in win rate, ability to respond to 2-3x more opportunities"
+        }
+      },
+      "implementation": {
+        "complexity": "medium",
+        "timeline_weeks": 4,
+        "required_data": [
+          "Past proposals and RFP responses",
+          "Team bios and credentials",
+          "Case studies",
+          "Firm capabilities deck",
+          "Pricing templates"
+        ]
+      },
+      "options": {
+        "connect_and_automate": {
+          "approach": "Build proposal generator with Claude Code using filesystem MCP to access credential library and past proposals. Use RAG to auto-pull relevant case studies and team bios. Output formatted proposals via Google Docs MCP.",
+          "build_time": "10-15 hours",
+          "mcp_servers": [
+            "filesystem-mcp",
+            "supabase-mcp",
+            "google-docs-mcp"
+          ],
+          "tools_used": [
+            "Claude Code",
+            "filesystem-mcp",
+            "supabase-mcp",
+            "google-docs-mcp"
+          ],
+          "monthly_cost": "EUR 50-150 (API usage)",
+          "pros": [
+            "Firm-specific content generation",
+            "Auto-pulls relevant credentials",
+            "Custom formatting",
+            "No per-user pricing"
+          ],
+          "cons": [
+            "Development required",
+            "Needs well-organized content library",
+            "Ongoing content maintenance"
+          ]
+        },
+        "enhance_with_ai": {
+          "approach": "Deploy Responsive (formerly RFPIO), Loopio with advanced AI capabilities for autonomous handling",
+          "build_time": "2-4 weeks",
+          "tools_used": [
+            "Responsive (formerly RFPIO)",
+            "Loopio"
+          ],
+          "monthly_cost": "€300-800/month",
+          "pros": [
+            "AI answer library",
+            "Content reuse intelligence",
+            "Collaboration workflows",
+            "RFP-specific"
+          ],
+          "cons": [
+            "Enterprise pricing",
+            "Onboarding time",
+            "Best for high-volume RFP responders"
+          ]
+        },
+        "targeted_upgrade": {
+          "when_needed": "Only if your current tools have no API or are fundamentally broken for ai-assisted proposal & rfp response",
+          "tools": [
+            "Qwilr",
+            "PandaDoc",
+            "Proposify"
+          ],
+          "cost_range": "€30-80/user/month",
+          "migration_time": "4-6 weeks",
+          "pros": [
+            "Template library",
+            "E-signature included",
+            "Analytics on proposal views",
+            "CRM integration"
+          ],
+          "cons": [
+            "Not professional-services specific",
+            "Manual content assembly",
+            "Limited AI features"
+          ]
+        }
+      },
+      "roi_example": {
+        "scenario": "Firm responding to 4 RFPs/month, each taking 15-20 hours to prepare",
+        "cost": "€500/month",
+        "value_created": "Reduce proposal creation time and improve quality through AI-assisted content assembly",
+        "roi_analysis": {
+          "conservative": {
+            "roi_percentage": 200,
+            "payback_months": 4,
+            "note": "40% time reduction on proposals"
+          },
+          "expected": {
+            "roi_percentage": 400,
+            "payback_months": 2,
+            "note": "60% time reduction, 10% win rate improvement"
+          },
+          "optimistic": {
+            "roi_percentage": 600,
+            "payback_months": 1,
+            "note": "70% time reduction, 15% win rate improvement, respond to 2x more RFPs"
+          }
+        },
+        "assumptions": "AI-generated proposals need partner review and customization; content library quality drives output quality"
+      },
+      "our_recommendation": "connect_and_automate",
+      "recommendation_rationale": "Your existing tools likely support API integration. A Claude workflow connecting them for ai-assisted proposal & rfp response ships in days, not weeks, and costs a fraction of a SaaS subscription."
     },
     {
       "id": "knowledge-management-ai",
       "name": "AI Knowledge Management",
       "category": "productivity",
-      "description": "AI-powered search across documents, precedents, and institutional knowledge",
+      "description": "AI-powered search across documents, precedents, and institutional knowledge that prevents reinventing the wheel and retains expertise when staff leave",
       "typical_roi": {
         "time_saved_hours_weekly": 3,
         "knowledge_retention_improvement": 50,
@@ -211,13 +1161,122 @@
       "two_pillars": {
         "customer_value": 5,
         "business_health": 8
-      }
+      },
+      "impact": {
+        "value_saved": {
+          "time_hours_per_week": 3,
+          "description": "Find precedents, templates, and institutional knowledge in seconds instead of hours of searching"
+        },
+        "value_created": {
+          "description": "Preserve institutional knowledge, reduce onboarding time for new hires, improve work product consistency",
+          "potential_revenue_impact": "50% improvement in knowledge retention when staff depart, 40% faster onboarding"
+        }
+      },
+      "implementation": {
+        "complexity": "high",
+        "timeline_weeks": 8,
+        "required_data": [
+          "Document repository access",
+          "Precedent categorization",
+          "Practice area taxonomy",
+          "Staff expertise mapping"
+        ]
+      },
+      "options": {
+        "connect_and_automate": {
+          "approach": "Custom knowledge base with AI semantic search (RAG) over firm documents, using embeddings and Claude API for answers",
+          "build_time": "1-2 weeks",
+          "tools_used": [
+            "Claude Code",
+            "Custom API integrations"
+          ],
+          "mcp_servers": [],
+          "monthly_cost": "EUR 100-300",
+          "pros": [
+            "Searches all firm documents intelligently",
+            "Custom taxonomy",
+            "No per-user pricing",
+            "Answers questions, not just returns documents"
+          ],
+          "cons": [
+            "Significant build effort",
+            "Needs clean document corpus",
+            "Ongoing indexing and maintenance"
+          ]
+        },
+        "enhance_with_ai": {
+          "approach": "Deploy iManage Knowledge, NetDocuments + ndMail AI with advanced AI capabilities for autonomous handling",
+          "build_time": "2-4 weeks",
+          "tools_used": [
+            "iManage Knowledge",
+            "NetDocuments + ndMail AI"
+          ],
+          "monthly_cost": "€50-150/user/month",
+          "pros": [
+            "Legal DMS integration",
+            "Precedent search",
+            "Matter-based organization",
+            "Security and compliance"
+          ],
+          "cons": [
+            "Enterprise pricing",
+            "Complex implementation",
+            "Requires dedicated KM role"
+          ]
+        },
+        "targeted_upgrade": {
+          "when_needed": "Only if your current tools have no API or are fundamentally broken for ai knowledge management",
+          "tools": [
+            "Guru",
+            "Notion AI",
+            "Confluence AI"
+          ],
+          "cost_range": "€10-30/user/month",
+          "migration_time": "8-10 weeks",
+          "pros": [
+            "Easy to start",
+            "AI-powered search",
+            "Wiki-style knowledge base",
+            "Integrations"
+          ],
+          "cons": [
+            "Requires content migration",
+            "Not legal-specific",
+            "Knowledge base needs curation"
+          ]
+        }
+      },
+      "roi_example": {
+        "scenario": "20-person firm where 4 hours/week is wasted searching for precedents and reinventing existing work",
+        "cost": "€600/month (20 users × €30)",
+        "value_created": "Reduce time spent searching for existing work product and institutional knowledge",
+        "roi_analysis": {
+          "conservative": {
+            "roi_percentage": 100,
+            "payback_months": 6,
+            "note": "30% reduction in precedent search time"
+          },
+          "expected": {
+            "roi_percentage": 200,
+            "payback_months": 4,
+            "note": "50% reduction, better work consistency"
+          },
+          "optimistic": {
+            "roi_percentage": 400,
+            "payback_months": 2,
+            "note": "70% reduction, 40% faster new hire onboarding"
+          }
+        },
+        "assumptions": "Knowledge management ROI is long-term and compounds; initial content curation effort is significant; adoption requires cultural change"
+      },
+      "our_recommendation": "connect_and_automate",
+      "recommendation_rationale": "Your existing tools likely support API integration. A Claude workflow connecting them for ai knowledge management ships in days, not weeks, and costs a fraction of a SaaS subscription."
     },
     {
       "id": "billing-collections",
       "name": "Automated Billing & Collections",
       "category": "billing",
-      "description": "Automated invoice generation, payment reminders, and collections workflows",
+      "description": "Automated invoice generation, payment reminders, online payment processing, and collections workflows that reduce DSO",
       "typical_roi": {
         "dso_reduction_days": 15,
         "collection_rate_increase": 10,
@@ -229,7 +1288,383 @@
       "two_pillars": {
         "customer_value": 6,
         "business_health": 9
-      }
+      },
+      "impact": {
+        "value_saved": {
+          "time_hours_per_week": 4,
+          "description": "Eliminate manual invoice preparation, payment follow-ups, and collections tracking"
+        },
+        "value_created": {
+          "description": "Faster payments, reduced write-offs, better cash flow predictability",
+          "potential_revenue_impact": "10% increase in collection rate, 15-day reduction in DSO"
+        }
+      },
+      "implementation": {
+        "complexity": "low",
+        "timeline_weeks": 2,
+        "required_data": [
+          "Time entries",
+          "Client billing preferences",
+          "Fee arrangements",
+          "Payment processing setup"
+        ]
+      },
+      "options": {
+        "connect_and_automate": {
+          "approach": "Build billing and collections system with Claude Code using Stripe MCP for payment processing, Supabase for invoice tracking, and Resend for automated payment reminders. Add AI-generated billing narratives from time entries and smart escalation workflows.",
+          "build_time": "12-18 hours",
+          "mcp_servers": [
+            "stripe-mcp",
+            "supabase-mcp",
+            "resend-mcp"
+          ],
+          "tools_used": [
+            "Claude Code",
+            "stripe-mcp",
+            "supabase-mcp",
+            "resend-mcp"
+          ],
+          "monthly_cost": "EUR 50-150 (API usage)",
+          "pros": [
+            "Custom fee structures",
+            "AI billing narratives",
+            "No per-user pricing",
+            "Custom collections logic"
+          ],
+          "cons": [
+            "Trust accounting complexity",
+            "Regulatory requirements",
+            "Payment processing integration"
+          ]
+        },
+        "enhance_with_ai": {
+          "approach": "Deploy Clio Manage + Payments, CARET Legal Billing with advanced AI capabilities for autonomous handling",
+          "build_time": "2-4 weeks",
+          "tools_used": [
+            "Clio Manage + Payments",
+            "CARET Legal Billing"
+          ],
+          "monthly_cost": "€80-200/user/month",
+          "pros": [
+            "Full billing lifecycle",
+            "LEDES support",
+            "E-billing integration",
+            "Trust accounting",
+            "Collections automation"
+          ],
+          "cons": [
+            "Higher cost",
+            "PM lock-in",
+            "Complex fee arrangement setup"
+          ]
+        },
+        "targeted_upgrade": {
+          "when_needed": "Only if your current tools have no API or are fundamentally broken for automated billing & collections",
+          "tools": [
+            "Clio Payments",
+            "LawPay",
+            "TimeSolv"
+          ],
+          "cost_range": "€50-100/user/month + 2-3% payment processing",
+          "migration_time": "2-4 weeks",
+          "pros": [
+            "IOLTA/trust compliant",
+            "Online payments",
+            "Automated reminders",
+            "Client-friendly invoices"
+          ],
+          "cons": [
+            "Payment processing fees",
+            "May not handle complex fee arrangements",
+            "Per-user pricing"
+          ]
+        }
+      },
+      "roi_example": {
+        "scenario": "Firm with €100K/month billings, 55-day DSO, 85% collection rate",
+        "cost": "€400/month (4 users × €100)",
+        "value_created": "Improve collections through automated reminders, online payment options, and systematic follow-up",
+        "roi_analysis": {
+          "conservative": {
+            "roi_percentage": 300,
+            "payback_months": 2,
+            "note": "5% collection rate improvement, 10-day DSO reduction"
+          },
+          "expected": {
+            "roi_percentage": 500,
+            "payback_months": 1,
+            "note": "10% collection rate improvement, 15-day DSO reduction"
+          },
+          "optimistic": {
+            "roi_percentage": 800,
+            "payback_months": 1,
+            "note": "15% collection rate improvement, 20-day DSO reduction"
+          }
+        },
+        "assumptions": "Online payment adoption is high for consumer clients; corporate clients may still require e-billing; collection improvement depends on existing process maturity"
+      },
+      "our_recommendation": "connect_and_automate",
+      "recommendation_rationale": "Your existing tools likely support API integration. A Claude workflow connecting them for automated billing & collections ships in days, not weeks, and costs a fraction of a SaaS subscription."
+    },
+    {
+      "id": "predictive-billing-analytics",
+      "name": "Predictive Billing & Revenue Analytics",
+      "category": "billing",
+      "description": "AI-powered forecasting of matter costs, budget alerts, and revenue prediction to enable proactive fee management and prevent billing surprises",
+      "typical_roi": {
+        "time_saved_hours_weekly": 3,
+        "write_off_reduction_percentage": 20,
+        "payback_months": 3
+      },
+      "implementation_complexity": "medium",
+      "vendor_category": "analytics",
+      "quick_win": false,
+      "two_pillars": {
+        "customer_value": 7,
+        "business_health": 9
+      },
+      "impact": {
+        "value_saved": {
+          "time_hours_per_week": 3,
+          "description": "Replace manual budget tracking and end-of-matter write-off surprises"
+        },
+        "value_created": {
+          "description": "Proactive budget alerts prevent scope creep, AI fee estimates improve pricing accuracy on fixed-fee work",
+          "potential_revenue_impact": "20% reduction in write-offs, 15% improvement in fixed-fee profitability"
+        }
+      },
+      "implementation": {
+        "complexity": "medium",
+        "timeline_weeks": 4,
+        "required_data": [
+          "Historical matter data (billing, hours, outcomes)",
+          "Fee arrangements",
+          "Matter types and complexity scores",
+          "Staff rates"
+        ]
+      },
+      "options": {
+        "connect_and_automate": {
+          "approach": "Custom analytics dashboard with ML-based matter cost prediction, budget monitoring, and revenue forecasting",
+          "build_time": "1-2 weeks",
+          "tools_used": [
+            "Claude Code",
+            "Custom API integrations"
+          ],
+          "mcp_servers": [],
+          "monthly_cost": "EUR 100-300",
+          "pros": [
+            "Custom to firm's matter types",
+            "Real-time budget monitoring",
+            "Partner-level dashboards",
+            "API integration with PM"
+          ],
+          "cons": [
+            "Needs significant billing history",
+            "Data science expertise required",
+            "Ongoing model tuning"
+          ]
+        },
+        "enhance_with_ai": {
+          "approach": "Deploy Brightflag Enterprise, Clio Analytics + AI with advanced AI capabilities for autonomous handling",
+          "build_time": "2-4 weeks",
+          "tools_used": [
+            "Brightflag Enterprise",
+            "Clio Analytics + AI"
+          ],
+          "monthly_cost": "€500-1200/month",
+          "pros": [
+            "AI matter prediction",
+            "Industry benchmarks",
+            "Multi-office analytics",
+            "Partner dashboards"
+          ],
+          "cons": [
+            "Enterprise pricing",
+            "Requires clean billing history",
+            "6-8 week onboarding"
+          ]
+        },
+        "targeted_upgrade": {
+          "when_needed": "Only if your current tools have no API or are fundamentally broken for predictive billing & revenue analytics",
+          "tools": [
+            "Brightflag",
+            "Clocktimizer",
+            "BigTime Forecasting"
+          ],
+          "cost_range": "€200-500/month",
+          "migration_time": "4-6 weeks",
+          "pros": [
+            "Benchmarking data",
+            "Budget alerts",
+            "Visual dashboards",
+            "Easy reporting"
+          ],
+          "cons": [
+            "Needs historical data to train",
+            "May not handle all fee structures",
+            "Separate from PM"
+          ]
+        }
+      },
+      "roi_example": {
+        "scenario": "Firm with €1.2M annual revenue, 8% write-off rate, 20% of matters going over budget",
+        "cost": "€400/month",
+        "value_created": "Reduce write-offs through early budget alerts and improve pricing on fixed-fee matters",
+        "roi_analysis": {
+          "conservative": {
+            "roi_percentage": 200,
+            "payback_months": 4,
+            "note": "10% write-off reduction"
+          },
+          "expected": {
+            "roi_percentage": 400,
+            "payback_months": 2,
+            "note": "20% write-off reduction, better fixed-fee pricing"
+          },
+          "optimistic": {
+            "roi_percentage": 600,
+            "payback_months": 1,
+            "note": "30% write-off reduction, proactive client budget discussions"
+          }
+        },
+        "assumptions": "Prediction accuracy improves with more data; firm must act on budget alerts for value to materialize"
+      },
+      "our_recommendation": "connect_and_automate",
+      "recommendation_rationale": "Your existing tools likely support API integration. A Claude workflow connecting them for predictive billing & revenue analytics ships in days, not weeks, and costs a fraction of a SaaS subscription."
+    },
+    {
+      "id": "compliance-monitoring-ai",
+      "name": "AI Compliance Monitoring & Regulatory Tracking",
+      "category": "risk_management",
+      "description": "Automated monitoring of regulatory changes, compliance deadlines, and filing requirements across jurisdictions to prevent missed obligations",
+      "typical_roi": {
+        "time_saved_hours_weekly": 4,
+        "risk_reduction_percentage": 50,
+        "payback_months": 3
+      },
+      "implementation_complexity": "medium",
+      "vendor_category": "compliance",
+      "quick_win": false,
+      "two_pillars": {
+        "customer_value": 8,
+        "business_health": 9
+      },
+      "impact": {
+        "value_saved": {
+          "time_hours_per_week": 4,
+          "description": "Replace manual tracking of regulatory deadlines, filing requirements, and compliance changes"
+        },
+        "value_created": {
+          "description": "Prevent compliance violations, proactively advise clients on regulatory changes, reduce risk of malpractice",
+          "potential_revenue_impact": "New advisory revenue from proactive regulatory alerts to clients; avoid costly compliance failures"
+        }
+      },
+      "implementation": {
+        "complexity": "medium",
+        "timeline_weeks": 4,
+        "required_data": [
+          "Jurisdiction list",
+          "Practice area regulatory bodies",
+          "Client matter types",
+          "Filing deadline calendar",
+          "Regulatory sources"
+        ]
+      },
+      "options": {
+        "connect_and_automate": {
+          "approach": "Custom compliance monitoring system using AI to track regulatory sources, flag relevant changes, and auto-generate client advisories",
+          "build_time": "1-2 weeks",
+          "tools_used": [
+            "Claude Code",
+            "Custom API integrations"
+          ],
+          "mcp_servers": [],
+          "monthly_cost": "EUR 100-300",
+          "pros": [
+            "Tailored to firm's practice areas",
+            "Auto-generates client alerts",
+            "Custom deadline tracking",
+            "New revenue stream from advisory"
+          ],
+          "cons": [
+            "Regulatory source access complexity",
+            "Needs legal review of AI-flagged changes",
+            "Ongoing source maintenance"
+          ]
+        },
+        "enhance_with_ai": {
+          "approach": "Deploy Thomson Reuters Practical Law, LexisNexis Regulatory Compliance with advanced AI capabilities for autonomous handling",
+          "build_time": "2-4 weeks",
+          "tools_used": [
+            "Thomson Reuters Practical Law",
+            "LexisNexis Regulatory Compliance"
+          ],
+          "monthly_cost": "€500-1500/month",
+          "pros": [
+            "Comprehensive regulatory coverage",
+            "Multi-jurisdiction",
+            "AI-powered change analysis",
+            "Practice notes"
+          ],
+          "cons": [
+            "Enterprise pricing",
+            "Information overload if not filtered",
+            "May overlap with research tools"
+          ]
+        },
+        "targeted_upgrade": {
+          "when_needed": "Only if your current tools have no API or are fundamentally broken for ai compliance monitoring & regulatory tracking",
+          "tools": [
+            "Docket Alarm",
+            "ComplianceHR",
+            "Diligent Compliance"
+          ],
+          "cost_range": "€200-500/month",
+          "migration_time": "4-6 weeks",
+          "pros": [
+            "Pre-built regulatory databases",
+            "Deadline tracking",
+            "Alert notifications",
+            "Audit trails"
+          ],
+          "cons": [
+            "May not cover niche practice areas",
+            "Jurisdiction limitations",
+            "Integration work needed"
+          ]
+        }
+      },
+      "roi_example": {
+        "scenario": "Firm tracking compliance for 50 clients across 3 jurisdictions, currently manual",
+        "cost": "€500/month",
+        "value_created": "Automated compliance monitoring and proactive client advisory on regulatory changes",
+        "roi_analysis": {
+          "conservative": {
+            "roi_percentage": 200,
+            "payback_months": 4,
+            "note": "50% reduction in manual tracking time"
+          },
+          "expected": {
+            "roi_percentage": 400,
+            "payback_months": 2,
+            "note": "70% reduction, zero missed deadlines, advisory revenue"
+          },
+          "optimistic": {
+            "roi_percentage": 600,
+            "payback_months": 1,
+            "note": "80% reduction, new compliance advisory service line"
+          }
+        },
+        "assumptions": "Regulatory coverage varies by jurisdiction; AI flags need attorney review; client advisory revenue depends on firm pricing model"
+      },
+      "jevons_effect": {
+        "applies": true,
+        "mechanism": "Automated compliance monitoring enables firms to take on more clients with compliance needs without proportional staff increase",
+        "demand_expansion_potential": "30% more compliance clients manageable with same team"
+      },
+      "our_recommendation": "connect_and_automate",
+      "recommendation_rationale": "Your existing tools likely support API integration. A Claude workflow connecting them for ai compliance monitoring & regulatory tracking ships in days, not weeks, and costs a fraction of a SaaS subscription."
     }
   ],
   "anti_patterns": [
@@ -271,25 +1706,38 @@
     {
       "phase": 1,
       "name": "Billing & Admin",
-      "opportunities": ["ai-time-capture", "billing-collections"],
+      "opportunities": [
+        "ai-time-capture",
+        "billing-collections"
+      ],
       "rationale": "Immediate revenue impact, low risk"
     },
     {
       "phase": 2,
       "name": "Client Experience",
-      "opportunities": ["client-intake-automation", "client-portal"],
+      "opportunities": [
+        "client-intake-automation",
+        "client-portal"
+      ],
       "rationale": "Win more clients, improve satisfaction"
     },
     {
       "phase": 3,
       "name": "Productivity",
-      "opportunities": ["document-drafting-ai", "email-ai-assistant"],
+      "opportunities": [
+        "document-drafting-ai",
+        "email-ai-assistant"
+      ],
       "rationale": "Multiply professional capacity"
     },
     {
       "phase": 4,
       "name": "Advanced AI",
-      "opportunities": ["contract-review-ai", "ai-legal-research", "knowledge-management-ai"],
+      "opportunities": [
+        "contract-review-ai",
+        "ai-legal-research",
+        "knowledge-management-ai"
+      ],
       "rationale": "Higher complexity, higher reward"
     }
   ],
