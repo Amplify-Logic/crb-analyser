@@ -42,6 +42,19 @@ const INDUSTRIES = [
     color: 'amber',
     ready: true,
   },
+  {
+    slug: 'b2b-platforms',
+    name: 'B2B Platforms',
+    description: 'IoT devices, connected products, hardware-to-platform businesses',
+    painPoints: ['System integration gaps', 'Scaling operations', 'Partner management complexity'],
+    icon: (
+      <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M8.25 3v1.5M4.5 8.25H3m18 0h-1.5M4.5 12H3m18 0h-1.5m-15 3.75H3m18 0h-1.5M8.25 19.5V21M12 3v1.5m0 15V21m3.75-18v1.5m0 15V21m-9-1.5h10.5a2.25 2.25 0 002.25-2.25V6.75a2.25 2.25 0 00-2.25-2.25H6.75A2.25 2.25 0 004.5 6.75v10.5a2.25 2.25 0 002.25 2.25zm.75-12h9v9h-9v-9z" />
+      </svg>
+    ),
+    color: 'violet',
+    ready: true,
+  },
 ]
 
 const colorClasses = {
@@ -62,6 +75,12 @@ const colorClasses = {
     border: 'border-amber-200 hover:border-amber-400',
     icon: 'bg-amber-100 text-amber-600',
     badge: 'bg-amber-100 text-amber-700',
+  },
+  violet: {
+    bg: 'bg-violet-50',
+    border: 'border-violet-200 hover:border-violet-400',
+    icon: 'bg-violet-100 text-violet-600',
+    badge: 'bg-violet-100 text-violet-700',
   },
 }
 
@@ -89,17 +108,17 @@ export default function LandingHome() {
             transition={{ duration: 0.6 }}
           >
             <h1 className="text-4xl sm:text-5xl font-bold text-gray-900 mb-6 leading-tight">
-              Should you invest in AI?
+              Build Your AI Operating System
               <br />
-              <span className="text-primary-600">We'll tell you.</span>
+              <span className="text-primary-600">We'll show you how.</span>
             </h1>
 
             <p className="text-xl text-gray-600 mb-4 max-w-2xl mx-auto">
-              Get a report that tells you exactly which AI tools make sense for your business—and which ones to skip.
+              Connect what you have. Automate what slows you down. Get an architecture blueprint specific to your stack.
             </p>
 
             <p className="text-lg text-gray-500 mb-12">
-              Real prices. Real ROI. Week-by-week implementation plan.
+              Real build estimates. Real ROI. Week-by-week action plan.
             </p>
           </motion.div>
         </div>
@@ -112,7 +131,7 @@ export default function LandingHome() {
             Select your industry to get started
           </h2>
 
-          <div className="grid md:grid-cols-3 gap-6">
+          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
             {INDUSTRIES.map((industry, index) => {
               const colors = colorClasses[industry.color as keyof typeof colorClasses]
 

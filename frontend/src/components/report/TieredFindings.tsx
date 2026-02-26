@@ -35,6 +35,19 @@ function getVerdict(finding: Finding): { label: string; color: string; bgColor: 
   return { label: 'Skip', color: 'text-gray-600 dark:text-gray-400', bgColor: 'bg-gray-100 dark:bg-gray-700 border-gray-200 dark:border-gray-600' }
 }
 
+// Derive severity tier from combined scores for color-coded display
+function getSeverityTier(finding: Finding): { label: string; color: string; bgColor: string; icon: string } {
+  const combined = finding.customer_value_score + finding.business_health_score
+  if (combined >= 16) {
+    return { label: 'Critical', color: 'text-red-700 dark:text-red-400', bgColor: 'bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-400', icon: '!!' }
+  } else if (combined >= 14) {
+    return { label: 'High', color: 'text-orange-700 dark:text-orange-400', bgColor: 'bg-orange-100 dark:bg-orange-900/30 text-orange-700 dark:text-orange-400', icon: '!' }
+  } else if (combined >= 10) {
+    return { label: 'Medium', color: 'text-yellow-700 dark:text-yellow-400', bgColor: 'bg-yellow-100 dark:bg-yellow-900/30 text-yellow-700 dark:text-yellow-400', icon: '~' }
+  }
+  return { label: 'Low', color: 'text-blue-700 dark:text-blue-400', bgColor: 'bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-400', icon: '-' }
+}
+
 interface TieredFindingsProps {
   findings: Finding[]
   heroCount?: number
@@ -108,6 +121,9 @@ function HeroFindingCard({ finding, index, globalIndex }: { finding: Finding; in
           <span className={`px-2.5 py-1 text-xs font-bold rounded-full border uppercase tracking-wide ${verdict.bgColor} ${verdict.color}`}>
             {verdict.label}
           </span>
+          <span className={`px-2 py-1 text-xs font-bold rounded ${getSeverityTier(finding).bgColor}`}>
+            {getSeverityTier(finding).label}
+          </span>
           <span className="px-2 py-1 bg-primary-100 dark:bg-primary-900/30 text-primary-700 dark:text-primary-300 text-xs font-medium rounded">
             {getImpactLabel(globalIndex)}
           </span>
@@ -116,7 +132,7 @@ function HeroFindingCard({ finding, index, globalIndex }: { finding: Finding; in
           {finding.connect_path && finding.replace_path ? (
             <span className="px-2 py-1 text-xs font-medium rounded bg-purple-100 dark:bg-purple-900/30 text-purple-700 dark:text-purple-400">Either</span>
           ) : finding.connect_path ? (
-            <span className="px-2 py-1 text-xs font-medium rounded bg-teal-100 dark:bg-teal-900/30 text-teal-700 dark:text-teal-400">Connect</span>
+            <span className="px-2 py-1 text-xs font-medium rounded bg-teal-100 dark:bg-teal-900/30 text-teal-700 dark:text-teal-400">Buildable on your stack</span>
           ) : finding.replace_path ? (
             <span className="px-2 py-1 text-xs font-medium rounded bg-orange-100 dark:bg-orange-900/30 text-orange-700 dark:text-orange-400">Replace</span>
           ) : null}
@@ -168,6 +184,9 @@ function CompactFindingCard({ finding }: { finding: Finding }) {
       <div className="flex items-center gap-2 mb-2">
         <span className={`px-2 py-0.5 text-[10px] font-bold rounded-full border uppercase tracking-wide ${verdict.bgColor} ${verdict.color}`}>
           {verdict.label}
+        </span>
+        <span className={`px-1.5 py-0.5 text-[10px] font-bold rounded ${getSeverityTier(finding).bgColor}`}>
+          {getSeverityTier(finding).label}
         </span>
         {finding.connect_path && finding.replace_path ? (
           <span className="px-1.5 py-0.5 text-[10px] font-medium rounded bg-purple-100 dark:bg-purple-900/30 text-purple-700 dark:text-purple-400">Either</span>

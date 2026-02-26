@@ -52,11 +52,8 @@ interface ReportRecommendation {
     risk: { description: string; probability: string; impact: number; mitigation: string }[]
     benefit: { short_term: any; mid_term: any; long_term: any; total: number }
   }
-  options: {
-    off_the_shelf: { name: string; vendor: string; monthly_cost: number; implementation_weeks: number }
-    best_in_class: { name: string; vendor: string; monthly_cost: number; implementation_weeks: number }
-    custom_solution: { approach: string; estimated_cost: { min: number; max: number }; implementation_weeks: number }
-  }
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  options: Record<string, any>
   our_recommendation: string
   assumptions: string[]
 }
@@ -111,8 +108,9 @@ export default function ROICalculator({
 
     // Calculate costs from recommendations
     const totalMonthlyCost = recommendations.reduce((sum, rec) => {
-      const option = rec.options?.best_in_class || rec.options?.off_the_shelf
-      return sum + (option?.monthly_cost || 0)
+      const option = rec.options?.connect_and_automate || rec.options?.enhance_with_ai || rec.options?.best_in_class || rec.options?.off_the_shelf
+      const cost = typeof option?.monthly_cost === 'number' ? option.monthly_cost : 0
+      return sum + cost
     }, 0)
 
     const totalImplementationCost = recommendations.reduce((sum, rec) => {
@@ -147,17 +145,18 @@ export default function ROICalculator({
   // Dynamic approach costs based on report data
   const approachCosts = useMemo(() => {
     const saasMonthly = recommendations.reduce((sum, rec) => {
-      const option = rec.options?.best_in_class || rec.options?.off_the_shelf
-      return sum + (option?.monthly_cost || 0)
+      const option = rec.options?.enhance_with_ai || rec.options?.targeted_upgrade || rec.options?.best_in_class || rec.options?.off_the_shelf
+      const cost = typeof option?.monthly_cost === 'number' ? option.monthly_cost : 0
+      return sum + cost
     }, 0) || DEFAULT_APPROACH_COSTS.saas.monthly
 
     const saasImplementation = recommendations.reduce((sum, rec) => {
-      const option = rec.options?.best_in_class?.implementation_weeks || rec.options?.off_the_shelf?.implementation_weeks || 2
-      return sum + (option * 200) // Rough estimate: $200 per week of setup time
+      const weeks = rec.options?.enhance_with_ai?.implementation_weeks || rec.options?.targeted_upgrade?.implementation_weeks || rec.options?.best_in_class?.implementation_weeks || rec.options?.off_the_shelf?.implementation_weeks || 2
+      return sum + (weeks * 200) // Rough estimate: €200 per week of setup time
     }, 0) || DEFAULT_APPROACH_COSTS.saas.implementation
 
     const customMin = recommendations.reduce((sum, rec) => {
-      return sum + (rec.options?.custom_solution?.estimated_cost?.min || 0)
+      return sum + (rec.options?.connect_and_automate?.estimated_cost?.min || rec.options?.custom_solution?.estimated_cost?.min || 0)
     }, 0) || DEFAULT_APPROACH_COSTS.custom.implementation
 
     return {
@@ -195,10 +194,10 @@ export default function ROICalculator({
 
     const hoursSavedWeekly = inputs.hoursWeekly * inputs.automationRate
     const hoursSavedMonthly = hoursSavedWeekly * 4.33
-    const hoursSavedYearly = hoursSavedWeekly * 52
+    const hoursSavedYearly = hoursSavedMonthly * 12
 
     const monthlySavings = hoursSavedMonthly * inputs.hourlyRate
-    const yearlySavings = hoursSavedYearly * inputs.hourlyRate
+    const yearlySavings = monthlySavings * 12
 
     const implementationCost = approach.implementation
     const monthlyCost = approach.monthly
@@ -214,16 +213,16 @@ export default function ROICalculator({
       : 999
 
     return {
-      hoursSavedWeekly,
-      hoursSavedMonthly,
-      hoursSavedYearly,
+      hoursSavedWeekly: Math.round(hoursSavedWeekly * 10) / 10,
+      hoursSavedMonthly: Math.round(hoursSavedMonthly * 10) / 10,
+      hoursSavedYearly: Math.round(hoursSavedYearly),
       implementationCost,
       monthlyCost,
-      monthlySavings,
-      yearlySavings,
+      monthlySavings: Math.round(monthlySavings),
+      yearlySavings: Math.round(yearlySavings),
       roiPercentage: Math.round(roiPercentage),
       breakevenMonths: Math.max(0, parseFloat(breakevenMonths.toFixed(1))),
-      threeYearNet,
+      threeYearNet: Math.round(threeYearNet),
     }
   }, [inputs, approachCosts])
 

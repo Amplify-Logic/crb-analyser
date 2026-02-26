@@ -42,14 +42,32 @@ logger = logging.getLogger(__name__)
 class PlaybookGenerator:
     """Generate personalized playbooks from recommendations."""
 
-    SYSTEM_PROMPT = """You are an expert implementation consultant creating actionable playbooks.
+    SYSTEM_PROMPT = """You are an expert AIOS (AI Operating System) implementation consultant creating actionable playbooks.
+
+Your playbooks follow the AIOS implementation timeline:
+- Phase 1: CONNECT — Wire existing tools together with API integrations and Claude workflows
+- Phase 2: AUTOMATE — Deploy AI workflows on connected data (Claude agents, MCP servers)
+- Phase 3: ENHANCE — Build intelligence layers (dashboards, monitoring, predictive agents)
+- Phase 4: COMMAND STATION — Unified oversight and human-in-the-loop controls
+- Phase 5 (only if needed): TARGETED UPGRADES — Replace specific dead-end tools
 
 Your playbooks must be:
 1. SPECIFIC - Exact tool names, exact steps, no vague instructions
 2. FAST-PACED - Things can move fast with modern tools. Compress timelines.
-3. PERSONALIZED - Adapt to team size, tech level, existing tools
-4. CRB-FOCUSED - Every task shows Cost, Risk, Benefit
-5. DEPENDENCY-AWARE - Tasks reference prerequisites by ID
+3. CONNECT-FIRST - Always start by wiring existing tools before suggesting replacements
+4. PERSONALIZED - Adapt to team size, tech level, existing tools
+5. CRB-FOCUSED - Every task shows Cost, Risk, Benefit with real EUR amounts
+6. DEPENDENCY-AWARE - Tasks reference prerequisites by ID
+
+MANDATORY RULES:
+- NEVER use "TBD" for cost or benefit fields. Always provide a concrete EUR estimate.
+- Cost fields MUST show EUR amounts (e.g., "€0 (free tier)", "€50 setup", "€29/mo").
+- Benefit fields MUST describe concrete value (e.g., "Saves 2 hrs/week (€160/mo)", "Foundation for later automation").
+- Risk MUST correlate with task difficulty: easy tasks→"low", medium tasks→"medium", hard/integration/migration tasks→"high".
+- Executor MUST match team size: solo teams→"owner" for everything, small/medium/large teams→"team" for medium/hard tasks.
+- Time estimates MUST vary by task type: sign-up=15-30min, configure=30-60min, integration=120-240min, migration=240-480min.
+- Phase crb_summary.total_cost MUST be non-zero when phases include paid tools.
+- Include Claude Code build hours and MCP servers where applicable.
 
 Generate aggressive but achievable week-by-week plans with proper task dependencies."""
 
@@ -110,9 +128,106 @@ Generate aggressive but achievable week-by-week plans with proper task dependenc
             urgency=urgency,
         )
 
+    def _extract_cost_context(
+        self,
+        recommendation: Dict[str, Any],
+        option_type: str,
+        context: PersonalizationContext,
+    ) -> Dict[str, Any]:
+        """Extract financial context from recommendation data for both code paths.
+
+        Returns a dict with all optional fields (None if missing):
+        - total_implementation_cost, monthly_ongoing_cost, first_year_total
+        - annual_benefit, roi_percentage, payback_months
+        - time_savings_hours_per_week, risks, team_size
+        """
+        option = recommendation.get("options", {}).get(option_type, {})
+        crb = recommendation.get("crb_analysis", {})
+
+        # --- Setup / implementation cost ---
+        setup_cost: Optional[float] = None
+        cost_data = crb.get("cost", {})
+        short_term = cost_data.get("short_term", {})
+        if short_term.get("setup") is not None:
+            setup_cost = float(short_term["setup"])
+        elif option_type in ("custom_solution", "connect_and_automate", "enhance_with_ai"):
+            est = option.get("estimated_cost", {})
+            if isinstance(est, dict):
+                # Use midpoint of min/max
+                lo = est.get("min", 0)
+                hi = est.get("max", lo)
+                setup_cost = (lo + hi) / 2.0
+            elif est:
+                try:
+                    setup_cost = float(est)
+                except (ValueError, TypeError):
+                    pass
+
+        # --- Monthly ongoing cost ---
+        monthly_cost: Optional[float] = None
+        if option.get("monthly_cost") is not None:
+            monthly_cost = float(option["monthly_cost"])
+        elif short_term.get("monthly") is not None:
+            monthly_cost = float(short_term["monthly"])
+
+        # --- First year total ---
+        first_year_total: Optional[float] = None
+        if setup_cost is not None and monthly_cost is not None:
+            first_year_total = setup_cost + 12 * monthly_cost
+        elif setup_cost is not None:
+            first_year_total = setup_cost
+
+        # --- Annual benefit ---
+        annual_benefit: Optional[float] = None
+        benefit_data = crb.get("benefit", {})
+        short_benefit = benefit_data.get("short_term", {})
+        if short_benefit.get("annual") is not None:
+            annual_benefit = float(short_benefit["annual"])
+        elif benefit_data.get("total") is not None:
+            # Approximate annual from 3-year total
+            annual_benefit = float(benefit_data["total"]) / 3.0
+
+        # --- ROI and payback ---
+        roi_pct = recommendation.get("roi_percentage")
+        payback = recommendation.get("payback_months")
+
+        # --- Time savings ---
+        roi_detail = recommendation.get("roi_detail", {})
+        time_savings = roi_detail.get("time_savings", {})
+        hours_per_week = time_savings.get("hours_per_week")
+
+        # --- Risks ---
+        risks_raw = crb.get("risk", [])
+        risks: List[Dict[str, Any]] = []
+        if isinstance(risks_raw, list):
+            for r in risks_raw:
+                if isinstance(r, dict):
+                    risks.append({
+                        "description": r.get("description", ""),
+                        "probability": r.get("probability", "medium"),
+                        "impact": r.get("impact", 3),
+                    })
+
+        return {
+            "total_implementation_cost": setup_cost,
+            "monthly_ongoing_cost": monthly_cost,
+            "first_year_total": first_year_total,
+            "annual_benefit": annual_benefit,
+            "roi_percentage": roi_pct,
+            "payback_months": payback,
+            "time_savings_hours_per_week": hours_per_week,
+            "risks": risks,
+            "team_size": context.team_size,
+        }
+
     def _get_week_count(self, urgency: str, option_type: str) -> int:
         """Get total weeks based on urgency and option type."""
         base_weeks = {
+            # AIOS option types
+            "connect_and_automate": 4,
+            "enhance_with_ai": 8,
+            "targeted_upgrade": 10,
+            # Legacy option types (backward compat)
             "off_the_shelf": 6,
             "best_in_class": 10,
             "custom_solution": 12,
@@ -132,13 +247,15 @@ Generate aggressive but achievable week-by-week plans with proper task dependenc
         option: Dict[str, Any],
         context: PersonalizationContext,
         total_weeks: int,
+        cost_context: Optional[Dict[str, Any]] = None,
     ) -> str:
         """Build the LLM prompt for playbook generation."""
-        executor_guidance = (
-            "all tasks go to 'owner' since this is a solo operation"
-            if context.team_size == "solo"
-            else "distribute between 'owner' and 'team' based on skill requirements"
-        )
+        executor_guidance = {
+            "solo": "all tasks go to 'owner' since this is a solo operation",
+            "small": "most tasks go to 'owner', assign 'team' for medium/hard tasks that benefit from collaboration",
+            "medium": "'owner' for strategic/easy tasks, 'team' for medium/hard implementation tasks",
+            "large": "'owner' for oversight/approval, 'team' for most implementation, 'hire_out' for specialized hard tasks",
+        }.get(context.team_size, "distribute between 'owner' and 'team' based on skill requirements")
 
         detail_level = (
             "detailed hand-holding with step-by-step instructions"
@@ -148,11 +265,36 @@ Generate aggressive but achievable week-by-week plans with proper task dependenc
             else "moderate detail - explain key concepts but don't over-explain"
         )
 
+        # Build financial context section from extracted data
+        financial_section = ""
+        if cost_context:
+            lines = ["FINANCIAL CONTEXT (use these numbers, do NOT use TBD):"]
+            if cost_context.get("total_implementation_cost") is not None:
+                lines.append(f"- Total implementation cost: €{cost_context['total_implementation_cost']:,.0f}")
+            if cost_context.get("monthly_ongoing_cost") is not None:
+                lines.append(f"- Monthly ongoing cost: €{cost_context['monthly_ongoing_cost']:,.0f}/mo")
+            if cost_context.get("first_year_total") is not None:
+                lines.append(f"- First year total: €{cost_context['first_year_total']:,.0f}")
+            if cost_context.get("annual_benefit") is not None:
+                lines.append(f"- Annual benefit: €{cost_context['annual_benefit']:,.0f}")
+            if cost_context.get("roi_percentage") is not None:
+                lines.append(f"- ROI: {cost_context['roi_percentage']}%")
+            if cost_context.get("payback_months") is not None:
+                lines.append(f"- Payback period: {cost_context['payback_months']} months")
+            if cost_context.get("time_savings_hours_per_week") is not None:
+                lines.append(f"- Time savings: {cost_context['time_savings_hours_per_week']} hrs/week")
+            if cost_context.get("risks"):
+                risk_strs = [f"{r['description']} ({r['probability']})" for r in cost_context["risks"][:3]]
+                lines.append(f"- Key risks: {'; '.join(risk_strs)}")
+            financial_section = "\n".join(lines)
+
         return f"""Generate a detailed implementation playbook.
 
 RECOMMENDATION: {recommendation.get('title')}
 OPTION: {option_type.replace('_', ' ').title()}
 OPTION DETAILS: {json.dumps(option, indent=2)}
+
+{financial_section}
 
 PERSONALIZATION:
 - Team size: {context.team_size}
@@ -190,7 +332,7 @@ Generate a JSON playbook with this EXACT structure:
                             "id": "p1-w1-t1",
                             "title": "Sign up for [specific tool]",
                             "description": "Create account and complete onboarding",
-                            "time_estimate_minutes": 30,
+                            "time_estimate_minutes": 20,
                             "difficulty": "easy",
                             "executor": "owner",
                             "tools": ["tool-name"],
@@ -212,7 +354,7 @@ Generate a JSON playbook with this EXACT structure:
                             "tools": ["tool-name"],
                             "dependencies": ["p1-w1-t1"],
                             "crb": {{
-                                "cost": "€0",
+                                "cost": "€50 (pro plan setup)",
                                 "risk": "low",
                                 "benefit": "System ready for use"
                             }}
@@ -225,6 +367,14 @@ Generate a JSON playbook with this EXACT structure:
     ]
 }}
 
+ESTIMATION RULES (follow strictly):
+- Time: "Sign up/create account" = 15-30min, "Configure/set up" = 30-60min, "Integrate/connect" = 120-240min, "Migrate data" = 240-480min
+- Cost: Distribute the total implementation cost proportionally across tasks weighted by difficulty. NEVER use "TBD".
+- Benefit: Early phases = "Foundation for €X/yr savings", later phases = proportional share of annual benefit. NEVER use "TBD".
+- Risk: easy tasks → "low", medium tasks → "medium", hard/integration/migration tasks → "high"
+- Executor for {context.team_size} team: {executor_guidance}
+- Phase total_cost: Sum of task costs in that phase. Must be > €0 if any paid tools are involved.
+
 REQUIREMENTS:
 1. 3-5 phases total, covering all {total_weeks} weeks
 2. 3-6 tasks per week
@@ -232,7 +382,7 @@ REQUIREMENTS:
 4. Executor: {executor_guidance}
 5. Skip setup for tools they already have: {context.existing_tools}
 6. Technical level {context.technical_level}/5 means {detail_level}
-7. Every task MUST have a CRB breakdown
+7. Every task MUST have a CRB breakdown with real EUR amounts
 8. IMPORTANT: Task IDs follow pattern "p{{phase}}-w{{week}}-t{{task}}" (e.g., p1-w1-t1, p1-w1-t2, p1-w2-t1)
 9. Dependencies MUST reference existing task IDs from earlier in the playbook
 10. First task of first week has no dependencies (empty array)
@@ -252,41 +402,80 @@ Return ONLY valid JSON, no explanation."""
         phase_num: int,
         week_num: int,
         task_num: int,
+        cost_context: Optional[Dict[str, Any]] = None,
+        total_tasks: int = 1,
     ) -> Dict[str, Any]:
-        """Sanitize and normalize task data from LLM response."""
+        """Sanitize and normalize task data from LLM response.
+
+        Uses cost_context to derive smart fallbacks instead of static defaults.
+        """
         # Ensure valid ID
         task_id = task_data.get("id") or f"p{phase_num}-w{week_num}-t{task_num}"
 
-        # Ensure time estimate is within bounds
-        time_est = task_data.get("time_estimate_minutes", 30)
-        if not isinstance(time_est, int):
-            try:
-                time_est = int(time_est)
-            except (ValueError, TypeError):
-                time_est = 30
-        time_est = max(MIN_TASK_MINUTES, min(MAX_TASK_MINUTES, time_est))
-
-        # Ensure valid difficulty
+        # Ensure valid difficulty (needed before time/cost defaults)
         difficulty = task_data.get("difficulty", "medium")
         if difficulty not in ("easy", "medium", "hard"):
             difficulty = "medium"
 
-        # Ensure valid executor
-        executor = task_data.get("executor", "owner")
+        # Difficulty-based default time estimates instead of flat 30
+        default_minutes = {"easy": 20, "medium": 60, "hard": 180}
+        time_est = task_data.get("time_estimate_minutes")
+        if time_est is None or time_est == 60:
+            # 60 is the old hardcoded default — treat as missing
+            time_est = default_minutes[difficulty]
+        if not isinstance(time_est, int):
+            try:
+                time_est = int(time_est)
+            except (ValueError, TypeError):
+                time_est = default_minutes[difficulty]
+        time_est = max(MIN_TASK_MINUTES, min(MAX_TASK_MINUTES, time_est))
+
+        # Ensure valid executor — team-size aware
+        executor = task_data.get("executor", "")
+        team_size = (cost_context or {}).get("team_size", "solo")
         if executor not in ("owner", "team", "hire_out"):
-            executor = "owner"
+            # Smart default based on team size and difficulty
+            if team_size == "solo":
+                executor = "owner"
+            elif difficulty == "easy":
+                executor = "owner"
+            else:
+                executor = "team"
 
         # Ensure dependencies is a list
         dependencies = task_data.get("dependencies", [])
         if not isinstance(dependencies, list):
             dependencies = []
-        # Filter out any non-string dependencies
         dependencies = [d for d in dependencies if isinstance(d, str) and d]
 
-        # Build CRB
+        # Build CRB with smart fallbacks
         crb_data = task_data.get("crb", {})
         if not isinstance(crb_data, dict):
             crb_data = {}
+
+        cost_str = crb_data.get("cost", "")
+        risk_str = crb_data.get("risk", "")
+        benefit_str = crb_data.get("benefit", "")
+
+        # --- Cost fallback: proportional share weighted by difficulty ---
+        if not cost_str or cost_str == "TBD":
+            cost_str = self._derive_task_cost(difficulty, cost_context, total_tasks)
+
+        # --- Risk fallback: correlate with difficulty ---
+        risk_map = {"easy": "low", "medium": "medium", "hard": "high"}
+        if not risk_str or risk_str == "low":
+            # Only override if it was the old blanket default "low"
+            # and we have a non-easy difficulty
+            if difficulty != "easy" and crb_data.get("risk") in (None, "low"):
+                risk_str = risk_map[difficulty]
+            elif not risk_str:
+                risk_str = risk_map[difficulty]
+
+        # --- Benefit fallback ---
+        if not benefit_str or benefit_str == "TBD":
+            benefit_str = self._derive_task_benefit(
+                phase_num, difficulty, cost_context, total_tasks
+            )
 
         return {
             "id": task_id,
@@ -299,11 +488,73 @@ Return ONLY valid JSON, no explanation."""
             "tutorial_hint": task_data.get("tutorial_hint"),
             "dependencies": dependencies,
             "crb": {
-                "cost": crb_data.get("cost", "TBD"),
-                "risk": crb_data.get("risk", "low"),
-                "benefit": crb_data.get("benefit", "TBD"),
+                "cost": cost_str,
+                "risk": risk_str,
+                "benefit": benefit_str,
             },
         }
+
+    @staticmethod
+    def _derive_task_cost(
+        difficulty: str,
+        cost_context: Optional[Dict[str, Any]],
+        total_tasks: int,
+    ) -> str:
+        """Derive a cost estimate for a task from the recommendation financials."""
+        if not cost_context:
+            return "€0"
+
+        total_cost = cost_context.get("total_implementation_cost")
+        monthly = cost_context.get("monthly_ongoing_cost")
+
+        if total_cost is not None and total_tasks > 0:
+            weight = {"easy": 0.5, "medium": 1.0, "hard": 2.0}[difficulty]
+            share = (total_cost * weight) / max(total_tasks, 1)
+            if share < 1:
+                return "€0 (included)"
+            return f"€{share:,.0f}"
+
+        if monthly is not None:
+            return f"€{monthly:,.0f}/mo (shared)"
+
+        return "€0"
+
+    @staticmethod
+    def _derive_task_benefit(
+        phase_num: int,
+        difficulty: str,
+        cost_context: Optional[Dict[str, Any]],
+        total_tasks: int,
+    ) -> str:
+        """Derive a benefit description for a task."""
+        if not cost_context:
+            return "Process improvement"
+
+        annual = cost_context.get("annual_benefit")
+        hours = cost_context.get("time_savings_hours_per_week")
+
+        # Early phases (1-2) are foundational
+        if phase_num <= 2:
+            if annual is not None:
+                return f"Foundation for €{annual:,.0f}/yr savings"
+            if hours is not None:
+                return f"Foundation for {hours} hrs/week savings"
+            return "Foundational setup for later savings"
+
+        # Later phases get proportional benefit
+        if annual is not None and total_tasks > 0:
+            weight = {"easy": 0.5, "medium": 1.0, "hard": 2.0}[difficulty]
+            share = (annual * weight) / max(total_tasks, 1)
+            return f"~€{share:,.0f}/yr value"
+
+        if hours is not None:
+            frac = {"easy": 0.5, "medium": 1.0, "hard": 2.0}[difficulty]
+            hrs = hours * frac / max(total_tasks, 1)
+            if hrs >= 0.5:
+                return f"~{hrs:.1f} hrs/week saved"
+            return "Incremental time savings"
+
+        return "Efficiency improvement"
 
     def _parse_llm_response(self, content: str) -> Dict[str, Any]:
         """Parse and extract JSON from LLM response."""
@@ -334,10 +585,21 @@ Return ONLY valid JSON, no explanation."""
         option: Dict[str, Any],
         context: PersonalizationContext,
         total_weeks: int,
+        cost_context: Optional[Dict[str, Any]] = None,
     ) -> Playbook:
         """Build Playbook model from parsed data with sanitization."""
         phases: List[Phase] = []
         all_task_ids: set = set()
+
+        # Count total tasks for proportional cost/benefit distribution
+        total_task_count = sum(
+            len(task)
+            for phase_data in data.get("phases", [])
+            for week_data in phase_data.get("weeks", [])
+            for task in [week_data.get("tasks", [])]
+        )
+
+        num_phases = len(data.get("phases", [])) or 1
 
         for pi, phase_data in enumerate(data.get("phases", [])):
             phase_num = phase_data.get("phase_number", pi + 1)
@@ -349,7 +611,9 @@ Return ONLY valid JSON, no explanation."""
 
                 for ti, task_data in enumerate(week_data.get("tasks", [])):
                     sanitized = self._sanitize_task_data(
-                        task_data, phase_num, week_num, ti + 1
+                        task_data, phase_num, week_num, ti + 1,
+                        cost_context=cost_context,
+                        total_tasks=total_task_count,
                     )
 
                     # Filter dependencies to only include existing task IDs
@@ -387,18 +651,39 @@ Return ONLY valid JSON, no explanation."""
                     checkpoint=week_data.get("checkpoint", "Review progress"),
                 ))
 
+            # Phase CRB summary — derive from cost_context if LLM left defaults
             crb_sum = phase_data.get("crb_summary", {})
+            phase_total_cost = crb_sum.get("total_cost", "€0")
+            phase_monthly_cost = crb_sum.get("monthly_cost", "€0")
+            phase_benefits = crb_sum.get("benefits", [])
+            phase_risks = crb_sum.get("risks", [])
+
+            if phase_total_cost == "€0" and cost_context:
+                impl_cost = cost_context.get("total_implementation_cost")
+                if impl_cost is not None:
+                    phase_total_cost = f"€{impl_cost / num_phases:,.0f}"
+            if phase_monthly_cost == "€0" and cost_context:
+                monthly = cost_context.get("monthly_ongoing_cost")
+                if monthly is not None:
+                    phase_monthly_cost = f"€{monthly:,.0f}/mo"
+            if not phase_benefits and cost_context:
+                annual = cost_context.get("annual_benefit")
+                if annual is not None:
+                    phase_benefits = [f"€{annual / num_phases:,.0f}/yr value"]
+            if not phase_risks and cost_context and cost_context.get("risks"):
+                phase_risks = [r["description"] for r in cost_context["risks"][:2]]
+
             phases.append(Phase(
                 phase_number=phase_num,
                 title=phase_data.get("title", f"Phase {phase_num}"),
                 duration_weeks=phase_data.get("duration_weeks", len(weeks)),
                 outcome=phase_data.get("outcome", ""),
                 crb_summary=PhaseCRBSummary(
-                    total_cost=crb_sum.get("total_cost", "€0"),
-                    monthly_cost=crb_sum.get("monthly_cost", "€0"),
+                    total_cost=phase_total_cost,
+                    monthly_cost=phase_monthly_cost,
                     setup_hours=max(0, crb_sum.get("setup_hours", 0)),
-                    risks=crb_sum.get("risks", []),
-                    benefits=crb_sum.get("benefits", []),
+                    risks=phase_risks,
+                    benefits=phase_benefits,
                     crb_score=min(10, max(0, crb_sum.get("crb_score", 5.0))),
                 ),
                 weeks=weeks,
@@ -490,12 +775,22 @@ Return ONLY valid JSON, no explanation."""
         context = self._extract_personalization_context(quiz_answers)
         option = recommendation.get("options", {}).get(option_type, {})
 
+        # Extract financial context for smart defaults
+        cost_context = self._extract_cost_context(recommendation, option_type, context)
+
         # The skill returns a timeline with phases — convert to Playbook format
         timeline = skill_data.get("timeline", {})
         total_weeks = timeline.get("total_weeks", self._get_week_count(context.urgency, option_type))
 
+        # Count total tasks across all phases for proportional distribution
+        all_phases = timeline.get("phases", [])
+        total_task_count = sum(
+            len(p.get("tasks", [])) for p in all_phases
+        )
+        num_phases = len(all_phases) or 1
+
         phases: List[Phase] = []
-        for pi, phase_data in enumerate(timeline.get("phases", [])):
+        for pi, phase_data in enumerate(all_phases):
             phase_num = phase_data.get("phase", pi + 1)
 
             # Skill returns flat task lists per phase, wrap them into a single week
@@ -504,20 +799,40 @@ Return ONLY valid JSON, no explanation."""
 
             for ti, task_text in enumerate(tasks_list):
                 task_id = f"p{phase_num}-w1-t{ti + 1}"
+
+                # Infer difficulty from task text
+                title = task_text if isinstance(task_text, str) else task_text.get("title", f"Task {ti + 1}")
+                description = task_text if isinstance(task_text, str) else task_text.get("description", "")
+                difficulty = self._infer_difficulty_from_title(title)
+
+                # Build raw task data and run through sanitizer
+                raw_task = {
+                    "id": task_id,
+                    "title": title,
+                    "description": description,
+                    "difficulty": difficulty,
+                    "tools": [],
+                    "dependencies": [],
+                }
+                sanitized = self._sanitize_task_data(
+                    raw_task, phase_num, 1, ti + 1,
+                    cost_context=cost_context,
+                    total_tasks=total_task_count,
+                )
+
                 playbook_tasks.append(PlaybookTask(
-                    id=task_id,
-                    title=task_text if isinstance(task_text, str) else task_text.get("title", f"Task {ti + 1}"),
-                    description=task_text if isinstance(task_text, str) else task_text.get("description", ""),
-                    time_estimate_minutes=60,
-                    difficulty="medium",
-                    executor="owner",
-                    tools=[],
-                    dependencies=[],
-                    crb=TaskCRB(cost="TBD", risk="low", benefit="TBD"),
+                    id=sanitized["id"],
+                    title=sanitized["title"],
+                    description=sanitized["description"],
+                    time_estimate_minutes=sanitized["time_estimate_minutes"],
+                    difficulty=sanitized["difficulty"],
+                    executor=sanitized["executor"],
+                    tools=sanitized["tools"],
+                    dependencies=sanitized["dependencies"],
+                    crb=TaskCRB(**sanitized["crb"]),
                 ))
 
             # Parse weeks range from phase
-            weeks_str = phase_data.get("weeks", str(phase_num))
             week_num = phase_num  # Use phase number as week start
 
             weeks = [Week(
@@ -528,17 +843,36 @@ Return ONLY valid JSON, no explanation."""
                 if phase_data.get("deliverables") else "Review progress",
             )]
 
+            # Derive phase CRB summary from cost_context
+            phase_total_cost = "€0"
+            phase_monthly_cost = "€0"
+            phase_benefits: List[str] = []
+            phase_risks: List[str] = []
+
+            if cost_context:
+                impl_cost = cost_context.get("total_implementation_cost")
+                if impl_cost is not None:
+                    phase_total_cost = f"€{impl_cost / num_phases:,.0f}"
+                monthly = cost_context.get("monthly_ongoing_cost")
+                if monthly is not None:
+                    phase_monthly_cost = f"€{monthly:,.0f}/mo"
+                annual = cost_context.get("annual_benefit")
+                if annual is not None:
+                    phase_benefits = [f"€{annual / num_phases:,.0f}/yr value"]
+                if cost_context.get("risks"):
+                    phase_risks = [r["description"] for r in cost_context["risks"][:2]]
+
             phases.append(Phase(
                 phase_number=phase_num,
                 title=phase_data.get("name", f"Phase {phase_num}"),
                 duration_weeks=phase_data.get("duration_weeks", 2),
                 outcome=phase_data.get("focus", ""),
                 crb_summary=PhaseCRBSummary(
-                    total_cost="€0",
-                    monthly_cost="€0",
+                    total_cost=phase_total_cost,
+                    monthly_cost=phase_monthly_cost,
                     setup_hours=0,
-                    risks=[],
-                    benefits=[],
+                    risks=phase_risks,
+                    benefits=phase_benefits,
                     crb_score=5.0,
                 ),
                 weeks=weeks,
@@ -557,6 +891,19 @@ Return ONLY valid JSON, no explanation."""
             personalization_context=context,
         )
 
+    @staticmethod
+    def _infer_difficulty_from_title(title: str) -> str:
+        """Infer task difficulty from the title text."""
+        lower = title.lower()
+        hard_keywords = ["integrat", "migrat", "custom", "build", "develop", "api", "automat"]
+        easy_keywords = ["sign up", "create account", "review", "document", "explore", "read"]
+
+        if any(kw in lower for kw in hard_keywords):
+            return "hard"
+        if any(kw in lower for kw in easy_keywords):
+            return "easy"
+        return "medium"
+
     async def _generate_playbook_legacy(
         self,
         recommendation: Dict[str, Any],
@@ -571,8 +918,12 @@ Return ONLY valid JSON, no explanation."""
         # Get the specific option details
         option = recommendation.get("options", {}).get(option_type, {})
 
+        # Extract financial context for prompt enrichment and sanitization
+        cost_context = self._extract_cost_context(recommendation, option_type, context)
+
         prompt = self._build_generation_prompt(
-            recommendation, option_type, option, context, total_weeks
+            recommendation, option_type, option, context, total_weeks,
+            cost_context=cost_context,
         )
 
         try:
@@ -597,7 +948,8 @@ Return ONLY valid JSON, no explanation."""
 
             # Build the playbook (with sanitization)
             playbook = self._build_playbook_from_data(
-                data, recommendation, option_type, option, context, total_weeks
+                data, recommendation, option_type, option, context, total_weeks,
+                cost_context=cost_context,
             )
 
             return playbook

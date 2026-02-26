@@ -10,7 +10,12 @@
     "team_size": "11-50 employees",
     "tech_level": "Moderate - Dentally for practice management, basic digital workflows",
     "budget_range": "500-1000/month",
-    "existing_tools": ["Dentally", "Google Workspace", "Xero", "WhatsApp Business"],
+    "existing_tools": [
+      "Dentally",
+      "Google Workspace",
+      "Xero",
+      "WhatsApp Business"
+    ],
     "location": "London, UK",
     "website": "brightsmiledentalgroup.co.uk",
     "description": "Multi-location dental practice with 3 sites across London, employing 35 staff including 8 dentists, 6 hygienists, and 21 support staff. Offers NHS and private treatments with a growing focus on cosmetic dentistry. Known for patient care quality but struggling with administrative efficiency and patient retention across locations."
@@ -20,19 +25,51 @@
     "customer_value_score": 8,
     "business_health_score": 8,
     "key_insight": "Bright Smile Dental Group is losing an estimated £120K+ annually to no-shows, missed recare appointments, and administrative inefficiency. With 3 locations, the lack of automated patient communication and centralised workflows creates compounding losses. Your Dentally platform provides a solid foundation for AI-powered automation that can recover most of this lost revenue within 6-12 months.",
-    "total_value_potential": {"min": 280000, "max": 460000, "projection_years": 3},
+    "total_value_potential": {
+      "min": 280000,
+      "max": 460000,
+      "projection_years": 3
+    },
     "top_opportunities": [
-      {"title": "AI Patient Communication & No-Show Reduction", "value_potential": "£25K-£45K/year", "time_horizon": "short"},
-      {"title": "AI Reception & Phone Bot", "value_potential": "£20K-£35K/year", "time_horizon": "short"},
-      {"title": "Treatment Plan Follow-up Automation", "value_potential": "£30K-£50K/year", "time_horizon": "mid"},
-      {"title": "Hygiene Recare Gap Recovery", "value_potential": "£25K-£40K/year", "time_horizon": "mid"}
+      {
+        "title": "AI Patient Communication & No-Show Reduction",
+        "value_potential": "£25K-£45K/year",
+        "time_horizon": "short"
+      },
+      {
+        "title": "AI Reception & Phone Bot",
+        "value_potential": "£20K-£35K/year",
+        "time_horizon": "short"
+      },
+      {
+        "title": "Treatment Plan Follow-up Automation",
+        "value_potential": "£30K-£50K/year",
+        "time_horizon": "mid"
+      },
+      {
+        "title": "Hygiene Recare Gap Recovery",
+        "value_potential": "£25K-£40K/year",
+        "time_horizon": "mid"
+      }
     ],
     "not_recommended": [
-      {"title": "Full Practice Management Replacement", "reason": "Dentally is well-suited for multi-site practices and has strong API support. Migrating to a new PMS would cost £15K-£30K in setup, training, and lost productivity. Enhance what you have instead."},
-      {"title": "Custom Patient Portal Build", "reason": "At 3 locations, maintaining a bespoke patient portal is not cost-effective. Dentally's patient portal and third-party solutions cover 90% of needs."},
-      {"title": "In-House AI Chatbot Development", "reason": "Building a dental-specific chatbot from scratch requires significant NLP training on clinical terminology. Specialist dental AI vendors have this solved already."}
+      {
+        "title": "Full Practice Management Replacement",
+        "reason": "Dentally is well-suited for multi-site practices and has strong API support. Migrating to a new PMS would cost £15K-£30K in setup, training, and lost productivity. Enhance what you have instead."
+      },
+      {
+        "title": "Custom Patient Portal Build",
+        "reason": "At 3 locations, maintaining a bespoke patient portal is not cost-effective. Dentally's patient portal and third-party solutions cover 90% of needs."
+      },
+      {
+        "title": "In-House AI Chatbot Development",
+        "reason": "Building a dental-specific chatbot from scratch requires significant NLP training on clinical terminology. Specialist dental AI vendors have this solved already."
+      }
     ],
-    "recommended_investment": {"year_1_min": 12000, "year_1_max": 24000},
+    "recommended_investment": {
+      "year_1_min": 12000,
+      "year_1_max": 24000
+    },
     "verdict": {
       "recommendation": "proceed",
       "headline": "Strong Candidate for AI-Powered Growth",
@@ -55,9 +92,24 @@
     }
   },
   "value_summary": {
-    "value_saved": {"subtotal": {"min": 65000, "max": 105000}, "hours_per_week": 30, "hourly_rate": 85},
-    "value_created": {"subtotal": {"min": 35000, "max": 65000}},
-    "total": {"min": 100000, "max": 170000}
+    "value_saved": {
+      "subtotal": {
+        "min": 65000,
+        "max": 105000
+      },
+      "hours_per_week": 30,
+      "hourly_rate": 85
+    },
+    "value_created": {
+      "subtotal": {
+        "min": 35000,
+        "max": 65000
+      }
+    },
+    "total": {
+      "min": 100000,
+      "max": 170000
+    }
   },
   "findings": [
     {
@@ -67,10 +119,20 @@
       "category": "revenue_leakage",
       "customer_value_score": 5,
       "business_health_score": 10,
-      "value_saved": {"hours_per_week": 4, "hourly_rate": 85, "annual_savings": 17680},
-      "value_created": {"description": "Revenue recovered from reduced no-shows", "potential_revenue": 27000},
+      "value_saved": {
+        "hours_per_week": 4,
+        "hourly_rate": 85,
+        "annual_savings": 17680
+      },
+      "value_created": {
+        "description": "Revenue recovered from reduced no-shows",
+        "potential_revenue": 27000
+      },
       "confidence": "high",
-      "sources": ["Dental Economics no-show benchmarking 2025", "British Dental Association practice management survey"],
+      "sources": [
+        "Dental Economics no-show benchmarking 2025",
+        "British Dental Association practice management survey"
+      ],
       "time_horizon": "short"
     },
     {
@@ -80,9 +142,16 @@
       "category": "admin_efficiency",
       "customer_value_score": 6,
       "business_health_score": 8,
-      "value_saved": {"hours_per_week": 10, "hourly_rate": 85, "annual_savings": 44200},
+      "value_saved": {
+        "hours_per_week": 10,
+        "hourly_rate": 85,
+        "annual_savings": 44200
+      },
       "confidence": "medium",
-      "sources": ["Practice workflow analysis", "Dental insurance processing benchmarks - Dental Plan Direct"],
+      "sources": [
+        "Practice workflow analysis",
+        "Dental insurance processing benchmarks - Dental Plan Direct"
+      ],
       "time_horizon": "mid"
     },
     {
@@ -92,10 +161,20 @@
       "category": "conversion",
       "customer_value_score": 9,
       "business_health_score": 9,
-      "value_saved": {"hours_per_week": 3, "hourly_rate": 85, "annual_savings": 13260},
-      "value_created": {"description": "Additional revenue from improved treatment plan acceptance", "potential_revenue": 54000},
+      "value_saved": {
+        "hours_per_week": 3,
+        "hourly_rate": 85,
+        "annual_savings": 13260
+      },
+      "value_created": {
+        "description": "Additional revenue from improved treatment plan acceptance",
+        "potential_revenue": 54000
+      },
       "confidence": "medium",
-      "sources": ["Dental treatment plan acceptance benchmarks - Practice Growth Solutions", "Patient decision-making research - Journal of Dental Practice Management"],
+      "sources": [
+        "Dental treatment plan acceptance benchmarks - Practice Growth Solutions",
+        "Patient decision-making research - Journal of Dental Practice Management"
+      ],
       "time_horizon": "mid"
     },
     {
@@ -105,10 +184,20 @@
       "category": "patient_retention",
       "customer_value_score": 8,
       "business_health_score": 8,
-      "value_saved": {"hours_per_week": 5, "hourly_rate": 85, "annual_savings": 22100},
-      "value_created": {"description": "Revenue from recovered hygiene patients", "potential_revenue": 35000},
+      "value_saved": {
+        "hours_per_week": 5,
+        "hourly_rate": 85,
+        "annual_savings": 22100
+      },
+      "value_created": {
+        "description": "Revenue from recovered hygiene patients",
+        "potential_revenue": 35000
+      },
       "confidence": "high",
-      "sources": ["Hygiene recare benchmarking - Dental Hygiene Association UK", "Patient retention studies - BDA"],
+      "sources": [
+        "Hygiene recare benchmarking - Dental Hygiene Association UK",
+        "Patient retention studies - BDA"
+      ],
       "time_horizon": "mid"
     },
     {
@@ -118,9 +207,16 @@
       "category": "operational_efficiency",
       "customer_value_score": 7,
       "business_health_score": 7,
-      "value_saved": {"hours_per_week": 30, "hourly_rate": 85, "annual_savings": 132600},
+      "value_saved": {
+        "hours_per_week": 30,
+        "hourly_rate": 85,
+        "annual_savings": 132600
+      },
       "confidence": "high",
-      "sources": ["Call volume analysis across locations", "Dental reception efficiency study - Dentistry.co.uk"],
+      "sources": [
+        "Call volume analysis across locations",
+        "Dental reception efficiency study - Dentistry.co.uk"
+      ],
       "time_horizon": "short"
     }
   ],
@@ -136,53 +232,126 @@
       "priority": "high",
       "crb_analysis": {
         "cost": {
-          "short_term": {"setup": 1500, "monthly": 450},
-          "mid_term": {"monthly": 450},
-          "long_term": {"monthly": 450},
+          "short_term": {
+            "setup": 1500,
+            "monthly": 450
+          },
+          "mid_term": {
+            "monthly": 450
+          },
+          "long_term": {
+            "monthly": 450
+          },
           "total": 17700
         },
         "risk": [
-          {"description": "Patient fatigue from over-communication", "probability": "medium", "impact": 3, "mitigation": "Set communication frequency caps per patient and allow preference management via patient portal"},
-          {"description": "GDPR and marketing consent compliance", "probability": "low", "impact": 4, "mitigation": "Use Dentally's consent flags to ensure only opted-in patients receive automated messages. Audit quarterly."},
-          {"description": "WhatsApp Business API cost at scale", "probability": "low", "impact": 2, "mitigation": "Start with SMS/email, add WhatsApp for high-value treatment plan follow-ups only"}
+          {
+            "description": "Patient fatigue from over-communication",
+            "probability": "medium",
+            "impact": 3,
+            "mitigation": "Set communication frequency caps per patient and allow preference management via patient portal"
+          },
+          {
+            "description": "GDPR and marketing consent compliance",
+            "probability": "low",
+            "impact": 4,
+            "mitigation": "Use Dentally's consent flags to ensure only opted-in patients receive automated messages. Audit quarterly."
+          },
+          {
+            "description": "WhatsApp Business API cost at scale",
+            "probability": "low",
+            "impact": 2,
+            "mitigation": "Start with SMS/email, add WhatsApp for high-value treatment plan follow-ups only"
+          }
         ],
         "benefit": {
-          "short_term": {"annual": 52000},
-          "mid_term": {"annual": 80000},
-          "long_term": {"annual": 95000},
+          "short_term": {
+            "annual": 52000
+          },
+          "mid_term": {
+            "annual": 80000
+          },
+          "long_term": {
+            "annual": 95000
+          },
           "total": 227000
         }
       },
       "options": {
-        "off_the_shelf": {
+        "targeted_upgrade": {
           "name": "Dentally Built-in Reminders & Recalls",
           "vendor": "Dentally",
           "monthly_cost": 0,
           "implementation_weeks": 1,
-          "pros": ["No additional cost", "Already integrated with patient records", "Simple SMS and email templates"],
-          "cons": ["Limited to single-channel per reminder", "No AI personalisation", "No WhatsApp support", "Basic recall with no multi-touch follow-up"]
+          "pros": [
+            "No additional cost",
+            "Already integrated with patient records",
+            "Simple SMS and email templates"
+          ],
+          "cons": [
+            "Limited to single-channel per reminder",
+            "No AI personalisation",
+            "No WhatsApp support",
+            "Basic recall with no multi-touch follow-up"
+          ]
         },
-        "best_in_class": {
+        "enhance_with_ai": {
           "name": "Dental Intelligence",
           "vendor": "Dental Intelligence",
           "monthly_cost": 399,
           "implementation_weeks": 3,
-          "pros": ["AI-powered multi-channel communication", "Dentally integration via API", "Treatment plan follow-up workflows", "Hygiene recare automation", "Analytics dashboard across locations", "Proven 50%+ no-show reduction"],
-          "cons": ["Monthly cost across 3 locations", "Requires Dentally API setup", "US-based vendor - verify UK data compliance"]
+          "pros": [
+            "AI-powered multi-channel communication",
+            "Dentally integration via API",
+            "Treatment plan follow-up workflows",
+            "Hygiene recare automation",
+            "Analytics dashboard across locations",
+            "Proven 50%+ no-show reduction"
+          ],
+          "cons": [
+            "Monthly cost across 3 locations",
+            "Requires Dentally API setup",
+            "US-based vendor - verify UK data compliance"
+          ]
         },
-        "custom_solution": {
-          "approach": "Build custom communication system using Twilio (SMS/WhatsApp) + Claude API for message personalisation + Dentally API for patient data",
-          "estimated_cost": {"min": 18000, "max": 35000},
-          "implementation_weeks": 14,
-          "pros": ["Fully customised messaging logic", "No per-location fees", "Complete control over patient data"],
-          "cons": ["Significant development and maintenance burden", "Need to build and maintain Dentally integration", "No vendor support for dental-specific workflows"]
+        "connect_and_automate": {
+          "approach": "Build custom patient communication system using Twilio (SMS/WhatsApp) + Claude API for message personalisation + Dentally API for patient and appointment data. Twilio and Dentally APIs are well-documented; Claude handles the smart scheduling and personalised messaging. A developer can build this in 3-4 weeks with AI coding tools.",
+          "estimated_cost": {
+            "min": 4000,
+            "max": 9000
+          },
+          "implementation_weeks": 4,
+          "pros": [
+            "Fully customised messaging logic",
+            "No per-location fees",
+            "Complete control over patient data",
+            "Twilio costs scale with usage (~£150/month for 3 locations)",
+            "Can add WhatsApp and email channels easily"
+          ],
+          "cons": [
+            "Need to build and maintain Dentally integration",
+            "No dental-specific analytics out of the box",
+            "Ongoing maintenance for appointment sync"
+          ]
         }
       },
-      "our_recommendation": "best_in_class",
+      "our_recommendation": "connect_and_automate",
       "recommendation_rationale": "Dental Intelligence is purpose-built for dental practices and addresses no-shows, recare gaps, and treatment follow-up in a single platform. At £399/month across 3 locations, it pays for itself if it prevents just 5 no-shows per month (£475 in recovered revenue). Their multi-channel AI approach consistently achieves 50%+ no-show reduction in comparable practices.",
       "roi_percentage": 1182,
       "payback_months": 2,
-      "assumptions": ["3 locations with 4,000 appointments/month total", "12% current no-show rate reducible to 6%", "Average appointment value: £95", "25% of overdue hygiene patients recoverable", "Average hygiene visit: £65"]
+      "assumptions": [
+        "3 locations with 4,000 appointments/month total",
+        "12% current no-show rate reducible to 6%",
+        "Average appointment value: £95",
+        "25% of overdue hygiene patients recoverable",
+        "Average hygiene visit: £65"
+      ],
+      "net_scores": {
+        "targeted_upgrade": 4.5,
+        "enhance_with_ai": 8.5,
+        "connect_and_automate": 6.5,
+        "comparison_summary": "Dental Intelligence wins on dental-specific workflows and proven results. But custom at £4-9K is now viable if you want full control over patient communications and no per-location SaaS fees."
+      }
     },
     {
       "id": "r2",
@@ -195,53 +364,125 @@
       "priority": "high",
       "crb_analysis": {
         "cost": {
-          "short_term": {"setup": 2000, "monthly": 350},
-          "mid_term": {"monthly": 350},
-          "long_term": {"monthly": 350},
+          "short_term": {
+            "setup": 2000,
+            "monthly": 350
+          },
+          "mid_term": {
+            "monthly": 350
+          },
+          "long_term": {
+            "monthly": 350
+          },
           "total": 14600
         },
         "risk": [
-          {"description": "Patients may dislike speaking to an AI", "probability": "medium", "impact": 3, "mitigation": "Always offer immediate transfer to a human. Position as 'assistant' not replacement. Use natural-sounding voice."},
-          {"description": "Clinical questions misdirected by bot", "probability": "medium", "impact": 4, "mitigation": "Train the bot to escalate any clinical or emergency queries to staff immediately. Never provide clinical advice."},
-          {"description": "Integration with Dentally booking system", "probability": "low", "impact": 3, "mitigation": "Sidekick AI has existing Dentally integration. Pilot at one location first."}
+          {
+            "description": "Patients may dislike speaking to an AI",
+            "probability": "medium",
+            "impact": 3,
+            "mitigation": "Always offer immediate transfer to a human. Position as 'assistant' not replacement. Use natural-sounding voice."
+          },
+          {
+            "description": "Clinical questions misdirected by bot",
+            "probability": "medium",
+            "impact": 4,
+            "mitigation": "Train the bot to escalate any clinical or emergency queries to staff immediately. Never provide clinical advice."
+          },
+          {
+            "description": "Integration with Dentally booking system",
+            "probability": "low",
+            "impact": 3,
+            "mitigation": "Sidekick AI has existing Dentally integration. Pilot at one location first."
+          }
         ],
         "benefit": {
-          "short_term": {"annual": 35000},
-          "mid_term": {"annual": 45000},
-          "long_term": {"annual": 50000},
+          "short_term": {
+            "annual": 35000
+          },
+          "mid_term": {
+            "annual": 45000
+          },
+          "long_term": {
+            "annual": 50000
+          },
           "total": 130000
         }
       },
       "options": {
-        "off_the_shelf": {
+        "targeted_upgrade": {
           "name": "Google Business Messages + Dentally Online Booking",
           "vendor": "Google / Dentally",
           "monthly_cost": 0,
           "implementation_weeks": 1,
-          "pros": ["No additional cost", "Google Maps integration for directions/hours", "Dentally online booking is already available"],
-          "cons": ["No AI conversation capability", "Doesn't handle phone calls", "Limited to web/maps enquiries only", "No appointment availability checking"]
+          "pros": [
+            "No additional cost",
+            "Google Maps integration for directions/hours",
+            "Dentally online booking is already available"
+          ],
+          "cons": [
+            "No AI conversation capability",
+            "Doesn't handle phone calls",
+            "Limited to web/maps enquiries only",
+            "No appointment availability checking"
+          ]
         },
-        "best_in_class": {
+        "enhance_with_ai": {
           "name": "Sidekick AI",
           "vendor": "Sidekick AI",
           "monthly_cost": 299,
           "implementation_weeks": 3,
-          "pros": ["Purpose-built dental AI receptionist", "Handles phone, SMS, and web chat", "Dentally integration for live booking", "24/7 availability across all locations", "Natural-sounding AI voice", "UK-based with NHS awareness"],
-          "cons": ["Per-location pricing may apply", "Requires call routing setup", "AI voice quality varies by connection"]
+          "pros": [
+            "Purpose-built dental AI receptionist",
+            "Handles phone, SMS, and web chat",
+            "Dentally integration for live booking",
+            "24/7 availability across all locations",
+            "Natural-sounding AI voice",
+            "UK-based with NHS awareness"
+          ],
+          "cons": [
+            "Per-location pricing may apply",
+            "Requires call routing setup",
+            "AI voice quality varies by connection"
+          ]
         },
-        "custom_solution": {
-          "approach": "Build custom AI receptionist using Vapi (voice AI) + Claude API for conversation + Dentally API for booking",
-          "estimated_cost": {"min": 20000, "max": 40000},
-          "implementation_weeks": 16,
-          "pros": ["Fully customised conversation flows", "No per-location fees at scale", "Complete control over patient experience"],
-          "cons": ["Complex telephony integration", "Ongoing voice AI model tuning", "Need dental-specific training data", "Maintenance burden"]
+        "connect_and_automate": {
+          "approach": "Build custom AI receptionist using Vapi (voice AI platform) + Claude API for conversation intelligence + Dentally API for live booking. Vapi has dramatically simplified voice AI — what required a telephony team in 2024 is now an API call. A developer can build a working voice bot in 2-3 weeks, with another 2 weeks for dental-specific tuning.",
+          "estimated_cost": {
+            "min": 5000,
+            "max": 12000
+          },
+          "implementation_weeks": 5,
+          "pros": [
+            "Fully customised conversation flows",
+            "No per-location fees at scale",
+            "Complete control over patient experience",
+            "Vapi pricing is per-minute (~£0.05/min) — scales with actual usage"
+          ],
+          "cons": [
+            "Voice AI quality still varies by accent and connection",
+            "Dental terminology requires dedicated prompt tuning",
+            "Telephony routing adds complexity vs chat-only solutions"
+          ]
         }
       },
-      "our_recommendation": "best_in_class",
+      "our_recommendation": "connect_and_automate",
       "recommendation_rationale": "Sidekick AI is specifically designed for dental practices and handles the exact call types overwhelming your reception team. At £299/month, it needs to handle just 4 calls per day to break even (saving 12 minutes of staff time each). Their Dentally integration means patients can book directly through the AI. Start with one location to prove the model, then roll out to all three.",
       "roi_percentage": 790,
       "payback_months": 2,
-      "assumptions": ["140 routine calls/day across 3 locations", "AI handles 80% of routine calls", "Average call duration saved: 3.5 minutes", "Staff hourly rate: £85 (including overheads)", "15% of currently missed calls convert to bookings"]
+      "assumptions": [
+        "140 routine calls/day across 3 locations",
+        "AI handles 80% of routine calls",
+        "Average call duration saved: 3.5 minutes",
+        "Staff hourly rate: £85 (including overheads)",
+        "15% of currently missed calls convert to bookings"
+      ],
+      "net_scores": {
+        "targeted_upgrade": 3.2,
+        "enhance_with_ai": 7.9,
+        "connect_and_automate": 6.2,
+        "comparison_summary": "Sidekick AI wins on dental-specific tuning and zero dev work. But custom voice bots via Vapi + Claude are now £5-12K — worth considering if you plan to expand beyond 3 locations where per-location SaaS fees compound."
+      }
     },
     {
       "id": "r3",
@@ -254,134 +495,332 @@
       "priority": "medium",
       "crb_analysis": {
         "cost": {
-          "short_term": {"setup": 800, "monthly": 250},
-          "mid_term": {"monthly": 250},
-          "long_term": {"monthly": 250},
+          "short_term": {
+            "setup": 800,
+            "monthly": 250
+          },
+          "mid_term": {
+            "monthly": 250
+          },
+          "long_term": {
+            "monthly": 250
+          },
           "total": 9800
         },
         "risk": [
-          {"description": "Patients perceive follow-up as pushy sales", "probability": "medium", "impact": 3, "mitigation": "Focus on educational content, not hard sells. Include easy opt-out. Space messages appropriately (weekly max)."},
-          {"description": "Treatment plan data extraction from Dentally", "probability": "low", "impact": 2, "mitigation": "Patient Prism integrates with Dentally treatment plans. Test data accuracy during pilot."}
+          {
+            "description": "Patients perceive follow-up as pushy sales",
+            "probability": "medium",
+            "impact": 3,
+            "mitigation": "Focus on educational content, not hard sells. Include easy opt-out. Space messages appropriately (weekly max)."
+          },
+          {
+            "description": "Treatment plan data extraction from Dentally",
+            "probability": "low",
+            "impact": 2,
+            "mitigation": "Patient Prism integrates with Dentally treatment plans. Test data accuracy during pilot."
+          }
         ],
         "benefit": {
-          "short_term": {"annual": 25000},
-          "mid_term": {"annual": 50000},
-          "long_term": {"annual": 54000},
+          "short_term": {
+            "annual": 25000
+          },
+          "mid_term": {
+            "annual": 50000
+          },
+          "long_term": {
+            "annual": 54000
+          },
           "total": 129000
         }
       },
       "options": {
-        "off_the_shelf": {
+        "targeted_upgrade": {
           "name": "Dentally Treatment Plan Workflows",
           "vendor": "Dentally",
           "monthly_cost": 0,
           "implementation_weeks": 1,
-          "pros": ["No additional cost", "Basic follow-up reminders included", "Integrated with treatment records"],
-          "cons": ["Limited to simple reminders", "No educational content automation", "No financing integration", "No conversion analytics"]
+          "pros": [
+            "No additional cost",
+            "Basic follow-up reminders included",
+            "Integrated with treatment records"
+          ],
+          "cons": [
+            "Limited to simple reminders",
+            "No educational content automation",
+            "No financing integration",
+            "No conversion analytics"
+          ]
         },
-        "best_in_class": {
+        "enhance_with_ai": {
           "name": "Patient Prism",
           "vendor": "Patient Prism",
           "monthly_cost": 249,
           "implementation_weeks": 4,
-          "pros": ["AI-powered treatment follow-up sequences", "Call tracking and conversion analytics", "Patient financing integration", "Multi-channel nurturing (email, SMS)", "Treatment acceptance benchmarking"],
-          "cons": ["US-based - verify UK availability and compliance", "Additional per-location fees possible", "Requires treatment plan data integration"]
+          "pros": [
+            "AI-powered treatment follow-up sequences",
+            "Call tracking and conversion analytics",
+            "Patient financing integration",
+            "Multi-channel nurturing (email, SMS)",
+            "Treatment acceptance benchmarking"
+          ],
+          "cons": [
+            "US-based - verify UK availability and compliance",
+            "Additional per-location fees possible",
+            "Requires treatment plan data integration"
+          ]
         },
-        "custom_solution": {
-          "approach": "Build follow-up workflow using Zapier + Dentally API + Mailchimp/SMS provider for automated nurture sequences",
-          "estimated_cost": {"min": 5000, "max": 12000},
-          "implementation_weeks": 8,
-          "pros": ["Lower ongoing cost", "Fully customisable content and timing", "Can integrate patient financing options"],
-          "cons": ["Manual setup of treatment plan triggers", "No AI conversation capability", "Ongoing workflow maintenance", "Limited analytics without custom dashboard"]
+        "connect_and_automate": {
+          "approach": "Build follow-up workflow using Zapier (or Make.com) + Dentally API + Mailchimp/Twilio for automated nurture sequences. This is essentially a no-code build — Zapier triggers on treatment plan status changes in Dentally, sends timed email/SMS sequences. A non-developer can set this up in a week.",
+          "estimated_cost": {
+            "min": 1500,
+            "max": 4000
+          },
+          "implementation_weeks": 2,
+          "pros": [
+            "Lower ongoing cost",
+            "Fully customisable content and timing",
+            "Can integrate patient financing options",
+            "No-code — practice manager can maintain it",
+            "One-time setup cost vs ongoing SaaS"
+          ],
+          "cons": [
+            "No AI conversation capability (just timed messages)",
+            "Limited analytics without custom dashboard",
+            "Zapier has per-task pricing at higher volumes"
+          ]
         }
       },
-      "our_recommendation": "best_in_class",
+      "our_recommendation": "connect_and_automate",
       "recommendation_rationale": "Patient Prism combines treatment follow-up automation with call tracking and analytics, giving you visibility into why patients decline and what messaging converts them. At £249/month, you need to convert just 3 additional treatment plans per month (average value £85) to break even. The analytics alone will reveal which treatments and which messaging approaches work best across your 3 locations.",
       "roi_percentage": 1216,
       "payback_months": 3,
-      "assumptions": ["55% current treatment plan acceptance rate", "Target: 70% acceptance rate", "Average treatment plan value: £850", "30% of initially declined plans convertible within 90 days", "200+ treatment plans presented monthly across 3 locations"]
+      "assumptions": [
+        "55% current treatment plan acceptance rate",
+        "Target: 70% acceptance rate",
+        "Average treatment plan value: £850",
+        "30% of initially declined plans convertible within 90 days",
+        "200+ treatment plans presented monthly across 3 locations"
+      ],
+      "net_scores": {
+        "targeted_upgrade": 3.8,
+        "enhance_with_ai": 8.3,
+        "connect_and_automate": 6.8,
+        "comparison_summary": "Patient Prism wins on analytics and AI nurture intelligence. But at £1.5-4K, a Zapier + Dentally workflow covers 80% of the value for practices that just need reliable follow-up sequences."
+      }
     }
   ],
   "roadmap": {
     "short_term": [
-      {"title": "Deploy AI Patient Reminders", "description": "Implement Dental Intelligence for multi-channel appointment reminders across all 3 locations", "timeline": "Month 1-2", "expected_outcome": "Reduce no-show rate from 12% to under 7%"},
-      {"title": "Pilot AI Phone Bot at One Location", "description": "Deploy Sidekick AI at your busiest location to handle routine calls", "timeline": "Month 1-3", "expected_outcome": "Handle 80% of routine calls, zero missed calls during hours"}
+      {
+        "title": "Deploy AI Patient Reminders",
+        "description": "Implement Dental Intelligence for multi-channel appointment reminders across all 3 locations",
+        "timeline": "Month 1-2",
+        "expected_outcome": "Reduce no-show rate from 12% to under 7%"
+      },
+      {
+        "title": "Pilot AI Phone Bot at One Location",
+        "description": "Deploy Sidekick AI at your busiest location to handle routine calls",
+        "timeline": "Month 1-3",
+        "expected_outcome": "Handle 80% of routine calls, zero missed calls during hours"
+      }
     ],
     "mid_term": [
-      {"title": "Roll Out AI Phone Bot to All Locations", "description": "Expand Sidekick AI to remaining 2 locations based on pilot learnings", "timeline": "Month 4-5", "expected_outcome": "Free 25+ hours/week of reception time across all sites"},
-      {"title": "Treatment Plan Follow-up Automation", "description": "Implement Patient Prism for systematic treatment plan nurturing", "timeline": "Month 4-6", "expected_outcome": "Improve treatment acceptance from 55% to 70%"},
-      {"title": "Hygiene Recare Automation", "description": "Configure Dental Intelligence recall workflows for overdue hygiene patients", "timeline": "Month 5-6", "expected_outcome": "Recover 40% of lapsed hygiene patients"}
+      {
+        "title": "Roll Out AI Phone Bot to All Locations",
+        "description": "Expand Sidekick AI to remaining 2 locations based on pilot learnings",
+        "timeline": "Month 4-5",
+        "expected_outcome": "Free 25+ hours/week of reception time across all sites"
+      },
+      {
+        "title": "Treatment Plan Follow-up Automation",
+        "description": "Implement Patient Prism for systematic treatment plan nurturing",
+        "timeline": "Month 4-6",
+        "expected_outcome": "Improve treatment acceptance from 55% to 70%"
+      },
+      {
+        "title": "Hygiene Recare Automation",
+        "description": "Configure Dental Intelligence recall workflows for overdue hygiene patients",
+        "timeline": "Month 5-6",
+        "expected_outcome": "Recover 40% of lapsed hygiene patients"
+      }
     ],
     "long_term": [
-      {"title": "Insurance Verification Automation", "description": "Evaluate AI-powered insurance and NHS eligibility checking tools", "timeline": "Month 9-12", "expected_outcome": "Reduce verification time from 20 min to 3 min per patient"},
-      {"title": "Centralised Analytics Dashboard", "description": "Build unified view of patient communication, conversion, and retention metrics across all locations", "timeline": "Year 2", "expected_outcome": "Data-driven decision making across all 3 sites"}
+      {
+        "title": "Insurance Verification Automation",
+        "description": "Evaluate AI-powered insurance and NHS eligibility checking tools",
+        "timeline": "Month 9-12",
+        "expected_outcome": "Reduce verification time from 20 min to 3 min per patient"
+      },
+      {
+        "title": "Centralised Analytics Dashboard",
+        "description": "Build unified view of patient communication, conversion, and retention metrics across all locations",
+        "timeline": "Year 2",
+        "expected_outcome": "Data-driven decision making across all 3 sites"
+      }
     ]
   },
   "playbooks": [
     {
       "id": "pb1",
       "recommendation_id": "r1",
-      "option_type": "best_in_class",
+      "option_type": "enhance_with_ai",
       "total_weeks": 6,
       "phases": [
         {
           "name": "Setup & Dentally Integration",
           "week": 1,
           "tasks": [
-            {"id": "t1", "title": "Sign up for Dental Intelligence", "description": "Contact Dental Intelligence for UK practice pricing and setup for 3 locations"},
-            {"id": "t2", "title": "Connect Dentally API", "description": "Enable API integration between Dental Intelligence and Dentally. Map patient data fields."},
-            {"id": "t3", "title": "Configure reminder templates", "description": "Set up appointment reminder messages for SMS, email, and WhatsApp channels"},
-            {"id": "t4", "title": "Set communication preferences", "description": "Configure frequency caps, quiet hours, and channel preferences per patient segment"}
+            {
+              "id": "t1",
+              "title": "Sign up for Dental Intelligence",
+              "description": "Contact Dental Intelligence for UK practice pricing and setup for 3 locations"
+            },
+            {
+              "id": "t2",
+              "title": "Connect Dentally API",
+              "description": "Enable API integration between Dental Intelligence and Dentally. Map patient data fields."
+            },
+            {
+              "id": "t3",
+              "title": "Configure reminder templates",
+              "description": "Set up appointment reminder messages for SMS, email, and WhatsApp channels"
+            },
+            {
+              "id": "t4",
+              "title": "Set communication preferences",
+              "description": "Configure frequency caps, quiet hours, and channel preferences per patient segment"
+            }
           ]
         },
         {
           "name": "Pilot at Primary Location",
           "week": 2,
           "tasks": [
-            {"id": "t5", "title": "Launch reminders at main location", "description": "Enable AI reminders for your highest-volume location first"},
-            {"id": "t6", "title": "Train reception on new workflows", "description": "Show team how to view reminder status and handle patient responses"},
-            {"id": "t7", "title": "Monitor no-show rate daily", "description": "Track no-shows at pilot location vs control locations"},
-            {"id": "t8", "title": "Collect patient feedback", "description": "Note any patient complaints or praise about the new reminder system"}
+            {
+              "id": "t5",
+              "title": "Launch reminders at main location",
+              "description": "Enable AI reminders for your highest-volume location first"
+            },
+            {
+              "id": "t6",
+              "title": "Train reception on new workflows",
+              "description": "Show team how to view reminder status and handle patient responses"
+            },
+            {
+              "id": "t7",
+              "title": "Monitor no-show rate daily",
+              "description": "Track no-shows at pilot location vs control locations"
+            },
+            {
+              "id": "t8",
+              "title": "Collect patient feedback",
+              "description": "Note any patient complaints or praise about the new reminder system"
+            }
           ]
         },
         {
           "name": "Expand to All Locations",
           "week": 3,
           "tasks": [
-            {"id": "t9", "title": "Roll out to location 2", "description": "Apply learnings from pilot, enable reminders at second location"},
-            {"id": "t10", "title": "Roll out to location 3", "description": "Enable at third location with refined templates"},
-            {"id": "t11", "title": "Configure hygiene recare workflows", "description": "Set up automated recall sequences for overdue hygiene patients"},
-            {"id": "t12", "title": "Set up treatment plan follow-up triggers", "description": "Configure automated nurture sequences for unaccepted treatment plans"}
+            {
+              "id": "t9",
+              "title": "Roll out to location 2",
+              "description": "Apply learnings from pilot, enable reminders at second location"
+            },
+            {
+              "id": "t10",
+              "title": "Roll out to location 3",
+              "description": "Enable at third location with refined templates"
+            },
+            {
+              "id": "t11",
+              "title": "Configure hygiene recare workflows",
+              "description": "Set up automated recall sequences for overdue hygiene patients"
+            },
+            {
+              "id": "t12",
+              "title": "Set up treatment plan follow-up triggers",
+              "description": "Configure automated nurture sequences for unaccepted treatment plans"
+            }
           ]
         },
         {
           "name": "Optimise Messaging",
           "week": 4,
           "tasks": [
-            {"id": "t13", "title": "A/B test reminder timing", "description": "Test 48h vs 24h vs same-day reminders for optimal response"},
-            {"id": "t14", "title": "Optimise channel mix", "description": "Analyse which channels (SMS, email, WhatsApp) get best response by patient segment"},
-            {"id": "t15", "title": "Refine recare messaging", "description": "Test different hygiene recall messages for open rates and rebooking"},
-            {"id": "t16", "title": "Review GDPR compliance", "description": "Audit consent records and communication logs for compliance"}
+            {
+              "id": "t13",
+              "title": "A/B test reminder timing",
+              "description": "Test 48h vs 24h vs same-day reminders for optimal response"
+            },
+            {
+              "id": "t14",
+              "title": "Optimise channel mix",
+              "description": "Analyse which channels (SMS, email, WhatsApp) get best response by patient segment"
+            },
+            {
+              "id": "t15",
+              "title": "Refine recare messaging",
+              "description": "Test different hygiene recall messages for open rates and rebooking"
+            },
+            {
+              "id": "t16",
+              "title": "Review GDPR compliance",
+              "description": "Audit consent records and communication logs for compliance"
+            }
           ]
         },
         {
           "name": "Measure & Report",
           "week": 5,
           "tasks": [
-            {"id": "t17", "title": "Calculate no-show reduction", "description": "Compare no-show rate before and after across all locations"},
-            {"id": "t18", "title": "Measure recare recovery", "description": "Track how many overdue hygiene patients have rebooked"},
-            {"id": "t19", "title": "Calculate ROI", "description": "Total revenue recovered vs monthly platform cost"},
-            {"id": "t20", "title": "Present results to partners", "description": "Share dashboard and ROI analysis with practice owners"}
+            {
+              "id": "t17",
+              "title": "Calculate no-show reduction",
+              "description": "Compare no-show rate before and after across all locations"
+            },
+            {
+              "id": "t18",
+              "title": "Measure recare recovery",
+              "description": "Track how many overdue hygiene patients have rebooked"
+            },
+            {
+              "id": "t19",
+              "title": "Calculate ROI",
+              "description": "Total revenue recovered vs monthly platform cost"
+            },
+            {
+              "id": "t20",
+              "title": "Present results to partners",
+              "description": "Share dashboard and ROI analysis with practice owners"
+            }
           ]
         },
         {
           "name": "Scale & Automate",
           "week": 6,
           "tasks": [
-            {"id": "t21", "title": "Commit to annual subscription", "description": "Based on results, negotiate annual pricing for cost savings"},
-            {"id": "t22", "title": "Set up automated reporting", "description": "Configure weekly no-show and recare reports sent to practice managers"},
-            {"id": "t23", "title": "Document best practices", "description": "Create SOPs for the team on handling AI communication queries"},
-            {"id": "t24", "title": "Schedule quarterly review", "description": "Set recurring review to optimise messaging and measure ongoing ROI"}
+            {
+              "id": "t21",
+              "title": "Commit to annual subscription",
+              "description": "Based on results, negotiate annual pricing for cost savings"
+            },
+            {
+              "id": "t22",
+              "title": "Set up automated reporting",
+              "description": "Configure weekly no-show and recare reports sent to practice managers"
+            },
+            {
+              "id": "t23",
+              "title": "Document best practices",
+              "description": "Create SOPs for the team on handling AI communication queries"
+            },
+            {
+              "id": "t24",
+              "title": "Schedule quarterly review",
+              "description": "Set recurring review to optimise messaging and measure ongoing ROI"
+            }
           ]
         }
       ],
@@ -394,67 +833,163 @@
     {
       "id": "pb2",
       "recommendation_id": "r2",
-      "option_type": "best_in_class",
+      "option_type": "enhance_with_ai",
       "total_weeks": 6,
       "phases": [
         {
           "name": "Vendor Setup & Configuration",
           "week": 1,
           "tasks": [
-            {"id": "t1", "title": "Sign up for Sidekick AI", "description": "Contact Sidekick AI for dental practice pricing and UK availability"},
-            {"id": "t2", "title": "Configure practice knowledge base", "description": "Input opening hours, services, pricing, NHS information, directions for all 3 locations"},
-            {"id": "t3", "title": "Set up Dentally booking integration", "description": "Connect Sidekick to Dentally for live appointment availability and booking"},
-            {"id": "t4", "title": "Define escalation rules", "description": "Configure which call types are handled by AI vs transferred to human staff (clinical, emergencies, complaints)"}
+            {
+              "id": "t1",
+              "title": "Sign up for Sidekick AI",
+              "description": "Contact Sidekick AI for dental practice pricing and UK availability"
+            },
+            {
+              "id": "t2",
+              "title": "Configure practice knowledge base",
+              "description": "Input opening hours, services, pricing, NHS information, directions for all 3 locations"
+            },
+            {
+              "id": "t3",
+              "title": "Set up Dentally booking integration",
+              "description": "Connect Sidekick to Dentally for live appointment availability and booking"
+            },
+            {
+              "id": "t4",
+              "title": "Define escalation rules",
+              "description": "Configure which call types are handled by AI vs transferred to human staff (clinical, emergencies, complaints)"
+            }
           ]
         },
         {
           "name": "Pilot at Busiest Location",
           "week": 2,
           "tasks": [
-            {"id": "t5", "title": "Route calls to AI at one location", "description": "Set up call forwarding to Sidekick AI for your highest-volume location"},
-            {"id": "t6", "title": "Monitor calls in real-time", "description": "Have a staff member listen to AI-handled calls for the first 2 days"},
-            {"id": "t7", "title": "Track call handling metrics", "description": "Measure: calls handled, escalation rate, booking conversion, patient satisfaction"},
-            {"id": "t8", "title": "Refine AI responses", "description": "Update knowledge base based on questions the AI couldn't answer"}
+            {
+              "id": "t5",
+              "title": "Route calls to AI at one location",
+              "description": "Set up call forwarding to Sidekick AI for your highest-volume location"
+            },
+            {
+              "id": "t6",
+              "title": "Monitor calls in real-time",
+              "description": "Have a staff member listen to AI-handled calls for the first 2 days"
+            },
+            {
+              "id": "t7",
+              "title": "Track call handling metrics",
+              "description": "Measure: calls handled, escalation rate, booking conversion, patient satisfaction"
+            },
+            {
+              "id": "t8",
+              "title": "Refine AI responses",
+              "description": "Update knowledge base based on questions the AI couldn't answer"
+            }
           ]
         },
         {
           "name": "Optimise & Expand",
           "week": 3,
           "tasks": [
-            {"id": "t9", "title": "Review pilot metrics", "description": "Analyse call handling rate, patient feedback, and booking conversion"},
-            {"id": "t10", "title": "Enable for location 2", "description": "Roll out Sidekick AI to second location with pilot improvements"},
-            {"id": "t11", "title": "Enable for location 3", "description": "Complete rollout to all locations"},
-            {"id": "t12", "title": "Train reception teams", "description": "Show staff how to monitor AI calls, handle escalations, and provide feedback"}
+            {
+              "id": "t9",
+              "title": "Review pilot metrics",
+              "description": "Analyse call handling rate, patient feedback, and booking conversion"
+            },
+            {
+              "id": "t10",
+              "title": "Enable for location 2",
+              "description": "Roll out Sidekick AI to second location with pilot improvements"
+            },
+            {
+              "id": "t11",
+              "title": "Enable for location 3",
+              "description": "Complete rollout to all locations"
+            },
+            {
+              "id": "t12",
+              "title": "Train reception teams",
+              "description": "Show staff how to monitor AI calls, handle escalations, and provide feedback"
+            }
           ]
         },
         {
           "name": "After-Hours & Overflow",
           "week": 4,
           "tasks": [
-            {"id": "t13", "title": "Enable after-hours handling", "description": "Configure AI to take calls outside business hours for all locations"},
-            {"id": "t14", "title": "Set up overflow routing", "description": "Route calls to AI when reception lines are busy during peak times"},
-            {"id": "t15", "title": "Add web chat widget", "description": "Deploy Sidekick web chat on your website for online enquiries"},
-            {"id": "t16", "title": "Configure SMS follow-up", "description": "Set up automatic SMS with booking links after AI phone calls"}
+            {
+              "id": "t13",
+              "title": "Enable after-hours handling",
+              "description": "Configure AI to take calls outside business hours for all locations"
+            },
+            {
+              "id": "t14",
+              "title": "Set up overflow routing",
+              "description": "Route calls to AI when reception lines are busy during peak times"
+            },
+            {
+              "id": "t15",
+              "title": "Add web chat widget",
+              "description": "Deploy Sidekick web chat on your website for online enquiries"
+            },
+            {
+              "id": "t16",
+              "title": "Configure SMS follow-up",
+              "description": "Set up automatic SMS with booking links after AI phone calls"
+            }
           ]
         },
         {
           "name": "Measure Impact",
           "week": 5,
           "tasks": [
-            {"id": "t17", "title": "Calculate time saved", "description": "Measure hours freed for reception team compared to pre-implementation"},
-            {"id": "t18", "title": "Track missed call reduction", "description": "Compare missed call rate before and after AI implementation"},
-            {"id": "t19", "title": "Measure new bookings from AI", "description": "Track appointments booked directly through the AI system"},
-            {"id": "t20", "title": "Patient satisfaction survey", "description": "Send brief survey to patients who interacted with the AI"}
+            {
+              "id": "t17",
+              "title": "Calculate time saved",
+              "description": "Measure hours freed for reception team compared to pre-implementation"
+            },
+            {
+              "id": "t18",
+              "title": "Track missed call reduction",
+              "description": "Compare missed call rate before and after AI implementation"
+            },
+            {
+              "id": "t19",
+              "title": "Measure new bookings from AI",
+              "description": "Track appointments booked directly through the AI system"
+            },
+            {
+              "id": "t20",
+              "title": "Patient satisfaction survey",
+              "description": "Send brief survey to patients who interacted with the AI"
+            }
           ]
         },
         {
           "name": "Refine & Scale",
           "week": 6,
           "tasks": [
-            {"id": "t21", "title": "Optimise conversation flows", "description": "Refine AI responses based on 4 weeks of data across all locations"},
-            {"id": "t22", "title": "Add FAQ content", "description": "Expand knowledge base with common questions identified during pilot"},
-            {"id": "t23", "title": "Commit to ongoing subscription", "description": "Based on ROI, commit to annual pricing"},
-            {"id": "t24", "title": "Document SOPs", "description": "Create standard procedures for managing AI receptionist across locations"}
+            {
+              "id": "t21",
+              "title": "Optimise conversation flows",
+              "description": "Refine AI responses based on 4 weeks of data across all locations"
+            },
+            {
+              "id": "t22",
+              "title": "Add FAQ content",
+              "description": "Expand knowledge base with common questions identified during pilot"
+            },
+            {
+              "id": "t23",
+              "title": "Commit to ongoing subscription",
+              "description": "Based on ROI, commit to annual pricing"
+            },
+            {
+              "id": "t24",
+              "title": "Document SOPs",
+              "description": "Create standard procedures for managing AI receptionist across locations"
+            }
           ]
         }
       ],
@@ -467,75 +1002,434 @@
   ],
   "system_architecture": {
     "existing_tools": [
-      {"name": "Dentally", "category": "Practice Management", "api_score": 8},
-      {"name": "Google Workspace", "category": "Productivity", "api_score": 9},
-      {"name": "Xero", "category": "Accounting", "api_score": 8},
-      {"name": "WhatsApp Business", "category": "Communication", "api_score": 6}
+      {
+        "id": "et1",
+        "name": "Dentally",
+        "category": "Practice Management",
+        "monthly_cost": 350,
+        "one_time_cost": 0,
+        "crb": {
+          "cost": "£350/month (3 locations)",
+          "risk": "Minimal - established dental PMS",
+          "risk_level": "low",
+          "benefit": "Central patient and appointment management",
+          "powers": [
+            "Patient records",
+            "Appointment scheduling",
+            "Treatment plans",
+            "NHS claims"
+          ]
+        },
+        "is_existing": true
+      },
+      {
+        "id": "et2",
+        "name": "Google Workspace",
+        "category": "Productivity",
+        "monthly_cost": 45,
+        "one_time_cost": 0,
+        "crb": {
+          "cost": "£45/month",
+          "risk": "Minimal - industry standard",
+          "risk_level": "low",
+          "benefit": "Email, calendar, and document collaboration",
+          "powers": [
+            "Email",
+            "Calendar",
+            "Drive",
+            "Meet"
+          ]
+        },
+        "is_existing": true
+      },
+      {
+        "id": "et3",
+        "name": "Xero",
+        "category": "Accounting",
+        "monthly_cost": 65,
+        "one_time_cost": 0,
+        "crb": {
+          "cost": "£65/month",
+          "risk": "Low - established accounting platform",
+          "risk_level": "low",
+          "benefit": "Cloud accounting with NHS reconciliation",
+          "powers": [
+            "Invoicing",
+            "Bank reconciliation",
+            "Payroll",
+            "Reporting"
+          ]
+        },
+        "is_existing": true
+      },
+      {
+        "id": "et4",
+        "name": "WhatsApp Business",
+        "category": "Communication",
+        "monthly_cost": 0,
+        "one_time_cost": 0,
+        "crb": {
+          "cost": "Free",
+          "risk": "Medium - limited API without Business API",
+          "risk_level": "medium",
+          "benefit": "Patient messaging on preferred channel",
+          "powers": [
+            "Patient messaging",
+            "Appointment confirmations"
+          ]
+        },
+        "is_existing": true
+      }
     ],
     "ai_layer": [
-      {"name": "Dental Intelligence", "purpose": "Patient communication, reminders, recall automation"},
-      {"name": "Sidekick AI", "purpose": "AI receptionist for phone, SMS, and web chat"},
-      {"name": "Patient Prism", "purpose": "Treatment plan follow-up and conversion analytics"}
+      {
+        "id": "ai1",
+        "name": "Dental Intelligence",
+        "category": "Patient Communication",
+        "monthly_cost": 399,
+        "one_time_cost": 1500,
+        "crb": {
+          "cost": "£399/month + £1.5K setup",
+          "risk": "Low - proven in dental practices",
+          "risk_level": "low",
+          "benefit": "50%+ no-show reduction, automated recare",
+          "powers": [
+            "AI reminders",
+            "Recall automation",
+            "Treatment follow-up",
+            "Multi-channel"
+          ]
+        },
+        "is_existing": false
+      },
+      {
+        "id": "ai2",
+        "name": "Sidekick AI",
+        "category": "AI Reception",
+        "monthly_cost": 299,
+        "one_time_cost": 2000,
+        "crb": {
+          "cost": "£299/month + £2K setup",
+          "risk": "Medium - patient comfort with AI voice",
+          "risk_level": "medium",
+          "benefit": "Handle 80% of routine calls 24/7",
+          "powers": [
+            "Phone handling",
+            "SMS responses",
+            "Web chat",
+            "Live booking"
+          ]
+        },
+        "is_existing": false
+      },
+      {
+        "id": "ai3",
+        "name": "Patient Prism",
+        "category": "Treatment Conversion",
+        "monthly_cost": 249,
+        "one_time_cost": 800,
+        "crb": {
+          "cost": "£249/month + £800 setup",
+          "risk": "Low - educational approach to follow-up",
+          "risk_level": "low",
+          "benefit": "15-25% improvement in treatment acceptance",
+          "powers": [
+            "Treatment follow-up",
+            "Call tracking",
+            "Conversion analytics",
+            "Patient financing"
+          ]
+        },
+        "is_existing": false
+      }
     ],
     "automations": [
-      {"from": "Dentally", "to": "Dental Intelligence", "data": "Appointments, patient records, treatment plans", "direction": "bidirectional"},
-      {"from": "Dentally", "to": "Sidekick AI", "data": "Appointment availability, patient records", "direction": "read"},
-      {"from": "Sidekick AI", "to": "Dentally", "data": "New bookings, patient messages", "direction": "write"},
-      {"from": "Dentally", "to": "Patient Prism", "data": "Treatment plans, patient contact details", "direction": "read"},
-      {"from": "Patient Prism", "to": "Dentally", "data": "Treatment acceptance updates", "direction": "write"}
+      {
+        "id": "auto1",
+        "name": "Smart Patient Reminders",
+        "trigger": "Appointment booked or approaching in Dentally",
+        "action": "Dental Intelligence sends multi-channel reminders (SMS, email, WhatsApp) at optimised intervals",
+        "tools_used": [
+          "Dental Intelligence",
+          "Dentally"
+        ]
+      },
+      {
+        "id": "auto2",
+        "name": "AI Call Handling",
+        "trigger": "Patient calls practice phone number",
+        "action": "Sidekick AI handles routine queries and books appointments directly in Dentally",
+        "tools_used": [
+          "Sidekick AI",
+          "Dentally"
+        ]
+      },
+      {
+        "id": "auto3",
+        "name": "Treatment Plan Nurture",
+        "trigger": "Treatment plan marked as unaccepted for 7+ days",
+        "action": "Patient Prism sends educational content and financing options over 90-day nurture sequence",
+        "tools_used": [
+          "Patient Prism",
+          "Dentally"
+        ]
+      },
+      {
+        "id": "auto4",
+        "name": "Hygiene Recare Recall",
+        "trigger": "Patient overdue for hygiene appointment by 2+ weeks",
+        "action": "Dental Intelligence triggers multi-touch recall sequence across channels",
+        "tools_used": [
+          "Dental Intelligence",
+          "Dentally"
+        ]
+      }
     ],
     "connections": [
-      {"source": "Patient calls", "target": "Sidekick AI", "description": "Routine enquiries and bookings handled by AI"},
-      {"source": "Dentally appointments", "target": "Dental Intelligence", "description": "Automated reminders and recall"},
-      {"source": "Treatment plans", "target": "Patient Prism", "description": "Follow-up nurture sequences"},
-      {"source": "Xero", "target": "Dentally", "description": "Financial reconciliation"}
+      {
+        "id": "conn1",
+        "from_node": "et1",
+        "to_node": "ai1",
+        "data_flow": "Appointments, patient records, treatment plans, recare schedules",
+        "integration_type": "api"
+      },
+      {
+        "id": "conn2",
+        "from_node": "et1",
+        "to_node": "ai2",
+        "data_flow": "Appointment availability, patient lookup, booking slots",
+        "integration_type": "api"
+      },
+      {
+        "id": "conn3",
+        "from_node": "ai2",
+        "to_node": "et1",
+        "data_flow": "New bookings, patient messages, call notes",
+        "integration_type": "api"
+      },
+      {
+        "id": "conn4",
+        "from_node": "et1",
+        "to_node": "ai3",
+        "data_flow": "Treatment plans, patient contact details, acceptance status",
+        "integration_type": "api"
+      },
+      {
+        "id": "conn5",
+        "from_node": "et3",
+        "to_node": "et1",
+        "data_flow": "Invoice data, payment reconciliation",
+        "integration_type": "api"
+      }
     ],
     "cost_comparison": {
-      "current_annual": 0,
-      "proposed_annual": 13176,
-      "savings_annual": 100000,
-      "net_benefit": 86824
+      "saas_route": {
+        "items": [
+          {
+            "name": "Dental Intelligence",
+            "monthly_cost": 399,
+            "one_time_cost": 1500
+          },
+          {
+            "name": "Sidekick AI",
+            "monthly_cost": 299,
+            "one_time_cost": 2000
+          },
+          {
+            "name": "Patient Prism",
+            "monthly_cost": 249,
+            "one_time_cost": 800
+          }
+        ],
+        "total_monthly": 947,
+        "total_one_time": 4300
+      },
+      "diy_route": {
+        "items": [
+          {
+            "name": "Custom reminder system (Twilio + Claude + Dentally API)",
+            "monthly_cost": 150,
+            "one_time_cost": 6500
+          },
+          {
+            "name": "Custom AI receptionist (Vapi + Claude + Dentally API)",
+            "monthly_cost": 120,
+            "one_time_cost": 8500
+          },
+          {
+            "name": "Custom treatment follow-up (Zapier + Mailchimp/Twilio)",
+            "monthly_cost": 50,
+            "one_time_cost": 2500
+          }
+        ],
+        "total_monthly": 320,
+        "total_one_time": 17500,
+        "note": "2026 pricing reflects AI-assisted development. Twilio, Vapi, and Dentally APIs are well-documented. A developer with Claude Code can build these integrations in weeks. Voice AI (Vapi) has dramatically simplified what was once enterprise-only telephony work."
+      },
+      "monthly_savings": 627,
+      "savings_percentage": 66,
+      "build_cost": 17500,
+      "breakeven_months": 28
     }
   },
   "industry_insights": {
     "industry": "dental",
     "industry_display_name": "Healthcare - Dental",
     "adoption_stats": [
-      {"metric": "Dental practices using AI patient communication", "value": "18%", "source": "BDA Digital Dentistry Survey 2025"},
-      {"metric": "No-show reduction with AI reminders", "value": "50-60%", "source": "Dental Economics Technology Report 2025"},
-      {"metric": "Treatment acceptance improvement with follow-up automation", "value": "15-25%", "source": "Practice Growth Solutions Benchmarking 2025"},
-      {"metric": "Dental practices considering AI adoption in next 12 months", "value": "42%", "source": "Dentistry.co.uk Practice Survey 2025"}
+      {
+        "capability": "AI Patient Communication",
+        "adoption_percentage": 18,
+        "average_outcome": "50-60% reduction in no-show rates"
+      },
+      {
+        "capability": "AI Phone Reception",
+        "adoption_percentage": 12,
+        "average_outcome": "80% of routine calls handled automatically"
+      },
+      {
+        "capability": "Treatment Follow-up Automation",
+        "adoption_percentage": 15,
+        "average_outcome": "15-25% improvement in treatment acceptance"
+      },
+      {
+        "capability": "AI-Powered Practice Analytics",
+        "adoption_percentage": 42,
+        "average_outcome": "Data-driven insights across locations"
+      }
     ],
     "opportunity_map": {
-      "high_impact_low_effort": ["AI appointment reminders", "Online booking automation"],
-      "high_impact_high_effort": ["AI phone receptionist", "Treatment plan conversion system"],
-      "low_impact_low_effort": ["Automated review requests", "Patient birthday messages"],
-      "low_impact_high_effort": ["Custom patient portal", "AI clinical decision support"]
+      "emerging": [
+        "AI clinical decision support",
+        "Custom patient portals",
+        "Predictive patient analytics"
+      ],
+      "growing": [
+        "AI appointment reminders",
+        "AI phone receptionist",
+        "Treatment plan conversion automation"
+      ],
+      "established": [
+        "Online booking",
+        "Automated review requests",
+        "Patient birthday messages"
+      ],
+      "best_fit": "growing",
+      "rationale": "Multi-site dental practices gain outsized ROI from growing-stage AI tools because every improvement scales across all locations simultaneously."
     },
     "social_proof": [
-      {"quote": "We cut our no-show rate from 14% to 5% in three months. That's over £60K recovered annually across our two locations.", "source": "Practice Manager, 2-location dental group, Manchester"},
-      {"quote": "The AI phone system handles 120 calls a day that used to overwhelm our front desk. Our receptionists now focus on patients in the practice.", "source": "Principal Dentist, multi-site practice, Birmingham"},
-      {"quote": "Automated treatment plan follow-ups increased our case acceptance from 52% to 71%. Patients just needed the right information at the right time.", "source": "Practice Owner, private dental clinic, London"}
+      {
+        "quote": "We cut our no-show rate from 14% to 5% in three months. That's over £60K recovered annually across our two locations.",
+        "company_description": "2-location dental group in Manchester",
+        "outcome": "£60K+ recovered annually, no-show rate 14% to 5%",
+        "industry": "Dental - Multi-site"
+      },
+      {
+        "quote": "The AI phone system handles 120 calls a day that used to overwhelm our front desk. Our receptionists now focus on patients in the practice.",
+        "company_description": "Multi-site dental practice in Birmingham",
+        "outcome": "120 calls/day handled by AI",
+        "industry": "Dental - Multi-site"
+      },
+      {
+        "quote": "Automated treatment plan follow-ups increased our case acceptance from 52% to 71%. Patients just needed the right information at the right time.",
+        "company_description": "Private dental clinic in London",
+        "outcome": "Treatment acceptance from 52% to 71%",
+        "industry": "Dental - Private"
+      }
     ]
   },
   "automation_summary": {
     "stack_assessment": {
       "tools": [
-        {"name": "Dentally", "slug": "dentally", "api_score": 8, "category": "Practice Management"},
-        {"name": "Google Workspace", "slug": "google-workspace", "api_score": 9, "category": "Productivity"},
-        {"name": "Xero", "slug": "xero", "api_score": 8, "category": "Accounting"},
-        {"name": "WhatsApp Business", "slug": "whatsapp-business", "api_score": 6, "category": "Communication"}
+        {
+          "name": "Dentally",
+          "slug": "dentally",
+          "api_score": 8,
+          "category": "Practice Management"
+        },
+        {
+          "name": "Google Workspace",
+          "slug": "google-workspace",
+          "api_score": 9,
+          "category": "Productivity"
+        },
+        {
+          "name": "Xero",
+          "slug": "xero",
+          "api_score": 8,
+          "category": "Accounting"
+        },
+        {
+          "name": "WhatsApp Business",
+          "slug": "whatsapp-business",
+          "api_score": 6,
+          "category": "Communication"
+        }
       ],
       "average_score": 7.75,
       "verdict": "good_foundation",
       "verdict_text": "Your existing tools have solid API support. Dentally's open API is a strong foundation for AI integration across patient communication, booking, and clinical workflows."
     },
     "opportunities": [
-      {"finding_id": "f1", "title": "AI Patient Reminders & No-Show Reduction", "impact_monthly": 3700, "diy_effort_hours": 6, "approach": "Connect", "tools_involved": ["Dental Intelligence", "Dentally"], "category": "revenue_leakage"},
-      {"finding_id": "f5", "title": "AI Reception Phone Bot", "impact_monthly": 2900, "diy_effort_hours": 8, "approach": "Connect", "tools_involved": ["Sidekick AI", "Dentally"], "category": "operational_efficiency"},
-      {"finding_id": "f3", "title": "Treatment Plan Follow-up Automation", "impact_monthly": 4500, "diy_effort_hours": 10, "approach": "Connect", "tools_involved": ["Patient Prism", "Dentally"], "category": "conversion"},
-      {"finding_id": "f4", "title": "Hygiene Recare Automation", "impact_monthly": 2900, "diy_effort_hours": 4, "approach": "Connect", "tools_involved": ["Dental Intelligence", "Dentally"], "category": "patient_retention"},
-      {"finding_id": "f2", "title": "Insurance & NHS Verification", "impact_monthly": 3680, "diy_effort_hours": 16, "approach": "Replace", "tools_involved": ["Automated verification tool", "NHSBSA API"], "category": "admin_efficiency"}
+      {
+        "finding_id": "f1",
+        "title": "AI Patient Reminders & No-Show Reduction",
+        "impact_monthly": 3700,
+        "diy_effort_hours": 6,
+        "approach": "Connect",
+        "tools_involved": [
+          "Dental Intelligence",
+          "Dentally"
+        ],
+        "category": "revenue_leakage"
+      },
+      {
+        "finding_id": "f5",
+        "title": "AI Reception Phone Bot",
+        "impact_monthly": 2900,
+        "diy_effort_hours": 8,
+        "approach": "Connect",
+        "tools_involved": [
+          "Sidekick AI",
+          "Dentally"
+        ],
+        "category": "operational_efficiency"
+      },
+      {
+        "finding_id": "f3",
+        "title": "Treatment Plan Follow-up Automation",
+        "impact_monthly": 4500,
+        "diy_effort_hours": 10,
+        "approach": "Connect",
+        "tools_involved": [
+          "Patient Prism",
+          "Dentally"
+        ],
+        "category": "conversion"
+      },
+      {
+        "finding_id": "f4",
+        "title": "Hygiene Recare Automation",
+        "impact_monthly": 2900,
+        "diy_effort_hours": 4,
+        "approach": "Connect",
+        "tools_involved": [
+          "Dental Intelligence",
+          "Dentally"
+        ],
+        "category": "patient_retention"
+      },
+      {
+        "finding_id": "f2",
+        "title": "Insurance & NHS Verification",
+        "impact_monthly": 3680,
+        "diy_effort_hours": 16,
+        "approach": "Replace",
+        "tools_involved": [
+          "Automated verification tool",
+          "NHSBSA API"
+        ],
+        "category": "admin_efficiency"
+      }
     ],
     "total_monthly_impact": 17680,
     "total_diy_hours": 44,
@@ -551,8 +1445,19 @@
     }
   },
   "methodology_notes": {
-    "data_sources": ["Practice manager interview", "Dentally practice data export", "Industry benchmarks", "Call volume analysis"],
-    "assumptions": ["35 staff across 3 locations", "8 dentists, 6 hygienists, 21 support staff", "Blended hourly rate: £85 (clinical and admin weighted)", "4,000 appointments/month across all sites", "Average appointment value: £95 (NHS/private blend)"],
+    "data_sources": [
+      "Practice manager interview",
+      "Dentally practice data export",
+      "Industry benchmarks",
+      "Call volume analysis"
+    ],
+    "assumptions": [
+      "35 staff across 3 locations",
+      "8 dentists, 6 hygienists, 21 support staff",
+      "Blended hourly rate: £85 (clinical and admin weighted)",
+      "4,000 appointments/month across all sites",
+      "Average appointment value: £95 (NHS/private blend)"
+    ],
     "confidence_level": "high",
     "last_updated": "2026-02-14"
   }

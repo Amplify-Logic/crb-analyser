@@ -46,6 +46,8 @@ SAMPLE_REPORT_FILES = {
     "professional-services": "sample_report.json",
     "dental": "sample_report_dental.json",
     "ecommerce": "sample_report_ecommerce.json",
+    "b2b-platforms": "sample_report_b2b_platforms.json",
+    "wizard-firepits": "sample_report_wizard_firepits.json",
 }
 
 # Default sample report industry
@@ -74,6 +76,26 @@ def get_sample_report(industry: Optional[str] = None) -> dict:
     return _sample_reports[industry]
 
 
+def _build_workshop_summary(report: dict) -> Optional[dict]:
+    """Build workshop summary metadata (not raw transcript) for the report response."""
+    workshop_data = report.get("workshop_data") or report.get("workshop_context")
+    if not workshop_data:
+        return None
+
+    messages = workshop_data.get("messages", [])
+    topics = workshop_data.get("topics_covered", [])
+    completed = workshop_data.get("completed", False) or len(messages) > 5
+
+    if not completed and not messages:
+        return None
+
+    return {
+        "completed": completed,
+        "topics_covered": topics[:20] if topics else [],
+        "message_count": len(messages),
+    }
+
+
 # ============================================================================
 # PUBLIC ROUTES (for guest/quiz-based reports)
 # ============================================================================
@@ -90,8 +112,8 @@ async def get_sample_report_endpoint(industry: Optional[str] = None):
     report = get_sample_report(industry)
     if not report:
         raise HTTPException(
-            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail="Sample report not available"
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail=f"Sample report not available{f' for industry: {industry}' if industry else ''}"
         )
     return report
 
@@ -169,6 +191,8 @@ async def get_public_report(report_id: str):
             "assumption_log": report.get("assumption_log", {}),
             # RAG retrieval data (for debugging/verification)
             "semantic_retrieval": report.get("semantic_retrieval", {}),
+            # Workshop summary (metadata only, not raw transcript)
+            "workshop_summary": _build_workshop_summary(report),
         }
 
     except HTTPException:

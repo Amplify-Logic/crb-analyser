@@ -10,26 +10,24 @@ interface Recommendation {
   roi_calculation_failed?: boolean
   roi_calculation_note?: string
   payback_months: number
-  options: {
-    off_the_shelf: { name: string; vendor: string; monthly_cost: number; implementation_weeks: number; vendor_verified?: boolean; pricing_source?: string }
-    best_in_class: { name: string; vendor: string; monthly_cost: number; implementation_weeks: number; vendor_verified?: boolean; pricing_source?: string }
-    custom_solution: { approach: string; estimated_cost: { min: number; max: number }; implementation_weeks: number }
-  }
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  options: Record<string, any>
   our_recommendation: string
   recommendation_rationale: string
   assumptions: string[]
-  net_scores?: {
-    off_the_shelf?: number
-    best_in_class?: number
-    custom_solution?: number
-    comparison_summary?: string
-  }
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  net_scores?: Record<string, any>
 }
 
 interface NumberedRecommendationsProps {
   recommendations: Recommendation[]
   totalCount?: number
   startIndex?: number
+}
+
+/** Detect if recommendation uses AIOS option keys */
+function isAIOSFormat(options: Record<string, unknown>): boolean {
+  return 'connect_and_automate' in options || 'enhance_with_ai' in options || 'targeted_upgrade' in options
 }
 
 export default function NumberedRecommendations({ recommendations, totalCount, startIndex }: NumberedRecommendationsProps) {
@@ -123,8 +121,129 @@ export default function NumberedRecommendations({ recommendations, totalCount, s
                   className="overflow-hidden"
                 >
                   <div className="px-6 pb-6 border-t border-gray-200 dark:border-gray-700">
-                    {/* Three Options with Purple Glow */}
-                    {rec.options && (
+                    {rec.options && isAIOSFormat(rec.options) ? (
+                      /* ============ AIOS OPTIONS LAYOUT ============ */
+                      <div className="mt-4">
+                        <h5 className="font-semibold text-gray-900 dark:text-white mb-3">Your Options</h5>
+                        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                          {/* Connect & Automate */}
+                          {rec.options.connect_and_automate && (
+                            <div className={`p-4 rounded-xl border-2 transition relative ${
+                              rec.our_recommendation === 'connect_and_automate'
+                                ? 'border-emerald-500 bg-emerald-50 dark:bg-emerald-900/20 shadow-lg shadow-emerald-500/20'
+                                : 'border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800'
+                            }`}>
+                              {rec.our_recommendation === 'connect_and_automate' && (
+                                <span className="absolute -top-2 left-4 px-2 py-0.5 bg-emerald-600 text-white text-xs font-bold rounded uppercase">
+                                  Recommended
+                                </span>
+                              )}
+                              <p className="font-semibold mt-1 text-emerald-700 dark:text-emerald-300">Connect & Automate</p>
+                              <p className="text-sm text-gray-600 dark:text-gray-400 mt-1 line-clamp-3">{rec.options.connect_and_automate.approach}</p>
+                              {rec.options.connect_and_automate.build_time && (
+                                <p className="text-lg font-bold mt-2 text-gray-900 dark:text-white">
+                                  {rec.options.connect_and_automate.build_time}
+                                </p>
+                              )}
+                              {rec.options.connect_and_automate.monthly_cost && (
+                                <p className="text-xs text-gray-500">{rec.options.connect_and_automate.monthly_cost}</p>
+                              )}
+                              {rec.options.connect_and_automate.tools_used?.length > 0 && (
+                                <div className="mt-2 flex flex-wrap gap-1">
+                                  {rec.options.connect_and_automate.tools_used.map((tool: string, i: number) => (
+                                    <span key={i} className="px-1.5 py-0.5 text-xs rounded bg-emerald-100 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-400">{tool}</span>
+                                  ))}
+                                </div>
+                              )}
+                              {(rec.options.connect_and_automate.pros?.length || rec.options.connect_and_automate.cons?.length) && (
+                                <div className="mt-3 pt-3 border-t border-gray-200 dark:border-gray-600 space-y-2 text-xs">
+                                  {rec.options.connect_and_automate.pros?.slice(0, 3).map((pro: string, i: number) => (
+                                    <p key={i} className="text-green-600 dark:text-green-400">+ {pro}</p>
+                                  ))}
+                                  {rec.options.connect_and_automate.cons?.slice(0, 2).map((con: string, i: number) => (
+                                    <p key={i} className="text-red-500 dark:text-red-400">- {con}</p>
+                                  ))}
+                                </div>
+                              )}
+                            </div>
+                          )}
+                          {/* Enhance with AI */}
+                          {rec.options.enhance_with_ai && (
+                            <div className={`p-4 rounded-xl border-2 transition relative ${
+                              rec.our_recommendation === 'enhance_with_ai'
+                                ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/20 shadow-lg shadow-blue-500/20'
+                                : 'border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800'
+                            }`}>
+                              {rec.our_recommendation === 'enhance_with_ai' && (
+                                <span className="absolute -top-2 left-4 px-2 py-0.5 bg-blue-600 text-white text-xs font-bold rounded uppercase">
+                                  Recommended
+                                </span>
+                              )}
+                              <p className="font-semibold mt-1 text-blue-700 dark:text-blue-300">Enhance with AI</p>
+                              <p className="text-sm text-gray-600 dark:text-gray-400 mt-1 line-clamp-3">{rec.options.enhance_with_ai.approach}</p>
+                              {rec.options.enhance_with_ai.build_time && (
+                                <p className="text-lg font-bold mt-2 text-gray-900 dark:text-white">
+                                  {rec.options.enhance_with_ai.build_time}
+                                </p>
+                              )}
+                              {rec.options.enhance_with_ai.monthly_cost && (
+                                <p className="text-xs text-gray-500">{rec.options.enhance_with_ai.monthly_cost}</p>
+                              )}
+                              {(rec.options.enhance_with_ai.pros?.length || rec.options.enhance_with_ai.cons?.length) && (
+                                <div className="mt-3 pt-3 border-t border-gray-200 dark:border-gray-600 space-y-2 text-xs">
+                                  {rec.options.enhance_with_ai.pros?.slice(0, 3).map((pro: string, i: number) => (
+                                    <p key={i} className="text-green-600 dark:text-green-400">+ {pro}</p>
+                                  ))}
+                                  {rec.options.enhance_with_ai.cons?.slice(0, 2).map((con: string, i: number) => (
+                                    <p key={i} className="text-red-500 dark:text-red-400">- {con}</p>
+                                  ))}
+                                </div>
+                              )}
+                            </div>
+                          )}
+                          {/* Targeted Upgrade */}
+                          {rec.options.targeted_upgrade && (
+                            <div className={`p-4 rounded-xl border-2 transition relative ${
+                              rec.our_recommendation === 'targeted_upgrade'
+                                ? 'border-amber-500 bg-amber-50 dark:bg-amber-900/20 shadow-lg shadow-amber-500/20'
+                                : 'border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800'
+                            }`}>
+                              {rec.our_recommendation === 'targeted_upgrade' && (
+                                <span className="absolute -top-2 left-4 px-2 py-0.5 bg-amber-600 text-white text-xs font-bold rounded uppercase">
+                                  Recommended
+                                </span>
+                              )}
+                              <p className="font-semibold mt-1 text-amber-700 dark:text-amber-300">Targeted Upgrade</p>
+                              {rec.options.targeted_upgrade.when_needed && (
+                                <p className="text-xs text-amber-600 dark:text-amber-400 mt-1 italic">{rec.options.targeted_upgrade.when_needed}</p>
+                              )}
+                              {rec.options.targeted_upgrade.tools?.length > 0 && (
+                                <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">{rec.options.targeted_upgrade.tools.join(', ')}</p>
+                              )}
+                              {rec.options.targeted_upgrade.cost_range && (
+                                <p className="text-lg font-bold mt-2 text-gray-900 dark:text-white">
+                                  {rec.options.targeted_upgrade.cost_range}
+                                </p>
+                              )}
+                              {rec.options.targeted_upgrade.migration_time && (
+                                <p className="text-xs text-gray-500">{rec.options.targeted_upgrade.migration_time}</p>
+                              )}
+                              {(rec.options.targeted_upgrade.pros?.length || rec.options.targeted_upgrade.cons?.length) && (
+                                <div className="mt-3 pt-3 border-t border-gray-200 dark:border-gray-600 space-y-2 text-xs">
+                                  {rec.options.targeted_upgrade.pros?.slice(0, 3).map((pro: string, i: number) => (
+                                    <p key={i} className="text-green-600 dark:text-green-400">+ {pro}</p>
+                                  ))}
+                                  {rec.options.targeted_upgrade.cons?.slice(0, 2).map((con: string, i: number) => (
+                                    <p key={i} className="text-red-500 dark:text-red-400">- {con}</p>
+                                  ))}
+                                </div>
+                              )}
+                            </div>
+                          )}
+                        </div>
+                      </div>
+                    ) : rec.options ? (
+                      /* ============ LEGACY OPTIONS LAYOUT ============ */
                       <div className="mt-4">
                         <h5 className="font-semibold text-gray-900 dark:text-white mb-3">Three Options</h5>
                         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
@@ -140,23 +259,27 @@ export default function NumberedRecommendations({ recommendations, totalCount, s
                               </span>
                             )}
                             <p className="font-semibold mt-1 text-gray-700 dark:text-gray-300">Option A: Off-the-Shelf</p>
-                            <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">{rec.options.off_the_shelf.name}</p>
-                            {rec.options.off_the_shelf.vendor_verified === true && (
+                            <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">{rec.options.off_the_shelf?.name}</p>
+                            {rec.options.off_the_shelf?.vendor_verified === true && (
                               <span className="inline-block mt-1 px-2 py-0.5 text-xs font-medium rounded bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400">Verified vendor</span>
                             )}
-                            {rec.options.off_the_shelf.vendor_verified === false && (
+                            {rec.options.off_the_shelf?.vendor_verified === false && (
                               <span className="inline-block mt-1 px-2 py-0.5 text-xs font-medium rounded bg-amber-100 dark:bg-amber-900/30 text-amber-700 dark:text-amber-400">Unverified vendor</span>
                             )}
-                            {rec.options.off_the_shelf.pricing_source === 'estimated' && (
-                              <span className="inline-block mt-1 px-2 py-0.5 text-xs font-medium rounded bg-gray-100 dark:bg-gray-700 text-gray-500 dark:text-gray-400">Estimated pricing</span>
-                            )}
-                            {rec.options.off_the_shelf.pricing_source === 'verified' && (
-                              <span className="inline-block mt-1 px-2 py-0.5 text-xs font-medium rounded bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400">Verified pricing</span>
-                            )}
                             <p className="text-lg font-bold mt-2 text-gray-900 dark:text-white">
-                              {formatCurrency(rec.options.off_the_shelf.monthly_cost)}/mo
+                              {formatCurrency(rec.options.off_the_shelf?.monthly_cost || 0)}/mo
                             </p>
-                            <p className="text-xs text-gray-500">{rec.options.off_the_shelf.implementation_weeks} weeks</p>
+                            <p className="text-xs text-gray-500">{rec.options.off_the_shelf?.implementation_weeks} weeks</p>
+                            {(rec.options.off_the_shelf?.pros?.length || rec.options.off_the_shelf?.cons?.length) && (
+                              <div className="mt-3 pt-3 border-t border-gray-200 dark:border-gray-600 space-y-2 text-xs">
+                                {rec.options.off_the_shelf?.pros?.slice(0, 3).map((pro: string, i: number) => (
+                                  <p key={i} className="text-green-600 dark:text-green-400">+ {pro}</p>
+                                ))}
+                                {rec.options.off_the_shelf?.cons?.slice(0, 2).map((con: string, i: number) => (
+                                  <p key={i} className="text-red-500 dark:text-red-400">- {con}</p>
+                                ))}
+                              </div>
+                            )}
                           </div>
                           {/* Best-in-class */}
                           <div className={`p-4 rounded-xl border-2 transition relative ${
@@ -170,23 +293,27 @@ export default function NumberedRecommendations({ recommendations, totalCount, s
                               </span>
                             )}
                             <p className="font-semibold mt-1 text-gray-700 dark:text-gray-300">Option B: Best-in-Class</p>
-                            <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">{rec.options.best_in_class.name}</p>
-                            {rec.options.best_in_class.vendor_verified === true && (
+                            <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">{rec.options.best_in_class?.name}</p>
+                            {rec.options.best_in_class?.vendor_verified === true && (
                               <span className="inline-block mt-1 px-2 py-0.5 text-xs font-medium rounded bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400">Verified vendor</span>
                             )}
-                            {rec.options.best_in_class.vendor_verified === false && (
+                            {rec.options.best_in_class?.vendor_verified === false && (
                               <span className="inline-block mt-1 px-2 py-0.5 text-xs font-medium rounded bg-amber-100 dark:bg-amber-900/30 text-amber-700 dark:text-amber-400">Unverified vendor</span>
                             )}
-                            {rec.options.best_in_class.pricing_source === 'estimated' && (
-                              <span className="inline-block mt-1 px-2 py-0.5 text-xs font-medium rounded bg-gray-100 dark:bg-gray-700 text-gray-500 dark:text-gray-400">Estimated pricing</span>
-                            )}
-                            {rec.options.best_in_class.pricing_source === 'verified' && (
-                              <span className="inline-block mt-1 px-2 py-0.5 text-xs font-medium rounded bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400">Verified pricing</span>
-                            )}
                             <p className="text-lg font-bold mt-2 text-gray-900 dark:text-white">
-                              {formatCurrency(rec.options.best_in_class.monthly_cost)}/mo
+                              {formatCurrency(rec.options.best_in_class?.monthly_cost || 0)}/mo
                             </p>
-                            <p className="text-xs text-gray-500">{rec.options.best_in_class.implementation_weeks} weeks</p>
+                            <p className="text-xs text-gray-500">{rec.options.best_in_class?.implementation_weeks} weeks</p>
+                            {(rec.options.best_in_class?.pros?.length || rec.options.best_in_class?.cons?.length) && (
+                              <div className="mt-3 pt-3 border-t border-gray-200 dark:border-gray-600 space-y-2 text-xs">
+                                {rec.options.best_in_class?.pros?.slice(0, 3).map((pro: string, i: number) => (
+                                  <p key={i} className="text-green-600 dark:text-green-400">+ {pro}</p>
+                                ))}
+                                {rec.options.best_in_class?.cons?.slice(0, 2).map((con: string, i: number) => (
+                                  <p key={i} className="text-red-500 dark:text-red-400">- {con}</p>
+                                ))}
+                              </div>
+                            )}
                           </div>
                           {/* Custom */}
                           <div className={`p-4 rounded-xl border-2 transition relative ${
@@ -200,21 +327,48 @@ export default function NumberedRecommendations({ recommendations, totalCount, s
                               </span>
                             )}
                             <p className="font-semibold mt-1 text-gray-700 dark:text-gray-300">Option C: Custom AI</p>
-                            <p className="text-sm text-gray-600 dark:text-gray-400 mt-1 line-clamp-2">{rec.options.custom_solution.approach}</p>
+                            <p className="text-sm text-gray-600 dark:text-gray-400 mt-1 line-clamp-2">{rec.options.custom_solution?.approach}</p>
                             <p className="text-lg font-bold mt-2 text-gray-900 dark:text-white">
-                              {formatCurrency(rec.options.custom_solution.estimated_cost?.min || 0)} - {formatCurrency(rec.options.custom_solution.estimated_cost?.max || 0)}
+                              {formatCurrency(rec.options.custom_solution?.estimated_cost?.min || 0)} - {formatCurrency(rec.options.custom_solution?.estimated_cost?.max || 0)}
                             </p>
-                            <p className="text-xs text-gray-500">{rec.options.custom_solution.implementation_weeks} weeks</p>
+                            <p className="text-xs text-gray-500">{rec.options.custom_solution?.implementation_weeks} weeks</p>
+                            {(rec.options.custom_solution?.pros?.length || rec.options.custom_solution?.cons?.length) && (
+                              <div className="mt-3 pt-3 border-t border-gray-200 dark:border-gray-600 space-y-2 text-xs">
+                                {rec.options.custom_solution?.pros?.slice(0, 3).map((pro: string, i: number) => (
+                                  <p key={i} className="text-green-600 dark:text-green-400">+ {pro}</p>
+                                ))}
+                                {rec.options.custom_solution?.cons?.slice(0, 2).map((con: string, i: number) => (
+                                  <p key={i} className="text-red-500 dark:text-red-400">- {con}</p>
+                                ))}
+                              </div>
+                            )}
                           </div>
                         </div>
                       </div>
-                    )}
+                    ) : null}
 
                     {/* NET SCORE display */}
                     {rec.net_scores && (
                       <div className="mt-3 p-3 bg-gray-50 dark:bg-gray-700/50 rounded-lg">
                         <p className="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wide mb-2">NET Score (Benefit - Cost - Risk/10)</p>
                         <div className="flex gap-4 text-sm">
+                          {/* AIOS scores */}
+                          {rec.net_scores.connect_and_automate != null && (
+                            <span className={rec.our_recommendation === 'connect_and_automate' ? 'font-bold text-emerald-700 dark:text-emerald-300' : 'text-gray-600 dark:text-gray-400'}>
+                              Connect: {rec.net_scores.connect_and_automate.toFixed(1)}
+                            </span>
+                          )}
+                          {rec.net_scores.enhance_with_ai != null && (
+                            <span className={rec.our_recommendation === 'enhance_with_ai' ? 'font-bold text-blue-700 dark:text-blue-300' : 'text-gray-600 dark:text-gray-400'}>
+                              Enhance: {rec.net_scores.enhance_with_ai.toFixed(1)}
+                            </span>
+                          )}
+                          {rec.net_scores.targeted_upgrade != null && (
+                            <span className={rec.our_recommendation === 'targeted_upgrade' ? 'font-bold text-amber-700 dark:text-amber-300' : 'text-gray-600 dark:text-gray-400'}>
+                              Upgrade: {rec.net_scores.targeted_upgrade.toFixed(1)}
+                            </span>
+                          )}
+                          {/* Legacy scores */}
                           {rec.net_scores.off_the_shelf != null && (
                             <span className={rec.our_recommendation === 'off_the_shelf' ? 'font-bold text-primary-700 dark:text-primary-300' : 'text-gray-600 dark:text-gray-400'}>
                               A: {rec.net_scores.off_the_shelf.toFixed(1)}

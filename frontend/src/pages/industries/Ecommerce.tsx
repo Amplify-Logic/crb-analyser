@@ -33,23 +33,23 @@ const PAIN_POINTS = [
 const SAMPLE_FINDINGS = [
   {
     title: 'Customer Support AI',
-    verdict: 'Proceed',
+    verdict: 'Connect',
     verdictColor: 'emerald',
-    description: 'Your ticket volume and repetitive queries make AI chat a clear win. Fast payback with Gorgias or similar.',
+    description: 'Build a Claude workflow connecting your Shopify order data to your support tool. Auto-respond to WISMO queries in hours, not weeks.',
     roi: '€36,000/year',
   },
   {
-    title: 'Inventory Forecasting AI',
-    verdict: 'Proceed',
+    title: 'Inventory Forecasting Agent',
+    verdict: 'Enhance',
     verdictColor: 'emerald',
-    description: 'Your SKU count and sales velocity justify AI forecasting. Reduces both stockouts and overstock.',
+    description: 'Deploy an AI agent on your existing sales data that predicts demand and flags reorder points. No new software needed.',
     roi: '€48,000/year',
   },
   {
     title: 'AI Product Descriptions',
     verdict: 'Skip',
     verdictColor: 'gray',
-    description: 'Your product catalog is stable. Manual descriptions are fine for now—focus on higher-impact areas.',
+    description: 'Your product catalog is stable. Manual descriptions are fine for now — focus on higher-impact areas.',
     roi: 'Low impact',
   },
 ]
@@ -113,8 +113,8 @@ export default function Ecommerce() {
             </h1>
 
             <p className="text-xl text-gray-600 mb-8 max-w-2xl mx-auto">
-              Find out exactly which AI tools will save you time—and which ones to skip.
-              Clear verdicts. Real prices. No consultant fees.
+              Get an architecture blueprint showing what to connect, what to automate, and what to skip.
+              Real build estimates. Real ROI. No consultant fees.
             </p>
 
             <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-8">
@@ -129,13 +129,22 @@ export default function Ecommerce() {
               </ShimmerButton>
 
               <Link
-                to="/quiz"
+                to="/report/sample-ecommerce"
                 className="px-6 py-3 text-gray-700 font-medium hover:text-primary-600 transition flex items-center gap-2"
               >
                 <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
                 </svg>
-                See What You Get
+                Nordic Outdoor Co.
+              </Link>
+              <Link
+                to="/report/sample-wizard-firepits"
+                className="px-6 py-3 text-gray-700 font-medium hover:text-primary-600 transition flex items-center gap-2"
+              >
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                </svg>
+                Wizard Firepits
               </Link>
             </div>
 
@@ -255,7 +264,17 @@ export default function Ecommerce() {
               to="/report/sample-ecommerce"
               className="inline-flex items-center gap-2 text-gray-500 font-medium hover:text-gray-700"
             >
-              See a sample report
+              Nordic Outdoor Co.
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+              </svg>
+            </Link>
+            <span className="text-gray-300 hidden sm:inline">|</span>
+            <Link
+              to="/report/sample-wizard-firepits"
+              className="inline-flex items-center gap-2 text-gray-500 font-medium hover:text-gray-700"
+            >
+              Wizard Firepits
               <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
               </svg>
@@ -268,10 +287,10 @@ export default function Ecommerce() {
       <section className="py-16 px-4">
         <div className="max-w-4xl mx-auto">
           <h2 className="text-2xl font-bold text-gray-900 text-center mb-4">
-            We know your software
+            We know your stack
           </h2>
           <p className="text-center text-gray-600 mb-8">
-            Our recommendations integrate with the tools you already use.
+            Our blueprint integrates with the tools you already use.
           </p>
 
           <div className="flex flex-wrap justify-center gap-3">
@@ -295,7 +314,7 @@ export default function Ecommerce() {
       <section className="py-16 px-4 bg-gray-900">
         <div className="max-w-3xl mx-auto text-center">
           <h2 className="text-3xl font-bold text-white mb-4">
-            Ready to find out which AI tools make sense?
+            Ready to build your AI operating system?
           </h2>
           <p className="text-gray-400 mb-8">
             Take the free 5-minute quiz. Get your AI readiness score instantly.

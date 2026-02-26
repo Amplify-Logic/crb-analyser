@@ -1,0 +1,1431 @@
+{
+  "id": "sample-demo-report-wizard-firepits",
+  "tier": "full",
+  "status": "completed",
+  "created_at": "2026-02-22T10:00:00Z",
+  "company_profile": {
+    "company_name": "Wizard Firepits",
+    "industry": "b2b-platforms",
+    "industry_display": "Ecommerce - DTC Outdoor / Home & Garden",
+    "team_size": "1-10 employees",
+    "tech_level": "Moderate - Shopify with marketing automation, some manual processes",
+    "budget_range": "500-1000/month",
+    "existing_tools": [
+      "Shopify",
+      "Klaviyo",
+      "Judge.me",
+      "Google Analytics 4",
+      "Microsoft Clarity",
+      "GoAffPro"
+    ],
+    "location": "New Zealand (NZ, AU, UK markets)",
+    "website": "wizardfirepits.co.nz",
+    "description": "Direct-to-consumer smokeless fire pit brand selling proprietary secondary-burn technology fire pits in three sizes (Mini, Regular, Jumbo) plus accessories. Known for irreverent brand voice and 'Experience the Magic, Not the Smoke' positioning. 840+ five-star reviews on Judge.me. Recently expanded to the UK market and serves Australia. Estimated annual revenue around \u20ac1.8M with strong repeat purchase on accessories. Growing 40% year-over-year fuelled by word-of-mouth and affiliate marketing."
+  },
+  "executive_summary": {
+    "ai_readiness_score": 65,
+    "customer_value_score": 8,
+    "business_health_score": 7,
+    "key_insight": "Wizard Firepits has built a cult-following brand with an exceptional product, but the team is stretched thin across three markets (NZ, AU, UK) with mostly manual operations. Customer support is buckling under international shipping queries, inventory planning across three warehouses is done by feel, and the brand's brilliant content voice isn't scaling to new markets. AI can automate 55-65% of support volume, dramatically improve multi-market inventory allocation, and help scale content production \u2014 freeing the team to focus on product development and market expansion.",
+    "total_value_potential": {
+      "min": 185000,
+      "max": 320000,
+      "projection_years": 3
+    },
+    "top_opportunities": [
+      {
+        "title": "AI Customer Support for Multi-Market Operations",
+        "value_potential": "\u20ac28K-42K/year",
+        "time_horizon": "short"
+      },
+      {
+        "title": "Multi-Market Inventory Forecasting",
+        "value_potential": "\u20ac22K-38K/year",
+        "time_horizon": "short"
+      },
+      {
+        "title": "AI-Powered International Content & Localisation",
+        "value_potential": "\u20ac15K-24K/year",
+        "time_horizon": "mid"
+      },
+      {
+        "title": "Smart Review Mining & Social Proof Automation",
+        "value_potential": "\u20ac10K-18K/year",
+        "time_horizon": "mid"
+      }
+    ],
+    "not_recommended": [
+      {
+        "title": "Enterprise ERP or OMS (NetSuite/Cin7)",
+        "reason": "At your current scale with 3 core SKUs and accessories, enterprise inventory management is massive overkill. Shopify's built-in tools plus smart forecasting cover your needs. Revisit when you hit 50+ SKUs or \u20ac5M+ revenue."
+      },
+      {
+        "title": "Custom Recommendation Engine",
+        "reason": "With a focused product line (3 fire pit sizes + accessories), a recommendation engine adds complexity without meaningful lift. Your cross-sell is straightforward: pit \u2192 mat \u2192 accessories. Shopify's native upsells handle this."
+      },
+      {
+        "title": "Full Marketing Mix Modelling Platform",
+        "reason": "At your ad spend level, platforms like Northbeam or Rockerbox cost more than the attribution clarity they provide. Your affiliate program (GoAffPro) and post-purchase surveys give you enough signal for now."
+      }
+    ],
+    "recommended_investment": {
+      "year_1_min": 9600,
+      "year_1_max": 19200
+    },
+    "verdict": {
+      "recommendation": "proceed",
+      "headline": "High-Impact AI Opportunities Across Multi-Market Operations",
+      "subheadline": "Your Shopify stack and strong brand are well-suited for AI that scales operations across NZ, AU, and UK",
+      "reasoning": [
+        "55-65% of support tickets are automatable \u2014 shipping queries, order status, and returns follow predictable patterns across all three markets",
+        "Multi-market inventory allocation is your biggest hidden cost: stockouts in UK lose early-adopter momentum, overstock in NZ ties up cash",
+        "Your irreverent brand voice is a key asset but it doesn't scale manually across three markets and multiple channels",
+        "At 40% growth with international expansion, manual processes will break within 6-9 months without automation"
+      ],
+      "when_to_revisit": "Review after 6 months \u2014 if support automation hits 55%+ deflection across all markets, expand to proactive shipping notifications and seasonal campaign automation",
+      "recommended_approach": [
+        "Start with AI customer support (fastest ROI, handles the multi-market complexity that's overwhelming your team)",
+        "Add multi-market inventory forecasting in month 2-3 before NZ winter / UK summer season",
+        "Roll out AI content localisation in month 4-5 to scale brand voice to UK and AU",
+        "Implement review mining and social proof automation in month 6"
+      ],
+      "confidence": "high",
+      "color": "green"
+    }
+  },
+  "value_summary": {
+    "value_saved": {
+      "subtotal": {
+        "min": 52000,
+        "max": 84000
+      },
+      "hours_per_week": 35,
+      "hourly_rate": 32
+    },
+    "value_created": {
+      "subtotal": {
+        "min": 24000,
+        "max": 42000
+      }
+    },
+    "total": {
+      "min": 76000,
+      "max": 126000
+    }
+  },
+  "findings": [
+    {
+      "id": "f1",
+      "title": "International Shipping Queries Overwhelm a Small Support Team",
+      "description": "With expansion into UK and AU, support volume has tripled. Approximately 1,200 tickets/month now \u2014 with 60% being shipping-related: 'Where is my order?', customs duty questions, delivery timeframe queries, and returns across three different postal systems. A team of 2 handles everything manually, with average first-response time of 12-18 hours. International customers expect faster answers, and slow responses are showing up in negative reviews for the first time.",
+      "category": "customer_support",
+      "customer_value_score": 9,
+      "business_health_score": 8,
+      "value_saved": {
+        "hours_per_week": 14,
+        "hourly_rate": 32,
+        "annual_savings": 23296
+      },
+      "value_created": {
+        "description": "Faster response times improve CSAT and reduce refund demands from frustrated international customers",
+        "potential_revenue": 12000
+      },
+      "confidence": "high",
+      "sources": [
+        "Support ticket analysis",
+        "Judge.me review sentiment data",
+        "Ecommerce support automation benchmarks - Gartner 2025"
+      ],
+      "time_horizon": "short"
+    },
+    {
+      "id": "f2",
+      "title": "Multi-Market Inventory Allocation Is Guesswork \u2014 Causing Stockouts in UK and Overstock in NZ",
+      "description": "Inventory planning across NZ, AU, and UK warehouses is done manually based on gut feel. The UK launch saw two stockout periods in the first three months (losing an estimated \u20ac45K in early-adopter sales momentum), while NZ warehouse holds 4 months of Mini stock that isn't moving. Seasonal patterns differ drastically between hemispheres \u2014 NZ winter peaks while UK has summer fire pit demand. Without data-driven allocation, cash is tied up in the wrong stock in the wrong place.",
+      "category": "inventory",
+      "customer_value_score": 7,
+      "business_health_score": 9,
+      "value_saved": {
+        "hours_per_week": 5,
+        "hourly_rate": 32,
+        "annual_savings": 8320
+      },
+      "value_created": {
+        "description": "Reduced stockouts recover lost UK sales momentum; smarter allocation frees working capital",
+        "potential_revenue": 28000
+      },
+      "confidence": "medium",
+      "sources": [
+        "Shopify multi-location inventory data",
+        "UK launch performance analysis",
+        "IHL Group inventory distortion study 2025"
+      ],
+      "time_horizon": "short"
+    },
+    {
+      "id": "f3",
+      "title": "Brand Voice Doesn't Scale \u2014 UK and AU Content Feels Generic",
+      "description": "Wizard Firepits' irreverent NZ voice ('let's be frank...') is a core brand asset that drives engagement and conversions. But the team can't manually craft localised content for three markets. UK product pages read like translated NZ copy (references to manuka wood, NZ-specific terms). AU content is identical to NZ. Email campaigns go out in a single version. This generic approach is costing conversion \u2014 UK conversion rate is 1.4% vs NZ's 3.8%, partly because the content doesn't resonate locally.",
+      "category": "content",
+      "customer_value_score": 7,
+      "business_health_score": 7,
+      "value_saved": {
+        "hours_per_week": 10,
+        "hourly_rate": 32,
+        "annual_savings": 16640
+      },
+      "value_created": {
+        "description": "Localised content improves UK and AU conversion rates toward NZ benchmark",
+        "potential_revenue": 18000
+      },
+      "confidence": "medium",
+      "sources": [
+        "Shopify conversion analytics by market",
+        "Content production timeline analysis",
+        "Baymard Institute localisation studies 2025"
+      ],
+      "time_horizon": "mid"
+    },
+    {
+      "id": "f4",
+      "title": "840+ Reviews Are a Goldmine That's Barely Tapped",
+      "description": "With 840+ reviews on Judge.me (predominantly 5-star), Wizard Firepits sits on a massive trove of social proof and customer insight. But reviews are only displayed on product pages. No automated review highlights in email campaigns, no AI-extracted themes for product development, no dynamic social proof on landing pages. Competitors are using AI to mine reviews for marketing copy, FAQ improvements, and product insights. Your reviews contain recurring themes (family gatherings, camping trips, winter warmth) that could power entire content strategies.",
+      "category": "marketing",
+      "customer_value_score": 6,
+      "business_health_score": 7,
+      "value_saved": {
+        "hours_per_week": 3,
+        "hourly_rate": 32,
+        "annual_savings": 4992
+      },
+      "value_created": {
+        "description": "Better social proof usage increases conversion rate and provides product development insights",
+        "potential_revenue": 10000
+      },
+      "confidence": "medium",
+      "sources": [
+        "Judge.me review data analysis",
+        "Spiegel Research Center review impact study",
+        "Bazaarvoice social proof benchmarks 2025"
+      ],
+      "time_horizon": "mid"
+    },
+    {
+      "id": "f5",
+      "title": "Affiliate Program Lacks Smart Attribution and Tiering",
+      "description": "GoAffPro runs the affiliate program that drives significant word-of-mouth sales, but attribution is basic (last-click only) and all affiliates get the same commission regardless of performance. Top affiliates (likely 10-15% of the base) drive 70%+ of affiliate revenue but aren't incentivised differently. There's no AI-driven fraud detection, no smart commission tiering, and no automated content kit generation for affiliates. At 40% growth, the affiliate channel could be 2-3x larger with better tooling.",
+      "category": "marketing",
+      "customer_value_score": 5,
+      "business_health_score": 8,
+      "value_saved": {
+        "hours_per_week": 3,
+        "hourly_rate": 32,
+        "annual_savings": 4992
+      },
+      "value_created": {
+        "description": "Smarter affiliate management increases channel revenue and reduces fraud",
+        "potential_revenue": 15000
+      },
+      "confidence": "low",
+      "sources": [
+        "GoAffPro affiliate performance data",
+        "Affiliate marketing industry benchmarks - Forrester 2025"
+      ],
+      "time_horizon": "long"
+    }
+  ],
+  "recommendations": [
+    {
+      "id": "r1",
+      "title": "Deploy AI-Powered Customer Support Across All Markets",
+      "description": "Implement an AI support agent that handles shipping queries, order status, returns initiation, and product questions across NZ, AU, and UK \u2014 with market-specific knowledge about shipping times, customs duties, and local return policies. The AI connects to Shopify order data, carrier tracking APIs, and your product catalog to give instant, accurate responses \u2014 escalating only complex issues to human agents.",
+      "why_it_matters": {
+        "customer_value": "International customers get instant answers about shipping times, duties, and returns for their specific country instead of waiting 12-18 hours. Product sizing and firewood compatibility questions answered instantly.",
+        "business_health": "Reduce support load from 2 FTE to ~0.8 FTE as you scale across three markets. Current support cost of \u20ac130K/year drops significantly while handling 3x the volume from international expansion."
+      },
+      "priority": "high",
+      "crb_analysis": {
+        "cost": {
+          "short_term": {
+            "setup": 1200,
+            "monthly": 450
+          },
+          "mid_term": {
+            "monthly": 450
+          },
+          "long_term": {
+            "monthly": 450
+          },
+          "total": 17400
+        },
+        "risk": [
+          {
+            "description": "AI gives incorrect customs duty or shipping time estimates for specific markets",
+            "probability": "medium",
+            "impact": 3,
+            "mitigation": "Connect directly to carrier APIs for real-time tracking; maintain market-specific FAQ database for duties and regulations"
+          },
+          {
+            "description": "AI doesn't capture the irreverent Wizard Firepits brand voice",
+            "probability": "medium",
+            "impact": 2,
+            "mitigation": "Train AI with 30+ example conversations in brand voice; human review on first 500 international conversations"
+          }
+        ],
+        "benefit": {
+          "short_term": {
+            "annual": 28000
+          },
+          "mid_term": {
+            "annual": 35000
+          },
+          "long_term": {
+            "annual": 42000
+          },
+          "total": 105000
+        }
+      },
+      "options": {
+        "targeted_upgrade": {
+          "name": "Tidio AI Chatbot",
+          "vendor": "Tidio",
+          "monthly_cost": 200,
+          "implementation_weeks": 1,
+          "pros": [
+            "Quick setup with Shopify app",
+            "Affordable entry point",
+            "Pre-built ecommerce flows for WISMO"
+          ],
+          "cons": [
+            "Limited multi-market awareness",
+            "Basic AI \u2014 mostly keyword matching",
+            "No deep carrier integration for international tracking"
+          ]
+        },
+        "enhance_with_ai": {
+          "name": "Gorgias + AI Automate",
+          "vendor": "Gorgias",
+          "monthly_cost": 400,
+          "implementation_weeks": 3,
+          "pros": [
+            "Purpose-built for ecommerce support",
+            "Deep Shopify integration with order/tracking context",
+            "AI handles WISMO, returns, and product queries natively",
+            "Multi-language support for international markets",
+            "Macros and rules engine for market-specific responses",
+            "Strong brand voice customisation"
+          ],
+          "cons": [
+            "Higher monthly cost than basic chatbots",
+            "AI automate is an add-on to base helpdesk",
+            "Requires conversation design upfront"
+          ]
+        },
+        "connect_and_automate": {
+          "approach": "Build custom AI support agent using Claude API + Shopify webhooks + carrier tracking APIs. With AI coding tools (Claude Code, Cursor), a solo developer or small agency can ship this in 2-3 weeks \u2014 not months. The Claude API handles conversation intelligence, Shopify provides order context, and carrier APIs give real-time tracking.",
+          "estimated_cost": {
+            "min": 3000,
+            "max": 8000
+          },
+          "implementation_weeks": 3,
+          "pros": [
+            "Full control over brand voice and AI behaviour",
+            "Deep market-specific customisation",
+            "No per-conversation fees at scale",
+            "Claude API costs ~\u20ac200/month for 1,200 conversations",
+            "AI coding tools cut development time by 60-70%"
+          ],
+          "cons": [
+            "Still needs a developer comfortable with AI APIs",
+            "Ongoing maintenance and prompt tuning",
+            "No vendor support \u2014 you own the code"
+          ]
+        }
+      },
+      "our_recommendation": "connect_and_automate",
+      "recommendation_rationale": "Gorgias with AI Automate is purpose-built for DTC ecommerce brands like yours. Their Shopify integration means the AI has real-time access to order data, tracking, and customer history across all three markets. The rules engine lets you set market-specific responses (NZ shipping = 2-5 days, UK = 7-12 days, AU = 3-7 days) without custom code. At \u20ac400/month, it pays for itself if it deflects just 20% of your current 1,200 monthly tickets. Their brand voice training will help maintain your irreverent tone in automated responses.",
+      "roi_percentage": 503,
+      "payback_months": 2,
+      "assumptions": [
+        "1,200 tickets/month growing 30% with expansion",
+        "60% are shipping/WISMO/returns queries",
+        "AI achieves 55% deflection rate in month 3",
+        "Support staff cost: \u20ac32/hour fully loaded"
+      ],
+      "net_scores": {
+        "targeted_upgrade": 5.2,
+        "enhance_with_ai": 8.1,
+        "connect_and_automate": 7.2,
+        "comparison_summary": "Gorgias + AI Automate offers the fastest time-to-value with zero dev work. But custom is now genuinely competitive at \u20ac3-8K build cost \u2014 especially if you want full control over brand voice and no per-conversation fees. The custom route makes sense if you have access to a developer comfortable with AI APIs."
+      }
+    },
+    {
+      "id": "r2",
+      "title": "Implement Multi-Market Inventory Forecasting",
+      "description": "Replace gut-feel inventory allocation with ML-driven demand forecasting that accounts for hemisphere-opposite seasonality (NZ winter = UK summer), market maturity differences, promotional campaigns, and weather patterns. System recommends optimal stock allocation across NZ, AU, and UK warehouses and generates purchase orders automatically.",
+      "why_it_matters": {
+        "customer_value": "Fire pits are in stock when customers want them. No more 'sold out' in the UK during peak summer demand. Faster fulfilment from better-positioned inventory across all markets.",
+        "business_health": "UK stockouts already cost an estimated \u20ac45K in the first quarter. NZ overstock ties up \u20ac30K in working capital. Better forecasting across hemispheres directly improves both revenue and cash flow as you scale internationally."
+      },
+      "priority": "high",
+      "crb_analysis": {
+        "cost": {
+          "short_term": {
+            "setup": 600,
+            "monthly": 200
+          },
+          "mid_term": {
+            "monthly": 200
+          },
+          "long_term": {
+            "monthly": 200
+          },
+          "total": 7800
+        },
+        "risk": [
+          {
+            "description": "UK market too new for reliable demand forecasting \u2014 insufficient historical data",
+            "probability": "medium",
+            "impact": 3,
+            "mitigation": "Use NZ seasonal patterns as proxy for UK demand, adjusted for market size. Augment with industry benchmarks for UK outdoor/BBQ market"
+          },
+          {
+            "description": "Opposite-hemisphere seasonality confuses basic forecasting models",
+            "probability": "low",
+            "impact": 3,
+            "mitigation": "Choose a tool with explicit multi-location seasonality. Inventory Planner handles this natively with per-location profiles"
+          }
+        ],
+        "benefit": {
+          "short_term": {
+            "annual": 22000
+          },
+          "mid_term": {
+            "annual": 32000
+          },
+          "long_term": {
+            "annual": 38000
+          },
+          "total": 92000
+        }
+      },
+      "options": {
+        "targeted_upgrade": {
+          "name": "Shopify Stocky",
+          "vendor": "Shopify",
+          "monthly_cost": 0,
+          "implementation_weeks": 1,
+          "pros": [
+            "Included free with Shopify",
+            "Basic demand forecasting",
+            "No additional cost"
+          ],
+          "cons": [
+            "Very basic algorithms \u2014 no multi-location seasonality",
+            "Cannot handle hemisphere-opposite demand patterns",
+            "No weather or external data integration"
+          ]
+        },
+        "enhance_with_ai": {
+          "name": "Inventory Planner",
+          "vendor": "Inventory Planner (Sage)",
+          "monthly_cost": 150,
+          "implementation_weeks": 3,
+          "pros": [
+            "Advanced ML-based forecasting with per-location profiles",
+            "Handles hemisphere seasonality (NZ winter \u2260 UK winter)",
+            "Shopify native integration including multi-location",
+            "Automated purchase order generation per warehouse",
+            "Overstock alerts and markdown recommendations"
+          ],
+          "cons": [
+            "Monthly cost scales with SKU count (but yours is small)",
+            "Needs clean historical data for NZ (have it), less for UK (new market)",
+            "Learning curve for operations team"
+          ]
+        },
+        "connect_and_automate": {
+          "approach": "Build a lightweight forecasting pipeline using Python (Prophet or LightGBM) pulling Shopify sales data via API, with per-market seasonality and weather inputs. An AI-savvy developer with Claude Code can scaffold this in 1-2 weeks \u2014 the ML models are well-documented and the Shopify API is straightforward.",
+          "estimated_cost": {
+            "min": 2500,
+            "max": 6000
+          },
+          "implementation_weeks": 3,
+          "pros": [
+            "Fully customised for fire pit seasonality patterns",
+            "Can incorporate weather data (critical for your product)",
+            "No ongoing per-SKU fees",
+            "Modern AI coding tools make ML pipelines accessible to non-ML engineers"
+          ],
+          "cons": [
+            "Still needs someone comfortable with Python and data",
+            "Model accuracy improves over time \u2014 not instant",
+            "Overkill for 3 core SKUs unless you plan to expand range"
+          ]
+        }
+      },
+      "our_recommendation": "connect_and_automate",
+      "recommendation_rationale": "Inventory Planner is the leading forecasting tool for Shopify brands and specifically handles multi-location inventory with per-location seasonal profiles \u2014 exactly what you need for hemisphere-opposite demand. At \u20ac150/month with your small SKU count, it pays for itself if it prevents just one stockout in the UK per quarter. Their automated PO generation also saves your operations team hours of manual spreadsheet work each week.",
+      "roi_percentage": 1079,
+      "payback_months": 2,
+      "assumptions": [
+        "3 core SKUs + 8-10 accessories across 3 markets",
+        "UK stockout cost: \u20ac45K in first quarter",
+        "NZ overstock: \u20ac30K tied up in slow-moving inventory",
+        "Forecasting improves allocation accuracy by 40-60%"
+      ],
+      "net_scores": {
+        "targeted_upgrade": 3.0,
+        "enhance_with_ai": 8.5,
+        "connect_and_automate": 6.8,
+        "comparison_summary": "Inventory Planner wins on proven multi-location ML forecasting and zero dev effort. But at \u20ac2.5-6K, custom is no longer 'massive overkill' \u2014 a Python-savvy developer can build a solid Prophet pipeline in 2-3 weeks with AI coding tools. Custom makes more sense if you plan to expand your product range."
+      }
+    },
+    {
+      "id": "r3",
+      "title": "AI-Powered Content Localisation and Brand Voice Scaling",
+      "description": "Use AI to adapt your NZ-native brand voice for UK and AU markets while maintaining the irreverent 'Wizard' tone. Generate market-specific product descriptions, email campaigns, landing page copy, and social content \u2014 all trained on your best-performing NZ content. AI generates localised drafts, your team reviews and approves. New markets get authentic content from day one.",
+      "why_it_matters": {
+        "customer_value": "UK customers see content that speaks to them \u2014 references to British camping, Guy Fawkes Night, garden entertaining, local wood types. AU customers get content about backyard entertaining, bushfire-safe fire use, and Australian outdoor culture. No more generic NZ copy that doesn't resonate.",
+        "business_health": "Close the conversion gap: UK at 1.4% vs NZ at 3.8%. Even moving UK to 2.5% represents \u20ac95K+ in additional annual revenue. Free up the team member spending 40% of their time on manual content adaptation."
+      },
+      "priority": "medium",
+      "crb_analysis": {
+        "cost": {
+          "short_term": {
+            "setup": 400,
+            "monthly": 150
+          },
+          "mid_term": {
+            "monthly": 150
+          },
+          "long_term": {
+            "monthly": 150
+          },
+          "total": 5800
+        },
+        "risk": [
+          {
+            "description": "AI-generated content loses the authentic irreverent Wizard voice",
+            "probability": "medium",
+            "impact": 4,
+            "mitigation": "Train AI on your 20 best-performing pieces of content. Human review on all content before publishing. Start with email subject lines and social posts before tackling core product pages"
+          },
+          {
+            "description": "Cultural missteps in localised content",
+            "probability": "low",
+            "impact": 3,
+            "mitigation": "Have a UK-based reviewer for initial content batches. AI tools with localisation features reduce but don't eliminate this risk"
+          }
+        ],
+        "benefit": {
+          "short_term": {
+            "annual": 15000
+          },
+          "mid_term": {
+            "annual": 20000
+          },
+          "long_term": {
+            "annual": 24000
+          },
+          "total": 59000
+        }
+      },
+      "options": {
+        "targeted_upgrade": {
+          "name": "Shopify Magic + Google Translate",
+          "vendor": "Shopify / Google",
+          "monthly_cost": 0,
+          "implementation_weeks": 0,
+          "pros": [
+            "Free",
+            "Built into Shopify",
+            "Instant"
+          ],
+          "cons": [
+            "Zero brand voice awareness",
+            "Translations are literal, not localised",
+            "Cannot capture irreverent tone",
+            "No cultural adaptation"
+          ]
+        },
+        "enhance_with_ai": {
+          "name": "Hypotenuse AI",
+          "vendor": "Hypotenuse AI",
+          "monthly_cost": 120,
+          "implementation_weeks": 2,
+          "pros": [
+            "Ecommerce-specific content AI",
+            "Brand voice training from your existing content",
+            "Market-specific content variants",
+            "Bulk generation with Shopify sync",
+            "SEO optimisation built-in"
+          ],
+          "cons": [
+            "Still needs human review for brand voice",
+            "Cultural nuances require manual checking",
+            "Smaller content AI \u2014 less known than Jasper"
+          ]
+        },
+        "connect_and_automate": {
+          "approach": "Build a content pipeline using Claude API with your best NZ content as few-shot examples, market-specific style guides, and Shopify product feed integration. This is one of the simplest custom builds \u2014 essentially prompt engineering with API wrappers. A developer can build this in a weekend with AI coding tools.",
+          "estimated_cost": {
+            "min": 1500,
+            "max": 4000
+          },
+          "implementation_weeks": 2,
+          "pros": [
+            "Deeply trained on your specific brand voice",
+            "Full control over localisation rules per market",
+            "Claude API excels at tone adaptation and cultural nuance",
+            "Cheapest custom build \u2014 mostly prompt engineering",
+            "Can integrate with Shopify and Klaviyo directly"
+          ],
+          "cons": [
+            "Prompt tuning needed per market \u2014 iterative process",
+            "Need to build Shopify/Klaviyo sync (or use Zapier)",
+            "API costs scale with content volume (~\u20ac50-100/month)"
+          ]
+        }
+      },
+      "our_recommendation": "connect_and_automate",
+      "recommendation_rationale": "This is one area where custom beats SaaS in 2026. Your irreverent brand voice is your biggest competitive moat \u2014 and a Claude API pipeline trained on your best NZ content will preserve it better than any generic AI content tool. At \u20ac1.5-4K build cost and 2 weeks, this is cheaper than a Hypotenuse AI annual subscription and gives you full control. AI coding tools like Claude Code mean a solo developer can scaffold the Shopify integration, prompt templates, and Klaviyo sync in days. Start with email subject lines, expand to product descriptions, then landing pages.",
+      "roi_percentage": 1317,
+      "payback_months": 1,
+      "assumptions": [
+        "UK conversion rate improves from 1.4% to 2.2% with localised content",
+        "40% of one team member's time freed from manual content work",
+        "Custom pipeline built in 2 weeks with AI coding tools",
+        "Claude API costs ~\u20ac50-100/month for content generation",
+        "3 markets requiring distinct content"
+      ],
+      "net_scores": {
+        "targeted_upgrade": 2.5,
+        "enhance_with_ai": 7.8,
+        "connect_and_automate": 7.9,
+        "comparison_summary": "This is where custom actually beats SaaS. At \u20ac1.5-4K and 2 weeks, a Claude API content pipeline with your brand voice baked in is cheaper, more flexible, and produces better results than generic AI content tools. The irreverent Wizard voice is your competitive moat \u2014 own it with a custom pipeline rather than fitting it into a SaaS template."
+      }
+    }
+  ],
+  "roadmap": {
+    "short_term": [
+      {
+        "title": "Deploy AI Customer Support",
+        "description": "Implement Gorgias + AI Automate for shipping queries, WISMO, and returns across NZ, AU, and UK markets",
+        "timeline": "Month 1-2",
+        "expected_outcome": "55% ticket deflection, first response time under 60 seconds across all markets"
+      },
+      {
+        "title": "Implement Multi-Market Inventory Forecasting",
+        "description": "Set up Inventory Planner with per-location seasonal profiles for NZ, AU, and UK warehouses",
+        "timeline": "Month 2-3",
+        "expected_outcome": "Eliminate UK stockouts, reduce NZ overstock by 40%, free \u20ac30K+ in working capital"
+      }
+    ],
+    "mid_term": [
+      {
+        "title": "AI Content Localisation",
+        "description": "Roll out Hypotenuse AI for market-specific product descriptions, email campaigns, and landing pages",
+        "timeline": "Month 4-5",
+        "expected_outcome": "UK conversion rate improves from 1.4% to 2.2%+, content production 3x faster"
+      },
+      {
+        "title": "Smart Review Mining & Social Proof",
+        "description": "Deploy AI to extract themes from 840+ reviews, auto-generate social proof widgets, and power email content",
+        "timeline": "Month 5-6",
+        "expected_outcome": "Review-powered content across all channels, 15% improvement in email click-through rates"
+      }
+    ],
+    "long_term": [
+      {
+        "title": "Affiliate Program Intelligence",
+        "description": "Implement smart commission tiering, fraud detection, and automated content kits for top affiliates",
+        "timeline": "Month 9-12",
+        "expected_outcome": "2x affiliate revenue, identify and reward top 15% of affiliates"
+      },
+      {
+        "title": "Predictive Customer Engagement",
+        "description": "Use Klaviyo AI features to predict purchase timing, recommend accessories based on purchase history, and automate seasonal re-engagement",
+        "timeline": "Year 2",
+        "expected_outcome": "Increase repeat purchase rate by 20%, grow accessories as % of revenue"
+      }
+    ]
+  },
+  "playbooks": [
+    {
+      "id": "pb1",
+      "recommendation_id": "r1",
+      "option_type": "enhance_with_ai",
+      "total_weeks": 5,
+      "phases": [
+        {
+          "name": "Setup & Market Configuration",
+          "week": 1,
+          "tasks": [
+            {
+              "id": "t1",
+              "title": "Sign up for Gorgias",
+              "description": "Start trial and connect Shopify store with full order/product/customer data access across all market segments"
+            },
+            {
+              "id": "t2",
+              "title": "Configure market-specific settings",
+              "description": "Set up NZ, AU, and UK as distinct markets with separate shipping time expectations, return policies, and duty information"
+            },
+            {
+              "id": "t3",
+              "title": "Import existing support history",
+              "description": "Load past support conversations to train AI on common queries and your response style"
+            },
+            {
+              "id": "t4",
+              "title": "Define brand voice guide",
+              "description": "Provide 30+ example conversations in the Wizard Firepits irreverent tone for AI training"
+            }
+          ]
+        },
+        {
+          "name": "Conversation Flow Design",
+          "week": 2,
+          "tasks": [
+            {
+              "id": "t5",
+              "title": "Configure WISMO flows per market",
+              "description": "Set up order tracking with market-specific carrier integrations (NZ Post, Royal Mail, Australia Post) and delivery estimates"
+            },
+            {
+              "id": "t6",
+              "title": "Configure returns flows per market",
+              "description": "Build return eligibility checking, local return address routing, and refund processing per market"
+            },
+            {
+              "id": "t7",
+              "title": "Build product knowledge base",
+              "description": "Load fire pit specs, firewood compatibility guides, safety information, and sizing recommendations"
+            },
+            {
+              "id": "t8",
+              "title": "Define escalation rules",
+              "description": "Set when AI hands off to humans: warranty claims, damaged goods, VIP customers, complaints"
+            }
+          ]
+        },
+        {
+          "name": "Pilot with NZ Traffic",
+          "week": 3,
+          "tasks": [
+            {
+              "id": "t9",
+              "title": "Enable AI on 25% of NZ traffic",
+              "description": "Route one in four NZ conversations to AI agent for testing on home market first"
+            },
+            {
+              "id": "t10",
+              "title": "Monitor conversation quality daily",
+              "description": "Review AI responses for accuracy, brand voice alignment, and resolution quality"
+            },
+            {
+              "id": "t11",
+              "title": "Collect customer satisfaction scores",
+              "description": "Compare CSAT for AI-handled vs human-handled tickets in NZ market"
+            },
+            {
+              "id": "t12",
+              "title": "Fix common failure patterns",
+              "description": "Update AI training for any queries it handles poorly \u2014 especially firewood and safety questions"
+            }
+          ]
+        },
+        {
+          "name": "Expand to All Markets",
+          "week": 4,
+          "tasks": [
+            {
+              "id": "t13",
+              "title": "Enable AI on 100% of NZ traffic",
+              "description": "Full rollout for NZ market based on pilot results"
+            },
+            {
+              "id": "t14",
+              "title": "Enable AI for UK and AU",
+              "description": "Roll out to international markets with market-specific shipping and return knowledge"
+            },
+            {
+              "id": "t15",
+              "title": "Enable email channel",
+              "description": "Extend AI support from live chat to email tickets across all markets"
+            },
+            {
+              "id": "t16",
+              "title": "Adjust team schedule",
+              "description": "Reduce support hours based on AI deflection rates while maintaining human oversight"
+            }
+          ]
+        },
+        {
+          "name": "Optimise & Measure",
+          "week": 5,
+          "tasks": [
+            {
+              "id": "t17",
+              "title": "Calculate deflection rate per market",
+              "description": "Measure percentage of tickets fully resolved by AI in NZ, AU, and UK separately"
+            },
+            {
+              "id": "t18",
+              "title": "Compare response times before/after",
+              "description": "Benchmark first response time improvement (target: 12-18hrs \u2192 under 60 seconds)"
+            },
+            {
+              "id": "t19",
+              "title": "Review CSAT trends per market",
+              "description": "Ensure customer satisfaction hasn't dropped with AI handling across any market"
+            },
+            {
+              "id": "t20",
+              "title": "Plan proactive features",
+              "description": "Evaluate adding proactive shipping delay notifications and seasonal product tips"
+            }
+          ]
+        }
+      ],
+      "personalization_context": {
+        "team_size": "8",
+        "technical_level": 5,
+        "budget_monthly": 450
+      }
+    },
+    {
+      "id": "pb2",
+      "recommendation_id": "r2",
+      "option_type": "enhance_with_ai",
+      "total_weeks": 5,
+      "phases": [
+        {
+          "name": "Data Connection & Multi-Location Setup",
+          "week": 1,
+          "tasks": [
+            {
+              "id": "t1",
+              "title": "Sign up for Inventory Planner",
+              "description": "Start trial and connect to Shopify for historical sales data sync across all locations"
+            },
+            {
+              "id": "t2",
+              "title": "Configure location profiles",
+              "description": "Set up NZ, AU, and UK as separate locations with distinct seasonality profiles (NZ winter = peak, UK summer = peak)"
+            },
+            {
+              "id": "t3",
+              "title": "Verify NZ historical data",
+              "description": "Check that 2+ years of NZ sales data imported correctly for baseline forecasting"
+            },
+            {
+              "id": "t4",
+              "title": "Set lead times per supplier per market",
+              "description": "Input manufacturing lead times and shipping times to each warehouse location"
+            }
+          ]
+        },
+        {
+          "name": "Model Training & Hemisphere Calibration",
+          "week": 2,
+          "tasks": [
+            {
+              "id": "t5",
+              "title": "Run NZ forecasts on core SKUs",
+              "description": "Generate demand predictions for Jumbo, Regular, and Mini fire pits in NZ and compare to actuals"
+            },
+            {
+              "id": "t6",
+              "title": "Configure hemisphere-opposite seasonality",
+              "description": "Set UK seasonality as inverse of NZ patterns (UK fire pit peak = May-September, NZ peak = April-August)"
+            },
+            {
+              "id": "t7",
+              "title": "Set safety stock rules per location",
+              "description": "Higher safety stock for UK (new market, less predictable) vs NZ (mature market, reliable data)"
+            },
+            {
+              "id": "t8",
+              "title": "Test purchase order generation",
+              "description": "Generate sample POs per warehouse and verify quantities and timing make sense"
+            }
+          ]
+        },
+        {
+          "name": "Expand to Full Catalog & All Markets",
+          "week": 3,
+          "tasks": [
+            {
+              "id": "t9",
+              "title": "Enable forecasting for all SKUs across all locations",
+              "description": "Extend ML forecasting to accessories, mats, and bundles in all three markets"
+            },
+            {
+              "id": "t10",
+              "title": "Set up overstock alerts",
+              "description": "Configure notifications for slow-moving inventory that needs markdown or cross-market transfer"
+            },
+            {
+              "id": "t11",
+              "title": "Create multi-market reorder dashboard",
+              "description": "Build daily view of items approaching reorder point in each warehouse"
+            },
+            {
+              "id": "t12",
+              "title": "Train operations team",
+              "description": "30-minute session on reading multi-location forecasts and approving market-specific POs"
+            }
+          ]
+        },
+        {
+          "name": "Process Integration",
+          "week": 4,
+          "tasks": [
+            {
+              "id": "t13",
+              "title": "Replace spreadsheet allocation",
+              "description": "Officially retire the manual spreadsheet-based inventory allocation process"
+            },
+            {
+              "id": "t14",
+              "title": "Automate PO drafts per warehouse",
+              "description": "Set up automated purchase order generation for buyer approval, split by destination warehouse"
+            },
+            {
+              "id": "t15",
+              "title": "Connect to marketing calendar",
+              "description": "Input planned promotions per market to adjust demand forecasts (e.g., NZ winter campaign, UK summer launch)"
+            },
+            {
+              "id": "t16",
+              "title": "Set up weekly cross-market review",
+              "description": "Establish 30-minute weekly review comparing forecasts vs actuals across all three markets"
+            }
+          ]
+        },
+        {
+          "name": "Measure & Optimise",
+          "week": 5,
+          "tasks": [
+            {
+              "id": "t17",
+              "title": "Measure UK stockout improvement",
+              "description": "Compare UK stockout rate to pre-implementation baseline (target: zero stockouts on core SKUs)"
+            },
+            {
+              "id": "t18",
+              "title": "Calculate NZ overstock reduction",
+              "description": "Measure working capital freed from reduced NZ overstock (target: 40%+ reduction)"
+            },
+            {
+              "id": "t19",
+              "title": "Review forecast accuracy per market",
+              "description": "Compare predictions to actuals in NZ (data-rich) vs UK (data-poor) and identify tuning needs"
+            },
+            {
+              "id": "t20",
+              "title": "Plan for peak season preparation",
+              "description": "Ensure forecasting is calibrated for upcoming seasonal peaks in each hemisphere"
+            }
+          ]
+        }
+      ],
+      "personalization_context": {
+        "team_size": "8",
+        "technical_level": 5,
+        "budget_monthly": 200
+      }
+    }
+  ],
+  "system_architecture": {
+    "existing_tools": [
+      {
+        "id": "et1",
+        "name": "Shopify",
+        "category": "Ecommerce Platform",
+        "monthly_cost": 380,
+        "one_time_cost": 0,
+        "crb": {
+          "cost": "\u20ac380/month",
+          "risk": "Minimal - industry-leading platform",
+          "risk_level": "low",
+          "benefit": "Full ecommerce stack with multi-location inventory",
+          "powers": [
+            "Storefront",
+            "Orders",
+            "Multi-location Inventory",
+            "Analytics"
+          ]
+        },
+        "is_existing": true
+      },
+      {
+        "id": "et2",
+        "name": "Klaviyo",
+        "category": "Email & SMS Marketing",
+        "monthly_cost": 120,
+        "one_time_cost": 0,
+        "crb": {
+          "cost": "\u20ac120/month",
+          "risk": "Low - established email platform",
+          "risk_level": "low",
+          "benefit": "Advanced email/SMS automation with Shopify integration",
+          "powers": [
+            "Email campaigns",
+            "SMS marketing",
+            "Segmentation",
+            "Flows"
+          ]
+        },
+        "is_existing": true
+      },
+      {
+        "id": "et3",
+        "name": "Judge.me",
+        "category": "Reviews & Social Proof",
+        "monthly_cost": 15,
+        "one_time_cost": 0,
+        "crb": {
+          "cost": "\u20ac15/month",
+          "risk": "Low - simple review platform",
+          "risk_level": "low",
+          "benefit": "840+ reviews powering social proof",
+          "powers": [
+            "Product reviews",
+            "Photo reviews",
+            "Review widgets"
+          ]
+        },
+        "is_existing": true
+      },
+      {
+        "id": "et4",
+        "name": "Google Analytics 4",
+        "category": "Analytics",
+        "monthly_cost": 0,
+        "one_time_cost": 0,
+        "crb": {
+          "cost": "Free",
+          "risk": "Medium - privacy regulation changes",
+          "risk_level": "medium",
+          "benefit": "Web analytics and conversion tracking across markets",
+          "powers": [
+            "Traffic analysis",
+            "Conversion tracking",
+            "Audience insights"
+          ]
+        },
+        "is_existing": true
+      },
+      {
+        "id": "et5",
+        "name": "Microsoft Clarity",
+        "category": "Session Analytics",
+        "monthly_cost": 0,
+        "one_time_cost": 0,
+        "crb": {
+          "cost": "Free",
+          "risk": "Low - complementary analytics",
+          "risk_level": "low",
+          "benefit": "Heatmaps and session recordings for UX insights",
+          "powers": [
+            "Heatmaps",
+            "Session recordings",
+            "Rage click detection"
+          ]
+        },
+        "is_existing": true
+      },
+      {
+        "id": "et6",
+        "name": "GoAffPro",
+        "category": "Affiliate Marketing",
+        "monthly_cost": 24,
+        "one_time_cost": 0,
+        "crb": {
+          "cost": "\u20ac24/month",
+          "risk": "Low - basic affiliate management",
+          "risk_level": "low",
+          "benefit": "Affiliate program driving word-of-mouth sales",
+          "powers": [
+            "Affiliate tracking",
+            "Commission management",
+            "Referral links"
+          ]
+        },
+        "is_existing": true
+      }
+    ],
+    "ai_layer": [
+      {
+        "id": "ai1",
+        "name": "Gorgias + AI Automate",
+        "category": "AI Customer Support",
+        "monthly_cost": 400,
+        "one_time_cost": 1200,
+        "crb": {
+          "cost": "\u20ac400/month + \u20ac1.2K setup",
+          "risk": "Medium - requires conversation design per market",
+          "risk_level": "medium",
+          "benefit": "55% support ticket deflection across NZ, AU, UK",
+          "powers": [
+            "WISMO handling",
+            "Returns processing",
+            "Product Q&A",
+            "Multi-market support",
+            "Brand voice AI"
+          ]
+        },
+        "is_existing": false
+      },
+      {
+        "id": "ai2",
+        "name": "Inventory Planner",
+        "category": "AI Forecasting",
+        "monthly_cost": 150,
+        "one_time_cost": 600,
+        "crb": {
+          "cost": "\u20ac150/month + \u20ac600 setup",
+          "risk": "Low - proven Shopify integration",
+          "risk_level": "low",
+          "benefit": "40-60% better demand forecasting with hemisphere-aware seasonality",
+          "powers": [
+            "Demand forecasting",
+            "Multi-location allocation",
+            "Reorder optimisation",
+            "PO automation"
+          ]
+        },
+        "is_existing": false
+      },
+      {
+        "id": "ai3",
+        "name": "Hypotenuse AI",
+        "category": "AI Content",
+        "monthly_cost": 120,
+        "one_time_cost": 400,
+        "crb": {
+          "cost": "\u20ac120/month + \u20ac400 setup",
+          "risk": "Low - content review catches errors",
+          "risk_level": "low",
+          "benefit": "70% faster market-specific content creation",
+          "powers": [
+            "Product descriptions",
+            "Market localisation",
+            "SEO metadata",
+            "Brand voice"
+          ]
+        },
+        "is_existing": false
+      }
+    ],
+    "automations": [
+      {
+        "id": "auto1",
+        "name": "AI Support Routing (Multi-Market)",
+        "trigger": "Customer submits support ticket via chat or email from NZ, AU, or UK",
+        "action": "Gorgias AI routes to market-specific knowledge base, resolves shipping, WISMO, and returns queries; escalates complex issues to human agents",
+        "tools_used": [
+          "Gorgias + AI Automate",
+          "Shopify",
+          "NZ Post / Royal Mail / Australia Post APIs"
+        ]
+      },
+      {
+        "id": "auto2",
+        "name": "Cross-Hemisphere Demand Forecast",
+        "trigger": "Daily sales data sync from Shopify across all locations",
+        "action": "Inventory Planner generates per-market demand forecasts with hemisphere-adjusted seasonality and recommends purchase orders per warehouse",
+        "tools_used": [
+          "Inventory Planner",
+          "Shopify"
+        ]
+      },
+      {
+        "id": "auto3",
+        "name": "Market Content Localisation",
+        "trigger": "New product or campaign created for NZ market",
+        "action": "Hypotenuse AI generates UK and AU variants maintaining brand voice with local cultural references",
+        "tools_used": [
+          "Hypotenuse AI",
+          "Shopify",
+          "Klaviyo"
+        ]
+      }
+    ],
+    "connections": [
+      {
+        "id": "conn1",
+        "from_node": "et1",
+        "to_node": "ai1",
+        "data_flow": "Orders, products, customer data, multi-location inventory for support context",
+        "integration_type": "native"
+      },
+      {
+        "id": "conn2",
+        "from_node": "et2",
+        "to_node": "ai1",
+        "data_flow": "Customer segments and email history for support context",
+        "integration_type": "api"
+      },
+      {
+        "id": "conn3",
+        "from_node": "et1",
+        "to_node": "ai2",
+        "data_flow": "Sales history, stock levels per location, product data",
+        "integration_type": "native"
+      },
+      {
+        "id": "conn4",
+        "from_node": "et1",
+        "to_node": "ai3",
+        "data_flow": "Product catalog, images, specifications for content generation",
+        "integration_type": "api"
+      },
+      {
+        "id": "conn5",
+        "from_node": "et2",
+        "to_node": "ai3",
+        "data_flow": "Email templates and campaign content for localisation",
+        "integration_type": "api"
+      }
+    ],
+    "cost_comparison": {
+      "saas_route": {
+        "items": [
+          {
+            "name": "Gorgias + AI Automate",
+            "monthly_cost": 400,
+            "one_time_cost": 1200
+          },
+          {
+            "name": "Inventory Planner",
+            "monthly_cost": 150,
+            "one_time_cost": 600
+          },
+          {
+            "name": "Hypotenuse AI",
+            "monthly_cost": 120,
+            "one_time_cost": 400
+          }
+        ],
+        "total_monthly": 670,
+        "total_one_time": 2200
+      },
+      "diy_route": {
+        "items": [
+          {
+            "name": "Custom AI support (Claude API + Shopify + carrier APIs)",
+            "monthly_cost": 200,
+            "one_time_cost": 5500
+          },
+          {
+            "name": "Custom forecasting (Prophet + Shopify multi-location)",
+            "monthly_cost": 50,
+            "one_time_cost": 4000
+          },
+          {
+            "name": "Custom content pipeline (Claude API + market configs)",
+            "monthly_cost": 80,
+            "one_time_cost": 2500
+          }
+        ],
+        "total_monthly": 330,
+        "total_one_time": 12000,
+        "note": "2026 pricing reflects AI-assisted development (Claude Code, Cursor). A solo developer or small AI agency can build these integrations in weeks, not months. Custom builds are now genuinely competitive with SaaS for small product catalogs."
+      },
+      "monthly_savings": 340,
+      "savings_percentage": 51,
+      "build_cost": 12000,
+      "breakeven_months": 35
+    }
+  },
+  "industry_insights": {
+    "industry": "ecommerce",
+    "industry_display_name": "Ecommerce - DTC Outdoor / Home & Garden",
+    "adoption_stats": [
+      {
+        "capability": "AI Customer Support",
+        "adoption_percentage": 34,
+        "average_outcome": "40-60% support cost reduction with maintained CSAT"
+      },
+      {
+        "capability": "AI Inventory Forecasting",
+        "adoption_percentage": 22,
+        "average_outcome": "15-25% revenue increase from optimised stock levels"
+      },
+      {
+        "capability": "AI Content Localisation",
+        "adoption_percentage": 28,
+        "average_outcome": "2-3x faster market expansion with consistent brand voice"
+      },
+      {
+        "capability": "Review Mining & Social Proof AI",
+        "adoption_percentage": 19,
+        "average_outcome": "15-25% improvement in conversion from dynamic social proof"
+      }
+    ],
+    "opportunity_map": {
+      "emerging": [
+        "AI-powered affiliate fraud detection",
+        "Autonomous returns processing",
+        "Predictive customer lifetime value"
+      ],
+      "growing": [
+        "AI customer support automation",
+        "Multi-market inventory forecasting",
+        "AI content localisation"
+      ],
+      "established": [
+        "Email marketing automation",
+        "Review collection and display",
+        "Basic analytics and tracking"
+      ],
+      "best_fit": "growing",
+      "rationale": "Your Shopify stack and multi-market expansion make growing-stage AI tools ideal \u2014 proven ROI with competitive advantage over brands still manually managing international operations."
+    },
+    "social_proof": [
+      {
+        "quote": "We went from 2 markets to 5 in 12 months. AI support automation was the only way we could handle the volume without hiring a full call centre.",
+        "company_description": "DTC outdoor gear brand with \u20ac2.5M revenue, NZ and EU markets",
+        "outcome": "5x market expansion without proportional support headcount",
+        "industry": "Ecommerce - Outdoor"
+      },
+      {
+        "quote": "Hemisphere-aware inventory forecasting eliminated our Southern Hemisphere stockout problem. We used to run out every winter while UK sat on excess summer stock.",
+        "company_description": "Multi-market home and garden brand",
+        "outcome": "Zero stockouts on core products across both hemispheres",
+        "industry": "Ecommerce - Home & Garden"
+      }
+    ]
+  },
+  "automation_summary": {
+    "stack_assessment": {
+      "tools": [
+        {
+          "name": "Shopify",
+          "slug": "shopify",
+          "api_score": 9,
+          "category": "Ecommerce Platform"
+        },
+        {
+          "name": "Klaviyo",
+          "slug": "klaviyo",
+          "api_score": 9,
+          "category": "Email & SMS Marketing"
+        },
+        {
+          "name": "Judge.me",
+          "slug": "judge-me",
+          "api_score": 7,
+          "category": "Reviews & Social Proof"
+        },
+        {
+          "name": "Google Analytics 4",
+          "slug": "google-analytics-4",
+          "api_score": 7,
+          "category": "Analytics"
+        },
+        {
+          "name": "Microsoft Clarity",
+          "slug": "microsoft-clarity",
+          "api_score": 6,
+          "category": "Session Analytics"
+        },
+        {
+          "name": "GoAffPro",
+          "slug": "goaffpro",
+          "api_score": 6,
+          "category": "Affiliate Marketing"
+        }
+      ],
+      "average_score": 7.3,
+      "verdict": "solid_foundation",
+      "verdict_text": "Your Shopify-centred stack has good API support for core operations. Klaviyo and Shopify are excellent integration targets. Judge.me and GoAffPro have more limited APIs but sufficient for the recommended automations."
+    },
+    "opportunities": [
+      {
+        "finding_id": "f1",
+        "title": "AI Customer Support (Multi-Market)",
+        "impact_monthly": 2941,
+        "diy_effort_hours": 6,
+        "approach": "Connect",
+        "tools_involved": [
+          "Gorgias + AI Automate",
+          "Shopify"
+        ],
+        "category": "customer_support"
+      },
+      {
+        "finding_id": "f2",
+        "title": "Multi-Market Inventory Forecasting",
+        "impact_monthly": 3027,
+        "diy_effort_hours": 4,
+        "approach": "Connect",
+        "tools_involved": [
+          "Inventory Planner",
+          "Shopify"
+        ],
+        "category": "inventory"
+      },
+      {
+        "finding_id": "f3",
+        "title": "AI Content Localisation",
+        "impact_monthly": 2887,
+        "diy_effort_hours": 4,
+        "approach": "Connect",
+        "tools_involved": [
+          "Hypotenuse AI",
+          "Shopify",
+          "Klaviyo"
+        ],
+        "category": "content"
+      },
+      {
+        "finding_id": "f4",
+        "title": "Smart Review Mining & Social Proof",
+        "impact_monthly": 1249,
+        "diy_effort_hours": 3,
+        "approach": "Connect",
+        "tools_involved": [
+          "Judge.me API",
+          "Klaviyo"
+        ],
+        "category": "marketing"
+      }
+    ],
+    "total_monthly_impact": 10104,
+    "total_diy_hours": 17,
+    "connect_count": 4,
+    "replace_count": 0,
+    "either_count": 0,
+    "next_steps": {
+      "tier": "full",
+      "headline": "Ready to scale internationally with AI",
+      "message": "Your Shopify stack is well-suited for AI integration. Start with multi-market customer support automation for the fastest ROI and biggest pain relief as you scale across NZ, AU, and UK.",
+      "cta_text": "Schedule Implementation Call",
+      "cta_url": "/contact"
+    }
+  },
+  "methodology_notes": {
+    "data_sources": [
+      "Company interview",
+      "Shopify multi-market analytics",
+      "Judge.me review data",
+      "Industry benchmarks for DTC outdoor brands"
+    ],
+    "assumptions": [
+      "8 employees",
+      "\u20ac1.8M annual revenue (NZD converted)",
+      "Operations staff rate \u20ac32/hour",
+      "40% YoY growth rate",
+      "3 markets (NZ primary, AU secondary, UK new)",
+      "3 core fire pit SKUs + 8-10 accessories"
+    ],
+    "confidence_level": "high",
+    "last_updated": "2026-02-22"
+  },
+  "industry": "b2b-platforms"
+}

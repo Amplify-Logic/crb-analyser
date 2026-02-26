@@ -1,17 +1,20 @@
 """
-Three Options Skill
+AIOS Options Skill (formerly Three Options)
 
-Generates recommendations in the Three Options format:
-- Option A: Off-the-Shelf (fastest, plug-and-play)
-- Option B: Best-in-Class (premium, full-featured)
-- Option C: Custom Solution (AI/API-based, competitive advantage)
+Generates recommendations in the AIOS connect-first format:
+- Option A: Connect & Automate (wire existing tools with AI workflows)
+- Option B: Enhance with AI (add intelligence layer on top)
+- Option C: Targeted Upgrade (replace only as last resort)
 
 This skill:
-1. Takes a finding and generates three solution options
+1. Takes a finding and generates three solution options (connect-first)
 2. Integrates vendor pricing from knowledge base
 3. Calculates ROI with confidence adjustment
 4. Provides specific "our recommendation" with rationale
-5. Includes Build It Yourself details for custom solutions
+5. Includes Claude Code hours and MCP servers for connect option
+
+Backward compatible: maps old keys (off_the_shelf, best_in_class, custom_solution)
+to new keys (connect_and_automate, enhance_with_ai, targeted_upgrade).
 
 Output Schema:
 {
@@ -22,11 +25,11 @@ Output Schema:
     "why_it_matters": {"customer_value": "...", "business_health": "..."},
     "priority": "high|medium|low",
     "options": {
-        "off_the_shelf": {...},
-        "best_in_class": {...},
-        "custom_solution": {...}
+        "connect_and_automate": {...},
+        "enhance_with_ai": {...},
+        "targeted_upgrade": {...}
     },
-    "our_recommendation": "off_the_shelf|best_in_class|custom_solution",
+    "our_recommendation": "connect_and_automate|enhance_with_ai|targeted_upgrade",
     "recommendation_rationale": "...",
     "roi_percentage": N,
     "payback_months": N,
@@ -55,23 +58,65 @@ from src.skills.report_generation_utils import (
 logger = logging.getLogger(__name__)
 
 
+    # Backward compatibility mapping: old keys → new keys
+OPTION_KEY_MAPPING = {
+    "off_the_shelf": "targeted_upgrade",
+    "best_in_class": "enhance_with_ai",
+    "custom_solution": "connect_and_automate",
+}
+
+# Valid AIOS option keys
+AIOS_OPTION_KEYS = {"connect_and_automate", "enhance_with_ai", "targeted_upgrade"}
+
+# Valid legacy option keys
+LEGACY_OPTION_KEYS = {"off_the_shelf", "best_in_class", "custom_solution"}
+
+
 class ThreeOptionsSkill(LLMSkill[Dict[str, Any]]):
     """
-    Generate Three Options recommendations for findings.
+    Generate AIOS Options recommendations for findings.
 
-    This is an LLM-powered skill that creates comprehensive
-    recommendations with three solution options: off-the-shelf,
-    best-in-class, and custom solution.
+    Connect-first philosophy: always lead with what can be built
+    on the existing stack, enhance second, replace only as last resort.
     """
 
     name = "three-options"
-    description = "Format recommendations in Three Options structure"
-    version = "1.0.0"
+    description = "Format recommendations in AIOS connect-first structure"
+    version = "2.0.0"
 
     requires_llm = True
-    requires_knowledge = True  # Works best with vendor data
+    requires_knowledge = True
 
-    # Default option templates
+    # Default option templates (AIOS format)
+    CONNECT_AND_AUTOMATE_TEMPLATE = {
+        "approach": "",
+        "build_time": "",
+        "tools_used": [],
+        "mcp_servers": [],
+        "monthly_cost": "",
+        "pros": ["Uses your existing stack", "Ships this week", "Fully customized"],
+        "cons": ["Requires API access", "Needs maintenance"],
+    }
+
+    ENHANCE_WITH_AI_TEMPLATE = {
+        "approach": "",
+        "build_time": "",
+        "tools_used": [],
+        "monthly_cost": "",
+        "pros": ["Autonomous handling", "Learns and improves", "Scalable"],
+        "cons": ["More complex setup", "Needs training data"],
+    }
+
+    TARGETED_UPGRADE_TEMPLATE = {
+        "when_needed": "",
+        "tools": [],
+        "cost_range": "",
+        "migration_time": "",
+        "pros": ["Pre-built solution", "Quick setup"],
+        "cons": ["Monthly SaaS cost", "Less customization", "Vendor lock-in"],
+    }
+
+    # Legacy templates (for backward compat)
     OFF_THE_SHELF_TEMPLATE = {
         "name": "",
         "vendor": "",
@@ -216,7 +261,7 @@ class ThreeOptionsSkill(LLMSkill[Dict[str, Any]]):
         # Get AI tools context
         ai_tools_context = self._get_ai_tools_context()
 
-        prompt = f"""Generate a recommendation with THREE OPTIONS for this finding.
+        prompt = f"""Generate a recommendation with AIOS OPTIONS for this finding.
 
 FINDING:
 {json.dumps(finding, indent=2)}
@@ -232,25 +277,26 @@ COMPANY CONTEXT:
 {ai_tools_context}
 
 ═══════════════════════════════════════════════════════════════════════════════
-THREE OPTIONS PATTERN
+AIOS OPTIONS PATTERN (Connect-First Philosophy)
 ═══════════════════════════════════════════════════════════════════════════════
 
-Generate ALL THREE options:
+Generate ALL THREE options in this PRIORITY ORDER:
 
-Option A: OFF-THE-SHELF
-- Fastest to deploy, lowest risk
-- Existing SaaS product, plug-and-play
-- Best for: Quick wins, proven solutions
+Option A: CONNECT & AUTOMATE (ALWAYS first choice)
+- Wire existing tools together with AI workflows
+- Build with Claude Code, MCP servers, APIs
+- Include specific build time and tools used
+- Best for: Most situations — 80% of value comes from connecting what exists
 
-Option B: BEST-IN-CLASS
-- Premium vendor, more features
-- Better support and ecosystem
-- Best for: Scaling, enterprise needs
+Option B: ENHANCE WITH AI
+- Add an AI intelligence layer on top of existing data
+- Deploy agents, predictive workflows, dashboards
+- Best for: When data exists but isn't being acted on
 
-Option C: CUSTOM SOLUTION
-- Built with AI/APIs (Claude, etc.)
-- Full control and ownership
-- Best for: Competitive advantage, unique requirements
+Option C: TARGETED UPGRADE
+- Replace a specific tool ONLY if it genuinely blocks integration
+- ONLY when: No API, fundamentally broken, data is trapped
+- Best for: Dead-end tools that can't be connected
 
 ═══════════════════════════════════════════════════════════════════════════════
 
@@ -264,69 +310,62 @@ Generate a JSON object with this structure:
     }},
     "priority": "high|medium|low",
     "options": {{
-        "off_the_shelf": {{
-            "name": "<specific product name>",
-            "vendor": "<company name>",
-            "monthly_cost": <number>,
-            "implementation_weeks": <number>,
-            "implementation_cost": <number>,
+        "connect_and_automate": {{
+            "approach": "<how to wire existing tools with AI workflows>",
+            "build_time": "<e.g., 8-12 hours>",
+            "tools_used": ["Claude Code", "<existing tool 1>", "<existing tool 2>"],
+            "mcp_servers": ["<mcp-server-name if applicable>"],
+            "monthly_cost": "<e.g., EUR 50-150 (API usage)>",
             "pros": ["<pro1>", "<pro2>"],
             "cons": ["<con1>", "<con2>"]
         }},
-        "best_in_class": {{
-            "name": "<specific product name>",
-            "vendor": "<company name>",
-            "monthly_cost": <number>,
-            "implementation_weeks": <number>,
-            "implementation_cost": <number>,
+        "enhance_with_ai": {{
+            "approach": "<what the AI agent/layer does>",
+            "build_time": "<e.g., 2-3 weeks>",
+            "tools_used": ["Claude API", "<data source>", "<dashboard>"],
+            "monthly_cost": "<e.g., EUR 200-400>",
             "pros": ["<pro1>", "<pro2>"],
             "cons": ["<con1>", "<con2>"]
         }},
-        "custom_solution": {{
-            "approach": "<description of custom solution>",
-            "estimated_cost": {{"min": <number>, "max": <number>}},
-            "monthly_running_cost": <number>,
-            "implementation_weeks": <number>,
-            "pros": ["Perfect fit", "Competitive advantage", "Full control"],
-            "cons": ["Higher upfront investment", "Requires maintenance"],
-            "build_tools": ["Claude API", "Cursor", "Vercel", "Supabase"],
-            "model_recommendation": "<specific model> because <reason>",
-            "skills_required": ["<skill1>", "<skill2>"],
-            "dev_hours_estimate": "<min>-<max> hours"
+        "targeted_upgrade": {{
+            "when_needed": "<explain when this is justified — ONLY if existing tool is a dead end>",
+            "tools": ["<vendor1>", "<vendor2>"],
+            "cost_range": "<e.g., EUR 200-500/month>",
+            "migration_time": "<e.g., 4-6 weeks>",
+            "pros": ["<pro1>", "<pro2>"],
+            "cons": ["<con1>", "<con2>"]
         }}
     }},
-    "our_recommendation": "off_the_shelf|best_in_class|custom_solution",
-    "recommendation_rationale": "<why this option is best for THIS company - MUST reference their size, budget, or tech comfort from quiz>",
+    "our_recommendation": "connect_and_automate",
+    "recommendation_rationale": "<why connect_and_automate is best for THIS company — reference their existing stack, size, or tech comfort>",
 
     "comparison_summary": {{
         "table": [
-            {{"aspect": "Monthly cost", "off_the_shelf": "€X", "best_in_class": "€Y", "custom": "€Z"}},
-            {{"aspect": "Setup cost", "off_the_shelf": "€X", "best_in_class": "€Y", "custom": "€Z"}},
-            {{"aspect": "Time to value", "off_the_shelf": "X weeks", "best_in_class": "Y weeks", "custom": "Z weeks"}},
-            {{"aspect": "Customization", "off_the_shelf": "Low", "best_in_class": "Medium", "custom": "High"}},
-            {{"aspect": "Maintenance", "off_the_shelf": "None", "best_in_class": "Low", "custom": "High"}}
+            {{"aspect": "Monthly cost", "connect_and_automate": "€X", "enhance_with_ai": "€Y", "targeted_upgrade": "€Z"}},
+            {{"aspect": "Build/setup time", "connect_and_automate": "X hours", "enhance_with_ai": "Y weeks", "targeted_upgrade": "Z weeks"}},
+            {{"aspect": "Time to value", "connect_and_automate": "Days", "enhance_with_ai": "Weeks", "targeted_upgrade": "Months"}},
+            {{"aspect": "Disruption", "connect_and_automate": "Zero", "enhance_with_ai": "Low", "targeted_upgrade": "High"}},
+            {{"aspect": "Maintenance", "connect_and_automate": "API monitoring", "enhance_with_ai": "Model tuning", "targeted_upgrade": "Vendor managed"}}
         ],
-        "winner_for_this_company": "off_the_shelf|best_in_class|custom",
-        "why_winner": "<1-2 sentences explaining why this wins GIVEN THIS COMPANY's specific quiz answers>"
+        "winner_for_this_company": "connect_and_automate|enhance_with_ai|targeted_upgrade",
+        "why_winner": "<1-2 sentences explaining why this wins GIVEN THIS COMPANY's stack and context>"
     }},
 
     "assumptions": [
-        "<assumption 1 - MUST include number AND source: 'Response time 4hrs (Quiz Q3)'>",
-        "<assumption 2 - MUST include number AND source: 'Ticket volume 500/month (user-reported)'>",
-        "<assumption 3 - MUST include number AND source: 'Hourly rate €45 (industry avg for [size])'>"
+        "<assumption 1 - MUST include number AND source>",
+        "<assumption 2 - MUST include number AND source>",
+        "<assumption 3 - MUST include number AND source>"
     ]
 }}
 
 ═══════════════════════════════════════════════════════════════════════════════
-DECISION GUIDANCE
+CRITICAL RULES (Connect-First)
 ═══════════════════════════════════════════════════════════════════════════════
-- off_the_shelf: Small budget (<€300/mo), low tech comfort, need results in <2 weeks
-- best_in_class: Growing business, €300-1000/mo budget, can invest in scalability
-- custom_solution: High tech comfort ONLY, unique requirements, competitive advantage needed
-
-STRICT RULES:
-- If tech_comfort is "low": NEVER recommend custom_solution
-- If budget implies <€300/month: NEVER recommend best_in_class
+- our_recommendation MUST be "connect_and_automate" UNLESS the existing tool literally has no API
+- NEVER recommend "targeted_upgrade" just because a "better" tool exists
+- Every connect_and_automate option MUST include build_time and tools_used
+- Include MCP servers where applicable
+- If tech_comfort is "low": recommend connect_and_automate with simpler approach (automation tools)
 - If ROI > 500%: MUST explain why this is exceptional (not typical)
 
 Return ONLY the JSON object."""
@@ -346,38 +385,40 @@ Return ONLY the JSON object."""
 
     def _get_system_prompt(self) -> str:
         """Get the system prompt for recommendation generation."""
-        return """You are an expert AI business consultant generating recommendations for CRB Analysis reports.
+        return """You are an expert AI architecture consultant generating AIOS (AI Operating System) recommendations for CRB Analysis reports.
 
-Your role is to provide balanced, honest recommendations across three solution types.
+Your role: Help businesses connect what they have, automate what slows them down, and build what doesn't exist. Always lead with connecting existing tools.
 
 ═══════════════════════════════════════════════════════════════════════════════
 BANNED LANGUAGE - Using any of these INVALIDATES your output:
 ═══════════════════════════════════════════════════════════════════════════════
 - "seamless integration", "robust", "scalable", "enterprise-grade"
 - "unlock value", "drive efficiency", "optimize", "streamline"
-- "best-in-class" (except as option name), "cutting-edge", "revolutionary"
+- "consider migrating to", "we recommend Tool X", "best-in-class solution"
+- "cutting-edge", "revolutionary", "transform your business"
 
-INSTEAD OF: "Seamlessly integrate with your existing tools"
-USE: "Connects to HubSpot via native integration, syncs in <5 minutes"
+INSTEAD OF: "Consider migrating to Salesforce"
+USE: "Build a Claude workflow connecting HubSpot deals to Exact invoices — ships in 8 hours"
 
 ═══════════════════════════════════════════════════════════════════════════════
-KEY PRINCIPLES
+KEY PRINCIPLES (Connect-First)
 ═══════════════════════════════════════════════════════════════════════════════
-1. VENDOR CATALOG: For off-the-shelf and best-in-class options, ONLY use vendors from the VENDOR CATALOG provided in the prompt. Use their exact pricing. Never invent vendor names or prices.
-2. HONEST TRADE-OFFS: Every option has pros AND cons - never all positive
-3. CONTEXT-AWARE: Recommendation MUST match company size, budget, tech comfort
-4. TRANSPARENT ROI: Show calculation with all assumptions and sources
-5. COMPLETE OPTIONS: All three options must be fully specified with real numbers
-6. If no vendor from the catalog fits, say "No matching vendor in catalog" rather than making one up
+1. CONNECT FIRST: Always show how to wire existing tools with AI workflows
+2. VENDOR CATALOG: For targeted_upgrade options, ONLY use vendors from the VENDOR CATALOG. Never invent vendor names or prices.
+3. HONEST TRADE-OFFS: Every option has pros AND cons
+4. CONTEXT-AWARE: Recommendation MUST match company's existing stack, size, tech comfort
+5. BUILD TIME: Every connect option MUST include specific Claude Code hours
+6. REPLACE LAST: Only suggest replacing a tool when it genuinely has no API or is fundamentally broken
 
 ═══════════════════════════════════════════════════════════════════════════════
 NOTE: roi_percentage and payback_months will be calculated by the ROI Calculator Skill.
 Do NOT generate these values - they will be computed using canonical formulas.
 ═══════════════════════════════════════════════════════════════════════════════
-DECISION RULES
+CONNECT-FIRST RULES
 ═══════════════════════════════════════════════════════════════════════════════
-- NEVER recommend custom solutions if tech_comfort is "low"
-- NEVER recommend best-in-class if budget_range indicates <€500/month available
+- our_recommendation should be "connect_and_automate" in 90%+ of cases
+- Only recommend "targeted_upgrade" when existing tool is genuinely a dead end
+- Never recommend replacing software just because a "better" tool exists
 - Be honest about implementation complexity and ongoing maintenance burden"""
 
     def _get_ai_tools_context(self) -> str:
@@ -440,42 +481,63 @@ STACK RECOMMENDATIONS:
             "priority": recommendation.get("priority", "medium"),
         }
 
-        # Validate options
+        # Validate options — detect whether AIOS or legacy format
         options = recommendation.get("options", {})
+        option_keys = set(options.keys())
 
-        # Validate off_the_shelf
-        ots = options.get("off_the_shelf", {})
-        rec_ots = self.OFF_THE_SHELF_TEMPLATE.copy()
-        rec_ots.update({k: v for k, v in ots.items() if v})
+        if option_keys & AIOS_OPTION_KEYS:
+            # AIOS format (new) — validate AIOS options
+            ca = options.get("connect_and_automate", {})
+            rec_ca = self.CONNECT_AND_AUTOMATE_TEMPLATE.copy()
+            rec_ca.update({k: v for k, v in ca.items() if v})
 
-        # Validate best_in_class
-        bic = options.get("best_in_class", {})
-        rec_bic = self.BEST_IN_CLASS_TEMPLATE.copy()
-        rec_bic.update({k: v for k, v in bic.items() if v})
+            ea = options.get("enhance_with_ai", {})
+            rec_ea = self.ENHANCE_WITH_AI_TEMPLATE.copy()
+            rec_ea.update({k: v for k, v in ea.items() if v})
 
-        # Validate custom_solution
-        cs = options.get("custom_solution", {})
-        rec_cs = self.CUSTOM_SOLUTION_TEMPLATE.copy()
-        rec_cs.update({k: v for k, v in cs.items() if v})
+            tu = options.get("targeted_upgrade", {})
+            rec_tu = self.TARGETED_UPGRADE_TEMPLATE.copy()
+            rec_tu.update({k: v for k, v in tu.items() if v})
 
-        rec["options"] = {
-            "off_the_shelf": rec_ots,
-            "best_in_class": rec_bic,
-            "custom_solution": rec_cs,
-        }
+            rec["options"] = {
+                "connect_and_automate": rec_ca,
+                "enhance_with_ai": rec_ea,
+                "targeted_upgrade": rec_tu,
+            }
+        elif option_keys & LEGACY_OPTION_KEYS:
+            # Legacy format — map to AIOS keys for backward compatibility
+            logger.info("Mapping legacy option keys to AIOS format")
 
-        # Our recommendation
-        rec["our_recommendation"] = recommendation.get(
-            "our_recommendation", "off_the_shelf"
-        )
-        if rec["our_recommendation"] not in ("off_the_shelf", "best_in_class", "custom_solution"):
-            rec["our_recommendation"] = "off_the_shelf"
+            # Map old → new
+            ots = options.get("off_the_shelf", {})
+            bic = options.get("best_in_class", {})
+            cs = options.get("custom_solution", {})
+
+            rec["options"] = {
+                "connect_and_automate": cs if cs else self.CONNECT_AND_AUTOMATE_TEMPLATE.copy(),
+                "enhance_with_ai": bic if bic else self.ENHANCE_WITH_AI_TEMPLATE.copy(),
+                "targeted_upgrade": ots if ots else self.TARGETED_UPGRADE_TEMPLATE.copy(),
+            }
+        else:
+            # Unknown format — use defaults
+            rec["options"] = {
+                "connect_and_automate": self.CONNECT_AND_AUTOMATE_TEMPLATE.copy(),
+                "enhance_with_ai": self.ENHANCE_WITH_AI_TEMPLATE.copy(),
+                "targeted_upgrade": self.TARGETED_UPGRADE_TEMPLATE.copy(),
+            }
+
+        # Our recommendation — normalize to AIOS keys
+        our_rec = recommendation.get("our_recommendation", "connect_and_automate")
+        if our_rec in OPTION_KEY_MAPPING:
+            our_rec = OPTION_KEY_MAPPING[our_rec]
+        if our_rec not in AIOS_OPTION_KEYS:
+            our_rec = "connect_and_automate"
+        rec["our_recommendation"] = our_rec
 
         rec["recommendation_rationale"] = recommendation.get(
             "recommendation_rationale", ""
         )
         # ROI values are calculated by ROI Calculator Skill, not LLM
-        # Set to 0 as placeholder - report_service.py will call ROI Calculator
         rec["roi_percentage"] = 0
         rec["payback_months"] = 0
         rec["roi_pending_calculation"] = True
@@ -538,12 +600,12 @@ STACK RECOMMENDATIONS:
             },
             "priority": "medium",
             "options": {
-                "off_the_shelf": self.OFF_THE_SHELF_TEMPLATE.copy(),
-                "best_in_class": self.BEST_IN_CLASS_TEMPLATE.copy(),
-                "custom_solution": self.CUSTOM_SOLUTION_TEMPLATE.copy(),
+                "connect_and_automate": self.CONNECT_AND_AUTOMATE_TEMPLATE.copy(),
+                "enhance_with_ai": self.ENHANCE_WITH_AI_TEMPLATE.copy(),
+                "targeted_upgrade": self.TARGETED_UPGRADE_TEMPLATE.copy(),
             },
-            "our_recommendation": "off_the_shelf",
-            "recommendation_rationale": "Start with proven solutions for faster implementation.",
+            "our_recommendation": "connect_and_automate",
+            "recommendation_rationale": "Start by connecting your existing tools with AI workflows for fastest time-to-value.",
             "roi_percentage": 0,
             "payback_months": 0,
             "roi_pending_calculation": True,

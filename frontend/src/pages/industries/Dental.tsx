@@ -33,16 +33,16 @@ const PAIN_POINTS = [
 const SAMPLE_FINDINGS = [
   {
     title: 'Patient Recall Automation',
-    verdict: 'Proceed',
+    verdict: 'Connect',
     verdictColor: 'emerald',
-    description: 'Your no-show rate and recare gaps show clear automation potential. High ROI with minimal risk.',
+    description: 'Build a Claude workflow connecting your PMS appointment data to automated SMS reminders. Ships in hours, not weeks.',
     roi: '€24,000/year',
   },
   {
     title: 'AI Treatment Planning',
-    verdict: 'Proceed with Caution',
+    verdict: 'Enhance',
     verdictColor: 'amber',
-    description: 'AI-assisted diagnostics can improve case acceptance, but requires clinical workflow integration.',
+    description: 'Add an AI layer to your existing diagnostic workflow that suggests treatment plans and improves case acceptance.',
     roi: '€12,000/year',
   },
   {
@@ -128,7 +128,7 @@ export default function Dental() {
               </ShimmerButton>
 
               <Link
-                to="/quiz"
+                to="/report/sample-dental"
                 className="px-6 py-3 text-gray-700 font-medium hover:text-primary-600 transition flex items-center gap-2"
               >
                 <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">

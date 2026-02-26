@@ -8,6 +8,7 @@ const LandingHome = React.lazy(() => import('./pages/LandingHome'))
 const ProfessionalServices = React.lazy(() => import('./pages/industries/ProfessionalServices'))
 const Dental = React.lazy(() => import('./pages/industries/Dental'))
 const Ecommerce = React.lazy(() => import('./pages/industries/Ecommerce'))
+const B2BPlatforms = React.lazy(() => import('./pages/industries/B2BPlatforms'))
 const Login = React.lazy(() => import('./pages/Login'))
 const Signup = React.lazy(() => import('./pages/Signup'))
 const Quiz = React.lazy(() => import('./pages/Quiz'))
@@ -62,6 +63,7 @@ function App() {
       <Route path="/professional-services" element={<ProfessionalServices />} />
       <Route path="/dental" element={<Dental />} />
       <Route path="/ecommerce" element={<Ecommerce />} />
+      <Route path="/b2b-platforms" element={<B2BPlatforms />} />
       <Route path="/login" element={<Login />} />
       <Route path="/signup" element={<Signup />} />
 

@@ -265,6 +265,75 @@ MEDSPA_SOFTWARE: List[SoftwareOption] = [
     {"slug": "podium", "name": "Podium", "category": "Reviews"},
 ]
 
+ECOMMERCE_SOFTWARE: List[SoftwareOption] = [
+    # E-Commerce Platforms
+    {"slug": "shopify", "name": "Shopify", "category": "Platform"},
+    {"slug": "woocommerce", "name": "WooCommerce", "category": "Platform"},
+    {"slug": "bigcommerce", "name": "BigCommerce", "category": "Platform"},
+    {"slug": "magento", "name": "Magento / Adobe Commerce", "category": "Platform"},
+
+    # Customer Support
+    {"slug": "gorgias", "name": "Gorgias", "category": "Support"},
+    {"slug": "richpanel", "name": "Richpanel", "category": "Support"},
+
+    # Email & SMS Marketing
+    {"slug": "klaviyo", "name": "Klaviyo", "category": "Email & SMS"},
+    {"slug": "attentive", "name": "Attentive", "category": "Email & SMS"},
+    {"slug": "postscript", "name": "Postscript", "category": "SMS"},
+    {"slug": "omnisend", "name": "Omnisend", "category": "Email & SMS"},
+
+    # Attribution & Analytics
+    {"slug": "triple-whale", "name": "Triple Whale", "category": "Attribution"},
+    {"slug": "northbeam", "name": "Northbeam", "category": "Attribution"},
+
+    # Subscriptions & Loyalty
+    {"slug": "recharge", "name": "Recharge", "category": "Subscriptions"},
+    {"slug": "yotpo", "name": "Yotpo", "category": "Reviews & Loyalty"},
+    {"slug": "stamped-io", "name": "Stamped.io", "category": "Reviews & Loyalty"},
+    {"slug": "smile-io", "name": "Smile.io", "category": "Loyalty"},
+
+    # Fulfillment & Operations
+    {"slug": "shipstation", "name": "ShipStation", "category": "Fulfillment"},
+    {"slug": "shipbob", "name": "ShipBob", "category": "Fulfillment"},
+    {"slug": "returnly", "name": "Returnly / Loop", "category": "Returns"},
+]
+
+
+B2B_PLATFORMS_SOFTWARE: List[SoftwareOption] = [
+    # IoT Platforms
+    {"slug": "azure-iot-hub", "name": "Azure IoT Hub", "category": "IoT Platform"},
+    {"slug": "aws-iot-core", "name": "AWS IoT Core", "category": "IoT Platform"},
+    {"slug": "particle", "name": "Particle", "category": "IoT Platform"},
+
+    # ERP
+    {"slug": "exact-online", "name": "Exact Online", "category": "ERP"},
+    {"slug": "netsuite", "name": "NetSuite", "category": "ERP"},
+    {"slug": "odoo", "name": "Odoo", "category": "ERP"},
+
+    # Field Service
+    {"slug": "salesforce-fsl", "name": "Salesforce Field Service", "category": "Field Service"},
+    {"slug": "servicemax", "name": "ServiceMax", "category": "Field Service"},
+    {"slug": "zuper", "name": "Zuper", "category": "Field Service"},
+
+    # Subscription Billing
+    {"slug": "chargebee", "name": "Chargebee", "category": "Billing"},
+    {"slug": "zuora", "name": "Zuora", "category": "Billing"},
+    {"slug": "stripe-billing", "name": "Stripe Billing", "category": "Billing"},
+
+    # Partner Management
+    {"slug": "impartner", "name": "Impartner", "category": "Partner Management"},
+    {"slug": "partnerstack", "name": "PartnerStack", "category": "Partner Management"},
+
+    # Customer Success
+    {"slug": "gainsight", "name": "Gainsight", "category": "Customer Success"},
+    {"slug": "vitally", "name": "Vitally", "category": "Customer Success"},
+    {"slug": "planhat", "name": "Planhat", "category": "Customer Success"},
+
+    # Supply Chain
+    {"slug": "katana", "name": "Katana", "category": "Supply Chain"},
+    {"slug": "inflow", "name": "inFlow", "category": "Supply Chain"},
+]
+
 
 # ============================================================================
 # INDUSTRY MAPPING
@@ -279,6 +348,8 @@ INDUSTRY_SOFTWARE_MAP: dict[str, List[SoftwareOption]] = {
     "professional-services": PROFESSIONAL_SERVICES_SOFTWARE,
     "physical-therapy": PHYSICAL_THERAPY_SOFTWARE,
     "medspa": MEDSPA_SOFTWARE,
+    "ecommerce": ECOMMERCE_SOFTWARE,
+    "b2b-platforms": B2B_PLATFORMS_SOFTWARE,
 }
 
 

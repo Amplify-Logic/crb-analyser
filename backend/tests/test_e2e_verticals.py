@@ -1,10 +1,11 @@
 """
-E2E Smoke Tests for All 3 Verticals
+E2E Smoke Tests for All 4 Verticals
 
 Tests the critical path for each primary industry:
 - professional-services (EUR 125/hr)
 - dental (EUR 85/hr)
-- ecommerce (EUR 35/hr, NEW)
+- ecommerce (EUR 35/hr)
+- b2b-platforms (EUR 75/hr)
 
 Covers:
 1. Knowledge base completeness (all 4 files per industry)
@@ -51,13 +52,14 @@ from src.skills.base import (
 # Constants
 # =============================================================================
 
-VERTICALS = ["professional-services", "dental", "ecommerce"]
+VERTICALS = ["professional-services", "dental", "ecommerce", "b2b-platforms"]
 DATA_TYPES = ["processes", "opportunities", "benchmarks", "vendors"]
 
 EXPECTED_HOURLY_RATES = {
     "professional-services": 125.0,
     "dental": 85.0,
     "ecommerce": 35.0,
+    "b2b-platforms": 75.0,
 }
 
 KNOWLEDGE_BASE_PATH = Path(__file__).parent.parent / "src" / "knowledge"
@@ -147,6 +149,7 @@ class TestIndustryQuestions:
         ("ecommerce", "ecommerce.json"),
         ("dental", "dental.json"),
         ("professional-services", "professional_services.json"),
+        ("b2b-platforms", "b2b_platforms.json"),
     ])
     def test_question_file_exists(self, industry, filename):
         """Each vertical must have an industry question file."""
@@ -157,6 +160,7 @@ class TestIndustryQuestions:
         ("ecommerce", "ecommerce.json"),
         ("dental", "dental.json"),
         ("professional-services", "professional_services.json"),
+        ("b2b-platforms", "b2b_platforms.json"),
     ])
     def test_questions_valid_json(self, industry, filename):
         """Question files must be valid JSON with questions array."""
@@ -172,6 +176,7 @@ class TestIndustryQuestions:
         ("ecommerce", "ecommerce.json"),
         ("dental", "dental.json"),
         ("professional-services", "professional_services.json"),
+        ("b2b-platforms", "b2b_platforms.json"),
     ])
     def test_question_structure(self, industry, filename):
         """Each question must have required fields."""
@@ -199,6 +204,7 @@ class TestHourlyRates:
         ("professional-services", 125.0),
         ("dental", 85.0),
         ("ecommerce", 35.0),
+        ("b2b-platforms", 75.0),
     ])
     def test_industry_default_rate(self, industry, expected_rate):
         """Each industry should return correct default hourly rate."""
@@ -211,6 +217,7 @@ class TestHourlyRates:
     @pytest.mark.parametrize("industry,expected_rate", [
         ("professional_services", 125.0),
         ("e-commerce", 35.0),
+        ("b2b_platforms", 75.0),
     ])
     def test_alternate_slug_rates(self, industry, expected_rate):
         """Alternate slug formats should return same hourly rate."""
@@ -417,6 +424,7 @@ class TestSampleReports:
         "professional-services": "sample_report.json",
         "dental": "sample_report_dental.json",
         "ecommerce": "sample_report_ecommerce.json",
+        "b2b-platforms": "sample_report_b2b_platforms.json",
     }
 
     @pytest.mark.parametrize("industry", VERTICALS)
@@ -504,6 +512,11 @@ class TestIndustryNormalization:
         ("dtc", "ecommerce"),
         ("shopify", "ecommerce"),
         ("online_retail", "ecommerce"),
+        # B2B Platforms variants
+        ("b2b-platforms", "b2b-platforms"),
+        ("b2b_platforms", "b2b-platforms"),
+        ("iot", "b2b-platforms"),
+        ("connected-devices", "b2b-platforms"),
     ])
     def test_normalization(self, input_slug, expected):
         """Various industry name inputs should normalize correctly."""
@@ -515,7 +528,7 @@ class TestIndustryNormalization:
         assert result == "general"
 
     def test_primary_industries_list(self):
-        """Primary industries should be exactly our 3 verticals."""
+        """Primary industries should be exactly our 4 verticals."""
         primaries = list_primary_industries()
         assert set(primaries) == set(VERTICALS)
 

@@ -10,7 +10,13 @@
     "team_size": "1-10 employees",
     "tech_level": "Moderate - Shopify Plus with marketing stack, mostly manual operations",
     "budget_range": "500-1000/month",
-    "existing_tools": ["Shopify Plus", "Klaviyo", "Gorgias", "Google Analytics 4", "ShipStation"],
+    "existing_tools": [
+      "Shopify Plus",
+      "Klaviyo",
+      "Gorgias",
+      "Google Analytics 4",
+      "ShipStation"
+    ],
     "location": "Amsterdam, Netherlands",
     "website": "nordicoutdoor.co",
     "description": "Direct-to-consumer outdoor gear brand with 12 employees, selling premium hiking, camping, and cycling equipment across Europe. Strong brand identity built on sustainability and Scandinavian design. Annual revenue around €3.2M with 500+ active SKUs and growing 35% year-over-year."
@@ -20,19 +26,51 @@
     "customer_value_score": 8,
     "business_health_score": 8,
     "key_insight": "Nordic Outdoor Co. is scaling fast but operations haven't kept pace. Three full-time support agents handle mostly repetitive queries, manual inventory forecasting causes both stockouts and overstock, and returns processing eats margin on every order. AI can automate 60-70% of support volume, dramatically improve demand forecasting, and streamline returns — freeing the team to focus on brand, product, and growth.",
-    "total_value_potential": {"min": 245000, "max": 410000, "projection_years": 3},
+    "total_value_potential": {
+      "min": 245000,
+      "max": 410000,
+      "projection_years": 3
+    },
     "top_opportunities": [
-      {"title": "AI Customer Support Automation", "value_potential": "€38K-55K/year", "time_horizon": "short"},
-      {"title": "AI Inventory Forecasting", "value_potential": "€30K-48K/year", "time_horizon": "short"},
-      {"title": "Automated Returns Processing", "value_potential": "€18K-28K/year", "time_horizon": "mid"},
-      {"title": "AI Product Content Generation", "value_potential": "€12K-20K/year", "time_horizon": "mid"}
+      {
+        "title": "AI Customer Support Automation",
+        "value_potential": "€38K-55K/year",
+        "time_horizon": "short"
+      },
+      {
+        "title": "AI Inventory Forecasting",
+        "value_potential": "€30K-48K/year",
+        "time_horizon": "short"
+      },
+      {
+        "title": "Automated Returns Processing",
+        "value_potential": "€18K-28K/year",
+        "time_horizon": "mid"
+      },
+      {
+        "title": "AI Product Content Generation",
+        "value_potential": "€12K-20K/year",
+        "time_horizon": "mid"
+      }
     ],
     "not_recommended": [
-      {"title": "Enterprise ERP System (NetSuite/SAP)", "reason": "At 12 employees and €3.2M revenue, enterprise ERP is overkill. Shopify Plus with smart integrations handles your complexity. Revisit at €10M+."},
-      {"title": "Custom Warehouse Management System", "reason": "ShipStation combined with Shopify fulfillment covers your needs. A custom WMS only makes sense with 10K+ orders/month."},
-      {"title": "Full Marketing Mix Modeling Platform", "reason": "At your spend level, tools like Rockerbox or Northbeam cost more than the attribution clarity they provide. Focus on first-party data and post-purchase surveys first."}
+      {
+        "title": "Enterprise ERP System (NetSuite/SAP)",
+        "reason": "At 12 employees and €3.2M revenue, enterprise ERP is overkill. Shopify Plus with smart integrations handles your complexity. Revisit at €10M+."
+      },
+      {
+        "title": "Custom Warehouse Management System",
+        "reason": "ShipStation combined with Shopify fulfillment covers your needs. A custom WMS only makes sense with 10K+ orders/month."
+      },
+      {
+        "title": "Full Marketing Mix Modeling Platform",
+        "reason": "At your spend level, tools like Rockerbox or Northbeam cost more than the attribution clarity they provide. Focus on first-party data and post-purchase surveys first."
+      }
     ],
-    "recommended_investment": {"year_1_min": 12000, "year_1_max": 24000},
+    "recommended_investment": {
+      "year_1_min": 12000,
+      "year_1_max": 24000
+    },
     "verdict": {
       "recommendation": "proceed",
       "headline": "High-Impact AI Opportunities Across Operations",
@@ -55,9 +93,24 @@
     }
   },
   "value_summary": {
-    "value_saved": {"subtotal": {"min": 68000, "max": 108000}, "hours_per_week": 42, "hourly_rate": 35},
-    "value_created": {"subtotal": {"min": 30000, "max": 52000}},
-    "total": {"min": 98000, "max": 160000}
+    "value_saved": {
+      "subtotal": {
+        "min": 68000,
+        "max": 108000
+      },
+      "hours_per_week": 42,
+      "hourly_rate": 35
+    },
+    "value_created": {
+      "subtotal": {
+        "min": 30000,
+        "max": 52000
+      }
+    },
+    "total": {
+      "min": 98000,
+      "max": 160000
+    }
   },
   "findings": [
     {
@@ -67,10 +120,20 @@
       "category": "customer_support",
       "customer_value_score": 9,
       "business_health_score": 8,
-      "value_saved": {"hours_per_week": 18, "hourly_rate": 35, "annual_savings": 32760},
-      "value_created": {"description": "Faster response times improve CSAT and reduce refund demands", "potential_revenue": 15000},
+      "value_saved": {
+        "hours_per_week": 18,
+        "hourly_rate": 35,
+        "annual_savings": 32760
+      },
+      "value_created": {
+        "description": "Faster response times improve CSAT and reduce refund demands",
+        "potential_revenue": 15000
+      },
       "confidence": "high",
-      "sources": ["Gorgias ticket analysis", "Ecommerce support automation benchmarks - Gartner 2025"],
+      "sources": [
+        "Gorgias ticket analysis",
+        "Ecommerce support automation benchmarks - Gartner 2025"
+      ],
       "time_horizon": "short"
     },
     {
@@ -80,10 +143,20 @@
       "category": "inventory",
       "customer_value_score": 7,
       "business_health_score": 9,
-      "value_saved": {"hours_per_week": 6, "hourly_rate": 35, "annual_savings": 10920},
-      "value_created": {"description": "Reduced stockouts recover lost sales; reduced overstock frees working capital", "potential_revenue": 35000},
+      "value_saved": {
+        "hours_per_week": 6,
+        "hourly_rate": 35,
+        "annual_savings": 10920
+      },
+      "value_created": {
+        "description": "Reduced stockouts recover lost sales; reduced overstock frees working capital",
+        "potential_revenue": 35000
+      },
       "confidence": "medium",
-      "sources": ["Shopify sales data analysis", "IHL Group inventory distortion study 2025"],
+      "sources": [
+        "Shopify sales data analysis",
+        "IHL Group inventory distortion study 2025"
+      ],
       "time_horizon": "short"
     },
     {
@@ -93,9 +166,16 @@
       "category": "operations",
       "customer_value_score": 8,
       "business_health_score": 7,
-      "value_saved": {"hours_per_week": 12, "hourly_rate": 35, "annual_savings": 21840},
+      "value_saved": {
+        "hours_per_week": 12,
+        "hourly_rate": 35,
+        "annual_savings": 21840
+      },
       "confidence": "high",
-      "sources": ["ShipStation returns data", "Narvar returns benchmarking report 2025"],
+      "sources": [
+        "ShipStation returns data",
+        "Narvar returns benchmarking report 2025"
+      ],
       "time_horizon": "mid"
     },
     {
@@ -105,10 +185,20 @@
       "category": "content",
       "customer_value_score": 6,
       "business_health_score": 7,
-      "value_saved": {"hours_per_week": 14, "hourly_rate": 35, "annual_savings": 25480},
-      "value_created": {"description": "Better SEO content drives incremental organic traffic and conversions", "potential_revenue": 12000},
+      "value_saved": {
+        "hours_per_week": 14,
+        "hourly_rate": 35,
+        "annual_savings": 25480
+      },
+      "value_created": {
+        "description": "Better SEO content drives incremental organic traffic and conversions",
+        "potential_revenue": 12000
+      },
       "confidence": "medium",
-      "sources": ["Content production timeline analysis", "Ahrefs ecommerce SEO study 2025"],
+      "sources": [
+        "Content production timeline analysis",
+        "Ahrefs ecommerce SEO study 2025"
+      ],
       "time_horizon": "mid"
     },
     {
@@ -118,10 +208,20 @@
       "category": "marketing",
       "customer_value_score": 5,
       "business_health_score": 8,
-      "value_saved": {"hours_per_week": 4, "hourly_rate": 35, "annual_savings": 7280},
-      "value_created": {"description": "Better attribution reduces wasted ad spend and enables smarter budget allocation", "potential_revenue": 20000},
+      "value_saved": {
+        "hours_per_week": 4,
+        "hourly_rate": 35,
+        "annual_savings": 7280
+      },
+      "value_created": {
+        "description": "Better attribution reduces wasted ad spend and enables smarter budget allocation",
+        "potential_revenue": 20000
+      },
       "confidence": "low",
-      "sources": ["GA4 attribution data gaps analysis", "AppsFlyer/Singular attribution studies 2025"],
+      "sources": [
+        "GA4 attribution data gaps analysis",
+        "AppsFlyer/Singular attribution studies 2025"
+      ],
       "time_horizon": "long"
     }
   ],
@@ -137,52 +237,117 @@
       "priority": "high",
       "crb_analysis": {
         "cost": {
-          "short_term": {"setup": 1500, "monthly": 600},
-          "mid_term": {"monthly": 600},
-          "long_term": {"monthly": 600},
+          "short_term": {
+            "setup": 1500,
+            "monthly": 600
+          },
+          "mid_term": {
+            "monthly": 600
+          },
+          "long_term": {
+            "monthly": 600
+          },
           "total": 23100
         },
         "risk": [
-          {"description": "AI gives incorrect order status or sizing advice", "probability": "medium", "impact": 3, "mitigation": "Connect directly to Shopify/ShipStation APIs for real-time data; human review on first 500 conversations"},
-          {"description": "Customers frustrated by AI and demand human agent", "probability": "medium", "impact": 2, "mitigation": "Always offer clear escalation path; AI handles simple queries, humans handle complaints"}
+          {
+            "description": "AI gives incorrect order status or sizing advice",
+            "probability": "medium",
+            "impact": 3,
+            "mitigation": "Connect directly to Shopify/ShipStation APIs for real-time data; human review on first 500 conversations"
+          },
+          {
+            "description": "Customers frustrated by AI and demand human agent",
+            "probability": "medium",
+            "impact": 2,
+            "mitigation": "Always offer clear escalation path; AI handles simple queries, humans handle complaints"
+          }
         ],
         "benefit": {
-          "short_term": {"annual": 38000},
-          "mid_term": {"annual": 47000},
-          "long_term": {"annual": 55000},
+          "short_term": {
+            "annual": 38000
+          },
+          "mid_term": {
+            "annual": 47000
+          },
+          "long_term": {
+            "annual": 55000
+          },
           "total": 140000
         }
       },
       "options": {
-        "off_the_shelf": {
+        "targeted_upgrade": {
           "name": "Gorgias AI Add-on",
           "vendor": "Gorgias",
           "monthly_cost": 300,
           "implementation_weeks": 1,
-          "pros": ["Already integrated with your Gorgias stack", "No migration needed", "Quick to enable"],
-          "cons": ["Limited AI sophistication compared to dedicated tools", "Gorgias AI is still maturing", "Less control over conversation flows"]
+          "pros": [
+            "Already integrated with your Gorgias stack",
+            "No migration needed",
+            "Quick to enable"
+          ],
+          "cons": [
+            "Limited AI sophistication compared to dedicated tools",
+            "Gorgias AI is still maturing",
+            "Less control over conversation flows"
+          ]
         },
-        "best_in_class": {
+        "enhance_with_ai": {
           "name": "Siena AI",
           "vendor": "Siena AI",
           "monthly_cost": 500,
           "implementation_weeks": 3,
-          "pros": ["Purpose-built ecommerce AI agent", "Deep Shopify Plus integration", "Handles WISMO, returns, sizing natively", "Empathetic tone matches brand voice", "Supports multi-language (key for EU market)"],
-          "cons": ["Requires Gorgias integration or migration", "Higher monthly cost", "Setup requires conversation design"]
+          "pros": [
+            "Purpose-built ecommerce AI agent",
+            "Deep Shopify Plus integration",
+            "Handles WISMO, returns, sizing natively",
+            "Empathetic tone matches brand voice",
+            "Supports multi-language (key for EU market)"
+          ],
+          "cons": [
+            "Requires Gorgias integration or migration",
+            "Higher monthly cost",
+            "Setup requires conversation design"
+          ]
         },
-        "custom_solution": {
-          "approach": "Build custom AI support using Claude API connected to Shopify, ShipStation, and product database",
-          "estimated_cost": {"min": 18000, "max": 35000},
-          "implementation_weeks": 10,
-          "pros": ["Full control over AI behavior and brand voice", "No per-conversation fees at scale", "Deep product expertise possible"],
-          "cons": ["Significant development time", "Requires ongoing maintenance", "No vendor support or updates"]
+        "connect_and_automate": {
+          "approach": "Build custom AI support agent using Claude API + Shopify webhooks + ShipStation API for order and tracking context. With AI coding tools (Claude Code, Cursor), a developer can scaffold the Shopify integration, conversation flows, and escalation logic in 2-3 weeks. The Claude API handles the conversation intelligence natively.",
+          "estimated_cost": {
+            "min": 3500,
+            "max": 8000
+          },
+          "implementation_weeks": 3,
+          "pros": [
+            "Full control over AI behavior and brand voice",
+            "No per-conversation fees at scale",
+            "Deep product expertise possible",
+            "Claude API cost: ~€200/month for 1,800 conversations",
+            "AI coding tools cut development time by 60-70%"
+          ],
+          "cons": [
+            "Needs a developer comfortable with AI APIs",
+            "Ongoing maintenance and prompt tuning",
+            "No vendor support — you own the code"
+          ]
         }
       },
-      "our_recommendation": "best_in_class",
+      "our_recommendation": "connect_and_automate",
       "recommendation_rationale": "Siena AI is purpose-built for DTC ecommerce support and handles your top 3 ticket types (WISMO, returns, sizing) out of the box. Their Shopify Plus integration means the AI has real-time access to order and tracking data. At €500/month, it pays for itself if it deflects just 25% of current tickets. Multi-language support is critical for your European customer base.",
       "roi_percentage": 507,
       "payback_months": 2,
-      "assumptions": ["1,800 tickets/month", "65% are automatable", "AI achieves 60% deflection rate in month 3", "Agent cost: €35/hour fully loaded"]
+      "assumptions": [
+        "1,800 tickets/month",
+        "65% are automatable",
+        "AI achieves 60% deflection rate in month 3",
+        "Agent cost: €35/hour fully loaded"
+      ],
+      "net_scores": {
+        "targeted_upgrade": 5.8,
+        "enhance_with_ai": 8.4,
+        "connect_and_automate": 7.1,
+        "comparison_summary": "Siena AI offers the fastest path to support automation with zero dev work. But at €3.5-8K, custom is now genuinely competitive — especially at 1,800 tickets/month where per-conversation SaaS fees add up fast."
+      }
     },
     {
       "id": "r2",
@@ -195,52 +360,117 @@
       "priority": "high",
       "crb_analysis": {
         "cost": {
-          "short_term": {"setup": 800, "monthly": 350},
-          "mid_term": {"monthly": 350},
-          "long_term": {"monthly": 350},
+          "short_term": {
+            "setup": 800,
+            "monthly": 350
+          },
+          "mid_term": {
+            "monthly": 350
+          },
+          "long_term": {
+            "monthly": 350
+          },
           "total": 13400
         },
         "risk": [
-          {"description": "Forecast model needs 12+ months of historical data to be accurate", "probability": "low", "impact": 3, "mitigation": "You have 3+ years of Shopify data. Start with bestsellers where data is richest"},
-          {"description": "Over-reliance on AI forecasts without human judgment", "probability": "medium", "impact": 3, "mitigation": "Use AI as recommendation, not automation. Buyer approves all purchase orders"}
+          {
+            "description": "Forecast model needs 12+ months of historical data to be accurate",
+            "probability": "low",
+            "impact": 3,
+            "mitigation": "You have 3+ years of Shopify data. Start with bestsellers where data is richest"
+          },
+          {
+            "description": "Over-reliance on AI forecasts without human judgment",
+            "probability": "medium",
+            "impact": 3,
+            "mitigation": "Use AI as recommendation, not automation. Buyer approves all purchase orders"
+          }
         ],
         "benefit": {
-          "short_term": {"annual": 30000},
-          "mid_term": {"annual": 42000},
-          "long_term": {"annual": 48000},
+          "short_term": {
+            "annual": 30000
+          },
+          "mid_term": {
+            "annual": 42000
+          },
+          "long_term": {
+            "annual": 48000
+          },
           "total": 120000
         }
       },
       "options": {
-        "off_the_shelf": {
+        "targeted_upgrade": {
           "name": "Shopify Stocky",
           "vendor": "Shopify",
           "monthly_cost": 0,
           "implementation_weeks": 1,
-          "pros": ["Included with Shopify Plus", "No additional cost", "Basic demand forecasting"],
-          "cons": ["Very basic forecasting algorithms", "Limited seasonality handling", "No external data integration (weather, trends)"]
+          "pros": [
+            "Included with Shopify Plus",
+            "No additional cost",
+            "Basic demand forecasting"
+          ],
+          "cons": [
+            "Very basic forecasting algorithms",
+            "Limited seasonality handling",
+            "No external data integration (weather, trends)"
+          ]
         },
-        "best_in_class": {
+        "enhance_with_ai": {
           "name": "Inventory Planner",
           "vendor": "Inventory Planner (Sage)",
           "monthly_cost": 250,
           "implementation_weeks": 3,
-          "pros": ["Advanced ML-based forecasting", "Shopify Plus native integration", "Accounts for seasonality, trends, and promotions", "Automated purchase order generation", "Overstock alerts and markdown recommendations"],
-          "cons": ["Monthly cost scales with SKU count", "Requires clean historical data", "Learning curve for operations team"]
+          "pros": [
+            "Advanced ML-based forecasting",
+            "Shopify Plus native integration",
+            "Accounts for seasonality, trends, and promotions",
+            "Automated purchase order generation",
+            "Overstock alerts and markdown recommendations"
+          ],
+          "cons": [
+            "Monthly cost scales with SKU count",
+            "Requires clean historical data",
+            "Learning curve for operations team"
+          ]
         },
-        "custom_solution": {
-          "approach": "Build demand forecasting model using Prophet/LightGBM on historical Shopify data with weather and Google Trends inputs",
-          "estimated_cost": {"min": 20000, "max": 45000},
-          "implementation_weeks": 14,
-          "pros": ["Fully customized to your product categories", "Can incorporate unique data sources", "No ongoing per-SKU fees"],
-          "cons": ["Requires data engineering expertise", "Model maintenance and retraining needed", "Long time to production-ready accuracy"]
+        "connect_and_automate": {
+          "approach": "Build demand forecasting pipeline using Python (Prophet or LightGBM) pulling Shopify Plus sales data via API, with weather and Google Trends inputs. Pre-trained models and well-documented APIs make this a 3-4 week project with AI coding tools. The ML models handle seasonality natively.",
+          "estimated_cost": {
+            "min": 4000,
+            "max": 10000
+          },
+          "implementation_weeks": 4,
+          "pros": [
+            "Fully customized to your product categories and outdoor seasonality",
+            "Can incorporate weather data (critical for outdoor gear)",
+            "No ongoing per-SKU fees",
+            "Modern AI coding tools make ML pipelines accessible"
+          ],
+          "cons": [
+            "Needs someone comfortable with Python and data pipelines",
+            "Model accuracy improves over time — not instant",
+            "500+ SKUs adds complexity vs smaller catalogs"
+          ]
         }
       },
-      "our_recommendation": "best_in_class",
+      "our_recommendation": "connect_and_automate",
       "recommendation_rationale": "Inventory Planner is the leading forecasting tool for Shopify Plus brands and handles the exact complexity you face — seasonal outdoor gear with weather-dependent demand. At €250/month, it pays for itself if it prevents just one stockout on a bestselling product per quarter. Their purchase order automation will also save your operations team 6+ hours per week on manual reorder calculations.",
       "roi_percentage": 795,
       "payback_months": 2,
-      "assumptions": ["500+ active SKUs", "8% stockout rate on key products", "15% overstock across catalog", "€3.2M annual revenue baseline", "Forecasting improves accuracy by 40-60%"]
+      "assumptions": [
+        "500+ active SKUs",
+        "8% stockout rate on key products",
+        "15% overstock across catalog",
+        "€3.2M annual revenue baseline",
+        "Forecasting improves accuracy by 40-60%"
+      ],
+      "net_scores": {
+        "targeted_upgrade": 3.5,
+        "enhance_with_ai": 8.2,
+        "connect_and_automate": 6.5,
+        "comparison_summary": "Inventory Planner wins on proven ML forecasting and zero dev effort. But custom at €4-10K is no longer overkill — especially if you want to incorporate weather data and outdoor-specific demand signals that SaaS tools don't handle."
+      }
     },
     {
       "id": "r3",
@@ -253,123 +483,299 @@
       "priority": "medium",
       "crb_analysis": {
         "cost": {
-          "short_term": {"setup": 500, "monthly": 200},
-          "mid_term": {"monthly": 200},
-          "long_term": {"monthly": 200},
+          "short_term": {
+            "setup": 500,
+            "monthly": 200
+          },
+          "mid_term": {
+            "monthly": 200
+          },
+          "long_term": {
+            "monthly": 200
+          },
           "total": 7700
         },
         "risk": [
-          {"description": "AI-generated content sounds generic and doesn't match brand voice", "probability": "medium", "impact": 3, "mitigation": "Train AI with 20-30 of your best descriptions as examples. Human review on all content before publishing"},
-          {"description": "SEO content becomes outdated or penalized by algorithm changes", "probability": "low", "impact": 2, "mitigation": "Quarterly content refresh cycle. Monitor organic traffic for drops"}
+          {
+            "description": "AI-generated content sounds generic and doesn't match brand voice",
+            "probability": "medium",
+            "impact": 3,
+            "mitigation": "Train AI with 20-30 of your best descriptions as examples. Human review on all content before publishing"
+          },
+          {
+            "description": "SEO content becomes outdated or penalized by algorithm changes",
+            "probability": "low",
+            "impact": 2,
+            "mitigation": "Quarterly content refresh cycle. Monitor organic traffic for drops"
+          }
         ],
         "benefit": {
-          "short_term": {"annual": 12000},
-          "mid_term": {"annual": 18000},
-          "long_term": {"annual": 20000},
+          "short_term": {
+            "annual": 12000
+          },
+          "mid_term": {
+            "annual": 18000
+          },
+          "long_term": {
+            "annual": 20000
+          },
           "total": 50000
         }
       },
       "options": {
-        "off_the_shelf": {
+        "targeted_upgrade": {
           "name": "Shopify Magic",
           "vendor": "Shopify",
           "monthly_cost": 0,
           "implementation_weeks": 0,
-          "pros": ["Built into Shopify admin", "No additional cost", "Simple to use"],
-          "cons": ["Very basic generation", "No brand voice training", "Limited SEO optimization", "No bulk generation"]
+          "pros": [
+            "Built into Shopify admin",
+            "No additional cost",
+            "Simple to use"
+          ],
+          "cons": [
+            "Very basic generation",
+            "No brand voice training",
+            "Limited SEO optimization",
+            "No bulk generation"
+          ]
         },
-        "best_in_class": {
+        "enhance_with_ai": {
           "name": "Hypotenuse AI",
           "vendor": "Hypotenuse AI",
           "monthly_cost": 150,
           "implementation_weeks": 2,
-          "pros": ["Ecommerce-specific content AI", "Shopify integration for bulk generation", "Brand voice training", "SEO optimization built-in", "Multi-language support for EU markets"],
-          "cons": ["Monthly subscription adds up", "Still needs human review for quality", "Image-to-description quality varies"]
+          "pros": [
+            "Ecommerce-specific content AI",
+            "Shopify integration for bulk generation",
+            "Brand voice training",
+            "SEO optimization built-in",
+            "Multi-language support for EU markets"
+          ],
+          "cons": [
+            "Monthly subscription adds up",
+            "Still needs human review for quality",
+            "Image-to-description quality varies"
+          ]
         },
-        "custom_solution": {
-          "approach": "Build product content pipeline using Claude API with product feed, brand guidelines, and SEO requirements",
-          "estimated_cost": {"min": 8000, "max": 18000},
-          "implementation_weeks": 6,
-          "pros": ["Deeply trained on your brand voice", "Full control over SEO strategy", "No per-product fees at scale"],
-          "cons": ["Development and prompt engineering time", "Need to build Shopify sync", "Ongoing maintenance"]
+        "connect_and_automate": {
+          "approach": "Build product content pipeline using Claude API with your product feed, brand guidelines, SEO requirements, and Shopify sync. This is essentially prompt engineering with API wrappers — one of the simplest custom builds. A developer can build this in 1-2 weeks with AI coding tools. Claude excels at brand voice adaptation and multi-language content.",
+          "estimated_cost": {
+            "min": 2000,
+            "max": 5000
+          },
+          "implementation_weeks": 2,
+          "pros": [
+            "Deeply trained on your Scandinavian brand voice",
+            "Full control over SEO strategy",
+            "No per-product fees at scale",
+            "Claude API handles multi-language natively",
+            "Cheapest custom build — mostly prompt engineering"
+          ],
+          "cons": [
+            "Prompt tuning needed for each product category",
+            "Need to build Shopify sync (or use Zapier)",
+            "API costs scale with content volume (~€80-150/month for 500+ SKUs)"
+          ]
         }
       },
-      "our_recommendation": "best_in_class",
-      "recommendation_rationale": "Hypotenuse AI is purpose-built for ecommerce product content and has native Shopify integration for bulk generation. At €150/month, it's cheaper than the 8+ hours/week your team currently spends on content. Their brand voice training means output aligns with your premium Scandinavian positioning, and multi-language support is essential for your European markets.",
+      "our_recommendation": "connect_and_automate",
+      "recommendation_rationale": "Hypotenuse AI is purpose-built for ecommerce product content and has native Shopify integration for bulk generation. At €150/month, it's cheaper than the 8+ hours/week your team currently spends on content. Their brand voice training means output aligns with your premium Scandinavian positioning, and multi-language support is essential for your European markets. That said, a custom Claude API pipeline at €2-5K is worth considering if you want deeper brand voice control.",
       "roi_percentage": 549,
       "payback_months": 3,
-      "assumptions": ["500+ active SKUs needing descriptions", "60% of one FTE currently on content", "AI reduces content creation time by 75%", "15% organic traffic increase over 6 months"]
+      "assumptions": [
+        "500+ active SKUs needing descriptions",
+        "60% of one FTE currently on content",
+        "AI reduces content creation time by 75%",
+        "15% organic traffic increase over 6 months"
+      ],
+      "net_scores": {
+        "targeted_upgrade": 4.0,
+        "enhance_with_ai": 7.6,
+        "connect_and_automate": 7.4,
+        "comparison_summary": "Hypotenuse AI wins slightly on out-of-the-box Shopify sync and bulk generation. But custom at €2-5K is nearly as good and gives you full control over brand voice — especially relevant for premium positioning."
+      }
     }
   ],
   "roadmap": {
     "short_term": [
-      {"title": "Deploy AI Customer Support", "description": "Implement Siena AI for WISMO, returns, and sizing queries across Shopify and Gorgias", "timeline": "Month 1-2", "expected_outcome": "60% ticket deflection, response time under 30 seconds"},
-      {"title": "Implement Inventory Forecasting", "description": "Set up Inventory Planner with historical Shopify data, configure for seasonal products", "timeline": "Month 2-3", "expected_outcome": "Reduce stockout rate from 8% to 3%, reduce overstock by 40%"}
+      {
+        "title": "Deploy AI Customer Support",
+        "description": "Implement Siena AI for WISMO, returns, and sizing queries across Shopify and Gorgias",
+        "timeline": "Month 1-2",
+        "expected_outcome": "60% ticket deflection, response time under 30 seconds"
+      },
+      {
+        "title": "Implement Inventory Forecasting",
+        "description": "Set up Inventory Planner with historical Shopify data, configure for seasonal products",
+        "timeline": "Month 2-3",
+        "expected_outcome": "Reduce stockout rate from 8% to 3%, reduce overstock by 40%"
+      }
     ],
     "mid_term": [
-      {"title": "Automate Returns Processing", "description": "Implement self-service returns portal with automated label generation and refund processing", "timeline": "Month 4-5", "expected_outcome": "Reduce per-return processing cost from €12 to €4"},
-      {"title": "AI Product Content Generation", "description": "Roll out Hypotenuse AI for product descriptions, SEO metadata, and translations", "timeline": "Month 5-6", "expected_outcome": "Full catalog optimized, new products launch with content day one"}
+      {
+        "title": "Automate Returns Processing",
+        "description": "Implement self-service returns portal with automated label generation and refund processing",
+        "timeline": "Month 4-5",
+        "expected_outcome": "Reduce per-return processing cost from €12 to €4"
+      },
+      {
+        "title": "AI Product Content Generation",
+        "description": "Roll out Hypotenuse AI for product descriptions, SEO metadata, and translations",
+        "timeline": "Month 5-6",
+        "expected_outcome": "Full catalog optimized, new products launch with content day one"
+      }
     ],
     "long_term": [
-      {"title": "Attribution & Marketing Intelligence", "description": "Implement server-side tracking and post-purchase surveys for better channel attribution", "timeline": "Month 9-12", "expected_outcome": "Attribute 80%+ of conversions, reduce wasted ad spend by 20%"},
-      {"title": "Predictive Customer Engagement", "description": "Use AI to predict churn risk and automate retention campaigns via Klaviyo", "timeline": "Year 2", "expected_outcome": "Increase repeat purchase rate by 15%, reduce churn by 10%"}
+      {
+        "title": "Attribution & Marketing Intelligence",
+        "description": "Implement server-side tracking and post-purchase surveys for better channel attribution",
+        "timeline": "Month 9-12",
+        "expected_outcome": "Attribute 80%+ of conversions, reduce wasted ad spend by 20%"
+      },
+      {
+        "title": "Predictive Customer Engagement",
+        "description": "Use AI to predict churn risk and automate retention campaigns via Klaviyo",
+        "timeline": "Year 2",
+        "expected_outcome": "Increase repeat purchase rate by 15%, reduce churn by 10%"
+      }
     ]
   },
   "playbooks": [
     {
       "id": "pb1",
       "recommendation_id": "r1",
-      "option_type": "best_in_class",
+      "option_type": "enhance_with_ai",
       "total_weeks": 5,
       "phases": [
         {
           "name": "Setup & Configuration",
           "week": 1,
           "tasks": [
-            {"id": "t1", "title": "Sign up for Siena AI", "description": "Start trial and connect Shopify Plus store with full order/product data access"},
-            {"id": "t2", "title": "Connect Gorgias integration", "description": "Enable Siena AI to work within your existing Gorgias helpdesk workflow"},
-            {"id": "t3", "title": "Connect ShipStation for tracking", "description": "Give AI real-time access to tracking data for WISMO queries"},
-            {"id": "t4", "title": "Define brand voice and tone", "description": "Provide 20 example conversations showing your preferred communication style"}
+            {
+              "id": "t1",
+              "title": "Sign up for Siena AI",
+              "description": "Start trial and connect Shopify Plus store with full order/product data access"
+            },
+            {
+              "id": "t2",
+              "title": "Connect Gorgias integration",
+              "description": "Enable Siena AI to work within your existing Gorgias helpdesk workflow"
+            },
+            {
+              "id": "t3",
+              "title": "Connect ShipStation for tracking",
+              "description": "Give AI real-time access to tracking data for WISMO queries"
+            },
+            {
+              "id": "t4",
+              "title": "Define brand voice and tone",
+              "description": "Provide 20 example conversations showing your preferred communication style"
+            }
           ]
         },
         {
           "name": "Conversation Design",
           "week": 2,
           "tasks": [
-            {"id": "t5", "title": "Configure WISMO flows", "description": "Set up order status lookup, tracking updates, and delivery estimate responses"},
-            {"id": "t6", "title": "Configure returns flows", "description": "Build return eligibility checking, label generation, and refund status responses"},
-            {"id": "t7", "title": "Configure sizing assistance", "description": "Load size charts and fit recommendations per product category"},
-            {"id": "t8", "title": "Define escalation rules", "description": "Set when AI hands off to human: complaints, damaged items, VIP customers"}
+            {
+              "id": "t5",
+              "title": "Configure WISMO flows",
+              "description": "Set up order status lookup, tracking updates, and delivery estimate responses"
+            },
+            {
+              "id": "t6",
+              "title": "Configure returns flows",
+              "description": "Build return eligibility checking, label generation, and refund status responses"
+            },
+            {
+              "id": "t7",
+              "title": "Configure sizing assistance",
+              "description": "Load size charts and fit recommendations per product category"
+            },
+            {
+              "id": "t8",
+              "title": "Define escalation rules",
+              "description": "Set when AI hands off to human: complaints, damaged items, VIP customers"
+            }
           ]
         },
         {
           "name": "Pilot & Testing",
           "week": 3,
           "tasks": [
-            {"id": "t9", "title": "Enable on 20% of traffic", "description": "Route one in five chat conversations to AI agent for testing"},
-            {"id": "t10", "title": "Monitor conversation quality daily", "description": "Review AI responses for accuracy, tone, and resolution"},
-            {"id": "t11", "title": "Collect customer satisfaction scores", "description": "Compare CSAT for AI-handled vs human-handled tickets"},
-            {"id": "t12", "title": "Fix common failure cases", "description": "Update AI training for any patterns it handles poorly"}
+            {
+              "id": "t9",
+              "title": "Enable on 20% of traffic",
+              "description": "Route one in five chat conversations to AI agent for testing"
+            },
+            {
+              "id": "t10",
+              "title": "Monitor conversation quality daily",
+              "description": "Review AI responses for accuracy, tone, and resolution"
+            },
+            {
+              "id": "t11",
+              "title": "Collect customer satisfaction scores",
+              "description": "Compare CSAT for AI-handled vs human-handled tickets"
+            },
+            {
+              "id": "t12",
+              "title": "Fix common failure cases",
+              "description": "Update AI training for any patterns it handles poorly"
+            }
           ]
         },
         {
           "name": "Full Rollout",
           "week": 4,
           "tasks": [
-            {"id": "t13", "title": "Enable on 100% of traffic", "description": "Roll out AI to all incoming support conversations"},
-            {"id": "t14", "title": "Reduce agent hours", "description": "Adjust support team schedule based on reduced human ticket volume"},
-            {"id": "t15", "title": "Enable email channel", "description": "Extend AI support from chat to email tickets"},
-            {"id": "t16", "title": "Add multilingual support", "description": "Enable Dutch, German, and French for EU customers"}
+            {
+              "id": "t13",
+              "title": "Enable on 100% of traffic",
+              "description": "Roll out AI to all incoming support conversations"
+            },
+            {
+              "id": "t14",
+              "title": "Reduce agent hours",
+              "description": "Adjust support team schedule based on reduced human ticket volume"
+            },
+            {
+              "id": "t15",
+              "title": "Enable email channel",
+              "description": "Extend AI support from chat to email tickets"
+            },
+            {
+              "id": "t16",
+              "title": "Add multilingual support",
+              "description": "Enable Dutch, German, and French for EU customers"
+            }
           ]
         },
         {
           "name": "Optimize & Measure",
           "week": 5,
           "tasks": [
-            {"id": "t17", "title": "Calculate deflection rate and cost savings", "description": "Measure percentage of tickets fully resolved by AI without human intervention"},
-            {"id": "t18", "title": "Compare response times before/after", "description": "Benchmark first response time improvement"},
-            {"id": "t19", "title": "Review CSAT trends", "description": "Ensure customer satisfaction hasn't dropped with AI handling"},
-            {"id": "t20", "title": "Plan proactive support features", "description": "Evaluate adding proactive shipping delay notifications"}
+            {
+              "id": "t17",
+              "title": "Calculate deflection rate and cost savings",
+              "description": "Measure percentage of tickets fully resolved by AI without human intervention"
+            },
+            {
+              "id": "t18",
+              "title": "Compare response times before/after",
+              "description": "Benchmark first response time improvement"
+            },
+            {
+              "id": "t19",
+              "title": "Review CSAT trends",
+              "description": "Ensure customer satisfaction hasn't dropped with AI handling"
+            },
+            {
+              "id": "t20",
+              "title": "Plan proactive support features",
+              "description": "Evaluate adding proactive shipping delay notifications"
+            }
           ]
         }
       ],
@@ -382,57 +788,137 @@
     {
       "id": "pb2",
       "recommendation_id": "r2",
-      "option_type": "best_in_class",
+      "option_type": "enhance_with_ai",
       "total_weeks": 5,
       "phases": [
         {
           "name": "Data Connection & Setup",
           "week": 1,
           "tasks": [
-            {"id": "t1", "title": "Sign up for Inventory Planner", "description": "Start trial and connect to Shopify Plus for historical sales data sync"},
-            {"id": "t2", "title": "Verify data quality", "description": "Check that 3+ years of historical order data imported correctly"},
-            {"id": "t3", "title": "Configure product categories", "description": "Set up product groupings that match your buying and seasonality patterns"},
-            {"id": "t4", "title": "Set lead times per supplier", "description": "Input vendor lead times for accurate reorder point calculations"}
+            {
+              "id": "t1",
+              "title": "Sign up for Inventory Planner",
+              "description": "Start trial and connect to Shopify Plus for historical sales data sync"
+            },
+            {
+              "id": "t2",
+              "title": "Verify data quality",
+              "description": "Check that 3+ years of historical order data imported correctly"
+            },
+            {
+              "id": "t3",
+              "title": "Configure product categories",
+              "description": "Set up product groupings that match your buying and seasonality patterns"
+            },
+            {
+              "id": "t4",
+              "title": "Set lead times per supplier",
+              "description": "Input vendor lead times for accurate reorder point calculations"
+            }
           ]
         },
         {
           "name": "Model Training & Calibration",
           "week": 2,
           "tasks": [
-            {"id": "t5", "title": "Run initial forecasts on top 50 SKUs", "description": "Generate demand predictions for bestsellers and compare to historical actuals"},
-            {"id": "t6", "title": "Adjust seasonality profiles", "description": "Calibrate seasonal multipliers for outdoor gear categories (hiking peaks summer, skiing peaks winter)"},
-            {"id": "t7", "title": "Configure safety stock rules", "description": "Set minimum stock levels based on demand variability and lead times"},
-            {"id": "t8", "title": "Test purchase order generation", "description": "Generate sample POs and verify quantities and timing make sense"}
+            {
+              "id": "t5",
+              "title": "Run initial forecasts on top 50 SKUs",
+              "description": "Generate demand predictions for bestsellers and compare to historical actuals"
+            },
+            {
+              "id": "t6",
+              "title": "Adjust seasonality profiles",
+              "description": "Calibrate seasonal multipliers for outdoor gear categories (hiking peaks summer, skiing peaks winter)"
+            },
+            {
+              "id": "t7",
+              "title": "Configure safety stock rules",
+              "description": "Set minimum stock levels based on demand variability and lead times"
+            },
+            {
+              "id": "t8",
+              "title": "Test purchase order generation",
+              "description": "Generate sample POs and verify quantities and timing make sense"
+            }
           ]
         },
         {
           "name": "Expand to Full Catalog",
           "week": 3,
           "tasks": [
-            {"id": "t9", "title": "Enable forecasting for all 500+ SKUs", "description": "Extend ML forecasting to the full product catalog"},
-            {"id": "t10", "title": "Set up overstock alerts", "description": "Configure notifications for slow-moving inventory that needs markdown"},
-            {"id": "t11", "title": "Create reorder dashboard", "description": "Build daily view of items approaching reorder point"},
-            {"id": "t12", "title": "Train operations team", "description": "30-minute session on reading forecasts and approving POs"}
+            {
+              "id": "t9",
+              "title": "Enable forecasting for all 500+ SKUs",
+              "description": "Extend ML forecasting to the full product catalog"
+            },
+            {
+              "id": "t10",
+              "title": "Set up overstock alerts",
+              "description": "Configure notifications for slow-moving inventory that needs markdown"
+            },
+            {
+              "id": "t11",
+              "title": "Create reorder dashboard",
+              "description": "Build daily view of items approaching reorder point"
+            },
+            {
+              "id": "t12",
+              "title": "Train operations team",
+              "description": "30-minute session on reading forecasts and approving POs"
+            }
           ]
         },
         {
           "name": "Process Integration",
           "week": 4,
           "tasks": [
-            {"id": "t13", "title": "Replace spreadsheet forecasting", "description": "Officially retire the old spreadsheet-based forecasting process"},
-            {"id": "t14", "title": "Automate PO drafts", "description": "Set up automated purchase order generation for buyer approval"},
-            {"id": "t15", "title": "Connect to marketing calendar", "description": "Input planned promotions and campaigns to adjust demand forecasts"},
-            {"id": "t16", "title": "Set up weekly forecast review", "description": "Establish 30-minute weekly review with operations and buying team"}
+            {
+              "id": "t13",
+              "title": "Replace spreadsheet forecasting",
+              "description": "Officially retire the old spreadsheet-based forecasting process"
+            },
+            {
+              "id": "t14",
+              "title": "Automate PO drafts",
+              "description": "Set up automated purchase order generation for buyer approval"
+            },
+            {
+              "id": "t15",
+              "title": "Connect to marketing calendar",
+              "description": "Input planned promotions and campaigns to adjust demand forecasts"
+            },
+            {
+              "id": "t16",
+              "title": "Set up weekly forecast review",
+              "description": "Establish 30-minute weekly review with operations and buying team"
+            }
           ]
         },
         {
           "name": "Measure & Optimize",
           "week": 5,
           "tasks": [
-            {"id": "t17", "title": "Compare stockout rate to baseline", "description": "Measure stockout rate improvement from 8% baseline"},
-            {"id": "t18", "title": "Calculate overstock reduction", "description": "Measure working capital freed from reduced overstock"},
-            {"id": "t19", "title": "Review forecast accuracy", "description": "Compare predictions to actuals and identify categories needing tuning"},
-            {"id": "t20", "title": "Plan for peak season", "description": "Ensure forecasting is calibrated for upcoming seasonal demand changes"}
+            {
+              "id": "t17",
+              "title": "Compare stockout rate to baseline",
+              "description": "Measure stockout rate improvement from 8% baseline"
+            },
+            {
+              "id": "t18",
+              "title": "Calculate overstock reduction",
+              "description": "Measure working capital freed from reduced overstock"
+            },
+            {
+              "id": "t19",
+              "title": "Review forecast accuracy",
+              "description": "Compare predictions to actuals and identify categories needing tuning"
+            },
+            {
+              "id": "t20",
+              "title": "Plan for peak season",
+              "description": "Ensure forecasting is calibrated for upcoming seasonal demand changes"
+            }
           ]
         }
       ],
@@ -445,75 +931,435 @@
   ],
   "system_architecture": {
     "existing_tools": [
-      {"name": "Shopify Plus", "category": "Ecommerce Platform", "api_score": 10},
-      {"name": "Klaviyo", "category": "Email Marketing", "api_score": 9},
-      {"name": "Gorgias", "category": "Customer Support", "api_score": 8},
-      {"name": "Google Analytics 4", "category": "Analytics", "api_score": 7},
-      {"name": "ShipStation", "category": "Shipping & Fulfillment", "api_score": 8}
+      {
+        "id": "et1",
+        "name": "Shopify Plus",
+        "category": "Ecommerce Platform",
+        "monthly_cost": 2300,
+        "one_time_cost": 0,
+        "crb": {
+          "cost": "€2,300/month",
+          "risk": "Minimal - industry-leading platform",
+          "risk_level": "low",
+          "benefit": "Full ecommerce stack with excellent API",
+          "powers": [
+            "Storefront",
+            "Orders",
+            "Inventory",
+            "Analytics"
+          ]
+        },
+        "is_existing": true
+      },
+      {
+        "id": "et2",
+        "name": "Klaviyo",
+        "category": "Email Marketing",
+        "monthly_cost": 150,
+        "one_time_cost": 0,
+        "crb": {
+          "cost": "€150/month",
+          "risk": "Low - established email platform",
+          "risk_level": "low",
+          "benefit": "Advanced email/SMS automation",
+          "powers": [
+            "Email campaigns",
+            "SMS marketing",
+            "Segmentation",
+            "Flows"
+          ]
+        },
+        "is_existing": true
+      },
+      {
+        "id": "et3",
+        "name": "Gorgias",
+        "category": "Customer Support",
+        "monthly_cost": 300,
+        "one_time_cost": 0,
+        "crb": {
+          "cost": "€300/month",
+          "risk": "Low - purpose-built for ecommerce",
+          "risk_level": "low",
+          "benefit": "Unified support with Shopify context",
+          "powers": [
+            "Helpdesk",
+            "Live chat",
+            "Ticket management"
+          ]
+        },
+        "is_existing": true
+      },
+      {
+        "id": "et4",
+        "name": "Google Analytics 4",
+        "category": "Analytics",
+        "monthly_cost": 0,
+        "one_time_cost": 0,
+        "crb": {
+          "cost": "Free",
+          "risk": "Medium - privacy regulation changes",
+          "risk_level": "medium",
+          "benefit": "Web analytics and conversion tracking",
+          "powers": [
+            "Traffic analysis",
+            "Conversion tracking",
+            "Audience insights"
+          ]
+        },
+        "is_existing": true
+      },
+      {
+        "id": "et5",
+        "name": "ShipStation",
+        "category": "Shipping & Fulfillment",
+        "monthly_cost": 160,
+        "one_time_cost": 0,
+        "crb": {
+          "cost": "€160/month",
+          "risk": "Low - reliable shipping platform",
+          "risk_level": "low",
+          "benefit": "Multi-carrier shipping automation",
+          "powers": [
+            "Label printing",
+            "Tracking",
+            "Rate shopping"
+          ]
+        },
+        "is_existing": true
+      }
     ],
     "ai_layer": [
-      {"name": "Siena AI", "purpose": "AI customer support agent for WISMO, returns, sizing"},
-      {"name": "Inventory Planner", "purpose": "ML-driven demand forecasting and reorder optimization"},
-      {"name": "Hypotenuse AI", "purpose": "Product content generation and SEO optimization"}
+      {
+        "id": "ai1",
+        "name": "Siena AI",
+        "category": "AI Customer Support",
+        "monthly_cost": 500,
+        "one_time_cost": 1500,
+        "crb": {
+          "cost": "€500/month + €1.5K setup",
+          "risk": "Medium - requires conversation design",
+          "risk_level": "medium",
+          "benefit": "60% support ticket deflection",
+          "powers": [
+            "WISMO handling",
+            "Returns processing",
+            "Sizing recommendations",
+            "Multi-language"
+          ]
+        },
+        "is_existing": false
+      },
+      {
+        "id": "ai2",
+        "name": "Inventory Planner",
+        "category": "AI Forecasting",
+        "monthly_cost": 250,
+        "one_time_cost": 800,
+        "crb": {
+          "cost": "€250/month + €800 setup",
+          "risk": "Low - proven Shopify integration",
+          "risk_level": "low",
+          "benefit": "40-60% better demand forecasting accuracy",
+          "powers": [
+            "Demand forecasting",
+            "Reorder optimization",
+            "Overstock alerts",
+            "PO automation"
+          ]
+        },
+        "is_existing": false
+      },
+      {
+        "id": "ai3",
+        "name": "Hypotenuse AI",
+        "category": "AI Content",
+        "monthly_cost": 150,
+        "one_time_cost": 500,
+        "crb": {
+          "cost": "€150/month + €500 setup",
+          "risk": "Low - content review catches errors",
+          "risk_level": "low",
+          "benefit": "75% faster product content creation",
+          "powers": [
+            "Product descriptions",
+            "SEO metadata",
+            "Translations",
+            "Brand voice"
+          ]
+        },
+        "is_existing": false
+      }
     ],
     "automations": [
-      {"from": "Shopify Plus", "to": "Siena AI", "data": "Orders, products, customers", "direction": "read"},
-      {"from": "ShipStation", "to": "Siena AI", "data": "Tracking and shipping status", "direction": "read"},
-      {"from": "Gorgias", "to": "Siena AI", "data": "Support tickets, conversations", "direction": "bidirectional"},
-      {"from": "Shopify Plus", "to": "Inventory Planner", "data": "Sales history, stock levels", "direction": "bidirectional"},
-      {"from": "Shopify Plus", "to": "Hypotenuse AI", "data": "Product catalog, images", "direction": "read"}
+      {
+        "id": "auto1",
+        "name": "AI Support Routing",
+        "trigger": "Customer submits support ticket via chat or email",
+        "action": "Siena AI resolves WISMO, returns, and sizing queries; escalates complex issues to human agents",
+        "tools_used": [
+          "Siena AI",
+          "Gorgias",
+          "Shopify Plus",
+          "ShipStation"
+        ]
+      },
+      {
+        "id": "auto2",
+        "name": "Demand Forecast & Reorder",
+        "trigger": "Daily sales data sync from Shopify",
+        "action": "Inventory Planner generates demand forecasts and recommends purchase orders for buyer approval",
+        "tools_used": [
+          "Inventory Planner",
+          "Shopify Plus"
+        ]
+      },
+      {
+        "id": "auto3",
+        "name": "Product Content Pipeline",
+        "trigger": "New product added to Shopify catalog",
+        "action": "Hypotenuse AI generates SEO-optimized description and metadata for review",
+        "tools_used": [
+          "Hypotenuse AI",
+          "Shopify Plus"
+        ]
+      }
     ],
     "connections": [
-      {"source": "Orders", "target": "Siena AI", "description": "Real-time order data for WISMO queries"},
-      {"source": "Tracking", "target": "Siena AI", "description": "ShipStation tracking for delivery status"},
-      {"source": "Sales History", "target": "Inventory Planner", "description": "3+ years of order data for ML forecasting"},
-      {"source": "Product Catalog", "target": "Hypotenuse AI", "description": "Product specs and images for content generation"}
+      {
+        "id": "conn1",
+        "from_node": "et1",
+        "to_node": "ai1",
+        "data_flow": "Orders, products, customer data for support context",
+        "integration_type": "api"
+      },
+      {
+        "id": "conn2",
+        "from_node": "et5",
+        "to_node": "ai1",
+        "data_flow": "Tracking and shipping status for WISMO",
+        "integration_type": "api"
+      },
+      {
+        "id": "conn3",
+        "from_node": "et3",
+        "to_node": "ai1",
+        "data_flow": "Support tickets and conversation history",
+        "integration_type": "native"
+      },
+      {
+        "id": "conn4",
+        "from_node": "et1",
+        "to_node": "ai2",
+        "data_flow": "Sales history, stock levels, product data",
+        "integration_type": "native"
+      },
+      {
+        "id": "conn5",
+        "from_node": "et1",
+        "to_node": "ai3",
+        "data_flow": "Product catalog, images, specifications",
+        "integration_type": "api"
+      }
     ],
     "cost_comparison": {
-      "current_annual": 0,
-      "proposed_annual": 10800,
-      "savings_annual": 98000,
-      "net_benefit": 87200
+      "saas_route": {
+        "items": [
+          {
+            "name": "Siena AI",
+            "monthly_cost": 500,
+            "one_time_cost": 1500
+          },
+          {
+            "name": "Inventory Planner",
+            "monthly_cost": 250,
+            "one_time_cost": 800
+          },
+          {
+            "name": "Hypotenuse AI",
+            "monthly_cost": 150,
+            "one_time_cost": 500
+          }
+        ],
+        "total_monthly": 900,
+        "total_one_time": 2800
+      },
+      "diy_route": {
+        "items": [
+          {
+            "name": "Custom AI support (Claude API + Shopify + ShipStation)",
+            "monthly_cost": 200,
+            "one_time_cost": 5500
+          },
+          {
+            "name": "Custom forecasting (Prophet + Shopify data + weather)",
+            "monthly_cost": 60,
+            "one_time_cost": 7000
+          },
+          {
+            "name": "Custom content pipeline (Claude API + Shopify sync)",
+            "monthly_cost": 120,
+            "one_time_cost": 3500
+          }
+        ],
+        "total_monthly": 380,
+        "total_one_time": 16000,
+        "note": "2026 pricing reflects AI-assisted development (Claude Code, Cursor). Shopify Plus APIs, ShipStation, and Prophet are all well-documented. A solo developer or small AI agency can ship these integrations in weeks, not months."
+      },
+      "monthly_savings": 520,
+      "savings_percentage": 58,
+      "build_cost": 16000,
+      "breakeven_months": 31
     }
   },
   "industry_insights": {
     "industry": "ecommerce",
     "industry_display_name": "Ecommerce - Direct to Consumer",
     "adoption_stats": [
-      {"metric": "DTC brands using AI for customer support", "value": "34%", "source": "Shopify Commerce Trends 2025"},
-      {"metric": "Revenue increase from AI inventory optimization", "value": "15-25%", "source": "McKinsey Supply Chain Report 2025"},
-      {"metric": "Support cost reduction with AI agents", "value": "40-60%", "source": "Gartner Customer Service AI Study 2025"},
-      {"metric": "Content creation time reduction with AI", "value": "70-80%", "source": "Content Marketing Institute 2025"}
+      {
+        "capability": "AI Customer Support",
+        "adoption_percentage": 34,
+        "average_outcome": "40-60% support cost reduction with maintained CSAT"
+      },
+      {
+        "capability": "AI Inventory Forecasting",
+        "adoption_percentage": 22,
+        "average_outcome": "15-25% revenue increase from optimized stock levels"
+      },
+      {
+        "capability": "AI Content Generation",
+        "adoption_percentage": 41,
+        "average_outcome": "70-80% faster product content creation"
+      },
+      {
+        "capability": "AI-Powered Returns",
+        "adoption_percentage": 18,
+        "average_outcome": "50% reduction in per-return processing cost"
+      }
     ],
     "opportunity_map": {
-      "high_impact_low_effort": ["AI customer support automation", "Product content generation"],
-      "high_impact_high_effort": ["Inventory forecasting AI", "Marketing attribution modeling"],
-      "low_impact_low_effort": ["Automated review responses", "Social media content scheduling"],
-      "low_impact_high_effort": ["Custom recommendation engine", "Fully autonomous returns processing"]
+      "emerging": [
+        "Marketing attribution modeling",
+        "Custom recommendation engine",
+        "Autonomous returns processing"
+      ],
+      "growing": [
+        "AI customer support automation",
+        "Inventory forecasting AI",
+        "Product content generation"
+      ],
+      "established": [
+        "Automated review responses",
+        "Social media content scheduling",
+        "Email marketing automation"
+      ],
+      "best_fit": "growing",
+      "rationale": "Your Shopify Plus stack and growth rate make growing-stage AI tools ideal — proven ROI with competitive advantage over brands still using manual processes."
     },
     "social_proof": [
-      {"quote": "We reduced support costs by 52% in 6 months while improving our CSAT score by 8 points", "source": "Head of CX, DTC apparel brand (€5M revenue)"},
-      {"quote": "AI forecasting cut our stockout rate from 12% to 2%. That alone paid for every AI tool we use", "source": "COO, European outdoor equipment retailer"}
+      {
+        "quote": "We reduced support costs by 52% in 6 months while improving our CSAT score by 8 points.",
+        "company_description": "DTC apparel brand with €5M revenue",
+        "outcome": "52% support cost reduction",
+        "industry": "Ecommerce - Apparel"
+      },
+      {
+        "quote": "AI forecasting cut our stockout rate from 12% to 2%. That alone paid for every AI tool we use.",
+        "company_description": "European outdoor equipment retailer",
+        "outcome": "Stockout rate reduced from 12% to 2%",
+        "industry": "Ecommerce - Outdoor"
+      }
     ]
   },
   "automation_summary": {
     "stack_assessment": {
       "tools": [
-        {"name": "Shopify Plus", "slug": "shopify-plus", "api_score": 10, "category": "Ecommerce Platform"},
-        {"name": "Klaviyo", "slug": "klaviyo", "api_score": 9, "category": "Email Marketing"},
-        {"name": "Gorgias", "slug": "gorgias", "api_score": 8, "category": "Customer Support"},
-        {"name": "Google Analytics 4", "slug": "google-analytics-4", "api_score": 7, "category": "Analytics"},
-        {"name": "ShipStation", "slug": "shipstation", "api_score": 8, "category": "Shipping & Fulfillment"}
+        {
+          "name": "Shopify Plus",
+          "slug": "shopify-plus",
+          "api_score": 10,
+          "category": "Ecommerce Platform"
+        },
+        {
+          "name": "Klaviyo",
+          "slug": "klaviyo",
+          "api_score": 9,
+          "category": "Email Marketing"
+        },
+        {
+          "name": "Gorgias",
+          "slug": "gorgias",
+          "api_score": 8,
+          "category": "Customer Support"
+        },
+        {
+          "name": "Google Analytics 4",
+          "slug": "google-analytics-4",
+          "api_score": 7,
+          "category": "Analytics"
+        },
+        {
+          "name": "ShipStation",
+          "slug": "shipstation",
+          "api_score": 8,
+          "category": "Shipping & Fulfillment"
+        }
       ],
       "average_score": 8.4,
       "verdict": "strong_foundation",
       "verdict_text": "Your Shopify Plus stack has excellent API support across all tools. AI integrations will be straightforward with minimal custom development needed."
     },
     "opportunities": [
-      {"finding_id": "f1", "title": "AI Customer Support Automation", "impact_monthly": 3980, "diy_effort_hours": 6, "approach": "Connect", "tools_involved": ["Siena AI", "Gorgias", "Shopify Plus"], "category": "customer_support"},
-      {"finding_id": "f2", "title": "AI Inventory Forecasting", "impact_monthly": 3827, "diy_effort_hours": 8, "approach": "Connect", "tools_involved": ["Inventory Planner", "Shopify Plus"], "category": "inventory"},
-      {"finding_id": "f3", "title": "Returns Processing Automation", "impact_monthly": 1820, "diy_effort_hours": 10, "approach": "Connect", "tools_involved": ["Loop Returns", "Shopify Plus", "ShipStation"], "category": "operations"},
-      {"finding_id": "f4", "title": "AI Product Content Generation", "impact_monthly": 3123, "diy_effort_hours": 4, "approach": "Connect", "tools_involved": ["Hypotenuse AI", "Shopify Plus"], "category": "content"}
+      {
+        "finding_id": "f1",
+        "title": "AI Customer Support Automation",
+        "impact_monthly": 3980,
+        "diy_effort_hours": 6,
+        "approach": "Connect",
+        "tools_involved": [
+          "Siena AI",
+          "Gorgias",
+          "Shopify Plus"
+        ],
+        "category": "customer_support"
+      },
+      {
+        "finding_id": "f2",
+        "title": "AI Inventory Forecasting",
+        "impact_monthly": 3827,
+        "diy_effort_hours": 8,
+        "approach": "Connect",
+        "tools_involved": [
+          "Inventory Planner",
+          "Shopify Plus"
+        ],
+        "category": "inventory"
+      },
+      {
+        "finding_id": "f3",
+        "title": "Returns Processing Automation",
+        "impact_monthly": 1820,
+        "diy_effort_hours": 10,
+        "approach": "Connect",
+        "tools_involved": [
+          "Loop Returns",
+          "Shopify Plus",
+          "ShipStation"
+        ],
+        "category": "operations"
+      },
+      {
+        "finding_id": "f4",
+        "title": "AI Product Content Generation",
+        "impact_monthly": 3123,
+        "diy_effort_hours": 4,
+        "approach": "Connect",
+        "tools_involved": [
+          "Hypotenuse AI",
+          "Shopify Plus"
+        ],
+        "category": "content"
+      }
     ],
     "total_monthly_impact": 12750,
     "total_diy_hours": 28,
@@ -529,8 +1375,19 @@
     }
   },
   "methodology_notes": {
-    "data_sources": ["Company interview", "Shopify analytics data", "Gorgias ticket analysis", "Industry benchmarks"],
-    "assumptions": ["12 employees", "€3.2M annual revenue", "Operations staff rate €35/hour", "35% YoY growth rate", "13,500 orders/month"],
+    "data_sources": [
+      "Company interview",
+      "Shopify analytics data",
+      "Gorgias ticket analysis",
+      "Industry benchmarks"
+    ],
+    "assumptions": [
+      "12 employees",
+      "€3.2M annual revenue",
+      "Operations staff rate €35/hour",
+      "35% YoY growth rate",
+      "13,500 orders/month"
+    ],
     "confidence_level": "high",
     "last_updated": "2026-02-14"
   }

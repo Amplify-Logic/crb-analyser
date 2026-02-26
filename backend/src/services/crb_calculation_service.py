@@ -41,6 +41,8 @@ INDUSTRY_HOURLY_RATES_EUR: Dict[str, float] = {
     "dental": 85,                  # Dental practice staff avg
     "ecommerce": 35,              # E-commerce operations avg
     "e-commerce": 35,             # Alternate slug format
+    "b2b-platforms": 75,          # B2B/IoT platform operations avg
+    "b2b_platforms": 75,          # Alternate slug format
     "home-services": 65,          # Trades avg
     "home_services": 65,          # Alternate slug format
     "recruiting": 75,             # Recruiter avg

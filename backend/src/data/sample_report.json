@@ -9,8 +9,13 @@
     "industry_display": "Professional Services - Law Firm",
     "team_size": "11-50 employees",
     "tech_level": "Moderate - Clio for practice management, basic automation",
-    "budget_range": "500-1000/month",
-    "existing_tools": ["Clio Manage", "Microsoft 365", "Xero", "SharePoint"],
+    "budget_range": "EUR 500-1,000/month",
+    "existing_tools": [
+      "Clio Manage",
+      "Microsoft 365",
+      "Xero",
+      "SharePoint"
+    ],
     "location": "Amsterdam, Netherlands",
     "website": "morrisonclarke.nl",
     "description": "Boutique commercial law firm with 18 fee earners specializing in corporate M&A, employment law, and commercial contracts. Known for responsive service and practical advice. Primarily serves mid-market Dutch and international companies."
@@ -19,20 +24,52 @@
     "ai_readiness_score": 78,
     "customer_value_score": 8,
     "business_health_score": 9,
-    "key_insight": "Morrison & Clarke has strong client relationships but partners and associates lose 15-20% of billable time to admin tasks that AI can automate. Time tracking capture alone is leaving an estimated 80,000-120,000/year in unbilled work. The firm is well-positioned for AI adoption given existing Clio infrastructure.",
-    "total_value_potential": {"min": 315000, "max": 525000, "projection_years": 3},
+    "key_insight": "Morrison & Clarke has strong client relationships but partners and associates lose 15-20% of billable time to admin tasks that AI can automate. Time tracking capture alone is leaving an estimated EUR 80,000-120,000/year in unbilled work. The firm is well-positioned for AI adoption given existing Clio infrastructure.",
+    "total_value_potential": {
+      "min": 315000,
+      "max": 525000,
+      "projection_years": 3
+    },
     "top_opportunities": [
-      {"title": "AI-Powered Time Capture", "value_potential": "40K-65K/year", "time_horizon": "short"},
-      {"title": "Document Drafting Automation", "value_potential": "25K-40K/year", "time_horizon": "short"},
-      {"title": "Client Intake & Conflict Checking", "value_potential": "15K-25K/year", "time_horizon": "mid"},
-      {"title": "Contract Review AI", "value_potential": "20K-35K/year", "time_horizon": "mid"}
+      {
+        "title": "AI-Powered Time Capture",
+        "value_potential": "40K-65K/year",
+        "time_horizon": "short"
+      },
+      {
+        "title": "Document Drafting Automation",
+        "value_potential": "25K-40K/year",
+        "time_horizon": "short"
+      },
+      {
+        "title": "Client Intake & Conflict Checking",
+        "value_potential": "15K-25K/year",
+        "time_horizon": "mid"
+      },
+      {
+        "title": "Contract Review AI",
+        "value_potential": "20K-35K/year",
+        "time_horizon": "mid"
+      }
     ],
     "not_recommended": [
-      {"title": "Enterprise Document Management (iManage/NetDocuments)", "reason": "At 18 fee earners, these systems cost 500-1500/user/month and require dedicated IT. SharePoint + Clio integration is sufficient for your scale."},
-      {"title": "Full AI-Autonomous Drafting", "reason": "Professional liability requires human review on all client work. Use AI for first drafts with mandatory lawyer review."},
-      {"title": "Custom Billing System Build", "reason": "Trust accounting and LEDES compliance are complex. Clio handles this well - don't rebuild."}
+      {
+        "title": "Enterprise Document Management (iManage/NetDocuments)",
+        "reason": "At 18 fee earners, these systems cost EUR 500-1,500/user/month and require dedicated IT. SharePoint + Clio integration is sufficient for your scale."
+      },
+      {
+        "title": "Full AI-Autonomous Drafting",
+        "reason": "Professional liability requires human review on all client work. Use AI for first drafts with mandatory lawyer review."
+      },
+      {
+        "title": "Custom Billing System Build",
+        "reason": "Trust accounting and LEDES compliance are complex. Clio handles this well - don't rebuild."
+      }
     ],
-    "recommended_investment": {"year_1_min": 15000, "year_1_max": 28000},
+    "recommended_investment": {
+      "year_1_min": 15000,
+      "year_1_max": 28000
+    },
     "verdict": {
       "recommendation": "proceed",
       "headline": "Strong Fit for AI Enhancement",
@@ -55,21 +92,43 @@
     }
   },
   "value_summary": {
-    "value_saved": {"subtotal": {"min": 80000, "max": 130000}, "hours_per_week": 35, "hourly_rate": 185},
-    "value_created": {"subtotal": {"min": 25000, "max": 45000}},
-    "total": {"min": 105000, "max": 175000}
+    "value_saved": {
+      "subtotal": {
+        "min": 80000,
+        "max": 130000
+      },
+      "hours_per_week": 35,
+      "hourly_rate": 185
+    },
+    "value_created": {
+      "subtotal": {
+        "min": 25000,
+        "max": 45000
+      }
+    },
+    "total": {
+      "min": 105000,
+      "max": 175000
+    }
   },
   "findings": [
     {
       "id": "f1",
       "title": "10-15% of Billable Time Goes Unrecorded",
-      "description": "Partners and associates routinely forget to capture all time spent on client matters - quick calls, email review, brief research. At average billable rates of 250/hour across 18 fee earners, this represents 80K-120K in lost annual revenue. Industry best practice is AI-assisted time capture from calendar, email, and document activity.",
+      "description": "Partners and associates routinely forget to capture all time spent on client matters - quick calls, email review, brief research. At average billable rates of EUR 250/hour across 18 fee earners, this represents EUR 80K-120K in lost annual revenue. Industry best practice is AI-assisted time capture from calendar, email, and document activity.",
       "category": "billing",
       "customer_value_score": 6,
       "business_health_score": 10,
-      "value_saved": {"hours_per_week": 12, "hourly_rate": 250, "annual_savings": 65000},
+      "value_saved": {
+        "hours_per_week": 12,
+        "hourly_rate": 250,
+        "annual_savings": 65000
+      },
       "confidence": "high",
-      "sources": ["Legal industry benchmarks - Clio Legal Trends Report 2025", "Time leakage studies - Thomson Reuters"],
+      "sources": [
+        "Legal industry benchmarks - Clio Legal Trends Report 2025",
+        "Time leakage studies - Thomson Reuters"
+      ],
       "time_horizon": "short"
     },
     {
@@ -79,9 +138,16 @@
       "category": "productivity",
       "customer_value_score": 7,
       "business_health_score": 8,
-      "value_saved": {"hours_per_week": 10, "hourly_rate": 150, "annual_savings": 39000},
+      "value_saved": {
+        "hours_per_week": 10,
+        "hourly_rate": 150,
+        "annual_savings": 39000
+      },
       "confidence": "high",
-      "sources": ["Document workflow analysis", "Legal AI adoption benchmarks"],
+      "sources": [
+        "Document workflow analysis",
+        "Legal AI adoption benchmarks"
+      ],
       "time_horizon": "short"
     },
     {
@@ -91,10 +157,20 @@
       "category": "client_experience",
       "customer_value_score": 9,
       "business_health_score": 7,
-      "value_saved": {"hours_per_week": 6, "hourly_rate": 120, "annual_savings": 18720},
-      "value_created": {"description": "Faster intake improves conversion of new prospects", "potential_revenue": 25000},
+      "value_saved": {
+        "hours_per_week": 6,
+        "hourly_rate": 120,
+        "annual_savings": 18720
+      },
+      "value_created": {
+        "description": "Faster intake improves conversion of new prospects",
+        "potential_revenue": 25000
+      },
       "confidence": "medium",
-      "sources": ["Client intake timing analysis", "Legal services conversion studies"],
+      "sources": [
+        "Client intake timing analysis",
+        "Legal services conversion studies"
+      ],
       "time_horizon": "mid"
     },
     {
@@ -104,9 +180,16 @@
       "category": "productivity",
       "customer_value_score": 8,
       "business_health_score": 8,
-      "value_saved": {"hours_per_week": 8, "hourly_rate": 175, "annual_savings": 36400},
+      "value_saved": {
+        "hours_per_week": 8,
+        "hourly_rate": 175,
+        "annual_savings": 36400
+      },
       "confidence": "medium",
-      "sources": ["M&A deal flow analysis", "Contract AI benchmarks - Luminance, Kira Systems case studies"],
+      "sources": [
+        "M&A deal flow analysis",
+        "Contract AI benchmarks - Luminance, Kira Systems case studies"
+      ],
       "time_horizon": "mid"
     },
     {
@@ -116,9 +199,16 @@
       "category": "productivity",
       "customer_value_score": 7,
       "business_health_score": 7,
-      "value_saved": {"hours_per_week": 5, "hourly_rate": 300, "annual_savings": 39000},
+      "value_saved": {
+        "hours_per_week": 5,
+        "hourly_rate": 300,
+        "annual_savings": 39000
+      },
       "confidence": "high",
-      "sources": ["Partner time allocation surveys", "Microsoft Copilot adoption studies"],
+      "sources": [
+        "Partner time allocation surveys",
+        "Microsoft Copilot adoption studies"
+      ],
       "time_horizon": "short"
     }
   ],
@@ -134,52 +224,117 @@
       "priority": "high",
       "crb_analysis": {
         "cost": {
-          "short_term": {"setup": 2000, "monthly": 1600},
-          "mid_term": {"monthly": 1600},
-          "long_term": {"monthly": 1600},
+          "short_term": {
+            "setup": 2000,
+            "monthly": 1600
+          },
+          "mid_term": {
+            "monthly": 1600
+          },
+          "long_term": {
+            "monthly": 1600
+          },
           "total": 59200
         },
         "risk": [
-          {"description": "Privacy concerns from lawyers about activity monitoring", "probability": "medium", "impact": 3, "mitigation": "Position as 'time suggestion' not 'surveillance' - lawyers approve all entries"},
-          {"description": "Integration with existing Clio may require setup time", "probability": "low", "impact": 2, "mitigation": "Smokeball and Timeero have certified Clio integrations"}
+          {
+            "description": "Privacy concerns from lawyers about activity monitoring",
+            "probability": "medium",
+            "impact": 3,
+            "mitigation": "Position as 'time suggestion' not 'surveillance' - lawyers approve all entries"
+          },
+          {
+            "description": "Integration with existing Clio may require setup time",
+            "probability": "low",
+            "impact": 2,
+            "mitigation": "Smokeball and Timeero have certified Clio integrations"
+          }
         ],
         "benefit": {
-          "short_term": {"annual": 65000},
-          "mid_term": {"annual": 65000},
-          "long_term": {"annual": 65000},
+          "short_term": {
+            "annual": 65000
+          },
+          "mid_term": {
+            "annual": 65000
+          },
+          "long_term": {
+            "annual": 65000
+          },
           "total": 195000
         }
       },
       "options": {
-        "off_the_shelf": {
+        "targeted_upgrade": {
           "name": "Clio + Time Tracking Discipline",
           "vendor": "Clio",
           "monthly_cost": 0,
           "implementation_weeks": 0,
-          "pros": ["No additional cost", "Already in your stack"],
-          "cons": ["Relies on behavior change", "No AI assistance", "Doesn't capture forgotten time"]
+          "vendor_verified": true,
+          "pricing_source": "verified",
+          "pros": [
+            "No additional cost",
+            "Already in your stack"
+          ],
+          "cons": [
+            "Relies on behavior change",
+            "No AI assistance",
+            "Doesn't capture forgotten time"
+          ]
         },
-        "best_in_class": {
+        "enhance_with_ai": {
           "name": "Smokeball",
           "vendor": "Smokeball",
           "monthly_cost": 89,
           "implementation_weeks": 2,
-          "pros": ["Automatic time capture from all activity", "AI-suggested time entries", "Integrates with Clio", "Per-user pricing scales with firm"],
-          "cons": ["Requires migration planning", "Per-user cost adds up"]
+          "vendor_verified": true,
+          "pricing_source": "verified",
+          "pros": [
+            "Automatic time capture from all activity",
+            "AI-suggested time entries",
+            "Integrates with Clio",
+            "Per-user pricing scales with firm"
+          ],
+          "cons": [
+            "Requires migration planning",
+            "Per-user cost adds up"
+          ]
         },
-        "custom_solution": {
-          "approach": "Build internal time capture using Microsoft Graph API + Claude for time suggestions",
-          "estimated_cost": {"min": 15000, "max": 35000},
-          "implementation_weeks": 12,
-          "pros": ["Fully customized to your workflow", "No ongoing per-user fees"],
-          "cons": ["Significant development time", "Maintenance burden", "No vendor support"]
+        "connect_and_automate": {
+          "approach": "Build internal time capture using Microsoft Graph API + Claude API for activity-to-time-entry suggestions. The Graph API provides calendar, email, and document activity data; Claude classifies and suggests time entries. With AI coding tools, a developer can scaffold this integration in 2-3 weeks.",
+          "estimated_cost": {
+            "min": 4000,
+            "max": 10000
+          },
+          "implementation_weeks": 4,
+          "pros": [
+            "Fully customized to your workflow",
+            "No ongoing per-user fees",
+            "Claude API cost: ~EUR 100/month for 18 users",
+            "Graph API is extremely well-documented"
+          ],
+          "cons": [
+            "Needs a developer familiar with M365 APIs",
+            "Accuracy improves over time with tuning",
+            "No vendor support"
+          ]
         }
       },
-      "our_recommendation": "best_in_class",
-      "recommendation_rationale": "Smokeball's automatic time capture is purpose-built for law firms and has proven ROI. The 89/user/month pays for itself if each lawyer captures just 2 additional hours monthly. Their Clio integration means you keep your existing workflows.",
+      "our_recommendation": "connect_and_automate",
+      "recommendation_rationale": "Smokeball's automatic time capture is purpose-built for law firms and has proven ROI. The EUR 89/user/month pays for itself if each lawyer captures just 2 additional hours monthly. Their Clio integration means you keep your existing workflows.",
       "roi_percentage": 329,
       "payback_months": 3,
-      "assumptions": ["18 fee earners", "10% of billable time currently unrecorded", "Average billable rate: 250/hour", "System recovers 50% of lost time"]
+      "assumptions": [
+        "18 fee earners",
+        "10% of billable time currently unrecorded",
+        "Average billable rate: EUR 250/hour",
+        "System recovers 50% of lost time"
+      ],
+      "net_scores": {
+        "targeted_upgrade": 4.2,
+        "enhance_with_ai": 8.1,
+        "connect_and_automate": 6.8,
+        "comparison_summary": "Smokeball offers the best balance of proven ROI and low implementation risk. But custom is now viable at EUR 4-10K — especially if you want to avoid per-user SaaS fees that compound across 18 fee earners."
+      }
     },
     {
       "id": "r2",
@@ -192,52 +347,116 @@
       "priority": "high",
       "crb_analysis": {
         "cost": {
-          "short_term": {"setup": 500, "monthly": 500},
-          "mid_term": {"monthly": 500},
-          "long_term": {"monthly": 500},
+          "short_term": {
+            "setup": 500,
+            "monthly": 500
+          },
+          "mid_term": {
+            "monthly": 500
+          },
+          "long_term": {
+            "monthly": 500
+          },
           "total": 18500
         },
         "risk": [
-          {"description": "AI may produce errors requiring careful review", "probability": "high", "impact": 4, "mitigation": "Mandatory lawyer review on ALL AI-drafted documents - never send without human approval"},
-          {"description": "Client confidentiality with AI services", "probability": "low", "impact": 5, "mitigation": "Use enterprise-grade AI with data processing agreements (Claude for Work, Microsoft Copilot)"}
+          {
+            "description": "AI may produce errors requiring careful review",
+            "probability": "high",
+            "impact": 4,
+            "mitigation": "Mandatory lawyer review on ALL AI-drafted documents - never send without human approval"
+          },
+          {
+            "description": "Client confidentiality with AI services",
+            "probability": "low",
+            "impact": 5,
+            "mitigation": "Use enterprise-grade AI with data processing agreements (Claude for Work, Microsoft Copilot)"
+          }
         ],
         "benefit": {
-          "short_term": {"annual": 39000},
-          "mid_term": {"annual": 39000},
-          "long_term": {"annual": 39000},
+          "short_term": {
+            "annual": 39000
+          },
+          "mid_term": {
+            "annual": 39000
+          },
+          "long_term": {
+            "annual": 39000
+          },
           "total": 117000
         }
       },
       "options": {
-        "off_the_shelf": {
+        "targeted_upgrade": {
           "name": "Microsoft Copilot for M365",
           "vendor": "Microsoft",
           "monthly_cost": 28,
           "implementation_weeks": 1,
-          "pros": ["Already integrated with Word/Outlook", "GDPR compliant", "Low per-user cost"],
-          "cons": ["Not legal-specific", "Limited template learning"]
+          "vendor_verified": true,
+          "pricing_source": "verified",
+          "pros": [
+            "Already integrated with Word/Outlook",
+            "GDPR compliant",
+            "Low per-user cost"
+          ],
+          "cons": [
+            "Not legal-specific",
+            "Limited template learning"
+          ]
         },
-        "best_in_class": {
+        "enhance_with_ai": {
           "name": "Documate + Claude API",
           "vendor": "Documate",
           "monthly_cost": 299,
           "implementation_weeks": 4,
-          "pros": ["Legal-specific document automation", "Learns from your templates", "Client intake integration"],
-          "cons": ["Higher setup investment", "Requires template configuration"]
+          "vendor_verified": false,
+          "pricing_source": "estimated",
+          "pros": [
+            "Legal-specific document automation",
+            "Learns from your templates",
+            "Client intake integration"
+          ],
+          "cons": [
+            "Higher setup investment",
+            "Requires template configuration"
+          ]
         },
-        "custom_solution": {
-          "approach": "Build custom drafting system using Claude API with firm precedent library",
-          "estimated_cost": {"min": 25000, "max": 50000},
-          "implementation_weeks": 16,
-          "pros": ["Fully trained on your documents", "Deep integration with systems"],
-          "cons": ["Significant development time", "Ongoing model refinement needed"]
+        "connect_and_automate": {
+          "approach": "Build a RAG-based drafting assistant using Claude API with your firm's precedent library as the knowledge base. Upload templates and prior documents to a vector store, Claude generates first drafts contextualised to your style and clauses. AI coding tools make this a 3-4 week project for a developer.",
+          "estimated_cost": {
+            "min": 5000,
+            "max": 12000
+          },
+          "implementation_weeks": 4,
+          "pros": [
+            "Deeply trained on YOUR documents and precedents",
+            "No per-user fees — Claude API scales by usage (~EUR 150/month)",
+            "Can integrate directly with SharePoint document library",
+            "Better legal-specific results than generic Copilot"
+          ],
+          "cons": [
+            "Requires initial document indexing and prompt engineering",
+            "Ongoing refinement as precedents evolve",
+            "No vendor support — you own the system"
+          ]
         }
       },
-      "our_recommendation": "off_the_shelf",
-      "recommendation_rationale": "Start with Microsoft Copilot since you already have M365. At 28/user/month, it's low-risk to pilot. If results are good after 3 months, evaluate Documate for more legal-specific features. Don't over-engineer initially.",
+      "our_recommendation": "connect_and_automate",
+      "recommendation_rationale": "Start with Microsoft Copilot since you already have M365. At EUR 28/user/month, it's low-risk to pilot. If results are good after 3 months, evaluate a custom Claude-based system that trains on your actual precedent library — at EUR 5-12K it's now affordable and will produce better firm-specific output than any generic tool.",
       "roi_percentage": 532,
       "payback_months": 2,
-      "assumptions": ["40+ standard documents drafted monthly", "Current drafting time: 3 hours average", "AI reduces to 1 hour average", "Associate rate: 150/hour"]
+      "assumptions": [
+        "40+ standard documents drafted monthly",
+        "Current drafting time: 3 hours average",
+        "AI reduces to 1 hour average",
+        "Associate rate: EUR 150/hour"
+      ],
+      "net_scores": {
+        "targeted_upgrade": 7.8,
+        "enhance_with_ai": 7.2,
+        "connect_and_automate": 6.9,
+        "comparison_summary": "Start with Copilot (already in your M365 stack). But a custom Claude-based drafter trained on YOUR precedents is now EUR 5-12K and 4 weeks — worth evaluating after Copilot pilot if you want firm-specific quality."
+      }
     },
     {
       "id": "r3",
@@ -250,113 +469,271 @@
       "priority": "medium",
       "crb_analysis": {
         "cost": {
-          "short_term": {"setup": 1000, "monthly": 350},
-          "mid_term": {"monthly": 350},
-          "long_term": {"monthly": 350},
+          "short_term": {
+            "setup": 1000,
+            "monthly": 350
+          },
+          "mid_term": {
+            "monthly": 350
+          },
+          "long_term": {
+            "monthly": 350
+          },
           "total": 13600
         },
         "risk": [
-          {"description": "Automated conflict checks may miss complex relationships", "probability": "low", "impact": 5, "mitigation": "AI flags potential conflicts for partner review - never auto-clear"},
-          {"description": "Clients may prefer personal contact over digital forms", "probability": "medium", "impact": 2, "mitigation": "Offer both options - digital for speed, phone for preference"}
+          {
+            "description": "Automated conflict checks may miss complex relationships",
+            "probability": "low",
+            "impact": 5,
+            "mitigation": "AI flags potential conflicts for partner review - never auto-clear"
+          },
+          {
+            "description": "Clients may prefer personal contact over digital forms",
+            "probability": "medium",
+            "impact": 2,
+            "mitigation": "Offer both options - digital for speed, phone for preference"
+          }
         ],
         "benefit": {
-          "short_term": {"annual": 18720},
-          "mid_term": {"annual": 25000},
-          "long_term": {"annual": 25000},
+          "short_term": {
+            "annual": 18720
+          },
+          "mid_term": {
+            "annual": 25000
+          },
+          "long_term": {
+            "annual": 25000
+          },
           "total": 68720
         }
       },
       "options": {
-        "off_the_shelf": {
+        "targeted_upgrade": {
           "name": "Clio Grow",
           "vendor": "Clio",
           "monthly_cost": 49,
           "implementation_weeks": 2,
-          "pros": ["Native Clio integration", "Built-in conflict checking", "E-signature included"],
-          "cons": ["Additional Clio cost", "Limited customization"]
+          "vendor_verified": true,
+          "pricing_source": "verified",
+          "pros": [
+            "Native Clio integration",
+            "Built-in conflict checking",
+            "E-signature included"
+          ],
+          "cons": [
+            "Additional Clio cost",
+            "Limited customization"
+          ]
         },
-        "best_in_class": {
+        "enhance_with_ai": {
           "name": "Lawmatics",
           "vendor": "Lawmatics",
           "monthly_cost": 199,
           "implementation_weeks": 3,
-          "pros": ["Powerful automation workflows", "Marketing integration", "Advanced reporting"],
-          "cons": ["Higher price", "Learning curve"]
+          "vendor_verified": false,
+          "pricing_source": "estimated",
+          "pros": [
+            "Powerful automation workflows",
+            "Marketing integration",
+            "Advanced reporting"
+          ],
+          "cons": [
+            "Higher price",
+            "Learning curve"
+          ]
         },
-        "custom_solution": {
-          "approach": "Build intake portal using Typeform + Zapier + Clio API",
-          "estimated_cost": {"min": 5000, "max": 12000},
-          "implementation_weeks": 6,
-          "pros": ["Fully branded experience", "Flexible workflow"],
-          "cons": ["Manual conflict check integration", "Maintenance burden"]
+        "connect_and_automate": {
+          "approach": "Build intake portal using Typeform (or Tally.so) + Zapier + Clio API for automatic contact creation and conflict checking. This is essentially a no-code build — Zapier handles the orchestration, Clio API handles the data. A developer can set this up in a week.",
+          "estimated_cost": {
+            "min": 1500,
+            "max": 4000
+          },
+          "implementation_weeks": 2,
+          "pros": [
+            "Fully branded experience",
+            "Flexible workflow",
+            "Low-code — mostly Zapier configuration",
+            "One-time cost vs ongoing SaaS subscription"
+          ],
+          "cons": [
+            "Conflict check requires Clio API familiarity",
+            "Zapier has per-task pricing at scale",
+            "Less polished than Clio Grow's native UX"
+          ]
         }
       },
-      "our_recommendation": "off_the_shelf",
+      "our_recommendation": "connect_and_automate",
       "recommendation_rationale": "Clio Grow is the natural choice since you're already on Clio Manage. Native integration means data flows automatically, conflict checking works against your existing client database, and there's no new system to learn.",
       "roi_percentage": 405,
       "payback_months": 4,
-      "assumptions": ["20-30 new matters monthly", "Current intake time: 3 hours average", "Automated intake reduces to 45 minutes", "15% improvement in prospect conversion"]
+      "assumptions": [
+        "20-30 new matters monthly",
+        "Current intake time: 3 hours average",
+        "Automated intake reduces to 45 minutes",
+        "15% improvement in prospect conversion"
+      ],
+      "net_scores": {
+        "targeted_upgrade": 7.5,
+        "enhance_with_ai": 6.8,
+        "connect_and_automate": 5.8,
+        "comparison_summary": "Clio Grow's native integration with your existing Clio Manage still wins on UX and zero-friction setup. But at EUR 1.5-4K, custom is a viable alternative if you want a branded intake experience."
+      }
     }
   ],
   "roadmap": {
     "short_term": [
-      {"title": "Deploy AI Time Capture", "description": "Implement Smokeball or similar AI time tracking across all fee earners", "timeline": "Month 1-2", "expected_outcome": "Recover 10-15% lost billable time"},
-      {"title": "Enable Copilot for Partners", "description": "Turn on Microsoft Copilot for the 5 partners immediately", "timeline": "Week 1", "expected_outcome": "Save 3-5 hours/week on email and admin"}
+      {
+        "title": "Deploy AI Time Capture",
+        "description": "Implement Smokeball or similar AI time tracking across all fee earners",
+        "timeline": "Month 1-2",
+        "expected_outcome": "Recover 10-15% lost billable time"
+      },
+      {
+        "title": "Enable Copilot for Partners",
+        "description": "Turn on Microsoft Copilot for the 5 partners immediately",
+        "timeline": "Week 1",
+        "expected_outcome": "Save 3-5 hours/week on email and admin"
+      }
     ],
     "mid_term": [
-      {"title": "Document Drafting AI", "description": "Roll out AI drafting assistance for standard documents", "timeline": "Month 3-4", "expected_outcome": "50% reduction in first draft time"},
-      {"title": "Automated Client Intake", "description": "Implement Clio Grow for digital intake and conflict checking", "timeline": "Month 5-6", "expected_outcome": "70% faster client onboarding"}
+      {
+        "title": "Document Drafting AI",
+        "description": "Roll out AI drafting assistance for standard documents",
+        "timeline": "Month 3-4",
+        "expected_outcome": "50% reduction in first draft time"
+      },
+      {
+        "title": "Automated Client Intake",
+        "description": "Implement Clio Grow for digital intake and conflict checking",
+        "timeline": "Month 5-6",
+        "expected_outcome": "70% faster client onboarding"
+      }
     ],
     "long_term": [
-      {"title": "Contract Review AI", "description": "Evaluate and pilot contract analysis tools for M&A due diligence", "timeline": "Month 9-12", "expected_outcome": "50-70% faster contract review"},
-      {"title": "Knowledge Management", "description": "Build searchable knowledge base from firm precedents", "timeline": "Year 2", "expected_outcome": "Faster onboarding, better consistency"}
+      {
+        "title": "Contract Review AI",
+        "description": "Evaluate and pilot contract analysis tools for M&A due diligence",
+        "timeline": "Month 9-12",
+        "expected_outcome": "50-70% faster contract review"
+      },
+      {
+        "title": "Knowledge Management",
+        "description": "Build searchable knowledge base from firm precedents",
+        "timeline": "Year 2",
+        "expected_outcome": "Faster onboarding, better consistency"
+      }
     ]
   },
   "playbooks": [
     {
       "id": "pb1",
       "recommendation_id": "r1",
-      "option_type": "best_in_class",
+      "option_type": "enhance_with_ai",
       "total_weeks": 4,
       "phases": [
         {
           "name": "Setup & Integration",
           "week": 1,
           "tasks": [
-            {"id": "t1", "title": "Sign up for Smokeball trial", "description": "Start 14-day trial with your Clio credentials"},
-            {"id": "t2", "title": "Connect Clio integration", "description": "Enable two-way sync between Smokeball and Clio"},
-            {"id": "t3", "title": "Configure billing categories", "description": "Map Smokeball activity types to your Clio billing codes"},
-            {"id": "t4", "title": "Pilot with 2-3 lawyers", "description": "Have partners and one associate test for first week"}
+            {
+              "id": "t1",
+              "title": "Sign up for Smokeball trial",
+              "description": "Start 14-day trial with your Clio credentials"
+            },
+            {
+              "id": "t2",
+              "title": "Connect Clio integration",
+              "description": "Enable two-way sync between Smokeball and Clio"
+            },
+            {
+              "id": "t3",
+              "title": "Configure billing categories",
+              "description": "Map Smokeball activity types to your Clio billing codes"
+            },
+            {
+              "id": "t4",
+              "title": "Pilot with 2-3 lawyers",
+              "description": "Have partners and one associate test for first week"
+            }
           ]
         },
         {
           "name": "Team Rollout",
           "week": 2,
           "tasks": [
-            {"id": "t5", "title": "Training session for all fee earners", "description": "30-minute demo showing time suggestion approval workflow"},
-            {"id": "t6", "title": "Set up daily reminders", "description": "Configure end-of-day prompts to review suggested time"},
-            {"id": "t7", "title": "Enable for all fee earners", "description": "Roll out to remaining 15 lawyers"},
-            {"id": "t8", "title": "Collect first week feedback", "description": "Quick survey on ease of use and accuracy"}
+            {
+              "id": "t5",
+              "title": "Training session for all fee earners",
+              "description": "30-minute demo showing time suggestion approval workflow"
+            },
+            {
+              "id": "t6",
+              "title": "Set up daily reminders",
+              "description": "Configure end-of-day prompts to review suggested time"
+            },
+            {
+              "id": "t7",
+              "title": "Enable for all fee earners",
+              "description": "Roll out to remaining 15 lawyers"
+            },
+            {
+              "id": "t8",
+              "title": "Collect first week feedback",
+              "description": "Quick survey on ease of use and accuracy"
+            }
           ]
         },
         {
           "name": "Optimization",
           "week": 3,
           "tasks": [
-            {"id": "t9", "title": "Review captured time vs baseline", "description": "Compare billed hours to previous month"},
-            {"id": "t10", "title": "Adjust category mappings", "description": "Fix any miscategorized activities"},
-            {"id": "t11", "title": "Address privacy concerns", "description": "Meet with any skeptical team members"},
-            {"id": "t12", "title": "Fine-tune detection rules", "description": "Improve accuracy based on feedback"}
+            {
+              "id": "t9",
+              "title": "Review captured time vs baseline",
+              "description": "Compare billed hours to previous month"
+            },
+            {
+              "id": "t10",
+              "title": "Adjust category mappings",
+              "description": "Fix any miscategorized activities"
+            },
+            {
+              "id": "t11",
+              "title": "Address privacy concerns",
+              "description": "Meet with any skeptical team members"
+            },
+            {
+              "id": "t12",
+              "title": "Fine-tune detection rules",
+              "description": "Improve accuracy based on feedback"
+            }
           ]
         },
         {
           "name": "Measure & Scale",
           "week": 4,
           "tasks": [
-            {"id": "t13", "title": "Calculate ROI", "description": "Measure additional hours captured and revenue impact"},
-            {"id": "t14", "title": "Decision: commit or trial another tool", "description": "Based on results, commit to annual subscription"},
-            {"id": "t15", "title": "Document best practices", "description": "Create quick reference guide for team"},
-            {"id": "t16", "title": "Schedule quarterly review", "description": "Set calendar reminder to assess ongoing impact"}
+            {
+              "id": "t13",
+              "title": "Calculate ROI",
+              "description": "Measure additional hours captured and revenue impact"
+            },
+            {
+              "id": "t14",
+              "title": "Decision: commit or trial another tool",
+              "description": "Based on results, commit to annual subscription"
+            },
+            {
+              "id": "t15",
+              "title": "Document best practices",
+              "description": "Create quick reference guide for team"
+            },
+            {
+              "id": "t16",
+              "title": "Schedule quarterly review",
+              "description": "Set calendar reminder to assess ongoing impact"
+            }
           ]
         }
       ],
@@ -369,47 +746,111 @@
     {
       "id": "pb2",
       "recommendation_id": "r2",
-      "option_type": "off_the_shelf",
+      "option_type": "targeted_upgrade",
       "total_weeks": 4,
       "phases": [
         {
           "name": "Enable & Pilot",
           "week": 1,
           "tasks": [
-            {"id": "t1", "title": "Enable Copilot licenses", "description": "Add Copilot to M365 admin for 5 partners"},
-            {"id": "t2", "title": "Partner training session", "description": "30-minute demo on email and document features"},
-            {"id": "t3", "title": "Create prompt library", "description": "Document 5-10 common prompts for legal documents"},
-            {"id": "t4", "title": "Test with real documents", "description": "Try drafting NDA, engagement letter, and client memo"}
+            {
+              "id": "t1",
+              "title": "Enable Copilot licenses",
+              "description": "Add Copilot to M365 admin for 5 partners"
+            },
+            {
+              "id": "t2",
+              "title": "Partner training session",
+              "description": "30-minute demo on email and document features"
+            },
+            {
+              "id": "t3",
+              "title": "Create prompt library",
+              "description": "Document 5-10 common prompts for legal documents"
+            },
+            {
+              "id": "t4",
+              "title": "Test with real documents",
+              "description": "Try drafting NDA, engagement letter, and client memo"
+            }
           ]
         },
         {
           "name": "Expand to Associates",
           "week": 2,
           "tasks": [
-            {"id": "t5", "title": "Enable for senior associates", "description": "Add Copilot to 5 senior associates"},
-            {"id": "t6", "title": "Associate training", "description": "Focus on document drafting use cases"},
-            {"id": "t7", "title": "Review workflow", "description": "Establish AI draft → lawyer review → client process"},
-            {"id": "t8", "title": "Collect quality feedback", "description": "Track accuracy and time savings"}
+            {
+              "id": "t5",
+              "title": "Enable for senior associates",
+              "description": "Add Copilot to 5 senior associates"
+            },
+            {
+              "id": "t6",
+              "title": "Associate training",
+              "description": "Focus on document drafting use cases"
+            },
+            {
+              "id": "t7",
+              "title": "Review workflow",
+              "description": "Establish AI draft → lawyer review → client process"
+            },
+            {
+              "id": "t8",
+              "title": "Collect quality feedback",
+              "description": "Track accuracy and time savings"
+            }
           ]
         },
         {
           "name": "Full Rollout",
           "week": 3,
           "tasks": [
-            {"id": "t9", "title": "Enable for all fee earners", "description": "Roll out to remaining team"},
-            {"id": "t10", "title": "Create document templates", "description": "Build Copilot-optimized starting templates"},
-            {"id": "t11", "title": "Establish review standards", "description": "Define what 'reviewed' means for AI drafts"},
-            {"id": "t12", "title": "Track usage metrics", "description": "Monitor adoption via M365 admin"}
+            {
+              "id": "t9",
+              "title": "Enable for all fee earners",
+              "description": "Roll out to remaining team"
+            },
+            {
+              "id": "t10",
+              "title": "Create document templates",
+              "description": "Build Copilot-optimized starting templates"
+            },
+            {
+              "id": "t11",
+              "title": "Establish review standards",
+              "description": "Define what 'reviewed' means for AI drafts"
+            },
+            {
+              "id": "t12",
+              "title": "Track usage metrics",
+              "description": "Monitor adoption via M365 admin"
+            }
           ]
         },
         {
           "name": "Evaluate Next Steps",
           "week": 4,
           "tasks": [
-            {"id": "t13", "title": "Measure time savings", "description": "Compare drafting time before/after"},
-            {"id": "t14", "title": "Assess quality", "description": "Review client feedback on turnaround"},
-            {"id": "t15", "title": "Decision: expand or upgrade", "description": "Consider Documate if results warrant"},
-            {"id": "t16", "title": "Document learnings", "description": "Share best prompts and workflows"}
+            {
+              "id": "t13",
+              "title": "Measure time savings",
+              "description": "Compare drafting time before/after"
+            },
+            {
+              "id": "t14",
+              "title": "Assess quality",
+              "description": "Review client feedback on turnaround"
+            },
+            {
+              "id": "t15",
+              "title": "Decision: expand or upgrade",
+              "description": "Consider Documate if results warrant"
+            },
+            {
+              "id": "t16",
+              "title": "Document learnings",
+              "description": "Share best prompts and workflows"
+            }
           ]
         }
       ],
@@ -422,68 +863,376 @@
   ],
   "system_architecture": {
     "existing_tools": [
-      {"name": "Clio Manage", "category": "Practice Management", "api_score": 8},
-      {"name": "Microsoft 365", "category": "Productivity", "api_score": 10},
-      {"name": "Xero", "category": "Accounting", "api_score": 8},
-      {"name": "SharePoint", "category": "Document Management", "api_score": 9}
+      {
+        "id": "et1",
+        "name": "Clio Manage",
+        "category": "Practice Management",
+        "monthly_cost": 89,
+        "one_time_cost": 0,
+        "crb": {
+          "cost": "€89/user/month",
+          "risk": "Low - established legal tech vendor",
+          "risk_level": "low",
+          "benefit": "Central practice management hub",
+          "powers": [
+            "Case management",
+            "Time tracking",
+            "Billing"
+          ]
+        },
+        "is_existing": true
+      },
+      {
+        "id": "et2",
+        "name": "Microsoft 365",
+        "category": "Productivity",
+        "monthly_cost": 22,
+        "one_time_cost": 0,
+        "crb": {
+          "cost": "€22/user/month",
+          "risk": "Minimal - industry standard",
+          "risk_level": "low",
+          "benefit": "Full productivity suite with excellent API",
+          "powers": [
+            "Email",
+            "Documents",
+            "Calendar",
+            "SharePoint"
+          ]
+        },
+        "is_existing": true
+      },
+      {
+        "id": "et3",
+        "name": "Xero",
+        "category": "Accounting",
+        "monthly_cost": 65,
+        "one_time_cost": 0,
+        "crb": {
+          "cost": "€65/month",
+          "risk": "Low - established accounting platform",
+          "risk_level": "low",
+          "benefit": "Cloud accounting with strong integrations",
+          "powers": [
+            "Invoicing",
+            "Bank reconciliation",
+            "Reporting"
+          ]
+        },
+        "is_existing": true
+      },
+      {
+        "id": "et4",
+        "name": "SharePoint",
+        "category": "Document Management",
+        "monthly_cost": 0,
+        "one_time_cost": 0,
+        "crb": {
+          "cost": "Included with M365",
+          "risk": "Minimal",
+          "risk_level": "low",
+          "benefit": "Document management and collaboration",
+          "powers": [
+            "Document storage",
+            "Version control",
+            "Team sites"
+          ]
+        },
+        "is_existing": true
+      }
     ],
     "ai_layer": [
-      {"name": "Microsoft Copilot", "purpose": "Document drafting, email assistance"},
-      {"name": "Smokeball", "purpose": "AI time capture and billing"},
-      {"name": "Clio Grow", "purpose": "Client intake automation"}
+      {
+        "id": "ai1",
+        "name": "Microsoft Copilot",
+        "category": "AI Drafting",
+        "monthly_cost": 28,
+        "one_time_cost": 500,
+        "crb": {
+          "cost": "€28/user/month + setup",
+          "risk": "Low - Microsoft enterprise support",
+          "risk_level": "low",
+          "benefit": "30-40% faster document drafting",
+          "powers": [
+            "Email drafting",
+            "Document generation",
+            "Meeting summaries"
+          ]
+        },
+        "is_existing": false
+      },
+      {
+        "id": "ai2",
+        "name": "Smokeball",
+        "category": "AI Time Capture",
+        "monthly_cost": 89,
+        "one_time_cost": 2000,
+        "crb": {
+          "cost": "€89/user/month + €2K setup",
+          "risk": "Medium - requires workflow adoption",
+          "risk_level": "medium",
+          "benefit": "Recover 10-15% lost billable time",
+          "powers": [
+            "Automatic time capture",
+            "AI time suggestions",
+            "Activity tracking"
+          ]
+        },
+        "is_existing": false
+      },
+      {
+        "id": "ai3",
+        "name": "Clio Grow",
+        "category": "Client Intake",
+        "monthly_cost": 49,
+        "one_time_cost": 1000,
+        "crb": {
+          "cost": "€49/user/month + €1K setup",
+          "risk": "Low - native Clio integration",
+          "risk_level": "low",
+          "benefit": "70% faster client onboarding",
+          "powers": [
+            "Digital intake forms",
+            "Conflict checking",
+            "E-signatures"
+          ]
+        },
+        "is_existing": false
+      }
     ],
     "automations": [
-      {"from": "Clio Manage", "to": "Smokeball", "data": "Time entries", "direction": "bidirectional"},
-      {"from": "Microsoft 365", "to": "Clio Manage", "data": "Calendar, email", "direction": "read"},
-      {"from": "Clio Grow", "to": "Clio Manage", "data": "New clients, conflicts", "direction": "write"}
+      {
+        "id": "auto1",
+        "name": "Time Entry Sync",
+        "trigger": "Lawyer completes billable activity",
+        "action": "Smokeball suggests time entry for approval in Clio",
+        "tools_used": [
+          "Smokeball",
+          "Clio Manage"
+        ]
+      },
+      {
+        "id": "auto2",
+        "name": "Email Draft Assist",
+        "trigger": "Lawyer starts composing email or document",
+        "action": "Copilot suggests draft based on context and templates",
+        "tools_used": [
+          "Microsoft Copilot",
+          "Microsoft 365"
+        ]
+      },
+      {
+        "id": "auto3",
+        "name": "Client Intake Flow",
+        "trigger": "New enquiry submitted via web form",
+        "action": "Clio Grow runs conflict check and generates engagement letter",
+        "tools_used": [
+          "Clio Grow",
+          "Clio Manage"
+        ]
+      }
     ],
     "connections": [
-      {"source": "Email", "target": "Smokeball", "description": "Time capture from emails"},
-      {"source": "Calendar", "target": "Smokeball", "description": "Meeting time capture"},
-      {"source": "Documents", "target": "Smokeball", "description": "Document work time"}
+      {
+        "id": "conn1",
+        "from_node": "et2",
+        "to_node": "ai1",
+        "data_flow": "Calendar events, email context, document content",
+        "integration_type": "native"
+      },
+      {
+        "id": "conn2",
+        "from_node": "et1",
+        "to_node": "ai2",
+        "data_flow": "Time entries, billing codes, matter data",
+        "integration_type": "api"
+      },
+      {
+        "id": "conn3",
+        "from_node": "ai3",
+        "to_node": "et1",
+        "data_flow": "New client records, conflict results",
+        "integration_type": "native"
+      },
+      {
+        "id": "conn4",
+        "from_node": "et3",
+        "to_node": "et1",
+        "data_flow": "Invoice data, payment status",
+        "integration_type": "api"
+      }
     ],
     "cost_comparison": {
-      "current_annual": 0,
-      "proposed_annual": 31200,
-      "savings_annual": 105000,
-      "net_benefit": 73800
+      "saas_route": {
+        "items": [
+          {
+            "name": "Smokeball (18 users)",
+            "monthly_cost": 1602,
+            "one_time_cost": 2000
+          },
+          {
+            "name": "Microsoft Copilot (18 users)",
+            "monthly_cost": 504,
+            "one_time_cost": 500
+          },
+          {
+            "name": "Clio Grow",
+            "monthly_cost": 49,
+            "one_time_cost": 1000
+          }
+        ],
+        "total_monthly": 2155,
+        "total_one_time": 3500
+      },
+      "diy_route": {
+        "items": [
+          {
+            "name": "Custom time capture (Graph API + Claude)",
+            "monthly_cost": 100,
+            "one_time_cost": 7000
+          },
+          {
+            "name": "Custom drafting system (Claude RAG)",
+            "monthly_cost": 150,
+            "one_time_cost": 8500
+          },
+          {
+            "name": "Custom intake portal (Tally + Zapier + Clio API)",
+            "monthly_cost": 50,
+            "one_time_cost": 2500
+          }
+        ],
+        "total_monthly": 300,
+        "total_one_time": 18000,
+        "note": "2026 pricing reflects AI-assisted development. Microsoft Graph API, Claude API, and Clio API are all well-documented — a developer with AI coding tools can build these integrations in weeks, not months."
+      },
+      "monthly_savings": 1855,
+      "savings_percentage": 86,
+      "build_cost": 18000,
+      "breakeven_months": 10
     }
   },
   "industry_insights": {
     "industry": "professional-services",
     "industry_display_name": "Professional Services - Legal",
     "adoption_stats": [
-      {"metric": "Law firms using AI time capture", "value": "23%", "source": "Clio Legal Trends 2025"},
-      {"metric": "Productivity gain from AI drafting", "value": "30-40%", "source": "Thomson Reuters Legal AI Study"},
-      {"metric": "Revenue recovered through better time capture", "value": "10-15%", "source": "Legal Tech News 2025"}
+      {
+        "capability": "AI-Powered Time Capture",
+        "adoption_percentage": 23,
+        "average_outcome": "10-15% revenue recovered through better time recording"
+      },
+      {
+        "capability": "AI Document Drafting",
+        "adoption_percentage": 35,
+        "average_outcome": "30-40% productivity gain in document production"
+      },
+      {
+        "capability": "Automated Client Intake",
+        "adoption_percentage": 28,
+        "average_outcome": "70% faster onboarding, 15% higher conversion"
+      }
     ],
     "opportunity_map": {
-      "high_impact_low_effort": ["AI time capture", "Email drafting assistance"],
-      "high_impact_high_effort": ["Contract review AI", "Knowledge management"],
-      "low_impact_low_effort": ["Meeting scheduling automation"],
-      "low_impact_high_effort": ["Custom practice management"]
+      "emerging": [
+        "AI contract review for due diligence",
+        "Knowledge management AI"
+      ],
+      "growing": [
+        "AI time capture",
+        "Document drafting assistance",
+        "Client intake automation"
+      ],
+      "established": [
+        "Meeting scheduling automation",
+        "Email management tools"
+      ],
+      "best_fit": "growing",
+      "rationale": "Your firm size and existing Clio infrastructure make growing-stage AI tools the ideal fit — proven enough for reliable ROI but still offering competitive advantage."
     },
     "social_proof": [
-      {"quote": "We recovered $180K in the first year just from better time capture", "source": "Managing Partner, 25-person law firm"},
-      {"quote": "AI drafting cut our NDA turnaround from 2 days to 2 hours", "source": "Corporate Partner, Amsterdam"}
+      {
+        "quote": "We recovered €180K in the first year just from better time capture.",
+        "company_description": "25-person commercial law firm",
+        "outcome": "€180K recovered annually",
+        "industry": "Legal - Commercial"
+      },
+      {
+        "quote": "AI drafting cut our NDA turnaround from 2 days to 2 hours.",
+        "company_description": "Corporate law practice in Amsterdam",
+        "outcome": "90% faster document turnaround",
+        "industry": "Legal - Corporate"
+      }
     ]
   },
   "automation_summary": {
     "stack_assessment": {
       "tools": [
-        {"name": "Clio Manage", "slug": "clio", "api_score": 8, "category": "Practice Management"},
-        {"name": "Microsoft 365", "slug": "microsoft-365", "api_score": 10, "category": "Productivity"},
-        {"name": "Xero", "slug": "xero", "api_score": 8, "category": "Accounting"},
-        {"name": "SharePoint", "slug": "sharepoint", "api_score": 9, "category": "Document Management"}
+        {
+          "name": "Clio Manage",
+          "slug": "clio",
+          "api_score": 8,
+          "category": "Practice Management"
+        },
+        {
+          "name": "Microsoft 365",
+          "slug": "microsoft-365",
+          "api_score": 10,
+          "category": "Productivity"
+        },
+        {
+          "name": "Xero",
+          "slug": "xero",
+          "api_score": 8,
+          "category": "Accounting"
+        },
+        {
+          "name": "SharePoint",
+          "slug": "sharepoint",
+          "api_score": 9,
+          "category": "Document Management"
+        }
       ],
       "average_score": 8.75,
       "verdict": "strong_foundation",
       "verdict_text": "Your existing tools have excellent API support, making AI integration straightforward."
     },
     "opportunities": [
-      {"finding_id": "f1", "title": "AI Time Capture", "impact_monthly": 5400, "diy_effort_hours": 8, "approach": "Connect", "tools_involved": ["Smokeball", "Clio"], "category": "billing"},
-      {"finding_id": "f2", "title": "Document Drafting AI", "impact_monthly": 3250, "diy_effort_hours": 4, "approach": "Connect", "tools_involved": ["Microsoft Copilot", "Word"], "category": "productivity"},
-      {"finding_id": "f3", "title": "Client Intake Automation", "impact_monthly": 1560, "diy_effort_hours": 12, "approach": "Connect", "tools_involved": ["Clio Grow", "Clio Manage"], "category": "client_experience"}
+      {
+        "finding_id": "f1",
+        "title": "AI Time Capture",
+        "impact_monthly": 5400,
+        "diy_effort_hours": 8,
+        "approach": "Connect",
+        "tools_involved": [
+          "Smokeball",
+          "Clio"
+        ],
+        "category": "billing"
+      },
+      {
+        "finding_id": "f2",
+        "title": "Document Drafting AI",
+        "impact_monthly": 3250,
+        "diy_effort_hours": 4,
+        "approach": "Connect",
+        "tools_involved": [
+          "Microsoft Copilot",
+          "Word"
+        ],
+        "category": "productivity"
+      },
+      {
+        "finding_id": "f3",
+        "title": "Client Intake Automation",
+        "impact_monthly": 1560,
+        "diy_effort_hours": 12,
+        "approach": "Connect",
+        "tools_involved": [
+          "Clio Grow",
+          "Clio Manage"
+        ],
+        "category": "client_experience"
+      }
     ],
     "total_monthly_impact": 10210,
     "total_diy_hours": 24,
@@ -499,8 +1248,16 @@
     }
   },
   "methodology_notes": {
-    "data_sources": ["Client interview", "Practice management data", "Industry benchmarks"],
-    "assumptions": ["18 fee earners", "Average blended rate 200/hour", "70% utilization target"],
+    "data_sources": [
+      "Client interview",
+      "Practice management data",
+      "Industry benchmarks"
+    ],
+    "assumptions": [
+      "18 fee earners",
+      "Average blended rate 200/hour",
+      "70% utilization target"
+    ],
     "confidence_level": "high",
     "last_updated": "2026-01-26"
   }

@@ -937,6 +937,43 @@ class ReportGenerator:
 
             self.trace_collector.end_phase("validation", f"Checked {len(findings) + len(recommendations)} items, {validation_results.get('issues_found', 0)} issues")
 
+            # Phase 5a.1: Validate vendors in recommendations against KB
+            from src.services.vendor_validation_service import validate_all_recommendations
+            industry_slug = self.context.get("company_profile", {}).get("industry_slug")
+            recommendations, vendor_warnings = validate_all_recommendations(recommendations, industry=industry_slug)
+            if vendor_warnings:
+                logger.warning(
+                    "vendor_validation_warnings",
+                    warning_count=len(vendor_warnings),
+                    warnings=vendor_warnings[:10],
+                    report_id=self.report_id,
+                )
+                self._partial_data.setdefault("metadata", {})["vendor_validation_warnings"] = vendor_warnings
+            yield {"phase": "validation", "step": f"Vendor validation: {len(vendor_warnings)} warning(s)", "progress": 75}
+
+            # Phase 5a.2: Enforce confidence distribution (15-40% high / 35-65% medium / 5-35% low)
+            if findings:
+                total = len(findings)
+                high_count = sum(1 for f in findings if f.get("confidence") == "high")
+                high_pct = high_count / total * 100 if total > 0 else 0
+
+                if high_pct > 50:
+                    # Downgrade weakest HIGH findings (fewest sources) to MEDIUM
+                    high_findings = [f for f in findings if f.get("confidence") == "high"]
+                    high_findings.sort(key=lambda f: len(f.get("sources", [])))
+                    target_high = int(total * 0.40)  # Max 40% high
+                    downgrade_count = high_count - target_high
+                    for f in high_findings[:downgrade_count]:
+                        f["confidence"] = "medium"
+                        f["confidence_adjusted"] = True
+                        f["confidence_adjustment_reason"] = "Rebalanced: too many high-confidence findings relative to source count"
+                    logger.info(
+                        "confidence_rebalanced",
+                        original_high_pct=round(high_pct, 1),
+                        downgraded=downgrade_count,
+                        report_id=self.report_id,
+                    )
+
             # Update findings and recommendations - be resilient to missing columns
             try:
                 await supabase.table("reports").update({
@@ -1137,6 +1174,7 @@ class ReportGenerator:
                                     }
                                 else:
                                     rec["roi_calculation_failed"] = True
+                                    rec["roi_calculation_note"] = "ROI could not be calculated with available data"
                                     logger.warning(f"[FINALIZE] No finding for ROI recalc: {rec.get('id')}")
                                     continue
 
@@ -1150,21 +1188,34 @@ class ReportGenerator:
                                 rec["roi_percentage"] = roi_result.data["roi_percentage"]
                                 rec["roi_confidence_adjusted"] = roi_result.data.get("roi_confidence_adjusted")
                                 rec["payback_months"] = roi_result.data.get("payback_months", 12)
+                                roi_assumptions = roi_result.data.get("assumptions", [])
                                 rec["roi_detail"] = {
                                     "sensitivity": roi_result.data.get("sensitivity", {}),
-                                    "assumptions": roi_result.data.get("assumptions", []),
+                                    "assumptions": roi_assumptions,
                                     "calculation_breakdown": roi_result.data.get("calculation_breakdown", ""),
                                     "time_savings": roi_result.data.get("time_savings", {}),
                                     "financial_impact": roi_result.data.get("financial_impact", {}),
                                 }
+                                # Merge ROI assumptions into recommendation assumptions
+                                existing_assumptions = rec.get("assumptions", [])
+                                for assumption in roi_assumptions:
+                                    stmt = assumption.get("statement", str(assumption)) if isinstance(assumption, dict) else str(assumption)
+                                    source = assumption.get("source", "") if isinstance(assumption, dict) else ""
+                                    if source in ("industry_benchmark", "default_value"):
+                                        stmt = f"{stmt} (industry benchmark)"
+                                    if stmt not in existing_assumptions:
+                                        existing_assumptions.append(stmt)
+                                rec["assumptions"] = existing_assumptions
                                 rec.pop("roi_pending_calculation", None)
                                 logger.info(f"[FINALIZE] ROI recalculated: {rec['roi_percentage']}% for {rec.get('title')}")
                             else:
                                 rec["roi_calculation_failed"] = True
+                                rec["roi_calculation_note"] = "ROI could not be calculated with available data"
                                 rec.pop("roi_pending_calculation", None)
                                 logger.warning(f"[FINALIZE] ROI recalculation failed for {rec.get('id')}")
                         except (ValueError, KeyError, TypeError, RuntimeError) as roi_e:
                             rec["roi_calculation_failed"] = True
+                            rec["roi_calculation_note"] = "ROI could not be calculated with available data"
                             rec.pop("roi_pending_calculation", None)
                             logger.warning(f"[FINALIZE] ROI recalculation error for {rec.get('id')}: {roi_e}")
             # ================================================================
@@ -1851,6 +1902,35 @@ IMPORTANT:
                     # Add the platform vendor to used list
                     used_vendors.add(platform_rec.recommended_vendor.lower())
 
+                    # Look up vendor pricing from knowledge base
+                    from src.knowledge import get_vendor_by_slug
+                    ots_vendor_slug = platform_rec.recommended_vendor.lower().replace(" ", "-")
+                    ots_kb_vendor = get_vendor_by_slug(ots_vendor_slug)
+                    ots_monthly = 169  # Fallback
+                    ots_setup = 500  # Fallback
+                    ots_pricing_source = "estimated"
+                    if ots_kb_vendor:
+                        from src.services.vendor_validation_service import VendorValidationService
+                        _vvs = VendorValidationService()
+                        kb_pricing = _vvs._extract_kb_pricing(ots_kb_vendor)
+                        if kb_pricing and kb_pricing.get("monthly"):
+                            ots_monthly = kb_pricing["monthly"]
+                            ots_pricing_source = "knowledge_base"
+
+                    bic_name = platform_rec.alternatives[1].title() if len(platform_rec.alternatives) > 1 else "Alternative"
+                    bic_vendor_slug = platform_rec.alternatives[1].lower().replace(" ", "-") if len(platform_rec.alternatives) > 1 else ""
+                    bic_kb_vendor = get_vendor_by_slug(bic_vendor_slug) if bic_vendor_slug else None
+                    bic_monthly = 299  # Fallback
+                    bic_setup = 1500  # Fallback
+                    bic_pricing_source = "estimated"
+                    if bic_kb_vendor:
+                        if not _vvs:
+                            _vvs = VendorValidationService()
+                        bic_kb_pricing = _vvs._extract_kb_pricing(bic_kb_vendor)
+                        if bic_kb_pricing and bic_kb_pricing.get("monthly"):
+                            bic_monthly = bic_kb_pricing["monthly"]
+                            bic_pricing_source = "knowledge_base"
+
                     # Create a consolidated recommendation for the platform
                     platform_finding_titles = platform_rec.finding_titles[:3]
                     rec = {
@@ -1875,9 +1955,10 @@ IMPORTANT:
                             "off_the_shelf": {
                                 "name": platform_rec.recommended_vendor.title(),
                                 "vendor": platform_rec.recommended_vendor.title(),
-                                "monthly_cost": 169,  # Typical mid-tier FSM cost
+                                "monthly_cost": ots_monthly,
                                 "implementation_weeks": 2,
-                                "implementation_cost": 500,  # Standard setup
+                                "implementation_cost": ots_setup,
+                                "pricing_source": ots_pricing_source,
                                 "pros": [
                                     f"Solves {len(platform_rec.solves_findings)} findings at once",
                                     "Single vendor relationship and support",
@@ -1889,11 +1970,12 @@ IMPORTANT:
                                 ],
                             },
                             "best_in_class": {
-                                "name": platform_rec.alternatives[1].title() if len(platform_rec.alternatives) > 1 else "Alternative",
-                                "vendor": platform_rec.alternatives[1].title() if len(platform_rec.alternatives) > 1 else "Alternative",
-                                "monthly_cost": 299,
+                                "name": bic_name,
+                                "vendor": bic_name,
+                                "monthly_cost": bic_monthly,
                                 "implementation_weeks": 4,
-                                "implementation_cost": 1500,
+                                "implementation_cost": bic_setup,
+                                "pricing_source": bic_pricing_source,
                                 "pros": ["More advanced features", "Better for scaling"],
                                 "cons": ["Higher cost", "Longer implementation"],
                             },
@@ -1915,7 +1997,8 @@ IMPORTANT:
                         ),
                         "assumptions": [
                             f"Platform addresses {len(platform_rec.solves_findings)} related findings",
-                            "Assumes mid-tier pricing for platform",
+                            f"Off-the-shelf pricing: {'verified from knowledge base' if ots_pricing_source == 'knowledge_base' else 'estimated (not verified)'}",
+                            f"Best-in-class pricing: {'verified from knowledge base' if bic_pricing_source == 'knowledge_base' else 'estimated (not verified)'}",
                         ],
                         "consolidation_note": consolidation.consolidation_savings,
                     }
@@ -2178,7 +2261,7 @@ IMPORTANT:
                 seen_vendors: set[str] = set()
                 for rec in recommendations:
                     options = rec.get("options", {})
-                    for option_key in ["off_the_shelf", "best_in_class"]:
+                    for option_key in ["connect_and_automate", "enhance_with_ai", "targeted_upgrade", "off_the_shelf", "best_in_class"]:
                         option = options.get(option_key, {})
                         vendor_name = option.get("vendor", "").lower().replace(" ", "-")
                         if vendor_name:
@@ -2218,7 +2301,7 @@ IMPORTANT:
         # Get AI tools context for custom solution recommendations
         ai_tools_context = get_ai_tools_prompt_context()
 
-        prompt = f"""Based on these findings, generate detailed recommendations with the THREE OPTIONS pattern.
+        prompt = f"""Based on these findings, generate detailed recommendations with the AIOS OPTIONS pattern.
 
 TOP FINDINGS:
 {json.dumps(priority_findings, indent=2)}
@@ -2229,21 +2312,25 @@ AVAILABLE VENDORS FOR THIS INDUSTRY:
 {ai_tools_context}
 
 ═══════════════════════════════════════════════════════════════════════════════
-THREE OPTIONS PATTERN (REQUIRED)
+AIOS OPTIONS PATTERN (REQUIRED - Connect-First Philosophy)
 ═══════════════════════════════════════════════════════════════════════════════
 
-For EACH recommendation, provide ALL THREE options:
+For EACH recommendation, provide ALL THREE options in this priority:
 
-Option A: OFF-THE-SHELF - Existing SaaS, plug and play, fastest to implement
-Option B: BEST-IN-CLASS - Premium vendor solution, more features, better support
-Option C: CUSTOM SOLUTION - Built with AI/APIs, perfect fit, competitive advantage
+1. connect_and_automate (ALWAYS first choice): How to wire existing tools together with AI workflows.
+   Include: Claude Code build time, MCP servers needed, which existing tools are connected.
 
-The custom_solution MUST include:
-- Specific AI model recommendation (from the AI TOOL RECOMMENDATIONS above)
-- build_tools list (e.g., ["Claude API", "Cursor", "Vercel", "Supabase"])
-- skills_required list
-- dev_hours_estimate range (e.g., "40-80 hours")
-- model_recommendation with reasoning
+2. enhance_with_ai: Add an AI intelligence layer on top of existing data/workflows.
+   Include: What the AI agent does, what data it needs, deployment timeline.
+
+3. targeted_upgrade: Replace a specific tool ONLY if it genuinely blocks integration.
+   Include: Why existing tool is a dead end (no API, broken, data trapped), what to replace with.
+
+CRITICAL RULES:
+- our_recommendation MUST be "connect_and_automate" unless the existing tool literally has no API
+- NEVER recommend "targeted_upgrade" just because a "better" tool exists
+- Every connect_and_automate option MUST include build_time and tools_used
+- Include MCP servers where applicable
 
 ═══════════════════════════════════════════════════════════════════════════════
 
@@ -2282,39 +2369,34 @@ For each recommendation, use this EXACT structure:
         }}
     }},
     "options": {{
-        "off_the_shelf": {{
-            "name": "<specific product name>",
-            "vendor": "<company name>",
-            "monthly_cost": <number in EUR>,
-            "implementation_weeks": <number>,
-            "implementation_cost": <one-time setup cost>,
-            "pros": ["<pro1>", "<pro2>", "<pro3>"],
-            "cons": ["<con1>", "<con2>"]
+        "connect_and_automate": {{
+            "approach": "<how to wire existing tools with AI workflows>",
+            "build_time": "<e.g. 8-12 hours>",
+            "tools_used": ["Claude Code", "<existing tool 1>", "<existing tool 2>"],
+            "mcp_servers": ["<mcp-server if applicable>"],
+            "monthly_cost": "<e.g. €50-100 (API usage)>",
+            "pros": ["Uses your existing stack", "Ships this week", "Fully customized"],
+            "cons": ["Requires API access", "Needs maintenance"]
         }},
-        "best_in_class": {{
-            "name": "<specific product name>",
-            "vendor": "<company name>",
-            "monthly_cost": <number in EUR>,
-            "implementation_weeks": <number>,
-            "implementation_cost": <one-time setup cost>,
-            "pros": ["<pro1>", "<pro2>", "<pro3>"],
-            "cons": ["<con1>", "<con2>"]
+        "enhance_with_ai": {{
+            "approach": "<AI agent or intelligence layer description>",
+            "build_time": "<e.g. 2-3 weeks>",
+            "tools_used": ["Claude API", "<existing tool>", "<dashboard>"],
+            "monthly_cost": "<e.g. €200-400>",
+            "pros": ["Autonomous handling", "Learns and improves"],
+            "cons": ["Needs training data", "Gradual rollout"]
         }},
-        "custom_solution": {{
-            "approach": "<description of custom solution approach>",
-            "estimated_cost": {{ "min": <number>, "max": <number> }},
-            "monthly_running_cost": <ongoing API/hosting costs>,
-            "implementation_weeks": <number>,
-            "pros": ["Perfect fit for your needs", "Competitive advantage", "Full control"],
-            "cons": ["Higher upfront investment", "Requires maintenance"],
-            "build_tools": ["<AI model>", "Cursor", "Vercel", "Supabase"],
-            "model_recommendation": "<Specific model> because <reason>",
-            "skills_required": ["<skill1>", "<skill2>"],
-            "dev_hours_estimate": "<min>-<max> hours"
+        "targeted_upgrade": {{
+            "when_needed": "<Only if current tool has no API or is fundamentally broken>",
+            "tools": ["<specific replacement tool>"],
+            "cost_range": "<e.g. €200-500/month>",
+            "migration_time": "<e.g. 4-6 weeks>",
+            "pros": ["Pre-built solution", "Quick setup"],
+            "cons": ["Monthly SaaS cost", "Locked into vendor"]
         }}
     }},
-    "our_recommendation": "off_the_shelf|best_in_class|custom_solution",
-    "recommendation_rationale": "<detailed explanation of why this option is best for THIS business based on their size, budget, tech comfort, and goals>",
+    "our_recommendation": "connect_and_automate",
+    "recommendation_rationale": "<why connecting existing tools is the best path for THIS business>",
     "assumptions": [
         "<assumption 1 with specific numbers>",
         "<assumption 2 with specific numbers>",
@@ -2325,11 +2407,11 @@ For each recommendation, use this EXACT structure:
 NOTE: roi_percentage and payback_months will be calculated automatically by the ROI Calculator Skill using the canonical formulas. Do NOT generate these values.
 
 CRITICAL REQUIREMENTS:
-1. ALL THREE OPTIONS must be complete with real vendor names and pricing
-2. CUSTOM SOLUTION must always include build_tools, model_recommendation, skills_required, dev_hours_estimate
+1. ALL THREE OPTIONS must be complete with specific approaches and realistic costs
+2. connect_and_automate MUST include build_time, tools_used, and mcp_servers
 3. Cost and benefit numbers must be realistic and consistent across options
 4. Recommendation rationale must be specific to THIS business context
-5. Use real vendor names and current pricing (approximate if needed)
+5. Lead with CONNECT — only suggest replacement when tool genuinely blocks integration
 
 Generate 5-10 recommendations. Return ONLY the JSON array."""
 
@@ -2351,26 +2433,48 @@ Generate 5-10 recommendations. Return ONLY the JSON array."""
                 if "id" not in rec:
                     rec["id"] = f"rec-{i+1:03d}"
 
-                # Validate three options exist
+                # Validate options exist — accept AIOS keys or legacy keys
                 options = rec.get("options", {})
-                if not all(k in options for k in ["off_the_shelf", "best_in_class", "custom_solution"]):
+                has_aios_keys = all(k in options for k in ["connect_and_automate", "enhance_with_ai", "targeted_upgrade"])
+                has_legacy_keys = all(k in options for k in ["off_the_shelf", "best_in_class", "custom_solution"])
+
+                if not has_aios_keys and not has_legacy_keys:
                     logger.warning(f"Recommendation {rec.get('id')} missing options, skipping")
                     continue
 
-                # Ensure custom solution has required fields
-                custom = options.get("custom_solution", {})
-                if not custom.get("build_tools"):
-                    custom["build_tools"] = ["Claude API", "Cursor", "Vercel", "Supabase"]
-                if not custom.get("model_recommendation"):
-                    custom["model_recommendation"] = "Claude Sonnet 4 for balanced quality and cost"
-                if not custom.get("skills_required"):
-                    custom["skills_required"] = ["Python or TypeScript", "Basic API integration"]
-                if not custom.get("dev_hours_estimate"):
-                    custom["dev_hours_estimate"] = "40-80 hours"
+                # Map legacy keys to AIOS keys if needed
+                if has_legacy_keys and not has_aios_keys:
+                    _legacy_to_aios = {
+                        "off_the_shelf": "targeted_upgrade",
+                        "best_in_class": "enhance_with_ai",
+                        "custom_solution": "connect_and_automate",
+                    }
+                    for old_key, new_key in _legacy_to_aios.items():
+                        if old_key in options and new_key not in options:
+                            options[new_key] = options[old_key]
 
-                # Enrich custom solution with Build It Yourself details
-                custom = self._enrich_build_it_yourself(rec["title"], custom)
-                options["custom_solution"] = custom
+                # Ensure connect_and_automate has required fields
+                connect = options.get("connect_and_automate", {})
+                if not connect.get("tools_used"):
+                    connect["tools_used"] = ["Claude Code", "Existing tools API"]
+                if not connect.get("build_time"):
+                    connect["build_time"] = "8-16 hours"
+
+                # Legacy: ensure custom solution has required fields if present
+                custom = options.get("custom_solution", {})
+                if custom:
+                    if not custom.get("build_tools"):
+                        custom["build_tools"] = ["Claude API", "Cursor", "Vercel", "Supabase"]
+                    if not custom.get("model_recommendation"):
+                        custom["model_recommendation"] = "Claude Sonnet 4 for balanced quality and cost"
+                    if not custom.get("skills_required"):
+                        custom["skills_required"] = ["Python or TypeScript", "Basic API integration"]
+                    if not custom.get("dev_hours_estimate"):
+                        custom["dev_hours_estimate"] = "40-80 hours"
+
+                    # Enrich custom solution with Build It Yourself details
+                    custom = self._enrich_build_it_yourself(rec["title"], custom)
+                    options["custom_solution"] = custom
 
                 # Calculate ROI using ROI Calculator Skill (canonical formulas)
                 roi_skill = get_skill("roi-calculator", client=self.client)
@@ -2760,10 +2864,26 @@ Return ONLY the JSON."""
 
     def _generate_methodology_notes(self) -> Dict[str, Any]:
         """Generate methodology notes and disclaimers."""
+        industry = self.context.get("industry", "general")
+        industry_slug = self.context.get("company_profile", {}).get("industry_slug", industry)
+
+        # Check if industry has KB data
+        from src.knowledge import load_industry_data
+        has_industry_kb = load_industry_data(industry_slug, "benchmarks") is not None
+
+        limitations = [
+            "Estimates based on self-reported data",
+            "Actual implementation results may vary",
+            "Market conditions may affect vendor availability/pricing",
+            "Recommendations should be validated with actual business data",
+        ]
+        if not has_industry_kb:
+            limitations.insert(0, f"Industry-specific benchmarks not yet available for {industry_slug}. Using general benchmarks.")
+
         return {
             "data_sources": [
                 "Quiz responses provided by business owner",
-                "Industry benchmarks from our knowledge base",
+                "Industry benchmarks from our knowledge base" if has_industry_kb else "General industry benchmarks (industry-specific data in development)",
                 "Vendor pricing data (verified where possible)",
                 "AI/automation adoption studies",
             ],
@@ -2773,12 +2893,7 @@ Return ONLY the JSON."""
                 "All estimates include ±20% uncertainty range",
                 "Vendor pricing as of report generation date",
             ],
-            "limitations": [
-                "Estimates based on self-reported data",
-                "Actual implementation results may vary",
-                "Market conditions may affect vendor availability/pricing",
-                "Recommendations should be validated with actual business data",
-            ],
+            "limitations": limitations,
             "industry_benchmarks_used": list(self.context.get("benchmarks", {}).keys())[:5],
             "confidence_notes": "Findings marked as 'high' confidence have multiple supporting data points. "
                                "'Medium' confidence items are based on industry patterns. "
@@ -3346,11 +3461,11 @@ Return ONLY the JSON."""
                 return summary_dict
             else:
                 logger.warning(f"AutomationSummarySkill failed: {result.warnings}")
-                return {}
+                return {"opportunities": [], "_generation_failed": True, "_failure_reason": "Automation summary skill returned no data"}
 
         except (ValueError, KeyError, TypeError, RuntimeError) as e:
             logger.warning("automation_summary_failed", error=str(e), error_type=type(e).__name__)
-            return {}
+            return {"opportunities": [], "_generation_failed": True, "_failure_reason": str(e)}
 
     async def _generate_post_report_metadata(
         self,

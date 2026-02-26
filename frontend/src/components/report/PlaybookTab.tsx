@@ -19,6 +19,9 @@ import { motion, AnimatePresence } from 'framer-motion'
 /** Format option_type to proper display name */
 function formatOptionType(optionType: string): string {
   const displayNames: Record<string, string> = {
+    'connect_and_automate': 'Connect & Automate',
+    'enhance_with_ai': 'Enhance with AI',
+    'targeted_upgrade': 'Targeted Upgrade',
     'off_the_shelf': 'Off-the-Shelf',
     'best_in_class': 'Best-in-Class',
     'custom_solution': 'Custom Solution',

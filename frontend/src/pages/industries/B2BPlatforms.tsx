@@ -5,69 +5,69 @@ import { ShimmerButton } from '../../components/magicui'
 
 const PAIN_POINTS = [
   {
-    title: 'Client Onboarding',
-    problem: '3-5 hours per new client',
-    description: 'Manual intake forms, chasing documents, re-entering data into your system.',
-    potential: 'Save 2-3 hours per client',
+    title: 'System Integration Gaps',
+    problem: 'Manual data sync',
+    description: 'CRM doesn\'t talk to ERP, ERP doesn\'t talk to IoT. Someone manually copies data between systems every day.',
+    potential: 'Automate 90% of data sync',
   },
   {
-    title: 'Time Tracking Leakage',
-    problem: '10-20% revenue loss',
-    description: 'Unbilled work from forgotten time entries, manual logging, context switching.',
-    potential: 'Capture €20K-50K/year',
+    title: 'Scaling Operations',
+    problem: 'Processes breaking',
+    description: 'What worked at 20 employees is cracking at 60. Knowledge is in people\'s heads, not systems.',
+    potential: 'Build automated playbooks',
   },
   {
-    title: 'Document Chaos',
-    problem: 'Hours wasted searching',
-    description: 'Version confusion, files in email/drive/desktop, compliance documentation gaps.',
-    potential: 'Save 5+ hours/week',
+    title: 'Partner Management',
+    problem: 'Onboarding bottleneck',
+    description: 'Every new distributor needs manual setup, training, portal access. It doesn\'t scale to 100+ partners.',
+    potential: 'Self-service partner portal',
   },
   {
-    title: 'Client Communication',
-    problem: 'Update requests eat time',
-    description: 'Same questions repeated, status updates via email, no self-service portal.',
-    potential: 'Reduce back-and-forth 60%',
+    title: 'Revenue Optimization',
+    problem: 'Blind spots in usage data',
+    description: 'You\'re sitting on IoT usage data that could drive upsells, prevent churn, and optimize pricing. But nobody\'s looking at it.',
+    potential: 'AI-driven pricing intelligence',
   },
 ]
 
 const SAMPLE_FINDINGS = [
   {
-    title: 'Client Intake Automation',
+    title: 'CRM to ERP Auto-Sync',
     verdict: 'Connect',
     verdictColor: 'emerald',
-    description: 'Build a Claude workflow connecting your website form to CRM to practice management. Auto-route and pre-qualify leads.',
-    roi: '€18,000/year',
+    description: 'Build a Claude workflow that syncs deal closures from HubSpot to auto-generate invoices in Exact. Ships in 8 hours.',
+    roi: '\u20AC24,000/year',
   },
   {
-    title: 'AI Document Drafting',
+    title: 'Predictive Churn Agent',
     verdict: 'Enhance',
-    verdictColor: 'amber',
-    description: 'Add an AI layer to your existing document templates that drafts first versions from client data. Needs review workflow.',
-    roi: '€12,000/year',
+    verdictColor: 'blue',
+    description: 'AI agent monitoring usage patterns across your fleet. Flags at-risk accounts before they churn.',
+    roi: '\u20AC48,000/year',
   },
   {
-    title: 'Predictive Analytics',
+    title: 'Enterprise CRM Migration',
     verdict: 'Skip',
     verdictColor: 'gray',
-    description: 'Your data volume doesn\'t justify the investment yet. Revisit at 2x current size.',
-    roi: 'Deferred',
+    description: 'HubSpot works fine with API integrations. Salesforce migration would cost 6 months and \u20AC200K. Not worth it.',
+    roi: 'Negative ROI',
   },
 ]
 
-const SOFTWARE = [
-  { name: 'Clio', category: 'Practice Management' },
-  { name: 'Karbon', category: 'Practice Management' },
-  { name: 'Practice Ignition', category: 'Proposals' },
-  { name: 'Harvest', category: 'Time Tracking' },
-  { name: 'n8n', category: 'Automation' },
-  { name: 'Claude', category: 'AI Assistant' },
+const STACK = [
+  { name: 'HubSpot', category: 'CRM' },
+  { name: 'Exact Online', category: 'ERP' },
+  { name: 'Azure IoT Hub', category: 'IoT' },
+  { name: 'Salesforce FSL', category: 'Field Service' },
+  { name: 'Chargebee', category: 'Billing' },
+  { name: 'Notion', category: 'Knowledge' },
 ]
 
-export default function ProfessionalServices() {
+export default function B2BPlatforms() {
   const navigate = useNavigate()
 
   const handleQuizStart = () => {
-    navigate('/quiz?industry=professional-services&new=true')
+    navigate('/quiz?industry=b2b-platforms&new=true')
   }
 
   return (
@@ -78,7 +78,7 @@ export default function ProfessionalServices() {
           <div className="flex items-center gap-4">
             <Logo size="sm" />
             <span className="text-sm text-gray-400">|</span>
-            <span className="text-sm font-medium text-gray-600">Professional Services</span>
+            <span className="text-sm font-medium text-gray-600">B2B Platforms</span>
           </div>
           <div className="flex items-center gap-4">
             <Link to="/" className="text-sm text-gray-500 hover:text-gray-900 transition">
@@ -92,29 +92,29 @@ export default function ProfessionalServices() {
       </nav>
 
       {/* Hero */}
-      <section className="pt-32 pb-16 px-4 bg-gradient-to-b from-primary-50/50 to-white">
+      <section className="pt-32 pb-16 px-4 bg-gradient-to-b from-violet-50/50 to-white">
         <div className="max-w-4xl mx-auto text-center">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
           >
-            <div className="inline-flex items-center gap-2 px-3 py-1.5 bg-primary-100 rounded-full text-sm font-medium text-primary-700 mb-6">
+            <div className="inline-flex items-center gap-2 px-3 py-1.5 bg-violet-100 rounded-full text-sm font-medium text-violet-700 mb-6">
               <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8.25 3v1.5M4.5 8.25H3m18 0h-1.5M4.5 12H3m18 0h-1.5m-15 3.75H3m18 0h-1.5M8.25 19.5V21M12 3v1.5m0 15V21m3.75-18v1.5m0 15V21m-9-1.5h10.5a2.25 2.25 0 002.25-2.25V6.75a2.25 2.25 0 00-2.25-2.25H6.75A2.25 2.25 0 004.5 6.75v10.5a2.25 2.25 0 002.25 2.25zm.75-12h9v9h-9v-9z" />
               </svg>
-              For Accountants, Lawyers, Consultants & Advisors
+              For Hardware-to-Platform & IoT Businesses
             </div>
 
             <h1 className="text-4xl sm:text-5xl font-bold text-gray-900 mb-6 leading-tight">
-              Every hour on admin is an hour
+              Your systems don't talk to each other.
               <br />
-              <span className="text-primary-600">you're not billing.</span>
+              <span className="text-violet-600">We'll wire them up.</span>
             </h1>
 
             <p className="text-xl text-gray-600 mb-8 max-w-2xl mx-auto">
-              Find out exactly which AI tools will save you time—and which ones to skip.
-              Clear verdicts. Real prices. No consultant fees.
+              Get an architecture blueprint that connects your CRM, ERP, IoT, and billing
+              into one AI-powered operating system. No rip-and-replace.
             </p>
 
             <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-8">
@@ -124,19 +124,9 @@ export default function ProfessionalServices() {
                 shimmerColor="#ffffff"
                 background="linear-gradient(135deg, #7c3aed 0%, #6366f1 50%, #8b5cf6 100%)"
               >
-                Take the Free Quiz
-                <span className="ml-2">→</span>
+                Get Your Architecture Blueprint
+                <span className="ml-2">&rarr;</span>
               </ShimmerButton>
-
-              <Link
-                to="/report/sample"
-                className="px-6 py-3 text-gray-700 font-medium hover:text-primary-600 transition flex items-center gap-2"
-              >
-                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-                </svg>
-                See What You Get
-              </Link>
             </div>
 
             <div className="flex flex-wrap justify-center gap-6 text-sm text-gray-500">
@@ -150,7 +140,7 @@ export default function ProfessionalServices() {
                 <svg className="w-4 h-4 text-emerald-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                 </svg>
-                €147 full report
+                &euro;147 full report
               </span>
               <span className="flex items-center gap-2">
                 <svg className="w-4 h-4 text-emerald-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -170,7 +160,7 @@ export default function ProfessionalServices() {
             Sound familiar?
           </h2>
           <p className="text-center text-gray-600 mb-12">
-            These are the problems we help professional services firms solve.
+            These are the problems we help B2B platform companies solve.
           </p>
 
           <div className="grid md:grid-cols-2 gap-6">
@@ -181,7 +171,7 @@ export default function ProfessionalServices() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.5, delay: index * 0.1 }}
-                className="bg-white rounded-xl p-6 border border-gray-200 hover:border-primary-300 hover:shadow-lg transition-all"
+                className="bg-white rounded-xl p-6 border border-gray-200 hover:border-violet-300 hover:shadow-lg transition-all"
               >
                 <div className="flex items-start justify-between mb-3">
                   <h3 className="font-bold text-gray-900">{point.title}</h3>
@@ -208,7 +198,7 @@ export default function ProfessionalServices() {
             What you get
           </h2>
           <p className="text-center text-gray-600 mb-12">
-            Not vague advice. Specific verdicts with clear reasoning.
+            Not "buy this software." Specific architecture decisions with clear reasoning.
           </p>
 
           <div className="grid md:grid-cols-3 gap-6">
@@ -223,7 +213,7 @@ export default function ProfessionalServices() {
               >
                 <div className={`inline-block px-3 py-1 text-xs font-semibold uppercase tracking-wide rounded-full mb-4 ${
                   finding.verdictColor === 'emerald' ? 'bg-emerald-50 text-emerald-700 border border-emerald-100' :
-                  finding.verdictColor === 'amber' ? 'bg-amber-50 text-amber-700 border border-amber-100' :
+                  finding.verdictColor === 'blue' ? 'bg-blue-50 text-blue-700 border border-blue-100' :
                   'bg-gray-100 text-gray-600'
                 }`}>
                   {finding.verdict}
@@ -231,7 +221,7 @@ export default function ProfessionalServices() {
                 <h3 className="font-bold text-gray-900 mb-2">{finding.title}</h3>
                 <p className="text-sm text-gray-600 mb-4">{finding.description}</p>
                 <div className="pt-3 border-t border-gray-100 flex justify-between items-center">
-                  <span className={`font-bold ${finding.roi === 'Deferred' ? 'text-gray-400' : 'text-emerald-600'}`}>
+                  <span className={`font-bold ${finding.roi === 'Negative ROI' ? 'text-gray-400' : 'text-emerald-600'}`}>
                     {finding.roi}
                   </span>
                   <span className="text-xs text-gray-400">estimated annual</span>
@@ -240,52 +230,42 @@ export default function ProfessionalServices() {
             ))}
           </div>
 
-          <div className="text-center mt-8 flex flex-col sm:flex-row items-center justify-center gap-4">
+          <div className="text-center mt-8">
             <Link
-              to="/quiz"
-              className="inline-flex items-center gap-2 text-primary-600 font-medium hover:text-primary-700"
+              to="/quiz?industry=b2b-platforms&new=true"
+              className="inline-flex items-center gap-2 text-violet-600 font-medium hover:text-violet-700"
             >
-              Get your personalized report
+              Get your personalized architecture blueprint
               <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-              </svg>
-            </Link>
-            <span className="text-gray-300 hidden sm:inline">|</span>
-            <Link
-              to="/report/sample"
-              className="inline-flex items-center gap-2 text-gray-500 font-medium hover:text-gray-700"
-            >
-              See a sample report
-              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
               </svg>
             </Link>
           </div>
         </div>
       </section>
 
-      {/* Software We Know */}
+      {/* Stack We Know */}
       <section className="py-16 px-4">
         <div className="max-w-4xl mx-auto">
           <h2 className="text-2xl font-bold text-gray-900 text-center mb-4">
-            We know your software
+            We know your stack
           </h2>
           <p className="text-center text-gray-600 mb-8">
-            Our recommendations integrate with the tools you already use.
+            Our blueprint integrates with the tools you already use.
           </p>
 
           <div className="flex flex-wrap justify-center gap-3">
-            {SOFTWARE.map((tool) => (
+            {STACK.map((tool) => (
               <div
                 key={tool.name}
                 className="px-4 py-2 bg-gray-50 border border-gray-200 rounded-lg text-sm"
               >
                 <span className="font-medium text-gray-900">{tool.name}</span>
-                <span className="text-gray-400 ml-2">• {tool.category}</span>
+                <span className="text-gray-400 ml-2">&bull; {tool.category}</span>
               </div>
             ))}
-            <div className="px-4 py-2 bg-primary-50 border border-primary-200 rounded-lg text-sm text-primary-700">
-              + 50 more
+            <div className="px-4 py-2 bg-violet-50 border border-violet-200 rounded-lg text-sm text-violet-700">
+              + custom IoT &amp; more
             </div>
           </div>
         </div>
@@ -295,18 +275,18 @@ export default function ProfessionalServices() {
       <section className="py-16 px-4 bg-gray-900">
         <div className="max-w-3xl mx-auto text-center">
           <h2 className="text-3xl font-bold text-white mb-4">
-            Ready to find out which AI tools make sense?
+            Ready to connect your systems?
           </h2>
           <p className="text-gray-400 mb-8">
             Take the free 5-minute quiz. Get your AI readiness score instantly.
-            Full report for €147 if you want to go deeper.
+            Full architecture blueprint for &euro;147.
           </p>
 
           <button
             onClick={handleQuizStart}
             className="px-8 py-4 bg-white text-gray-900 font-bold rounded-xl hover:bg-gray-100 transition-all hover:scale-105 shadow-lg"
           >
-            Start Free Quiz →
+            Start Free Quiz &rarr;
           </button>
 
           <p className="text-sm text-gray-500 mt-6">
@@ -319,7 +299,7 @@ export default function ProfessionalServices() {
       <footer className="py-8 px-4 border-t border-gray-100">
         <div className="max-w-6xl mx-auto flex flex-col md:flex-row justify-between items-center gap-4">
           <Logo size="sm" showIcon={false} linkToHome={false} />
-          <p className="text-sm text-gray-500">© 2026 ReadyPath. No BS, just clarity.</p>
+          <p className="text-sm text-gray-500">&copy; 2026 ReadyPath. No BS, just clarity.</p>
           <div className="flex gap-6 text-sm text-gray-500">
             <Link to="/privacy" className="hover:text-gray-900 transition">Privacy</Link>
             <Link to="/terms" className="hover:text-gray-900 transition">Terms</Link>

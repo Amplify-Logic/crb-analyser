@@ -553,8 +553,8 @@ CRITICAL RULES:
 
 Return ONLY the insight text, no quotes or formatting."""
 
-        client = anthropic.Anthropic(api_key=settings.ANTHROPIC_API_KEY)
-        message = client.messages.create(
+        client = anthropic.AsyncAnthropic(api_key=settings.ANTHROPIC_API_KEY, timeout=30.0)
+        message = await client.messages.create(
             model="claude-haiku-4-5-20251001",  # Fast + cheap
             max_tokens=200,
             messages=[{"role": "user", "content": prompt}]
@@ -792,13 +792,13 @@ async def generate_teaser_report(
                     {"name": "Deep-Dive", "description": "Explore your pain points in detail"},
                     {"name": "Synthesis", "description": "Prioritize opportunities for your report"},
                 ],
-                "outcome": "Validated priorities and personalized findings",
+                "outcome": "Validated priorities and your AIOS architecture blueprint",
             },
             "full_report_includes": [
                 {"icon": "📊", "title": "Prioritized Findings", "description": "10-15 opportunities ranked by impact"},
                 {"icon": "💰", "title": "ROI Calculations", "description": "Specific estimates for your situation"},
-                {"icon": "🛠️", "title": "Vendor Recommendations", "description": "3 options per finding with pricing"},
-                {"icon": "📋", "title": "Implementation Roadmap", "description": "Week-by-week action plan"},
+                {"icon": "🔗", "title": "AIOS Architecture Blueprint", "description": "Connect, Enhance, or Upgrade — 3 options per finding"},
+                {"icon": "📋", "title": "Implementation Roadmap", "description": "Week-by-week build plan with Claude Code hours"},
             ],
         },
 
