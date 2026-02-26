@@ -8,13 +8,13 @@
 
 ## Product Overview
 
-**CRB Analyser** delivers AI-powered Cost/Risk/Benefit analysis for professional services firms considering AI implementation. We help compliance-focused businesses get clarity on AI opportunities without expensive consultants.
+**CRB Analyser** delivers AI-powered architecture blueprints that show businesses how to build their AI Operating System (AIOS) on top of their existing tools. We help companies get clarity on what to connect, what to automate, and what to build — without ripping out what already works.
 
 ### Core Promise
 
-> "The analysis makes the best option obvious."
+> "Connect what you have. Automate what slows you down. Build what doesn't exist."
 
-We don't just list pros and cons. Our CRB framework scores every option across multiple dimensions so the right choice emerges clearly - with confidence levels and trade-offs explicitly stated.
+We don't just list software recommendations. Our CRB framework analyzes your existing stack, identifies the gaps between systems, and architects an AI layer that connects everything — with specific workflows, agents, and integrations you can build this week.
 
 ### Delivery Model
 
@@ -66,13 +66,19 @@ Our value proposition centers on four key themes for professional services:
 
 ---
 
-## Three Options Model (3O)
+## AIOS Options Model
 
-Every recommendation presents three options: **Off-the-Shelf** (fast, proven), **Best-in-Class** (premium, full features), **Custom Build** (full control, competitive moat).
+Every recommendation presents options prioritized by implementation speed and disruption:
 
-When recommending Custom, include build tools, model choice, skills, dev hours, and stack.
+| Priority | Option | When We Recommend |
+|----------|--------|-------------------|
+| 1st | **Connect & Automate** | Your tools work. Wire them together with AI workflows (MCP, APIs, Claude). |
+| 2nd | **Enhance with AI** | Add an intelligence layer — agents, predictive workflows, command stations. |
+| 3rd | **Targeted Upgrade** | One specific tool is a dead end. Replace ONLY that link in the chain. |
 
-> **Full three-options methodology** → [FRAMEWORK.md](./FRAMEWORK.md#the-three-options-pattern)
+**Connect-first philosophy:** We never recommend replacing software unless the existing tool genuinely cannot be integrated (no API, fundamentally broken, blocking growth). Most businesses can get 80% of the value by connecting what they have.
+
+> **Full AIOS methodology** → [FRAMEWORK.md](./FRAMEWORK.md#aios-options-model)
 
 ---
 
@@ -90,24 +96,26 @@ Findings are prioritized as: **Quick Win** → **Strategic** → **Consider** �
 
 ---
 
-## Connect vs Replace Strategy
+## Connect → Enhance → Replace Strategy
 
-For every automation opportunity, we present two paths:
+For every automation opportunity, we evaluate in this order:
 
-| Strategy | When We Recommend | Example |
-|----------|-------------------|---------|
-| **Connect** | Current tools work well, just need automation | "Keep Clio, add n8n for client intake automation" |
-| **Replace** | Current tools are fundamentally limiting | "Move from spreadsheets to Karbon for workflow" |
+| Strategy | Priority | When We Recommend | Example |
+|----------|----------|-------------------|---------|
+| **Connect** | 1st (default) | Tool works, just needs wiring | "Keep HubSpot + Exact, build Claude workflow to sync deals → invoices" |
+| **Enhance** | 2nd | Need intelligence on top of existing data | "Build an AI agent that monitors IoT usage data and flags churn risk" |
+| **Replace** | 3rd (last resort) | Tool is a dead end — no API, fundamentally broken | "Migrate from spreadsheets to Odoo for inventory tracking" |
 
-### Decision Factors We Analyze
+### Decision Factors
 
-| Factor | Favors Connect | Favors Replace |
-|--------|----------------|----------------|
-| Current tool quality | Works well | Fundamentally broken |
-| Team size | Large (change is risky) | Small (can adapt quickly) |
-| Data complexity | High (migration risk) | Low (easy to move) |
-| Budget | Limited | Available for investment |
-| Technical capability | Low | Has dev resources |
+| Factor | Favors Connect/Enhance | Favors Replace |
+|--------|------------------------|----------------|
+| Tool has API | Yes — wire it up | - |
+| Tool fundamentally broken | - | Yes — it's blocking you |
+| Team already trained | Yes — don't retrain | - |
+| Data is trapped | - | Yes — if no export path |
+| Budget constrained | Yes — build, don't buy | - |
+| Technical capability | Yes — build workflows | Low — may need turnkey |
 
 ---
 
@@ -227,6 +235,36 @@ We launch all three verticals simultaneously with:
 | Customer Support | Gorgias, Zendesk, Intercom |
 | Email/SMS | Klaviyo, Omnisend, Postscript |
 | Analytics | Triple Whale, Northbeam, Lifetimely |
+
+---
+
+### Vertical 4: B2B Platforms
+
+**Slug:** `b2b-platforms`
+
+**Customer Profile:**
+- Hardware-to-platform companies (IoT devices, connected products, subscription hardware)
+- 20-200 employees, scaling rapidly with lean teams
+- Complex stacks: custom IoT + ERP + CRM + field service
+- Already AI-forward, looking for architecture help at scale
+
+**Key Pain Points:**
+| Pain Point | Impact |
+|------------|--------|
+| System Integration Gaps | Manual data sync between CRM, ERP, IoT, billing |
+| Scaling Operations | Processes that worked at 20 people break at 100 |
+| Partner Channel Management | Onboarding and managing distributors across countries |
+| Field Service Coordination | Scheduling, parts, technician routing at scale |
+
+**Software Ecosystem:**
+| Category | Key Vendors |
+|----------|-------------|
+| IoT Platform | Azure IoT Hub, AWS IoT Core, custom |
+| ERP | Exact Online, NetSuite, Odoo |
+| CRM | HubSpot, Salesforce |
+| Field Service | Salesforce FSL, ServiceMax, Zuper |
+| Subscription Billing | Chargebee, Zuora, Stripe Billing |
+| Partner Management | Impartner, PartnerStack |
 
 ---
 
@@ -388,18 +426,18 @@ Report Delivery (24-48 hours)
 
 ## Positioning
 
-> "We help professional services firms figure out which AI tools are worth their time - and which to skip."
+> "We help businesses build their AI Operating System — connecting what they have, automating what slows them down."
 
 ### The Promise
-- You get a personalised report with specific tools, prices, and implementation steps
-- No generic advice - we know your industry (Clio, Karbon, not Salesforce)
-- Clear verdicts: Proceed, Wait, or Skip
+- You get an architecture blueprint specific to YOUR stack
+- No generic "buy this tool" advice — we show what to build and connect
+- Clear verdicts: Connect, Enhance, or Replace
 - Enterprise-quality analysis at €147, not €15,000
 
 ### What We're NOT
-- Not a consulting firm (we're a product)
+- Not a software comparison site (we're an architecture firm)
 - Not an AI vendor (we recommend, don't sell)
-- Not generic (we're industry-specific)
+- Not generic (we know your industry and your stack)
 
 ---
 

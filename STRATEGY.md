@@ -8,20 +8,20 @@
 
 ## Vision & Mission
 
-**Vision:** Become the trusted AI readiness partner for professional services firms navigating digital transformation.
+**Vision:** Become the go-to platform for businesses building their AI Operating System — connecting existing tools, automating workflows, and deploying AI agents.
 
-**Mission:** Deliver enterprise-grade AI analysis at SMB pricing, helping compliance-focused businesses make confident technology decisions in days, not months.
+**Mission:** Deliver architecture blueprints that show businesses exactly how to build AI workflows on their existing stack, at SMB pricing, in days not months.
 
 ---
 
 ## Core Thesis
 
-> "Professional services firms face a unique dilemma: they advise clients on risk management while struggling to assess their own technology risks."
+> "Most businesses don't need new software. They need an AI layer that connects what they already have."
 
-We solve this by combining:
-1. **Deep industry expertise** in professional services workflows and compliance requirements
-2. **AI-powered analysis** that delivers consulting-quality insights at a fraction of the cost
-3. **A structured framework** (CRB) that makes the best option obvious
+We solve this by:
+1. **Analyzing your existing stack** — what tools you have, where the gaps are, what's connected and what isn't
+2. **Architecting your AIOS** — AI workflows, agents, and automations that bridge the gaps between your tools
+3. **Providing a build plan** — specific, actionable steps you can execute this week with Claude Code, MCP servers, and API integrations
 
 ---
 
@@ -46,13 +46,14 @@ Instead of sequential expansion, we test all three markets at once with:
 | **Lower Risk** | If one vertical fails, others may succeed |
 | **Compounding Data** | Cross-industry patterns emerge faster |
 
-### Three Verticals
+### Four Verticals
 
 | Vertical | Why It Could Win | Risk |
 |----------|------------------|------|
 | **Professional Services** | Compliance-focused, referral-driven, budget available | Slower sales cycles |
-| **Dental** | Clear processes, tech-forward, high-ticket services | Niche community, harder to reach |
-| **E-commerce** | Volume market, automation-hungry, measurable ROI | Crowded space, price-sensitive |
+| **Dental** | Clear processes, tech-forward, high-ticket services | Niche community |
+| **E-commerce** | Volume market, automation-hungry, measurable ROI | Crowded space |
+| **B2B Platforms** | Hardware-to-platform companies scaling lean, complex integrations | Niche but high-value |
 
 ### Success Signals (First 90 Days)
 

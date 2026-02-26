@@ -31,6 +31,22 @@ Use these commands at conversation start and during development:
 | `/execute [plan.md]` | After context reset - executes a plan with minimal context |
 | `/create-prd` | After discussing a product idea - generates PRD |
 | `/evolve` | After fixing a bug - improves rules/commands to prevent recurrence |
+| `/build-with-agent-team [plan]` | After planning - parallel build with 3+ independent components |
+| `/ui-test` | After building - validate UI with parallel Bowser QA agents |
+
+### Choosing an Execution Method
+
+Pick the **simplest** approach that fits. More agents = more tokens + coordination overhead.
+
+| Situation | Use | Why |
+|-----------|-----|-----|
+| Bug fix, single file change | Single session | No coordination needed |
+| Sequential plan, shared files | `/execute [plan]` | Agents would conflict on files |
+| Quick research, code review | Subagents (Task tool) | Report results back, no inter-agent talk needed |
+| 3+ independent modules, clear file boundaries | `/build-with-agent-team [plan]` | True parallel build with contracts |
+| UI validation after any build | `/ui-test` | Parallel story validation with screenshots |
+
+**Default to `/execute`.** Only use agent teams when the plan clearly has independent components with no shared files.
 
 ### Context Reset Workflow
 
@@ -146,13 +162,13 @@ created → in_progress → completed → payment_pending → paid → workshop_
 
 > **Full framework details** → [PRODUCT.md](./PRODUCT.md) and [FRAMEWORK.md](./FRAMEWORK.md)
 
-Core principle: **The analysis must make the best option obvious.**
+Core principle: **"Connect what you have. Automate what slows you down. Build what doesn't exist."**
 
 - **6 Costs**: Financial, Time, Opportunity, Complexity, Risk, Brand/Trust
 - **4 Benefits**: Financial, Time, Strategic, Quality
 - **NET SCORE** = Benefit - Cost - (Risk ÷ 10)
-- **Three Options**: Off-the-Shelf, Best-in-Class, Custom Build
-- **Connect vs Replace**: Integrate existing tools OR migrate to new ones
+- **AIOS Options**: Connect & Automate → Enhance with AI → Targeted Upgrade (replace only as last resort)
+- **Connect-First**: Never recommend replacing software unless the existing tool is genuinely a dead end (no API, fundamentally broken)
 
 When working on report generation, load `.claude/reference/report-quality.md`.
 
@@ -268,16 +284,22 @@ cd frontend && npm test
 
 ## Browser Automation
 
-Playwright-based browser automation for UI testing, enhanced scraping, and vendor research.
+Two layers: **Python skills** for production scraping and **Bowser QA agent** for UI testing.
 
 ### Setup
 ```bash
+# Python skills (production scraping)
 pip install playwright
 playwright install chromium
 # Or: make playwright-install
+
+# Bowser QA (UI testing via CLI)
+pnpm add -g @playwright/cli@latest
+playwright-cli install
+# Or: make playwright-cli-install
 ```
 
-### Skills
+### Production Skills (Python, in `backend/src/skills/browser/`)
 
 | Skill | Purpose | LLM? |
 |-------|---------|------|
@@ -285,12 +307,30 @@ playwright install chromium
 | `enhanced-scraper` | Site scraping with Playwright + httpx fallback | No |
 | `vendor-site-scraper` | Vendor pricing extraction via Playwright + Claude | Yes |
 
+### Bowser QA (UI Testing)
+
+Uses the [Bowser pattern](https://github.com/anthropics/bowser): Skill -> Agent -> Command -> Makefile.
+
+| Component | File | Purpose |
+|-----------|------|---------|
+| Skill | `.claude/skills/playwright-bowser/SKILL.md` | `playwright-cli` usage reference |
+| QA Agent | `.claude/agents/bowser-qa-agent.md` | Executes stories with PASS/FAIL reporting |
+| Command | `.claude/commands/ui-test.md` | Orchestrates parallel QA agent runs |
+
+**Workflow:** `/ui-test` discovers YAML stories, spawns one QA agent per story in parallel, each agent uses `playwright-cli` to execute steps with screenshots, results are aggregated into a summary table.
+
 ### Commands
 
 | Command | Purpose |
 |---------|---------|
-| `/ui-test` | Run agentic UI tests against user stories |
+| `/ui-test` | Run Bowser QA agents against user stories |
+| `/ui-test landing-page` | Run a specific story |
 | `/research-vendor` | Discover and scrape vendor pricing |
+
+### User Stories
+Stories live in `tests/ui/stories/*.yaml` using Bowser format (`stories:` array with `workflow:` field). Auto-discovered by `/ui-test`.
+
+Screenshots are saved to `screenshots/bowser-qa/<run_id>/` (gitignored).
 
 ### CLI Flag
 ```bash
@@ -299,13 +339,11 @@ cd backend && python -m src.cli.generate_report --playwright --url https://examp
 # Or: make generate-report-playwright ARGS="--url https://example.com"
 ```
 
-### User Stories
-UI test stories live in `tests/ui/stories/*.yaml`. Add new stories by creating a YAML file — they're auto-discovered by `/ui-test`.
-
 ### Makefile Targets
 ```bash
-make playwright-install          # Install Chromium
-make ui-test                     # Run UI tests
+make playwright-install          # Install Chromium (Python skills)
+make playwright-cli-install      # Install playwright-cli (Bowser QA)
+make ui-test                     # Run UI tests via Bowser QA
 make generate-report-playwright  # Generate report with Playwright scraping
 make test-all                    # Full test suite including UI
 ```

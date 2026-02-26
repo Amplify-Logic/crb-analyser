@@ -24,6 +24,9 @@ These phrases are BANNED. Replace with specifics:
 | "Unlock potential" | "Increase capacity from 40 to 55 clients/month" |
 | "Optimize workflows" | "Cut appointment scheduling from 15 to 2 minutes" |
 | "Drive growth" | "Add €4,200/month revenue with automated follow-ups" |
+| "Consider migrating to X" | "Connect HubSpot to Exact with a Claude workflow that syncs deals → invoices" |
+| "We recommend Tool X" | "Build an AI agent that monitors your IoT data and flags churn risk" |
+| "Best-in-class solution" | "Wire your existing CRM + ERP + IoT data into a unified context layer" |
 
 ## Specificity Requirements
 
@@ -81,24 +84,31 @@ NET SCORE = Benefit Score - Cost Score - (Risk Score ÷ 10)
 - Use ranges for LOW confidence
 - If everything is HIGH, you're being dishonest
 
-## Three Options Format
+## AIOS Options Format
 
-Every recommendation presents 3 options:
+Every recommendation presents options in connect-first priority:
 
 ```
-Option A: [Off-the-Shelf]     NET: +4.1  ◀ RECOMMENDED
-Option B: [Best-in-Class]     NET: +2.8
-Option C: [Custom Build]      NET: +1.2
+Option A: [Connect & Automate]   NET: +5.2  ◀ RECOMMENDED
+Option B: [Enhance with AI]      NET: +3.8
+Option C: [Targeted Upgrade]     NET: +1.5
 
 WHY OPTION A WINS:
-✓ Lowest time-to-value
-✓ Free tier covers current needs
-✓ Team already familiar
+✓ Uses your existing HubSpot + Exact stack
+✓ Claude workflow ships in 8 hours
+✓ Zero disruption, zero migration
 
 TRADE-OFFS:
-△ Less customization
-△ May outgrow in 12-18 months
+△ Requires API access to both tools
+△ Custom workflow needs maintenance
 ```
+
+### Connect-First Rules
+1. **Always lead with Connect** — show how to wire existing tools with AI
+2. **Enhance second** — add AI agents/workflows on top of existing data
+3. **Replace ONLY when** — tool has no API, is fundamentally broken, or data is trapped
+4. **Never recommend Replace** just because a "better" tool exists
+5. **Include build time** — "Ship in 8 hours with Claude Code" not "6-month migration"
 
 ## Teaser vs Full Report
 
@@ -123,6 +133,10 @@ Before shipping any report:
 - [ ] Would a dentist/plumber/lawyer understand without jargon?
 - [ ] Recommendations are actionable THIS WEEK
 - [ ] €147 price is clearly justified by value shown
+- [ ] First recommendation is CONNECT, not REPLACE
+- [ ] Every finding explains what can be built on existing stack
+- [ ] Custom build estimates include Claude Code hours and MCP servers needed
+- [ ] "Replace" option only appears when Connect is genuinely impossible (document why)
 
 ## Key Files
 
