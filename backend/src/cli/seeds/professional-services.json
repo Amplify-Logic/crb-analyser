@@ -1,0 +1,114 @@
+{
+  "industry": "professional-services",
+  "description": "Professional services firms for CRB report generation",
+  "tiers": {
+    "small": {
+      "description": "Solo/boutique firm, 1-10 staff, single specialization",
+      "defaults": {
+        "budget": 500,
+        "hourly_cost": 65,
+        "pain_points": ["manual time tracking", "document management chaos", "client onboarding friction"]
+      }
+    },
+    "mid": {
+      "description": "Mid-size firm, 10-50 staff, multiple service lines",
+      "defaults": {
+        "budget": 2000,
+        "hourly_cost": 75,
+        "pain_points": ["project visibility gaps", "resource allocation", "compliance overhead", "knowledge silos"]
+      }
+    },
+    "scaling": {
+      "description": "Large firm, 50-200 staff, multi-office/international",
+      "defaults": {
+        "budget": 5000,
+        "hourly_cost": 85,
+        "pain_points": ["cross-office collaboration", "talent management", "client reporting at scale", "M&A integration"]
+      }
+    }
+  },
+  "seeds": [
+    {
+      "name": "Catalyst Consulting",
+      "website": "https://catalyst-consulting.nl",
+      "country": "NL",
+      "profile": {
+        "tier": "small",
+        "industry": "professional-services",
+        "staff_size": "1-10",
+        "service_type": "strategy_consulting",
+        "billing_model": "project_based",
+        "client_count": 12,
+        "compliance_requirements": ["GDPR"],
+        "monthly_revenue": 45000,
+        "hourly_rate": 150,
+        "current_tools": ["Google Workspace", "Notion", "Toggl", "Stripe", "LinkedIn"],
+        "pain_points": ["manual proposal writing", "inconsistent project tracking", "knowledge lost between projects", "no CRM"],
+        "implementation_preference": "connect",
+        "ai_tools_used": ["chatgpt", "copilot"],
+        "integration_issues": 5,
+        "manual_data_entry": false,
+        "implementation_urgency": "this_month"
+      },
+      "workshop_transcript": [
+        {"role": "assistant", "content": "Let's start with an overview \u2014 what kind of consulting does Catalyst do, and who are your typical clients?"},
+        {"role": "user", "content": "We're an 8-person strategy consulting firm. We help mid-size companies \u2014 usually \u20ac5M-50M revenue \u2014 with growth strategy, digital transformation, and operational improvement. Our sweet spot is companies that have outgrown their founder-led approach and need to professionalize. Typical engagement is 6-12 weeks, \u20ac15,000-40,000."},
+        {"role": "assistant", "content": "Walk me through how a new client engagement works, from first contact to delivery."},
+        {"role": "user", "content": "A lead comes in \u2014 usually through LinkedIn content or referrals. I have a 30-minute discovery call. If it's a fit, we write a proposal. Proposals are our biggest bottleneck \u2014 each one takes 3-5 hours to write, and we probably win 1 in 3. That's 10-15 hours per month on proposals that go nowhere. We use Google Docs for proposals, no templates, each consultant writes them differently."},
+        {"role": "assistant", "content": "Once you win the project, how do you manage delivery?"},
+        {"role": "user", "content": "We use Notion for project management. Each project gets a Notion workspace. But here's the problem \u2014 every consultant sets up their workspace differently. There's no standard structure. When I need to review a project or when a consultant leaves, I can't find anything. We also track time in Toggl, but compliance is maybe 60%. People forget to log hours, so our profitability data is unreliable."},
+        {"role": "assistant", "content": "How do you handle knowledge management \u2014 learnings from past projects, reusable frameworks?"},
+        {"role": "user", "content": "We don't, really. It's all in people's heads or scattered across Google Drives. We did a digital transformation project for a logistics company last year \u2014 brilliant work. Now we have a similar engagement coming up and I can't find half the deliverables. Every project we start from scratch. I know there's so much we could reuse \u2014 frameworks, benchmark data, presentation templates. We just have no system."},
+        {"role": "assistant", "content": "What about client relationships and pipeline management?"},
+        {"role": "user", "content": "I have a Google Sheet. Honestly, it's embarrassing for a consulting firm. No CRM, no pipeline tracking, no automated follow-ups. I keep relationships warm through personal LinkedIn messages. But I know we're leaving money on the table \u2014 past clients who'd buy more if we stayed in touch, warm leads that go cold because nobody followed up. My guess is we lose \u20ac10,000-15,000 per month in missed repeat business."},
+        {"role": "assistant", "content": "How are you handling invoicing and financial management?"},
+        {"role": "user", "content": "Stripe for payments, Xero for accounting. That part actually works okay. The problem is the gap between \u2014 I can't easily tell you which projects are profitable because time tracking is inconsistent. Some projects we've definitely undercharged on. I suspect our average effective hourly rate is closer to \u20ac100 when it should be \u20ac150, because of scope creep we don't track."},
+        {"role": "assistant", "content": "If you could fix one thing about your operations, what would it be?"},
+        {"role": "user", "content": "Proposal automation and a knowledge base. If we could cut proposal time from 5 hours to 1 hour using templates and AI, and if we could actually capture and reuse knowledge from past projects, it would fundamentally change our capacity. Right now I turn away work because we're at capacity \u2014 but half our time is spent on non-billable admin. Free that up and we could take on 2-3 more projects per quarter without hiring."},
+        {"role": "assistant", "content": "What's your budget for technology improvements?"},
+        {"role": "user", "content": "\u20ac400-600 per month. But honestly, if something could demonstrably save us 20+ hours per month of admin time, I'd go to \u20ac1,000. Our hourly rate is \u20ac150 \u2014 so 20 saved hours is \u20ac3,000 in recovered capacity. The ROI math is obvious, I just need to know what actually works and doesn't become another tool nobody uses."}
+      ]
+    },
+    {
+      "name": "Van Berg & Partners",
+      "website": "https://vanberg-partners.nl",
+      "country": "NL",
+      "profile": {
+        "tier": "mid",
+        "industry": "professional-services",
+        "staff_size": "11-50",
+        "service_type": "accounting_advisory",
+        "billing_model": "retainer_and_project",
+        "client_count": 180,
+        "compliance_requirements": ["GDPR", "Dutch_audit_standards", "NBA_regulations"],
+        "monthly_revenue": 125000,
+        "hourly_rate": 95,
+        "current_tools": ["Exact Online", "Microsoft 365", "CaseWare", "Twinfield", "Teams"],
+        "pain_points": ["annual audit bottleneck", "document collection from clients", "regulatory compliance tracking", "junior staff onboarding"],
+        "implementation_preference": "buy",
+        "ai_tools_used": [],
+        "integration_issues": 3,
+        "manual_data_entry": true,
+        "implementation_urgency": "this_quarter"
+      },
+      "workshop_transcript": [
+        {"role": "assistant", "content": "Thanks for making time. Let's start broad \u2014 tell me about Van Berg & Partners and how the firm operates today."},
+        {"role": "user", "content": "We're a 22-person accounting and advisory firm in Rotterdam. Four partners, eight senior accountants, six juniors, and four admin staff. We do annual accounts, tax filing, audit, and business advisory for SMEs. About 180 active clients, mostly in the \u20ac1M-20M revenue range. We've been around for 15 years and we're growing steadily \u2014 added 25 new clients last year."},
+        {"role": "assistant", "content": "What does your tech stack look like currently?"},
+        {"role": "user", "content": "Exact Online for general ledger and client accounting. CaseWare for audit and compilation. Twinfield for some older clients we haven't migrated yet. Microsoft 365 for email, documents, Teams for internal chat. Everything is somewhat siloed \u2014 CaseWare doesn't talk to Exact, so our staff manually re-enter data during audit season. We also use a shared network drive for client documents, which is... a mess."},
+        {"role": "assistant", "content": "Tell me about audit season. You mentioned that's a bottleneck?"},
+        {"role": "user", "content": "January through April is brutal. We have about 60 clients that need annual accounts filed, and 20 that need full audits. The biggest time sink is document collection \u2014 chasing clients for bank statements, invoices, receipts. Our staff send an average of 15 follow-up emails per client. Some clients take 6-8 weeks to provide everything. Meanwhile our staff are idle on that engagement, waiting. Then everything comes in at once and we're overwhelmed."},
+        {"role": "assistant", "content": "How much time would you estimate is spent on document collection and follow-up?"},
+        {"role": "user", "content": "Conservatively? 800 hours per year across the firm. That's almost half an FTE just on follow-up emails and phone calls. We tried a client portal two years ago \u2014 Basecone \u2014 but adoption was terrible. Only about 30% of clients actually used it. The rest kept emailing PDFs or, worse, dropping off paper documents."},
+        {"role": "assistant", "content": "What about compliance and regulatory changes \u2014 how do you stay on top of those?"},
+        {"role": "user", "content": "That's a growing concern. Dutch accounting standards change regularly, and we need to ensure every engagement complies. Right now it's the partners' job to stay current and cascade changes to the team. But things slip through. Last year we had to redo three sets of annual accounts because of a reporting standard change we implemented late. That cost us probably \u20ac15,000 in unbilled time and significant client frustration."},
+        {"role": "assistant", "content": "How do you onboard junior staff? You mentioned that as a pain point."},
+        {"role": "user", "content": "It takes 6 months before a junior is truly productive. They learn by sitting with seniors, which pulls the seniors off billable work. We have no formal training system, no documented procedures. Every senior has their own way of doing things in CaseWare. When a senior leaves \u2014 which has happened twice in the past year \u2014 their clients' institutional knowledge walks out the door. We spent weeks trying to figure out how one departing senior had set up their CaseWare files."},
+        {"role": "assistant", "content": "What would have the biggest impact on the firm if you could solve it?"},
+        {"role": "user", "content": "Two things: automated document collection from clients, and standardized workflows in CaseWare with compliance checks built in. If clients could upload documents to a portal that actually worked \u2014 with AI that categorizes and matches documents to the right accounts \u2014 we'd save hundreds of hours. And if CaseWare had automated compliance checklists that updated with regulation changes, we'd eliminate those costly redo situations."},
+        {"role": "assistant", "content": "Budget for technology improvements?"},
+        {"role": "user", "content": "The partners have approved up to \u20ac1,500 per month for the right solution. But we need to see ROI within 6 months. We've been burned before \u2014 the Basecone implementation cost us \u20ac8,000 and we abandoned it. Whatever we do next needs a proper rollout plan with client training. Our clients are mostly small business owners, not tech people."}
+      ]
+    }
+  ]
+}

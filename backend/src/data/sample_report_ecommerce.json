@@ -312,28 +312,42 @@
           ]
         },
         "connect_and_automate": {
-          "approach": "Build custom AI support agent using Claude API + Shopify webhooks + ShipStation API for order and tracking context. With AI coding tools (Claude Code, Cursor), a developer can scaffold the Shopify integration, conversation flows, and escalation logic in 2-3 weeks. The Claude API handles the conversation intelligence natively.",
-          "estimated_cost": {
-            "min": 3500,
-            "max": 8000
+          "approach": "Build custom AI support agent using Claude API + Shopify webhooks + ShipStation API for order and tracking context. Claude Code scaffolds the Shopify integration, conversation flows, and escalation logic.",
+          "build_time": "3 weeks (solo) / 1 week (guided)",
+          "tools_used": ["Claude Code", "Shopify API", "ShipStation API", "Gorgias API"],
+          "mcp_servers": ["mcp-server-shopify"],
+          "monthly_cost": "EUR 200-300 (API usage)",
+          "diy_complexity": "high",
+          "automation_flow": {
+            "nodes": [
+              {"id": "n1", "label": "Gorgias", "type": "existing_tool"},
+              {"id": "n2", "label": "Claude API", "type": "ai_layer"},
+              {"id": "n3", "label": "Shopify", "type": "existing_tool"},
+              {"id": "n4", "label": "ShipStation", "type": "existing_tool"},
+              {"id": "n5", "label": "Auto-Response", "type": "output"}
+            ],
+            "edges": [
+              {"from": "n1", "to": "n2", "label": "Customer message"},
+              {"from": "n3", "to": "n2", "label": "Order data"},
+              {"from": "n4", "to": "n2", "label": "Tracking info"},
+              {"from": "n2", "to": "n5", "label": "Drafted reply"}
+            ]
           },
-          "implementation_weeks": 3,
           "pros": [
             "Full control over AI behavior and brand voice",
             "No per-conversation fees at scale",
-            "Deep product expertise possible",
-            "Claude API cost: ~€200/month for 1,800 conversations",
+            "Claude API cost: ~EUR 200/month for 1,800 conversations",
             "AI coding tools cut development time by 60-70%"
           ],
           "cons": [
-            "Needs a developer comfortable with AI APIs",
+            "High complexity — needs AI API experience",
             "Ongoing maintenance and prompt tuning",
             "No vendor support — you own the code"
           ]
         }
       },
       "our_recommendation": "connect_and_automate",
-      "recommendation_rationale": "Siena AI is purpose-built for DTC ecommerce support and handles your top 3 ticket types (WISMO, returns, sizing) out of the box. Their Shopify Plus integration means the AI has real-time access to order and tracking data. At €500/month, it pays for itself if it deflects just 25% of current tickets. Multi-language support is critical for your European customer base.",
+      "recommendation_rationale": "You already have Gorgias, Shopify Plus, and ShipStation — all with strong APIs. Connecting them with Claude API gives your support agent real-time access to order and tracking data, handling WISMO, returns, and sizing queries automatically. At 1,800 tickets/month, this is more cost-effective than per-conversation SaaS pricing.",
       "roi_percentage": 507,
       "payback_months": 2,
       "assumptions": [

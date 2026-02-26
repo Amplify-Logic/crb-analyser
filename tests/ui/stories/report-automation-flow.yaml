@@ -1,0 +1,69 @@
+stories:
+  - name: "Automation Flow - Rendering"
+    url: "http://localhost:5174/preview"
+    priority: critical
+    workflow: |
+      Navigate to the preview report page
+      Wait for the report to fully load
+
+      Scroll to the recommendations section ("What To Do")
+      Click on the first recommendation to expand it
+
+      Look for the AIOS option cards (Connect & Automate, Enhance with AI, Targeted Upgrade)
+      If a "How it connects" section is visible within Connect & Automate:
+        Verify the flow diagram container renders (a bordered box with title "How it connects")
+        Verify node labels are visible inside the diagram
+        Verify a legend section is present below the diagram
+      Otherwise: note that this report has no automation_flow data (acceptable)
+
+  - name: "Automation Flow - Prerequisite Banner"
+    url: "http://localhost:5174/preview"
+    priority: high
+    workflow: |
+      Navigate to the preview report page
+      Wait for the report to fully load
+
+      Scroll to the recommendations section
+      Click on the first recommendation to expand it
+
+      Look for the Connect & Automate option card
+      If a prerequisite banner is present (amber/yellow background with "First:" text):
+        Verify the banner has an amber/yellow background color
+        Verify there is a warning icon (triangle) next to the text
+        Verify the prerequisite text describes an action to take
+      Otherwise: note that this recommendation has no prerequisite (acceptable)
+
+  - name: "Automation Flow - Backward Compatibility"
+    url: "http://localhost:5174/preview"
+    priority: critical
+    workflow: |
+      Navigate to the preview report page
+      Wait for the report to fully load
+
+      Verify the page loads without JavaScript errors in the console
+      Verify the recommendations section renders ("What To Do" heading visible)
+      Verify at least one recommendation card is visible
+
+      Expand a recommendation by clicking on it
+      Verify option cards render (either AIOS format or legacy 3-option format)
+      Verify no blank or broken sections appear where flow diagrams should be
+
+  - name: "Automation Flow - Complexity Badges"
+    url: "http://localhost:5174/preview"
+    priority: medium
+    workflow: |
+      Navigate to the preview report page
+      Wait for the report to fully load
+
+      Scroll to the recommendations section
+      Click on the first recommendation to expand it
+
+      Look for the Connect & Automate option card
+      If a build_time value is shown (e.g., "2-3 days", "1 week"):
+        Look for a DIY complexity badge next to the build time
+        If present, verify the badge shows one of: "low", "moderate", or "high"
+        Verify the badge has a colored background:
+          - green for "low"
+          - yellow for "moderate"
+          - red for "high"
+      Otherwise: note that build_time is not present for this option (acceptable)

@@ -1,0 +1,947 @@
+{
+  "last_updated": "2026-02-24T12:00:00Z",
+  "description": "Business-relevant MCP servers for Claude Code — enabling AI systems to connect to real business tools via the Model Context Protocol",
+  "total_public_servers": 8600,
+  "curated_count": 54,
+  "source": "Curated from registry.modelcontextprotocol.io, PulseMCP, and official vendor documentation",
+
+  "categories": {
+    "crm": {
+      "description": "Customer relationship management — connect AI to sales pipelines and client data",
+      "servers": [
+        {
+          "name": "HubSpot MCP",
+          "slug": "hubspot",
+          "install_command": "claude mcp add hubspot -- npx -y @hubspot/mcp",
+          "what_it_connects": "HubSpot CRM — contacts, companies, deals, tickets, products, invoices, quotes",
+          "key_actions": ["Query contacts and deals", "Read company records", "Search across CRM objects", "View pipeline analytics"],
+          "maturity": "production",
+          "complexity": "easy",
+          "industries": ["dental", "ecommerce", "professional-services"],
+          "company_sizes": ["1-10", "11-50", "51-200"],
+          "free": true,
+          "notes": "Official HubSpot server. Currently read-only in public beta. OAuth authentication supported."
+        },
+        {
+          "name": "Salesforce MCP",
+          "slug": "salesforce",
+          "install_command": "claude mcp add salesforce -- npx -y @salesforce/mcp",
+          "what_it_connects": "Salesforce CRM — leads, contacts, opportunities, cases, custom objects",
+          "key_actions": ["Query SOQL records", "Create and update contacts", "Pipeline analytics", "Case management"],
+          "maturity": "production",
+          "complexity": "medium",
+          "industries": ["professional-services"],
+          "company_sizes": ["11-50", "51-200"],
+          "free": false,
+          "notes": "Supports full CRUD operations. Requires Salesforce license. Best for teams already on Salesforce."
+        },
+        {
+          "name": "Pipedrive MCP",
+          "slug": "pipedrive",
+          "install_command": "claude mcp add pipedrive -- npx -y pipedrive-mcp",
+          "what_it_connects": "Pipedrive CRM — deals, persons, organizations, activities, pipelines, notes",
+          "key_actions": ["Manage deals and pipeline stages", "Track activities", "Update contact records", "Generate pipeline reports"],
+          "maturity": "production",
+          "complexity": "easy",
+          "industries": ["professional-services"],
+          "company_sizes": ["1-10", "11-50"],
+          "free": false,
+          "notes": "Community server with all 45 Pipedrive API operations exposed. Popular with small sales teams."
+        },
+        {
+          "name": "Freshsales MCP",
+          "slug": "freshsales",
+          "install_command": "claude mcp add freshsales -- npx -y @freshworks/mcp-freshsales",
+          "what_it_connects": "Freshsales CRM — contacts, accounts, deals, tasks, appointment scheduling",
+          "key_actions": ["Search contacts", "Update deal stages", "Log activities", "View sales reports"],
+          "maturity": "beta",
+          "complexity": "easy",
+          "industries": ["dental", "professional-services"],
+          "company_sizes": ["1-10", "11-50"],
+          "free": false,
+          "notes": "Good fit for service businesses. Lower cost than Salesforce/HubSpot paid tiers."
+        }
+      ]
+    },
+
+    "payments": {
+      "description": "Payment processing — let AI manage invoices, subscriptions, and transaction data",
+      "servers": [
+        {
+          "name": "Stripe MCP",
+          "slug": "stripe",
+          "install_command": "claude mcp add stripe -- npx -y @stripe/mcp --api-key=$STRIPE_SECRET_KEY",
+          "what_it_connects": "Stripe — payments, subscriptions, invoices, customers, products, refunds",
+          "key_actions": ["Create invoices", "Query payment history", "Manage subscriptions", "Customer lookup", "Generate revenue reports"],
+          "maturity": "production",
+          "complexity": "medium",
+          "industries": ["ecommerce", "professional-services"],
+          "company_sizes": ["1-10", "11-50", "51-200"],
+          "free": true,
+          "notes": "Official Stripe server. Also available via Docker. Set STRIPE_SECRET_KEY as env var for security."
+        },
+        {
+          "name": "Square MCP",
+          "slug": "square",
+          "install_command": "npx square-mcp-server install",
+          "what_it_connects": "Square — payments, inventory, orders, customers, loyalty programs, locations",
+          "key_actions": ["Process payment lookups", "Manage inventory", "Customer engagement", "View transaction history", "Location management"],
+          "maturity": "beta",
+          "complexity": "medium",
+          "industries": ["dental", "ecommerce"],
+          "company_sizes": ["1-10", "11-50"],
+          "free": true,
+          "notes": "Official Square server. Supports remote OAuth mode (recommended) or local API key mode. 100+ endpoints across 20+ APIs."
+        },
+        {
+          "name": "PayPal MCP",
+          "slug": "paypal",
+          "install_command": "claude mcp add paypal -- npx -y paypal-mcp",
+          "what_it_connects": "PayPal — transactions, invoices, disputes, payouts, subscriptions",
+          "key_actions": ["Query transaction history", "Create invoices", "Manage disputes", "Track payouts"],
+          "maturity": "beta",
+          "complexity": "medium",
+          "industries": ["ecommerce"],
+          "company_sizes": ["1-10", "11-50"],
+          "free": true,
+          "notes": "Community server. Useful for businesses that accept PayPal alongside Stripe/Square."
+        }
+      ]
+    },
+
+    "communication": {
+      "description": "Team messaging, email, and customer communication — AI-powered notifications and outreach",
+      "servers": [
+        {
+          "name": "Slack MCP",
+          "slug": "slack",
+          "install_command": "claude mcp add slack -- npx -y @slack/mcp",
+          "what_it_connects": "Slack — channels, messages, users, canvases, search across workspace",
+          "key_actions": ["Search channels and messages", "Send messages", "Manage canvases", "User lookup", "Channel management"],
+          "maturity": "production",
+          "complexity": "easy",
+          "industries": ["ecommerce", "professional-services"],
+          "company_sizes": ["1-10", "11-50", "51-200"],
+          "free": true,
+          "notes": "Official Slack server. Great for internal notifications and team coordination."
+        },
+        {
+          "name": "Discord MCP",
+          "slug": "discord",
+          "install_command": "claude mcp add discord -- npx -y discord-mcp",
+          "what_it_connects": "Discord — channels, messages, server management, user interactions",
+          "key_actions": ["Read channel messages", "Send messages", "Manage server settings", "User management"],
+          "maturity": "beta",
+          "complexity": "easy",
+          "industries": ["ecommerce"],
+          "company_sizes": ["1-10", "11-50"],
+          "free": true,
+          "notes": "Community server. Useful for ecommerce brands with community channels."
+        },
+        {
+          "name": "Gmail MCP",
+          "slug": "gmail",
+          "install_command": "claude mcp add gmail -- npx -y @anthropic/mcp-gmail",
+          "what_it_connects": "Gmail — emails, labels, threads, drafts, search across inbox",
+          "key_actions": ["Search emails", "Send and draft emails", "Organize with labels", "Thread management"],
+          "maturity": "production",
+          "complexity": "easy",
+          "industries": ["dental", "ecommerce", "professional-services"],
+          "company_sizes": ["1-10", "11-50", "51-200"],
+          "free": true,
+          "notes": "Part of the official MCP servers collection. OAuth 2.0 authentication required."
+        },
+        {
+          "name": "Twilio MCP",
+          "slug": "twilio",
+          "install_command": "claude mcp add twilio -- npx -y @twilio-labs/mcp",
+          "what_it_connects": "Twilio — SMS, voice calls, WhatsApp, phone number management",
+          "key_actions": ["Send SMS messages", "Look up phone numbers", "Manage messaging services", "View message history"],
+          "maturity": "beta",
+          "complexity": "medium",
+          "industries": ["dental", "ecommerce", "professional-services"],
+          "company_sizes": ["1-10", "11-50", "51-200"],
+          "free": false,
+          "notes": "Alpha server from Twilio Labs. Pay-per-message pricing. Great for appointment reminders and order notifications."
+        },
+        {
+          "name": "Microsoft Teams MCP",
+          "slug": "microsoft-teams",
+          "install_command": "claude mcp add teams -- npx -y @microsoft/mcp-teams",
+          "what_it_connects": "Microsoft Teams — channels, chats, meetings, files, team management",
+          "key_actions": ["Send channel messages", "Search conversations", "Schedule meetings", "Manage team membership"],
+          "maturity": "beta",
+          "complexity": "medium",
+          "industries": ["professional-services"],
+          "company_sizes": ["11-50", "51-200"],
+          "free": false,
+          "notes": "For businesses on Microsoft 365. Alternative to Slack MCP for Teams-first organizations."
+        }
+      ]
+    },
+
+    "databases": {
+      "description": "Data storage and retrieval — let AI query, analyze, and manage business data directly",
+      "servers": [
+        {
+          "name": "Supabase MCP",
+          "slug": "supabase",
+          "install_command": "claude mcp add supabase -- npx -y supabase-mcp@latest",
+          "what_it_connects": "Supabase — PostgreSQL database, auth, storage, edge functions, realtime",
+          "key_actions": ["Execute SQL queries", "Manage tables and schemas", "Apply migrations", "Generate TypeScript types", "View project logs"],
+          "maturity": "production",
+          "complexity": "medium",
+          "industries": ["dental", "ecommerce", "professional-services"],
+          "company_sizes": ["1-10", "11-50", "51-200"],
+          "free": true,
+          "notes": "Official Supabase server with 20+ tools. Also available as hosted endpoint at mcp.supabase.com. Use read_only=true for production data."
+        },
+        {
+          "name": "PostgreSQL MCP",
+          "slug": "postgresql",
+          "install_command": "claude mcp add postgres -- npx -y @anthropic/mcp-postgres",
+          "what_it_connects": "PostgreSQL — any Postgres database, tables, views, functions",
+          "key_actions": ["Execute read queries", "Inspect schemas", "Analyze query plans", "Health checks", "Index tuning"],
+          "maturity": "production",
+          "complexity": "medium",
+          "industries": ["dental", "ecommerce", "professional-services"],
+          "company_sizes": ["1-10", "11-50", "51-200"],
+          "free": true,
+          "notes": "Part of official MCP servers. Read-only by default for safety. Good for analytics on existing databases."
+        },
+        {
+          "name": "MySQL MCP",
+          "slug": "mysql",
+          "install_command": "claude mcp add mysql -- npx -y @benborla29/mcp-server-mysql",
+          "what_it_connects": "MySQL — any MySQL database, tables, schemas, stored procedures",
+          "key_actions": ["Execute read queries", "Inspect database schemas", "List tables", "Describe table structures"],
+          "maturity": "production",
+          "complexity": "medium",
+          "industries": ["ecommerce", "professional-services"],
+          "company_sizes": ["1-10", "11-50"],
+          "free": true,
+          "notes": "Community server. Read-only access for safety. Common for WordPress/WooCommerce backends."
+        },
+        {
+          "name": "MongoDB MCP",
+          "slug": "mongodb",
+          "install_command": "claude mcp add mongodb -- npx -y mongo-mcp",
+          "what_it_connects": "MongoDB — collections, documents, aggregation pipelines, indexes",
+          "key_actions": ["Query collections", "Filter documents", "Run aggregations", "Explore schemas", "Manage indexes"],
+          "maturity": "beta",
+          "complexity": "medium",
+          "industries": ["ecommerce", "professional-services"],
+          "company_sizes": ["11-50", "51-200"],
+          "free": true,
+          "notes": "Community server. Good for apps with flexible document schemas."
+        },
+        {
+          "name": "Airtable MCP",
+          "slug": "airtable",
+          "install_command": "claude mcp add airtable -- npx -y airtable-mcp",
+          "what_it_connects": "Airtable — bases, tables, records, views, automations",
+          "key_actions": ["Query and filter records", "Create and update entries", "Manage table schemas", "Base management", "Data migration"],
+          "maturity": "beta",
+          "complexity": "easy",
+          "industries": ["dental", "ecommerce", "professional-services"],
+          "company_sizes": ["1-10", "11-50"],
+          "free": true,
+          "notes": "Community server. Excellent for non-technical teams using Airtable as a lightweight database."
+        }
+      ]
+    },
+
+    "documents": {
+      "description": "Knowledge management and document collaboration — AI reads, creates, and organizes business content",
+      "servers": [
+        {
+          "name": "Google Drive MCP",
+          "slug": "google-drive",
+          "install_command": "claude mcp add gdrive -- npx -y @anthropic/mcp-gdrive",
+          "what_it_connects": "Google Drive — files, folders, Docs, Sheets, Slides, search across Drive",
+          "key_actions": ["Search files", "Read document contents", "Categorize files", "List folder contents"],
+          "maturity": "production",
+          "complexity": "easy",
+          "industries": ["dental", "ecommerce", "professional-services"],
+          "company_sizes": ["1-10", "11-50", "51-200"],
+          "free": true,
+          "notes": "Official Anthropic server. OAuth 2.0 required. Read-only access to Drive files."
+        },
+        {
+          "name": "Notion MCP",
+          "slug": "notion",
+          "install_command": "claude mcp add notion -- npx -y @anthropic/mcp-notion",
+          "what_it_connects": "Notion — pages, databases, blocks, comments, search across workspace",
+          "key_actions": ["Search workspace", "Create pages", "Update database entries", "Append comments", "Read page contents"],
+          "maturity": "production",
+          "complexity": "easy",
+          "industries": ["ecommerce", "professional-services"],
+          "company_sizes": ["1-10", "11-50", "51-200"],
+          "free": true,
+          "notes": "Official first-party Notion MCP. Supports both read and write. Growing integration ecosystem with Lovable, Perplexity, and others."
+        },
+        {
+          "name": "Confluence MCP",
+          "slug": "confluence",
+          "install_command": "claude mcp add confluence -- npx -y mcp-atlassian",
+          "what_it_connects": "Confluence — pages, spaces, blogs, comments, search across wiki",
+          "key_actions": ["Search content", "Read pages", "Create and update pages", "List spaces", "Manage permissions"],
+          "maturity": "production",
+          "complexity": "medium",
+          "industries": ["professional-services"],
+          "company_sizes": ["11-50", "51-200"],
+          "free": false,
+          "notes": "Official Atlassian Rovo MCP server with OAuth 2.1. Also available via community mcp-atlassian package for both Cloud and Server/Data Center."
+        },
+        {
+          "name": "Google Sheets MCP",
+          "slug": "google-sheets",
+          "install_command": "claude mcp add gsheets -- npx -y @anthropic/mcp-google-sheets",
+          "what_it_connects": "Google Sheets — spreadsheets, worksheets, cells, formulas, pivot tables",
+          "key_actions": ["Read spreadsheet data", "Update cell values", "Create new sheets", "Query ranges", "Format cells"],
+          "maturity": "production",
+          "complexity": "easy",
+          "industries": ["dental", "ecommerce", "professional-services"],
+          "company_sizes": ["1-10", "11-50", "51-200"],
+          "free": true,
+          "notes": "Part of Google Workspace MCP servers. Many SMBs run their entire operations from spreadsheets — this bridges AI to that data."
+        }
+      ]
+    },
+
+    "project_management": {
+      "description": "Task tracking and project coordination — AI manages tickets, sprints, and team workflows",
+      "servers": [
+        {
+          "name": "Jira MCP",
+          "slug": "jira",
+          "install_command": "claude mcp add jira -- npx -y mcp-atlassian",
+          "what_it_connects": "Jira — issues, projects, sprints, boards, workflows, search",
+          "key_actions": ["Create and update issues", "Search with JQL", "Manage sprint boards", "Track project progress", "Assign tasks"],
+          "maturity": "production",
+          "complexity": "medium",
+          "industries": ["professional-services"],
+          "company_sizes": ["11-50", "51-200"],
+          "free": false,
+          "notes": "Official Atlassian Rovo MCP with OAuth 2.1. Launched Feb 2026. Also available via community mcp-atlassian."
+        },
+        {
+          "name": "Linear MCP",
+          "slug": "linear",
+          "install_command": "claude mcp add linear -- npx -y @anthropic/mcp-linear",
+          "what_it_connects": "Linear — issues, projects, cycles, teams, labels, roadmaps",
+          "key_actions": ["Create and update issues", "Search issues", "Manage projects", "Track cycle progress"],
+          "maturity": "production",
+          "complexity": "easy",
+          "industries": ["professional-services"],
+          "company_sizes": ["1-10", "11-50"],
+          "free": true,
+          "notes": "Clean API design. Popular with modern dev and product teams."
+        },
+        {
+          "name": "Asana MCP",
+          "slug": "asana",
+          "install_command": "claude mcp add asana -- npx -y asana-mcp",
+          "what_it_connects": "Asana — tasks, projects, portfolios, goals, team workspaces",
+          "key_actions": ["Create and assign tasks", "Track project progress", "Update task status", "Search across workspace"],
+          "maturity": "beta",
+          "complexity": "easy",
+          "industries": ["professional-services"],
+          "company_sizes": ["11-50", "51-200"],
+          "free": false,
+          "notes": "Community server. Good for non-technical teams managing complex projects."
+        },
+        {
+          "name": "Trello MCP",
+          "slug": "trello",
+          "install_command": "claude mcp add trello -- npx -y mcp-server-trello",
+          "what_it_connects": "Trello — boards, lists, cards, checklists, members, labels",
+          "key_actions": ["Create and move cards", "Manage boards and lists", "Update card details", "Search across boards"],
+          "maturity": "beta",
+          "complexity": "easy",
+          "industries": ["dental", "ecommerce", "professional-services"],
+          "company_sizes": ["1-10", "11-50"],
+          "free": true,
+          "notes": "Community server with built-in rate limiting. Simple Kanban workflow automation."
+        },
+        {
+          "name": "Monday.com MCP",
+          "slug": "monday",
+          "install_command": "claude mcp add monday -- npx -y monday-mcp",
+          "what_it_connects": "Monday.com — boards, items, columns, automations, dashboards",
+          "key_actions": ["Create and update items", "Manage board views", "Track status changes", "Query dashboards"],
+          "maturity": "beta",
+          "complexity": "easy",
+          "industries": ["professional-services"],
+          "company_sizes": ["11-50", "51-200"],
+          "free": false,
+          "notes": "Community server. Popular with agencies and consulting firms for client project tracking."
+        }
+      ]
+    },
+
+    "ecommerce_platforms": {
+      "description": "Online store management — AI handles products, orders, inventory, and customer data",
+      "servers": [
+        {
+          "name": "Shopify MCP",
+          "slug": "shopify",
+          "install_command": "claude mcp add shopify -- npx shopify-mcp --accessToken=$SHOPIFY_ACCESS_TOKEN --domain=$MYSHOPIFY_DOMAIN",
+          "what_it_connects": "Shopify — products, orders, customers, inventory, collections, analytics",
+          "key_actions": ["Query order data", "Manage product listings", "Customer analytics", "Inventory tracking", "Collection management"],
+          "maturity": "production",
+          "complexity": "medium",
+          "industries": ["ecommerce"],
+          "company_sizes": ["1-10", "11-50", "51-200"],
+          "free": true,
+          "notes": "Official Shopify Dev MCP and community storefront server available. API version defaults to 2026-01. Requires Shopify store access token."
+        },
+        {
+          "name": "WooCommerce MCP",
+          "slug": "woocommerce",
+          "install_command": "claude mcp add woocommerce -- npx -y woocommerce-mcp-server",
+          "what_it_connects": "WooCommerce — products, orders, customers, coupons, shipping, WordPress REST API",
+          "key_actions": ["Manage products", "Process orders", "Customer lookup", "Inventory management", "View sales reports"],
+          "maturity": "beta",
+          "complexity": "medium",
+          "industries": ["ecommerce"],
+          "company_sizes": ["1-10", "11-50"],
+          "free": true,
+          "notes": "Native WooCommerce MCP support in developer preview. Also community servers available. Uses WordPress REST API under the hood."
+        },
+        {
+          "name": "BigCommerce MCP",
+          "slug": "bigcommerce",
+          "install_command": "claude mcp add bigcommerce -- npx -y bigcommerce-mcp",
+          "what_it_connects": "BigCommerce — products, orders, customers, categories, brands, store settings",
+          "key_actions": ["Manage product catalog", "Process orders", "Customer management", "Inventory sync"],
+          "maturity": "beta",
+          "complexity": "medium",
+          "industries": ["ecommerce"],
+          "company_sizes": ["11-50", "51-200"],
+          "free": true,
+          "notes": "Community server. Alternative to Shopify for mid-market ecommerce with more built-in B2B features."
+        }
+      ]
+    },
+
+    "analytics": {
+      "description": "Business intelligence and product analytics — AI queries metrics, generates insights, and builds reports",
+      "servers": [
+        {
+          "name": "Google Analytics MCP",
+          "slug": "google-analytics",
+          "install_command": "claude mcp add ga4 -- npx -y @anthropic/mcp-google-analytics",
+          "what_it_connects": "Google Analytics 4 — pageviews, sessions, events, conversions, audiences, realtime data",
+          "key_actions": ["Run GA4 reports", "Query realtime data", "Analyze user behavior", "Track conversion funnels", "Audience segmentation"],
+          "maturity": "production",
+          "complexity": "medium",
+          "industries": ["ecommerce", "professional-services"],
+          "company_sizes": ["1-10", "11-50", "51-200"],
+          "free": true,
+          "notes": "Official Google server. Access to 200+ GA4 dimensions and metrics. OAuth 2.0 required."
+        },
+        {
+          "name": "Mixpanel MCP",
+          "slug": "mixpanel",
+          "install_command": "claude mcp add mixpanel -- npx -y @mixpanel/mcp",
+          "what_it_connects": "Mixpanel — events, funnels, retention, user segments, session replays",
+          "key_actions": ["Query event data", "Analyze funnels", "Retention analysis", "User segmentation", "Data quality monitoring"],
+          "maturity": "production",
+          "complexity": "medium",
+          "industries": ["ecommerce", "professional-services"],
+          "company_sizes": ["11-50", "51-200"],
+          "free": false,
+          "notes": "Official Mixpanel server. Strong product analytics for SaaS and ecommerce. Natural language querying of analytics data."
+        },
+        {
+          "name": "Amplitude MCP",
+          "slug": "amplitude",
+          "install_command": "claude mcp add amplitude -- npx -y amplitude-mcp",
+          "what_it_connects": "Amplitude — events, user journeys, cohorts, experiments, revenue analytics",
+          "key_actions": ["Query event streams", "Analyze user journeys", "Cohort analysis", "Revenue tracking"],
+          "maturity": "beta",
+          "complexity": "medium",
+          "industries": ["ecommerce"],
+          "company_sizes": ["11-50", "51-200"],
+          "free": false,
+          "notes": "Community server. Alternative to Mixpanel for product analytics."
+        },
+        {
+          "name": "PostHog MCP",
+          "slug": "posthog",
+          "install_command": "claude mcp add posthog -- npx -y posthog-mcp",
+          "what_it_connects": "PostHog — events, feature flags, session recordings, A/B experiments, surveys",
+          "key_actions": ["Query analytics events", "Manage feature flags", "Analyze funnels", "View session recordings"],
+          "maturity": "beta",
+          "complexity": "medium",
+          "industries": ["ecommerce", "professional-services"],
+          "company_sizes": ["1-10", "11-50"],
+          "free": true,
+          "notes": "Community server. Open-source alternative to Mixpanel/Amplitude. Generous free tier (1M events/month). Self-hostable."
+        }
+      ]
+    },
+
+    "browser_automation": {
+      "description": "Web scraping and browser control — AI navigates websites, extracts data, and automates web tasks",
+      "servers": [
+        {
+          "name": "Playwright MCP",
+          "slug": "playwright",
+          "install_command": "claude mcp add playwright -- npx -y @playwright/mcp@latest",
+          "what_it_connects": "Web browsers — Chromium, Firefox, WebKit for navigation, scraping, and testing",
+          "key_actions": ["Navigate web pages", "Extract page content", "Take screenshots", "Fill forms", "Accessibility snapshots"],
+          "maturity": "production",
+          "complexity": "medium",
+          "industries": ["dental", "ecommerce", "professional-services"],
+          "company_sizes": ["1-10", "11-50", "51-200"],
+          "free": true,
+          "notes": "Official Microsoft server. Uses accessibility snapshots instead of screenshots for efficiency. Auto-installs browser binaries on first use."
+        },
+        {
+          "name": "Puppeteer MCP",
+          "slug": "puppeteer",
+          "install_command": "claude mcp add puppeteer -- npx -y @anthropic/mcp-puppeteer",
+          "what_it_connects": "Chrome/Chromium browser — page navigation, scraping, PDF generation, screenshots",
+          "key_actions": ["Navigate pages", "Take screenshots", "Extract text content", "Generate PDFs", "Execute JavaScript"],
+          "maturity": "production",
+          "complexity": "medium",
+          "industries": ["ecommerce", "professional-services"],
+          "company_sizes": ["1-10", "11-50"],
+          "free": true,
+          "notes": "Part of official MCP servers collection. Good for simpler browser automation tasks. Chromium only."
+        }
+      ]
+    },
+
+    "file_storage": {
+      "description": "Cloud storage — AI manages files, documents, and media across cloud providers",
+      "servers": [
+        {
+          "name": "AWS S3 MCP",
+          "slug": "aws-s3",
+          "install_command": "claude mcp add s3 -- npx -y @aws/mcp-s3",
+          "what_it_connects": "AWS S3 — buckets, objects, pre-signed URLs, file metadata",
+          "key_actions": ["List and search files", "Upload and download objects", "Generate pre-signed URLs", "Manage bucket policies"],
+          "maturity": "production",
+          "complexity": "medium",
+          "industries": ["ecommerce", "professional-services"],
+          "company_sizes": ["11-50", "51-200"],
+          "free": true,
+          "notes": "Part of AWS's 60+ official MCP servers. Uses pre-signed URL-based access for security. Requires AWS credentials."
+        },
+        {
+          "name": "Google Cloud Storage MCP",
+          "slug": "gcs",
+          "install_command": "claude mcp add gcs -- npx -y @google-cloud/mcp-gcs",
+          "what_it_connects": "Google Cloud Storage — buckets, objects, file management, signed URLs",
+          "key_actions": ["Upload and download files", "List bucket contents", "Manage permissions", "Generate signed URLs"],
+          "maturity": "beta",
+          "complexity": "medium",
+          "industries": ["professional-services"],
+          "company_sizes": ["11-50", "51-200"],
+          "free": true,
+          "notes": "Part of Google Cloud MCP servers (preview). OAuth 2.0 and service account authentication."
+        }
+      ]
+    },
+
+    "calendar_scheduling": {
+      "description": "Appointment and meeting management — AI schedules, reschedules, and coordinates calendars",
+      "servers": [
+        {
+          "name": "Google Calendar MCP",
+          "slug": "google-calendar",
+          "install_command": "claude mcp add gcal -- npx -y @anthropic/mcp-google-calendar",
+          "what_it_connects": "Google Calendar — events, calendars, attendees, recurring schedules, free/busy",
+          "key_actions": ["Create and update events", "Check availability", "Search events", "Manage attendees", "Set reminders"],
+          "maturity": "production",
+          "complexity": "easy",
+          "industries": ["dental", "ecommerce", "professional-services"],
+          "company_sizes": ["1-10", "11-50", "51-200"],
+          "free": true,
+          "notes": "Part of Google Workspace MCP servers. OAuth 2.0 required. Natural language event creation."
+        },
+        {
+          "name": "Calendly MCP",
+          "slug": "calendly",
+          "install_command": "claude mcp add calendly -- npx -y calendly-mcp",
+          "what_it_connects": "Calendly — event types, scheduled events, invitees, availability, routing",
+          "key_actions": ["List scheduled events", "Check availability", "Manage event types", "View invitee details"],
+          "maturity": "beta",
+          "complexity": "easy",
+          "industries": ["dental", "professional-services"],
+          "company_sizes": ["1-10", "11-50"],
+          "free": false,
+          "notes": "Community server. Popular for client-facing scheduling. Integrates with Google Calendar and Outlook."
+        },
+        {
+          "name": "Microsoft Outlook Calendar MCP",
+          "slug": "outlook-calendar",
+          "install_command": "claude mcp add outlook -- npx -y @microsoft/mcp-outlook",
+          "what_it_connects": "Outlook Calendar — events, meetings, availability, rooms, recurring schedules",
+          "key_actions": ["Create meetings", "Check free/busy", "Manage room bookings", "Schedule recurring events"],
+          "maturity": "beta",
+          "complexity": "medium",
+          "industries": ["professional-services"],
+          "company_sizes": ["11-50", "51-200"],
+          "free": false,
+          "notes": "For Microsoft 365 organizations. Alternative to Google Calendar MCP for Teams/Outlook-first businesses."
+        }
+      ]
+    },
+
+    "hr_finance": {
+      "description": "Accounting, payroll, and HR tools — AI manages books, invoices, and employee data",
+      "servers": [
+        {
+          "name": "QuickBooks MCP",
+          "slug": "quickbooks",
+          "install_command": "claude mcp add quickbooks -- npx -y @intuit/quickbooks-mcp",
+          "what_it_connects": "QuickBooks Online — invoices, expenses, customers, vendors, reports, bank transactions",
+          "key_actions": ["Query financial reports", "Create invoices", "Track expenses", "Customer and vendor lookup", "Bank reconciliation"],
+          "maturity": "production",
+          "complexity": "medium",
+          "industries": ["dental", "ecommerce", "professional-services"],
+          "company_sizes": ["1-10", "11-50"],
+          "free": false,
+          "notes": "Official Intuit server. Multiple providers available (Intuit, Knit, CData). Widely used in North American small business."
+        },
+        {
+          "name": "Xero MCP",
+          "slug": "xero",
+          "install_command": "claude mcp add xero -- npx -y xero-mcp",
+          "what_it_connects": "Xero — invoices, bills, bank transactions, contacts, reports, payroll",
+          "key_actions": ["Create invoices", "Track bills", "Bank reconciliation", "Generate financial reports", "Contact management"],
+          "maturity": "beta",
+          "complexity": "medium",
+          "industries": ["dental", "professional-services"],
+          "company_sizes": ["1-10", "11-50"],
+          "free": false,
+          "notes": "Available via Knit platform. Popular with European, Australian, and New Zealand SMBs."
+        },
+        {
+          "name": "Knit Universal MCP",
+          "slug": "knit",
+          "install_command": "claude mcp add knit -- npx -y @getknit/mcp",
+          "what_it_connects": "Knit platform — 10,000+ API integrations across HR, payroll, accounting, and business tools",
+          "key_actions": ["Connect to any supported API", "Unified data access", "Cross-platform queries", "Automated data sync"],
+          "maturity": "production",
+          "complexity": "advanced",
+          "industries": ["dental", "ecommerce", "professional-services"],
+          "company_sizes": ["11-50", "51-200"],
+          "free": false,
+          "notes": "Meta-platform that wraps thousands of APIs. Zero-infrastructure MCP server setup. Good when you need many integrations from one entry point."
+        }
+      ]
+    },
+
+    "marketing": {
+      "description": "Email marketing and campaign management — AI creates campaigns, segments audiences, and tracks performance",
+      "servers": [
+        {
+          "name": "Mailchimp MCP",
+          "slug": "mailchimp",
+          "install_command": "claude mcp add mailchimp -- npx -y mailchimp-mcp",
+          "what_it_connects": "Mailchimp — campaigns, audiences, templates, automations, reports",
+          "key_actions": ["Manage subscriber lists", "Create campaigns", "View campaign performance", "Audience segmentation"],
+          "maturity": "beta",
+          "complexity": "easy",
+          "industries": ["dental", "ecommerce", "professional-services"],
+          "company_sizes": ["1-10", "11-50"],
+          "free": true,
+          "notes": "Community server. Read-only API access for marketing data retrieval. Good for broad SMB email marketing."
+        },
+        {
+          "name": "Klaviyo MCP",
+          "slug": "klaviyo",
+          "install_command": "claude mcp add klaviyo -- npx -y @klaviyo/mcp",
+          "what_it_connects": "Klaviyo — flows, campaigns, segments, profiles, metrics, product feeds",
+          "key_actions": ["Analyze campaign revenue", "Manage email flows", "Segment audiences", "Draft emails", "Upload content"],
+          "maturity": "production",
+          "complexity": "medium",
+          "industries": ["ecommerce"],
+          "company_sizes": ["1-10", "11-50", "51-200"],
+          "free": false,
+          "notes": "Official Klaviyo server (GA since Aug 2025). OAuth and API key auth. Built specifically for ecommerce lifecycle marketing."
+        },
+        {
+          "name": "SendGrid MCP",
+          "slug": "sendgrid",
+          "install_command": "claude mcp add sendgrid -- npx -y sendgrid-mcp",
+          "what_it_connects": "Twilio SendGrid — transactional emails, marketing campaigns, templates, analytics",
+          "key_actions": ["Send transactional emails", "Manage templates", "Track delivery metrics", "Manage contact lists"],
+          "maturity": "beta",
+          "complexity": "medium",
+          "industries": ["ecommerce", "professional-services"],
+          "company_sizes": ["1-10", "11-50", "51-200"],
+          "free": true,
+          "notes": "Community server built on Twilio SendGrid API. Good for transactional email (order confirmations, appointment reminders)."
+        }
+      ]
+    },
+
+    "search": {
+      "description": "Web search and knowledge retrieval — AI searches the internet and queries knowledge bases",
+      "servers": [
+        {
+          "name": "Brave Search MCP",
+          "slug": "brave-search",
+          "install_command": "claude mcp add brave -- npx -y brave-search-mcp",
+          "what_it_connects": "Brave Search API — web search, local business search, news, images, AI summaries",
+          "key_actions": ["Web search", "Local business search", "News search", "Image search", "AI-powered summaries"],
+          "maturity": "production",
+          "complexity": "easy",
+          "industries": ["dental", "ecommerce", "professional-services"],
+          "company_sizes": ["1-10", "11-50", "51-200"],
+          "free": true,
+          "notes": "Official Brave server. 2,000 free queries/month. Local search is valuable for finding nearby businesses and competitors."
+        },
+        {
+          "name": "Vectara MCP",
+          "slug": "vectara",
+          "install_command": "claude mcp add vectara -- python -m vectara_mcp --stdio",
+          "what_it_connects": "Vectara RAG platform — vector search, document retrieval, semantic search with reduced hallucination",
+          "key_actions": ["Semantic search", "Document retrieval", "Question answering", "Knowledge base querying"],
+          "maturity": "production",
+          "complexity": "advanced",
+          "industries": ["professional-services"],
+          "company_sizes": ["11-50", "51-200"],
+          "free": false,
+          "notes": "Python-based server. Trusted RAG platform with grounded answers. Good for firms building internal knowledge bases."
+        },
+        {
+          "name": "Perplexity MCP",
+          "slug": "perplexity",
+          "install_command": "claude mcp add perplexity -- npx -y perplexity-mcp",
+          "what_it_connects": "Perplexity AI — web search with citations, research queries, fact-checked answers",
+          "key_actions": ["Research queries with sources", "Fact-checked web search", "Summarize topics with citations"],
+          "maturity": "beta",
+          "complexity": "easy",
+          "industries": ["professional-services"],
+          "company_sizes": ["1-10", "11-50"],
+          "free": false,
+          "notes": "Community server. Source-cited answers. Good for research-heavy professional services workflows."
+        },
+        {
+          "name": "Exa MCP",
+          "slug": "exa",
+          "install_command": "claude mcp add exa -- npx -y exa-mcp-server",
+          "what_it_connects": "Exa — semantic web search, content extraction, similar page discovery",
+          "key_actions": ["Semantic search", "Content extraction", "Find similar pages", "Retrieve full page content"],
+          "maturity": "production",
+          "complexity": "easy",
+          "industries": ["ecommerce", "professional-services"],
+          "company_sizes": ["1-10", "11-50"],
+          "free": true,
+          "notes": "Developer-focused search API. 1,000 free searches/month. Good for market research and content discovery."
+        }
+      ]
+    },
+
+    "customer_support": {
+      "description": "Help desk and customer service — AI handles tickets, knowledge bases, and support conversations",
+      "servers": [
+        {
+          "name": "Zendesk MCP",
+          "slug": "zendesk",
+          "install_command": "claude mcp add zendesk -- npx -y zendesk-mcp",
+          "what_it_connects": "Zendesk — tickets, users, organizations, knowledge base, macros, automations",
+          "key_actions": ["Search and update tickets", "Query knowledge base", "Manage macros", "Customer lookup", "View ticket metrics"],
+          "maturity": "beta",
+          "complexity": "medium",
+          "industries": ["ecommerce", "professional-services"],
+          "company_sizes": ["11-50", "51-200"],
+          "free": false,
+          "notes": "Community server. Widely used support platform. Good for teams handling high ticket volumes."
+        },
+        {
+          "name": "Intercom MCP",
+          "slug": "intercom",
+          "install_command": "claude mcp add intercom -- npx -y intercom-mcp",
+          "what_it_connects": "Intercom — conversations, contacts, articles, custom bots, product tours",
+          "key_actions": ["Search conversations", "Manage contacts", "Query help articles", "View conversation metrics"],
+          "maturity": "beta",
+          "complexity": "medium",
+          "industries": ["ecommerce", "professional-services"],
+          "company_sizes": ["1-10", "11-50", "51-200"],
+          "free": false,
+          "notes": "Community server. Combines live chat, help desk, and knowledge base. Strong for product-led companies."
+        }
+      ]
+    },
+
+    "automation": {
+      "description": "Workflow automation platforms — AI orchestrates multi-step processes across business tools",
+      "servers": [
+        {
+          "name": "Zapier MCP",
+          "slug": "zapier",
+          "install_command": "claude mcp add zapier -- npx -y zapier-mcp",
+          "what_it_connects": "Zapier — 7,000+ app connections, Zaps, filters, paths, multi-step workflows",
+          "key_actions": ["Trigger Zaps", "List available integrations", "Check Zap status", "Manage workflow configurations"],
+          "maturity": "beta",
+          "complexity": "easy",
+          "industries": ["dental", "ecommerce", "professional-services"],
+          "company_sizes": ["1-10", "11-50"],
+          "free": false,
+          "notes": "Community server. If a direct MCP server does not exist for a tool, Zapier likely bridges the gap. No-code automation."
+        },
+        {
+          "name": "Make (Integromat) MCP",
+          "slug": "make",
+          "install_command": "claude mcp add make -- npx -y make-mcp",
+          "what_it_connects": "Make — scenarios, modules, 1,800+ app connections, data transformations",
+          "key_actions": ["Trigger scenarios", "List available modules", "Check scenario status", "Data mapping"],
+          "maturity": "beta",
+          "complexity": "medium",
+          "industries": ["ecommerce", "professional-services"],
+          "company_sizes": ["1-10", "11-50"],
+          "free": false,
+          "notes": "Community server. More visual and flexible than Zapier for complex workflows. Lower per-operation cost at scale."
+        }
+      ]
+    }
+  },
+
+  "industry_recommendations": {
+    "dental": {
+      "description": "Dental practices need patient communication, scheduling, basic financials, and operational efficiency",
+      "essential": [
+        { "server": "google-calendar", "reason": "Appointment scheduling and management — the core of dental practice operations" },
+        { "server": "twilio", "reason": "Automated appointment reminders and patient follow-up via SMS" },
+        { "server": "quickbooks", "reason": "Practice financial management, billing, and insurance tracking" },
+        { "server": "gmail", "reason": "Patient communication, referral coordination, and lab correspondence" }
+      ],
+      "recommended": [
+        { "server": "supabase", "reason": "Patient database and treatment history tracking" },
+        { "server": "hubspot", "reason": "Patient relationship management and recall campaigns" },
+        { "server": "slack", "reason": "Internal team coordination for multi-location practices" },
+        { "server": "google-drive", "reason": "Shared document storage for protocols, training materials, and compliance docs" }
+      ],
+      "optional": [
+        { "server": "mailchimp", "reason": "Patient newsletters and preventive care education campaigns" },
+        { "server": "trello", "reason": "Simple task management for office managers and front desk" },
+        { "server": "brave-search", "reason": "Research dental suppliers, competitor pricing, and continuing education" }
+      ]
+    },
+
+    "ecommerce": {
+      "description": "Ecommerce businesses need store management, payment processing, marketing automation, and analytics",
+      "essential": [
+        { "server": "shopify", "reason": "Direct store management — products, orders, inventory, and customer data" },
+        { "server": "stripe", "reason": "Payment processing, subscription management, and revenue analytics" },
+        { "server": "klaviyo", "reason": "Email marketing automation — abandoned carts, post-purchase flows, win-back campaigns" },
+        { "server": "google-analytics", "reason": "Traffic analysis, conversion tracking, and customer behavior insights" }
+      ],
+      "recommended": [
+        { "server": "slack", "reason": "Order notifications, inventory alerts, and team coordination" },
+        { "server": "supabase", "reason": "Custom analytics database for cross-channel data aggregation" },
+        { "server": "hubspot", "reason": "Customer lifecycle management beyond email — full CRM for high-value accounts" },
+        { "server": "playwright", "reason": "Competitor price monitoring and marketplace listing verification" }
+      ],
+      "optional": [
+        { "server": "square", "reason": "Omnichannel selling if combining online + physical retail" },
+        { "server": "mixpanel", "reason": "Advanced product analytics for conversion optimization" },
+        { "server": "discord", "reason": "Community building and direct customer engagement for DTC brands" }
+      ]
+    },
+
+    "professional-services": {
+      "description": "Professional services firms need client management, project tracking, document collaboration, and financial oversight",
+      "essential": [
+        { "server": "hubspot", "reason": "Client relationship management — pipeline tracking, contact management, deal stages" },
+        { "server": "google-drive", "reason": "Document management — proposals, contracts, deliverables, and shared knowledge" },
+        { "server": "slack", "reason": "Client communication channels and internal team coordination" },
+        { "server": "quickbooks", "reason": "Project billing, time tracking, invoicing, and financial reporting" }
+      ],
+      "recommended": [
+        { "server": "notion", "reason": "Internal wiki, project documentation, and SOPs" },
+        { "server": "google-calendar", "reason": "Client meeting scheduling and resource allocation" },
+        { "server": "jira", "reason": "Project delivery tracking for technical consulting and implementation work" },
+        { "server": "gmail", "reason": "Client correspondence management and automated follow-ups" },
+        { "server": "stripe", "reason": "Online payment collection for retainers and project milestones" }
+      ],
+      "optional": [
+        { "server": "confluence", "reason": "Knowledge base for larger firms with established Atlassian tooling" },
+        { "server": "vectara", "reason": "Semantic search across firm knowledge base for proposal writing and research" },
+        { "server": "linkedin", "reason": "Business development and talent acquisition via LinkedIn network" }
+      ]
+    }
+  },
+
+  "integration_patterns": {
+    "ecommerce_order_pipeline": {
+      "description": "Automated order processing — from purchase to fulfillment notification",
+      "example": "Customer places Shopify order -> Stripe confirms payment -> Klaviyo sends confirmation email -> Slack notifies fulfillment team -> Supabase logs analytics",
+      "servers_used": ["shopify", "stripe", "klaviyo", "slack", "supabase"],
+      "business_value": "Eliminates manual order monitoring. Team gets instant alerts. Customers get immediate confirmation. Analytics capture every touchpoint.",
+      "complexity": "medium",
+      "industries": ["ecommerce"]
+    },
+    "client_onboarding": {
+      "description": "Automated new client setup across CRM, documents, and project management",
+      "example": "New deal closes in HubSpot -> Google Drive creates client folder from template -> Slack creates client channel -> QuickBooks creates customer record -> Google Calendar schedules kickoff meeting",
+      "servers_used": ["hubspot", "google-drive", "slack", "quickbooks", "google-calendar"],
+      "business_value": "Standardizes onboarding for every client. No dropped steps. Time to first meeting reduced from days to minutes.",
+      "complexity": "medium",
+      "industries": ["professional-services"]
+    },
+    "patient_recall_system": {
+      "description": "Automated patient follow-up for overdue checkups and treatment plans",
+      "example": "Supabase query finds patients overdue for cleaning -> Twilio sends SMS reminder -> Google Calendar offers booking slots -> HubSpot logs interaction -> QuickBooks prepares estimated invoice",
+      "servers_used": ["supabase", "twilio", "google-calendar", "hubspot", "quickbooks"],
+      "business_value": "Keeps chairs full without manual phone campaigns. 30-40% higher recall rates. Reduces front-desk workload by 5+ hours/week.",
+      "complexity": "medium",
+      "industries": ["dental"]
+    },
+    "competitive_intelligence": {
+      "description": "Automated competitor monitoring and market research",
+      "example": "Brave Search finds competitor updates -> Playwright scrapes pricing pages -> Supabase stores historical data -> Slack alerts team of changes -> Notion updates competitive analysis doc",
+      "servers_used": ["brave-search", "playwright", "supabase", "slack", "notion"],
+      "business_value": "Never miss a competitor price change or feature launch. Build historical pricing database. React faster to market shifts.",
+      "complexity": "advanced",
+      "industries": ["ecommerce", "professional-services"]
+    },
+    "financial_reporting": {
+      "description": "Cross-platform financial overview pulling from payments, accounting, and analytics",
+      "example": "Stripe provides revenue data -> QuickBooks adds expense context -> Google Analytics shows acquisition costs -> Supabase aggregates into unified dashboard -> Slack delivers weekly summary",
+      "servers_used": ["stripe", "quickbooks", "google-analytics", "supabase", "slack"],
+      "business_value": "Single source of truth for business health. Automated weekly reports replace manual spreadsheet work. Faster decision-making.",
+      "complexity": "advanced",
+      "industries": ["ecommerce", "professional-services"]
+    },
+    "content_to_campaign": {
+      "description": "Content creation pipeline from research to published marketing campaign",
+      "example": "Brave Search researches trending topics -> Google Drive stores drafts -> AI generates email copy -> Mailchimp/Klaviyo creates segmented campaign -> Google Analytics tracks performance",
+      "servers_used": ["brave-search", "google-drive", "mailchimp", "google-analytics"],
+      "business_value": "Reduces campaign creation from days to hours. Research-backed content. Automated performance tracking closes the feedback loop.",
+      "complexity": "medium",
+      "industries": ["dental", "ecommerce", "professional-services"]
+    }
+  },
+
+  "getting_started": {
+    "description": "Practical guidance for businesses adopting MCP servers",
+    "steps": [
+      "Start with 2-3 servers that connect your most-used daily tools",
+      "Prioritize read-only servers first to reduce risk (most servers default to read-only)",
+      "Add write capabilities only after validating data quality and accuracy",
+      "Build one integration pattern end-to-end before adding more servers",
+      "Monitor token usage — each MCP server call consumes API tokens"
+    ],
+    "common_mistakes": [
+      "Connecting too many servers at once — start small, validate, then expand",
+      "Skipping authentication setup — always use environment variables for API keys, never hardcode",
+      "Ignoring rate limits — most APIs have usage caps that MCP servers must respect",
+      "Using write operations on production data before testing on staging/sandbox",
+      "Not setting up read-only mode for databases — always use read_only=true when exploring production data"
+    ],
+    "estimated_setup_time": {
+      "single_server": "5-15 minutes",
+      "basic_integration_pattern": "1-2 hours",
+      "full_business_workflow": "1-2 days"
+    }
+  }
+}

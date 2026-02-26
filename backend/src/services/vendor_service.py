@@ -652,6 +652,15 @@ class VendorService:
                 "scheduling": "Scheduling",
                 "ai_assistants": "AI Assistants",
                 "ai_receptionist": "AI Receptionist",
+                # E-commerce
+                "ecommerce_platform": "Platform",
+                "ecommerce_support": "Support",
+                "email_sms": "Email & SMS",
+                "attribution": "Attribution",
+                "subscriptions": "Subscriptions",
+                "reviews_loyalty": "Reviews & Loyalty",
+                "fulfillment": "Fulfillment",
+                "returns": "Returns",
             }
 
             # Group by display category and sort by tier
@@ -661,6 +670,8 @@ class VendorService:
                 tier = tier_map.get(vendor["id"], 3)
                 raw_category = vendor.get("category", "Other")
                 display_category = category_display_names.get(raw_category, raw_category.replace("_", " ").title())
+                # Fix acronyms broken by .title() (e.g. "Ai Dental" → "AI Dental")
+                display_category = display_category.replace("Ai ", "AI ").replace(" Ai", " AI")
 
                 option = {
                     "slug": vendor["slug"],
@@ -694,6 +705,9 @@ class VendorService:
             industry_categories = [
                 "Practice Management", "Job Management", "ATS", "Sourcing",
                 "Patient Communication", "Coaching Platform",
+                # E-commerce
+                "Platform", "Support", "Email & SMS", "SMS", "Attribution",
+                "Subscriptions", "Reviews & Loyalty", "Loyalty", "Fulfillment", "Returns",
             ]
             cross_categories = [
                 "CRM", "Accounting", "Email Marketing", "Customer Support",

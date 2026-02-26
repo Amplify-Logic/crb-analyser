@@ -1,0 +1,696 @@
+{
+  "platform": "claude-code",
+  "name": "Claude Code",
+  "tagline": "The AI-native development platform for building business systems",
+  "last_updated": "2026-02-24T12:00:00Z",
+  "website": "https://claude.ai/product/claude-code",
+  "docs_url": "https://code.claude.com/docs",
+
+  "overview": {
+    "description": "Claude Code is Anthropic's agentic coding and automation platform that turns natural language instructions into production software, integrations, and automated workflows. Unlike traditional no-code tools or IDE extensions, Claude Code operates as a full-stack development agent with direct filesystem access, terminal control, git integration, and the ability to orchestrate multi-agent teams. It is the fastest path from business idea to working system for SMBs that need custom automation but lack in-house engineering teams.",
+    "revenue_run_rate": "$2.5B+",
+    "total_mcp_servers": 8600,
+    "total_plugins": 9000,
+    "surfaces": ["terminal", "vs_code", "jetbrains", "desktop_app", "web", "ios", "slack"]
+  },
+
+  "capabilities": {
+    "core": [
+      {
+        "id": "cli",
+        "name": "Claude Code CLI",
+        "description": "Terminal-native agentic coding environment that reads, writes, and executes code directly on your machine. Understands full project context, runs tests, fixes errors, and iterates autonomously until the task is complete.",
+        "maturity": "production",
+        "business_value": "Build and ship production software 5-10x faster than traditional development. A business owner can describe what they need in plain English and get working code deployed the same day.",
+        "example_use": "A dental practice owner types 'Build me an appointment reminder system that sends SMS 24 hours before each appointment using our Dentrix export' and gets a working Python service with Twilio integration in under an hour."
+      },
+      {
+        "id": "agent_sdk",
+        "name": "Agent SDK",
+        "description": "Python and TypeScript SDKs for building custom AI agents that can reason, use tools, and complete multi-step tasks autonomously. Supports guardrails, structured outputs, and tool orchestration.",
+        "maturity": "production",
+        "business_value": "Create custom AI employees that handle specific business functions: intake agents, support agents, research agents, operations agents. Each agent can be tailored to your exact business logic and connected to your tools via MCP.",
+        "example_use": "An e-commerce brand builds a returns processing agent that reads return request emails, checks order history via Shopify MCP, determines if the return qualifies, generates the return label, and sends the customer a personalized response — all without human intervention."
+      },
+      {
+        "id": "mcp_integration",
+        "name": "MCP (Model Context Protocol) Integration",
+        "description": "Open protocol that connects Claude Code to any external data source or business tool. Over 8,600 community-built MCP servers available for databases, CRMs, payment systems, calendars, communication tools, and more.",
+        "maturity": "production",
+        "business_value": "Connect your entire business stack without custom API integrations. MCP servers act as universal adapters — Claude Code can read from your CRM, write to your accounting system, check your calendar, and send messages through your communication tools, all through a single standardized protocol.",
+        "example_use": "A law firm connects Clio (legal PM), QuickBooks (accounting), Google Calendar, and Gmail via MCP servers. Claude Code can now cross-reference billable hours against invoices, find scheduling conflicts, and draft client communications — all from one interface."
+      },
+      {
+        "id": "hooks",
+        "name": "Lifecycle Hooks",
+        "description": "Pre and post execution hooks that run custom validation, logging, or transformation logic before and after Claude Code tool calls. Hooks can block operations, enforce policies, or trigger side effects.",
+        "maturity": "production",
+        "business_value": "Enforce business rules automatically. Every time Claude Code writes financial data, a hook validates the math. Every time it accesses patient records, a hook checks HIPAA compliance. Hooks turn implicit policies into automated guardrails.",
+        "example_use": "A dental practice has a hook that validates any patient communication draft against HIPAA guidelines before it can be sent, and another hook that logs all data access for compliance auditing."
+      },
+      {
+        "id": "custom_agents",
+        "name": "Custom Agents",
+        "description": "Define specialized AI agents with custom system prompts, tool restrictions, and behavioral guidelines stored as markdown files. Each agent has a distinct persona, knowledge base, and set of permitted actions.",
+        "maturity": "production",
+        "business_value": "Create role-specific AI employees: a support agent that only accesses customer data, a finance agent that only touches accounting systems, an operations agent that monitors inventory. Each agent stays in its lane and follows your exact business rules.",
+        "example_use": "An e-commerce company defines three custom agents: 'support-agent' (handles customer queries, accesses Shopify orders, cannot modify pricing), 'ops-agent' (monitors inventory levels, triggers reorders, accesses warehouse API), and 'marketing-agent' (generates product descriptions, manages email campaigns, accesses analytics)."
+      },
+      {
+        "id": "agent_teams",
+        "name": "Agent Teams",
+        "description": "Orchestrate multiple specialized agents working in parallel on complex tasks. A team lead agent coordinates work, assigns tasks, and aggregates results from specialist agents that run concurrently.",
+        "maturity": "experimental",
+        "business_value": "Tackle multi-department projects that would normally require cross-team coordination. Launch a new product with parallel agents handling inventory setup, product page creation, email campaign drafting, and pricing analysis simultaneously.",
+        "example_use": "A professional services firm uses an agent team for monthly client reporting: one agent pulls financial data from QuickBooks, another gathers project status from Asana, a third compiles time tracking from Harvest, and the lead agent synthesizes everything into polished client-ready reports."
+      },
+      {
+        "id": "plugins",
+        "name": "Plugins",
+        "description": "Extend Claude Code with community-built plugins that add new capabilities like code review automation, deployment pipelines, data visualization, and specialized domain tools.",
+        "maturity": "production",
+        "business_value": "Access pre-built solutions for common business needs without building from scratch. Plugins for Stripe payment flows, Supabase database management, Vercel deployments, and dozens of other integrations reduce build time from hours to minutes.",
+        "example_use": "A small business installs the Stripe plugin and the Supabase plugin, then asks Claude Code to build a customer portal with subscription management — the plugins handle all the authentication, payment processing, and database setup automatically."
+      },
+      {
+        "id": "cowork",
+        "name": "Claude Cowork",
+        "description": "Collaborative interface where non-technical users can interact with Claude Code through a guided, conversational UI. Cowork translates business language into technical actions without requiring terminal or coding knowledge.",
+        "maturity": "experimental",
+        "business_value": "Enables business owners and non-technical staff to directly operate AI systems that were built with Claude Code. The dental office manager can ask 'Show me which patients are overdue for their 6-month checkup' without knowing SQL or Python.",
+        "example_use": "A practice manager opens Cowork and says 'Send recall reminders to all patients who haven't visited in 8+ months' — Cowork queries the patient database, drafts personalized messages, shows a preview for approval, and sends them through the configured SMS provider."
+      },
+      {
+        "id": "subagents",
+        "name": "Subagents",
+        "description": "Spawn child agents from within a Claude Code session to handle subtasks in parallel. Subagents inherit the parent's context but operate independently, reporting results back when complete.",
+        "maturity": "production",
+        "business_value": "Break large tasks into parallel work streams without losing coordination. Research 10 vendors simultaneously, analyze data from multiple sources at once, or validate changes across different systems in parallel — all orchestrated from a single session.",
+        "example_use": "When generating a CRB report, the main agent spawns subagents to simultaneously research vendor pricing, gather industry benchmarks, analyze the client's current stack, and model ROI scenarios — completing in minutes what would take hours sequentially."
+      }
+    ],
+    "models": [
+      {
+        "name": "Claude Opus 4.6",
+        "model_id": "claude-opus-4-6",
+        "tier": "premium",
+        "best_for": "Complex business logic, architecture decisions, strategic analysis, multi-step reasoning, financial modeling",
+        "context_window": 200000,
+        "max_output_tokens": 64000,
+        "speed": "thorough",
+        "quality": "highest"
+      },
+      {
+        "name": "Claude Sonnet 4.6",
+        "model_id": "claude-sonnet-4-6",
+        "tier": "balanced",
+        "best_for": "Code generation, data processing, integrations, report writing, everyday development tasks",
+        "context_window": 200000,
+        "max_output_tokens": 64000,
+        "speed": "fast",
+        "quality": "high"
+      },
+      {
+        "name": "Claude Haiku 4.5",
+        "model_id": "claude-haiku-4-5-20251001",
+        "tier": "fast",
+        "best_for": "Data extraction, classification, validation, quick transformations, high-volume processing",
+        "context_window": 200000,
+        "max_output_tokens": 64000,
+        "speed": "fastest",
+        "quality": "good"
+      }
+    ]
+  },
+
+  "business_building_blocks": {
+    "description": "What Claude Code can build for businesses — real, production systems that solve day-to-day operational pain points",
+    "dental": [
+      {
+        "system": "Patient Communication Automation",
+        "what_it_does": "Automated appointment reminders (SMS + email) 48hr and 24hr before visits, post-visit follow-ups with care instructions, recall campaigns for overdue patients, and birthday/holiday greetings. Integrates with practice management systems via data export or API.",
+        "mcp_servers_needed": ["supabase", "twilio", "google-calendar"],
+        "estimated_build_hours": 8,
+        "estimated_cost_eur": 200,
+        "monthly_value_eur": 1500,
+        "complexity": "medium",
+        "roi_note": "Reduces no-shows by 35-50%, recovers 15-20 recall patients per month at avg €180 treatment value"
+      },
+      {
+        "system": "Insurance Verification Bot",
+        "what_it_does": "Reads patient insurance details from intake forms or PM system exports, verifies coverage and benefits against payer portals via web scraping or API, flags discrepancies, and pre-populates claim forms. Runs nightly for next-day appointments.",
+        "mcp_servers_needed": ["supabase", "playwright-browser", "filesystem"],
+        "estimated_build_hours": 12,
+        "estimated_cost_eur": 300,
+        "monthly_value_eur": 2000,
+        "complexity": "high",
+        "roi_note": "Saves 2-3 hours per day of front desk time, reduces claim rejections by 40%"
+      },
+      {
+        "system": "Treatment Plan ROI Calculator",
+        "what_it_does": "Generates patient-facing treatment plan summaries that break down costs, insurance coverage, out-of-pocket expenses, and financing options. Includes visual comparisons of treatment vs. no-treatment outcomes based on clinical evidence. Outputs as branded PDF or web page.",
+        "mcp_servers_needed": ["supabase", "filesystem"],
+        "estimated_build_hours": 6,
+        "estimated_cost_eur": 150,
+        "monthly_value_eur": 800,
+        "complexity": "low",
+        "roi_note": "Increases case acceptance by 20-30% through transparent cost communication"
+      },
+      {
+        "system": "Appointment Scheduling Optimizer",
+        "what_it_does": "Analyzes historical appointment data to optimize chair utilization: identifies high-revenue time slots, suggests schedule templates by provider, fills cancellation gaps from waitlist, and balances procedure types throughout the day to maximize production per hour.",
+        "mcp_servers_needed": ["supabase", "google-calendar", "filesystem"],
+        "estimated_build_hours": 10,
+        "estimated_cost_eur": 250,
+        "monthly_value_eur": 2500,
+        "complexity": "medium",
+        "roi_note": "Increases daily production by 10-15% through better schedule density and reduced gaps"
+      },
+      {
+        "system": "Patient Recall Campaign System",
+        "what_it_does": "Identifies patients overdue for hygiene visits, treatments, or follow-ups from PM data exports. Runs multi-touch outreach campaigns (SMS day 1, email day 3, phone call reminder day 7) with personalized messaging. Tracks response rates and auto-schedules responders.",
+        "mcp_servers_needed": ["supabase", "twilio", "sendgrid", "google-calendar"],
+        "estimated_build_hours": 8,
+        "estimated_cost_eur": 200,
+        "monthly_value_eur": 3000,
+        "complexity": "medium",
+        "roi_note": "Recovers 20-40 lapsed patients per month, each worth €400-800 in annual hygiene + treatment revenue"
+      },
+      {
+        "system": "Review Management Automation",
+        "what_it_does": "Sends post-appointment satisfaction surveys via SMS. Happy patients (4-5 stars) get directed to Google/Yelp with pre-filled review links. Unhappy patients (1-3 stars) get routed to internal feedback form for immediate follow-up. Monitors review platforms and alerts on new reviews.",
+        "mcp_servers_needed": ["twilio", "supabase", "google-business"],
+        "estimated_build_hours": 6,
+        "estimated_cost_eur": 150,
+        "monthly_value_eur": 1200,
+        "complexity": "low",
+        "roi_note": "Increases Google review volume by 300-500%, improves average rating, drives 10-15 new patient inquiries per month"
+      },
+      {
+        "system": "Inventory Reorder Alerts",
+        "what_it_does": "Tracks supply usage patterns from purchase history and appointment volume. Predicts when key supplies (composites, anesthetics, disposables) will run low. Sends reorder alerts with suggested quantities and preferred vendor pricing. Compares supplier prices to find savings.",
+        "mcp_servers_needed": ["supabase", "filesystem", "sendgrid"],
+        "estimated_build_hours": 6,
+        "estimated_cost_eur": 150,
+        "monthly_value_eur": 600,
+        "complexity": "low",
+        "roi_note": "Prevents emergency orders (30-50% markup), reduces supply waste by 15%, saves 3 hours per week on inventory management"
+      },
+      {
+        "system": "Staff Scheduling Optimizer",
+        "what_it_does": "Creates optimal staff schedules based on appointment volume predictions, provider preferences, certification requirements, and labor regulations. Handles PTO requests, shift swaps, and last-minute coverage needs. Sends weekly schedules and shift reminders automatically.",
+        "mcp_servers_needed": ["supabase", "google-calendar", "twilio"],
+        "estimated_build_hours": 10,
+        "estimated_cost_eur": 250,
+        "monthly_value_eur": 1000,
+        "complexity": "medium",
+        "roi_note": "Reduces overtime costs by 20%, eliminates understaffing gaps, saves office manager 4-5 hours per week on scheduling"
+      }
+    ],
+    "ecommerce": [
+      {
+        "system": "Inventory Multi-Channel Sync",
+        "what_it_does": "Real-time inventory synchronization across Shopify, Amazon, WooCommerce, and physical POS. Deducts stock from all channels when any sale occurs, prevents overselling, and reconciles discrepancies daily. Generates low-stock alerts and auto-creates purchase orders when thresholds are hit.",
+        "mcp_servers_needed": ["shopify", "supabase", "filesystem", "sendgrid"],
+        "estimated_build_hours": 12,
+        "estimated_cost_eur": 300,
+        "monthly_value_eur": 2500,
+        "complexity": "high",
+        "roi_note": "Eliminates overselling (avg cost €50-200 per incident), reduces stockouts by 60%, saves 10+ hours per week on manual reconciliation"
+      },
+      {
+        "system": "AI Customer Support Agent",
+        "what_it_does": "Handles tier-1 customer inquiries via email and chat: order status, shipping tracking, return initiation, product questions, size/fit guidance. Pulls real-time data from Shopify orders and shipping APIs. Escalates complex issues to human agents with full context summary.",
+        "mcp_servers_needed": ["shopify", "supabase", "sendgrid", "slack"],
+        "estimated_build_hours": 10,
+        "estimated_cost_eur": 250,
+        "monthly_value_eur": 3000,
+        "complexity": "medium",
+        "roi_note": "Resolves 60-70% of support tickets autonomously, reduces first response time from 4 hours to 2 minutes, saves 1 FTE in support costs"
+      },
+      {
+        "system": "Dynamic Pricing Engine",
+        "what_it_does": "Monitors competitor prices, inventory levels, demand signals, and margin targets to recommend or automatically adjust product pricing. Implements rules-based pricing (never below margin floor, match competitor within 5%) with AI override for seasonal patterns and clearance optimization.",
+        "mcp_servers_needed": ["shopify", "supabase", "playwright-browser", "filesystem"],
+        "estimated_build_hours": 14,
+        "estimated_cost_eur": 350,
+        "monthly_value_eur": 4000,
+        "complexity": "high",
+        "roi_note": "Increases average margin by 3-8% while maintaining competitive positioning, recovers €2,000-5,000/month in underpriced inventory"
+      },
+      {
+        "system": "Abandoned Cart Recovery System",
+        "what_it_does": "Triggers multi-step recovery sequences when carts are abandoned: immediate exit-intent data capture, email at 1 hour with cart contents, SMS at 24 hours with urgency, email at 72 hours with personalized discount. AI tailors messaging based on cart value, customer history, and product category.",
+        "mcp_servers_needed": ["shopify", "twilio", "sendgrid", "supabase"],
+        "estimated_build_hours": 8,
+        "estimated_cost_eur": 200,
+        "monthly_value_eur": 3500,
+        "complexity": "medium",
+        "roi_note": "Recovers 8-15% of abandoned carts, avg recovered cart value €65-120, generates €2,000-5,000/month in recaptured revenue"
+      },
+      {
+        "system": "Returns Processing Automation",
+        "what_it_does": "End-to-end returns management: customer submits return request via form, AI evaluates eligibility against return policy, generates return shipping label, triggers refund or exchange upon warehouse receipt, updates inventory, and sends status notifications at each step.",
+        "mcp_servers_needed": ["shopify", "supabase", "sendgrid", "filesystem"],
+        "estimated_build_hours": 10,
+        "estimated_cost_eur": 250,
+        "monthly_value_eur": 1500,
+        "complexity": "medium",
+        "roi_note": "Reduces returns processing time from 15 minutes to 2 minutes per return, improves customer satisfaction, saves 15-20 hours per week at scale"
+      },
+      {
+        "system": "Product Description Generator",
+        "what_it_does": "Generates SEO-optimized product descriptions, bullet points, meta tags, and alt text from product photos, spec sheets, or supplier data. Maintains consistent brand voice across catalog. Batch processes new product uploads and seasonal refreshes. Supports multi-language output for international stores.",
+        "mcp_servers_needed": ["shopify", "filesystem", "supabase"],
+        "estimated_build_hours": 6,
+        "estimated_cost_eur": 150,
+        "monthly_value_eur": 1200,
+        "complexity": "low",
+        "roi_note": "Reduces product listing time from 30 minutes to 3 minutes per SKU, improves organic search traffic by 15-25% through better SEO"
+      },
+      {
+        "system": "Shipping Rate Optimizer",
+        "what_it_does": "Compares real-time shipping rates across carriers (DHL, UPS, DPD, local post) for each order based on weight, dimensions, destination, and delivery speed. Selects cheapest qualifying carrier automatically. Negotiates volume discounts by concentrating shipments. Generates shipping analytics dashboard.",
+        "mcp_servers_needed": ["shopify", "supabase", "filesystem"],
+        "estimated_build_hours": 8,
+        "estimated_cost_eur": 200,
+        "monthly_value_eur": 1800,
+        "complexity": "medium",
+        "roi_note": "Reduces average shipping cost by 12-20% through carrier optimization, saves €1,500-3,000/month on 500+ monthly shipments"
+      },
+      {
+        "system": "Customer Segmentation Engine",
+        "what_it_does": "Analyzes purchase history, browsing behavior, email engagement, and demographic data to create dynamic customer segments: VIPs, at-risk churners, bargain hunters, new high-potential, seasonal buyers. Feeds segments into email campaigns, ad targeting, and personalized on-site experiences.",
+        "mcp_servers_needed": ["shopify", "supabase", "google-analytics", "sendgrid"],
+        "estimated_build_hours": 10,
+        "estimated_cost_eur": 250,
+        "monthly_value_eur": 2000,
+        "complexity": "medium",
+        "roi_note": "Increases email revenue by 25-40% through targeted campaigns, reduces churn by 15% through early intervention, improves ad ROAS by 20-30%"
+      }
+    ],
+    "professional_services": [
+      {
+        "system": "Automatic Time Capture System",
+        "what_it_does": "Monitors calendar events, email threads, document editing, and application usage to automatically log billable time entries. Associates activities with clients and matters based on context clues. Generates daily timesheets for attorney/consultant review and approval before syncing to billing system.",
+        "mcp_servers_needed": ["google-calendar", "gmail", "supabase", "filesystem"],
+        "estimated_build_hours": 12,
+        "estimated_cost_eur": 300,
+        "monthly_value_eur": 5000,
+        "complexity": "high",
+        "roi_note": "Captures 20-40% more billable time that typically goes unrecorded, worth €3,000-8,000/month for a 10-person firm billing at €200/hr"
+      },
+      {
+        "system": "AI Proposal Generator",
+        "what_it_does": "Generates customized client proposals from templates enriched with prospect-specific data: company research, pain points identified in discovery calls, relevant case studies, tailored scope and pricing. Pulls from a knowledge base of past successful proposals and adjusts tone/depth by prospect size.",
+        "mcp_servers_needed": ["supabase", "filesystem", "playwright-browser", "google-docs"],
+        "estimated_build_hours": 10,
+        "estimated_cost_eur": 250,
+        "monthly_value_eur": 3000,
+        "complexity": "medium",
+        "roi_note": "Reduces proposal creation time from 4-8 hours to 30 minutes, increases proposal volume by 3x, improves win rate by 15-20% through better customization"
+      },
+      {
+        "system": "Client Intake Automation",
+        "what_it_does": "End-to-end intake pipeline: prospect fills web form, AI qualifies the lead against ideal client criteria, schedules discovery call, sends engagement letter for e-signature, creates matter in PM system, sets up billing codes, and sends onboarding materials — all triggered by the initial form submission.",
+        "mcp_servers_needed": ["supabase", "google-calendar", "sendgrid", "filesystem"],
+        "estimated_build_hours": 8,
+        "estimated_cost_eur": 200,
+        "monthly_value_eur": 2000,
+        "complexity": "medium",
+        "roi_note": "Reduces intake time from 3-5 days to same-day, eliminates 80% of manual data entry, prevents client drop-off during slow intake process"
+      },
+      {
+        "system": "Document Review Assistant",
+        "what_it_does": "Analyzes contracts, agreements, and legal documents against configurable checklists: missing clauses, non-standard terms, liability exposure, compliance gaps. Generates redline suggestions and risk summaries. Supports batch review for due diligence and portfolio audits.",
+        "mcp_servers_needed": ["filesystem", "supabase"],
+        "estimated_build_hours": 10,
+        "estimated_cost_eur": 250,
+        "monthly_value_eur": 4000,
+        "complexity": "medium",
+        "roi_note": "Reviews 50-page contract in 3 minutes vs. 2-3 hours manually, catches clauses human reviewers miss 15% of the time, enables junior staff to handle first-pass review"
+      },
+      {
+        "system": "Billing and Collections Automation",
+        "what_it_does": "Generates invoices from approved time entries, sends them on schedule, tracks payment status, and runs automated collections sequences: friendly reminder at 15 days, firm notice at 30 days, escalation at 45 days. Predicts payment likelihood based on client history and flags accounts receivable risks.",
+        "mcp_servers_needed": ["supabase", "sendgrid", "stripe", "filesystem"],
+        "estimated_build_hours": 10,
+        "estimated_cost_eur": 250,
+        "monthly_value_eur": 3500,
+        "complexity": "medium",
+        "roi_note": "Reduces average days-to-payment from 52 to 28 days, decreases write-offs by 30%, saves 8-10 hours per month on collections follow-up"
+      },
+      {
+        "system": "Knowledge Management System",
+        "what_it_does": "Indexes firm documents, precedents, memos, and work product into a searchable knowledge base. AI can answer questions like 'Have we handled a non-compete dispute in the healthcare sector?' with citations to relevant internal documents. Auto-tags new documents and suggests relevant precedents during matter work.",
+        "mcp_servers_needed": ["filesystem", "supabase", "google-drive"],
+        "estimated_build_hours": 14,
+        "estimated_cost_eur": 350,
+        "monthly_value_eur": 3000,
+        "complexity": "high",
+        "roi_note": "Reduces research time by 40-60%, prevents reinventing the wheel on recurring matter types, preserves institutional knowledge when staff leave"
+      },
+      {
+        "system": "Competitive Intelligence Monitor",
+        "what_it_does": "Tracks competitor firms' activities: new hires, published articles, case wins, pricing changes, service expansions, and marketing campaigns. Scrapes websites, press releases, and public filings on a weekly schedule. Delivers digest with actionable insights and alerts on significant moves.",
+        "mcp_servers_needed": ["playwright-browser", "supabase", "sendgrid", "filesystem"],
+        "estimated_build_hours": 8,
+        "estimated_cost_eur": 200,
+        "monthly_value_eur": 1500,
+        "complexity": "medium",
+        "roi_note": "Provides early warning on competitive threats, identifies talent poaching risks, surfaces business development opportunities from competitor gaps"
+      },
+      {
+        "system": "Client Reporting Dashboard",
+        "what_it_does": "Generates automated monthly client reports pulling data from time tracking, project management, financial systems, and deliverable tracking. Includes budget vs. actual, milestone progress, key metrics, and next-period outlook. Delivered as branded PDF and optional live web dashboard.",
+        "mcp_servers_needed": ["supabase", "google-sheets", "filesystem", "sendgrid"],
+        "estimated_build_hours": 10,
+        "estimated_cost_eur": 250,
+        "monthly_value_eur": 2000,
+        "complexity": "medium",
+        "roi_note": "Replaces 6-8 hours per month of manual report compilation per client, improves client satisfaction and retention through proactive transparency"
+      }
+    ]
+  },
+
+  "aios_mapping": {
+    "description": "How Claude Code capabilities map to the AIOS (AI Operating System) framework by Liam Ottley — the four-layer model for making AI integral to every business function",
+    "context_os": {
+      "description": "Persistent business context that makes AI smarter over time. Every interaction builds on accumulated knowledge about your business, industry, and preferences.",
+      "claude_code_features": ["claude.md workspace files", "skills system with domain-specific tools", "custom agents with specialized system prompts", "project-level memory that persists across sessions"],
+      "what_you_build": "Business profile, role definitions, strategy documents, operational procedures, customer personas, and data dictionaries — all feeding into every AI interaction so Claude Code understands your business as deeply as your best employee.",
+      "example": "A dental practice's claude.md contains their practice management system (Dentrix), insurance mix (60% PPO, 30% fee-for-service, 10% Medicaid), patient demographics (suburban family practice, 3,200 active patients), key pain points (no-show rate 18%, recall compliance 62%), and provider preferences — every Claude Code session starts with full business context, no re-explaining needed."
+    },
+    "data_os": {
+      "description": "Unified data layer that merges all business systems into a single queryable interface. Breaks down data silos between tools that were never designed to talk to each other.",
+      "claude_code_features": ["MCP servers for database, CRM, analytics, and accounting access", "subagents for parallel data gathering across systems", "hooks for data validation and quality enforcement", "structured outputs for clean data pipelines"],
+      "what_you_build": "Local dashboards and query interfaces that pull from Shopify, Google Analytics, CRM, accounting software, and operational tools — queryable via natural language or automated reports delivered through Slack, email, or a Telegram bot.",
+      "example": "An e-commerce owner asks 'What were yesterday's margins by product category?' and gets a precise answer synthesized from Shopify sales data, supplier cost sheets in Google Sheets, and shipping expenses from their fulfillment system — three tools that have no native integration."
+    },
+    "intelligence_os": {
+      "description": "Automated monitoring, alerting, and insight generation layer. Your AI systems proactively watch for patterns, anomalies, and opportunities instead of waiting for you to ask.",
+      "claude_code_features": ["scheduled agent runs via cron or event triggers", "hooks for lifecycle automation and alert routing", "agent teams for parallel monitoring of multiple business dimensions", "MCP integration with notification channels (Slack, SMS, email)"],
+      "what_you_build": "Daily intelligence briefs, anomaly detection systems, competitor monitoring agents, trend alerts, and early warning systems — all running automatically and surfacing only what matters.",
+      "example": "A law firm partner receives a daily email briefing: '3 client contracts expiring within 30 days (renewal opportunities worth €45K), competitor Smith & Associates posted 2 senior associate openings (potential talent risk), 2 clients have invoices overdue by 30+ days (€12K at risk), and a regulatory change in data privacy may affect 4 active matters.'"
+    },
+    "decision_os": {
+      "description": "AI-powered decision support that considers full business context, historical patterns, and real-time data to provide actionable recommendations — not just information, but specific next steps.",
+      "claude_code_features": ["agent SDK for building custom decision agents with domain expertise", "structured outputs for consistent recommendation formats", "MCP for real-time data access during decision analysis", "extended thinking for complex multi-factor reasoning"],
+      "what_you_build": "Decision agents that analyze pricing moves, hiring triggers, expansion opportunities, investment tradeoffs, and operational changes with the full context of your business history, current position, and strategic goals.",
+      "example": "An e-commerce brand owner asks 'Should we expand to Germany?' — the decision agent analyzes shipping costs from current warehouses, competitor landscape in German marketplaces, demand signals from existing German traffic and inquiries, VAT and regulatory requirements, localization costs, and projected ROI timelines — then delivers a structured recommendation with confidence levels and risk factors."
+    }
+  },
+
+  "roi_scenarios": {
+    "dental": {
+      "scenario": "3-location dental practice automating patient communication + insurance verification",
+      "current_cost": "2 FTE front desk staff dedicated to calls/verification = ~72,000 EUR/year",
+      "claude_code_build": "Automated SMS reminders + insurance API checker + recall campaign system",
+      "build_time": "16 hours over 2 weekends",
+      "build_cost_eur": 400,
+      "annual_savings_eur": 45000,
+      "payback_days": 4,
+      "roi_percentage": 11150,
+      "breakdown": {
+        "no_show_reduction": "18% to 9% = 540 recovered appointments/year at avg €180 = €97,200 production recovered, net €24,000 incremental profit",
+        "insurance_verification": "Automated eligibility checks save 2.5 hours/day = 650 hours/year of staff time",
+        "recall_campaigns": "20 reactivated patients/month at €400 avg annual value = €96,000 recovered patient lifetime value",
+        "staff_reallocation": "Front desk refocused on patient experience and case presentation instead of phone tag"
+      }
+    },
+    "ecommerce": {
+      "scenario": "DTC brand with 500 orders/day automating inventory sync + customer support + email flows",
+      "current_cost": "1 ops person + 1 CS agent + Klaviyo manual segments = ~84,000 EUR/year",
+      "claude_code_build": "Multi-channel inventory sync + AI support agent + personalized email automation",
+      "build_time": "24 hours over 3 weekends",
+      "build_cost_eur": 600,
+      "annual_savings_eur": 55000,
+      "payback_days": 4,
+      "roi_percentage": 9067,
+      "breakdown": {
+        "inventory_sync": "Eliminates overselling incidents (avg 15/month at €120 cost each = €21,600/year saved)",
+        "support_automation": "AI handles 65% of tickets = 0.6 FTE saved = €25,200/year",
+        "email_personalization": "Segmented flows improve email revenue by 30% = €8,000-15,000/year incremental",
+        "ops_efficiency": "Ops person shifts from firefighting to strategic projects (new channels, supplier negotiations)"
+      }
+    },
+    "professional_services": {
+      "scenario": "10-person law firm automating time capture + proposal generation + client intake",
+      "current_cost": "Lost billable time + manual proposals + intake friction = ~95,000 EUR/year opportunity cost",
+      "claude_code_build": "Automatic time tracker + AI proposal generator + intake automation pipeline",
+      "build_time": "20 hours over 2-3 weekends",
+      "build_cost_eur": 500,
+      "annual_savings_eur": 65000,
+      "payback_days": 3,
+      "roi_percentage": 12900,
+      "breakdown": {
+        "time_capture": "Recovers 0.5 billable hours/day per attorney at €200/hr = €260,000 additional billings/year across 10 attorneys, net €52,000 after realization",
+        "proposal_generation": "4x more proposals at 20% higher win rate = 6-8 additional clients/year",
+        "client_intake": "Same-day intake vs 3-5 day process reduces prospect drop-off by 40%, capturing 10-15 additional clients/year",
+        "staff_efficiency": "Admin team reallocated from data entry to client relationship management"
+      }
+    }
+  },
+
+  "enterprise_evidence": [
+    {
+      "company": "ServiceNow",
+      "employees": 29000,
+      "use_case": "Claude as default Build Agent across engineering org, integrated into Now Assist developer tools",
+      "results": "95% reduction in seller prep time, targeting 50% reduction in customer time-to-implement, AI agents for IT service management and HR workflows",
+      "source": "Anthropic partnership announcement, January 2026"
+    },
+    {
+      "company": "TELUS",
+      "employees": 57000,
+      "use_case": "Fuel iX platform with 47 enterprise AI applications across customer service, network operations, and internal tooling",
+      "results": "$90M+ in quantified business benefit, 500,000+ staff hours saved annually, processing 100B+ tokens per month across all applications",
+      "source": "Anthropic customer story, Q4 2025"
+    },
+    {
+      "company": "Intuit",
+      "use_case": "Custom financial AI agents for mid-market businesses, Claude integrated into TurboTax and QuickBooks platforms for intelligent bookkeeping and tax preparation",
+      "results": "Claude Code adopted across entire engineering organization, multi-year strategic partnership, AI-powered financial insights serving 100M+ customers",
+      "source": "Intuit investor relations, 2025 annual report"
+    },
+    {
+      "company": "Replit",
+      "employees": 200,
+      "use_case": "Claude as the default model powering Replit Agent, enabling users to build and deploy full applications through conversation",
+      "results": "Millions of applications built with Claude-powered agents, 90% of Replit's AI features run on Claude, 3x increase in user project completion rates",
+      "source": "Anthropic partnership announcement, 2025"
+    },
+    {
+      "company": "Notion",
+      "employees": 800,
+      "use_case": "Claude powering Notion AI for document generation, summarization, Q&A over workspace content, and meeting notes",
+      "results": "AI features used by 50%+ of paying teams, significant reduction in document creation time, improved knowledge discovery across large workspaces",
+      "source": "Notion product announcements, 2025-2026"
+    },
+    {
+      "company": "GitLab",
+      "employees": 2100,
+      "use_case": "Claude integrated into GitLab Duo for AI-powered code review, vulnerability detection, and development workflow automation",
+      "results": "35% faster code review cycles, 25% reduction in security vulnerabilities shipped to production, adopted by thousands of enterprise customers",
+      "source": "GitLab AI feature releases, 2025"
+    }
+  ],
+
+  "pricing": {
+    "model": "subscription",
+    "currency": "USD",
+    "tiers": [
+      {
+        "name": "Free",
+        "price": 0,
+        "per": "month",
+        "features": [
+          "Limited Claude Code sessions (Haiku model only)",
+          "Basic file reading and editing",
+          "3 sessions per day",
+          "Community MCP server access",
+          "Standard context window"
+        ],
+        "best_for": "Learning, personal projects, evaluating the platform"
+      },
+      {
+        "name": "Pro",
+        "price": 20,
+        "per": "month",
+        "features": [
+          "Unlimited Claude Code sessions",
+          "All models: Haiku (fast), Sonnet (balanced), Opus (premium)",
+          "Full filesystem and terminal access",
+          "Git integration with branching and commits",
+          "MCP server support (connect unlimited tools)",
+          "Extended thinking for complex reasoning",
+          "Vision and image analysis",
+          "Custom agents and skills",
+          "Subagent spawning",
+          "Hooks for lifecycle automation",
+          "200K context window"
+        ],
+        "best_for": "Individual developers, freelancers, small business owners building their own automation"
+      },
+      {
+        "name": "Team",
+        "price": 30,
+        "per": "user/month",
+        "features": [
+          "Everything in Pro",
+          "Team management and shared workspaces",
+          "Shared custom agents and skills across team",
+          "Collaborative MCP server configurations",
+          "Priority model access during peak hours",
+          "Usage analytics and cost tracking per team member",
+          "Priority support"
+        ],
+        "best_for": "Teams of 2-50 building and maintaining business automation together"
+      },
+      {
+        "name": "Enterprise",
+        "price": null,
+        "per": "custom",
+        "features": [
+          "Everything in Team",
+          "SSO/SAML authentication",
+          "Custom deployment options (VPC, on-premise)",
+          "Dedicated support engineer and SLA guarantees",
+          "Data governance and retention policies",
+          "Audit logging and compliance reporting",
+          "Custom model fine-tuning access",
+          "Volume pricing on API usage",
+          "SOC 2 Type II compliance"
+        ],
+        "best_for": "Organizations with 50+ employees, regulated industries (healthcare, legal, finance)"
+      }
+    ],
+    "api_pricing": {
+      "opus_4_6": {
+        "input_per_1m": 15.0,
+        "output_per_1m": 75.0,
+        "cached_input_per_1m": 1.5,
+        "note": "Premium tier — use for complex analysis, architecture, strategic decisions"
+      },
+      "sonnet_4_6": {
+        "input_per_1m": 3.0,
+        "output_per_1m": 15.0,
+        "cached_input_per_1m": 0.3,
+        "note": "Balanced tier — best price/performance for most coding and generation tasks"
+      },
+      "haiku_4_5": {
+        "input_per_1m": 0.80,
+        "output_per_1m": 4.0,
+        "cached_input_per_1m": 0.08,
+        "note": "Fast tier — ideal for extraction, validation, classification at scale"
+      }
+    },
+    "note": "Most SMB use cases cost 20-50 EUR/month with Pro subscription. API costs for automated agents typically add 10-30 EUR/month for moderate usage (50-100 agent runs per day). Total cost of AI operations for a typical SMB: 30-80 EUR/month."
+  },
+
+  "competitive_position": {
+    "vs_cursor": {
+      "claude_code_advantage": "No IDE installation required, instant browser and terminal access, native agent teams for parallel work, MCP ecosystem with 8,600+ connectors, custom agents with persistent business context, works across all surfaces (web, mobile, desktop, IDE, Slack)",
+      "cursor_advantage": "Local IDE experience with familiar VS Code interface, strong inline code completion, offline capable with local models, established developer community",
+      "recommendation": "Use Claude Code for business system building, automation, and AI-native workflows. Use Cursor for traditional software development where inline completion and local IDE experience matter most. Many developers use both."
+    },
+    "vs_github_copilot": {
+      "claude_code_advantage": "End-to-end application building from scratch, terminal and git control, can build entire systems not just code snippets, MCP connectors to business tools, agentic execution (runs code, fixes errors, iterates autonomously)",
+      "copilot_advantage": "Deep GitHub ecosystem integration, inline completion in existing IDE workflows, Copilot Workspace for issue-to-PR automation, strong enterprise adoption",
+      "recommendation": "Claude Code for new projects, full-stack automation, and business system creation. Copilot for enhancing productivity in existing large codebases with established development workflows."
+    },
+    "vs_bolt_lovable": {
+      "claude_code_advantage": "Full production control with persistent state, MCP connectors to any business tool, custom agents and hooks for enterprise requirements, scales beyond simple web UIs to complex backend systems and integrations, no vendor lock-in on hosting",
+      "bolt_lovable_advantage": "Faster for simple web UIs and landing pages, lower learning curve for non-developers, instant preview and deployment, good for rapid prototyping",
+      "recommendation": "Claude Code for business-critical systems that need to integrate with existing tools, handle sensitive data, or grow in complexity. Bolt/Lovable for quick marketing sites, landing pages, and MVPs that are primarily frontend."
+    },
+    "vs_zapier_make": {
+      "claude_code_advantage": "Unlimited customization with no platform constraints, AI judgment in workflow decisions (not just if-then logic), no per-action pricing ceiling that makes complex workflows expensive, full code ownership with no vendor lock-in, can handle unstructured data and edge cases",
+      "zapier_make_advantage": "No-code visual interface, faster setup for simple if-then automations, 6,000+ pre-built connectors, established reliability for straightforward workflows, easier for non-technical users",
+      "recommendation": "Start with Zapier/Make for simple linear automations (form submission triggers email). Graduate to Claude Code when hitting platform limits: needing AI judgment in decisions, complex branching logic, cost ceilings on high-volume workflows, or integration with tools that lack Zapier connectors."
+    }
+  },
+
+  "implementation_guide": {
+    "for_crb_clients": {
+      "phase_1_quick_wins": {
+        "timeline": "Week 1-2",
+        "focus": "Automate ONE high-impact manual process to demonstrate ROI and build confidence",
+        "examples": [
+          "PDF data extraction to spreadsheet (insurance forms, invoices, contracts)",
+          "Multi-tool data sync (inventory across channels, CRM to accounting, calendar to PM)",
+          "Email-triggered automation (inquiry receives auto-response + CRM entry + task creation)",
+          "Report auto-generation from existing data sources (daily sales summary, weekly metrics, monthly client reports)"
+        ],
+        "success_metric": "Hours saved per week, measured against baseline",
+        "typical_result": "5-10 hours saved per week on the targeted process",
+        "client_action": "Identify the task that consumes the most manual hours with the simplest data flow"
+      },
+      "phase_2_connectors": {
+        "timeline": "Week 3-6",
+        "focus": "Connect 3-5 core business tools via MCP to create a unified data layer",
+        "examples": [
+          "CRM to Accounting sync (new client in CRM auto-creates in QuickBooks with correct billing codes)",
+          "E-commerce to Shipping automation (order placed triggers label creation, tracking update, customer notification)",
+          "Calendar to Patient reminders (appointment booked triggers confirmation, 48hr reminder, 24hr reminder, post-visit follow-up)",
+          "Support inbox to Knowledge base (resolved tickets auto-categorized and searchable for future reference)"
+        ],
+        "success_metric": "Number of tools connected, manual data entry hours eliminated, error rate reduction",
+        "typical_result": "3-5 tools connected, 80% reduction in manual data transfer, 90% fewer sync errors",
+        "client_action": "Map current data flows between tools, identify manual transfer points and error-prone handoffs"
+      },
+      "phase_3_intelligence": {
+        "timeline": "Month 2-3",
+        "focus": "Add AI monitoring and insight generation layer on top of connected data",
+        "examples": [
+          "Daily business intelligence briefing (key metrics, anomalies, action items delivered via email or Slack at 7 AM)",
+          "Anomaly detection with alerts (revenue drops, unusual refund patterns, inventory discrepancies, appointment no-show spikes)",
+          "Competitive monitoring agent (tracks competitor pricing, new offerings, job postings, review sentiment weekly)",
+          "Predictive alerts (churn risk scoring, stockout prediction, compliance deadline tracking, cash flow forecasting)"
+        ],
+        "success_metric": "Number of proactive insights generated per week, issues caught before becoming problems",
+        "typical_result": "3-5 actionable insights per week, 2-3 problems prevented per month",
+        "client_action": "Define what 'good' and 'bad' looks like for key metrics, set threshold alerts, identify monitoring blind spots"
+      },
+      "phase_4_aios": {
+        "timeline": "Month 3-6",
+        "focus": "Build full AI Operating System with persistent context, multi-agent operations, and decision support",
+        "examples": [
+          "Persistent business context workspace (claude.md with full business profile, every AI interaction informed by complete context)",
+          "Multi-agent operations (specialized agents for sales, support, operations, finance — each with domain expertise and tool access)",
+          "Self-improving decision agents (pricing agents that learn from outcomes, support agents that improve from feedback, scheduling agents that optimize from patterns)",
+          "Client-facing dashboards and portals (real-time project status, automated reporting, self-service data queries)"
+        ],
+        "success_metric": "Percentage of business operations that are AI-assisted, decision quality improvement, operational velocity",
+        "typical_result": "40-60% of routine operations AI-assisted, 2-3x faster decision-making on data-driven questions",
+        "client_action": "Designate an internal AI champion, establish feedback loops for agent improvement, document business rules for agent decision-making"
+      }
+    }
+  },
+
+  "key_limitations": [
+    "Requires internet connectivity — no offline mode for Claude Code (mitigated by local file persistence and git history)",
+    "Session context resets between conversations (mitigated by claude.md workspace files, skills system, and MCP for persistent data access)",
+    "Agent Teams feature still marked experimental — production workloads should use subagents + hooks pattern for reliability",
+    "MCP servers can consume significant context window tokens for large data sources (mitigated by lazy loading introduced in early 2026)",
+    "Not suitable for life-critical or safety-critical systems without human oversight and validation layers",
+    "Learning curve for non-technical users (Claude Cowork addresses this, but still requires initial setup by a technical person)",
+    "AI-generated code requires review for security-sensitive operations (payments, authentication, data access controls)",
+    "Rate limits on free tier are restrictive — serious business use requires Pro subscription minimum",
+    "Complex multi-agent workflows can be difficult to debug when agents interact in unexpected ways"
+  ],
+
+  "freshness": {
+    "last_verified": "2026-02-24",
+    "next_review": "2026-05-24",
+    "signals_to_monitor": [
+      "Anthropic pricing changes or new tier announcements",
+      "New MCP server releases (especially for dental, e-commerce, and legal tools)",
+      "Claude Code feature releases (agent teams GA, new surfaces, Cowork updates)",
+      "Competitor moves (Cursor funding, Copilot features, Bolt/Lovable enterprise)",
+      "Enterprise deployment announcements (new logos, case studies, partnership deals)",
+      "Model releases (Claude 5 family, new Opus/Sonnet/Haiku versions)",
+      "Regulatory changes affecting AI in healthcare, legal, or e-commerce sectors"
+    ]
+  }
+}

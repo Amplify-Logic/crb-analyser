@@ -1,31 +1,84 @@
-name: Report Viewer - Rendering
-description: Verify report renders all sections correctly
-url: http://localhost:5174/report/{report_id}
-priority: critical
-requires:
-  report_id: "a valid report ID from the database"
+stories:
+  - name: "Report Viewer - Section Rendering"
+    url: "http://localhost:5174/report/{report_id}"
+    priority: critical
+    requires:
+      report_id: "a valid report ID from the database"
+    workflow: |
+      Navigate to the report URL (substitute a valid report_id)
+      Wait for the loading skeleton to disappear and content to render
 
-steps:
-  - name: Load report page
-    action: navigate to report URL
-    expect: Report loads without errors, executive summary visible
+      Verify the verdict card is visible with a recommendation
+      Verify the AI readiness gauge/score is displayed with a numeric score (0-100)
 
-  - name: Check executive summary
-    action: scroll to executive summary section
-    expect: AI readiness score, key metrics, and summary text visible
+      Scroll to the findings section
+      Verify at least one finding is displayed with cost-benefit analysis
+      Verify findings show the three CRB options (off-the-shelf, best-in-class, custom build)
 
-  - name: Check findings section
-    action: scroll to findings/recommendations
-    expect: At least 3 findings displayed with CRB options
+      Scroll to the recommendations section
+      Verify at least one numbered recommendation is visible
 
-  - name: Check charts
-    action: look for chart/visualization elements
-    expect: At least one chart or data visualization renders
+      Look for the sidebar navigation
+      Verify sidebar links correspond to visible report sections
 
-  - name: Check navigation
-    action: click table of contents or section links
-    expect: Page scrolls to correct section
+  - name: "Report Viewer - Sidebar Navigation"
+    url: "http://localhost:5174/report/{report_id}"
+    priority: high
+    requires:
+      report_id: "a valid report ID from the database"
+    workflow: |
+      Navigate to the report URL
+      Wait for the report to fully load
 
-  - name: Responsive check
-    action: resize viewport to 375px width (mobile)
-    expect: Content reflows properly, no horizontal scroll
+      Look for the sidebar navigation with section links
+      Click on a sidebar link (e.g., Recommendations, ROI, Playbook)
+      Verify the page scrolls to or displays the correct section
+
+      Click on a different sidebar link
+      Verify the view changes to that section
+
+  - name: "Report Viewer - Charts and Visualizations"
+    url: "http://localhost:5174/report/{report_id}"
+    priority: high
+    requires:
+      report_id: "a valid report ID from the database"
+    workflow: |
+      Navigate to the report URL
+      Wait for the report to fully load
+
+      Look for chart or data visualization elements (canvas, SVG, or chart containers)
+      Verify at least one chart renders (AI Readiness gauge, Two Pillars chart, or Value Timeline)
+
+      Look for the ROI section or calculator
+      Verify ROI data or interactive elements are present
+
+  - name: "Report Viewer - Tabs (Playbook, Stack, Insights)"
+    url: "http://localhost:5174/report/{report_id}"
+    priority: medium
+    requires:
+      report_id: "a valid report ID from the database"
+    workflow: |
+      Navigate to the report URL
+      Wait for the report to fully load
+
+      Look for tab navigation (Playbook, Stack, ROI Calculator, Insights, or similar tabs)
+      If tabs are visible, click the first tab
+      Verify the tab content loads
+
+      Click a second tab
+      Verify the content switches to the new tab
+
+  - name: "Report Viewer - Mobile Responsive"
+    url: "http://localhost:5174/report/{report_id}"
+    priority: high
+    requires:
+      report_id: "a valid report ID from the database"
+    workflow: |
+      Navigate to the report URL
+      Wait for the report to fully load
+
+      Resize the viewport to 375px width (mobile)
+      Verify the report content reflows for mobile
+      Verify no horizontal scrollbar appears
+      Verify the sidebar collapses or transforms for mobile navigation
+      Verify findings and recommendations remain readable

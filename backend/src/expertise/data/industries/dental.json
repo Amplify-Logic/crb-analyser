@@ -1,30 +1,511 @@
 {
   "industry": "dental",
-  "last_updated": "2026-01-17T22:10:51.550959",
-  "total_analyses": 5,
+  "last_updated": "2026-02-24T12:00:00Z",
+  "total_analyses": 7,
   "confidence": "medium",
-  "pain_points": {},
-  "processes": {},
-  "effective_patterns": [],
-  "anti_patterns": [],
+  "pain_points": {
+    "patient_no_shows": {
+      "name": "Patient no-shows and last-minute cancellations",
+      "frequency": 1,
+      "avg_impact": "high",
+      "typical_causes": [
+        "No automated appointment reminders",
+        "Single-channel reminder only (phone or email)",
+        "No cancellation waitlist to fill gaps",
+        "Patients forget appointments booked weeks in advance"
+      ],
+      "effective_solutions": [
+        "Weave multi-channel reminders (text, email, phone)",
+        "Lighthouse 360 automated confirmation sequences",
+        "AI predictive no-show identification and overbooking",
+        "Two-way texting for easy rescheduling"
+      ],
+      "last_seen": "2026-02-24T00:00:00Z"
+    },
+    "insurance_verification_burden": {
+      "name": "Time-consuming manual insurance verification",
+      "frequency": 1,
+      "avg_impact": "high",
+      "typical_causes": [
+        "Phone-based verification with insurance companies",
+        "4-6 hours per day spent on verification calls",
+        "Frequent plan changes and coverage updates",
+        "No real-time eligibility checking"
+      ],
+      "effective_solutions": [
+        "Vyne Dental automated eligibility verification",
+        "Dental Intelligence real-time insurance checks",
+        "Batch verification before appointment day",
+        "Integration with practice management for auto-posting"
+      ],
+      "last_seen": "2026-02-24T00:00:00Z"
+    },
+    "low_treatment_acceptance": {
+      "name": "Low treatment plan acceptance rates",
+      "frequency": 1,
+      "avg_impact": "high",
+      "typical_causes": [
+        "Poor visual communication of treatment needs",
+        "Cost shock without financing options presented",
+        "Patients not understanding urgency of treatment",
+        "Only 30-50% of presented plans accepted"
+      ],
+      "effective_solutions": [
+        "Pearl AI visual treatment presenters with intraoral imagery",
+        "Sunbit and CareCredit financing presented at chairside",
+        "AI-generated treatment animations and before/after visuals",
+        "Automated follow-up sequences for pending treatment plans"
+      ],
+      "last_seen": "2026-02-24T00:00:00Z"
+    },
+    "recall_compliance": {
+      "name": "Poor recall and hygiene appointment compliance",
+      "frequency": 1,
+      "avg_impact": "high",
+      "typical_causes": [
+        "40-60% of patients overdue for hygiene visits",
+        "Manual recall tracking via spreadsheets or reports",
+        "Generic one-size-fits-all recall messaging",
+        "No systematic follow-up for overdue patients"
+      ],
+      "effective_solutions": [
+        "Lighthouse 360 automated recall campaigns",
+        "Solutionreach personalized multi-touch recall sequences",
+        "AI-driven risk-based recall scheduling",
+        "Automated reactivation campaigns for lapsed patients"
+      ],
+      "last_seen": "2026-02-24T00:00:00Z"
+    },
+    "manual_appointment_scheduling": {
+      "name": "Phone-dependent manual appointment scheduling",
+      "frequency": 1,
+      "avg_impact": "high",
+      "typical_causes": [
+        "3-5 hours per day spent on phone scheduling",
+        "No online booking available for patients",
+        "Missed calls during lunch or after hours",
+        "Inefficient schedule utilization and gaps"
+      ],
+      "effective_solutions": [
+        "NexHealth online booking with PM integration",
+        "LocalMed real-time availability and self-scheduling",
+        "Weave online scheduling with automated confirmations",
+        "AI-optimized schedule fill for gap management"
+      ],
+      "last_seen": "2026-02-24T00:00:00Z"
+    },
+    "front_desk_phone_overload": {
+      "name": "Front desk overwhelmed by phone volume",
+      "frequency": 1,
+      "avg_impact": "high",
+      "typical_causes": [
+        "50% or more of front desk day spent on phone",
+        "Calls for scheduling, insurance, directions, hours",
+        "Missed calls during peak times losing new patients",
+        "Staff unable to focus on in-office patient experience"
+      ],
+      "effective_solutions": [
+        "Smith.ai AI voice receptionist for overflow calls",
+        "Weave missed-call auto-texting",
+        "IVR system routing common questions to self-service",
+        "Online FAQ and chatbot for routine inquiries"
+      ],
+      "last_seen": "2026-02-24T00:00:00Z"
+    },
+    "clinical_documentation": {
+      "name": "Time-consuming clinical charting and documentation",
+      "frequency": 1,
+      "avg_impact": "medium",
+      "typical_causes": [
+        "Manual charting after each patient visit",
+        "Inconsistent documentation across providers",
+        "Time spent on narrative notes reducing chair time",
+        "Compliance documentation requirements"
+      ],
+      "effective_solutions": [
+        "Voice-to-chart AI dictation (Bola AI)",
+        "Template-based charting with auto-population",
+        "AI clinical note generation from structured data",
+        "Automated perio charting from digital probing"
+      ],
+      "last_seen": "2026-02-24T00:00:00Z"
+    },
+    "billing_collections": {
+      "name": "Poor collection rates and aging accounts receivable",
+      "frequency": 1,
+      "avg_impact": "high",
+      "typical_causes": [
+        "No automated payment follow-up workflows",
+        "Patients leaving without paying co-pays",
+        "Manual statement generation and mailing",
+        "A/R aging beyond 90 days"
+      ],
+      "effective_solutions": [
+        "Automated payment plan setup at checkout",
+        "Text-to-pay and online payment portals",
+        "Automated collection sequences by aging bucket",
+        "CareCredit and Sunbit integration for large balances"
+      ],
+      "last_seen": "2026-02-24T00:00:00Z"
+    },
+    "new_patient_acquisition": {
+      "name": "High cost of new patient acquisition",
+      "frequency": 1,
+      "avg_impact": "medium",
+      "typical_causes": [
+        "Acquisition cost of EUR 150-350 per new patient",
+        "Few online reviews compared to competitors",
+        "Poor local SEO and Google Business Profile",
+        "No systematic referral program"
+      ],
+      "effective_solutions": [
+        "Birdeye or Podium automated review request campaigns",
+        "Google Business Profile optimization with AI",
+        "Automated referral tracking and reward programs",
+        "Weave review management integrated with PM system"
+      ],
+      "last_seen": "2026-02-24T00:00:00Z"
+    },
+    "staff_turnover": {
+      "name": "High staff turnover and burnout",
+      "frequency": 1,
+      "avg_impact": "medium",
+      "typical_causes": [
+        "25% average annual staff turnover in dental",
+        "Repetitive administrative tasks causing burnout",
+        "Understaffing leading to overtime and stress",
+        "Training costs for new hires on complex workflows"
+      ],
+      "effective_solutions": [
+        "Workflow automation reducing repetitive admin tasks",
+        "Better scheduling tools for work-life balance",
+        "Cross-training enabled by standardized digital processes",
+        "AI-assisted onboarding and training documentation"
+      ],
+      "last_seen": "2026-02-24T00:00:00Z"
+    },
+    "inventory_management": {
+      "name": "Inefficient dental supply inventory management",
+      "frequency": 1,
+      "avg_impact": "medium",
+      "typical_causes": [
+        "Expired supplies discovered at point of use",
+        "Stockouts of critical materials causing procedure delays",
+        "Manual counting and reordering processes",
+        "No usage tracking tied to procedures performed"
+      ],
+      "effective_solutions": [
+        "Automated reorder point systems",
+        "Usage tracking tied to procedure codes",
+        "Expiration date monitoring with alerts",
+        "Vendor comparison and group purchasing integration"
+      ],
+      "last_seen": "2026-02-24T00:00:00Z"
+    },
+    "patient_communication_gaps": {
+      "name": "Gaps in patient follow-up and communication",
+      "frequency": 1,
+      "avg_impact": "medium",
+      "typical_causes": [
+        "Manual post-treatment follow-ups often missed",
+        "No automated post-op care instructions",
+        "Patients unclear on pre-appointment preparation",
+        "Lack of two-way communication channel"
+      ],
+      "effective_solutions": [
+        "Automated post-treatment instruction delivery via text",
+        "Two-way texting with 98% open rate vs 20% email",
+        "Pre-appointment preparation reminders",
+        "Automated birthday and milestone messaging"
+      ],
+      "last_seen": "2026-02-24T00:00:00Z"
+    }
+  },
+  "processes": {
+    "appointment_scheduling": {
+      "process_name": "Appointment Scheduling",
+      "automation_potential_observed": [
+        85
+      ],
+      "common_tools_used": [
+        "nexhealth",
+        "localmed",
+        "weave"
+      ],
+      "common_blockers": [
+        "Complex procedure-specific scheduling rules",
+        "Provider preference and chair assignment logic"
+      ],
+      "quick_win_potential": true
+    },
+    "patient_communication": {
+      "process_name": "Patient Communication & Reminders",
+      "automation_potential_observed": [
+        90
+      ],
+      "common_tools_used": [
+        "weave",
+        "lighthouse_360",
+        "solutionreach"
+      ],
+      "common_blockers": [
+        "Patient contact data quality",
+        "Opt-in and consent management"
+      ],
+      "quick_win_potential": true
+    },
+    "insurance_verification": {
+      "process_name": "Insurance Verification & Eligibility",
+      "automation_potential_observed": [
+        75
+      ],
+      "common_tools_used": [
+        "vyne_dental",
+        "dental_intelligence"
+      ],
+      "common_blockers": [
+        "Non-standard insurance plans",
+        "Coordination of benefits cases"
+      ],
+      "quick_win_potential": true
+    },
+    "treatment_planning": {
+      "process_name": "Treatment Planning & Case Presentation",
+      "automation_potential_observed": [
+        60
+      ],
+      "common_tools_used": [
+        "pearl",
+        "overjet"
+      ],
+      "common_blockers": [
+        "Clinical judgment requirements",
+        "FDA regulatory considerations for AI diagnostics"
+      ],
+      "quick_win_potential": false
+    },
+    "billing_collections": {
+      "process_name": "Billing & Collections",
+      "automation_potential_observed": [
+        80
+      ],
+      "common_tools_used": [
+        "automated_payment_plans",
+        "carecredit",
+        "sunbit"
+      ],
+      "common_blockers": [
+        "Complex insurance claim adjudication",
+        "Patient financial hardship cases"
+      ],
+      "quick_win_potential": true
+    },
+    "patient_intake": {
+      "process_name": "Patient Intake & Registration",
+      "automation_potential_observed": [
+        85
+      ],
+      "common_tools_used": [
+        "nexhealth_forms",
+        "yapi",
+        "mango_voice"
+      ],
+      "common_blockers": [
+        "Legacy paper form workflows",
+        "HIPAA-compliant data transfer to PM system"
+      ],
+      "quick_win_potential": true
+    },
+    "recall_management": {
+      "process_name": "Recall & Reactivation Management",
+      "automation_potential_observed": [
+        90
+      ],
+      "common_tools_used": [
+        "lighthouse_360",
+        "solutionreach",
+        "weave"
+      ],
+      "common_blockers": [
+        "Outdated patient contact information",
+        "Segmentation of recall vs reactivation patients"
+      ],
+      "quick_win_potential": true
+    },
+    "inventory_ordering": {
+      "process_name": "Dental Supply Inventory & Ordering",
+      "automation_potential_observed": [
+        80
+      ],
+      "common_tools_used": [
+        "automated_reorder_systems",
+        "henry_schein_connect",
+        "net32"
+      ],
+      "common_blockers": [
+        "Product substitution decisions",
+        "Budgeting and approval workflows"
+      ],
+      "quick_win_potential": false
+    },
+    "reputation_management": {
+      "process_name": "Online Reputation & Review Management",
+      "automation_potential_observed": [
+        85
+      ],
+      "common_tools_used": [
+        "birdeye",
+        "podium",
+        "weave"
+      ],
+      "common_blockers": [
+        "HIPAA constraints on review responses",
+        "Staff adoption of review request workflows"
+      ],
+      "quick_win_potential": true
+    }
+  },
+  "effective_patterns": [
+    {
+      "pattern": "Automated multi-channel appointment reminders (text, email, voice) reduce no-shows by 30-50%",
+      "recommendation": "Deploy Weave or Lighthouse 360 with 3-touch reminder sequence (7-day, 2-day, same-day)",
+      "frequency": 1,
+      "context": {
+        "min_patients_per_day": 10,
+        "company_size": "any"
+      }
+    },
+    {
+      "pattern": "Online scheduling captures 15-25% of appointments after hours when phones are off",
+      "recommendation": "Implement NexHealth or LocalMed online booking integrated with practice management system",
+      "frequency": 1,
+      "context": {
+        "min_new_patients_per_month": 10,
+        "company_size": "any"
+      }
+    },
+    {
+      "pattern": "Automated insurance verification saves 15-20 hours per week per front desk staff member",
+      "recommendation": "Deploy Vyne Dental batch verification the day before appointments to eliminate phone-based checks",
+      "frequency": 1,
+      "context": {
+        "min_insured_patients_pct": 50,
+        "company_size": "any"
+      }
+    },
+    {
+      "pattern": "Patient financing options presented at chairside increase treatment acceptance by 20-40%",
+      "recommendation": "Integrate Sunbit or CareCredit into treatment presentation workflow with tablet-based applications",
+      "frequency": 1,
+      "context": {
+        "min_avg_treatment_value": 500,
+        "company_size": "any"
+      }
+    },
+    {
+      "pattern": "Automated review request campaigns generate 5-10x more online reviews than manual asking",
+      "recommendation": "Deploy Birdeye or Podium with automatic post-appointment review requests via text message",
+      "frequency": 1,
+      "context": {
+        "min_patients_per_day": 8,
+        "company_size": "any"
+      }
+    },
+    {
+      "pattern": "Two-way texting achieves 98% open rate vs 20% email open rate for patient communication",
+      "recommendation": "Implement Weave or Solutionreach two-way texting as primary patient communication channel",
+      "frequency": 1,
+      "context": {
+        "min_active_patients": 500,
+        "company_size": "any"
+      }
+    },
+    {
+      "pattern": "AI-assisted imaging analysis provides second opinion and increases treatment acceptance by 10-15%",
+      "recommendation": "Deploy Pearl or Overjet for AI-powered radiograph analysis to support case presentation",
+      "frequency": 1,
+      "context": {
+        "min_radiographs_per_week": 30,
+        "company_size": "11-50"
+      }
+    }
+  ],
+  "anti_patterns": [
+    "Custom practice management software build -- existing PM systems (Dentrix, Eaglesoft, Open Dental) are mature, deeply integrated, and heavily regulated",
+    "Custom AI diagnostic imaging solution -- FDA 510(k) approval requirements make custom dental AI infeasible for individual practices",
+    "Full practice management system replacement during busy season -- migrate in phases starting with the least disruptive modules",
+    "AI chatbots for clinical dental questions -- liability exposure and HIPAA compliance concerns outweigh marginal convenience gains",
+    "Replacing phone system without staff training and buy-in -- adoption fails and staff reverts to old workflows within weeks",
+    "Building a custom patient portal when practice management and communication vendors provide integrated solutions",
+    "Implementing all automation tools simultaneously -- start with highest-impact quick wins (reminders, online scheduling) before layering complexity",
+    "Using consumer-grade messaging tools (WhatsApp, iMessage) for patient communication -- HIPAA violations and no audit trail"
+  ],
   "size_specific": {
-    "11-25": {
-      "count": 2,
-      "avg_readiness": 72.0,
-      "common_pain_points": []
+    "1-10": {
+      "count": 1,
+      "avg_readiness": 58.0,
+      "common_pain_points": [],
+      "avg_potential_savings": 45000,
+      "typical_priorities": [
+        "no_shows",
+        "patient_communication",
+        "online_scheduling",
+        "reviews"
+      ],
+      "common_stack": [
+        "dentrix",
+        "manual_reminders"
+      ]
     },
     "11-50": {
       "count": 2,
-      "avg_readiness": 58.0,
-      "common_pain_points": []
+      "avg_readiness": 72.0,
+      "common_pain_points": [],
+      "avg_potential_savings": 120000,
+      "typical_priorities": [
+        "insurance_verification",
+        "recall_management",
+        "treatment_acceptance",
+        "billing"
+      ],
+      "common_stack": [
+        "dentrix",
+        "weave",
+        "carecredit"
+      ]
     },
-    "2-10": {
-      "count": 1,
+    "51-200": {
+      "count": 2,
       "avg_readiness": 58.0,
+      "common_pain_points": [],
+      "avg_potential_savings": 250000,
+      "typical_priorities": [
+        "multi_location_reporting",
+        "staff_efficiency",
+        "inventory",
+        "analytics"
+      ],
+      "common_stack": [
+        "eaglesoft",
+        "weave",
+        "dental_intelligence",
+        "pearl"
+      ]
+    },
+    "unknown": {
+      "count": 2,
+      "avg_readiness": 60.0,
       "common_pain_points": []
     }
   },
-  "avg_ai_readiness": 63.6,
-  "avg_potential_savings": 623600.0,
-  "common_tech_stacks": []
+  "avg_ai_readiness": 62.57142857142857,
+  "avg_potential_savings": 481428.5714285714,
+  "common_tech_stacks": [
+    "dentrix",
+    "eaglesoft",
+    "open_dental",
+    "weave",
+    "lighthouse_360",
+    "carecredit"
+  ]
 }

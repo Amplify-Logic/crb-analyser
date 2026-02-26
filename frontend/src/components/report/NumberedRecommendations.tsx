@@ -1,5 +1,9 @@
-import { useState } from 'react'
+import { useState, lazy, Suspense } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
+import { AlertTriangle } from 'lucide-react'
+import type { AutomationFlow } from './AutomationFlowBuilder'
+
+const AutomationFlowBuilder = lazy(() => import('./AutomationFlowBuilder'))
 
 interface Recommendation {
   id: string
@@ -139,14 +143,42 @@ export default function NumberedRecommendations({ recommendations, totalCount, s
                                 </span>
                               )}
                               <p className="font-semibold mt-1 text-emerald-700 dark:text-emerald-300">Connect & Automate</p>
+                              {rec.options.connect_and_automate.prerequisite && (
+                                <div className="flex items-center gap-2 px-3 py-2 mt-2 bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800 rounded-lg text-xs text-amber-800 dark:text-amber-300">
+                                  <AlertTriangle className="w-3.5 h-3.5 flex-shrink-0" />
+                                  <span>First: {rec.options.connect_and_automate.prerequisite}</span>
+                                </div>
+                              )}
                               <p className="text-sm text-gray-600 dark:text-gray-400 mt-1 line-clamp-3">{rec.options.connect_and_automate.approach}</p>
                               {rec.options.connect_and_automate.build_time && (
-                                <p className="text-lg font-bold mt-2 text-gray-900 dark:text-white">
-                                  {rec.options.connect_and_automate.build_time}
-                                </p>
+                                <div className="flex items-center gap-2 mt-2">
+                                  <p className="text-lg font-bold text-gray-900 dark:text-white">
+                                    {rec.options.connect_and_automate.build_time}
+                                  </p>
+                                  {rec.options.connect_and_automate.diy_complexity && (
+                                    <span className={`text-[10px] px-1.5 py-0.5 rounded-full font-medium ${
+                                      rec.options.connect_and_automate.diy_complexity === 'low' ? 'bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400' :
+                                      rec.options.connect_and_automate.diy_complexity === 'moderate' ? 'bg-yellow-100 dark:bg-yellow-900/30 text-yellow-700 dark:text-yellow-400' :
+                                      'bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-400'
+                                    }`}>
+                                      {rec.options.connect_and_automate.diy_complexity}
+                                    </span>
+                                  )}
+                                </div>
                               )}
                               {rec.options.connect_and_automate.monthly_cost && (
                                 <p className="text-xs text-gray-500">{rec.options.connect_and_automate.monthly_cost}</p>
+                              )}
+                              {rec.options.connect_and_automate.automation_flow?.nodes?.length > 0 && (
+                                <div className="mt-3">
+                                  <Suspense fallback={<div className="h-[200px] animate-pulse bg-gray-100 dark:bg-gray-700 rounded-xl" />}>
+                                    <AutomationFlowBuilder
+                                      flow={rec.options.connect_and_automate.automation_flow as AutomationFlow}
+                                      title="How it connects"
+                                      height={200}
+                                    />
+                                  </Suspense>
+                                </div>
                               )}
                               {rec.options.connect_and_automate.tools_used?.length > 0 && (
                                 <div className="mt-2 flex flex-wrap gap-1">

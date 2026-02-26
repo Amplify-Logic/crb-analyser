@@ -13,7 +13,7 @@ from typing import AsyncGenerator, Dict, Any, List, Optional
 from datetime import datetime
 import uuid
 
-from anthropic import Anthropic
+from anthropic import AsyncAnthropic
 
 from src.config.settings import settings
 from src.config.supabase_client import get_async_supabase
@@ -110,7 +110,10 @@ After research, you'll output a structured company profile."""
         self.company_name = company_name
         self.website_url = website_url
         self.research_id = str(uuid.uuid4())
-        self.client = Anthropic(api_key=settings.ANTHROPIC_API_KEY)
+        self.client = AsyncAnthropic(
+            api_key=settings.ANTHROPIC_API_KEY,
+            timeout=60.0,
+        )
         self.gathered_data: Dict[str, Any] = {}
 
     async def run_research(self) -> AsyncGenerator[Dict[str, Any], None]:
@@ -224,7 +227,7 @@ For each field, also note your confidence level (high/medium/low) and source."""
             current_progress = int(base_progress + (iteration * progress_per_iteration))
 
             try:
-                response = self.client.messages.create(
+                response = await self.client.messages.create(
                     model=settings.DEFAULT_MODEL,
                     max_tokens=4096,
                     system=self.SYSTEM_PROMPT,

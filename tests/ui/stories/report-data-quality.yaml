@@ -1,0 +1,528 @@
+stories:
+  - name: "Report Data - Financial Numbers Consistency"
+    url: "http://localhost:5174/report/sample"
+    priority: critical
+    workflow: |
+      Navigate to the sample report URL and wait for content to load fully.
+
+      STEP 1: Check Value Summary numbers
+      Look for the Value Summary / Investment section in the overview.
+      Take a screenshot. Verify:
+      - A return range is displayed (should show min-max like "105,000 - 175,000")
+      - An investment amount is shown
+      - The return is GREATER than the investment (if return < investment, this is a critical error)
+      - Numbers use EUR formatting (period as thousands separator OR comma, consistent with locale)
+      - No "$" signs appear (should be EUR only)
+
+      STEP 2: Check recommendation pricing adds up
+      Click on the first recommendation in the sidebar to expand it.
+      Take a screenshot. Verify:
+      - Three option cards are visible (Off-the-Shelf, Best-in-Class, Custom)
+      - Each option card shows a price (monthly cost or cost range)
+      - No option shows "EUR 0/mo" unless it's explicitly a "no additional cost" option
+      - The Recommended option is highlighted with a purple/primary border
+      - Implementation weeks are shown and are reasonable (1-16 weeks, not 0 or 52+)
+
+      STEP 3: Check ROI badges
+      Look at the recommendation headers (collapsed view).
+      Take a screenshot. Verify:
+      - ROI percentages are displayed (e.g. "329% ROI")
+      - No recommendation shows "0% ROI" as a green badge (this is a known bug)
+      - If an amber "ROI Estimated" badge appears, it should NOT also show a percentage
+      - Payback months are reasonable (1-36 months, not 0)
+
+      STEP 4: Check findings have financial data
+      Navigate back to overview, then click on the first finding in the sidebar.
+      Take a screenshot. Verify:
+      - Finding shows either "Potential Savings" or "Revenue Potential" or both
+      - Financial values are non-zero
+      - Currency formatting is consistent (EUR)
+      - Hours per week saved is shown if applicable
+
+  - name: "Report Data - Math Cross-Validation"
+    url: "http://localhost:5174/report/sample"
+    priority: critical
+    workflow: |
+      Navigate to the sample report URL and wait for content to load.
+
+      STEP 1: Record executive summary numbers
+      In the overview section, find and note:
+      - AI Readiness Score (should be 0-100)
+      - Value Summary return range (min and max)
+      - Recommended Investment amount
+      Take a screenshot capturing all these numbers.
+
+      STEP 2: Validate score is in range
+      Verify the AI Readiness Score is between 0 and 100.
+      If the score is exactly 0, this is likely a data loading error - FAIL.
+      If the score is above 100, this is a calculation error - FAIL.
+
+      STEP 3: Check that investment < return
+      The recommended investment (year 1) should be LESS than the total return range minimum.
+      If investment is higher than the return max, the report is recommending the user lose money - FAIL.
+
+      STEP 4: Check all recommendations have required fields
+      Click through each recommendation in the sidebar.
+      For EACH recommendation, verify:
+      - Title is not empty or "undefined"
+      - Description text is present (not just whitespace)
+      - Priority badge shows "high", "medium", or "low" (not blank)
+      - At least one option card has pricing data
+      - "Why we recommend" rationale section is visible
+      Take a screenshot of each recommendation.
+
+      STEP 5: Check no placeholder text appears
+      Search the visible report content for signs of template/placeholder data:
+      - "[PLACEHOLDER]" or "[TODO]"
+      - "Lorem ipsum"
+      - "undefined" or "null" or "NaN" appearing as visible text
+      - "EUR NaN" or "NaN%"
+      If any found, FAIL with details.
+
+  - name: "Report Data - Assumptions Transparency"
+    url: "http://localhost:5174/report/sample"
+    priority: high
+    workflow: |
+      Navigate to the sample report URL and wait for content to load.
+
+      STEP 1: Check assumptions are shown
+      Click to expand the first recommendation.
+      Scroll down within the expanded panel.
+      Take a screenshot. Verify:
+      - An "Assumptions" section is visible
+      - At least 2 assumptions are listed
+      - Assumptions are human-readable sentences (not JSON or code)
+
+      STEP 2: Check hourly rate assumption
+      Look through all recommendations' assumptions sections.
+      Verify that at least ONE recommendation mentions an hourly rate assumption.
+      The hourly rate should be a reasonable number (EUR 20-500/hr range).
+      If a default rate is used, it should say "(industry benchmark)" or similar indicator.
+      Take a screenshot.
+
+      STEP 3: Check "Why we recommend" rationale
+      For each expanded recommendation, verify:
+      - A green/highlighted rationale box is present
+      - The rationale text is specific to THIS recommendation (not generic)
+      - The rationale mentions the recommended vendor/approach by name
+      Take a screenshot.
+
+      STEP 4: Check methodology notes
+      Scroll to the bottom of the report or look for a methodology/disclaimers section.
+      If visible, verify:
+      - Data sources are listed
+      - Limitations are mentioned
+      - No section is empty or says "N/A"
+      Take a screenshot.
+
+  - name: "Report Data - Findings Quality Check"
+    url: "http://localhost:5174/report/sample"
+    priority: critical
+    workflow: |
+      Navigate to the sample report URL and wait for content to load.
+
+      STEP 1: Count findings
+      In the sidebar or overview, count the total number of findings listed.
+      There should be at least 3 findings for a report.
+      If fewer than 3 findings are shown, FAIL - report is too thin.
+      Take a screenshot of the findings list.
+
+      STEP 2: Check finding detail quality
+      Click on the FIRST finding to view its detail.
+      Take a screenshot. Verify:
+      - Title is descriptive (more than 5 words)
+      - Description paragraph is substantial (more than 50 characters)
+      - A confidence badge is shown (high/medium/low)
+      - A time horizon badge is shown (short/mid/long)
+      - A verdict badge is shown (Proceed/Wait/Skip)
+      - No field shows "undefined" or "null"
+
+      STEP 3: Check confidence distribution
+      Go through ALL findings (click each in sidebar).
+      Count: how many are HIGH, MEDIUM, LOW confidence.
+      Verify:
+      - Not ALL findings are "high" confidence (unrealistic)
+      - Not ALL findings are "low" confidence (useless report)
+      - There is a mix of confidence levels
+      Take a final screenshot with notes on the distribution.
+
+      STEP 4: Check time horizon distribution
+      Similarly verify that findings span different time horizons:
+      - At least one "short" term finding
+      - The report should not have ALL findings on the same time horizon
+      Take a screenshot.
+
+      STEP 5: Check financial values on hero findings
+      For the top findings (shown prominently), verify:
+      - Savings or revenue potential is displayed
+      - Numbers are formatted as currency
+      - Annual savings are plausible (EUR 1,000 - EUR 500,000 range for SMBs)
+      - If hours_per_week is shown, it's between 1 and 80
+
+  - name: "Report Data - Recommendation Options Completeness"
+    url: "http://localhost:5174/report/sample"
+    priority: critical
+    workflow: |
+      Navigate to the sample report URL and wait for content to load.
+
+      STEP 1: Expand first recommendation
+      Click on the first recommendation to expand the detail panel.
+      Take a screenshot. Verify THREE option cards are visible:
+      - "Option A: Off-the-Shelf" with a vendor name
+      - "Option B: Best-in-Class" with a vendor name
+      - "Option C: Custom AI" with an approach description
+
+      STEP 2: Validate Off-the-Shelf option
+      Check the Off-the-Shelf card:
+      - Vendor name is shown (not empty, not "undefined")
+      - Monthly cost is displayed
+      - Implementation weeks shown
+      - If "Unverified vendor" amber badge appears, note it (acceptable but worth flagging)
+      - If "Estimated pricing" badge appears, note it
+      Take a screenshot.
+
+      STEP 3: Validate Best-in-Class option
+      Check the Best-in-Class card:
+      - Different vendor name from Off-the-Shelf (they should not be the same vendor)
+      - Monthly cost is displayed and is higher than Off-the-Shelf (or at least different)
+      - Implementation weeks shown
+      Take a screenshot.
+
+      STEP 4: Validate Custom option
+      Check the Custom option card:
+      - Approach description is shown (not just "custom" or empty)
+      - Cost RANGE is displayed (min - max)
+      - The max should be greater than the min
+      - Implementation weeks shown and higher than other options
+      Take a screenshot.
+
+      STEP 5: Check ONE option is recommended
+      Verify exactly ONE option card has the "Recommended" badge.
+      The recommended option should match what's stated in the rationale below.
+      Take a screenshot.
+
+      STEP 6: Repeat for second recommendation
+      Collapse the first, expand the second recommendation.
+      Verify the same structure exists. The vendor names should be DIFFERENT
+      from the first recommendation (unless it's a legitimate platform recommendation).
+      Take a screenshot.
+
+  - name: "Report Data - Verdict and Scoring Integrity"
+    url: "http://localhost:5174/report/sample"
+    priority: high
+    workflow: |
+      Navigate to the sample report URL and wait for content to load.
+
+      STEP 1: Check verdict card
+      Find the verdict card on the overview page.
+      Take a screenshot. Verify:
+      - A verdict is shown: "Proceed", "Proceed with Caution", or "Reconsider"
+      - The verdict has a headline (bold text)
+      - The verdict has reasoning points (bullet list)
+      - The verdict color matches the recommendation (green=proceed, amber=caution, red=reconsider)
+
+      STEP 2: Check AI Readiness Score
+      Find the AI Readiness gauge/score.
+      Take a screenshot. Verify:
+      - Score is displayed as a number (0-100)
+      - A visual gauge or progress indicator accompanies the number
+      - The score aligns with the verdict (score > 60 with "proceed" OR score < 40 with "reconsider")
+
+      STEP 3: Check Two Pillars
+      Find the "Two Pillars" chart (Customer Value + Business Health).
+      Take a screenshot. Verify:
+      - Both pillars are visible with labels
+      - Scores are shown (should be 1-10 scale)
+      - The visual representation reflects the scores
+
+      STEP 4: Check verdict reasoning quality
+      Read the verdict reasoning bullets.
+      Verify:
+      - At least 3 reasoning points are shown
+      - Reasoning mentions specific findings or capabilities (not just generic advice)
+      - "When to revisit" is shown if verdict is not "proceed"
+      - Recommended approach steps are listed
+
+      STEP 5: Check Data Quality indicator
+      Look for a "Data Quality" card or indicator in the overview.
+      If present, verify:
+      - Shows a green dot with "All checks passed" OR amber with issue count
+      - The indicator is clearly visible
+      Take a screenshot.
+
+  - name: "Report Data - Roadmap and Playbook Integrity"
+    url: "http://localhost:5174/report/sample"
+    priority: high
+    workflow: |
+      Navigate to the sample report URL and wait for content to load.
+
+      STEP 1: Navigate to a Playbook
+      In the sidebar, click on a "Phase" or "Playbook" item.
+      Take a screenshot. Verify:
+      - A playbook is displayed with phases
+      - Each phase has a name and week number
+      - Tasks are listed under each phase
+      - Task titles are actionable (start with a verb or describe an action)
+
+      STEP 2: Check task structure
+      For the first phase of the playbook:
+      - Count tasks (should be 3-6 per phase)
+      - Verify each task has a title AND description
+      - Verify checkboxes are present for task completion
+      - Try checking a task checkbox
+      Take a screenshot after toggling.
+
+      STEP 3: Check playbook personalization
+      Verify the playbook content is personalized:
+      - References the company's specific tools (e.g. "Clio", "Microsoft 365")
+      - Mentions specific vendor names from recommendations
+      - Timeline references make sense (not "Week 0" or "Month 0")
+      Take a screenshot.
+
+      STEP 4: Navigate to overview and check roadmap
+      Go back to overview. Look for a roadmap section or timeline.
+      Verify:
+      - Short-term, mid-term, and long-term items are shown
+      - Each has a title and timeline
+      - Items are actionable and specific
+      Take a screenshot.
+
+  - name: "Report Data - Edge Cases and Error States"
+    url: "http://localhost:5174/report/sample"
+    priority: high
+    workflow: |
+      Navigate to the sample report URL and wait for content to load.
+
+      STEP 1: Check for empty sections
+      Scan the overview page. Look for any section that appears to be:
+      - Completely empty (just a heading with no content below)
+      - Shows a loading spinner that never resolves
+      - Shows "No data" or similar placeholder
+      Take a screenshot if any found.
+
+      STEP 2: Check for broken number formatting
+      Scan all visible numbers on the overview. Look for:
+      - "NaN" appearing anywhere
+      - "undefined" appearing as text
+      - "$0" or "EUR 0" where a real value should be
+      - Negative numbers where only positive makes sense (e.g. negative ROI %)
+      - Numbers without proper formatting (e.g. "105000" instead of "105.000" or "105,000")
+      Take a screenshot.
+
+      STEP 3: Check for truncated text
+      Look for any text that appears to be cut off:
+      - "..." in the middle of an important sentence
+      - Descriptions that end abruptly mid-word
+      - Titles that seem incomplete
+      Take a screenshot if found.
+
+      STEP 4: Check for duplicate content
+      Verify:
+      - No two findings have the exact same title
+      - No two recommendations have the exact same title
+      - Vendor names in different recommendations are not all the same vendor
+      Take a screenshot.
+
+      STEP 5: Test sidebar navigation exhaustively
+      Click through EVERY item in the sidebar:
+      - Overview
+      - Each finding
+      - Each recommendation/action
+      - Each playbook phase
+      - ROI Calculator
+      - Stack Analysis
+      - Industry Insights
+      Verify each click loads the correct content (no blank pages, no errors).
+      Take a screenshot of the last section loaded.
+
+  - name: "Report Data - Connect/Replace & New Quality Features"
+    url: "http://localhost:5174/report/sample"
+    priority: high
+    workflow: |
+      Navigate to the sample report URL and wait for content to load.
+
+      STEP 1: Check for Connect/Replace badges on findings
+      Navigate through the findings. Look for colored badges:
+      - Teal "Connect" badge (integrate with existing tools)
+      - Orange "Replace" badge (migrate to new tool)
+      - Purple "Either" badge (both paths viable)
+      Note which findings have badges and which don't.
+      If NO findings have any Connect/Replace badges at all, note this as a potential data issue.
+      Take a screenshot.
+
+      STEP 2: Check Automation Matrix
+      On the overview page, scroll down to find the Automation Opportunities Matrix.
+      Take a screenshot. Verify:
+      - If present: shows a list of automation opportunities with monthly impact
+      - Each opportunity references a finding
+      - Impact values are in EUR and non-zero
+      - If NOT present: check if the section is missing entirely (might indicate generation failure)
+
+      STEP 3: Check NET SCORE display
+      Expand a recommendation. Look below the three option cards.
+      Take a screenshot. Look for:
+      - NET SCORE section with values for each option (A, B, C)
+      - The recommended option's score should be highlighted/bold
+      - A comparison summary text below
+      If NET SCORE section is missing entirely, note this - scores may not be generated.
+
+      STEP 4: Check vendor verification badges
+      In expanded recommendations, look at option cards.
+      Take a screenshot. Check:
+      - Some vendors should show verified status (no amber badge)
+      - If "Unverified vendor" badge appears, it should be amber colored
+      - If "Estimated pricing" badge appears, verify it's on a different line from vendor name
+
+      STEP 5: Check Workshop Insights card
+      On the overview page, look for a "Workshop Insights" card.
+      If present, verify:
+      - Shows topic tags
+      - Shows exchange count
+      - Topics are relevant to the company's industry
+      If NOT present, this is expected for reports without a workshop. Note either way.
+      Take a screenshot.
+
+  - name: "Report Data - Industry Insights & Stack Analysis"
+    url: "http://localhost:5174/report/sample"
+    priority: medium
+    workflow: |
+      Navigate to the sample report URL and wait for content to load.
+
+      STEP 1: Navigate to Industry Insights
+      Click "Industry Insights" in the sidebar (or equivalent tab).
+      Take a screenshot. Verify:
+      - Industry name is displayed correctly (not "undefined" or "general")
+      - Adoption statistics are shown with percentages and sources
+      - Sources are cited (not just raw numbers)
+      - Opportunity map or similar categorization is visible
+
+      STEP 2: Check social proof
+      Look for testimonials or social proof in the insights section.
+      If present:
+      - Quotes should have attribution (source/role)
+      - Quotes should be industry-relevant
+      Take a screenshot.
+
+      STEP 3: Navigate to Stack Analysis
+      Click "Stack Analysis" in the sidebar.
+      Take a screenshot. Verify:
+      - Current tools are listed with their categories
+      - API/integration scores are shown
+      - A proposed AI layer is visualized or listed
+      - Cost comparison shows current vs proposed annual costs
+      - Net benefit is positive
+
+      STEP 4: Check tool connections
+      In the stack analysis, look for connection/integration lines or descriptions.
+      Verify:
+      - Connections reference actual tools from the company profile
+      - Data flow directions are indicated
+      - No connection references "undefined" or missing tools
+      Take a screenshot.
+
+  - name: "Report Data - Company Profile Accuracy"
+    url: "http://localhost:5174/report/sample"
+    priority: high
+    workflow: |
+      Navigate to the sample report URL and wait for content to load.
+
+      STEP 1: Check company profile display
+      In the overview, find the company profile card or header.
+      Take a screenshot. Verify:
+      - Company name is displayed prominently
+      - Industry is shown (with proper display name, not slug like "professional-services")
+      - Team size is mentioned
+      - Existing tools are listed
+
+      STEP 2: Check personalization consistency
+      Verify the company name and details are consistent throughout:
+      - Executive summary mentions the company context
+      - Findings reference the company's specific situation
+      - Recommendations mention the company's existing tools
+      Take screenshots of any inconsistencies.
+
+      STEP 3: Check the report is not generic
+      Verify personalization:
+      - At least one finding title references the company's industry
+      - Vendor recommendations include tools that integrate with their existing stack
+      - The verdict reasoning is specific (not "your company could benefit from AI")
+      Take a screenshot.
+
+      STEP 4: Check "Not Recommended" section
+      In the executive summary area, look for a "Not Recommended" or similar section.
+      If present:
+      - Each item should have a reason WHY it's not recommended
+      - Reasons should be specific to the company's size/industry
+      - At least 2 items should be listed
+      Take a screenshot.
+
+  - name: "Report Data - PDF Export Smoke Test"
+    url: "http://localhost:5174/report/sample"
+    priority: medium
+    workflow: |
+      Navigate to the sample report URL and wait for content to load.
+
+      STEP 1: Look for export/download button
+      Find a PDF download, export, or share button in the report header or toolbar.
+      Take a screenshot showing the button location.
+      If no export button exists, note this as a missing feature and FAIL.
+
+      STEP 2: Click the export button
+      Click the PDF or export button.
+      Wait up to 10 seconds for a response.
+      Verify:
+      - A download starts OR a new tab opens with PDF OR a modal appears
+      - No JavaScript error appears in the page
+      - The page doesn't crash or show an error state
+      Take a screenshot of the result.
+
+  - name: "Report Data - Dark Mode Rendering"
+    url: "http://localhost:5174/report/sample"
+    priority: medium
+    workflow: |
+      Navigate to the sample report URL and wait for content to load.
+
+      STEP 1: Toggle dark mode
+      Look for a dark mode toggle in the page header or settings.
+      If found, click it to switch to dark mode.
+      If not found, try setting prefers-color-scheme to dark (if possible) or note the absence.
+      Take a screenshot.
+
+      STEP 2: Check readability in dark mode
+      Verify:
+      - Text is readable (light text on dark background, not dark-on-dark)
+      - Cards and sections have visible borders
+      - Badge colors (ROI, priority, confidence) are still distinguishable
+      - Charts and visualizations are still visible
+      - No text appears to "disappear" against the background
+      Take a screenshot.
+
+      STEP 3: Check specific trouble areas
+      In dark mode, verify:
+      - The verdict card colors work (green/amber/red on dark)
+      - Option cards with "Recommended" badge are still prominent
+      - Assumption text is readable (often uses gray-on-gray)
+      - Financial numbers are clearly visible
+      Take a screenshot.
+
+  - name: "Report Data - Print Layout Quality"
+    url: "http://localhost:5174/report/sample"
+    priority: low
+    workflow: |
+      Navigate to the sample report URL and wait for content to load.
+
+      STEP 1: Check overall page structure
+      Take a full-page screenshot showing the complete report layout.
+      Verify:
+      - Content area fills available space (no excessive whitespace)
+      - Sections flow naturally top-to-bottom
+      - No content overlaps other content
+      - Font sizes are consistent within sections
+
+      STEP 2: Check table-like layouts
+      Find any areas with tabular data (cost comparisons, tool lists, adoption stats).
+      Take a screenshot. Verify:
+      - Data is aligned properly
+      - Columns don't overflow or wrap unexpectedly
+      - Numbers are right-aligned or consistently formatted
+      - Headers are distinguishable from data rows

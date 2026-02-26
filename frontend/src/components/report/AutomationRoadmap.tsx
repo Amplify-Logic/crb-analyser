@@ -203,7 +203,7 @@ export default function AutomationRoadmap({ summary }: AutomationRoadmapProps) {
               <div className="flex items-center gap-3">
                 <ApiScoreBar score={Math.round(stack_assessment.average_score)} />
                 <span className="text-sm font-medium text-gray-900 dark:text-white">
-                  ({stack_assessment.average_score.toFixed(1)}/5)
+                  ({stack_assessment.average_score.toFixed(1)}/10)
                 </span>
               </div>
             </div>
@@ -240,8 +240,10 @@ export default function AutomationRoadmap({ summary }: AutomationRoadmapProps) {
           </div>
 
           {/* Table */}
-          <div className="overflow-x-auto">
-            <table className="w-full">
+          <div className="overflow-x-auto relative">
+            {/* Mobile scroll hint */}
+            <div className="absolute right-0 top-0 bottom-0 w-8 bg-gradient-to-l from-white dark:from-gray-800 to-transparent pointer-events-none md:hidden z-10" />
+            <table className="w-full min-w-[500px]">
               <thead>
                 <tr className="border-t border-b border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800/50">
                   <th className="text-left px-6 py-3 text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">

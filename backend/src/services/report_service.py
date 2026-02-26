@@ -251,6 +251,8 @@ class ReportGenerator:
 
         Used by skill-based generation methods for consistent context passing.
         """
+        from src.services.readiness_profile import build_readiness_profile
+
         industry = self.context.get("industry", "general")
 
         # Get expertise data for this industry
@@ -293,6 +295,10 @@ class ReportGenerator:
             elif isinstance(currency_data, str):
                 currency = currency_data
 
+        # Build readiness profile for adaptive recommendations
+        readiness_profile = build_readiness_profile(answers)
+        logger.info("readiness_profile", **readiness_profile)
+
         return SkillContext(
             industry=industry,
             company_name=self.context.get("company_name"),
@@ -306,6 +312,7 @@ class ReportGenerator:
             existing_stack=existing_stack,
             current_tool_categories=self.context.get("current_tool_categories"),
             user_profile=user_profile,
+            metadata={"readiness_profile": readiness_profile},
         )
 
     def _call_claude(self, task: str, prompt: str, max_tokens: int = 4000) -> str:
@@ -2326,10 +2333,15 @@ For EACH recommendation, provide ALL THREE options in this priority:
 3. targeted_upgrade: Replace a specific tool ONLY if it genuinely blocks integration.
    Include: Why existing tool is a dead end (no API, broken, data trapped), what to replace with.
 
+RECOMMENDATION DECISION (evaluate per finding):
+1. If no digital tool exists for this function → recommend "targeted_upgrade" (buy API-ready foundation)
+2. If existing tool is a dead end (no API, data trapped) → recommend "targeted_upgrade" (replace with API-ready)
+3. Everything else → recommend "connect_and_automate" (adapt complexity to client readiness)
+
 CRITICAL RULES:
-- our_recommendation MUST be "connect_and_automate" unless the existing tool literally has no API
 - NEVER recommend "targeted_upgrade" just because a "better" tool exists
 - Every connect_and_automate option MUST include build_time and tools_used
+- When recommending targeted_upgrade, frame it as foundation for future automation
 - Include MCP servers where applicable
 
 ═══════════════════════════════════════════════════════════════════════════════
@@ -2459,6 +2471,21 @@ Generate 5-10 recommendations. Return ONLY the JSON array."""
                     connect["tools_used"] = ["Claude Code", "Existing tools API"]
                 if not connect.get("build_time"):
                     connect["build_time"] = "8-16 hours"
+
+                # Validate automation_flow structure if present
+                flow = connect.get("automation_flow")
+                if flow and isinstance(flow, dict):
+                    nodes = flow.get("nodes", [])
+                    edges = flow.get("edges", [])
+                    if not isinstance(nodes, list) or not isinstance(edges, list):
+                        connect.pop("automation_flow", None)
+                    elif not nodes:
+                        connect.pop("automation_flow", None)
+
+                # Validate diy_complexity if present
+                complexity = connect.get("diy_complexity")
+                if complexity and complexity not in ("low", "moderate", "high"):
+                    connect["diy_complexity"] = "moderate"
 
                 # Legacy: ensure custom solution has required fields if present
                 custom = options.get("custom_solution", {})

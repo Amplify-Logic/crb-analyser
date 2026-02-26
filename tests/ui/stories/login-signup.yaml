@@ -1,0 +1,56 @@
+stories:
+  - name: "Login - Page Renders"
+    url: "http://localhost:5174/login"
+    priority: critical
+    workflow: |
+      Navigate to http://localhost:5174/login
+      Verify the login page loads with an email input field
+      Verify a password input field is present
+      Verify a submit/sign-in button is present
+      Verify a link to the signup page is visible
+
+  - name: "Login - Password Visibility Toggle"
+    url: "http://localhost:5174/login"
+    priority: medium
+    workflow: |
+      Navigate to http://localhost:5174/login
+      Fill the password field with "testpassword123"
+      Look for a show/hide password toggle button (eye icon or similar)
+      If present, click the toggle
+      Verify the password field type changes (from password to text or vice versa)
+
+  - name: "Login - Empty Form Validation"
+    url: "http://localhost:5174/login"
+    priority: high
+    workflow: |
+      Navigate to http://localhost:5174/login
+      Without filling any fields, click the submit/sign-in button
+      Verify an error message appears or the form shows validation errors
+      Verify the page does not navigate away
+
+  - name: "Signup - Page Renders"
+    url: "http://localhost:5174/signup"
+    priority: critical
+    workflow: |
+      Navigate to http://localhost:5174/signup
+      Verify the signup page loads
+      Verify input fields are present for: full name, email, password, confirm password
+      Verify a submit/create account button is present
+
+  - name: "Signup - Password Requirements"
+    url: "http://localhost:5174/signup"
+    priority: high
+    workflow: |
+      Navigate to http://localhost:5174/signup
+      Fill the full name field with "Test User"
+      Fill the email field with "test@example.com"
+
+      Type a weak password like "abc" in the password field
+      Verify password strength indicators appear
+      Verify requirements are shown (8+ chars, uppercase, lowercase, number)
+
+      Clear and type a strong password like "TestPass1" in the password field
+      Verify the password strength indicators update to show requirements met
+
+      Fill the confirm password field with the same password
+      Verify the form appears ready to submit (no validation errors shown)

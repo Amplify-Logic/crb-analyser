@@ -133,6 +133,20 @@ interface ResearchResult {
 
 type QuizPhase = 'website' | 'researching' | 'findings' | 'teaser' | 'pricing' | 'email_capture' | 'questions' | 'complete'
 
+// Validate URL format — must look like a domain (contains a dot)
+const isValidUrl = (url: string): boolean => {
+  const trimmed = url.trim()
+  if (trimmed.length < 4) return false
+  // Must contain at least one dot to be a valid domain
+  const normalized = trimmed.startsWith('http') ? trimmed : `https://${trimmed}`
+  try {
+    const parsed = new URL(normalized)
+    return parsed.hostname.includes('.')
+  } catch {
+    return false
+  }
+}
+
 // Helper to format any value (handles objects, arrays, primitives)
 const formatValue = (value: unknown): string => {
   if (value === null || value === undefined) return ''
@@ -170,6 +184,21 @@ interface TeaserReport {
   industry: string
 }
 
+const INDUSTRY_COPY: Record<string, { heading: string; subheading: string }> = {
+  ecommerce: {
+    heading: "Let's analyze your e-commerce stack",
+    subheading: "We'll scan your store, detect your platform and tools, and find where AI can boost revenue and cut support costs.",
+  },
+  dental: {
+    heading: "Let's analyze your dental practice",
+    subheading: "We'll research your practice and identify where AI can streamline operations, reduce no-shows, and improve patient experience.",
+  },
+  'professional-services': {
+    heading: "Let's analyze your firm",
+    subheading: "We'll research your business and find where AI can automate admin, improve client delivery, and increase margins.",
+  },
+}
+
 // ============================================================================
 // Component
 // ============================================================================
@@ -181,10 +210,12 @@ export default function Quiz() {
   // Core state
   const [phase, setPhase] = useState<QuizPhase>('website')
   const [sessionId, setSessionId] = useState<string | null>(null)
+  const [sessionError, setSessionError] = useState<string | null>(null)
   const [websiteUrl, setWebsiteUrl] = useState('')
   const [companyName, setCompanyName] = useState('')
   const [userEmail, setUserEmail] = useState('')
   const [emailSubmitting, setEmailSubmitting] = useState(false)
+  const [urlIndustry, setUrlIndustry] = useState<string | null>(null)
 
   // Research state
   const [researchProgress, setResearchProgress] = useState(0)
@@ -221,6 +252,7 @@ export default function Quiz() {
   // ============================================================================
 
   const QUIZ_STORAGE_KEY = 'crb_quiz_progress'
+  const savedPhaseRef = useRef<QuizPhase | null>(null)
 
   // Load saved progress on mount
   useEffect(() => {
@@ -236,6 +268,14 @@ export default function Quiz() {
           }
           if (parsed.userEmail) setUserEmail(parsed.userEmail)
           if (parsed.companyName) setCompanyName(parsed.companyName)
+          if (parsed.selectedSoftware?.length) {
+            setSelectedSoftware(new Set(parsed.selectedSoftware))
+          }
+          if (parsed.otherSoftware) setOtherSoftware(parsed.otherSoftware)
+          if (parsed.phase && parsed.phase !== 'website' && parsed.phase !== 'researching') {
+            // Store saved phase to apply after session restore
+            savedPhaseRef.current = parsed.phase
+          }
         }
       }
     } catch (e) {
@@ -256,10 +296,13 @@ export default function Quiz() {
       try {
         const progress = {
           sessionId,
+          phase,
           answers,
           currentQuestionIndex,
           userEmail,
           companyName,
+          selectedSoftware: Array.from(selectedSoftware),
+          otherSoftware,
           savedAt: new Date().toISOString(),
         }
         localStorage.setItem(QUIZ_STORAGE_KEY, JSON.stringify(progress))
@@ -273,7 +316,7 @@ export default function Quiz() {
         clearTimeout(saveTimeoutRef.current)
       }
     }
-  }, [answers, currentQuestionIndex, userEmail, companyName, sessionId])
+  }, [answers, currentQuestionIndex, userEmail, companyName, sessionId, phase, selectedSoftware, otherSoftware])
 
   // Clear saved progress on quiz completion
   const clearSavedProgress = useCallback(() => {
@@ -433,6 +476,10 @@ export default function Quiz() {
         // Check if user wants a fresh start
         const urlParams = new URLSearchParams(window.location.search)
         const forceNew = urlParams.get('new') === 'true'
+        const industryParam = urlParams.get('industry')
+        if (industryParam) {
+          setUrlIndustry(industryParam)
+        }
 
         if (forceNew) {
           // Clear all previous session data
@@ -442,8 +489,9 @@ export default function Quiz() {
           sessionStorage.removeItem('researchFindings')
           sessionStorage.removeItem('companyProfile')
           sessionStorage.removeItem('knowledgeScore')
-          // Clean up URL
-          window.history.replaceState({}, '', '/quiz')
+          // Clean up URL — preserve industry param if present
+          const cleanUrl = industryParam ? `/quiz?industry=${industryParam}` : '/quiz'
+          window.history.replaceState({}, '', cleanUrl)
         }
 
         // Check for existing session
@@ -465,7 +513,14 @@ export default function Quiz() {
               })
               extractFindingsFromProfile(data.company_profile || {})
               setQuestions(data.dynamic_questionnaire.questions || [])
-              setPhase('findings')
+              // Restore to furthest phase if user had progressed beyond findings
+              const validResumablePhases: QuizPhase[] = ['findings', 'questions', 'email_capture', 'pricing', 'teaser']
+              if (savedPhaseRef.current && validResumablePhases.includes(savedPhaseRef.current)) {
+                setPhase(savedPhaseRef.current)
+              } else {
+                setPhase('findings')
+              }
+              savedPhaseRef.current = null
             }
             return
           } else {
@@ -493,6 +548,7 @@ export default function Quiz() {
         logger.error('Session init error:', error)
         // Clear bad session data
         localStorage.removeItem('crb_session_id')
+        setSessionError('Unable to connect to the server. Please check your connection and try again.')
       }
     }
 
@@ -502,8 +558,8 @@ export default function Quiz() {
   // Fetch software options when we have research results with an industry
   useEffect(() => {
     const fetchSoftwareOptions = async () => {
-      // Get industry from research results
-      const industry = researchResult?.company_profile?.industry?.primary_industry?.value
+      // Prefer URL industry param (user came from industry page) over research-detected industry
+      const industry = urlIndustry || researchResult?.company_profile?.industry?.primary_industry?.value
       if (!industry) return
 
       try {
@@ -523,7 +579,7 @@ export default function Quiz() {
     if (researchResult && phase === 'findings') {
       fetchSoftwareOptions()
     }
-  }, [researchResult, phase])
+  }, [researchResult, phase, urlIndustry])
 
   // Save existing stack to session
   const saveExistingStack = useCallback(async () => {
@@ -605,7 +661,20 @@ export default function Quiz() {
       )
       eventSourceRef.current = eventSource
 
+      // Timeout: if no progress update in 3 minutes, treat as stalled
+      let lastActivityTime = Date.now()
+      const RESEARCH_TIMEOUT_MS = 3 * 60 * 1000
+      const timeoutInterval = setInterval(() => {
+        if (Date.now() - lastActivityTime > RESEARCH_TIMEOUT_MS) {
+          clearInterval(timeoutInterval)
+          eventSource.close()
+          eventSourceRef.current = null
+          setResearchError('Research is taking longer than expected. Please try again.')
+        }
+      }, 10_000)
+
       eventSource.onmessage = async (event) => {
+        lastActivityTime = Date.now()
         try {
           const update = JSON.parse(event.data)
 
@@ -613,6 +682,7 @@ export default function Quiz() {
           setResearchStep(update.step || '')
 
           if (update.status === 'ready' && update.result) {
+            clearInterval(timeoutInterval)
             eventSource.close()
             eventSourceRef.current = null
 
@@ -635,6 +705,7 @@ export default function Quiz() {
           }
 
           if (update.status === 'failed') {
+            clearInterval(timeoutInterval)
             eventSource.close()
             eventSourceRef.current = null
             setResearchError(update.error || 'Research failed')
@@ -645,10 +716,11 @@ export default function Quiz() {
       }
 
       eventSource.onerror = () => {
+        clearInterval(timeoutInterval)
         eventSource.close()
         eventSourceRef.current = null
         if (researchProgress < 100) {
-          setResearchError('Connection lost during research')
+          setResearchError('Connection lost during research. Please try again.')
         }
       }
     } catch (error) {
@@ -788,23 +860,30 @@ export default function Quiz() {
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
                 </svg>
               </div>
-              <h1 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-3 tracking-tight">Let's research your business</h1>
+              <h1 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-3 tracking-tight">
+                {urlIndustry && INDUSTRY_COPY[urlIndustry]
+                  ? INDUSTRY_COPY[urlIndustry].heading
+                  : "Let's research your business"}
+              </h1>
               <p className="text-gray-600 text-lg">
-                We'll analyze publicly available information about your company to provide personalized insights.
+                {urlIndustry && INDUSTRY_COPY[urlIndustry]
+                  ? INDUSTRY_COPY[urlIndustry].subheading
+                  : "We'll analyze publicly available information about your company to provide personalized insights."}
               </p>
             </div>
 
             <div className="rounded-2xl border border-gray-200 bg-white p-8">
-              <label className="block text-sm font-medium text-gray-700 mb-2">
+              <label htmlFor="company-website" className="block text-sm font-medium text-gray-700 mb-2">
                 Your company website
               </label>
               <input
+                id="company-website"
                 type="text"
                 value={websiteUrl}
                 onChange={(e) => setWebsiteUrl(e.target.value)}
                 placeholder="www.yourcompany.com"
                 className="w-full px-4 py-4 text-lg border border-gray-200 rounded-xl focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all bg-white"
-                onKeyDown={(e) => e.key === 'Enter' && websiteUrl.length > 3 && startResearch()}
+                onKeyDown={(e) => e.key === 'Enter' && isValidUrl(websiteUrl) && startResearch()}
               />
 
               <div className="mt-4 p-4 bg-gradient-to-br from-gray-50 to-primary-50/30 rounded-xl border border-gray-100">
@@ -824,7 +903,27 @@ export default function Quiz() {
                 </div>
               </div>
 
-              {websiteUrl.length >= 4 && sessionId ? (
+              {/* Inline validation message */}
+              {websiteUrl.trim().length > 0 && !isValidUrl(websiteUrl) && (
+                <p className="mt-2 text-sm text-amber-600">
+                  Please enter a valid website URL (e.g. www.yourcompany.com)
+                </p>
+              )}
+
+              {sessionError ? (
+                <div className="mt-6">
+                  <p className="text-sm text-red-600 mb-3">{sessionError}</p>
+                  <button
+                    onClick={() => {
+                      setSessionError(null)
+                      window.location.reload()
+                    }}
+                    className="w-full py-4 font-semibold rounded-xl text-lg bg-gradient-to-r from-purple-600 to-indigo-600 text-white hover:shadow-lg transition-all"
+                  >
+                    Retry Connection
+                  </button>
+                </div>
+              ) : isValidUrl(websiteUrl) && sessionId ? (
                 <ShimmerButton
                   onClick={startResearch}
                   className="w-full mt-6 text-lg"
@@ -838,7 +937,7 @@ export default function Quiz() {
                   disabled
                   className="w-full mt-6 py-4 font-semibold rounded-xl text-lg bg-gray-200 text-gray-400 cursor-not-allowed"
                 >
-                  {!sessionId ? 'Loading...' : 'Start Research'}
+                  {!sessionId ? 'Connecting...' : 'Start Research'}
                 </button>
               )}
             </div>
@@ -1155,7 +1254,7 @@ export default function Quiz() {
     // General stat that always applies
     const generalHook = {
       stat: '88% of organizations now use AI regularly — is yours capturing full value?',
-      source: 'McKinsey State of AI 2025',
+      source: 'McKinsey State of AI 2026',
       sourceUrl: 'https://www.mckinsey.com/capabilities/quantumblack/our-insights/the-state-of-ai',
       cta: 'Complete the interview to discover your specific opportunities'
     }
@@ -1557,10 +1656,11 @@ export default function Quiz() {
 
                   {/* Other/Custom Software Input */}
                   <div className="mt-4 pt-4 border-t border-gray-100">
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                    <label htmlFor="other-software" className="block text-sm font-medium text-gray-700 mb-2">
                       Other software not listed?
                     </label>
                     <input
+                      id="other-software"
                       type="text"
                       value={otherSoftware}
                       onChange={(e) => {
@@ -2062,10 +2162,11 @@ export default function Quiz() {
             </div>
 
             <form onSubmit={handleEmailSubmit} className="bg-white rounded-2xl p-8 shadow-sm border border-gray-100">
-              <label className="block text-sm font-medium text-gray-700 mb-2">
+              <label htmlFor="work-email" className="block text-sm font-medium text-gray-700 mb-2">
                 Work email
               </label>
               <input
+                id="work-email"
                 type="email"
                 value={userEmail}
                 onChange={(e) => setUserEmail(e.target.value)}

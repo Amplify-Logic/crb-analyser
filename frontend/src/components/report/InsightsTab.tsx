@@ -101,17 +101,22 @@ export default function InsightsTab({ insights }: InsightsTabProps) {
 
   const { adoption_stats, opportunity_map, social_proof, industry_display_name } = insights
 
-  // Validate data shape - old sample data uses different schema
-  const hasValidStats = adoption_stats?.length > 0 &&
-    adoption_stats[0]?.capability !== undefined &&
-    adoption_stats[0]?.adoption_percentage !== undefined
+  // Validate data shape - accept any array with objects that have capability/adoption_percentage
+  // Also handle legacy formats where field names may differ
+  const hasValidStats = Array.isArray(adoption_stats) && adoption_stats.length > 0 &&
+    adoption_stats.every((stat: any) =>
+      stat?.capability !== undefined && stat?.adoption_percentage !== undefined
+    )
 
   if (!hasValidStats) {
-    return (
-      <div className="bg-white rounded-2xl p-8 text-center">
-        <p className="text-gray-500">Industry insights data format not supported.</p>
-      </div>
-    )
+    // Try to render with whatever data we have rather than failing
+    if (!Array.isArray(adoption_stats) || adoption_stats.length === 0) {
+      return (
+        <div className="bg-white dark:bg-gray-800 rounded-2xl p-8 text-center">
+          <p className="text-gray-500 dark:text-gray-400">Industry insights not available for this report.</p>
+        </div>
+      )
+    }
   }
 
   // Prepare chart data
@@ -131,15 +136,15 @@ export default function InsightsTab({ insights }: InsightsTabProps) {
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        className="bg-white rounded-2xl p-6 shadow-sm"
+        className="bg-white dark:bg-gray-800 rounded-2xl p-6 shadow-sm"
       >
         <div className="flex items-center gap-3 mb-2">
           <span className="text-2xl">📊</span>
-          <h3 className="text-lg font-semibold text-gray-900">
+          <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
             {industry_display_name} Industry Insights
           </h3>
         </div>
-        <p className="text-gray-500">
+        <p className="text-gray-500 dark:text-gray-400">
           AI adoption trends and opportunities in your industry based on aggregated data
         </p>
       </motion.div>
@@ -149,9 +154,9 @@ export default function InsightsTab({ insights }: InsightsTabProps) {
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.1 }}
-        className="bg-white rounded-2xl p-6 shadow-sm"
+        className="bg-white dark:bg-gray-800 rounded-2xl p-6 shadow-sm"
       >
-        <h4 className="text-md font-semibold text-gray-900 mb-6">AI Adoption by Capability</h4>
+        <h4 className="text-md font-semibold text-gray-900 dark:text-white mb-6">AI Adoption by Capability</h4>
 
         {/* Horizontal Bar Chart */}
         <div className="h-80 mb-6">
@@ -272,17 +277,17 @@ export default function InsightsTab({ insights }: InsightsTabProps) {
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.2 }}
-        className="bg-white rounded-2xl p-6 shadow-sm"
+        className="bg-white dark:bg-gray-800 rounded-2xl p-6 shadow-sm"
       >
-        <h4 className="text-md font-semibold text-gray-900 mb-2">Opportunity Map</h4>
+        <h4 className="text-md font-semibold text-gray-900 dark:text-white mb-2">Opportunity Map</h4>
         <p className="text-sm text-gray-500 mb-6">
           Where to focus based on your readiness level
         </p>
 
-        <div className="grid grid-cols-3 gap-4 mb-6">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
           {(['emerging', 'growing', 'established'] as const).map((category) => {
             const config = OPPORTUNITY_LABELS[category]
-            const items = opportunity_map[category]
+            const items = opportunity_map[category] || []
             const isBestFit = opportunity_map.best_fit === category
 
             return (
@@ -344,9 +349,9 @@ export default function InsightsTab({ insights }: InsightsTabProps) {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.3 }}
-          className="bg-white rounded-2xl p-6 shadow-sm"
+          className="bg-white dark:bg-gray-800 rounded-2xl p-6 shadow-sm"
         >
-          <h4 className="text-md font-semibold text-gray-900 mb-6">What Others Are Saying</h4>
+          <h4 className="text-md font-semibold text-gray-900 dark:text-white mb-6">What Others Are Saying</h4>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {social_proof.map((proof, index) => (

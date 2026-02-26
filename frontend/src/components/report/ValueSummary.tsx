@@ -20,7 +20,7 @@ export default function ValueSummary({ investment, returnMin, returnMax }: Value
           <p className="text-2xl md:text-3xl font-bold text-gray-900 dark:text-white">
             {formatCurrency(investment)}
           </p>
-          <p className="text-xs text-gray-500">first year</p>
+          <p className="text-xs text-gray-500" title="Total across all recommended automations">first year (all automations)</p>
         </div>
 
         <div className="text-3xl text-primary-400">→</div>

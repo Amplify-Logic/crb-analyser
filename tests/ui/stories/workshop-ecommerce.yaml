@@ -1,0 +1,208 @@
+stories:
+  - name: "E-Commerce Workshop - Expert AI Strategy Session"
+    url: "http://localhost:5174/workshop"
+    priority: critical
+    requires:
+      session: "Requires a paid e-commerce quiz session with research data"
+    workflow: |
+      CONTEXT: You are validating the 90-minute AI-powered workshop for an
+      e-commerce brand operator who has paid EUR 147. E-commerce operators
+      expect data-driven, actionable insights — not vague strategy talk.
+      The workshop must feel like having a brilliant e-commerce ops consultant
+      who has already studied your store, your tech stack, and your numbers.
+
+      QUALITY STANDARD: Think of the best Shopify merchant success call you've
+      ever had, combined with the analytical depth of a top-tier e-commerce
+      consultant. Every question should be sharp. Every insight should be
+      backed by data or clear reasoning. No fluff, no hand-waving.
+
+      STEP 1 — WELCOME SCREEN — E-COMMERCE OPERATOR PERSPECTIVE
+      Navigate to the workshop page.
+      Verify the welcome screen loads with the 3-phase explanation:
+        Phase 1: Confirm findings about your store
+        Phase 2: Deep-dive into each operational challenge
+        Phase 3: Final context for your automation roadmap
+      The tone should be direct and business-like — e-commerce operators
+      don't want warm fuzzy intros, they want to get to the value.
+      "Begin Workshop" button should be prominent.
+      Screenshot the welcome.
+
+      STEP 2 — CONFIRMATION PHASE — E-COMMERCE DATA
+      Enter the confirmation phase.
+      Verify cards show e-commerce relevant findings:
+        - Store platform (Shopify, WooCommerce, etc.)
+        - Monthly order volume estimates
+        - Product catalog characteristics
+        - Current tools (Gorgias, Klaviyo, etc.)
+        - Identified challenges (returns, support volume, attribution)
+      Each card should feel data-informed, not generic.
+      Mark 2 cards as accurate, edit 1 with e-commerce specific correction:
+        "We actually do closer to 3,000 orders/month with peaks during drops."
+      Verify edit functionality works smoothly.
+      Screenshot the confirmation phase with mixed states.
+
+      STEP 3 — PAIN POINT PRIORITIZATION — E-COMMERCE FOCUS
+      Reorder pain points to reflect e-commerce operator priorities:
+        1. Customer support ticket automation
+        2. Returns processing efficiency
+        3. Inventory demand forecasting
+      Verify the drag-to-reorder is responsive and smooth.
+      Numbered badges should update correctly.
+      Screenshot the reordered priorities.
+
+      STEP 4 — DEEP-DIVE ENTRY — SUPPORT AUTOMATION
+      Transition to the deep-dive phase.
+      Verify the interface shows:
+        - "Customer Support Ticket Automation" as current topic
+        - Stage: "Understanding current process"
+        - Confidence progress starting near 0%
+        - Clean, professional chat interface
+      Screenshot the deep-dive entry.
+
+      STEP 5 — AI CONSULTANT — E-COMMERCE EXPERTISE ON DISPLAY
+      Verify the first AI question demonstrates genuine e-commerce understanding.
+      EXCELLENT: "I see you're using Gorgias for support — what percentage of your
+      tickets are WISMO (where is my order) versus product questions versus returns?
+      And are you using any macros or auto-responses currently?"
+      GOOD: "Tell me about your support ticket breakdown by category."
+      BAD: "What are your customer support challenges?" (too generic)
+      The question must reference the e-commerce context from quiz data.
+      Screenshot the first expert question.
+
+      STEP 6 — CONVERSATIONAL DEPTH
+      Respond with realistic e-commerce operator data:
+        "About 45% WISMO, 25% returns/exchanges, 20% product questions, 10% other.
+        We have some Gorgias macros but they feel robotic. Response time is averaging
+        14 hours which is killing our reviews on Trustpilot."
+      Wait for AI follow-up.
+      Verify the AI:
+        - Acknowledges specific numbers (45% WISMO, 14hr response time)
+        - Goes deeper on a specific area (e.g., WISMO automation potential)
+        - Shows awareness of Gorgias capabilities and limitations
+        - Doesn't ask something already answered
+      Respond with 1-2 more exchanges, verifying the conversation builds logically.
+      Screenshot showing the conversation thread (at least 3-4 messages visible).
+
+      STEP 7 — STAGE PROGRESSION
+      Verify the deep-dive stages progress naturally:
+        "Understanding current process" →
+        "What you've tried" →
+        "Measuring impact" →
+        "Defining success" →
+        "Who's involved"
+      The confidence bar should fill noticeably with each substantive response.
+      Time remaining should decrease appropriately.
+      Screenshot showing mid-conversation progression.
+
+      STEP 8 — MILESTONE — SUPPORT AUTOMATION FINDING
+      When the milestone summary appears, verify it contains:
+        - Finding title: something specific like "AI-Powered Support Triage & Auto-Response"
+        - Severity: high (given the 14hr response time and review impact)
+        - Summary referencing their specific situation
+        - ROI Calculation:
+          - Current cost calculated from their data (ticket volume, handling time, agent cost)
+          - Potential savings with clear methodology
+          - All numbers in EUR and mathematically consistent
+        - Recommended vendors: e-commerce support specific (Gorgias AI, Siena AI, etc.)
+          with fit ratings (high/medium/low)
+        - Data gaps: what additional info would sharpen the estimate
+      The milestone should read like a mini-consulting deliverable.
+      Screenshot the full milestone.
+
+      STEP 9 — MILESTONE FEEDBACK & NEXT PAIN POINT
+      Approve the milestone.
+      Verify smooth transition to the next pain point (Returns Processing).
+      The new pain point should be clearly labeled in the header.
+      Stage resets to "Understanding current process."
+      The AI should open with a question specific to returns, not repeat
+      support questions.
+      Screenshot the transition to the next pain point.
+
+      STEP 10 — SECOND PAIN POINT DEEP-DIVE (ABBREVIATED)
+      Answer 2-3 questions about returns processing.
+      Verify the AI shows expertise in e-commerce returns:
+        - References reverse logistics, restocking costs
+        - Asks about return reasons, process steps
+        - Understands the financial impact per-return
+      Screenshot the returns conversation.
+
+      STEP 11 — SYNTHESIS PHASE
+      After pain point deep-dives, transition to synthesis.
+      Verify the synthesis form appears with:
+        - Stakeholder question
+        - Timeline selector
+        - Additional context area
+      Select "This Quarter" as timeline.
+      Add context: "We're heading into peak season in 3 months, so timing matters."
+      Verify "Generate My Report" enables.
+      Screenshot the synthesis form.
+
+      STEP 12 — COMPLETION & HANDOFF
+      Submit the synthesis form.
+      Verify the completion screen:
+        - Professional success state
+        - "Workshop Complete" message
+        - Report generation indicator
+        - Auto-navigation to report progress
+      The ending should leave the user feeling confident in their investment.
+      Screenshot the completion.
+
+  - name: "E-Commerce Workshop - Input Mode Switching & Chat UX"
+    url: "http://localhost:5174/workshop"
+    priority: high
+    requires:
+      session: "Requires a paid e-commerce quiz session"
+    workflow: |
+      CONTEXT: Testing the chat interface quality and input flexibility.
+      The deep-dive conversation should feel like a premium messaging experience,
+      not a crude chatbot.
+
+      STEP 1 — ENTER DEEP-DIVE
+      Navigate through welcome and confirmation to reach the deep-dive phase.
+      Screenshot the initial chat interface.
+
+      STEP 2 — TEXT INPUT QUALITY
+      Verify the text input area:
+        - Generous size (not a tiny single-line input)
+        - Clear placeholder text
+        - Resizable or auto-growing textarea
+        - Submit button clearly visible
+        - Keyboard shortcut (Enter or Cmd+Enter) works for submission
+      Type a long response (3+ sentences) and verify it displays well.
+      Screenshot the input experience.
+
+      STEP 3 — VOICE INPUT TOGGLE
+      Switch to voice mode.
+      Verify the transition is smooth:
+        - Clear visual indicator that voice mode is active
+        - Record button is prominent
+        - Instructions for how voice recording works
+      Switch back to text mode.
+      Verify no state is lost during the switch.
+      Screenshot the voice mode interface.
+
+      STEP 4 — MESSAGE RENDERING QUALITY
+      After a few exchanges, verify the chat renders beautifully:
+        - AI messages: clean bordered boxes, left-aligned, professional typography
+        - User messages: distinct style (gradient or colored), right-aligned
+        - Timestamps or spacing between messages
+        - Auto-scroll to latest message
+        - No overlapping or clipped content
+        - Messages with numbers/lists render properly (not as raw text)
+      Screenshot the chat thread showing both message types.
+
+      STEP 5 — TYPING INDICATOR
+      After submitting a message, verify a typing indicator appears:
+        - Three animated dots or similar
+        - Positioned where the next AI message will appear
+        - Smooth animation, not jarring
+        - Disappears when the AI message renders
+      Screenshot the typing indicator if possible.
+
+      STEP 6 — LONG CONVERSATION SCROLL
+      After 5+ messages in the conversation, verify:
+        - Smooth scrolling through the conversation history
+        - Earlier messages are still accessible by scrolling up
+        - The input area stays fixed at the bottom
+        - No performance degradation with more messages
+      Screenshot showing scroll position in a longer conversation.

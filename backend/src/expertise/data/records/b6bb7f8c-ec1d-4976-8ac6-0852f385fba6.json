@@ -1,0 +1,49 @@
+{
+  "audit_id": "b6bb7f8c-ec1d-4976-8ac6-0852f385fba6",
+  "timestamp": "2026-02-23T18:51:35.805401",
+  "industry": "professional-services",
+  "company_size": "unknown",
+  "pain_points_found": [],
+  "processes_analyzed": [],
+  "recommendations_made": [],
+  "vendors_recommended": [],
+  "ai_readiness_score": 60,
+  "total_potential_savings": 118000.0,
+  "findings_count": 7,
+  "tools_used": {},
+  "token_usage": {
+    "usage": [
+      {
+        "task": "generate_findings",
+        "model": "claude-sonnet-4-6",
+        "input_tokens": 11156,
+        "output_tokens": 4526
+      }
+    ],
+    "summary": {
+      "total_input_tokens": 11156,
+      "total_output_tokens": 4526,
+      "total_tokens": 15682,
+      "estimated_cost_usd": 0.1014,
+      "by_model": {
+        "claude-sonnet-4-6": {
+          "input": 11156,
+          "output": 4526,
+          "tasks": [
+            "generate_findings"
+          ],
+          "estimated_cost_usd": 0.1014
+        }
+      },
+      "task_count": 1
+    }
+  },
+  "phases_completed": [
+    "executive_summary",
+    "findings",
+    "playbook",
+    "architecture",
+    "insights"
+  ],
+  "errors_encountered": []
+}

@@ -1,5 +1,8 @@
-import { useState } from 'react'
+import { useState, lazy, Suspense } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
+import type { AutomationFlow } from './AutomationFlowBuilder'
+
+const AutomationFlowBuilder = lazy(() => import('./AutomationFlowBuilder'))
 
 interface AgentOpportunity {
   agent_type: string
@@ -22,6 +25,8 @@ interface Finding {
   agent_opportunity?: AgentOpportunity
   connect_path?: string
   replace_path?: string
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  automation_flow?: Record<string, any>
 }
 
 // Derive verdict from scores - aligns with landing page promise
@@ -172,6 +177,17 @@ function HeroFindingCard({ finding, index, globalIndex }: { finding: Finding; in
       )}
       {finding.agent_opportunity && (
         <AgentOpportunityCard opportunity={finding.agent_opportunity} />
+      )}
+      {finding.automation_flow?.nodes?.length > 0 && (
+        <div className="mt-4">
+          <Suspense fallback={<div className="h-[200px] animate-pulse bg-gray-100 dark:bg-gray-700 rounded-xl" />}>
+            <AutomationFlowBuilder
+              flow={finding.automation_flow as AutomationFlow}
+              title="How it connects"
+              height={200}
+            />
+          </Suspense>
+        </div>
       )}
     </motion.div>
   )

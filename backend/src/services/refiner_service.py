@@ -78,12 +78,17 @@ class RefinerService:
 }, indent=2, default=str)[:15000]}
 ```
 
+## Response Format
+- **Be brief.** 1-2 short paragraphs max. Use bullet points only when comparing options.
+- Use markdown: **bold** for emphasis, bullet lists for comparisons. No headers.
+- Lead with the direct answer, then give one supporting detail with a specific number from the report.
+- Do NOT repeat the question back. Do NOT use filler phrases like "Great question" or "That's a good point."
+
 ## Behavioral Rules
-1. When the user asks a question — explain clearly using report data
-2. When the user explores a hypothetical ("what if...") — discuss tradeoffs without proposing changes
-3. When the user shares NEW information not in the original analysis — acknowledge it and discuss how it might affect the findings
-4. Keep responses concise (2-4 paragraphs). Use bullet points for comparisons.
-5. Always ground answers in specific numbers, scores, or data from the report."""
+1. When the user asks a question — answer directly, cite one or two specific data points
+2. When the user explores a hypothetical ("what if...") — discuss tradeoffs briefly without proposing report changes
+3. When the user shares NEW information — acknowledge it in one sentence, then note how it might shift the analysis
+4. Always ground answers in specific numbers, scores, or data from the report"""
 
     def build_messages(
         self,
@@ -160,7 +165,7 @@ class RefinerService:
         try:
             response = self.client.messages.create(
                 model=model,
-                max_tokens=2000,
+                max_tokens=800,
                 system=system,
                 messages=messages,
             )

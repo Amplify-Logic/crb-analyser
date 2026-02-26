@@ -1,0 +1,44 @@
+stories:
+  - name: "Workshop - Initial Load and Welcome"
+    url: "http://localhost:5174/workshop"
+    priority: critical
+    requires:
+      session: "paid quiz session (post-checkout)"
+    workflow: |
+      Navigate to http://localhost:5174/workshop
+      Verify the workshop page loads
+
+      Look for a welcome state or confirmation phase
+      Verify the company name or research findings are referenced
+      Verify there is a way to begin or continue the workshop
+
+  - name: "Workshop - Confirmation Phase"
+    url: "http://localhost:5174/workshop"
+    priority: high
+    requires:
+      session: "paid quiz session with research data"
+    workflow: |
+      Navigate to http://localhost:5174/workshop
+      Wait for the workshop to load into the confirmation phase
+
+      Look for research finding verification cards
+      Verify at least one finding card is displayed for confirmation
+      Verify each card has a way to confirm or dispute the finding
+
+      If confirm buttons are present, click confirm on the first finding
+      Verify the UI updates to show the finding as confirmed
+
+  - name: "Workshop - Phase Navigation"
+    url: "http://localhost:5174/workshop"
+    priority: high
+    requires:
+      session: "paid quiz session in active workshop"
+    workflow: |
+      Navigate to http://localhost:5174/workshop
+      Wait for the workshop to load
+
+      Look for phase indicators or progress steps (Confirmation, Deep-Dive, Synthesis)
+      Verify the current phase is indicated
+      Verify the total number of phases is shown or implied
+
+      Verify there is contextual help or instructions for the current phase

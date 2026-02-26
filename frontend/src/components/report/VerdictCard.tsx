@@ -21,28 +21,28 @@ export default function VerdictCard({ verdict }: VerdictCardProps) {
     green: {
       border: 'border-l-emerald-500',
       icon: 'bg-emerald-500',
-      badge: 'bg-emerald-50 text-emerald-700 border-emerald-200',
+      badge: 'bg-emerald-50 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-400 border-emerald-200 dark:border-emerald-800',
       accent: 'text-emerald-600',
       dot: 'bg-emerald-500'
     },
     yellow: {
       border: 'border-l-amber-500',
       icon: 'bg-amber-500',
-      badge: 'bg-amber-50 text-amber-700 border-amber-200',
+      badge: 'bg-amber-50 dark:bg-amber-900/30 text-amber-700 dark:text-amber-400 border-amber-200 dark:border-amber-800',
       accent: 'text-amber-600',
       dot: 'bg-amber-500'
     },
     orange: {
       border: 'border-l-orange-500',
       icon: 'bg-orange-500',
-      badge: 'bg-orange-50 text-orange-700 border-orange-200',
+      badge: 'bg-orange-50 dark:bg-orange-900/30 text-orange-700 dark:text-orange-400 border-orange-200 dark:border-orange-800',
       accent: 'text-orange-600',
       dot: 'bg-orange-500'
     },
     gray: {
       border: 'border-l-gray-400',
       icon: 'bg-gray-500',
-      badge: 'bg-gray-100 text-gray-700 border-gray-200',
+      badge: 'bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 border-gray-200 dark:border-gray-600',
       accent: 'text-gray-600',
       dot: 'bg-gray-400'
     }

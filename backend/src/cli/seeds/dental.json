@@ -1,0 +1,116 @@
+{
+  "industry": "dental",
+  "description": "Dental practices for CRB report generation",
+  "tiers": {
+    "small": {
+      "description": "Solo practitioner, 1-5 staff, single location",
+      "defaults": {
+        "budget": 300,
+        "hourly_cost": 55,
+        "pain_points": ["manual appointment scheduling", "paper intake forms", "patient no-shows"]
+      }
+    },
+    "mid": {
+      "description": "Group practice, 10-50 staff, 2-4 locations",
+      "defaults": {
+        "budget": 1500,
+        "hourly_cost": 55,
+        "pain_points": ["multi-location scheduling", "patient communication gaps", "insurance claim delays", "staff coordination"]
+      }
+    },
+    "scaling": {
+      "description": "DSO or large group, 50-200 staff, 5+ locations",
+      "defaults": {
+        "budget": 5000,
+        "hourly_cost": 60,
+        "pain_points": ["centralized reporting", "cross-location data silos", "standardizing clinical workflows", "provider credentialing"]
+      }
+    }
+  },
+  "seeds": [
+    {
+      "name": "Solo Tandarts Amsterdam",
+      "website": "https://solotandarts-amsterdam.nl",
+      "country": "NL",
+      "profile": {
+        "tier": "small",
+        "industry": "dental",
+        "staff_size": "1-10",
+        "practice_type": "general_dentistry",
+        "locations": 1,
+        "patient_volume": 120,
+        "insurance_mix": "70_public_30_private",
+        "monthly_revenue": 28000,
+        "hourly_rate": 55,
+        "current_tools": ["Exquise", "Google Calendar", "paper forms"],
+        "pain_points": ["manual appointment scheduling", "paper intake forms", "patient no-shows", "manual recall system"],
+        "implementation_preference": "buy",
+        "ai_tools_used": [],
+        "integration_issues": 2,
+        "manual_data_entry": true,
+        "implementation_urgency": "this_quarter"
+      },
+      "workshop_transcript": [
+        {"role": "assistant", "content": "Thanks for joining this workshop. Let's start with the basics \u2014 can you walk me through what a typical day looks like at your practice?"},
+        {"role": "user", "content": "Sure. I'm a solo dentist with one dental hygienist and a receptionist. We open at 8am, first patient at 8:30. My receptionist manages the schedule in Exquise \u2014 that's our practice management system \u2014 but honestly most of the coordination is done with phone calls and a paper diary. Patients call to book, and if they don't answer when we call for reminders, they just don't show up."},
+        {"role": "assistant", "content": "How big of a problem are no-shows for you?"},
+        {"role": "user", "content": "Huge. I'd say we get 8-10 no-shows per week out of maybe 60 scheduled appointments. That's over 15%. Each missed appointment is about \u20ac120 in lost revenue. My receptionist spends probably 4-5 hours a week just calling people to confirm. Half the time she gets voicemail."},
+        {"role": "assistant", "content": "That's significant \u2014 roughly \u20ac5,000/month in lost revenue from no-shows alone. What about new patient intake \u2014 how does that work currently?"},
+        {"role": "user", "content": "Patients fill out paper forms when they arrive. Medical history, insurance details, contact info. Then my receptionist manually types everything into Exquise. It takes about 15 minutes per new patient, and we get maybe 15-20 new patients per month. Plus errors \u2014 wrong phone numbers, misspelled names. Last month we sent a recall letter to the wrong address because of a typo."},
+        {"role": "assistant", "content": "And how do you handle patient recalls \u2014 like 6-month checkup reminders?"},
+        {"role": "user", "content": "That's entirely manual. My receptionist runs a report from Exquise every Monday and sends recall letters by post. Yes, physical letters. We tried email but our system doesn't really support automated campaigns. I know we're losing patients because they just forget to come back. My hygienist thinks we lose about 20% of patients who should be coming in for their 6-month checkup."},
+        {"role": "assistant", "content": "Let's talk about your technology more broadly. Besides Exquise, what other tools do you use?"},
+        {"role": "user", "content": "Google Calendar for my personal schedule. My hygienist uses a separate paper schedule. We have a basic website \u2014 it's just a WordPress page with our address and phone number. No online booking. Patients can't see available slots. We use a shared Gmail inbox for the practice. For X-rays we have a Planmeca unit that stores images locally. No cloud backup."},
+        {"role": "assistant", "content": "If you could wave a magic wand and fix one thing tomorrow, what would it be?"},
+        {"role": "user", "content": "Online booking with automatic reminders. I lose so much revenue to no-shows, and my receptionist is drowning in phone calls. If patients could just book online and get SMS reminders automatically, that alone would probably save us \u20ac3,000-4,000 a month. But I've looked at some solutions and they all seem complicated to set up, or they don't integrate with Exquise."},
+        {"role": "assistant", "content": "What's your budget situation for technology improvements?"},
+        {"role": "user", "content": "I could spend maybe \u20ac200-300 per month on software. But it needs to actually save me time and money \u2014 I'm not going to pay for something that creates more work. I tried a patient portal two years ago and gave up after a month because it was too complicated for my older patients."},
+        {"role": "assistant", "content": "That's a really important point about the patient demographic. What's the age distribution of your patients?"},
+        {"role": "user", "content": "Mixed. Maybe 30% are over 60, and they're not very tech-savvy. But the younger patients \u2014 the 25-45 group, which is probably 40% \u2014 they expect online booking. I've had patients literally tell me they'd switch to a practice with online booking. So I'm losing new patients too, not just no-shows."},
+        {"role": "assistant", "content": "Last question \u2014 are there any compliance or data concerns that keep you up at night?"},
+        {"role": "user", "content": "GDPR, definitely. All our patient data is on a local server under my desk. If it crashes, I lose everything. We have no backup strategy. My accountant has been telling me to move to the cloud for a year now. Also, I'm not sure our paper forms comply with current GDPR consent requirements. I should probably get that sorted before someone complains."}
+      ]
+    },
+    {
+      "name": "Bright Smile Dental Group",
+      "website": "https://brightsmile-dental.nl",
+      "country": "NL",
+      "profile": {
+        "tier": "mid",
+        "industry": "dental",
+        "staff_size": "11-50",
+        "practice_type": "group_practice",
+        "locations": 3,
+        "patient_volume": 800,
+        "insurance_mix": "60_public_40_private",
+        "monthly_revenue": 185000,
+        "hourly_rate": 55,
+        "current_tools": ["Dentally", "Google Workspace", "Instagram", "Mailchimp", "WhatsApp Business"],
+        "pain_points": ["multi-location scheduling", "patient communication gaps", "insurance claim processing", "staff coordination across locations"],
+        "implementation_preference": "connect",
+        "ai_tools_used": ["chatgpt"],
+        "integration_issues": 4,
+        "manual_data_entry": false,
+        "implementation_urgency": "this_month"
+      },
+      "workshop_transcript": [
+        {"role": "assistant", "content": "Thanks for joining. You're running 3 locations \u2014 can you give me an overview of how they're currently set up and managed?"},
+        {"role": "user", "content": "We have Amsterdam Centrum, Amsterdam Zuid, and a new location in Haarlem that opened 6 months ago. Each has 2-3 dentists, 2 hygienists, and front desk staff. Total team is about 35 people. I'm the practice manager \u2014 I oversee all three but I'm physically at Centrum most days."},
+        {"role": "assistant", "content": "How do the three locations coordinate? Is everything on Dentally?"},
+        {"role": "user", "content": "Yes, Dentally is our PMS \u2014 it's cloud-based which is great, but each location was set up somewhat independently. The Haarlem location especially \u2014 when we onboarded them, we didn't migrate their old data well. So we have duplicate patient records across locations. I'd estimate maybe 15% of patients who visit multiple locations have duplicate entries. It causes billing errors and confusion."},
+        {"role": "assistant", "content": "What about scheduling \u2014 can patients book at any location?"},
+        {"role": "user", "content": "Technically yes, through Dentally. But in practice patients call the specific location. We don't have a centralized booking system that shows availability across all three. So if Centrum is full on Tuesday, the receptionist there doesn't always think to suggest Zuid. We lose maybe 10-15 appointments per week because of this \u2014 patients just say 'I'll call back later' and never do."},
+        {"role": "assistant", "content": "Tell me about your insurance claim process. You mentioned that's a pain point."},
+        {"role": "user", "content": "It's a nightmare. Dutch insurance claims require specific codes, and each insurer has slightly different rules. Our front desk staff spend about 2 hours per day per location on claims. That's 30 hours per week across the group. We reject or need to resubmit about 12% of claims because of coding errors. Each rejection delays payment by 4-6 weeks. At any given time we have \u20ac40,000-50,000 in outstanding claims."},
+        {"role": "assistant", "content": "That's a lot of tied-up revenue. How about patient communication \u2014 you mentioned gaps there?"},
+        {"role": "user", "content": "We use Mailchimp for newsletters \u2014 maybe send one every 2 months. WhatsApp Business for ad-hoc messages but it's not integrated with anything. Recall reminders are automated through Dentally but only via email. We don't have SMS reminders. Our no-show rate is about 10%, which is better than average but still costs us. We also can't easily reach patients who haven't visited in 12+ months \u2014 our reactivation campaigns are manual and sporadic."},
+        {"role": "assistant", "content": "What's your biggest operational headache across the three locations?"},
+        {"role": "user", "content": "Staff scheduling and coordination. I use a shared Google Sheet for shift planning, but it's constantly out of date. Dentists swap shifts and forget to update it. When someone calls in sick, I spend 45 minutes calling around to find coverage. We also have no good way to see performance metrics across locations \u2014 I manually pull numbers from Dentally every month to create a report. It takes me a full day."},
+        {"role": "assistant", "content": "If you could solve one problem with technology, what would have the biggest impact?"},
+        {"role": "user", "content": "Centralized scheduling with cross-location visibility and automated insurance claim submission. Those two things alone would probably save us 40+ hours per week of admin time and recover \u20ac15,000-20,000 per month in faster claim payments. I've been looking at tools like NexHealth or Doctify but I'm not sure what integrates with Dentally."},
+        {"role": "assistant", "content": "What's your technology budget for improvements?"},
+        {"role": "user", "content": "We can do \u20ac1,000-1,500 per month. The Haarlem expansion stretched us financially, but the inefficiencies are costing us more than the software would. I just need to be confident it'll actually work with our setup. We had a bad experience with an AI chatbot for the website last year \u2014 it gave patients wrong information about treatments and we had to pull it after two weeks."}
+      ]
+    }
+  ]
+}

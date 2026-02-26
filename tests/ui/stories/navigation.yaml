@@ -1,0 +1,60 @@
+stories:
+  - name: "Navigation - Public Routes Accessible"
+    url: "http://localhost:5174/"
+    priority: critical
+    workflow: |
+      Navigate to http://localhost:5174/
+      Verify the landing page loads
+
+      Navigate to http://localhost:5174/login
+      Verify the login page loads without errors
+
+      Navigate to http://localhost:5174/signup
+      Verify the signup page loads without errors
+
+      Navigate to http://localhost:5174/quiz
+      Verify the quiz page loads without errors
+
+      Navigate to http://localhost:5174/terms
+      Verify the terms page loads without errors
+
+      Navigate to http://localhost:5174/privacy
+      Verify the privacy page loads without errors
+
+  - name: "Navigation - Protected Route Redirects"
+    url: "http://localhost:5174/dashboard"
+    priority: critical
+    workflow: |
+      Navigate to http://localhost:5174/dashboard (without being logged in)
+      Verify the page redirects to the login page
+      Verify the login form is displayed
+
+      Navigate to http://localhost:5174/admin (without being logged in)
+      Verify the page redirects to login or shows an unauthorized message
+
+  - name: "Navigation - Nav Bar Links"
+    url: "http://localhost:5174/"
+    priority: high
+    workflow: |
+      Navigate to http://localhost:5174/
+      Look for the main navigation bar
+
+      Verify navigation links are present (at minimum: a logo/home link and a sign-in link)
+      Click the sign-in or login link
+      Verify navigation to the login page
+
+      Navigate back to http://localhost:5174/
+      Look for any other nav links and verify they work
+
+  - name: "Navigation - 404 Handling"
+    url: "http://localhost:5174/nonexistent-page-xyz"
+    priority: medium
+    workflow: |
+      Navigate to http://localhost:5174/nonexistent-page-xyz
+      Verify the page shows either:
+      - A 404 not found message, or
+      - A redirect to the landing page, or
+      - A generic error page
+
+      Verify the navigation bar is still functional
+      Click a navigation link to verify the app still works

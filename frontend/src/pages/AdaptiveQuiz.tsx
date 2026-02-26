@@ -395,7 +395,15 @@ export default function AdaptiveQuiz() {
         audioRef.current.src = audioSrc
         audioRef.current.onended = () => setIsSpeaking(false)
         audioRef.current.onerror = () => setIsSpeaking(false)
-        await audioRef.current.play()
+        try {
+          await Promise.race([
+            audioRef.current.play(),
+            new Promise((_, reject) => setTimeout(() => reject(new Error('Audio playback timeout')), 5000))
+          ])
+        } catch {
+          // Audio couldn't play (headless, no audio device, timeout) — unblock input
+          setIsSpeaking(false)
+        }
       }
     } catch (err) {
       logger.warn('TTS error:', err)

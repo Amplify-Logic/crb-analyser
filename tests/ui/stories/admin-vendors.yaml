@@ -1,0 +1,47 @@
+stories:
+  - name: "Admin Vendors - List and Search"
+    url: "http://localhost:5174/admin/vendors"
+    priority: high
+    requires:
+      auth: "admin user session"
+    workflow: |
+      Navigate to http://localhost:5174/admin/vendors
+      Verify the vendor admin page loads
+
+      Look for a vendor list with vendor names and categories
+      Verify at least one vendor entry is displayed (or a clear empty state)
+
+      Look for a search input field
+      Type "CRM" or a common category keyword in the search
+      Verify the list filters to show matching vendors
+      Clear the search
+      Verify the full list is restored
+
+  - name: "Admin Vendors - Category Filter"
+    url: "http://localhost:5174/admin/vendors"
+    priority: medium
+    requires:
+      auth: "admin user session"
+    workflow: |
+      Navigate to http://localhost:5174/admin/vendors
+      Verify the page loads
+
+      Look for a category sidebar or filter controls
+      If category filters are present, click on a specific category
+      Verify the vendor list filters to show only vendors in that category
+
+      Click on a different category or "All"
+      Verify the list updates accordingly
+
+  - name: "Admin Vendors - Vendor Detail"
+    url: "http://localhost:5174/admin/vendors"
+    priority: medium
+    requires:
+      auth: "admin user session with vendors in the database"
+    workflow: |
+      Navigate to http://localhost:5174/admin/vendors
+      Verify the vendor list loads
+
+      Click on a vendor card or name to view details
+      Verify a detail view, modal, or expanded card appears
+      Verify vendor details are shown (name, category, pricing, rating, or description)

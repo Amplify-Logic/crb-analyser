@@ -72,7 +72,7 @@ class WorkshopStartResponse(BaseModel):
     session_id: str
     company_name: str
     confirmation_cards: List[ConfirmationCard]
-    detected_signals: Dict[str, bool]
+    detected_signals: Dict[str, Any]
     pain_points: List[Dict[str, str]]
 
 
@@ -290,6 +290,7 @@ async def save_confirmation(request: WorkshopConfirmRequest):
             deep_dive_order = [pp["id"] for pp in pain_points[:4]]
 
         workshop_data["deep_dive_order"] = deep_dive_order
+        workshop_data["pain_point_labels"] = {pp["id"]: pp["label"] for pp in pain_points}
         workshop_data["current_deep_dive_index"] = 0
         workshop_data["deep_dives"] = []
 
@@ -820,7 +821,7 @@ async def complete_workshop(request: WorkshopCompleteRequest):
                 detail="Session must be paid before accessing workshop"
             )
 
-        workshop_data = session.get("workshop_data", {})
+        workshop_data = session.get("workshop_data") or {}
 
         # Enforce confidence gate
         confidence = _build_workshop_confidence(workshop_data)
@@ -1181,7 +1182,7 @@ def _build_workshop_confidence(workshop_data: Dict[str, Any]) -> WorkshopConfide
     confidence.depth_dimensions = DepthDimensions(
         integration_depth=0.5 if len(milestones) >= 2 else 0.2,
         cost_quantification=0.8 if quantifiable_impacts >= 2 else 0.3,
-        stakeholder_mapping=0.5 if workshop_data.get("final_answers", {}).get("stakeholders") else 0.1,
+        stakeholder_mapping=0.5 if (workshop_data.get("final_answers") or {}).get("stakeholders") else 0.1,
         implementation_readiness=0.4 if len(milestones) >= 1 else 0.0,
     )
 

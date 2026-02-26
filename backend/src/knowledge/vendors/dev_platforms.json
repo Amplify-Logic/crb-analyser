@@ -1,0 +1,1162 @@
+{
+  "category": "dev_platforms",
+  "description": "AI development platforms that enable non-developers and developers to build complete business applications through agentic coding, AI-powered IDEs, coding assistants, and no-code app builders",
+  "vendors": [
+    {
+      "slug": "claude-code",
+      "name": "Claude Code",
+      "category": "dev_platforms",
+      "subcategory": "agentic_platform",
+      "website": "https://claude.ai/code",
+      "pricing_url": "https://www.anthropic.com/pricing",
+      "description": "Anthropic's agentic coding tool that operates as a fully autonomous AI developer. Available across terminal, VS Code, JetBrains, desktop, web, iOS, and Slack. Claude Code can read and write files, execute terminal commands, manage git workflows, browse the web, and coordinate multi-agent teams. With 8,600+ MCP (Model Context Protocol) servers and 9,000+ plugins, it integrates with virtually any tool or service. Unique capabilities include hooks for automated validation, custom agent definitions, agent teams for parallel development, and the Agent SDK for building production AI applications. Powers everything from quick bug fixes to full-stack application development with human-in-the-loop oversight.",
+      "tagline": "Your AI-powered development partner that builds, tests, and ships",
+      "pricing": {
+        "model": "per_seat",
+        "currency": "USD",
+        "billing_options": ["monthly"],
+        "annual_discount_percent": null,
+        "tiers": [
+          {
+            "name": "Pro",
+            "price": 20,
+            "per": "user/month",
+            "billing": "monthly",
+            "features": [
+              "Full Claude Code access across all platforms",
+              "Terminal, VS Code, JetBrains, desktop, web, iOS, Slack",
+              "File system read/write access",
+              "Terminal command execution",
+              "Git integration and commit management",
+              "MCP server connections",
+              "Custom slash commands",
+              "Hooks for automated workflows",
+              "Agent SDK access",
+              "Standard usage limits"
+            ],
+            "limits": {
+              "usage": "Standard usage limits with fair-use policy"
+            }
+          },
+          {
+            "name": "Max (5x)",
+            "price": 100,
+            "per": "user/month",
+            "billing": "monthly",
+            "features": [
+              "All Pro features",
+              "5x higher usage limits",
+              "Priority access during peak demand",
+              "Extended context windows",
+              "Higher rate limits for agent teams"
+            ],
+            "limits": {
+              "usage": "5x Pro usage limits"
+            }
+          },
+          {
+            "name": "Max (20x)",
+            "price": 200,
+            "per": "user/month",
+            "billing": "monthly",
+            "features": [
+              "All Pro features",
+              "20x higher usage limits",
+              "Top priority access",
+              "Maximum context windows",
+              "Highest rate limits for agent teams",
+              "Best for heavy automation and multi-agent workflows"
+            ],
+            "limits": {
+              "usage": "20x Pro usage limits"
+            }
+          },
+          {
+            "name": "Team",
+            "price": 30,
+            "per": "user/month",
+            "billing": "monthly",
+            "features": [
+              "All Pro features",
+              "Team workspace and collaboration",
+              "Shared custom agents and commands",
+              "Team-level MCP server configuration",
+              "Admin controls and usage monitoring",
+              "Centralized billing",
+              "Priority support"
+            ],
+            "limits": {
+              "min_seats": 2
+            }
+          },
+          {
+            "name": "Enterprise",
+            "price": null,
+            "per": "user/month",
+            "billing": "annual",
+            "features": [
+              "All Team features",
+              "SSO/SAML integration",
+              "Custom data retention policies",
+              "Dedicated support and onboarding",
+              "Advanced security and compliance",
+              "Custom rate limits",
+              "SLA guarantees",
+              "Audit logging",
+              "API access management"
+            ],
+            "limits": {
+              "custom": true
+            }
+          }
+        ],
+        "starting_price": 20,
+        "custom_pricing": true,
+        "free_trial_days": null,
+        "free_tier": false,
+        "startup_discount": "Available through Anthropic partnerships and startup programs"
+      },
+      "best_for": [
+        "SMBs building custom AI-powered business systems",
+        "Business automation and workflow development",
+        "Internal tool development without dedicated engineering teams",
+        "Full-stack application development with AI assistance",
+        "Rapid prototyping and MVP development",
+        "Teams wanting agent-based parallel development",
+        "Organizations integrating AI into existing codebases",
+        "Building production AI applications with Agent SDK",
+        "Multi-platform development (terminal, IDE, mobile, web)"
+      ],
+      "industries": [
+        "Technology",
+        "Professional Services",
+        "Consulting",
+        "E-commerce",
+        "SaaS",
+        "Healthcare",
+        "Finance",
+        "Education",
+        "Startups",
+        "Small Business"
+      ],
+      "company_sizes": [
+        "startup",
+        "smb",
+        "mid_market",
+        "enterprise"
+      ],
+      "avoid_if": [
+        "Need a fully no-code solution with zero technical understanding",
+        "Require air-gapped environments with no internet access",
+        "Organization prohibits AI-assisted code generation",
+        "Need guaranteed deterministic outputs for regulated systems"
+      ],
+      "technical_requirements": {
+        "coding_required": false,
+        "coding_helpful": true,
+        "learning_curve": "low",
+        "time_to_first_project": "minutes",
+        "supported_platforms": [
+          "Terminal (macOS, Linux, Windows via WSL)",
+          "VS Code",
+          "JetBrains IDEs",
+          "Claude Desktop (macOS, Windows)",
+          "Claude Web (claude.ai)",
+          "Claude iOS app",
+          "Slack"
+        ],
+        "ecosystem": {
+          "mcp_servers": 8600,
+          "plugins": 9000,
+          "custom_agents": true,
+          "agent_teams": true,
+          "agent_sdk": true,
+          "hooks": true,
+          "slash_commands": true
+        },
+        "key_capabilities": [
+          "Filesystem access (read, write, edit files)",
+          "Terminal command execution",
+          "Git integration (commit, branch, PR creation)",
+          "MCP (Model Context Protocol) for tool connections",
+          "Hooks for pre/post tool execution validation",
+          "Agent teams for parallel multi-agent development",
+          "Custom agent definitions (.claude/agents/)",
+          "Agent SDK for building production AI applications",
+          "Web browsing and research",
+          "Image and PDF understanding",
+          "Jupyter notebook editing",
+          "Background task execution"
+        ]
+      },
+      "implementation": {
+        "avg_weeks": 0.5,
+        "complexity": "low",
+        "requires_developer": false,
+        "cost_range": {
+          "diy": {
+            "min": 0,
+            "max": 240
+          },
+          "with_help": {
+            "min": 500,
+            "max": 2000
+          },
+          "full_service": {
+            "min": 2000,
+            "max": 8000
+          }
+        }
+      },
+      "ratings": {
+        "g2": {
+          "score": 4.7,
+          "reviews": 520,
+          "last_updated": "2026-02"
+        },
+        "capterra": {
+          "score": 4.6,
+          "reviews": 380,
+          "last_updated": "2026-02"
+        },
+        "our_rating": 4.9,
+        "our_notes": "The most capable agentic coding platform available. Unique combination of deep codebase understanding, multi-platform availability, and extensibility via MCP and hooks. Agent teams enable parallel development workflows impossible with other tools. Low barrier to entry for non-developers while offering full power for experienced engineers. Primary recommendation for SMBs building custom AI systems. The ecosystem of 8,600+ MCP servers makes it the most extensible AI development tool on the market."
+      },
+      "integrations": [
+        "GitHub",
+        "GitLab",
+        "Bitbucket",
+        "Linear",
+        "Jira",
+        "Slack",
+        "Supabase",
+        "Vercel",
+        "Railway",
+        "AWS",
+        "Google Cloud",
+        "Azure",
+        "Docker",
+        "PostgreSQL",
+        "Redis",
+        "Stripe",
+        "8,600+ MCP servers",
+        "REST APIs",
+        "GraphQL APIs"
+      ],
+      "api": {
+        "available": true,
+        "type": "Agent SDK + MCP",
+        "documentation": "https://docs.anthropic.com/en/docs/claude-code"
+      },
+      "competitors": [
+        "Cursor",
+        "Windsurf",
+        "GitHub Copilot",
+        "Bolt.new",
+        "Lovable",
+        "Replit"
+      ],
+      "verified_at": "2026-02-24T00:00:00Z",
+      "verified_by": "manual",
+      "source_url": "https://www.anthropic.com/pricing",
+      "notes": "Claude Code is Anthropic's flagship agentic coding tool, powered by Claude Opus 4 and Sonnet 4. The MCP ecosystem has grown to 8,600+ servers with 9,000+ plugins, making it the most extensible AI development platform. Agent teams enable parallel development with coordinated multi-agent workflows. Hooks system allows automated code validation, security checks, and quality enforcement. The Agent SDK enables building production AI applications that can be deployed independently. Available on more platforms than any competitor: terminal, VS Code, JetBrains, desktop app, web, iOS, and Slack."
+    },
+    {
+      "slug": "cursor",
+      "name": "Cursor",
+      "category": "dev_platforms",
+      "subcategory": "ai_ide",
+      "website": "https://cursor.com",
+      "pricing_url": "https://cursor.com/pricing",
+      "description": "AI-first code editor forked from VS Code that deeply integrates AI into every aspect of the development workflow. Features intelligent inline code completion, multi-file editing with Composer, natural language code generation, and contextual chat. Understands entire codebases through indexing and provides AI-powered code navigation, refactoring, and debugging. Strong focus on developer productivity with Tab completion that predicts next edits across multiple lines.",
+      "tagline": "The AI code editor built for productivity",
+      "pricing": {
+        "model": "per_seat",
+        "currency": "USD",
+        "billing_options": ["monthly", "annual"],
+        "annual_discount_percent": 17,
+        "tiers": [
+          {
+            "name": "Hobby",
+            "price": 0,
+            "per": "month",
+            "billing": "monthly",
+            "features": [
+              "2,000 code completions",
+              "50 slow premium requests/month",
+              "VS Code extension compatibility",
+              "Basic AI chat",
+              "Community support"
+            ],
+            "limits": {
+              "completions": 2000,
+              "premium_requests": 50
+            }
+          },
+          {
+            "name": "Pro",
+            "price": 20,
+            "per": "user/month",
+            "billing": "monthly",
+            "features": [
+              "Unlimited code completions",
+              "500 fast premium requests/month",
+              "Unlimited slow premium requests",
+              "Composer for multi-file editing",
+              "Codebase-wide context",
+              "Custom AI model selection",
+              "Priority support"
+            ],
+            "limits": {
+              "completions": "unlimited",
+              "fast_premium_requests": 500
+            }
+          },
+          {
+            "name": "Business",
+            "price": 40,
+            "per": "user/month",
+            "billing": "monthly",
+            "features": [
+              "All Pro features",
+              "Centralized team billing",
+              "Admin dashboard and usage analytics",
+              "Enforced privacy mode",
+              "SAML/SSO integration",
+              "Priority support",
+              "Custom security policies"
+            ],
+            "limits": {
+              "completions": "unlimited",
+              "fast_premium_requests": 500
+            }
+          }
+        ],
+        "starting_price": 0,
+        "custom_pricing": false,
+        "free_trial_days": 14,
+        "free_tier": true,
+        "startup_discount": null
+      },
+      "best_for": [
+        "Professional developers writing production code daily",
+        "Teams wanting AI-powered IDE with familiar VS Code interface",
+        "Developers who value fast inline code completion",
+        "Multi-file refactoring and codebase-wide changes",
+        "Developers switching from VS Code wanting AI-native experience"
+      ],
+      "industries": [
+        "Technology",
+        "SaaS",
+        "Software Development",
+        "Startups",
+        "Enterprise Engineering"
+      ],
+      "company_sizes": [
+        "startup",
+        "smb",
+        "mid_market",
+        "enterprise"
+      ],
+      "avoid_if": [
+        "Non-developer needing no-code app building",
+        "Prefer JetBrains IDEs and cannot switch",
+        "Need autonomous agent that can work independently",
+        "Require offline-only development environment",
+        "Want browser-based development without local installation"
+      ],
+      "technical_requirements": {
+        "coding_required": true,
+        "coding_helpful": true,
+        "learning_curve": "low",
+        "time_to_first_project": "minutes",
+        "supported_platforms": [
+          "macOS",
+          "Windows",
+          "Linux"
+        ]
+      },
+      "implementation": {
+        "avg_weeks": 0.5,
+        "complexity": "low",
+        "requires_developer": true,
+        "cost_range": {
+          "diy": {
+            "min": 0,
+            "max": 240
+          },
+          "with_help": {
+            "min": 0,
+            "max": 500
+          },
+          "full_service": {
+            "min": 500,
+            "max": 2000
+          }
+        }
+      },
+      "ratings": {
+        "g2": {
+          "score": 4.7,
+          "reviews": 310,
+          "last_updated": "2026-02"
+        },
+        "capterra": {
+          "score": 4.6,
+          "reviews": 245,
+          "last_updated": "2026-02"
+        },
+        "our_rating": 4.5,
+        "our_notes": "Best AI-native IDE for professional developers. Tab completion is industry-leading for predicting multi-line edits. Composer enables impressive multi-file changes. However, it requires developer expertise and cannot autonomously build full applications like agentic platforms. The VS Code fork means familiar keybindings and extensions work out of the box."
+      },
+      "integrations": [
+        "VS Code extensions",
+        "GitHub",
+        "GitLab",
+        "Various language servers",
+        "Docker",
+        "Terminal",
+        "Debuggers",
+        "Custom AI models (OpenAI, Anthropic, etc.)"
+      ],
+      "api": {
+        "available": false,
+        "type": null,
+        "documentation": null
+      },
+      "competitors": [
+        "Claude Code",
+        "Windsurf",
+        "GitHub Copilot",
+        "VS Code + AI extensions",
+        "Zed"
+      ],
+      "verified_at": "2026-02-24T00:00:00Z",
+      "verified_by": "manual",
+      "source_url": "https://cursor.com/pricing",
+      "notes": "Cursor has become one of the most popular AI IDEs, particularly among professional developers. The Composer feature for multi-file editing is a standout. Tab completion goes beyond simple autocomplete to predict entire code blocks. Supports multiple AI model backends. Strong community and rapidly iterating on features. Main limitation compared to agentic platforms is that it requires active developer involvement for all changes."
+    },
+    {
+      "slug": "windsurf",
+      "name": "Windsurf",
+      "category": "dev_platforms",
+      "subcategory": "ai_ide",
+      "website": "https://windsurf.com",
+      "pricing_url": "https://windsurf.com/pricing",
+      "description": "AI-powered IDE (formerly Codeium) featuring the Cascade agent for autonomous multi-file editing and code generation. Combines traditional IDE features with an AI agent that can understand project context, make coordinated changes across files, and execute terminal commands. Offers both inline completions and agentic workflows in a VS Code-based interface.",
+      "tagline": "The first agentic IDE that keeps developers in flow",
+      "pricing": {
+        "model": "per_seat",
+        "currency": "USD",
+        "billing_options": ["monthly", "annual"],
+        "annual_discount_percent": null,
+        "tiers": [
+          {
+            "name": "Free",
+            "price": 0,
+            "per": "month",
+            "billing": "monthly",
+            "features": [
+              "Limited Cascade agent credits",
+              "Basic code completions",
+              "Chat assistance",
+              "Community support"
+            ],
+            "limits": {
+              "cascade_credits": "limited"
+            }
+          },
+          {
+            "name": "Pro",
+            "price": 15,
+            "per": "user/month",
+            "billing": "monthly",
+            "features": [
+              "Generous Cascade agent credits",
+              "Unlimited code completions",
+              "Multi-file editing with Cascade",
+              "Terminal command execution",
+              "Codebase-wide context",
+              "Multiple AI model options",
+              "Priority support"
+            ],
+            "limits": {
+              "cascade_credits": "generous monthly allocation"
+            }
+          },
+          {
+            "name": "Team",
+            "price": 30,
+            "per": "user/month",
+            "billing": "monthly",
+            "features": [
+              "All Pro features",
+              "Team management and billing",
+              "Admin controls",
+              "Usage analytics",
+              "Priority support"
+            ],
+            "limits": {
+              "cascade_credits": "generous monthly allocation"
+            }
+          }
+        ],
+        "starting_price": 0,
+        "custom_pricing": false,
+        "free_trial_days": null,
+        "free_tier": true,
+        "startup_discount": null
+      },
+      "best_for": [
+        "Developers wanting IDE-native AI agent assistance",
+        "Teams looking for affordable AI IDE alternative",
+        "Developers who prefer agentic multi-file editing in an IDE",
+        "Budget-conscious teams wanting AI coding help"
+      ],
+      "industries": [
+        "Technology",
+        "SaaS",
+        "Software Development",
+        "Startups"
+      ],
+      "company_sizes": [
+        "startup",
+        "smb",
+        "mid_market"
+      ],
+      "avoid_if": [
+        "Non-developer needing no-code solutions",
+        "Need multi-platform access beyond desktop IDE",
+        "Require enterprise security features and SSO",
+        "Want the most mature AI coding ecosystem",
+        "Need autonomous agent workflows outside IDE"
+      ],
+      "technical_requirements": {
+        "coding_required": true,
+        "coding_helpful": true,
+        "learning_curve": "low",
+        "time_to_first_project": "minutes",
+        "supported_platforms": [
+          "macOS",
+          "Windows",
+          "Linux"
+        ]
+      },
+      "implementation": {
+        "avg_weeks": 0.5,
+        "complexity": "low",
+        "requires_developer": true,
+        "cost_range": {
+          "diy": {
+            "min": 0,
+            "max": 180
+          },
+          "with_help": {
+            "min": 0,
+            "max": 500
+          },
+          "full_service": {
+            "min": 500,
+            "max": 2000
+          }
+        }
+      },
+      "ratings": {
+        "g2": {
+          "score": 4.5,
+          "reviews": 180,
+          "last_updated": "2026-02"
+        },
+        "capterra": {
+          "score": 4.4,
+          "reviews": 120,
+          "last_updated": "2026-02"
+        },
+        "our_rating": 4.2,
+        "our_notes": "Solid AI IDE with the Cascade agent providing good multi-file editing capabilities. Most affordable option in the AI IDE space. The rebrand from Codeium to Windsurf brought a more polished experience. However, the ecosystem is less mature than Cursor or Claude Code, and enterprise features are limited. Good budget option for small teams."
+      },
+      "integrations": [
+        "VS Code extensions",
+        "GitHub",
+        "GitLab",
+        "Various language servers",
+        "Docker",
+        "Terminal"
+      ],
+      "api": {
+        "available": false,
+        "type": null,
+        "documentation": null
+      },
+      "competitors": [
+        "Claude Code",
+        "Cursor",
+        "GitHub Copilot",
+        "VS Code + AI extensions"
+      ],
+      "verified_at": "2026-02-24T00:00:00Z",
+      "verified_by": "manual",
+      "source_url": "https://windsurf.com/pricing",
+      "notes": "Rebranded from Codeium to Windsurf in late 2024. The Cascade agent differentiates it from pure code completion tools by offering multi-step, multi-file editing workflows. OpenAI attempted to acquire Windsurf in early 2025, indicating the value of their technology. Pricing is the most competitive in the AI IDE category."
+    },
+    {
+      "slug": "github-copilot",
+      "name": "GitHub Copilot",
+      "category": "dev_platforms",
+      "subcategory": "ai_coding_assistant",
+      "website": "https://github.com/features/copilot",
+      "pricing_url": "https://github.com/features/copilot/plans",
+      "description": "Microsoft's AI coding assistant integrated into GitHub's ecosystem. Provides inline code completions, chat-based code generation, and automated pull request summaries. Deep integration with VS Code, JetBrains, and GitHub.com. Powered by OpenAI models with Microsoft's enterprise security and compliance infrastructure. The most widely adopted AI coding tool with millions of developers.",
+      "tagline": "Your AI pair programmer",
+      "pricing": {
+        "model": "per_seat",
+        "currency": "USD",
+        "billing_options": ["monthly", "annual"],
+        "annual_discount_percent": 17,
+        "tiers": [
+          {
+            "name": "Free",
+            "price": 0,
+            "per": "month",
+            "billing": "monthly",
+            "features": [
+              "2,000 code completions/month",
+              "50 chat messages/month",
+              "Access in VS Code and GitHub.com",
+              "Community support"
+            ],
+            "limits": {
+              "completions": 2000,
+              "chat_messages": 50
+            }
+          },
+          {
+            "name": "Pro",
+            "price": 10,
+            "per": "user/month",
+            "billing": "monthly",
+            "features": [
+              "Unlimited code completions",
+              "Unlimited chat messages",
+              "VS Code, JetBrains, Neovim, Xcode support",
+              "CLI assistance",
+              "Multiple model selection",
+              "Agent mode for multi-file edits"
+            ],
+            "limits": {
+              "completions": "unlimited",
+              "chat_messages": "unlimited"
+            }
+          },
+          {
+            "name": "Pro+",
+            "price": 39,
+            "per": "user/month",
+            "billing": "monthly",
+            "features": [
+              "All Pro features",
+              "Higher rate limits",
+              "Access to premium models (GPT-4o, Claude)",
+              "Priority access",
+              "Advanced code search"
+            ],
+            "limits": {
+              "completions": "unlimited",
+              "premium_models": true
+            }
+          },
+          {
+            "name": "Business",
+            "price": 19,
+            "per": "user/month",
+            "billing": "monthly",
+            "features": [
+              "All Pro features",
+              "Organization-wide management",
+              "Policy controls",
+              "Audit logs",
+              "IP indemnity",
+              "Content exclusions",
+              "SSO support"
+            ],
+            "limits": {
+              "completions": "unlimited"
+            }
+          },
+          {
+            "name": "Enterprise",
+            "price": 39,
+            "per": "user/month",
+            "billing": "annual",
+            "features": [
+              "All Business features",
+              "Fine-tuned models on your codebase",
+              "SAML SSO",
+              "Advanced security policies",
+              "Compliance controls",
+              "Dedicated support",
+              "GitHub Advanced Security integration"
+            ],
+            "limits": {
+              "completions": "unlimited",
+              "fine_tuning": true
+            }
+          }
+        ],
+        "starting_price": 0,
+        "custom_pricing": true,
+        "free_trial_days": 30,
+        "free_tier": true,
+        "startup_discount": "Free for verified students and open source maintainers (Copilot Pro)"
+      },
+      "best_for": [
+        "Existing GitHub users wanting integrated AI assistance",
+        "Teams already invested in the Microsoft/GitHub ecosystem",
+        "Developers wanting reliable inline code completion",
+        "Enterprise teams needing IP indemnity and compliance",
+        "Organizations requiring fine-tuned models on proprietary code"
+      ],
+      "industries": [
+        "Technology",
+        "SaaS",
+        "Enterprise Software",
+        "Financial Services",
+        "Government",
+        "Education"
+      ],
+      "company_sizes": [
+        "startup",
+        "smb",
+        "mid_market",
+        "enterprise"
+      ],
+      "avoid_if": [
+        "Non-developer needing no-code solutions",
+        "Want fully autonomous agentic coding workflows",
+        "Prefer non-Microsoft AI ecosystem",
+        "Need multi-platform access beyond IDE extensions",
+        "Want the strongest multi-file editing capabilities"
+      ],
+      "technical_requirements": {
+        "coding_required": true,
+        "coding_helpful": true,
+        "learning_curve": "low",
+        "time_to_first_project": "minutes",
+        "supported_platforms": [
+          "VS Code",
+          "JetBrains IDEs",
+          "Neovim",
+          "Xcode",
+          "GitHub.com",
+          "CLI"
+        ]
+      },
+      "implementation": {
+        "avg_weeks": 0.5,
+        "complexity": "low",
+        "requires_developer": true,
+        "cost_range": {
+          "diy": {
+            "min": 0,
+            "max": 120
+          },
+          "with_help": {
+            "min": 0,
+            "max": 500
+          },
+          "full_service": {
+            "min": 500,
+            "max": 2000
+          }
+        }
+      },
+      "ratings": {
+        "g2": {
+          "score": 4.5,
+          "reviews": 1150,
+          "last_updated": "2026-02"
+        },
+        "capterra": {
+          "score": 4.5,
+          "reviews": 890,
+          "last_updated": "2026-02"
+        },
+        "our_rating": 4.3,
+        "our_notes": "The most widely adopted AI coding assistant with deep GitHub ecosystem integration. Strong enterprise features including IP indemnity and fine-tuning. Inline completion is reliable and fast. However, agentic capabilities lag behind Claude Code and even Cursor's Composer. Best value at the $10/mo Pro tier for individual developers. The free tier with 2,000 completions is a solid entry point."
+      },
+      "integrations": [
+        "GitHub",
+        "VS Code",
+        "JetBrains IDEs",
+        "Neovim",
+        "Xcode",
+        "Azure DevOps",
+        "GitHub Actions",
+        "GitHub Advanced Security",
+        "Microsoft 365"
+      ],
+      "api": {
+        "available": false,
+        "type": null,
+        "documentation": "https://docs.github.com/en/copilot"
+      },
+      "competitors": [
+        "Claude Code",
+        "Cursor",
+        "Windsurf",
+        "Amazon CodeWhisperer",
+        "Tabnine"
+      ],
+      "verified_at": "2026-02-24T00:00:00Z",
+      "verified_by": "manual",
+      "source_url": "https://github.com/features/copilot/plans",
+      "notes": "GitHub Copilot added agent mode in 2025, allowing multi-file edits and terminal command execution within VS Code. Students and open source maintainers get Copilot Pro free. The free tier (2,000 completions + 50 chat messages/month) launched in late 2024. Enterprise tier supports fine-tuning on proprietary codebases. IP indemnity on Business and Enterprise plans provides legal protection for AI-generated code."
+    },
+    {
+      "slug": "bolt-new",
+      "name": "Bolt.new",
+      "category": "dev_platforms",
+      "subcategory": "ai_app_builder",
+      "website": "https://bolt.new",
+      "pricing_url": "https://bolt.new/pricing",
+      "description": "Browser-based AI application builder by StackBlitz that generates full-stack web applications from natural language prompts. Runs entirely in the browser using WebContainers technology, requiring no local setup. Can generate React, Next.js, and other framework-based applications with frontend and basic backend functionality. Ideal for rapid prototyping, landing pages, and proof-of-concept applications.",
+      "tagline": "Prompt, run, edit, and deploy full-stack web apps",
+      "pricing": {
+        "model": "per_seat",
+        "currency": "USD",
+        "billing_options": ["monthly", "annual"],
+        "annual_discount_percent": null,
+        "tiers": [
+          {
+            "name": "Free",
+            "price": 0,
+            "per": "month",
+            "billing": "monthly",
+            "features": [
+              "Limited daily token usage",
+              "Basic app generation",
+              "Community templates",
+              "Community support"
+            ],
+            "limits": {
+              "tokens": "limited daily allocation"
+            }
+          },
+          {
+            "name": "Pro",
+            "price": 20,
+            "per": "user/month",
+            "billing": "monthly",
+            "features": [
+              "10M tokens/month",
+              "Full app generation capabilities",
+              "Deploy to Netlify",
+              "Import from GitHub",
+              "Priority generation queue"
+            ],
+            "limits": {
+              "tokens_monthly": 10000000
+            }
+          },
+          {
+            "name": "Pro+",
+            "price": 50,
+            "per": "user/month",
+            "billing": "monthly",
+            "features": [
+              "26M tokens/month",
+              "All Pro features",
+              "Higher priority queue",
+              "Faster generation",
+              "Early access to new features"
+            ],
+            "limits": {
+              "tokens_monthly": 26000000
+            }
+          }
+        ],
+        "starting_price": 0,
+        "custom_pricing": false,
+        "free_trial_days": null,
+        "free_tier": true,
+        "startup_discount": null
+      },
+      "best_for": [
+        "Quick web prototypes and proof-of-concept apps",
+        "Landing pages and marketing sites",
+        "Non-developers wanting to build simple web apps",
+        "Rapid UI iteration and design exploration",
+        "Hackathons and quick demos"
+      ],
+      "industries": [
+        "Startups",
+        "Marketing",
+        "Small Business",
+        "Education",
+        "Freelance"
+      ],
+      "company_sizes": [
+        "startup",
+        "smb"
+      ],
+      "avoid_if": [
+        "Building production-grade business systems",
+        "Need complex backend logic or database integrations",
+        "Require enterprise security and compliance",
+        "Building applications that handle sensitive data",
+        "Need offline development or local environment control",
+        "Want to build mobile applications",
+        "Need complex multi-service architectures"
+      ],
+      "technical_requirements": {
+        "coding_required": false,
+        "coding_helpful": true,
+        "learning_curve": "low",
+        "time_to_first_project": "minutes",
+        "supported_platforms": [
+          "Web browser (any modern browser)"
+        ]
+      },
+      "implementation": {
+        "avg_weeks": 0.1,
+        "complexity": "low",
+        "requires_developer": false,
+        "cost_range": {
+          "diy": {
+            "min": 0,
+            "max": 50
+          },
+          "with_help": {
+            "min": 200,
+            "max": 1000
+          },
+          "full_service": {
+            "min": 1000,
+            "max": 5000
+          }
+        }
+      },
+      "ratings": {
+        "g2": {
+          "score": 4.3,
+          "reviews": 95,
+          "last_updated": "2026-02"
+        },
+        "capterra": {
+          "score": 4.2,
+          "reviews": 68,
+          "last_updated": "2026-02"
+        },
+        "our_rating": 3.8,
+        "our_notes": "Impressive for rapid prototyping and simple web apps. The browser-based approach eliminates setup friction entirely. However, significant limitations for production use: limited backend capabilities, no proper database integrations, and generated code often requires substantial refactoring for production. Best used as a starting point or for throwaway prototypes, not for building real business systems."
+      },
+      "integrations": [
+        "Netlify (deployment)",
+        "GitHub (import)",
+        "Various npm packages",
+        "React",
+        "Next.js",
+        "Vite"
+      ],
+      "api": {
+        "available": false,
+        "type": null,
+        "documentation": null
+      },
+      "competitors": [
+        "Lovable",
+        "Vercel v0",
+        "Replit",
+        "Claude Code",
+        "Cursor"
+      ],
+      "verified_at": "2026-02-24T00:00:00Z",
+      "verified_by": "manual",
+      "source_url": "https://bolt.new/pricing",
+      "notes": "Built on StackBlitz's WebContainers technology, which runs Node.js entirely in the browser. This is both its strength (zero setup) and limitation (constrained runtime environment). Token-based pricing means costs can be unpredictable for complex projects. Good for getting a visual prototype quickly, but generated applications typically need significant work before production deployment. No native mobile app generation."
+    },
+    {
+      "slug": "lovable",
+      "name": "Lovable",
+      "category": "dev_platforms",
+      "subcategory": "ai_app_builder",
+      "website": "https://lovable.dev",
+      "pricing_url": "https://lovable.dev/pricing",
+      "description": "AI-powered web application generator (formerly GPT Engineer) that creates full-stack React applications from natural language descriptions. Generates production-ready code with Supabase backend integration, authentication, and deployment. Targets non-developers and designers who want to build functional web applications without coding. Produces exportable, standard React/TypeScript code.",
+      "tagline": "The AI full-stack engineer that builds production-ready apps",
+      "pricing": {
+        "model": "credit_based",
+        "currency": "USD",
+        "billing_options": ["monthly", "annual"],
+        "annual_discount_percent": 17,
+        "tiers": [
+          {
+            "name": "Free",
+            "price": 0,
+            "per": "month",
+            "billing": "monthly",
+            "features": [
+              "5 message credits/day",
+              "Basic app generation",
+              "Community templates",
+              "Community support"
+            ],
+            "limits": {
+              "daily_credits": 5
+            }
+          },
+          {
+            "name": "Starter",
+            "price": 20,
+            "per": "user/month",
+            "billing": "monthly",
+            "features": [
+              "100 message credits/month",
+              "Supabase integration",
+              "GitHub export",
+              "Custom domains",
+              "Basic support"
+            ],
+            "limits": {
+              "monthly_credits": 100
+            }
+          },
+          {
+            "name": "Launch",
+            "price": 50,
+            "per": "user/month",
+            "billing": "monthly",
+            "features": [
+              "500 message credits/month",
+              "All Starter features",
+              "Priority generation",
+              "Advanced integrations",
+              "Email support"
+            ],
+            "limits": {
+              "monthly_credits": 500
+            }
+          },
+          {
+            "name": "Scale",
+            "price": 100,
+            "per": "user/month",
+            "billing": "monthly",
+            "features": [
+              "Unlimited message credits",
+              "All Launch features",
+              "Team collaboration",
+              "White-label options",
+              "Priority support",
+              "Custom integrations"
+            ],
+            "limits": {
+              "monthly_credits": "unlimited"
+            }
+          }
+        ],
+        "starting_price": 0,
+        "custom_pricing": false,
+        "free_trial_days": null,
+        "free_tier": true,
+        "startup_discount": "Student discount up to 50% off"
+      },
+      "best_for": [
+        "Rapid UI prototyping and visual app design",
+        "Simple CRUD applications with authentication",
+        "Non-developers wanting to build web applications",
+        "Designers creating functional prototypes",
+        "Quick MVP validation with working backends"
+      ],
+      "industries": [
+        "Startups",
+        "Small Business",
+        "Education",
+        "Freelance",
+        "Marketing"
+      ],
+      "company_sizes": [
+        "startup",
+        "smb"
+      ],
+      "avoid_if": [
+        "Building security-critical applications (170 of 1,645 apps had security vulnerabilities in 2025 audit)",
+        "Need complex business logic or multi-service architectures",
+        "Require enterprise compliance and security standards",
+        "Building applications that handle financial or health data",
+        "Need mobile-native applications",
+        "Want full control over code architecture and patterns",
+        "Building high-traffic production systems"
+      ],
+      "technical_requirements": {
+        "coding_required": false,
+        "coding_helpful": true,
+        "learning_curve": "low",
+        "time_to_first_project": "minutes",
+        "supported_platforms": [
+          "Web browser (any modern browser)"
+        ]
+      },
+      "implementation": {
+        "avg_weeks": 0.1,
+        "complexity": "low",
+        "requires_developer": false,
+        "cost_range": {
+          "diy": {
+            "min": 0,
+            "max": 100
+          },
+          "with_help": {
+            "min": 200,
+            "max": 1000
+          },
+          "full_service": {
+            "min": 1000,
+            "max": 5000
+          }
+        }
+      },
+      "ratings": {
+        "g2": {
+          "score": 4.2,
+          "reviews": 78,
+          "last_updated": "2026-02"
+        },
+        "capterra": {
+          "score": 4.1,
+          "reviews": 55,
+          "last_updated": "2026-02"
+        },
+        "our_rating": 3.5,
+        "our_notes": "Good for rapid prototyping and simple applications, but significant security concerns. A 2025 audit found that 170 of 1,645 Lovable-generated apps had security vulnerabilities, including exposed API keys and insecure authentication patterns. Code is exportable and uses standard React/TypeScript, which is positive. Supabase integration provides basic backend capabilities. However, generated code often needs security hardening before production use. Use for prototyping, not production business systems."
+      },
+      "integrations": [
+        "Supabase (backend/auth)",
+        "GitHub (code export)",
+        "Netlify (deployment)",
+        "Vercel (deployment)",
+        "Stripe (payments)",
+        "React",
+        "TypeScript",
+        "Tailwind CSS"
+      ],
+      "api": {
+        "available": false,
+        "type": null,
+        "documentation": null
+      },
+      "competitors": [
+        "Bolt.new",
+        "Vercel v0",
+        "Replit",
+        "Claude Code",
+        "Cursor"
+      ],
+      "verified_at": "2026-02-24T00:00:00Z",
+      "verified_by": "manual",
+      "source_url": "https://lovable.dev/pricing",
+      "notes": "Rebranded from GPT Engineer to Lovable in 2024. Credit-based system where complexity determines consumption. Simple changes use approximately 0.5 credits while new features use 2-10 credits. Generates standard React/TypeScript code that is fully exportable. The 2025 security audit revealing vulnerabilities in 10.3% of generated apps is a significant concern for production use. Student discount available (up to 50% off). Best used as a prototyping tool with professional security review before deployment."
+    }
+  ],
+  "last_updated": "2026-02-24T00:00:00Z"
+}

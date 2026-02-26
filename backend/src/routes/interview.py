@@ -16,6 +16,7 @@ Confidence Framework:
 - Triggers automatic report generation when thresholds met
 """
 
+import asyncio
 import logging
 from typing import Optional, List
 from datetime import datetime
@@ -49,7 +50,10 @@ def get_anthropic_client() -> anthropic.Anthropic:
     """Get or create the Anthropic client."""
     global _anthropic_client
     if _anthropic_client is None:
-        _anthropic_client = anthropic.Anthropic(api_key=settings.ANTHROPIC_API_KEY)
+        _anthropic_client = anthropic.Anthropic(
+            api_key=settings.ANTHROPIC_API_KEY,
+            timeout=30.0,
+        )
     return _anthropic_client
 
 router = APIRouter()
@@ -465,11 +469,21 @@ async def process_interview_answer(request: ProcessAnswerRequest, raw_request: R
             follow_ups_for_current_anchor=request.follow_ups_asked
         )
 
-        # Process the answer
-        result = await engine.process_answer(
-            state=state,
-            answer=request.answer_text
-        )
+        # Process the answer (with timeout to prevent hanging)
+        try:
+            result = await asyncio.wait_for(
+                engine.process_answer(
+                    state=state,
+                    answer=request.answer_text
+                ),
+                timeout=settings.TOOL_TIMEOUT_RESEARCH,  # 60 seconds
+            )
+        except asyncio.TimeoutError:
+            logger.error(f"Timeout processing answer for session_id={request.session_id}")
+            raise HTTPException(
+                status_code=status.HTTP_504_GATEWAY_TIMEOUT,
+                detail="Answer processing timed out. Please try again."
+            )
 
         return ProcessAnswerResponse(
             signals_detected=result.signals_detected,
@@ -485,6 +499,8 @@ async def process_interview_answer(request: ProcessAnswerRequest, raw_request: R
             interview_complete=result.interview_complete
         )
 
+    except asyncio.TimeoutError:
+        raise  # Re-raise timeout (already handled above)
     except Exception as e:
         logger.error(f"Error processing answer: {e}", exc_info=True)
         raise HTTPException(

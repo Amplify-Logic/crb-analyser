@@ -25,21 +25,33 @@ export default function TwoPillarsChart({
   const [currentBH, setCurrentBH] = useState(0)
 
   useEffect(() => {
+    // Reset animation state on mount so re-renders animate from 0
+    setIsVisible(false)
+    setCurrentCV(0)
+    setCurrentBH(0)
+
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting) {
           setIsVisible(true)
         }
       },
-      { threshold: 0.3 }
+      { threshold: 0.1 }
     )
 
     if (containerRef.current) {
       observer.observe(containerRef.current)
     }
 
-    return () => observer.disconnect()
-  }, [])
+    const fallbackTimeout = setTimeout(() => {
+      setIsVisible(true)
+    }, 500)
+
+    return () => {
+      observer.disconnect()
+      clearTimeout(fallbackTimeout)
+    }
+  }, [customerValue, businessHealth])
 
   useEffect(() => {
     if (isVisible && animated) {

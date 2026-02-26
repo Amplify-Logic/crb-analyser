@@ -1,6 +1,422 @@
 {
-  "last_updated": "2026-02-20T21:19:04.655363",
+  "last_updated": "2026-02-24T12:00:00Z",
   "total_recommendations": 0,
-  "vendors": {},
-  "category_insights": {}
+  "source": "seeded_from_knowledge_base",
+  "note": "Baseline vendor patterns seeded from KB. Will be enriched by SelfImproveService as reports are generated.",
+  "vendors": {
+    "weave": {
+      "name": "Weave",
+      "categories": ["patient_communication", "phone_systems", "reviews"],
+      "industries": ["dental"],
+      "recommendation_count": 0,
+      "avg_fit_score": 0.85,
+      "best_for_pain_points": ["patient_no_shows", "front_desk_phone_overload", "patient_communication_gaps", "new_patient_acquisition"],
+      "best_for_sizes": ["1-10", "11-50", "51-200"],
+      "integration_score": 4,
+      "notes": "All-in-one dental communication platform with VoIP, texting, reviews",
+      "eu_compliant": true,
+      "data_hosting": "us",
+      "gdpr_ready": true
+    },
+    "dentrix": {
+      "name": "Dentrix",
+      "categories": ["practice_management"],
+      "industries": ["dental"],
+      "recommendation_count": 0,
+      "avg_fit_score": 0.80,
+      "best_for_pain_points": ["manual_appointment_scheduling", "clinical_documentation", "billing_collections"],
+      "best_for_sizes": ["1-10", "11-50", "51-200"],
+      "integration_score": 4,
+      "notes": "Industry standard dental PM, extensive integrations",
+      "eu_compliant": false,
+      "data_hosting": "us",
+      "gdpr_ready": false
+    },
+    "open-dental": {
+      "name": "Open Dental",
+      "categories": ["practice_management"],
+      "industries": ["dental"],
+      "recommendation_count": 0,
+      "avg_fit_score": 0.75,
+      "best_for_pain_points": ["manual_appointment_scheduling", "billing_collections"],
+      "best_for_sizes": ["1-10", "11-50"],
+      "integration_score": 5,
+      "notes": "Open source, best value, great API",
+      "eu_compliant": true,
+      "data_hosting": "global",
+      "gdpr_ready": true
+    },
+    "pearl": {
+      "name": "Pearl",
+      "categories": ["ai_imaging_diagnostics"],
+      "industries": ["dental"],
+      "recommendation_count": 0,
+      "avg_fit_score": 0.80,
+      "best_for_pain_points": ["low_treatment_acceptance"],
+      "best_for_sizes": ["1-10", "11-50", "51-200"],
+      "integration_score": 3,
+      "notes": "FDA-cleared AI imaging for dental X-rays",
+      "eu_compliant": false,
+      "data_hosting": "us",
+      "gdpr_ready": false
+    },
+    "vyne-dental": {
+      "name": "Vyne Dental",
+      "categories": ["insurance_billing"],
+      "industries": ["dental"],
+      "recommendation_count": 0,
+      "avg_fit_score": 0.80,
+      "best_for_pain_points": ["insurance_verification_burden", "billing_collections"],
+      "best_for_sizes": ["1-10", "11-50", "51-200"],
+      "integration_score": 4,
+      "notes": "Claims and eligibility verification for dental",
+      "eu_compliant": false,
+      "data_hosting": "us",
+      "gdpr_ready": false
+    },
+    "nexhealth": {
+      "name": "NexHealth",
+      "categories": ["scheduling", "patient_communication"],
+      "industries": ["dental"],
+      "recommendation_count": 0,
+      "avg_fit_score": 0.80,
+      "best_for_pain_points": ["manual_appointment_scheduling", "patient_communication_gaps"],
+      "best_for_sizes": ["1-10", "11-50"],
+      "integration_score": 5,
+      "notes": "Modern online booking with real-time PM sync",
+      "eu_compliant": false,
+      "data_hosting": "us",
+      "gdpr_ready": true
+    },
+    "sunbit": {
+      "name": "Sunbit",
+      "categories": ["patient_financing"],
+      "industries": ["dental"],
+      "recommendation_count": 0,
+      "avg_fit_score": 0.85,
+      "best_for_pain_points": ["low_treatment_acceptance"],
+      "best_for_sizes": ["1-10", "11-50", "51-200"],
+      "integration_score": 3,
+      "notes": "85%+ approval rate patient financing",
+      "eu_compliant": false,
+      "data_hosting": "us",
+      "gdpr_ready": false
+    },
+    "clio": {
+      "name": "Clio",
+      "categories": ["practice_management", "time_billing"],
+      "industries": ["professional-services"],
+      "recommendation_count": 0,
+      "avg_fit_score": 0.90,
+      "best_for_pain_points": ["lost_billable_time", "manual_time_entry", "billing_collections_delays", "client_intake_friction"],
+      "best_for_sizes": ["1-10", "11-50"],
+      "integration_score": 5,
+      "notes": "Market leader for small-mid law firms, great integrations",
+      "eu_compliant": true,
+      "data_hosting": "global",
+      "gdpr_ready": true
+    },
+    "smokeball": {
+      "name": "Smokeball",
+      "categories": ["practice_management", "time_billing"],
+      "industries": ["professional-services"],
+      "recommendation_count": 0,
+      "avg_fit_score": 0.85,
+      "best_for_pain_points": ["lost_billable_time", "manual_time_entry"],
+      "best_for_sizes": ["1-10", "11-50"],
+      "integration_score": 4,
+      "notes": "Automatic time capture from desktop activity",
+      "eu_compliant": true,
+      "data_hosting": "global",
+      "gdpr_ready": true
+    },
+    "karbon": {
+      "name": "Karbon",
+      "categories": ["practice_management", "workflow_automation"],
+      "industries": ["professional-services"],
+      "recommendation_count": 0,
+      "avg_fit_score": 0.85,
+      "best_for_pain_points": ["email_overload", "staff_utilization_tracking", "knowledge_silos"],
+      "best_for_sizes": ["1-10", "11-50"],
+      "integration_score": 4,
+      "notes": "Modern accounting workflow automation with email triage",
+      "eu_compliant": true,
+      "data_hosting": "global",
+      "gdpr_ready": true
+    },
+    "luminance": {
+      "name": "Luminance",
+      "categories": ["contract_intelligence"],
+      "industries": ["professional-services"],
+      "recommendation_count": 0,
+      "avg_fit_score": 0.80,
+      "best_for_pain_points": ["contract_review_speed"],
+      "best_for_sizes": ["11-50", "51-200"],
+      "integration_score": 3,
+      "notes": "AI contract review for legal - enterprise focused",
+      "eu_compliant": true,
+      "data_hosting": "eu",
+      "gdpr_ready": true
+    },
+    "harvey-ai": {
+      "name": "Harvey AI",
+      "categories": ["research_tools", "ai_assistants"],
+      "industries": ["professional-services"],
+      "recommendation_count": 0,
+      "avg_fit_score": 0.85,
+      "best_for_pain_points": ["document_drafting_bottleneck", "contract_review_speed"],
+      "best_for_sizes": ["11-50", "51-200"],
+      "integration_score": 3,
+      "notes": "Premium AI legal assistant, invite-only",
+      "eu_compliant": false,
+      "data_hosting": "us",
+      "gdpr_ready": true
+    },
+    "copilot": {
+      "name": "Microsoft Copilot",
+      "categories": ["ai_assistants"],
+      "industries": ["professional-services", "ecommerce", "dental"],
+      "recommendation_count": 0,
+      "avg_fit_score": 0.75,
+      "best_for_pain_points": ["email_overload", "document_drafting_bottleneck", "proposal_creation_time"],
+      "best_for_sizes": ["1-10", "11-50", "51-200"],
+      "integration_score": 5,
+      "notes": "General-purpose AI assistant for Microsoft 365 users",
+      "eu_compliant": true,
+      "data_hosting": "global",
+      "gdpr_ready": true,
+      "kb_aliases": ["Microsoft Copilot"]
+    },
+    "klaviyo": {
+      "name": "Klaviyo",
+      "categories": ["marketing", "email_automation"],
+      "industries": ["ecommerce"],
+      "recommendation_count": 0,
+      "avg_fit_score": 0.90,
+      "best_for_pain_points": ["abandoned_cart_loss", "customer_segmentation_weak", "subscription_churn"],
+      "best_for_sizes": ["1-10", "11-50", "51-200"],
+      "integration_score": 5,
+      "notes": "Gold standard for e-commerce email/SMS marketing",
+      "eu_compliant": true,
+      "data_hosting": "global",
+      "gdpr_ready": true
+    },
+    "gorgias": {
+      "name": "Gorgias",
+      "categories": ["customer_support"],
+      "industries": ["ecommerce"],
+      "recommendation_count": 0,
+      "avg_fit_score": 0.85,
+      "best_for_pain_points": ["customer_service_volume", "returns_processing"],
+      "best_for_sizes": ["1-10", "11-50", "51-200"],
+      "integration_score": 5,
+      "notes": "E-commerce native support with AI agent, Shopify integration",
+      "eu_compliant": true,
+      "data_hosting": "eu",
+      "gdpr_ready": true
+    },
+    "shipstation": {
+      "name": "ShipStation",
+      "categories": ["fulfillment_shipping"],
+      "industries": ["ecommerce"],
+      "recommendation_count": 0,
+      "avg_fit_score": 0.80,
+      "best_for_pain_points": ["manual_order_processing", "shipping_cost_optimization"],
+      "best_for_sizes": ["1-10", "11-50"],
+      "integration_score": 4,
+      "notes": "Multi-carrier shipping platform with rate comparison",
+      "eu_compliant": false,
+      "data_hosting": "us",
+      "gdpr_ready": true
+    },
+    "sendcloud": {
+      "name": "Sendcloud",
+      "categories": ["fulfillment_shipping"],
+      "industries": ["ecommerce"],
+      "recommendation_count": 0,
+      "avg_fit_score": 0.85,
+      "best_for_pain_points": ["manual_order_processing", "shipping_cost_optimization"],
+      "best_for_sizes": ["1-10", "11-50"],
+      "integration_score": 4,
+      "notes": "European-focused shipping automation, strong in NL/DE",
+      "eu_compliant": true,
+      "data_hosting": "eu",
+      "gdpr_ready": true
+    },
+    "shopify-flow": {
+      "name": "Shopify Flow",
+      "categories": ["automation"],
+      "industries": ["ecommerce"],
+      "recommendation_count": 0,
+      "avg_fit_score": 0.85,
+      "best_for_pain_points": ["manual_order_processing", "inventory_sync_errors"],
+      "best_for_sizes": ["1-10", "11-50"],
+      "integration_score": 5,
+      "notes": "Native Shopify automation, no extra cost on Plus",
+      "eu_compliant": true,
+      "data_hosting": "global",
+      "gdpr_ready": true,
+      "kb_aliases": ["Shopify Flow", "Shopify"]
+    },
+    "loop-returns": {
+      "name": "Loop Returns",
+      "categories": ["returns_management"],
+      "industries": ["ecommerce"],
+      "recommendation_count": 0,
+      "avg_fit_score": 0.80,
+      "best_for_pain_points": ["returns_processing"],
+      "best_for_sizes": ["11-50", "51-200"],
+      "integration_score": 4,
+      "notes": "Exchange-first returns platform, reduces refunds",
+      "eu_compliant": false,
+      "data_hosting": "us",
+      "gdpr_ready": true
+    },
+    "signifyd": {
+      "name": "Signifyd",
+      "categories": ["fraud_prevention"],
+      "industries": ["ecommerce"],
+      "recommendation_count": 0,
+      "avg_fit_score": 0.80,
+      "best_for_pain_points": ["fraud_detection_gaps"],
+      "best_for_sizes": ["11-50", "51-200"],
+      "integration_score": 4,
+      "notes": "AI fraud detection with chargeback guarantee",
+      "eu_compliant": true,
+      "data_hosting": "global",
+      "gdpr_ready": true
+    },
+    "zapier": {
+      "name": "Zapier",
+      "categories": ["automation"],
+      "industries": ["professional-services", "ecommerce", "dental"],
+      "recommendation_count": 0,
+      "avg_fit_score": 0.75,
+      "best_for_pain_points": ["manual_time_entry", "client_communication_gaps", "patient_communication_gaps"],
+      "best_for_sizes": ["1-10", "11-50"],
+      "integration_score": 5,
+      "notes": "Universal integration platform, 6000+ app connections",
+      "eu_compliant": true,
+      "data_hosting": "us",
+      "gdpr_ready": true
+    },
+    "make": {
+      "name": "Make (Integromat)",
+      "categories": ["automation"],
+      "industries": ["professional-services", "ecommerce", "dental"],
+      "recommendation_count": 0,
+      "avg_fit_score": 0.75,
+      "best_for_pain_points": ["manual_time_entry", "client_communication_gaps", "patient_communication_gaps"],
+      "best_for_sizes": ["1-10", "11-50"],
+      "integration_score": 5,
+      "notes": "Visual workflow automation, more complex scenarios than Zapier",
+      "eu_compliant": true,
+      "data_hosting": "eu",
+      "gdpr_ready": true,
+      "kb_aliases": ["Make (Integromat)", "Make", "Integromat"]
+    },
+    "n8n": {
+      "name": "n8n",
+      "categories": ["automation"],
+      "industries": ["professional-services", "ecommerce", "dental"],
+      "recommendation_count": 0,
+      "avg_fit_score": 0.70,
+      "best_for_pain_points": ["manual_time_entry", "client_communication_gaps"],
+      "best_for_sizes": ["1-10", "11-50"],
+      "integration_score": 4,
+      "notes": "Self-hostable workflow automation, developer-friendly",
+      "eu_compliant": true,
+      "data_hosting": "eu",
+      "gdpr_ready": true
+    },
+    "claude-code": {
+      "name": "Claude Code",
+      "categories": ["dev_platforms", "automation", "ai_agents"],
+      "industries": ["dental", "ecommerce", "professional-services"],
+      "recommendation_count": 0,
+      "avg_fit_score": 0.90,
+      "best_for_pain_points": [
+        "manual_data_entry", "multi_tool_disconnect", "no_developer_resources",
+        "custom_automation_needs", "report_generation_manual", "client_communication_gaps",
+        "patient_communication_gaps", "inventory_sync_errors", "proposal_creation_time",
+        "billing_collections_delays"
+      ],
+      "best_for_sizes": ["1-10", "11-50", "51-200"],
+      "integration_score": 5,
+      "eu_compliant": true,
+      "data_hosting": "global",
+      "gdpr_ready": true,
+      "notes": "Primary platform recommendation for custom AI systems. 8,600+ MCP connectors, Agent SDK, production-grade."
+    }
+  },
+  "category_insights": {
+    "practice_management": {
+      "dental": {
+        "market_leader": "dentrix",
+        "best_value": "open-dental",
+        "most_modern": "curve-dental",
+        "recommendation_order": ["dentrix", "open-dental", "eaglesoft"]
+      },
+      "professional-services": {
+        "legal_leader": "clio",
+        "accounting_leader": "karbon",
+        "best_time_capture": "smokeball",
+        "recommendation_order": ["clio", "karbon", "smokeball", "practicepanther"]
+      }
+    },
+    "patient_communication": {
+      "dental": {
+        "all_in_one": "weave",
+        "recall_focused": "lighthouse-360",
+        "modern_scheduling": "nexhealth",
+        "recommendation_order": ["weave", "nexhealth", "lighthouse-360"]
+      }
+    },
+    "email_marketing": {
+      "ecommerce": {
+        "market_leader": "klaviyo",
+        "budget_option": "mailchimp",
+        "multi_channel": "omnisend",
+        "recommendation_order": ["klaviyo", "omnisend", "mailchimp"]
+      }
+    },
+    "customer_support": {
+      "ecommerce": {
+        "shopify_native": "gorgias",
+        "enterprise": "zendesk",
+        "budget": "tidio",
+        "recommendation_order": ["gorgias", "tidio", "zendesk"]
+      }
+    },
+    "automation": {
+      "cross_industry": {
+        "easiest": "zapier",
+        "most_powerful": "make",
+        "self_hosted": "n8n",
+        "recommendation_order": ["zapier", "make", "n8n"]
+      }
+    },
+    "fulfillment_shipping": {
+      "ecommerce": {
+        "europe_focused": "sendcloud",
+        "multi_carrier": "shipstation",
+        "recommendation_order": ["sendcloud", "shipstation", "shipbob"]
+      }
+    },
+    "ai_assistants": {
+      "cross_industry": {
+        "microsoft_users": "copilot",
+        "complex_reasoning": "claude-for-work",
+        "recommendation_order": ["copilot", "claude-for-work"]
+      }
+    },
+    "dev_platforms": {
+      "cross_industry": {
+        "agentic_platform": "claude-code",
+        "ai_ide": "cursor",
+        "quick_prototype": "bolt-new",
+        "recommendation_order": ["claude-code", "cursor", "github-copilot", "bolt-new"]
+      }
+    }
+  }
 }

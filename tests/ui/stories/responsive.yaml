@@ -1,0 +1,55 @@
+stories:
+  - name: "Responsive - Quiz Mobile"
+    url: "http://localhost:5174/quiz"
+    priority: high
+    workflow: |
+      Navigate to http://localhost:5174/quiz
+      Resize the viewport to 375px width and 812px height
+
+      Verify the quiz page renders correctly on mobile
+      Verify the company name input is full-width and usable
+      Verify buttons are touch-friendly (large enough to tap)
+      Verify no horizontal overflow or content cut off
+
+      Resize to 768px width and 1024px height (tablet)
+      Verify the layout adapts for tablet size
+
+  - name: "Responsive - Login Mobile"
+    url: "http://localhost:5174/login"
+    priority: high
+    workflow: |
+      Navigate to http://localhost:5174/login
+      Resize the viewport to 375px width and 812px height
+
+      Verify the login form is centered and usable on mobile
+      Verify email and password inputs are full-width
+      Verify the submit button is easily tappable
+      Verify no content overflows horizontally
+
+  - name: "Responsive - Checkout Mobile"
+    url: "http://localhost:5174/checkout"
+    priority: high
+    requires:
+      session: "completed quiz session"
+    workflow: |
+      Navigate to the checkout page
+      Resize the viewport to 375px width and 812px height
+
+      Verify pricing information is readable on mobile
+      Verify tier comparison (if present) stacks vertically
+      Verify the payment button is prominent and tappable
+      Verify no horizontal scrollbar appears
+
+  - name: "Responsive - Dashboard Tablet"
+    url: "http://localhost:5174/dashboard"
+    priority: medium
+    requires:
+      auth: "logged-in user session"
+    workflow: |
+      Navigate to http://localhost:5174/dashboard
+      Resize the viewport to 768px width and 1024px height (iPad)
+
+      Verify the dashboard layout adapts for tablet
+      Verify stat cards reflow to fit the screen
+      Verify audit list items are readable
+      Verify navigation remains functional

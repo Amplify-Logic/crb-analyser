@@ -7,7 +7,7 @@ body {
   font-family: 'Inter', system-ui, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  @apply bg-white text-gray-900;
+  @apply bg-white text-gray-900 dark:bg-gray-900 dark:text-gray-50;
 }
 
 /* Custom utilities */
@@ -107,5 +107,17 @@ body {
     @bottom-center {
       content: "CRB Analyser Report";
     }
+  }
+}
+
+/* Reduced motion preferences */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
   }
 }

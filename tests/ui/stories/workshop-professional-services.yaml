@@ -1,0 +1,257 @@
+stories:
+  - name: "Professional Services Workshop - Premium Strategy Consultation"
+    url: "http://localhost:5174/workshop"
+    priority: critical
+    requires:
+      session: "Requires a paid professional services quiz session with research data"
+    workflow: |
+      CONTEXT: You are validating the 90-minute AI-powered workshop for a managing
+      partner at a professional services firm who has invested EUR 147. Professional
+      services buyers are the most demanding audience — they sell expertise themselves
+      and can spot shallow consulting instantly. The workshop must demonstrate
+      subject matter expertise in professional services operations, technology, and
+      transformation at every turn.
+
+      QUALITY STANDARD: Imagine the partner is evaluating whether to recommend this
+      tool to their own clients. The bar is: "Would I trust this to consult MY firm?"
+      Every question must be pointed. Every summary must be analytically rigorous.
+      The AI should feel like a senior consultant who has spent a decade in professional
+      services technology transformation.
+
+      STEP 1 — WELCOME — SETTING EXECUTIVE EXPECTATIONS
+      Navigate to the workshop page.
+      Verify the welcome screen conveys appropriate gravitas:
+        - Clear 3-phase structure explanation
+        - Professional language (not "fun" or "exciting" — "thorough," "rigorous," "tailored")
+        - Estimated time commitment acknowledged
+        - "Begin Workshop" button with confident, professional styling
+      The welcome should make a partner think: "These people are serious."
+      Screenshot the welcome screen.
+
+      STEP 2 — CONFIRMATION PHASE — PROFESSIONAL SERVICES INTELLIGENCE
+      Enter the confirmation phase.
+      Verify cards display professional services relevant findings:
+        - Firm description, practice areas, specializations
+        - Team composition (partners, associates, support staff)
+        - Current technology stack (Clio, Karbon, Harvest, etc.)
+        - Identified inefficiencies (time tracking, onboarding, document management)
+        - Revenue/billing indicators
+      Each card should use professional services terminology naturally.
+      Confirm 3 cards as accurate.
+      Edit 1 card: "We actually have 35 professionals across two offices.
+        Our biggest pain is the 3-5 hours spent on new client intake."
+      Verify edit saves cleanly.
+      Screenshot the confirmation phase.
+
+      STEP 3 — PAIN POINT PRIORITIZATION
+      Reorder pain points for a professional services firm:
+        1. Client onboarding / intake process
+        2. Time tracking and billing leakage
+        3. Document management and version control
+        4. Client communication and follow-up
+      Verify drag-to-reorder works smoothly with numbered badges.
+      The pain points should feel specific and recognizable to any
+      professional services operator.
+      Screenshot the prioritized list.
+
+      STEP 4 — DEEP-DIVE: CLIENT ONBOARDING
+      Transition to the deep-dive.
+      Verify the header shows "Client Onboarding / Intake Process" as the topic.
+      The first AI question should demonstrate real expertise:
+      EXCELLENT: "I see you mentioned intake takes 3-5 hours per new client.
+        Walk me through the steps — are you using Practice Ignition or similar
+        for engagement letters, or is your team still doing manual proposals
+        and conflict checks?"
+      GOOD: "Tell me about each step in your client onboarding process."
+      BAD: "What's your client onboarding like?" (lazy, generic)
+      The question must reference the quiz data and demonstrate industry knowledge.
+      Screenshot the first expert question.
+
+      STEP 5 — SUBSTANTIVE CONVERSATION
+      Respond with realistic professional services detail:
+        "It's mostly manual. New matter request comes in, the partner sends an email
+        to the intake coordinator, who creates a matter in Clio, runs a conflict check
+        manually in our spreadsheet system, prepares the engagement letter in Word,
+        sends it for e-signature via DocuSign, then follows up on payment retainer.
+        The whole thing takes 3 days minimum and we lose about 8% of prospects who
+        go elsewhere because we're too slow."
+      Wait for AI follow-up.
+      Verify the AI:
+        - Picks up on the manual conflict check as a key bottleneck
+        - Recognizes the 8% loss rate as a concrete financial impact
+        - References Clio's capabilities or limitations specifically
+        - Asks a targeted follow-up (e.g., "Is the conflict check the bottleneck, or
+          is it the back-and-forth on engagement terms?")
+      Exchange 2-3 more messages, each going deeper.
+      Screenshot showing the building conversation.
+
+      STEP 6 — STAGE PROGRESSION THROUGH ONBOARDING
+      Verify the conversation progresses through stages:
+        "Understanding current process" → "What you've tried" → "Measuring impact"
+      Each stage transition should feel natural — driven by the conversation,
+      not by arbitrary thresholds.
+      The confidence bar should reflect genuine information gathering.
+      Time estimate should decrease as the conversation deepens.
+      Screenshot showing stage progression.
+
+      STEP 7 — MILESTONE: ONBOARDING AUTOMATION FINDING
+      When the milestone summary appears, verify analytical rigor:
+        - Finding title: specific (e.g., "Automated Client Intake & Conflict Resolution")
+        - Severity: high (3-5 hours per client, 8% prospect loss)
+        - Summary: references their actual situation, not generic
+        - ROI Calculation:
+          - Current cost: calculated from their data
+            (e.g., 3.5hrs avg × $200/hr × clients/month × 12 = annual cost)
+          - Potential savings: realistic percentage with justification
+          - Lost revenue: the 8% prospect loss quantified
+          - All math must be internally consistent and in EUR
+        - Vendors: professional services specific (Clio Grow, Practice Ignition,
+          Lawmatics, Karbon, or similar) with fit ratings
+        - Data gaps: what would sharpen the analysis
+      The milestone must feel like a preview of the full report —
+      analytical, data-driven, actionable.
+      Screenshot the complete milestone.
+
+      STEP 8 — PROVIDE MILESTONE FEEDBACK
+      Click "Needs adjustments."
+      Verify the notes textarea appears.
+      Type: "The hourly rate should be closer to EUR 250 for partner time,
+        and we typically onboard 6-8 new clients per month."
+      Submit the feedback.
+      Verify the system acknowledges the correction and either:
+        - Updates the calculation with the new numbers
+        - Notes the correction for the report
+      The feedback mechanism should feel responsive and valued.
+      Screenshot the feedback interaction.
+
+      STEP 9 — SECOND PAIN POINT: TIME TRACKING
+      Transition to the second pain point.
+      Verify "Time Tracking and Billing Leakage" is now the topic.
+      The AI should open with awareness that this is a different topic
+      but in the same professional services context.
+      EXCELLENT: "Time tracking leakage is one of the most expensive hidden
+        costs in professional services. With 35 professionals across two offices,
+        even a 10% capture loss could be significant. How are your people
+        tracking time today — timers in Clio, end-of-day entry, or weekly timesheets?"
+      Verify the question references firm details from earlier phases.
+      Answer 2 questions about time tracking.
+      Screenshot the second pain point conversation.
+
+      STEP 10 — SYNTHESIS PHASE
+      After completing pain point deep-dives, enter synthesis.
+      Verify the synthesis form asks strategic questions:
+        - Decision-making stakeholders
+        - Implementation timeline
+        - Budget considerations or constraints
+        - Additional strategic context
+      Fill in:
+        - Stakeholders: "Managing Partner, IT Director, Practice Manager"
+        - Timeline: "This Quarter"
+        - Context: "We have a technology committee meeting in 6 weeks where
+          I need to present a concrete automation roadmap with ROI justification."
+      Verify "Generate My Report" enables after required fields are complete.
+      Screenshot the completed synthesis form.
+
+      STEP 11 — WORKSHOP COMPLETION
+      Submit the synthesis.
+      Verify the completion experience:
+        - Professional success animation (subtle, not cartoonish)
+        - Clear "Workshop Complete" message
+        - Report generation status with pulse/progress animation
+        - Auto-navigation to report progress page
+      The ending should leave a senior professional feeling that their time
+      and money were well spent.
+      Screenshot the completion screen.
+
+  - name: "Professional Services Workshop - Milestone ROI Accuracy"
+    url: "http://localhost:5174/workshop"
+    priority: high
+    requires:
+      session: "Requires a paid professional services quiz session"
+    workflow: |
+      CONTEXT: Professional services buyers are numbers people. Testing that
+      the milestone ROI calculations are accurate, consistent, and credible.
+      Any mathematical error or unrealistic projection would destroy credibility.
+
+      STEP 1 — REACH FIRST MILESTONE
+      Navigate through welcome and confirmation phases quickly.
+      Enter the deep-dive and engage in conversation until a milestone appears.
+      Provide specific financial data during the conversation:
+        - "We have 30 professionals billing at average EUR 225/hour"
+        - "Each spends about 2 hours per week on manual time entry reconciliation"
+        - "Our utilization rate is 72% when it should be 80%"
+      Screenshot the conversation with financial data provided.
+
+      STEP 2 — VALIDATE ROI MATH
+      When the milestone appears, scrutinize the calculations:
+        - Current annual cost should be derived from the data provided
+          (e.g., 30 people × 2 hrs/week × EUR 225/hr × 52 weeks = EUR 702,000)
+        - Potential savings should be a reasonable percentage (40-70%, not 100%)
+        - The savings number must be less than the current cost
+        - Any ROI percentage must be mathematically consistent
+        - Methodology notes should explain the calculation clearly
+      Verify no placeholder numbers like "XX,XXX" or "TBD."
+      Verify currency is consistently EUR throughout.
+      Screenshot the ROI calculation in detail.
+
+      STEP 3 — VENDOR FIT ASSESSMENT
+      Verify recommended vendors make sense for the finding:
+        - Vendor names should be real, relevant professional services tools
+        - Fit ratings (high/medium/low) should be logically justified
+        - High-fit vendors should directly address the identified pain point
+        - No generic "AI tools" without specific relevance
+      Screenshot the vendor recommendations.
+
+      STEP 4 — DATA GAPS TRANSPARENCY
+      Verify the data gaps section is honest and useful:
+        - Lists what additional information would improve the estimate
+        - Gaps should be specific (not "more data needed" generically)
+        - Example: "Exact number of new matters per month" or
+          "Current spend on practice management software licensing"
+      The transparency should build trust, not undermine confidence.
+      Screenshot the data gaps section.
+
+  - name: "Professional Services Workshop - Mobile & Tablet Experience"
+    url: "http://localhost:5174/workshop"
+    priority: medium
+    requires:
+      session: "Requires a paid professional services quiz session"
+    workflow: |
+      CONTEXT: Partners often work from tablets in meetings or phones while
+      traveling. The workshop must be fully functional on non-desktop devices.
+
+      STEP 1 — TABLET VIEWPORT
+      Resize viewport to 768x1024 (iPad portrait).
+      Navigate to the workshop and enter the confirmation phase.
+      Verify cards display properly — single or two-column layout.
+      Touch targets should be generous (44px+ minimum).
+      Screenshot the tablet confirmation view.
+
+      STEP 2 — TABLET DEEP-DIVE
+      Enter the deep-dive phase.
+      Verify the chat interface is comfortable on tablet:
+        - Messages have adequate width and padding
+        - Input area is easily accessible
+        - Header information is readable
+        - No horizontal scrolling
+      Type a response and verify the experience.
+      Screenshot the tablet deep-dive.
+
+      STEP 3 — MOBILE VIEWPORT
+      Resize to 375x812 (iPhone portrait).
+      Verify the workshop adapts to mobile:
+        - Confirmation cards stack single-column
+        - Chat messages take full width with adequate padding
+        - Input area is easily accessible (not hidden behind keyboard)
+        - Phase indicators compress gracefully
+        - Pain point reordering still works on mobile
+      Screenshot the mobile workshop view.
+
+      STEP 4 — MOBILE CHAT INTERACTION
+      Type a response on mobile viewport.
+      Verify:
+        - Keyboard doesn't obscure the input
+        - Send button is accessible
+        - New messages auto-scroll into view
+        - Long messages wrap properly
+      Screenshot the mobile chat interaction.

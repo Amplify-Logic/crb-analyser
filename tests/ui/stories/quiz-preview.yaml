@@ -1,0 +1,47 @@
+stories:
+  - name: "Preview Report - Teaser Content"
+    url: "http://localhost:5174/quiz/preview"
+    priority: critical
+    requires:
+      session: "completed quiz session with score data"
+    workflow: |
+      Navigate to http://localhost:5174/quiz/preview
+      Verify the preview report page loads
+
+      Look for the AI Readiness Score display (a number between 0-100)
+      Verify the score is prominently displayed
+
+      Look for a "What You Told Us" or reflections section
+      Verify it contains information related to the quiz answers
+
+      Look for industry benchmarks with source citations
+      Verify benchmark data is displayed
+
+      Look for high-potential areas or opportunity highlights
+      Verify at least one opportunity or insight is shown
+
+  - name: "Preview Report - Upgrade CTA"
+    url: "http://localhost:5174/quiz/preview"
+    priority: critical
+    requires:
+      session: "completed quiz session"
+    workflow: |
+      Navigate to http://localhost:5174/quiz/preview
+      Verify the preview report page loads
+
+      Scroll through the entire page
+      Look for an upgrade/purchase call-to-action (e.g., "Get Full Report", "Unlock Recommendations", "Purchase")
+      Verify the CTA is visible and clickable
+      Verify the page does NOT show specific vendor recommendations (diagnostic only)
+
+  - name: "Preview Report - Workshop Preview"
+    url: "http://localhost:5174/quiz/preview"
+    priority: medium
+    requires:
+      session: "completed quiz session"
+    workflow: |
+      Navigate to http://localhost:5174/quiz/preview
+      Scroll down to find a workshop preview section
+
+      Verify workshop details are mentioned (90-minute session, deep-dive, etc.)
+      Verify pricing information is visible (EUR 147 for the full report package)

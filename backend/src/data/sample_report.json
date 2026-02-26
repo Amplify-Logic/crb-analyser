@@ -300,12 +300,27 @@
           ]
         },
         "connect_and_automate": {
-          "approach": "Build internal time capture using Microsoft Graph API + Claude API for activity-to-time-entry suggestions. The Graph API provides calendar, email, and document activity data; Claude classifies and suggests time entries. With AI coding tools, a developer can scaffold this integration in 2-3 weeks.",
-          "estimated_cost": {
-            "min": 4000,
-            "max": 10000
+          "approach": "Build internal time capture using Microsoft Graph API + Claude API for activity-to-time-entry suggestions. The Graph API provides calendar, email, and document activity data; Claude classifies and suggests time entries.",
+          "build_time": "2 weeks (solo) / 4 days (guided)",
+          "tools_used": ["Claude Code", "Microsoft Graph API", "Clio API"],
+          "mcp_servers": ["mcp-server-outlook"],
+          "monthly_cost": "EUR 100-150 (API usage)",
+          "diy_complexity": "moderate",
+          "automation_flow": {
+            "nodes": [
+              {"id": "n1", "label": "Outlook Calendar", "type": "existing_tool"},
+              {"id": "n2", "label": "Microsoft Graph API", "type": "existing_tool"},
+              {"id": "n3", "label": "Claude API", "type": "ai_layer"},
+              {"id": "n4", "label": "Clio", "type": "existing_tool"},
+              {"id": "n5", "label": "Time Entry Created", "type": "output"}
+            ],
+            "edges": [
+              {"from": "n1", "to": "n2", "label": "Calendar events"},
+              {"from": "n2", "to": "n3", "label": "Activity data"},
+              {"from": "n3", "to": "n4", "label": "Classified time entry"},
+              {"from": "n4", "to": "n5", "label": "Auto-saved"}
+            ]
           },
-          "implementation_weeks": 4,
           "pros": [
             "Fully customized to your workflow",
             "No ongoing per-user fees",
@@ -313,14 +328,14 @@
             "Graph API is extremely well-documented"
           ],
           "cons": [
-            "Needs a developer familiar with M365 APIs",
+            "Needs familiarity with M365 APIs",
             "Accuracy improves over time with tuning",
             "No vendor support"
           ]
         }
       },
       "our_recommendation": "connect_and_automate",
-      "recommendation_rationale": "Smokeball's automatic time capture is purpose-built for law firms and has proven ROI. The EUR 89/user/month pays for itself if each lawyer captures just 2 additional hours monthly. Their Clio integration means you keep your existing workflows.",
+      "recommendation_rationale": "Your firm already runs on Clio and Microsoft 365 — both have strong APIs. Connecting them with Claude API captures billable time automatically without adding per-user SaaS fees that compound across 18 fee earners. The moderate complexity is well within reach with guided implementation.",
       "roi_percentage": 329,
       "payback_months": 3,
       "assumptions": [
@@ -544,27 +559,38 @@
           ]
         },
         "connect_and_automate": {
-          "approach": "Build intake portal using Typeform (or Tally.so) + Zapier + Clio API for automatic contact creation and conflict checking. This is essentially a no-code build — Zapier handles the orchestration, Clio API handles the data. A developer can set this up in a week.",
-          "estimated_cost": {
-            "min": 1500,
-            "max": 4000
+          "approach": "Build intake portal using Typeform (or Tally.so) + Zapier + Clio API for automatic contact creation and conflict checking. Zapier handles orchestration, Clio API handles the data.",
+          "build_time": "1 week (solo) / 2 days (guided)",
+          "tools_used": ["Zapier", "Tally.so", "Clio API"],
+          "monthly_cost": "EUR 50-100 (Zapier + Tally)",
+          "prerequisite": "Requires Clio Grow or equivalent digital intake foundation",
+          "diy_complexity": "low",
+          "automation_flow": {
+            "nodes": [
+              {"id": "n1", "label": "Tally.so Form", "type": "new_tool"},
+              {"id": "n2", "label": "Zapier", "type": "existing_tool"},
+              {"id": "n3", "label": "Clio API", "type": "existing_tool"},
+              {"id": "n4", "label": "Contact + Conflict Check", "type": "output"}
+            ],
+            "edges": [
+              {"from": "n1", "to": "n2", "label": "Form submission"},
+              {"from": "n2", "to": "n3", "label": "Create contact"},
+              {"from": "n3", "to": "n4", "label": "Auto-check conflicts"}
+            ]
           },
-          "implementation_weeks": 2,
           "pros": [
             "Fully branded experience",
-            "Flexible workflow",
             "Low-code — mostly Zapier configuration",
-            "One-time cost vs ongoing SaaS subscription"
+            "One-time cost vs ongoing subscription"
           ],
           "cons": [
-            "Conflict check requires Clio API familiarity",
-            "Zapier has per-task pricing at scale",
-            "Less polished than Clio Grow's native UX"
+            "Requires Clio Grow to be set up first",
+            "Less polished than native Clio UX"
           ]
         }
       },
-      "our_recommendation": "connect_and_automate",
-      "recommendation_rationale": "Clio Grow is the natural choice since you're already on Clio Manage. Native integration means data flows automatically, conflict checking works against your existing client database, and there's no new system to learn.",
+      "our_recommendation": "targeted_upgrade",
+      "recommendation_rationale": "Your intake process is currently paper-based with no digital forms. You need a digital foundation first — Clio Grow provides native intake forms, conflict checking, and e-signature that integrates directly with your existing Clio Manage. Once this foundation is in place, you can wire AI automations on top.",
       "roi_percentage": 405,
       "payback_months": 4,
       "assumptions": [

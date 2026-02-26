@@ -16,7 +16,7 @@ export default function RefinerButton({ onClick, isOpen, hasUnread }: RefinerBut
       animate={{ opacity: 1, scale: 1 }}
       exit={{ opacity: 0, scale: 0.8 }}
       onClick={onClick}
-      className="fixed bottom-6 right-6 z-50 flex items-center gap-2 px-4 py-3 bg-primary-600 hover:bg-primary-700 text-white rounded-full shadow-lg transition-colors print:hidden"
+      className="fixed bottom-16 right-6 z-50 flex items-center gap-2 px-4 py-3 bg-primary-600 hover:bg-primary-700 text-white rounded-full shadow-lg transition-colors print:hidden"
       title="Ask your report"
     >
       <MessageCircle className="w-5 h-5" />

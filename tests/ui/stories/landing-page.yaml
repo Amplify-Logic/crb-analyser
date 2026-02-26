@@ -1,21 +1,42 @@
-name: Landing Page
-description: Test landing page loads and CTA works
-url: http://localhost:5174/
-priority: high
+stories:
+  - name: "Landing Page - Hero and CTA"
+    url: "http://localhost:5174/"
+    priority: critical
+    workflow: |
+      Navigate to http://localhost:5174/
+      Verify the page loads with the hero section visible
+      Verify the navigation bar is present with links
 
-steps:
-  - name: Load landing page
-    action: navigate to root URL
-    expect: Page loads, hero section visible
+      Look for the main call-to-action button (e.g., "Start Quiz", "Get Started", or similar)
+      Verify the CTA button is visible and prominently displayed
 
-  - name: Check CTA button
-    action: find main call-to-action button
-    expect: "Start Quiz" or similar CTA button visible
+      Scroll down to find industry cards (Professional Services, Dental, E-commerce)
+      Verify at least 2 industry-specific cards or sections are visible
 
-  - name: Click CTA
-    action: click the primary CTA button
-    expect: Navigates to /quiz page
+      Click the primary CTA button
+      Verify navigation to the /quiz page
 
-  - name: Check mobile nav
-    action: resize to 375px width
-    expect: Hamburger menu visible, content reflows
+  - name: "Landing Page - Industry Navigation"
+    url: "http://localhost:5174/"
+    priority: high
+    workflow: |
+      Navigate to http://localhost:5174/
+      Look for an industry-specific link or card (Professional Services, Dental, or E-commerce)
+      Click on one of the industry links/cards
+      Verify navigation to the industry-specific page (e.g., /professional-services, /dental, or /ecommerce)
+      Verify the industry page loads with relevant content and pain points
+      Navigate back to the landing page
+      Verify the landing page loads correctly again
+
+  - name: "Landing Page - Mobile Responsive"
+    url: "http://localhost:5174/"
+    priority: high
+    workflow: |
+      Navigate to http://localhost:5174/
+      Resize the viewport to 375px width and 812px height (iPhone size)
+      Verify the page content reflows properly for mobile
+      Verify a hamburger menu or mobile navigation control is visible
+      Verify the hero section is still readable and CTA button is visible
+      Verify no horizontal scrollbar appears
+      Resize back to 1440px width and 900px height
+      Verify desktop layout is restored

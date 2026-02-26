@@ -128,6 +128,7 @@ export default function PreviewReport() {
   const sessionId = searchParams.get('session_id') || sessionStorage.getItem('quizSessionId')
 
   const [isLoading, setIsLoading] = useState(true)
+  const [loadingTooLong, setLoadingTooLong] = useState(false)
   const [teaserData, setTeaserData] = useState<TeaserData | null>(null)
   const [companyName, setCompanyName] = useState('')
   const [error, setError] = useState<string | null>(null)
@@ -135,6 +136,16 @@ export default function PreviewReport() {
   useEffect(() => {
     generatePreview()
   }, [])
+
+  // Show retry option if loading takes too long
+  useEffect(() => {
+    if (!isLoading) {
+      setLoadingTooLong(false)
+      return
+    }
+    const timer = setTimeout(() => setLoadingTooLong(true), 30_000)
+    return () => clearTimeout(timer)
+  }, [isLoading])
 
   const generatePreview = async () => {
     try {
@@ -163,7 +174,7 @@ export default function PreviewReport() {
             quiz_answers: answers,
             interview_messages: messages,
           }, {
-            timeout: 60000,
+            timeout: 30000,
           })
           setTeaserData(data)
           if (data.company_name) setCompanyName(data.company_name)
@@ -182,7 +193,7 @@ export default function PreviewReport() {
             interview_answers: answers,
             interview_messages: messages,
           }, {
-            timeout: 60000,
+            timeout: 30000,
             retry: true,
           })
           setTeaserData(data)
@@ -238,7 +249,26 @@ export default function PreviewReport() {
             </div>
           </div>
           <h2 className="text-xl font-semibold text-gray-900 mb-2">Generating Your Insights...</h2>
-          <p className="text-gray-600">Analyzing your responses</p>
+          <p className="text-gray-600 mb-4">Analyzing your responses</p>
+          {loadingTooLong && (
+            <div className="space-y-3">
+              <p className="text-sm text-gray-500">This is taking longer than expected.</p>
+              <div className="flex gap-3 justify-center">
+                <button
+                  onClick={() => { setLoadingTooLong(false); generatePreview() }}
+                  className="px-4 py-2 bg-primary-600 text-white text-sm rounded-lg hover:bg-primary-700"
+                >
+                  Try Again
+                </button>
+                <button
+                  onClick={() => navigate(-1)}
+                  className="px-4 py-2 bg-gray-100 text-gray-700 text-sm rounded-lg hover:bg-gray-200"
+                >
+                  Go Back
+                </button>
+              </div>
+            </div>
+          )}
         </motion.div>
       </div>
     )

@@ -96,6 +96,7 @@ export default function Workshop() {
         // Resume existing workshop
         const workshopData = existingState.workshop_data || {}
 
+        const painPointLabels = workshopData.pain_point_labels || {}
         setState(prev => ({
           ...prev,
           companyName: existingState.company_name,
@@ -103,7 +104,7 @@ export default function Workshop() {
           currentPainPointIndex: workshopData.current_deep_dive_index || 0,
           painPoints: (workshopData.deep_dive_order || []).map((id: string, i: number) => ({
             id,
-            label: `Pain Point ${i + 1}`,
+            label: painPointLabels[id] || `Pain Point ${i + 1}`,
           })),
         }))
 

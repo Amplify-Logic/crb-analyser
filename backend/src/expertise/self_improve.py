@@ -259,24 +259,124 @@ class SelfImproveService:
         return updates
 
     def _update_vendor_expertise(self, record: AnalysisRecord) -> Dict[str, Any]:
-        """Update vendor expertise based on recommendations."""
+        """Update vendor expertise based on recommendations.
+
+        Extracts vendor context from recommendations to learn:
+        - Which vendors are recommended for which pain points
+        - Which company sizes each vendor fits
+        - Which industries each vendor serves
+        - Category insights for vendor selection
+        """
         expertise = self.store.get_vendor_expertise()
-        updates = {"vendors_updated": 0}
+        updates = {"vendors_updated": 0, "categories_updated": 0}
 
-        expertise.total_recommendations += len(record.vendors_recommended)
+        # Build a map of vendor → recommendation context from the full recommendations
+        vendor_contexts: Dict[str, Dict[str, Any]] = {}
+        for rec in record.recommendations_made:
+            rec_vendors = rec.get("vendors", [])
+            rec_title = rec.get("title", "")
+            rec_type = rec.get("type", "")
+            rec_priority = rec.get("priority", "")
 
+            for v in rec_vendors:
+                if isinstance(v, dict):
+                    name = v.get("name", "")
+                    slug = v.get("slug", name.lower().replace(" ", "-"))
+                    category = v.get("category", rec_type)
+                else:
+                    name = str(v)
+                    slug = name.lower().replace(" ", "-")
+                    category = rec_type
+
+                if not name:
+                    continue
+
+                if slug not in vendor_contexts:
+                    vendor_contexts[slug] = {
+                        "name": name,
+                        "use_cases": [],
+                        "categories": set(),
+                        "priority": rec_priority,
+                    }
+
+                vendor_contexts[slug]["use_cases"].append(rec_title)
+                if category:
+                    vendor_contexts[slug]["categories"].add(category)
+
+        # Also capture bare vendor names from vendors_recommended
         for vendor_name in record.vendors_recommended:
-            if vendor_name not in expertise.vendors:
-                expertise.vendors[vendor_name] = VendorFit(vendor_name=vendor_name)
+            slug = vendor_name.lower().replace(" ", "-")
+            if slug not in vendor_contexts:
+                vendor_contexts[slug] = {
+                    "name": vendor_name,
+                    "use_cases": [],
+                    "categories": set(),
+                    "priority": "",
+                }
 
-            vendor = expertise.vendors[vendor_name]
+        expertise.total_recommendations += len(vendor_contexts)
+
+        for slug, ctx in vendor_contexts.items():
+            vendor_name = ctx["name"]
+
+            # Use slug as key for consistency
+            if slug not in expertise.vendors:
+                expertise.vendors[slug] = VendorFit(vendor_name=vendor_name)
+
+            vendor = expertise.vendors[slug]
             vendor.recommendation_count += 1
 
             # Track company size fit
             if record.company_size and record.company_size not in vendor.company_size_fit:
                 vendor.company_size_fit.append(record.company_size)
 
+            # Track use cases (what this vendor is good for)
+            for use_case in ctx["use_cases"]:
+                if use_case and use_case not in vendor.good_for:
+                    vendor.good_for.append(use_case)
+                    # Keep bounded
+                    if len(vendor.good_for) > 20:
+                        vendor.good_for = vendor.good_for[-20:]
+
+            # Add industry note
+            industry_note = f"Recommended for {record.industry} ({record.company_size})"
+            if industry_note not in vendor.notes:
+                vendor.notes.append(industry_note)
+                if len(vendor.notes) > 10:
+                    vendor.notes = vendor.notes[-10:]
+
             updates["vendors_updated"] += 1
+
+        # Update category insights
+        for slug, ctx in vendor_contexts.items():
+            for category in ctx["categories"]:
+                if not category:
+                    continue
+                cat_key = f"{category}_{record.industry}"
+                if cat_key not in expertise.category_insights:
+                    expertise.category_insights[cat_key] = []
+
+                insight = f"{ctx['name']} recommended for {record.company_size} companies"
+                if insight not in expertise.category_insights[cat_key]:
+                    expertise.category_insights[cat_key].append(insight)
+                    # Keep bounded
+                    if len(expertise.category_insights[cat_key]) > 20:
+                        expertise.category_insights[cat_key] = expertise.category_insights[cat_key][-20:]
+                    updates["categories_updated"] += 1
+
+        # Track pain point → vendor mapping via recommendations
+        for rec in record.recommendations_made:
+            rec_vendors = rec.get("vendors", [])
+            rec_title = rec.get("title", "")
+            for pp in record.pain_points_found:
+                if pp.lower() in rec_title.lower():
+                    for v in rec_vendors:
+                        v_name = v.get("name", v) if isinstance(v, dict) else str(v)
+                        v_slug = v_name.lower().replace(" ", "-")
+                        if v_slug in expertise.vendors:
+                            vendor = expertise.vendors[v_slug]
+                            if pp not in vendor.good_for:
+                                vendor.good_for.append(pp)
 
         self.store.save_vendor_expertise(expertise)
         return updates

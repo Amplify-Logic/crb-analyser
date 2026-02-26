@@ -34,6 +34,7 @@ export interface SidebarProps {
   playbookPhases: PlaybookPhase[]
   activeItem: SidebarItem
   onItemClick: (item: SidebarItem) => void
+  className?: string
 }
 
 interface SectionState {
@@ -70,6 +71,7 @@ export function Sidebar({
   playbookPhases,
   activeItem,
   onItemClick,
+  className = '',
 }: SidebarProps) {
   const [expanded, setExpanded] = useState<SectionState>({
     overview: true,
@@ -96,7 +98,7 @@ export function Sidebar({
   }
 
   return (
-    <aside className="w-[280px] h-full border-r border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 flex flex-col overflow-hidden">
+    <aside className={`w-[280px] h-full border-r border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 flex flex-col overflow-hidden ${className}`}>
       {/* Header */}
       <div className="p-4 border-b border-gray-200 dark:border-gray-700">
         <h2 className="font-semibold text-gray-900 dark:text-white truncate">
@@ -117,7 +119,10 @@ export function Sidebar({
         {/* Overview Section */}
         <div className="mb-2">
           <button
-            onClick={() => toggleSection('overview')}
+            onClick={() => {
+              onItemClick({ type: 'overview', id: null })
+              if (!expanded.overview) toggleSection('overview')
+            }}
             className="w-full flex items-center justify-between px-2 py-1.5 text-sm font-medium text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white"
           >
             <span className="flex items-center gap-1">

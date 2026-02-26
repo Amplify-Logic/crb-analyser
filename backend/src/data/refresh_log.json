@@ -1,0 +1,21 @@
+{
+  "entries": [
+    {
+      "timestamp": "2026-02-26T19:08:56.568344",
+      "overall_health": "critical",
+      "auto_actions_count": 4,
+      "vendor_stale": 13,
+      "vendor_refreshed": 13,
+      "kb_health": "aging",
+      "expertise_health": {
+        "dental": "growing",
+        "ecommerce": "low_confidence",
+        "general": "incomplete",
+        "home-services": "incomplete",
+        "marketing-agencies": "incomplete",
+        "professional-services": "low_confidence"
+      }
+    }
+  ],
+  "last_run": "2026-02-26T19:08:56.568344"
+}

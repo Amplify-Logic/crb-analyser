@@ -197,21 +197,32 @@ export default function AIReadinessGauge({
   const [currentScore, setCurrentScore] = useState(0)
 
   useEffect(() => {
+    // Reset animation state on mount so re-renders animate from 0
+    setIsVisible(false)
+    setCurrentScore(0)
+
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting) {
           setIsVisible(true)
         }
       },
-      { threshold: 0.3 }
+      { threshold: 0.1 }
     )
 
     if (containerRef.current) {
       observer.observe(containerRef.current)
     }
 
-    return () => observer.disconnect()
-  }, [])
+    const fallbackTimeout = setTimeout(() => {
+      setIsVisible(true)
+    }, 500)
+
+    return () => {
+      observer.disconnect()
+      clearTimeout(fallbackTimeout)
+    }
+  }, [score])
 
   useEffect(() => {
     if (isVisible && animated) {
@@ -270,7 +281,7 @@ export default function AIReadinessGauge({
   }, [showBreakdown])
 
   return (
-    <div ref={containerRef} className="flex flex-col items-center relative">
+    <div ref={containerRef} className="flex flex-col items-center relative max-w-full">
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}

@@ -1,0 +1,232 @@
+stories:
+  - name: "Dental Practice Quiz - Full Professional Flow"
+    url: "http://localhost:5174/quiz?industry=dental&new=true"
+    priority: critical
+    workflow: |
+      CONTEXT: You are evaluating the quiz experience as a dental practice owner
+      considering AI automation. The entire flow must feel like a premium,
+      white-glove consultation — not a generic survey. Every screen must be
+      polished, responsive, and confidence-inspiring.
+
+      QUALITY STANDARD: This should feel indistinguishable from a $500/hr
+      consulting firm's intake process. No placeholder text, no broken layouts,
+      no janky transitions. Every element must earn its place on screen.
+
+      STEP 1 — LANDING & FIRST IMPRESSION
+      Navigate to the quiz URL with industry=dental parameter.
+      Verify the page loads within 3 seconds with no layout shift or flash of unstyled content.
+      The page should feel premium — clean typography, professional color palette, no visual clutter.
+      Check that the website/company input field is prominently displayed with clear instructions.
+      The input should have appropriate placeholder text guiding the user.
+      There should be a clear call-to-action button (e.g. "Start Research" or similar).
+      Screenshot the initial quiz landing state.
+
+      STEP 2 — ENTER DENTAL PRACTICE WEBSITE
+      Enter "www.brightsmiledental.com" in the company website field.
+      Verify the input accepts the URL and the submit/research button becomes enabled.
+      The button should have a clear hover state and feel clickable.
+      No validation errors should appear for a properly formatted URL.
+      Screenshot the filled-in state before submission.
+
+      STEP 3 — RESEARCH ANIMATION & PROGRESS
+      Click the research/submit button to begin automated company research.
+      Verify an engaging research animation begins — this should NOT be a boring spinner.
+      Expect to see a multi-step progress visualization showing research stages:
+        - Website scanning
+        - LinkedIn/social research
+        - News and updates
+        - Tech stack analysis
+        - Question generation
+      Each stage should have visual feedback (progress bar, animated icons, or step indicators).
+      The company name should appear prominently during research.
+      The animation should feel alive — smooth transitions, not jerky or frozen.
+      Wait for research to complete (may take 15-30 seconds).
+      Screenshot the research progress at least once mid-way through.
+
+      STEP 4 — RESEARCH FINDINGS DISPLAY
+      After research completes, verify a findings/results screen appears.
+      The findings should display extracted company information in an organized, scannable layout.
+      Check for confidence indicators (high/medium/low) on each finding — these should be
+      visually distinct with color coding or badges.
+      Verify the data shown is contextual and dental-practice relevant.
+      Unknown or missing data should NOT show as "unknown" or empty fields — they should
+      be gracefully hidden or shown as "To be explored in workshop."
+      The overall knowledge score should be displayed clearly.
+      There should be a clear "Continue" or "Next" action to proceed.
+      Screenshot the findings display.
+
+      STEP 5 — SOFTWARE STACK SELECTION
+      Proceed to the existing software/stack selection phase.
+      Verify dental-specific software options appear (e.g. Dentrix, Open Dental,
+      Curve Dental, Weave, RevenueWell, Pearl AI, or similar practice management tools).
+      The software selection should feel curated for dentistry, not generic.
+      Each software option should have a recognizable name and possibly an icon or category.
+      Select 2-3 relevant dental tools (click/tap the options).
+      Verify selected items are clearly highlighted with a distinct selected state.
+      Check that there is an option to add custom software not in the list.
+      Screenshot the software selection with choices made.
+
+      STEP 6 — ADAPTIVE QUESTIONS (FIRST QUESTION)
+      Proceed to the adaptive question phase.
+      Verify the first question appears with clear, professional copy.
+      The question should be contextually relevant — referencing dental practice
+      operations, patient management, or clinical workflows.
+      Check that the input type matches the question (radio buttons for single-select,
+      checkboxes for multi-select, text area for open-ended, or scale for ratings).
+      Progress indication should show where the user is in the question sequence.
+      The layout should be clean with adequate whitespace — not cramped or overwhelming.
+      Screenshot the first question.
+
+      STEP 7 — ANSWER AND PROGRESS THROUGH QUESTIONS
+      Answer the first question with a realistic dental practice response.
+      For select questions, choose a relevant option.
+      For text questions, type a thoughtful 1-2 sentence answer about dental operations.
+      For scale questions, select a mid-to-high rating.
+      Click "Next" to advance.
+      Verify smooth transition to the next question — no page reload, no flicker.
+      The progress indicator should update to reflect advancement.
+      Answer 2-3 more questions, verifying each:
+        - Has professional, dental-relevant copy
+        - Uses appropriate input types
+        - Transitions smoothly
+        - Shows updated progress
+      Screenshot after answering at least 3 questions showing progress.
+
+      STEP 8 — FINAL QUESTION & TRANSITION
+      Continue through remaining questions until reaching the end of the question phase.
+      On the final question, verify there is clear indication this is the last question
+      or that the "Next" button changes to something like "See Results" or "Continue."
+      Answer the final question.
+      Verify a smooth transition to the next phase (pricing or preview).
+      Screenshot the transition moment.
+
+      STEP 9 — PRICING / CHECKOUT PREVIEW
+      Verify the pricing page displays clearly:
+        - EUR 147 price point prominently displayed
+        - Clear description of what's included (Quiz + 90-min Workshop + Report)
+        - Professional layout with trust indicators
+        - Call-to-action button that feels confident and premium
+      The pricing should feel like a value proposition, not a paywall.
+      No broken formatting, no missing currency symbols, no placeholder prices.
+      Screenshot the pricing/checkout preview.
+
+      STEP 10 — OVERALL QUALITY AUDIT
+      Scroll back through the quiz if possible, or reflect on the full experience:
+        - Was every transition smooth?
+        - Was the copy professional and dental-specific throughout?
+        - Were there any moments of confusion about what to do next?
+        - Did the research animation feel engaging rather than tedious?
+        - Was the software selection relevant to dental practices?
+        - Did questions feel adaptive and intelligent, not generic?
+      Note any quality issues found.
+      Screenshot the final state.
+
+  - name: "Dental Quiz - Mobile Responsive Excellence"
+    url: "http://localhost:5174/quiz?industry=dental&new=true"
+    priority: high
+    workflow: |
+      CONTEXT: Testing the quiz experience on mobile viewport (375x812, iPhone-sized).
+      Many dental practice owners will access this on their phone during a break.
+      The experience must be flawless on mobile — not just "functional" but genuinely
+      excellent. Touch targets must be generous, text must be readable, and the flow
+      must feel native-app quality.
+
+      STEP 1 — MOBILE VIEWPORT SETUP
+      Resize the browser viewport to 375x812 (mobile portrait).
+      Navigate to the quiz URL with industry=dental.
+      Verify the layout adapts properly — no horizontal scrolling, no overlapping elements.
+      Text should be readable without zooming.
+      The website input field should be full-width and easy to tap.
+      The CTA button should be thumb-reachable (bottom half of screen preferred).
+      Screenshot the mobile landing state.
+
+      STEP 2 — MOBILE INPUT EXPERIENCE
+      Enter "www.brightsmiledental.com" in the website field.
+      Verify the input field is large enough for comfortable typing.
+      The submit button should be clearly visible and not hidden behind a keyboard.
+      Screenshot the filled input on mobile.
+
+      STEP 3 — MOBILE RESEARCH ANIMATION
+      Submit to begin research.
+      Verify the progress animation works well on mobile — not truncated, not overflowing.
+      Progress steps should stack vertically if needed, remaining scannable.
+      Wait for research to complete.
+      Screenshot the research progress on mobile.
+
+      STEP 4 — MOBILE FINDINGS LAYOUT
+      Verify findings display properly on mobile:
+        - Cards or data sections stack vertically
+        - Confidence badges are visible and not cut off
+        - Knowledge score is prominent
+        - No text overflow or horizontal scrolling
+      Screenshot the findings on mobile.
+
+      STEP 5 — MOBILE SOFTWARE SELECTION
+      Navigate to software selection.
+      Verify software options are easily tappable (minimum 44px touch targets).
+      Selected state should be clearly visible on mobile (not just a subtle border change).
+      Select 2 dental tools.
+      Screenshot the selection on mobile.
+
+      STEP 6 — MOBILE QUESTIONS
+      Proceed through at least 2 questions on mobile:
+        - Radio/checkbox options should be easily tappable
+        - Text areas should be comfortable to type in
+        - Navigation buttons (Next/Previous) should be clearly visible
+        - Progress indicator should fit the mobile width
+      Screenshot a question on mobile.
+
+      STEP 7 — MOBILE PRICING
+      Navigate to pricing phase.
+      Verify pricing displays cleanly on mobile:
+        - Price is prominent and readable
+        - Description text is not cramped
+        - CTA button is full-width or nearly so
+        - No cut-off content
+      Screenshot the mobile pricing view.
+
+  - name: "Dental Quiz - Empty State & Validation Handling"
+    url: "http://localhost:5174/quiz?industry=dental&new=true"
+    priority: high
+    workflow: |
+      CONTEXT: Testing error handling and edge cases. A professional experience
+      handles errors gracefully — no raw error messages, no confusing states,
+      no dead ends. Every error should guide the user toward the right action.
+
+      STEP 1 — EMPTY SUBMISSION ATTEMPT
+      Navigate to the quiz URL.
+      Without entering anything, try to click the submit/research button.
+      Verify the button is either disabled (grayed out, not clickable) or shows
+      a helpful validation message when clicked.
+      The validation message should be friendly and clear (e.g., "Please enter your
+      company website to get started"), NOT a raw form error.
+      Screenshot the validation state.
+
+      STEP 2 — INVALID URL FORMAT
+      Enter "not-a-url" in the website field.
+      Try to submit.
+      Verify appropriate validation feedback appears.
+      The error should be inline (near the input), not a browser alert or console error.
+      Screenshot the invalid URL feedback.
+
+      STEP 3 — VERY SHORT INPUT
+      Clear the field and enter just "ab".
+      Verify the submit button remains disabled or shows validation.
+      The minimum length requirement should be communicated clearly.
+      Screenshot this state.
+
+      STEP 4 — VALID URL RECOVERY
+      Now enter a valid URL: "www.brightsmiledental.com"
+      Verify validation errors clear immediately and the submit button enables.
+      The transition from error state to valid state should be smooth.
+      Screenshot the recovered valid state.
+
+      STEP 5 — BROWSER BACK BEHAVIOR
+      Submit the URL and wait for research to begin.
+      Press the browser back button.
+      Verify the app handles this gracefully — either:
+        - Returns to the input with the URL preserved
+        - Shows a confirmation dialog before leaving
+        - Maintains research state if navigating back
+      The user should NOT lose their progress or see a blank/broken page.
+      Screenshot the back-button state.

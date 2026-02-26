@@ -1,0 +1,198 @@
+stories:
+  - name: "Professional Services Quiz - Full Consultant-Grade Flow"
+    url: "http://localhost:5174/quiz?industry=professional-services&new=true"
+    priority: critical
+    workflow: |
+      CONTEXT: You are evaluating the quiz as a managing partner at a mid-size
+      professional services firm (accounting, legal, consulting). These buyers are
+      sophisticated, detail-oriented, and skeptical. They've seen bad consulting
+      before. The quiz must exude competence, substance, and gravitas — proving
+      immediately that this is a serious analytical tool, not a marketing gimmick.
+
+      QUALITY STANDARD: This should feel like the digital equivalent of walking
+      into McKinsey's office. Clean, authoritative, data-rich. Every word should
+      be chosen with care. Every interaction should feel precise and intentional.
+
+      STEP 1 — AUTHORITATIVE FIRST IMPRESSION
+      Navigate to the quiz URL with industry=professional-services parameter.
+      Verify the page loads cleanly within 3 seconds.
+      The design should convey authority — professional typography, restrained color use,
+      generous whitespace. Think: sophisticated, not flashy.
+      The website input should be clearly labeled and easy to find.
+      Any copy on the page should be precise and business-appropriate.
+      No marketing hyperbole, no "revolutionary" or "game-changing" language.
+      Screenshot the initial professional services quiz view.
+
+      STEP 2 — ENTER PROFESSIONAL SERVICES FIRM WEBSITE
+      Enter "www.harbourpartners.com" in the company website field.
+      Verify the input field is well-sized and professional-looking.
+      The submit/research button should have clear, action-oriented text.
+      Verify no visual bugs — field alignment, button positioning, font rendering.
+      Screenshot the pre-submission state.
+
+      STEP 3 — RESEARCH PHASE — BUILDING CONFIDENCE
+      Click to begin research.
+      Verify the research animation communicates thoroughness, not just speed:
+        - Website analysis
+        - Professional network research (LinkedIn)
+        - Industry news and positioning
+        - Technology infrastructure analysis
+        - Intelligent question preparation
+      For a professional services audience, the research phase should feel
+      analytical and methodical. Each step should have clear, professional labels.
+      No childish animations or excessive motion.
+      Wait for research to complete.
+      Screenshot the research in progress.
+
+      STEP 4 — RESEARCH FINDINGS — DEPTH & CREDIBILITY
+      Verify findings are displayed with professional gravitas:
+        - Company description should be accurate and well-formatted
+        - Industry classification should be specific (not just "professional services")
+        - Team size, revenue indicators, and service lines should be extracted
+        - Technology stack and existing tools should be identified
+      Confidence indicators should use professional language (not emoji or stars).
+      The layout should feel like a briefing document — organized, hierarchical, scannable.
+      Missing data should be labeled "To be explored in workshop" or similar — never
+      showing empty fields or "N/A."
+      Screenshot the findings display.
+
+      STEP 5 — PROFESSIONAL SERVICES SOFTWARE STACK
+      Navigate to software selection.
+      Verify professional services specific tools appear:
+        - Practice management: Clio, Karbon, Practice Ignition
+        - Time tracking: Harvest, Toggl, Clockify
+        - Document management: SharePoint, DocuSign, iManage
+        - Automation: n8n, Zapier, Make
+        - AI: Claude, ChatGPT, Copilot
+      Tools should be organized by category or function.
+      Select 3-4 relevant tools.
+      Verify selections are clearly indicated with professional visual feedback.
+      Screenshot the curated software selection.
+
+      STEP 6 — QUESTIONS — CONSULTING-QUALITY INQUIRY
+      Proceed to the adaptive question phase.
+      Verify questions are relevant to professional services operations:
+        - Client onboarding efficiency
+        - Time tracking and billing accuracy
+        - Document management workflows
+        - Client communication patterns
+        - Resource utilization and staffing
+        - Knowledge management
+      The question copy should use professional services vocabulary naturally:
+        billable hours, utilization rate, matter management, client intake, etc.
+      Questions should feel like they were written by someone who understands
+      the professional services industry intimately.
+      Screenshot the first question.
+
+      STEP 7 — THOUGHTFUL RESPONSE FLOW
+      Answer questions with realistic professional services responses:
+        - For time tracking: "We lose about 10-15% of billable time due to
+          inconsistent time entry. Partners are the worst offenders."
+        - For client onboarding: select a multi-step process option
+        - For document management: indicate pain with version control
+        - For team size: select mid-market range (20-50 professionals)
+      Progress through at least 5 questions, verifying:
+        - Each question builds on context from prior answers
+        - The progression feels like a structured intake interview
+        - No generic or irrelevant questions appear
+        - Input types are appropriate (text for nuanced answers, scales for ratings)
+      Screenshot progress at question 3 and question 5.
+
+      STEP 8 — TRANSITION TO PRICING
+      Complete all questions and reach the pricing phase.
+      Verify pricing presentation is appropriate for a professional services buyer:
+        - EUR 147 displayed with clear formatting
+        - Value proposition framed in terms professionals understand
+          (ROI, time savings, competitive advantage, not "cool AI features")
+        - Deliverables clearly listed with professional language
+        - Trust indicators (methodology, expertise, confidentiality)
+      The pricing should feel like an investment in insight, not a product purchase.
+      Screenshot the pricing page.
+
+      STEP 9 — OVERALL PROFESSIONAL POLISH AUDIT
+      Evaluate the entire experience through the eyes of a skeptical managing partner:
+        - Was the language consistently professional throughout?
+        - Did any screen feel generic or template-like?
+        - Were the questions genuinely insightful for professional services?
+        - Did the software options show real industry knowledge?
+        - Was the research phase substantive, not just theatrical?
+        - Would a partner at a top firm find this credible?
+      Document any issues with professionalism, relevance, or polish.
+      Screenshot the final state.
+
+  - name: "Professional Services Quiz - Data Preservation & Session Recovery"
+    url: "http://localhost:5174/quiz?industry=professional-services&new=true"
+    priority: high
+    workflow: |
+      CONTEXT: Professional services users are busy and may get interrupted during
+      the quiz. Testing that progress is preserved and the experience handles
+      interruptions gracefully — as a premium tool should.
+
+      STEP 1 — BEGIN AND PROGRESS
+      Navigate to the quiz URL.
+      Enter "www.harbourpartners.com" and submit.
+      Wait for research to complete.
+      Progress through findings and software selection.
+      Answer the first 2 questions.
+      Screenshot showing progress through 2 questions.
+
+      STEP 2 — SIMULATE INTERRUPTION
+      Reload the page (browser refresh).
+      Verify the quiz state is preserved:
+        - The user should NOT start from scratch
+        - Answers should be restored
+        - Current position in the quiz should be maintained
+        - Any selected software should still be selected
+      The recovery should be seamless — no "session expired" errors.
+      Screenshot the recovered state after reload.
+
+      STEP 3 — CONTINUE FROM RECOVERED STATE
+      Continue answering questions from where the user left off.
+      Verify the quiz continues smoothly without duplicate questions
+      or lost context.
+      Progress through 2 more questions.
+      Screenshot showing continued progress post-recovery.
+
+      STEP 4 — NAVIGATE BACKWARDS
+      Use the "Previous" button to go back through answered questions.
+      Verify all prior answers are preserved and displayed correctly.
+      Each previous question should show the exact answer that was given.
+      Go back to question 1, then forward to the latest question.
+      Screenshot showing answer preservation during navigation.
+
+  - name: "Professional Services Quiz - Accessibility Baseline"
+    url: "http://localhost:5174/quiz?industry=professional-services&new=true"
+    priority: medium
+    workflow: |
+      CONTEXT: Professional services firms serve diverse clients. The quiz must
+      be accessible and usable for all users, including those using keyboard
+      navigation or screen readers.
+
+      STEP 1 — KEYBOARD NAVIGATION
+      Navigate to the quiz URL.
+      Use Tab key to navigate between elements.
+      Verify focus states are clearly visible — highlighted borders, outlines, or rings.
+      Focus should follow a logical order: input field → submit button.
+      Screenshot showing a focused element.
+
+      STEP 2 — CONTRAST AND READABILITY
+      Verify all text has sufficient contrast against backgrounds.
+      Body text should be at minimum 16px equivalent.
+      Headings should have clear hierarchy (larger/bolder for H1, progressively smaller).
+      No text is placed on busy backgrounds without adequate contrast treatment.
+      Screenshot the main quiz view showing typography.
+
+      STEP 3 — FORM LABELS AND INSTRUCTIONS
+      Enter the website URL and proceed to questions.
+      Verify each form element has a visible label or clear instructions.
+      Error messages are associated with their respective inputs.
+      Required fields are clearly indicated.
+      Screenshot a question with its label and any instructions.
+
+      STEP 4 — NO MOTION SENSITIVITY ISSUES
+      Verify animations are not excessive or disorienting:
+        - No rapid flashing
+        - Transitions are smooth, not jarring
+        - Loading animations don't move too fast
+      The research animation should be visually engaging without being overwhelming.
+      Screenshot during an animation.

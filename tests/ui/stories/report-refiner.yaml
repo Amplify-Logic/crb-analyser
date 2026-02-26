@@ -1,0 +1,36 @@
+stories:
+  - name: "Report Refiner - Button Visible"
+    url: "http://localhost:5174/report/{report_id}"
+    priority: high
+    requires:
+      report_id: "a valid report ID"
+    workflow: |
+      Navigate to the report URL
+      Wait for the report to fully load
+
+      Look for a "Refine" or "Refiner" button (typically floating or in the sidebar)
+      Verify the refiner button is visible and clickable
+
+      Click the refiner button
+      Verify a side panel or modal opens with a chat interface
+      Verify a message input field is present
+
+  - name: "Report Refiner - Chat Interface"
+    url: "http://localhost:5174/report/{report_id}"
+    priority: medium
+    requires:
+      report_id: "a valid report ID"
+    workflow: |
+      Navigate to the report URL
+      Wait for the report to fully load
+
+      Open the refiner (click the refiner button)
+      Verify the chat interface loads
+
+      Look for a message input field
+      Type "Can you explain the top recommendation?" in the message input
+      Verify the text appears in the input field
+
+      Note: Do NOT submit the message (would make an API call)
+      Instead verify the send button is present and enabled
+      Verify any existing message history is displayed if present

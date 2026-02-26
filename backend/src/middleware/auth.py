@@ -160,13 +160,42 @@ async def require_workspace(
 
 
 async def require_admin(
-    user: CurrentUser = Depends(get_current_user)
+    request: Request,
+    credentials: Optional[HTTPAuthorizationCredentials] = Depends(security),
 ) -> CurrentUser:
     """
     Require user to have admin role.
 
-    Use for admin-only routes.
+    In development mode, bypasses auth entirely and returns a dev admin user.
+    In production, requires a valid JWT with role='admin'.
     """
+    if settings.is_development:
+        # Dev bypass: try to get real user, but fall back to dev admin
+        token = get_token_from_request(request, credentials)
+        if not token:
+            logger.info("Dev mode: admin bypass active (no token)")
+            return CurrentUser(
+                id="dev-admin",
+                email="dev@localhost",
+                workspace_id="dev-workspace",
+                role="admin",
+            )
+        # Token present — validate normally but grant admin regardless
+        try:
+            user = await get_current_user(request, credentials)
+            user.role = "admin"
+            return user
+        except HTTPException:
+            logger.info("Dev mode: admin bypass active (invalid token)")
+            return CurrentUser(
+                id="dev-admin",
+                email="dev@localhost",
+                workspace_id="dev-workspace",
+                role="admin",
+            )
+
+    # Production: strict admin check
+    user = await get_current_user(request, credentials)
     if user.role != "admin":
         raise HTTPException(
             status_code=status.HTTP_403_FORBIDDEN,

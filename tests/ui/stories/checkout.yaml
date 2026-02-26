@@ -1,19 +1,49 @@
-name: Checkout Flow
-description: Test payment flow UI (not actual payment)
-url: http://localhost:5174/checkout/{session_id}
-priority: critical
-requires:
-  session_id: "a completed quiz session ID"
+stories:
+  - name: "Checkout - Pricing Display"
+    url: "http://localhost:5174/checkout"
+    priority: critical
+    requires:
+      session_id: "a completed quiz session (pass as query param or in URL)"
+    workflow: |
+      Navigate to the checkout page
+      Verify the page loads with pricing information visible
 
-steps:
-  - name: Load checkout page
-    action: navigate to checkout URL
-    expect: Price displayed (EUR 147), order summary visible
+      Look for the AI Report tier priced at EUR 147
+      Verify the price is clearly displayed
+      Verify a description of what's included is shown (quiz + workshop + report)
 
-  - name: Verify pricing
-    action: check displayed price
-    expect: EUR 147 shown, no other hidden fees
+      Look for a second tier option (Human-Guided at EUR 497) if available
+      Verify tier comparison information is present
 
-  - name: Check Stripe elements
-    action: look for Stripe payment form
-    expect: Card input fields visible (Stripe Elements loaded)
+  - name: "Checkout - Email Capture and Payment"
+    url: "http://localhost:5174/checkout"
+    priority: critical
+    requires:
+      session_id: "a completed quiz session"
+    workflow: |
+      Navigate to the checkout page
+      Verify the page loads
+
+      Look for an email input field
+      Fill the email field with "test@example.com"
+
+      Look for a payment/continue button
+      Verify the button is clickable
+
+      Note: Do NOT actually click the payment button (would trigger Stripe)
+      Instead verify the button text references payment (e.g., "Pay", "Continue to Payment", "Purchase")
+
+  - name: "Checkout Success - Payment Verification"
+    url: "http://localhost:5174/checkout/success"
+    priority: high
+    requires:
+      session_id: "a paid quiz session ID (pass as query param)"
+    workflow: |
+      Navigate to the checkout success page
+      Verify a loading/verification state appears (polling for payment confirmation)
+
+      Wait for verification to complete or timeout
+      Verify either:
+      - A success message appears with the company name and next steps, or
+      - A "still verifying" state with a spinner, or
+      - An error state if no valid session

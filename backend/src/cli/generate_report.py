@@ -1,18 +1,25 @@
 """
 CRB Report Generator CLI
 
-Generate full CRB reports for real e-commerce businesses.
+Generate full CRB reports for testing across industries.
 
 Usage:
-    # Single report from seed (random pick from tier)
+    # Single report by industry (random seed)
+    python -m src.cli.generate_report --industry dental
+    python -m src.cli.generate_report --industry ecommerce --tier mid
+    python -m src.cli.generate_report --industry professional-services
+
+    # Default: ecommerce (backward compatible)
     python -m src.cli.generate_report --tier small
 
-    # Single report from URL
+    # Single report from URL (ecommerce only)
     python -m src.cli.generate_report --url https://store.com --country NL --staff 1-10
 
-    # Batch mode
-    python -m src.cli.generate_report --batch --count 10
-    python -m src.cli.generate_report --batch --tier mid --count 5
+    # Batch: one per industry
+    python -m src.cli.generate_report --batch --all-industries
+
+    # Batch: multiple from one industry
+    python -m src.cli.generate_report --batch --industry dental --count 3
 """
 
 import argparse
@@ -23,7 +30,7 @@ import random
 import sys
 import time
 from pathlib import Path
-from typing import Any, Dict, Optional
+from typing import Any, Dict, List, Optional
 
 from dotenv import load_dotenv
 load_dotenv()  # Must be before src.* imports
@@ -37,12 +44,23 @@ logger = logging.getLogger(__name__)
 
 SEEDS_DIR = Path(__file__).parent / "seeds"
 
+SUPPORTED_INDUSTRIES = ["ecommerce", "dental", "professional-services"]
 
-def load_seeds() -> Dict[str, Any]:
-    """Load e-commerce seed list."""
-    seeds_file = SEEDS_DIR / "ecommerce.json"
+
+def load_seeds(industry: str = "ecommerce") -> Dict[str, Any]:
+    """Load seed list for a given industry."""
+    seeds_file = SEEDS_DIR / f"{industry}.json"
+    if not seeds_file.exists():
+        print(f"No seed file found for industry '{industry}' at {seeds_file}")
+        print(f"Available: {', '.join(list_available_industries())}")
+        sys.exit(1)
     with open(seeds_file) as f:
         return json.load(f)
+
+
+def list_available_industries() -> List[str]:
+    """List industries that have seed files."""
+    return [p.stem for p in sorted(SEEDS_DIR.glob("*.json"))]
 
 
 def pick_seed(seeds_data: Dict[str, Any], tier: Optional[str] = None) -> Dict[str, Any]:
@@ -51,21 +69,23 @@ def pick_seed(seeds_data: Dict[str, Any], tier: Optional[str] = None) -> Dict[st
     if tier:
         filtered = [s for s in all_seeds if s["profile"]["tier"] == tier]
         if not filtered:
-            print(f"No seeds found for tier '{tier}'. Available tiers: small, mid, scaling")
+            tiers = sorted(set(s["profile"]["tier"] for s in all_seeds))
+            print(f"No seeds found for tier '{tier}'. Available tiers: {', '.join(tiers)}")
             sys.exit(1)
         return random.choice(filtered)
     return random.choice(all_seeds)
 
 
-def print_header(name: str, url: str, tier: str, country: str, staff: str) -> None:
+def print_header(name: str, url: str, tier: str, country: str, staff: str, industry: str) -> None:
     """Print report generation header."""
-    print(f"\n{'=' * 50}")
+    print(f"\n{'=' * 60}")
     print(f"  CRB Report Generator")
-    print(f"{'=' * 50}")
-    print(f"  Target:  {name}")
-    print(f"  URL:     {url}")
-    print(f"  Profile: {tier} | {country} | {staff} staff")
-    print(f"{'=' * 50}\n")
+    print(f"{'=' * 60}")
+    print(f"  Target:    {name}")
+    print(f"  Industry:  {industry}")
+    print(f"  URL:       {url}")
+    print(f"  Profile:   {tier} | {country} | {staff} staff")
+    print(f"{'=' * 60}\n")
 
 
 def print_progress(data: Dict[str, Any]) -> None:
@@ -79,7 +99,6 @@ def print_progress(data: Dict[str, Any]) -> None:
 
     print(f"  [{bar}] {progress:3d}%  {step}", end="\r", flush=True)
 
-    # Print newline when phase changes
     if data.get("phase_complete"):
         print()
 
@@ -99,6 +118,7 @@ async def generate_single_report(
     """
     profile = seed["profile"]
     tier = profile["tier"]
+    industry = profile.get("industry", seeds_data.get("industry", "ecommerce"))
     tier_defaults = seeds_data["tiers"][tier]["defaults"]
 
     print_header(
@@ -107,11 +127,12 @@ async def generate_single_report(
         tier=tier,
         country=seed.get("country", "?"),
         staff=profile.get("staff_size", "?"),
+        industry=industry,
     )
 
-    # Step 1: Scrape website (optional)
+    # Step 1: Scrape website (only for ecommerce with websites)
     scraped_data = None
-    if scrape and seed.get("website"):
+    if scrape and seed.get("website") and industry == "ecommerce":
         print("  Scraping website...", end="", flush=True)
         if use_playwright:
             from src.skills.browser.enhanced_scraper import EnhancedScraperSkill
@@ -139,6 +160,13 @@ async def generate_single_report(
                 print(f" failed ({scraped_data.get('error', 'unknown')}), using seed data only")
                 scraped_data = None
 
+    # Workshop transcript info
+    transcript = seed.get("workshop_transcript", [])
+    if transcript:
+        print(f"  Workshop transcript: {len(transcript)} messages loaded")
+    else:
+        print(f"  Workshop transcript: none (report will have less context)")
+
     # Step 2: Fabricate quiz session
     session_data = fabricate_quiz_session(seed, tier_defaults, scraped_data, report_tier)
     session_id = session_data["id"]
@@ -165,17 +193,14 @@ async def generate_single_report(
         except json.JSONDecodeError:
             continue
 
-        # Track phase transitions
         phase = data.get("phase", "")
         if phase != last_phase and last_phase is not None:
-            print()  # Newline on phase change
+            print()
         last_phase = phase
 
-        # Handle completion
         if data.get("report_id"):
             report_id = data["report_id"]
 
-        # Handle errors
         if data.get("phase") == "error" or data.get("error"):
             error = data.get("error", "Unknown error")
             break
@@ -189,19 +214,21 @@ async def generate_single_report(
         print(f"  ERROR: {error}")
         return None
 
-    # Step 5: Print summary
-    print(f"{'=' * 50}")
+    print(f"{'=' * 60}")
     print(f"  Complete")
-    print(f"{'=' * 50}")
+    print(f"{'=' * 60}")
     print(f"  Report ID:    {report_id}")
     print(f"  Session ID:   {session_id}")
+    print(f"  Industry:     {industry}")
+    print(f"  Transcript:   {len(transcript)} messages")
     print(f"  Total Time:   {elapsed:.1f}s")
-    print(f"{'=' * 50}\n")
+    print(f"{'=' * 60}\n")
 
     return {
         "report_id": report_id,
         "session_id": session_id,
         "company": seed["name"],
+        "industry": industry,
         "tier": tier,
         "elapsed": elapsed,
     }
@@ -215,14 +242,14 @@ async def generate_from_url(
     skip_review: bool = False,
     use_playwright: bool = False,
 ) -> Optional[Dict[str, Any]]:
-    """Generate a report from a custom URL."""
-    # Create a synthetic seed from URL
+    """Generate a report from a custom URL (ecommerce only)."""
     seed = {
         "name": url.replace("https://", "").replace("http://", "").split("/")[0],
         "website": url,
         "country": country,
         "profile": {
             "tier": "mid",
+            "industry": "ecommerce",
             "staff_size": staff_size,
             "monthly_orders": 500,
             "platform": "unknown",
@@ -233,12 +260,14 @@ async def generate_from_url(
         }
     }
 
-    # Use mid-tier defaults for URL-based generation
-    seeds_data = {"tiers": {
-        "mid": {"defaults": {"budget": 2000, "hourly_cost": 50,
-                             "pain_points": ["scaling operations", "customer service volume",
-                                             "manual processes"]}}
-    }}
+    seeds_data = {
+        "industry": "ecommerce",
+        "tiers": {
+            "mid": {"defaults": {"budget": 2000, "hourly_cost": 50,
+                                 "pain_points": ["scaling operations", "customer service volume",
+                                                 "manual processes"]}}
+        }
+    }
 
     return await generate_single_report(seed, seeds_data, report_tier, scrape=True, skip_review=skip_review, use_playwright=use_playwright)
 
@@ -255,9 +284,12 @@ async def cmd_single(args: argparse.Namespace) -> None:
             use_playwright=args.playwright,
         )
     else:
-        seeds_data = load_seeds()
+        seeds_data = load_seeds(args.industry)
         seed = pick_seed(seeds_data, args.tier)
-        result = await generate_single_report(seed, seeds_data, args.report_tier, skip_review=args.no_review, use_playwright=args.playwright)
+        result = await generate_single_report(
+            seed, seeds_data, args.report_tier,
+            skip_review=args.no_review, use_playwright=args.playwright,
+        )
 
     if not result:
         sys.exit(1)
@@ -265,51 +297,68 @@ async def cmd_single(args: argparse.Namespace) -> None:
 
 async def cmd_batch(args: argparse.Namespace) -> None:
     """Generate multiple reports."""
-    seeds_data = load_seeds()
-    count = args.count
+    if args.all_industries:
+        industries = list_available_industries()
+    else:
+        industries = [args.industry]
+
     results = []
+    total_count = 0
 
-    print(f"\n  Batch mode: generating {count} reports\n")
+    for industry in industries:
+        seeds_data = load_seeds(industry)
+        count = 1 if args.all_industries else args.count
 
-    for i in range(count):
-        print(f"\n{'\u2500' * 50}")
-        print(f"  Report {i + 1} of {count}")
-        print(f"{'\u2500' * 50}")
+        for i in range(count):
+            total_count += 1
+            print(f"\n{'\u2500' * 60}")
+            print(f"  Report {total_count} \u2014 {industry}")
+            print(f"{'\u2500' * 60}")
 
-        seed = pick_seed(seeds_data, args.tier)
-        result = await generate_single_report(seed, seeds_data, args.report_tier, skip_review=args.no_review, use_playwright=args.playwright)
+            seed = pick_seed(seeds_data, args.tier)
+            result = await generate_single_report(
+                seed, seeds_data, args.report_tier,
+                skip_review=args.no_review, use_playwright=args.playwright,
+            )
 
-        if result:
-            results.append(result)
-        else:
-            print(f"  Skipping failed report, continuing batch...")
+            if result:
+                results.append(result)
+            else:
+                print(f"  Skipping failed report, continuing batch...")
 
     # Print batch summary
-    print(f"\n{'=' * 60}")
-    print(f"  Batch Complete: {len(results)}/{count} reports generated")
-    print(f"{'=' * 60}")
+    print(f"\n{'=' * 70}")
+    print(f"  Batch Complete: {len(results)}/{total_count} reports generated")
+    print(f"{'=' * 70}")
+    print(f"  {'Company':30s}  {'Industry':22s}  {'Tier':8s}  {'Time':>6s}  {'Report ID'}")
+    print(f"  {'-'*30}  {'-'*22}  {'-'*8}  {'-'*6}  {'-'*10}")
     for r in results:
-        print(f"  {r['company']:30s}  {r['tier']:8s}  {r['elapsed']:6.1f}s  {r['report_id'][:8] if r['report_id'] else 'N/A'}...")
+        rid = r['report_id'][:8] if r['report_id'] else 'N/A'
+        print(f"  {r['company']:30s}  {r['industry']:22s}  {r['tier']:8s}  {r['elapsed']:5.1f}s  {rid}...")
     total_time = sum(r["elapsed"] for r in results)
     print(f"\n  Total time: {total_time:.1f}s ({total_time / 60:.1f} min)")
-    print(f"{'=' * 60}\n")
+    print(f"{'=' * 70}\n")
 
 
 def main() -> None:
     """CLI entry point."""
     parser = argparse.ArgumentParser(
-        description="CRB Report Generator \u2014 generate full reports for real e-commerce businesses"
+        description="CRB Report Generator \u2014 generate full reports across industries"
     )
 
     # Mode selection
     parser.add_argument("--batch", action="store_true", help="Generate multiple reports")
     parser.add_argument("--count", type=int, default=5, help="Number of reports in batch mode (default: 5)")
 
-    # Seed selection
+    # Industry & seed selection
+    parser.add_argument("--industry", default="ecommerce",
+                        help=f"Industry to generate for (available: {', '.join(SUPPORTED_INDUSTRIES)})")
+    parser.add_argument("--all-industries", action="store_true",
+                        help="Generate one report per available industry (batch mode)")
     parser.add_argument("--tier", choices=["small", "mid", "scaling"], help="Business tier filter")
 
-    # Custom URL mode
-    parser.add_argument("--url", help="Custom website URL (overrides seed list)")
+    # Custom URL mode (ecommerce only)
+    parser.add_argument("--url", help="Custom website URL (ecommerce only, overrides seed list)")
     parser.add_argument("--country", default="NL", help="Country code for URL mode (default: NL)")
     parser.add_argument("--staff", default="11-50", help="Staff size for URL mode (default: 11-50)")
 
@@ -317,9 +366,10 @@ def main() -> None:
     parser.add_argument("--report-tier", choices=["quick", "full"], default="quick",
                         help="Report tier (default: quick)")
     parser.add_argument("--no-scrape", action="store_true", help="Skip website scraping")
-    parser.add_argument("--no-review", action="store_true", help="Skip review/validation phase for faster iteration")
+    parser.add_argument("--no-review", action="store_true",
+                        help="Skip review/validation phase for faster iteration")
     parser.add_argument("--playwright", action="store_true",
-                        help="Use Playwright for JS-rendered scraping (more thorough but slower)")
+                        help="Use Playwright for JS-rendered scraping (ecommerce only)")
     parser.add_argument("-v", "--verbose", action="store_true", help="Verbose logging")
 
     args = parser.parse_args()
@@ -329,7 +379,7 @@ def main() -> None:
     logging.basicConfig(level=level, format="%(levelname)s %(name)s: %(message)s")
 
     # Route to command
-    if args.batch:
+    if args.batch or args.all_industries:
         asyncio.run(cmd_batch(args))
     else:
         asyncio.run(cmd_single(args))

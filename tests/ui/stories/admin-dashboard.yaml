@@ -1,19 +1,49 @@
-name: Admin Dashboard
-description: Test admin pages load and display data
-url: http://localhost:5174/admin
-priority: high
-requires:
-  auth: "admin user session"
+stories:
+  - name: "Admin Dashboard - Stats and Navigation"
+    url: "http://localhost:5174/admin"
+    priority: high
+    requires:
+      auth: "admin user session (logged in as admin)"
+    workflow: |
+      Navigate to http://localhost:5174/admin
+      Verify the admin dashboard loads
 
-steps:
-  - name: Load admin dashboard
-    action: navigate to admin URL
-    expect: Dashboard loads with stats/metrics
+      Look for stat cards (insights count, vendors count, or similar metrics)
+      Verify at least one stat card is displayed with a numeric value
 
-  - name: Check vendor admin
-    action: navigate to vendor management
-    expect: Vendor list loads, search/filter available
+      Look for quick-action links to admin sub-pages (vendors, knowledge, insights)
+      Verify navigation links are present and clickable
 
-  - name: Check knowledge base admin
-    action: navigate to knowledge base
-    expect: Knowledge categories listed, entries viewable
+  - name: "Admin Dashboard - Vendor Management"
+    url: "http://localhost:5174/admin/vendors"
+    priority: high
+    requires:
+      auth: "admin user session"
+    workflow: |
+      Navigate to http://localhost:5174/admin/vendors
+      Verify the vendor admin page loads
+
+      Look for a vendor list or vendor cards
+      Verify at least one vendor is displayed (or an empty state message)
+
+      Look for search or filter controls
+      If a search box is present, type a search query
+      Verify the vendor list filters based on the search
+
+  - name: "Admin Dashboard - Knowledge Base"
+    url: "http://localhost:5174/admin/knowledge"
+    priority: medium
+    requires:
+      auth: "admin user session"
+    workflow: |
+      Navigate to http://localhost:5174/admin/knowledge
+      Verify the knowledge base admin loads
+
+      Look for a sidebar with content type categories
+      Verify categories are listed (vendor, opportunity, benchmark, etc.)
+
+      Look for a search control
+      Verify the knowledge item list is displayed
+
+      Click on a content type category in the sidebar
+      Verify the list filters to show items of that type

@@ -276,7 +276,7 @@ class MilestoneSynthesisSkill(LLMSkill[Dict[str, Any]]):
 
         starting = pricing.get("starting_price")
         if starting:
-            currency = pricing.get("currency", "USD")
+            currency = pricing.get("currency", "EUR")
             return f"From {currency} {starting}/mo"
 
         if pricing.get("custom_pricing"):

@@ -1,0 +1,51 @@
+stories:
+  - name: "Error - Invalid Report ID"
+    url: "http://localhost:5174/report/invalid-id-12345"
+    priority: high
+    workflow: |
+      Navigate to http://localhost:5174/report/invalid-id-12345
+      Wait for the page to finish loading
+
+      Verify an error state is displayed (not a blank page)
+      Verify either:
+      - A "Report not found" or 404 message appears, or
+      - An error message with guidance (e.g., "contact support"), or
+      - A redirect to a safe page
+
+      Check the console for JavaScript errors
+      Verify no unhandled exceptions or white screen of death
+
+  - name: "Error - Invalid Checkout Session"
+    url: "http://localhost:5174/checkout/success?session_id=fake-session-123"
+    priority: high
+    workflow: |
+      Navigate to http://localhost:5174/checkout/success?session_id=fake-session-123
+      Wait for the page to attempt verification
+
+      Verify the page handles the invalid session gracefully
+      Verify either:
+      - An error message appears (e.g., "Payment not found"), or
+      - The page shows a retry option, or
+      - The page redirects to the quiz or checkout
+
+      Verify no blank/broken page state
+
+  - name: "Error - Console Errors on Key Pages"
+    url: "http://localhost:5174/"
+    priority: critical
+    workflow: |
+      Navigate to http://localhost:5174/
+      Check the console for JavaScript errors
+      Verify no critical errors (TypeError, ReferenceError, etc.)
+
+      Navigate to http://localhost:5174/quiz
+      Check the console for JavaScript errors
+      Verify no critical errors
+
+      Navigate to http://localhost:5174/login
+      Check the console for JavaScript errors
+      Verify no critical errors
+
+      Navigate to http://localhost:5174/signup
+      Check the console for JavaScript errors
+      Verify no critical errors

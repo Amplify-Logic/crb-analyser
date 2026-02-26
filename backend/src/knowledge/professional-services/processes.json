@@ -121,6 +121,36 @@
         "Expert identification",
         "Best practices documentation"
       ]
+    },
+    {
+      "id": "financial-management",
+      "name": "Financial Management & Firm Accounting",
+      "description": "Trust accounting, firm P&L tracking, expense management, partner distributions, and financial reporting",
+      "typical_time_spent": "3-5 hours/week",
+      "pain_level": "high",
+      "automation_potential": 70,
+      "ai_opportunities": [
+        "Automated trust account reconciliation",
+        "AI-powered expense categorization",
+        "Predictive revenue forecasting by practice area",
+        "Automated partner distribution calculations",
+        "Real-time profitability dashboards per matter"
+      ]
+    },
+    {
+      "id": "resource-allocation",
+      "name": "Staffing & Resource Allocation",
+      "description": "Assigning professionals to matters, balancing workloads, capacity planning, and identifying skill gaps",
+      "typical_time_spent": "2-3 hours/week",
+      "pain_level": "medium",
+      "automation_potential": 65,
+      "ai_opportunities": [
+        "AI-powered matter staffing recommendations based on expertise and availability",
+        "Workload balancing alerts and capacity forecasting",
+        "Skill gap identification and training recommendations",
+        "Predictive staffing needs based on pipeline",
+        "Automated conflict-of-interest screening for team assignments"
+      ]
     }
   ],
   "typical_team_structure": {

@@ -40,8 +40,29 @@
         "product_category": "jewelry",
         "has_erp": false,
         "current_tools": ["shopify", "google-analytics", "meta-pixel"],
-        "pain_points": ["manual order processing", "manual product content", "no email automation"]
-      }
+        "pain_points": ["manual order processing", "manual product content", "no email automation"],
+        "implementation_preference": "buy",
+        "ai_tools_used": [],
+        "integration_issues": 3,
+        "manual_data_entry": true,
+        "implementation_urgency": "this_quarter"
+      },
+      "workshop_transcript": [
+        {"role": "assistant", "content": "Let's start by understanding your business. What does BonBon Boutique sell and who are your customers?"},
+        {"role": "user", "content": "We're a handmade jewelry brand based in Amsterdam. Everything is designed and made here \u2014 earrings, necklaces, bracelets. Our customers are mostly women 25-45, gift buyers, and tourists who find us on Instagram. We do about 250 orders a month through Shopify, average order is around \u20ac85."},
+        {"role": "assistant", "content": "Walk me through what happens when an order comes in."},
+        {"role": "user", "content": "An order hits Shopify, I get a notification. My assistant prints the packing slip, picks the items from our studio shelves, wraps them \u2014 we do premium gift wrapping for every order \u2014 and drops them at PostNL. For personalized items, which are about 30% of orders, I engrave them myself, which adds 1-2 days. The whole process is manual. I spend 2-3 hours daily on fulfillment instead of designing new pieces."},
+        {"role": "assistant", "content": "What about customer questions and support?"},
+        {"role": "user", "content": "I handle them myself through Shopify chat and Instagram DMs. Maybe 15-20 messages per day. Most are 'when will my order arrive' or 'do you have this in gold' or 'can I customize this.' Very repetitive. But I feel like I need to answer personally because our brand is about that personal touch. I'm just running out of hours in the day."},
+        {"role": "assistant", "content": "Tell me about your marketing. You mentioned Instagram \u2014 how does that work?"},
+        {"role": "user", "content": "Instagram is our main channel. I post 4-5 times a week, do stories daily. We have about 18,000 followers. I also run Meta ads \u2014 spending maybe \u20ac800/month \u2014 but I have no idea what's actually working. I just boost posts that get good organic engagement. No email marketing at all, which I know is a mistake. We collect emails at checkout but never send anything."},
+        {"role": "assistant", "content": "You mentioned no email marketing \u2014 what's holding you back?"},
+        {"role": "user", "content": "Time, mostly. I know I should set up abandoned cart emails and a welcome series. I looked at Klaviyo but it felt overwhelming. I'm not a marketer, I'm a jewelry designer. I tried Mailchimp once but the template looked terrible and I gave up. I have a list of 4,000 email addresses just sitting there doing nothing. My friend who runs a similar brand says email is 30% of her revenue."},
+        {"role": "assistant", "content": "That's a big missed opportunity. What about product content \u2014 descriptions, photos?"},
+        {"role": "user", "content": "I photograph everything myself with my iPhone. It actually looks pretty good for Instagram, but for the website product pages... I have 120 products and each one needs 4-5 photos, a description, materials, sizing. I'm about 40 products behind on proper descriptions. For new launches I spend a whole day just on content creation. I know AI could help with writing descriptions but I haven't tried it yet."},
+        {"role": "assistant", "content": "What would make the biggest difference for your business right now?"},
+        {"role": "user", "content": "Getting email marketing running and automating the repetitive customer questions. Those two things alone would probably add \u20ac3,000-5,000 per month in revenue and give me back 2 hours a day. I'd use that time to design new collections, which is what actually grows the business. I just need someone to tell me exactly what to set up and make it simple."}
+      ]
     },
     {
       "name": "The Gathershop",
@@ -160,7 +181,12 @@
         "product_category": "pets",
         "has_erp": false,
         "current_tools": ["shopify", "klaviyo", "gorgias", "google-analytics"],
-        "pain_points": ["customer service volume", "returns processing", "manual order processing"]
+        "pain_points": ["customer service volume", "returns processing", "manual order processing"],
+        "implementation_preference": "connect",
+        "ai_tools_used": ["chatgpt"],
+        "integration_issues": 5,
+        "manual_data_entry": false,
+        "implementation_urgency": "this_quarter"
       }
     },
     {
@@ -191,7 +217,21 @@
         "has_erp": false,
         "current_tools": ["shopify", "klaviyo", "google-analytics"],
         "pain_points": ["scaling bottlenecks", "inventory sync issues", "tool sprawl"]
-      }
+      },
+      "workshop_transcript": [
+        {"role": "assistant", "content": "Filling Pieces is a well-known brand. Can you describe the current state of operations?"},
+        {"role": "user", "content": "We're a premium sneaker brand, about 30 people now. Direct-to-consumer through Shopify plus wholesale to about 150 retailers globally. Monthly we do around 3,000 DTC orders and manage wholesale separately through a B2B portal. Revenue is roughly \u20ac400K/month DTC and \u20ac200K wholesale. We're growing fast but our backend can't keep up."},
+        {"role": "assistant", "content": "What does 'backend can't keep up' mean specifically?"},
+        {"role": "user", "content": "Our inventory is a mess. We have one warehouse in Amsterdam and we dropship some products. But there's no real-time sync between Shopify, our wholesale orders, and actual warehouse stock. Last month we oversold 3 SKUs \u2014 had to cancel orders and refund customers. That's a brand killer for a premium product. We also carry about \u20ac200K in dead stock from poor demand planning."},
+        {"role": "assistant", "content": "How are you managing wholesale alongside DTC?"},
+        {"role": "user", "content": "Honestly, with spreadsheets and email. Retailers email orders, our wholesale team enters them into a Google Sheet, then someone manually reserves inventory. If a retailer orders 50 pairs of a popular style, we might already have sold 30 of those DTC by the time we process it. There's no integration between the two channels. Our wholesale coordinator spends 80% of her time on manual data entry."},
+        {"role": "assistant", "content": "Tell me about your customer experience tech stack."},
+        {"role": "user", "content": "Klaviyo for email \u2014 we're actually pretty good there, maybe 25% of revenue. Shopify for the storefront. Google Analytics for basic tracking. But we have no customer service platform \u2014 support goes to a shared inbox. We get maybe 200 tickets a month and it's chaos. Multiple people responding, no tracking, customers sometimes get two different answers. We looked at Gorgias but haven't pulled the trigger."},
+        {"role": "assistant", "content": "What's the team's biggest frustration day-to-day?"},
+        {"role": "user", "content": "Tool sprawl. We have 15+ different tools that don't talk to each other. Marketing uses different data than ops, finance has their own numbers. Nobody trusts the data. I spend Friday afternoons manually building a dashboard in Google Sheets that's already outdated by Monday. We need a single source of truth. An ERP maybe? But that feels like a massive project and we're already stretched thin."},
+        {"role": "assistant", "content": "What's your priority for the next 6 months?"},
+        {"role": "user", "content": "Fix inventory management and get wholesale integrated before it costs us a major retail partner. After that, customer service platform and better analytics. Budget is there \u2014 we could do \u20ac2,000-3,000/month in software. The problem isn't money, it's time and knowing what to pick. Every vendor says they're the solution. I need someone to cut through the noise and give me a clear roadmap."}
+      ]
     },
     {
       "name": "BALR",
@@ -340,7 +380,12 @@
         "product_category": "health",
         "has_erp": true,
         "current_tools": ["custom_nextjs", "react", "aws", "vercel", "segment"],
-        "pain_points": ["multi-channel complexity", "international expansion", "data silos"]
+        "pain_points": ["multi-channel complexity", "international expansion", "data silos"],
+        "implementation_preference": "build",
+        "ai_tools_used": ["chatgpt", "copilot", "automation"],
+        "integration_issues": 7,
+        "manual_data_entry": false,
+        "implementation_urgency": "this_month"
       }
     },
     {

@@ -1,5 +1,6 @@
 import { useEffect, useRef } from 'react'
 import { motion } from 'framer-motion'
+import Markdown from 'react-markdown'
 import type { Message } from '../../../services/refinerApi'
 
 interface StarterPromptsProps {
@@ -43,7 +44,13 @@ function MessageBubble({ message }: MessageBubbleProps) {
             : 'bg-gray-100 dark:bg-gray-800 text-gray-900 dark:text-white'
         }`}
       >
-        <div className="whitespace-pre-wrap">{message.content}</div>
+        {isUser ? (
+          <div className="whitespace-pre-wrap">{message.content}</div>
+        ) : (
+          <div className="refiner-markdown prose prose-sm dark:prose-invert max-w-none prose-p:my-1.5 prose-ul:my-1.5 prose-ol:my-1.5 prose-li:my-0.5 prose-headings:my-2 prose-strong:text-inherit">
+            <Markdown>{message.content}</Markdown>
+          </div>
+        )}
       </div>
     </motion.div>
   )

@@ -1,0 +1,154 @@
+stories:
+  - name: "E-Commerce Quiz - Full Professional Flow"
+    url: "http://localhost:5174/quiz?industry=ecommerce&new=true"
+    priority: critical
+    workflow: |
+      CONTEXT: You are evaluating the quiz experience as an e-commerce brand owner
+      or DTC operator considering AI automation. E-commerce founders are data-savvy,
+      impatient, and skeptical of consultants. The quiz must feel fast, smart, and
+      immediately valuable — proving its intelligence within seconds.
+
+      QUALITY STANDARD: This should feel like a best-in-class SaaS onboarding
+      experience (think Shopify, Klaviyo, or Triple Whale). Clean, fast, data-driven,
+      zero fluff. Every screen must demonstrate the product understands e-commerce.
+
+      STEP 1 — FIRST IMPRESSION & LOAD SPEED
+      Navigate to the quiz URL with industry=ecommerce parameter.
+      Verify the page loads within 3 seconds with no layout shift.
+      The design should feel modern and tech-forward — appropriate for e-commerce operators.
+      The website input should be immediately visible above the fold.
+      Check for any industry-specific messaging or context that signals "we understand e-commerce."
+      Screenshot the initial landing state.
+
+      STEP 2 — ENTER E-COMMERCE STORE URL
+      Enter "www.modernthreads.co" in the company website field.
+      Verify the input accepts the URL smoothly.
+      The submit button should be clearly actionable with strong contrast.
+      No unnecessary friction — just URL and go.
+      Screenshot the filled state.
+
+      STEP 3 — AUTOMATED RESEARCH EXPERIENCE
+      Click submit to begin research.
+      Verify the research animation begins immediately — no delay or dead state.
+      The multi-step progress should show:
+        - Website scanning (critical for e-commerce — detecting Shopify, WooCommerce, etc.)
+        - Social/LinkedIn research
+        - News and market context
+        - Tech stack detection (Shopify apps, integrations, etc.)
+        - Question generation
+      The animation should feel intelligent and purposeful, not decorative.
+      Wait for research to complete.
+      Screenshot the research progress mid-way.
+
+      STEP 4 — RESEARCH FINDINGS — E-COMMERCE RELEVANCE
+      After research completes, verify findings display clearly.
+      Look for e-commerce relevant data extraction:
+        - Platform detection (Shopify, WooCommerce, BigCommerce, etc.)
+        - Product catalog indicators
+        - Marketing stack clues (email, SMS, ads)
+        - Revenue indicators or business scale
+      Confidence indicators should be visually clear.
+      Findings should be organized, scannable, and not overwhelming.
+      Any unknown data should be handled gracefully — no "N/A" or "unknown" labels.
+      Screenshot the findings.
+
+      STEP 5 — E-COMMERCE SOFTWARE STACK
+      Proceed to the software selection phase.
+      Verify e-commerce specific tools appear (e.g., Shopify, Gorgias, Klaviyo,
+      Triple Whale, Northbeam, Recharge, Yotpo, Attentive, or similar).
+      The tool list should feel curated — not a generic software database.
+      Select 3-4 relevant e-commerce tools.
+      Verify clear visual feedback on selection.
+      Check that "Add custom tool" option exists for unlisted apps.
+      Screenshot the e-commerce software selection.
+
+      STEP 6 — ADAPTIVE QUESTIONS — E-COMMERCE CONTEXT
+      Proceed to questions.
+      Verify the first question is contextually relevant to e-commerce operations:
+        - Customer support volume
+        - Order fulfillment pain points
+        - Marketing spend allocation
+        - Inventory management
+        - Return rate challenges
+        - Customer acquisition cost
+      The question copy should use e-commerce vocabulary naturally (AOV, ROAS, LTV, etc.)
+      without being jargon-heavy for non-technical operators.
+      Screenshot the first question.
+
+      STEP 7 — QUESTION FLOW & RESPONSIVENESS
+      Answer questions with realistic e-commerce operator responses:
+        - For support volume: select a high-volume option
+        - For pain points: select fulfillment and returns
+        - For budget: indicate mid-market range
+        - For text inputs: "We're doing about 2000 orders/month with a 15% return rate.
+          Support tickets are killing us — mostly WISMO and return requests."
+      Progress through at least 4 questions, verifying:
+        - Each transition is instant and smooth
+        - Progress indicator updates correctly
+        - Questions feel sequenced logically, building on prior answers
+        - Input types match question format perfectly
+      Screenshot after completing several questions.
+
+      STEP 8 — COMPLETION & PRICING
+      Finish all questions and transition to pricing.
+      Verify pricing page shows:
+        - EUR 147 clearly displayed
+        - Compelling value proposition for e-commerce operators
+        - What's included in clear bullets
+        - Professional, trust-building design
+        - No broken elements or placeholder text
+      The pricing should make an e-commerce operator think "this is worth way more than 147."
+      Screenshot the pricing page.
+
+      STEP 9 — FULL EXPERIENCE AUDIT
+      Reflect on the complete journey:
+        - Did the quiz feel fast and respectful of the user's time?
+        - Was every screen relevant to e-commerce?
+        - Were there any moments of confusion or dead air?
+        - Did the research phase feel genuinely intelligent?
+        - Would a savvy e-commerce operator be impressed?
+      Note any issues with copy, layout, transitions, or relevance.
+      Screenshot the final state.
+
+  - name: "E-Commerce Quiz - Speed & Performance Test"
+    url: "http://localhost:5174/quiz?industry=ecommerce&new=true"
+    priority: high
+    workflow: |
+      CONTEXT: E-commerce operators are busy and impatient. Testing that the quiz
+      feels snappy and never makes the user wait without clear feedback.
+
+      STEP 1 — PAGE LOAD PERFORMANCE
+      Navigate to the quiz URL.
+      Verify the page is interactive within 3 seconds.
+      No layout shifts after initial render.
+      All fonts loaded (no FOUT — flash of unstyled text).
+      Screenshot the loaded state immediately.
+
+      STEP 2 — INPUT RESPONSIVENESS
+      Enter "www.modernthreads.co" character by character.
+      The input should respond instantly to each keystroke — no lag or debounce visible to user.
+      The submit button should enable the moment the URL is valid.
+      Screenshot after typing.
+
+      STEP 3 — RESEARCH INITIATION SPEED
+      Click submit.
+      Verify the transition to research state happens within 500ms.
+      There should be NO blank/white screen between clicking and seeing the research animation.
+      The animation should start immediately — no "loading..." text before the animation.
+      Screenshot the instant after clicking submit.
+
+      STEP 4 — TRANSITION SMOOTHNESS
+      After research completes, verify the transition to findings is smooth.
+      Should be an animated transition, not a hard page swap.
+      From findings to software selection — same smooth transition.
+      From software to questions — same.
+      Each transition should take less than 300ms visually.
+      Screenshot during a transition if possible.
+
+      STEP 5 — QUESTION NAVIGATION SPEED
+      Progress through 3 questions rapidly.
+      Each "Next" click should advance immediately.
+      Previous button should also work instantly with preserved answers.
+      Go back to question 1, verify the answer is preserved.
+      Go forward again to question 3, verify answers still there.
+      Screenshot showing navigation works smoothly.

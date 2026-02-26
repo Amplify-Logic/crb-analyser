@@ -11,6 +11,7 @@ export default defineConfig(({ mode }) => ({
   },
   server: {
     port: 5174,
+    allowedHosts: true,
     proxy: {
       '/api': {
         target: 'http://localhost:8383',
@@ -29,6 +30,8 @@ export default defineConfig(({ mode }) => ({
           'react-vendor': ['react', 'react-dom', 'react-router-dom'],
           // UI libraries
           'ui-vendor': ['framer-motion', 'lucide-react'],
+          // Flow diagram (lazy-loaded)
+          'flow-diagram': ['@xyflow/react', 'dagre'],
           // Charts (if used)
           ...(mode === 'production' ? { 'charts': ['recharts'] } : {}),
         },

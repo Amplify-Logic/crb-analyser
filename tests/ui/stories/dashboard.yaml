@@ -1,0 +1,46 @@
+stories:
+  - name: "Dashboard - Authenticated Load"
+    url: "http://localhost:5174/dashboard"
+    priority: critical
+    requires:
+      auth: "logged-in user session"
+    workflow: |
+      Navigate to http://localhost:5174/dashboard
+      Verify the dashboard loads (not redirected to login)
+
+      Look for a user greeting or welcome message
+      Verify the user's name or email is displayed
+
+      Look for stat cards (total audits, savings, in-progress)
+      Verify at least one stat card is visible
+
+      Look for a logout button or user menu
+      Verify it is present and clickable
+
+  - name: "Dashboard - Audit List"
+    url: "http://localhost:5174/dashboard"
+    priority: high
+    requires:
+      auth: "logged-in user with at least one audit"
+    workflow: |
+      Navigate to http://localhost:5174/dashboard
+      Verify the dashboard loads
+
+      Look for an audit list or audit cards
+      Verify audits are displayed with title, status badge, and date
+      Verify at least one audit entry is visible
+
+      Look for a "Create Audit" or "New Audit" CTA button
+      Verify the button is present
+
+  - name: "Dashboard - Empty State"
+    url: "http://localhost:5174/dashboard"
+    priority: medium
+    requires:
+      auth: "logged-in user with zero audits"
+    workflow: |
+      Navigate to http://localhost:5174/dashboard
+      Verify the dashboard loads
+
+      Verify an empty state message is shown (e.g., "No audits yet", "Get started")
+      Verify a prominent CTA to create the first audit is displayed

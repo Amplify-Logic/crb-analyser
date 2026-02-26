@@ -14,7 +14,7 @@ from typing import Optional, Dict, Any, List
 
 from fastapi import APIRouter, HTTPException, Request, status, Query
 from fastapi.responses import StreamingResponse
-from pydantic import BaseModel, EmailStr
+from pydantic import BaseModel, EmailStr, field_validator
 
 from src.middleware.security import email_limiter
 
@@ -757,6 +757,16 @@ async def get_software_options(industry: Optional[str] = Query(None, description
         "business coaching": "coaching",
         "executive coaching": "coaching",
         "consulting and coaching": "coaching",
+        # E-Commerce
+        "ecommerce": "ecommerce",
+        "e-commerce": "ecommerce",
+        "e-commerce & retail": "ecommerce",
+        "online retail": "ecommerce",
+        "dtc": "ecommerce",
+        "direct to consumer": "ecommerce",
+        "shopify": "ecommerce",
+        "online store": "ecommerce",
+        "retail": "ecommerce",
     }
 
     # Normalize the industry input
@@ -766,7 +776,7 @@ async def get_software_options(industry: Optional[str] = Query(None, description
     # Also try partial matching for longer names
     if industry_slug == industry_lower and industry_slug not in [
         "dental", "veterinary", "recruitment", "coaching", "medspa",
-        "home-services", "professional-services", "physical-therapy"
+        "home-services", "professional-services", "physical-therapy", "ecommerce"
     ]:
         # Try partial match
         for name, slug in industry_name_to_slug.items():
@@ -986,6 +996,23 @@ class StartResearchSessionRequest(BaseModel):
     """Request to start research for a quiz session."""
     company_name: Optional[str] = None
     website_url: str
+
+    @field_validator("website_url")
+    @classmethod
+    def validate_website_url(cls, v: str) -> str:
+        """Reject clearly invalid URLs (must contain a dot)."""
+        normalized = v.strip()
+        if not normalized.startswith("http"):
+            normalized = f"https://{normalized}"
+        from urllib.parse import urlparse
+
+        parsed = urlparse(normalized)
+        host = parsed.netloc or parsed.path
+        if "." not in host:
+            raise ValueError(
+                "Invalid website URL. Please provide a valid domain (e.g. www.yourcompany.com)"
+            )
+        return v
 
 
 @router.post("/sessions/{session_id}/research")

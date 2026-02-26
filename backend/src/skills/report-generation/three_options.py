@@ -198,6 +198,9 @@ class ThreeOptionsSkill(LLMSkill[Dict[str, Any]]):
         # Get excluded vendors (already used in other recommendations)
         exclude_vendors = context.metadata.get("exclude_vendors", [])
 
+        # Get readiness profile for adaptive recommendations
+        readiness_profile = context.metadata.get("readiness_profile", {})
+
         # Generate recommendation
         recommendation = await self._generate_recommendation(
             finding=finding,
@@ -206,6 +209,7 @@ class ThreeOptionsSkill(LLMSkill[Dict[str, Any]]):
             company_context=company_context,
             expertise=context.expertise,
             exclude_vendors=exclude_vendors,
+            readiness_profile=readiness_profile,
         )
 
         # Apply confidence-adjusted ROI
@@ -230,6 +234,7 @@ class ThreeOptionsSkill(LLMSkill[Dict[str, Any]]):
         company_context: Dict[str, Any],
         expertise: Optional[Dict[str, Any]],
         exclude_vendors: Optional[List[str]] = None,
+        readiness_profile: Optional[Dict[str, Any]] = None,
     ) -> Dict[str, Any]:
         """Generate recommendation using Claude."""
         # Build set of excluded vendors (already used in other recommendations)
@@ -261,6 +266,18 @@ class ThreeOptionsSkill(LLMSkill[Dict[str, Any]]):
         # Get AI tools context
         ai_tools_context = self._get_ai_tools_context()
 
+        # Build readiness profile block for prompt
+        rp = readiness_profile or {}
+        readiness_block = f"""
+CLIENT READINESS PROFILE:
+- Infrastructure: {rp.get('infrastructure', 'unknown')}
+- Build Willingness: {rp.get('build_willingness', 'unknown')}
+- AI Experience: {rp.get('ai_experience', 'unknown')}
+- Stack API Readiness: {rp.get('stack_api_readiness', 'unknown')}
+- Urgency: {rp.get('urgency', 'unknown')}
+- Preference: {rp.get('preference', 'unknown')}
+"""
+
         prompt = f"""Generate a recommendation with AIOS OPTIONS for this finding.
 
 FINDING:
@@ -271,7 +288,7 @@ COMPANY CONTEXT:
 - Size: {company_context['size']}
 - Tech Comfort: {company_context['tech_comfort']}
 - Budget Range: €{company_context['budget_range']}
-
+{readiness_block}
 {vendor_catalog}{exclude_note}
 
 {ai_tools_context}
@@ -299,6 +316,31 @@ Option C: TARGETED UPGRADE
 - Best for: Dead-end tools that can't be connected
 
 ═══════════════════════════════════════════════════════════════════════════════
+RECOMMENDATION DECISION (evaluate per finding)
+═══════════════════════════════════════════════════════════════════════════════
+
+1. If no digital tool exists for this business function → recommend "targeted_upgrade"
+   Buy the foundation. ALWAYS recommend tools with strong APIs so they become
+   connectable later. Frame as: "This is your foundation — once set up, we can
+   wire AI workflows on top."
+
+2. If existing tool is a dead end (no API, no data export, fundamentally broken)
+   → recommend "targeted_upgrade"
+   Replace with API-ready alternative. Frame as: "Your current tool traps your
+   data. [Replacement] opens up integration possibilities."
+
+3. Everything else → recommend "connect_and_automate"
+   Adapt the complexity based on the client's readiness profile.
+   - Paper-based infrastructure: acknowledge the gap, show simpler automation paths
+   - Digitized with APIs: show full Claude Code / MCP integration workflows
+   - Low build willingness: emphasize managed tools (Zapier, Make) over raw APIs
+   - High build willingness: show Claude Code workflows with specific build steps
+
+Always generate ALL THREE options regardless of recommendation.
+Always explain WHY this recommendation fits THIS client's readiness level.
+Never say "you're not technical enough" — AI-assisted building is accessible to everyone.
+Adapt the HOW, not the WHETHER.
+═══════════════════════════════════════════════════════════════════════════════
 
 Generate a JSON object with this structure:
 {{
@@ -312,10 +354,23 @@ Generate a JSON object with this structure:
     "options": {{
         "connect_and_automate": {{
             "approach": "<how to wire existing tools with AI workflows>",
-            "build_time": "<e.g., 8-12 hours>",
+            "build_time": "<e.g., 2 weeks (solo) / 4 days (guided)>",
             "tools_used": ["Claude Code", "<existing tool 1>", "<existing tool 2>"],
             "mcp_servers": ["<mcp-server-name if applicable>"],
             "monthly_cost": "<e.g., EUR 50-150 (API usage)>",
+            "prerequisite": "<optional: what must be in place first, e.g. 'digital scheduling tool'>",
+            "diy_complexity": "low|moderate|high",
+            "automation_flow": {{
+                "nodes": [
+                    {{"id": "n1", "label": "<tool name>", "type": "existing_tool|new_tool|ai_layer|output"}},
+                    {{"id": "n2", "label": "<AI processing>", "type": "ai_layer"}},
+                    {{"id": "n3", "label": "<result>", "type": "output"}}
+                ],
+                "edges": [
+                    {{"from": "n1", "to": "n2", "label": "<what data flows>"}},
+                    {{"from": "n2", "to": "n3", "label": "<processed output>"}}
+                ]
+            }},
             "pros": ["<pro1>", "<pro2>"],
             "cons": ["<con1>", "<con2>"]
         }},
@@ -336,8 +391,8 @@ Generate a JSON object with this structure:
             "cons": ["<con1>", "<con2>"]
         }}
     }},
-    "our_recommendation": "connect_and_automate",
-    "recommendation_rationale": "<why connect_and_automate is best for THIS company — reference their existing stack, size, or tech comfort>",
+    "our_recommendation": "connect_and_automate|enhance_with_ai|targeted_upgrade",
+    "recommendation_rationale": "<why THIS recommendation fits THIS client's readiness level — reference their infrastructure, build willingness, and existing stack>",
 
     "comparison_summary": {{
         "table": [
@@ -348,7 +403,7 @@ Generate a JSON object with this structure:
             {{"aspect": "Maintenance", "connect_and_automate": "API monitoring", "enhance_with_ai": "Model tuning", "targeted_upgrade": "Vendor managed"}}
         ],
         "winner_for_this_company": "connect_and_automate|enhance_with_ai|targeted_upgrade",
-        "why_winner": "<1-2 sentences explaining why this wins GIVEN THIS COMPANY's stack and context>"
+        "why_winner": "<1-2 sentences explaining why this wins GIVEN THIS COMPANY's readiness level and context>"
     }},
 
     "assumptions": [
@@ -359,14 +414,17 @@ Generate a JSON object with this structure:
 }}
 
 ═══════════════════════════════════════════════════════════════════════════════
-CRITICAL RULES (Connect-First)
+CRITICAL RULES
 ═══════════════════════════════════════════════════════════════════════════════
-- our_recommendation MUST be "connect_and_automate" UNLESS the existing tool literally has no API
+- Evaluate the RECOMMENDATION DECISION logic above for EACH finding independently
 - NEVER recommend "targeted_upgrade" just because a "better" tool exists
-- Every connect_and_automate option MUST include build_time and tools_used
+- Every connect_and_automate option MUST include build_time, tools_used, and automation_flow
+- For connect_and_automate: include "prerequisite" when the client lacks infrastructure
+- For connect_and_automate: include "diy_complexity" to set expectations
+- automation_flow: 3-6 nodes max, node types: "existing_tool" (green), "new_tool" (blue), "ai_layer" (purple), "output" (gray)
 - Include MCP servers where applicable
-- If tech_comfort is "low": recommend connect_and_automate with simpler approach (automation tools)
 - If ROI > 500%: MUST explain why this is exceptional (not typical)
+- When recommending targeted_upgrade, frame it as the foundation for future automation
 
 Return ONLY the JSON object."""
 
@@ -414,11 +472,13 @@ KEY PRINCIPLES (Connect-First)
 NOTE: roi_percentage and payback_months will be calculated by the ROI Calculator Skill.
 Do NOT generate these values - they will be computed using canonical formulas.
 ═══════════════════════════════════════════════════════════════════════════════
-CONNECT-FIRST RULES
+ADAPTIVE RECOMMENDATION RULES
 ═══════════════════════════════════════════════════════════════════════════════
-- our_recommendation should be "connect_and_automate" in 90%+ of cases
-- Only recommend "targeted_upgrade" when existing tool is genuinely a dead end
+- Evaluate each finding against the client's readiness profile
+- If no tool exists or tool is a dead end → recommend "targeted_upgrade" (buy API-ready foundation)
+- Everything else → recommend "connect_and_automate" (adapt complexity to readiness)
 - Never recommend replacing software just because a "better" tool exists
+- AI-assisted building is accessible to everyone — adapt the HOW, not the WHETHER
 - Be honest about implementation complexity and ongoing maintenance burden"""
 
     def _get_ai_tools_context(self) -> str:

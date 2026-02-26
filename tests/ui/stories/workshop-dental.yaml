@@ -1,0 +1,233 @@
+stories:
+  - name: "Dental Workshop - Expert AI Consultation Experience"
+    url: "http://localhost:5174/workshop"
+    priority: critical
+    requires:
+      session: "Requires a paid dental quiz session with research data"
+    workflow: |
+      CONTEXT: You are validating the 90-minute AI-powered workshop for a dental
+      practice owner who has already completed the quiz and paid EUR 147.
+      This is the PREMIUM deliverable — the experience that justifies the investment.
+      It must feel like sitting across from a world-class dental technology consultant
+      who has done thorough research on your practice.
+
+      QUALITY STANDARD: The workshop must feel like a $500/hr strategy session.
+      Every question should be incisive. Every response should show deep understanding.
+      The AI consultant should demonstrate expertise in dental practice operations,
+      patient management, and dental technology. No generic business questions —
+      every interaction must scream "I understand dentistry."
+
+      STEP 1 — WORKSHOP WELCOME & ORIENTATION
+      Navigate to the workshop page.
+      Verify a professional welcome screen appears explaining the 3-phase structure:
+        Phase 1: Confirmation — verify what we learned about your practice
+        Phase 2: Deep-Dive — explore each pain point in detail
+        Phase 3: Synthesis — final context for your personalized report
+      The welcome should feel warm but professional — acknowledging the investment
+      the user has made and setting expectations for the session.
+      The "Begin Workshop" button should be prominent and inviting.
+      Check for any option to upload an existing meeting recording (alternative path).
+      Screenshot the welcome screen.
+
+      STEP 2 — PHASE 1: CONFIRMATION CARDS — DENTAL CONTEXT
+      Click "Begin Workshop" to enter the confirmation phase.
+      Verify confirmation cards appear showing research findings from the quiz:
+        - Practice details (size, specialties, location)
+        - Current technology stack
+        - Identified pain points
+        - Initial findings about the practice
+      Each card should have clear action options:
+        - "Accurate" (confirm) — green/positive indicator
+        - "Edit" — opens inline editing
+        - Neither — allows skipping
+      Cards should use dental-specific language and be factually grounded in
+      the quiz research data.
+      Verify the progress bar shows status across all cards.
+      Screenshot the confirmation cards.
+
+      STEP 3 — INTERACT WITH CONFIRMATION CARDS
+      Mark 2-3 cards as "Accurate" by clicking the confirm action.
+      Click "Edit" on one card to modify the content.
+      Verify inline editing works smoothly:
+        - Text input appears in place
+        - Original text is editable
+        - Save/cancel options are clear
+      Type a correction: "We also have a second location opening next quarter."
+      Save the edit and verify the card updates.
+      Check that the progress indicators update to reflect completed cards
+      (green for confirmed, blue for edited).
+      Screenshot the cards with mixed states.
+
+      STEP 4 — PAIN POINT PRIORITIZATION
+      Verify a pain point reordering interface appears.
+      Pain points should be draggable to set priority order.
+      The interface should have clear instructions: "Drag to prioritize — we'll
+      focus on your top priorities first."
+      Reorder the pain points by dragging:
+        1. Patient no-shows
+        2. Insurance verification delays
+        3. Treatment plan acceptance
+      Verify numbered badges update as items are reordered.
+      The drag interaction should be smooth (Framer Motion based).
+      Screenshot the reordered pain points.
+
+      STEP 5 — TRANSITION TO DEEP-DIVE
+      Click "Continue to Deep-Dive" to enter Phase 2.
+      Verify a smooth, professional transition to the conversation interface.
+      The deep-dive should show:
+        - Current pain point being explored (e.g., "Patient No-Shows")
+        - Stage indicator (e.g., "Understanding current process")
+        - Confidence/completion progress bar
+        - Estimated time remaining
+      The chat interface should appear clean and professional — not a
+      generic chatbot look.
+      Screenshot the deep-dive entry.
+
+      STEP 6 — AI CONSULTANT FIRST QUESTION — DENTAL EXPERTISE
+      Verify the first AI question demonstrates deep dental knowledge.
+      The question should reference the specific pain point and show
+      awareness of dental practice operations.
+      GOOD examples: "Tell me about your current no-show management —
+      do you send automated reminders through your PMS, or is your front
+      desk calling patients manually?"
+      BAD examples: "Tell me about your challenges." (too generic)
+      The AI message should appear in a distinct visual style (bordered box,
+      left-aligned) that differentiates it from user responses.
+      A typing indicator should appear briefly before the message renders.
+      Screenshot the first AI question.
+
+      STEP 7 — USER RESPONSE & AI FOLLOW-UP
+      Type a detailed response in the text input:
+        "We send automated reminders through Dentrix 2 days before, but our
+        no-show rate is still around 18%. The hygiene recare recall is even worse —
+        maybe 25% don't show for their 6-month appointments. We've tried
+        text reminders but haven't seen much improvement."
+      Submit the response.
+      Verify the user message appears in the chat with a distinct style
+      (gradient background, right-aligned).
+      Wait for the AI follow-up question.
+      Verify the follow-up demonstrates it HEARD the response:
+        - References Dentrix specifically
+        - Acknowledges the 18% and 25% rates
+        - Asks a deeper follow-up (e.g., about reminder timing, patient demographics,
+          or whether they've tried different communication channels)
+      The conversation should feel like a genuine back-and-forth with an expert,
+      not a scripted questionnaire.
+      Screenshot the conversation exchange.
+
+      STEP 8 — VOICE INPUT OPTION
+      Verify there is a toggle between text and voice input modes.
+      Click the voice toggle to switch to voice recording mode.
+      Verify the voice recording interface appears:
+        - Record button is clearly visible
+        - Instructions are clear
+        - The mode switch is smooth
+      Switch back to text mode.
+      Verify the transition between input modes is seamless.
+      Screenshot showing the voice input option.
+
+      STEP 9 — DEEP-DIVE PROGRESSION
+      Continue the conversation with 2-3 more exchanges.
+      Verify the stage indicator progresses as the conversation deepens:
+        "Understanding current process" → "What you've tried" → "Measuring impact"
+      The confidence progress bar should fill incrementally.
+      The estimated time remaining should update.
+      Each AI question should go deeper, not just repeat at the same level.
+      Screenshot showing progression through the deep-dive stages.
+
+      STEP 10 — MILESTONE SUMMARY
+      After sufficient conversation (when confidence is high enough),
+      a milestone summary should appear.
+      Verify the milestone displays:
+        - Draft finding with title and severity (low/medium/high)
+        - Summary of what was discussed
+        - Current process description
+        - Recommendation
+        - ROI calculation card:
+          - Current annual cost (calculated from hours/rate data)
+          - Potential savings with percentage
+          - Calculation methodology notes
+        - Recommended vendors with fit badges (high/medium/low)
+        - Data gaps listed (what would improve the estimate)
+      All numbers should be in EUR and make mathematical sense.
+      The milestone should feel like a professional deliverable preview.
+      Feedback options: "Yes, looks good" and "Needs adjustments" with
+      optional notes textarea.
+      Screenshot the full milestone summary.
+
+      STEP 11 — MILESTONE FEEDBACK
+      Click "Yes, looks good" to approve the milestone.
+      Verify the system acknowledges the approval and transitions to
+      the next pain point or phase.
+      The transition should feel progressive — building toward a complete picture.
+      Screenshot the post-milestone transition.
+
+      STEP 12 — PHASE 3: SYNTHESIS
+      After completing deep-dives on pain points, verify transition to synthesis.
+      The synthesis form should ask final strategic questions:
+        - Key stakeholders involved in decisions
+        - Implementation timeline preference (immediately / quarter / 6 months / year)
+        - Additional context or priorities
+      The form should feel like the final step of a thorough consultation,
+      not an afterthought survey.
+      Select a timeline option and add brief context.
+      Verify the "Generate My Report" button enables only after required fields
+      are complete.
+      Screenshot the synthesis form.
+
+      STEP 13 — WORKSHOP COMPLETION
+      Click "Generate My Report."
+      Verify a professional completion screen appears:
+        - Success animation (checkmark or similar)
+        - "Workshop Complete" message
+        - "Generating your personalized report..." with pulse animation
+        - The user should feel a sense of accomplishment and anticipation
+      Verify auto-navigation to the report progress page within a few seconds.
+      Screenshot the completion celebration.
+
+  - name: "Dental Workshop - Phase Navigation & State Management"
+    url: "http://localhost:5174/workshop"
+    priority: high
+    requires:
+      session: "Requires a paid dental quiz session"
+    workflow: |
+      CONTEXT: Testing that the workshop phases work correctly and users can
+      navigate without losing progress. A 90-minute session means users may
+      pause, come back, or navigate between phases.
+
+      STEP 1 — START WORKSHOP
+      Navigate to the workshop page and begin the session.
+      Verify the confirmation phase loads with relevant dental data.
+      Screenshot the initial state.
+
+      STEP 2 — COMPLETE CONFIRMATION QUICKLY
+      Rapidly confirm all cards (click "Accurate" on each).
+      Reorder pain points.
+      Click continue to move to deep-dive.
+      Verify the phase transition is smooth and instant.
+      Screenshot the deep-dive start.
+
+      STEP 3 — PROGRESS THROUGH FIRST PAIN POINT
+      Answer 2 questions in the deep-dive conversation.
+      Verify the pain point progress bar at the top shows current position.
+      Note the completion percentage.
+      Screenshot showing progress indicators.
+
+      STEP 4 — PHASE HEADER INFORMATION
+      Verify the deep-dive header displays:
+        - Current pain point name clearly
+        - Current stage within the exploration
+        - Confidence/completion progress bar
+        - Time remaining estimate
+      All elements should be readable and well-formatted.
+      Screenshot the header details.
+
+      STEP 5 — BROWSER REFRESH RESILIENCE
+      Reload the page.
+      Verify the workshop resumes from the current state:
+        - Correct phase is shown
+        - Conversation history is preserved
+        - Pain point progress is maintained
+        - No "start over" prompt
+      The recovery should feel transparent to the user.
+      Screenshot the recovered workshop state.

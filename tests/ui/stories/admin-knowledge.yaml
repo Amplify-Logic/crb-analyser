@@ -1,0 +1,34 @@
+stories:
+  - name: "Admin Knowledge Base - Load and Browse"
+    url: "http://localhost:5174/admin/knowledge"
+    priority: medium
+    requires:
+      auth: "admin user session"
+    workflow: |
+      Navigate to http://localhost:5174/admin/knowledge
+      Verify the knowledge base admin page loads
+
+      Look for a sidebar with content type categories (vendor, opportunity, benchmark, etc.)
+      Verify at least two categories are listed
+
+      Look for a knowledge item list in the main content area
+      Verify items are displayed or an empty state is shown
+
+      Click on a different content type in the sidebar
+      Verify the list updates to show items of that type
+
+  - name: "Admin Knowledge Base - Search"
+    url: "http://localhost:5174/admin/knowledge"
+    priority: medium
+    requires:
+      auth: "admin user session"
+    workflow: |
+      Navigate to http://localhost:5174/admin/knowledge
+      Verify the page loads
+
+      Look for a search input (or try pressing Cmd+K / Ctrl+K for search shortcut)
+      If a search input is present, type a query like "automation"
+      Verify the results filter or a search results view appears
+
+      Clear the search
+      Verify the default view is restored

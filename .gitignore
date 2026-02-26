@@ -35,6 +35,12 @@ coverage/
 .pytest_cache/
 htmlcov/
 
+# Bowser reference (cloned for adaptation)
+bowser-reference/
+
+# Screenshots (Bowser QA)
+screenshots/bowser-qa/
+
 # Misc
 *.bak
 *.tmp

@@ -41,18 +41,31 @@ export interface FirstQuestionResponse {
 export async function processAnswer(
   request: ProcessAnswerRequest
 ): Promise<ProcessAnswerResponse> {
-  const response = await fetch(`${API_BASE}/api/interview/process-answer`, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(request),
-  })
+  const controller = new AbortController()
+  const timeoutId = setTimeout(() => controller.abort(), 60_000)
 
-  if (!response.ok) {
-    const error = await response.json().catch(() => ({ detail: 'Unknown error' }))
-    throw new Error(error.detail || 'Failed to process answer')
+  try {
+    const response = await fetch(`${API_BASE}/api/interview/process-answer`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(request),
+      signal: controller.signal,
+    })
+
+    if (!response.ok) {
+      const error = await response.json().catch(() => ({ detail: 'Unknown error' }))
+      throw new Error(error.detail || 'Failed to process answer')
+    }
+
+    return response.json()
+  } catch (err) {
+    if (err instanceof DOMException && err.name === 'AbortError') {
+      throw new Error('Answer processing timed out. Please try again.')
+    }
+    throw err
+  } finally {
+    clearTimeout(timeoutId)
   }
-
-  return response.json()
 }
 
 /**

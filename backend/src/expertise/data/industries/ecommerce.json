@@ -1,7 +1,7 @@
 {
   "industry": "ecommerce",
-  "last_updated": "2026-02-20T21:19:04.653938",
-  "total_analyses": 1,
+  "last_updated": "2026-02-24T12:00:00Z",
+  "total_analyses": 2,
   "confidence": "low",
   "pain_points": {
     "manual_order_processing": {
@@ -18,7 +18,7 @@
         "Mesa/Alloy integration platform",
         "ShipStation/Sendcloud for shipping"
       ],
-      "last_seen": "2026-02-20T00:00:00"
+      "last_seen": "2026-02-20T00:00:00Z"
     },
     "customer_service_volume": {
       "name": "High volume of repetitive customer service inquiries",
@@ -36,7 +36,7 @@
         "Self-service order tracking page",
         "Automated return portal (Returnly/Loop)"
       ],
-      "last_seen": "2026-02-20T00:00:00"
+      "last_seen": "2026-02-20T00:00:00Z"
     },
     "abandoned_cart_loss": {
       "name": "Revenue lost to abandoned carts",
@@ -54,7 +54,7 @@
         "Exit-intent popups",
         "Checkout optimization"
       ],
-      "last_seen": "2026-02-20T00:00:00"
+      "last_seen": "2026-02-20T00:00:00Z"
     },
     "inventory_sync_errors": {
       "name": "Inventory discrepancies across channels",
@@ -72,7 +72,7 @@
         "Real-time sync via API",
         "Automated reorder points"
       ],
-      "last_seen": "2026-02-20T00:00:00"
+      "last_seen": "2026-02-20T00:00:00Z"
     },
     "manual_product_content": {
       "name": "Time-consuming product listing and content creation",
@@ -90,7 +90,7 @@
         "AI image editing",
         "Content templates"
       ],
-      "last_seen": "2026-02-20T00:00:00"
+      "last_seen": "2026-02-20T00:00:00Z"
     },
     "returns_processing": {
       "name": "Manual and costly returns processing",
@@ -108,7 +108,151 @@
         "Return reason analytics",
         "Exchange-first policies"
       ],
-      "last_seen": "2026-02-20T00:00:00"
+      "last_seen": "2026-02-20T00:00:00Z"
+    },
+    "pricing_strategy_manual": {
+      "name": "No dynamic pricing strategy",
+      "frequency": 1,
+      "avg_impact": "high",
+      "typical_causes": [
+        "Static pricing set once and forgotten",
+        "No competitor price monitoring",
+        "No demand-based price adjustments",
+        "Manual spreadsheet-based price updates"
+      ],
+      "effective_solutions": [
+        "AI pricing tools (Prisync, Omnia Retail)",
+        "Competitor monitoring automation",
+        "Dynamic pricing rules based on demand signals",
+        "Margin optimization dashboards"
+      ],
+      "last_seen": "2026-02-24T00:00:00Z"
+    },
+    "supplier_management_chaos": {
+      "name": "Manual supplier and purchase order management",
+      "frequency": 1,
+      "avg_impact": "high",
+      "typical_causes": [
+        "Manual PO tracking via email and spreadsheets",
+        "No visibility into supplier lead times",
+        "No automated reorder triggers",
+        "Fragmented supplier communication"
+      ],
+      "effective_solutions": [
+        "Inventory management platforms (Cin7, TradeGecko)",
+        "Automated PO generation at reorder points",
+        "Supplier portal for real-time status updates",
+        "Demand forecasting for proactive ordering"
+      ],
+      "last_seen": "2026-02-24T00:00:00Z"
+    },
+    "fraud_detection_gaps": {
+      "name": "Manual fraud review losing revenue and increasing chargebacks",
+      "frequency": 1,
+      "avg_impact": "high",
+      "typical_causes": [
+        "Manual order review for fraud signals",
+        "No automated risk scoring",
+        "Over-cancelling legitimate orders",
+        "Reactive chargeback handling"
+      ],
+      "effective_solutions": [
+        "Signifyd guaranteed fraud protection",
+        "Riskified AI fraud detection",
+        "Shopify fraud analysis tools",
+        "Automated risk scoring with configurable thresholds"
+      ],
+      "last_seen": "2026-02-24T00:00:00Z"
+    },
+    "multi_channel_inconsistency": {
+      "name": "Inconsistent inventory and pricing across sales channels",
+      "frequency": 1,
+      "avg_impact": "high",
+      "typical_causes": [
+        "Different inventory counts per channel",
+        "Pricing mismatches between marketplace and DTC",
+        "Manual listing updates across platforms",
+        "No centralized product information management"
+      ],
+      "effective_solutions": [
+        "Multi-channel sync tools (Extensiv, ChannelAdvisor)",
+        "Centralized PIM (product information management)",
+        "Linnworks for unified order and inventory management",
+        "Automated listing syndication"
+      ],
+      "last_seen": "2026-02-24T00:00:00Z"
+    },
+    "customer_segmentation_weak": {
+      "name": "One-size-fits-all marketing with no customer segmentation",
+      "frequency": 1,
+      "avg_impact": "medium",
+      "typical_causes": [
+        "No customer data platform",
+        "Batch-and-blast email strategy",
+        "No behavioral tracking or RFM analysis",
+        "Limited use of purchase history for targeting"
+      ],
+      "effective_solutions": [
+        "Klaviyo advanced segments and predictive analytics",
+        "AI-powered personalization (Nosto, Dynamic Yield)",
+        "RFM segmentation for lifecycle marketing",
+        "Behavioral trigger campaigns"
+      ],
+      "last_seen": "2026-02-24T00:00:00Z"
+    },
+    "shipping_cost_optimization": {
+      "name": "Overpaying for shipping without rate optimization",
+      "frequency": 1,
+      "avg_impact": "medium",
+      "typical_causes": [
+        "Single carrier dependency",
+        "No rate comparison across carriers",
+        "Manual label generation",
+        "No zone-based shipping optimization"
+      ],
+      "effective_solutions": [
+        "ShipStation multi-carrier rate comparison",
+        "Sendcloud automated carrier selection",
+        "Negotiated volume-based carrier rates",
+        "Zone skipping and regional fulfillment"
+      ],
+      "last_seen": "2026-02-24T00:00:00Z"
+    },
+    "product_photography_bottleneck": {
+      "name": "Slow product content and photography pipeline",
+      "frequency": 1,
+      "avg_impact": "medium",
+      "typical_causes": [
+        "Manual photo editing for every product",
+        "Expensive studio photography sessions",
+        "Inconsistent image quality across catalog",
+        "Slow time-to-market for new products"
+      ],
+      "effective_solutions": [
+        "AI background removal (Photoroom, remove.bg)",
+        "AI image generation for lifestyle shots",
+        "Automated image resizing and optimization",
+        "Standardized photo templates and guidelines"
+      ],
+      "last_seen": "2026-02-24T00:00:00Z"
+    },
+    "subscription_churn": {
+      "name": "High churn rate on subscription products",
+      "frequency": 1,
+      "avg_impact": "high",
+      "typical_causes": [
+        "No churn prediction or early warning system",
+        "Rigid subscription plans with no flexibility",
+        "No win-back campaigns for churned subscribers",
+        "Poor subscription management UX"
+      ],
+      "effective_solutions": [
+        "Recharge subscription management with skip/swap",
+        "AI churn prediction models",
+        "Proactive retention offers before cancellation",
+        "Flexible subscription options (pause, frequency change)"
+      ],
+      "last_seen": "2026-02-24T00:00:00Z"
     }
   },
   "processes": {
@@ -207,6 +351,70 @@
         "Partial refund logic"
       ],
       "quick_win_potential": false
+    },
+    "pricing_optimization": {
+      "process_name": "Pricing Optimization",
+      "automation_potential_observed": [
+        70
+      ],
+      "common_tools_used": [
+        "prisync",
+        "omnia_retail",
+        "ai_pricing_engines"
+      ],
+      "common_blockers": [
+        "Insufficient historical sales data",
+        "Complex product bundling rules"
+      ],
+      "quick_win_potential": false
+    },
+    "product_content_creation": {
+      "process_name": "Product Content Creation",
+      "automation_potential_observed": [
+        80
+      ],
+      "common_tools_used": [
+        "shopify_magic",
+        "jasper",
+        "ai_photo_tools"
+      ],
+      "common_blockers": [
+        "Brand voice consistency",
+        "Technical product specifications"
+      ],
+      "quick_win_potential": true
+    },
+    "multi_channel_management": {
+      "process_name": "Multi-Channel Management",
+      "automation_potential_observed": [
+        75
+      ],
+      "common_tools_used": [
+        "channeladvisor",
+        "extensiv",
+        "linnworks"
+      ],
+      "common_blockers": [
+        "Marketplace-specific listing requirements",
+        "Channel-specific pricing strategies"
+      ],
+      "quick_win_potential": false
+    },
+    "fraud_prevention": {
+      "process_name": "Fraud Prevention",
+      "automation_potential_observed": [
+        85
+      ],
+      "common_tools_used": [
+        "signifyd",
+        "riskified",
+        "ns8"
+      ],
+      "common_blockers": [
+        "False positive rate tuning",
+        "International order verification"
+      ],
+      "quick_win_potential": true
     }
   },
   "effective_patterns": [
@@ -243,7 +451,7 @@
       "frequency": 1,
       "context": {
         "min_orders_per_month": 500,
-        "company_size": "11-50+"
+        "company_size": "11-50"
       }
     },
     {
@@ -254,6 +462,42 @@
         "min_return_rate": 0.05,
         "company_size": "any"
       }
+    },
+    {
+      "pattern": "AI fraud detection reduces chargebacks by 50-70% while improving conversion",
+      "recommendation": "Deploy Signifyd or Riskified for stores with >500 orders/month or high-value products",
+      "frequency": 1,
+      "context": {
+        "min_orders_per_month": 500,
+        "company_size": "any"
+      }
+    },
+    {
+      "pattern": "Dynamic pricing based on demand signals increases margin by 5-15%",
+      "recommendation": "Implement Prisync or Omnia Retail for stores with 200+ SKUs and competitive markets",
+      "frequency": 1,
+      "context": {
+        "min_skus": 200,
+        "company_size": "11-50"
+      }
+    },
+    {
+      "pattern": "Automated customer segmentation drives 3-5x email revenue per send",
+      "recommendation": "Use Klaviyo predictive analytics and RFM segments for targeted campaigns",
+      "frequency": 1,
+      "context": {
+        "min_customers": 1000,
+        "company_size": "any"
+      }
+    },
+    {
+      "pattern": "Subscription management with AI churn prediction reduces churn by 20-30%",
+      "recommendation": "Deploy Recharge with churn prediction for subscription-based ecommerce",
+      "frequency": 1,
+      "context": {
+        "business_model": "subscription",
+        "company_size": "any"
+      }
     }
   ],
   "anti_patterns": [
@@ -262,12 +506,16 @@
     "AI pricing optimization without at least 6 months of historical sales data",
     "Multi-channel expansion before core single-channel operations are automated",
     "Building custom inventory sync when Stocky/Extensiv handle standard use cases",
-    "Recommending headless commerce rebuild for stores under EUR 2M annual revenue"
+    "Recommending headless commerce rebuild for stores under EUR 2M annual revenue",
+    "Dynamic pricing without competitive monitoring \u2014 may price yourself out of market",
+    "AI customer service without human escalation path \u2014 damages customer trust on complex issues",
+    "Over-automating returns processing \u2014 loses opportunity for exchange/retention offers",
+    "Building custom shipping integration when Sendcloud/ShipStation exists with pre-negotiated rates"
   ],
   "size_specific": {
     "1-10": {
       "avg_ai_readiness": 35,
-      "avg_potential_savings": 15000,
+      "avg_potential_savings": 25000,
       "typical_priorities": [
         "customer_service",
         "abandoned_cart",
@@ -280,7 +528,7 @@
     },
     "11-50": {
       "avg_ai_readiness": 50,
-      "avg_potential_savings": 45000,
+      "avg_potential_savings": 80000,
       "typical_priorities": [
         "inventory",
         "order_routing",
@@ -296,7 +544,7 @@
     },
     "51-200": {
       "avg_ai_readiness": 65,
-      "avg_potential_savings": 120000,
+      "avg_potential_savings": 200000,
       "typical_priorities": [
         "multi_channel_sync",
         "warehouse_automation",
@@ -311,13 +559,13 @@
       ]
     },
     "unknown": {
-      "count": 1,
+      "count": 2,
       "avg_readiness": 60.0,
       "common_pain_points": []
     }
   },
   "avg_ai_readiness": 60.0,
-  "avg_potential_savings": 97200.0,
+  "avg_potential_savings": 258600.0,
   "common_tech_stacks": [
     "shopify",
     "klaviyo",

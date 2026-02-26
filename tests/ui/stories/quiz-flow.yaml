@@ -1,29 +1,48 @@
-name: Quiz Flow - Complete Journey
-description: Test the main conversion path from landing to quiz completion
-url: http://localhost:5174/quiz
-priority: critical
+stories:
+  - name: "Quiz - Company Research Flow"
+    url: "http://localhost:5174/quiz"
+    priority: critical
+    workflow: |
+      Navigate to http://localhost:5174/quiz
+      Verify the quiz page loads with a company name input field visible
 
-steps:
-  - name: Load quiz page
-    action: navigate
-    expect: Quiz page loads with first question visible
+      Type "ACME Corp" into the company name input field
+      Look for and click a submit/research button (e.g., "Find my company", "Research", or similar)
 
-  - name: Answer industry question
-    action: click option containing "E-commerce" or first available option
-    expect: Next question appears, progress bar advances
+      Wait for research progress indicators to appear (web scan, LinkedIn, Crunchbase steps)
+      Verify at least one research progress step is shown
+      Wait for research to complete (look for findings or results to appear)
 
-  - name: Answer company size question
-    action: click option for company size
-    expect: Next question appears
+      Verify company research findings are displayed with confidence indicators
+      Verify the user can proceed to the next phase of the quiz
 
-  - name: Complete remaining questions
-    action: answer all remaining questions by clicking first available option
-    expect: Each question advances to next, progress increases
+  - name: "Quiz - Empty Company Name Validation"
+    url: "http://localhost:5174/quiz"
+    priority: high
+    workflow: |
+      Navigate to http://localhost:5174/quiz
+      Verify the quiz page loads
 
-  - name: View results
-    action: wait for results/score page
-    expect: AI readiness score displayed, teaser report preview visible
+      Without entering a company name, try to click the submit/research button
+      Verify that either the button is disabled or an error message appears
+      Verify the form does not advance to the research phase
 
-  - name: CTA visible
-    action: check for purchase/checkout button
-    expect: Call-to-action button is visible and clickable
+  - name: "Quiz - Full Journey to Preview"
+    url: "http://localhost:5174/quiz"
+    priority: critical
+    workflow: |
+      Navigate to http://localhost:5174/quiz
+      Verify the quiz page loads
+
+      Enter a company name like "Test Company" and submit it
+      Wait for company research to complete
+      Proceed through the findings review
+
+      Continue through all subsequent quiz phases by interacting with available options
+      Look for a teaser/preview section or pricing section to appear
+      Verify the quiz progresses through multiple phases (check for progress indicators)
+
+      After completing available steps, verify either:
+      - A preview report page is shown, or
+      - A pricing/checkout option is presented, or
+      - An email capture form appears
