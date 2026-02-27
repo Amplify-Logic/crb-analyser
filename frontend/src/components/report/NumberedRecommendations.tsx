@@ -1,6 +1,6 @@
 import { useState, lazy, Suspense } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { AlertTriangle } from 'lucide-react'
+import { AlertTriangle, ChevronDown } from 'lucide-react'
 import type { AutomationFlow } from './AutomationFlowBuilder'
 
 const AutomationFlowBuilder = lazy(() => import('./AutomationFlowBuilder'))
@@ -32,6 +32,53 @@ interface NumberedRecommendationsProps {
 /** Detect if recommendation uses AIOS option keys */
 function isAIOSFormat(options: Record<string, unknown>): boolean {
   return 'connect_and_automate' in options || 'enhance_with_ai' in options || 'targeted_upgrade' in options
+}
+
+function FlowToggle({
+  defaultExpanded,
+  title,
+  monthlyCost,
+  children,
+}: {
+  defaultExpanded: boolean
+  title: string
+  monthlyCost?: string
+  children: React.ReactNode
+}) {
+  const [expanded, setExpanded] = useState(defaultExpanded)
+  return (
+    <div className="mt-3">
+      <button
+        onClick={() => setExpanded(!expanded)}
+        className="flex items-center justify-between w-full text-left px-2 py-1.5 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700/50 transition"
+      >
+        <span className="flex items-center gap-2">
+          <ChevronDown className={`w-3.5 h-3.5 text-gray-400 transition-transform ${expanded ? '' : '-rotate-90'}`} />
+          <span className="text-[10px] font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wide">
+            {title}
+          </span>
+        </span>
+        {monthlyCost && (
+          <span className="text-xs font-medium text-gray-500">
+            {monthlyCost}
+          </span>
+        )}
+      </button>
+      <AnimatePresence>
+        {expanded && (
+          <motion.div
+            initial={{ height: 0, opacity: 0 }}
+            animate={{ height: 'auto', opacity: 1 }}
+            exit={{ height: 0, opacity: 0 }}
+            transition={{ duration: 0.2 }}
+            className="overflow-hidden"
+          >
+            {children}
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </div>
+  )
 }
 
 export default function NumberedRecommendations({ recommendations, totalCount, startIndex }: NumberedRecommendationsProps) {
@@ -169,16 +216,30 @@ export default function NumberedRecommendations({ recommendations, totalCount, s
                               {rec.options.connect_and_automate.monthly_cost && (
                                 <p className="text-xs text-gray-500">{rec.options.connect_and_automate.monthly_cost}</p>
                               )}
+                              {rec.options.connect_and_automate.prerequisites?.length > 0 && (
+                                <div className="flex flex-wrap gap-1.5 mt-2 mb-2">
+                                  <span className="text-xs text-gray-500 font-medium">Needs:</span>
+                                  {rec.options.connect_and_automate.prerequisites.map((p: string, i: number) => (
+                                    <span key={i} className="px-2 py-0.5 text-xs rounded-full bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-400">
+                                      {p}
+                                    </span>
+                                  ))}
+                                </div>
+                              )}
                               {rec.options.connect_and_automate.automation_flow?.nodes?.length > 0 && (
-                                <div className="mt-3">
+                                <FlowToggle
+                                  defaultExpanded={rec.our_recommendation === 'connect_and_automate'}
+                                  title={`How it connects${rec.options.connect_and_automate.build_time ? ` — ${rec.options.connect_and_automate.build_time}` : ''}`}
+                                  monthlyCost={rec.options.connect_and_automate.monthly_cost}
+                                >
                                   <Suspense fallback={<div className="h-[200px] animate-pulse bg-gray-100 dark:bg-gray-700 rounded-xl" />}>
                                     <AutomationFlowBuilder
                                       flow={rec.options.connect_and_automate.automation_flow as AutomationFlow}
-                                      title="How it connects"
+                                      title=""
                                       height={200}
                                     />
                                   </Suspense>
-                                </div>
+                                </FlowToggle>
                               )}
                               {rec.options.connect_and_automate.tools_used?.length > 0 && (
                                 <div className="mt-2 flex flex-wrap gap-1">

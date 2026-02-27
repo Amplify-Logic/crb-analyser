@@ -94,6 +94,11 @@ class ThreeOptionsSkill(LLMSkill[Dict[str, Any]]):
         "tools_used": [],
         "mcp_servers": [],
         "monthly_cost": "",
+        "aios_layers_touched": ["connections", "intelligence"],
+        "skills_created": None,
+        "context_needed": None,
+        "education_prereq": None,
+        "cowork_tasks": None,
         "pros": ["Uses your existing stack", "Ships this week", "Fully customized"],
         "cons": ["Requires API access", "Needs maintenance", "Development labor cost"],
     }
@@ -376,6 +381,11 @@ Generate a JSON object with this structure:
                     {{"from": "n2", "to": "n3", "label": "<processed output>"}}
                 ]
             }},
+            "aios_layers_touched": ["connections", "intelligence"],
+            "skills_created": ["<optional: /skill-name if this creates a reusable Claude Code skill>"],
+            "context_needed": ["<optional: Context OS data needed, e.g., 'client profiles', 'process documentation'>"],
+            "education_prereq": "<optional: what to learn first, e.g., 'Claude Code basics' or 'MCP setup'>",
+            "cowork_tasks": ["<optional: ongoing tasks Claude Cowork handles, e.g., 'daily report generation'>"],
             "pros": ["<pro1>", "<pro2>"],
             "cons": ["<con1>", "<con2>"]
         }},
@@ -427,6 +437,11 @@ CRITICAL RULES
 - Evaluate the RECOMMENDATION DECISION logic above for EACH finding independently
 - Do NOT recommend "targeted_upgrade" SOLELY because a newer tool exists without clear benefit
 - Every connect_and_automate option MUST include build_time, tools_used, and automation_flow
+- For connect_and_automate: include "aios_layers_touched" (which AIOS layers this builds: stack, connections, intelligence, data_os, skills, context_os, dashboard)
+- For connect_and_automate: include "skills_created" if a reusable Claude Code skill results from this
+- For connect_and_automate: include "context_needed" if Context OS data is required
+- For connect_and_automate: include "education_prereq" when the client needs to learn something first
+- For connect_and_automate: include "cowork_tasks" for ongoing tasks Claude Cowork handles
 - For connect_and_automate: include "prerequisite" when the client lacks infrastructure
 - For connect_and_automate: include "diy_complexity" to set expectations
 - automation_flow: 3-6 nodes max, node types: "existing_tool" (green), "new_tool" (blue), "ai_layer" (purple), "output" (gray)

@@ -228,6 +228,18 @@ function CompactFindingCard({ finding }: { finding: Finding }) {
           </>
         )}
       </div>
+      {finding.automation_flow?.nodes?.length > 0 && (
+        <div className="mt-2">
+          <Suspense fallback={<div className="h-[100px] animate-pulse bg-gray-100 dark:bg-gray-700 rounded-lg" />}>
+            <AutomationFlowBuilder
+              flow={finding.automation_flow as AutomationFlow}
+              title=""
+              height={100}
+              compact
+            />
+          </Suspense>
+        </div>
+      )}
     </div>
   )
 }

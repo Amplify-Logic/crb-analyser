@@ -1,0 +1,248 @@
+{
+  "description": "Pre-built skill templates per industry — recommended Claude Code skills for AIOS reports",
+  "version": "1.0",
+  "last_updated": "2026-02-27",
+
+  "industries": {
+    "professional-services": {
+      "skills": [
+        {
+          "slug": "onboard-client",
+          "name": "/onboard-client",
+          "description": "Automated client onboarding workflow",
+          "what_it_does": "Creates client folder structure, generates engagement letter from template, sets up recurring meetings, sends welcome packet, creates tasks in PM tool",
+          "tools_needed": ["CRM (via MCP)", "Document storage", "Calendar (via MCP)", "PM tool"],
+          "build_time_hours": 4,
+          "complexity": "moderate",
+          "aios_layers": ["skills", "connections", "context_os"],
+          "prerequisite_layers": ["stack", "connections"],
+          "example_usage": "/onboard-client --name 'Acme BV' --type audit --partner jan",
+          "estimated_time_saved_monthly_hours": 8
+        },
+        {
+          "slug": "prep-meeting",
+          "name": "/prep-meeting",
+          "description": "Pre-meeting intelligence briefing",
+          "what_it_does": "Pulls client context from memory, recent communications, open items, financial data. Generates a 1-page briefing with talking points and action items",
+          "tools_needed": ["CRM (via MCP)", "Email (via MCP)", "Calendar", "Context OS"],
+          "build_time_hours": 3,
+          "complexity": "moderate",
+          "aios_layers": ["skills", "context_os", "data_os"],
+          "prerequisite_layers": ["context_os"],
+          "example_usage": "/prep-meeting --client 'Acme BV' --date tomorrow",
+          "estimated_time_saved_monthly_hours": 6
+        },
+        {
+          "slug": "generate-invoice",
+          "name": "/generate-invoice",
+          "description": "Generate invoice from time tracking and engagement terms",
+          "what_it_does": "Pulls time entries, matches against engagement rates, applies any caps or discounts, generates invoice in billing system, sends to client with personalized cover note",
+          "tools_needed": ["Time tracking (via MCP)", "Billing/invoicing", "CRM", "Email"],
+          "build_time_hours": 5,
+          "complexity": "moderate",
+          "aios_layers": ["skills", "connections", "data_os"],
+          "prerequisite_layers": ["stack", "connections"],
+          "example_usage": "/generate-invoice --client 'Acme BV' --period 2026-Q1",
+          "estimated_time_saved_monthly_hours": 4
+        },
+        {
+          "slug": "weekly-report",
+          "name": "/weekly-report",
+          "description": "Automated weekly team/partner report",
+          "what_it_does": "Aggregates data from PM tool, CRM, time tracking. Generates summary of: hours billed, pipeline status, deadline approaching, utilization rates, key client updates",
+          "tools_needed": ["PM tool (via MCP)", "CRM (via MCP)", "Time tracking"],
+          "build_time_hours": 4,
+          "complexity": "moderate",
+          "aios_layers": ["skills", "data_os", "dashboard"],
+          "prerequisite_layers": ["connections", "data_os"],
+          "example_usage": "/weekly-report --week current --team all",
+          "estimated_time_saved_monthly_hours": 6
+        },
+        {
+          "slug": "draft-proposal",
+          "name": "/draft-proposal",
+          "description": "Draft client proposal from context",
+          "what_it_does": "Pulls client needs from CRM notes and meeting summaries, matches with service catalog, generates proposal using brand templates, calculates pricing based on engagement complexity",
+          "tools_needed": ["CRM (via MCP)", "Document templates", "Context OS"],
+          "build_time_hours": 6,
+          "complexity": "high",
+          "aios_layers": ["skills", "context_os", "data_os"],
+          "prerequisite_layers": ["context_os", "connections"],
+          "example_usage": "/draft-proposal --client 'NewCo BV' --service audit --scope annual",
+          "estimated_time_saved_monthly_hours": 8
+        }
+      ]
+    },
+
+    "dental": {
+      "skills": [
+        {
+          "slug": "patient-recall",
+          "name": "/patient-recall",
+          "description": "Automated patient recall management",
+          "what_it_does": "Identifies patients overdue for check-ups, generates personalized recall messages, schedules follow-up reminders, tracks recall response rates",
+          "tools_needed": ["PMS (via MCP/API)", "SMS/Email platform", "Calendar"],
+          "build_time_hours": 4,
+          "complexity": "moderate",
+          "aios_layers": ["skills", "connections", "data_os"],
+          "prerequisite_layers": ["stack", "connections"],
+          "example_usage": "/patient-recall --overdue-months 6 --send true",
+          "estimated_time_saved_monthly_hours": 10
+        },
+        {
+          "slug": "treatment-plan-prep",
+          "name": "/treatment-plan-prep",
+          "description": "Pre-visit treatment plan preparation",
+          "what_it_does": "Pulls patient history, recent x-rays notes, insurance coverage. Generates treatment plan draft with cost estimates and insurance pre-auth requirements",
+          "tools_needed": ["PMS (via MCP/API)", "Insurance verification", "Context OS"],
+          "build_time_hours": 5,
+          "complexity": "high",
+          "aios_layers": ["skills", "data_os", "context_os"],
+          "prerequisite_layers": ["connections", "data_os"],
+          "example_usage": "/treatment-plan-prep --patient 'John Smith' --visit-date tomorrow",
+          "estimated_time_saved_monthly_hours": 8
+        },
+        {
+          "slug": "insurance-verify",
+          "name": "/insurance-verify",
+          "description": "Automated insurance eligibility verification",
+          "what_it_does": "Checks patient insurance eligibility, verifies coverage for planned procedures, flags issues before appointment, generates pre-authorization if needed",
+          "tools_needed": ["PMS", "Insurance portal (via API/Cowork)", "Calendar"],
+          "build_time_hours": 6,
+          "complexity": "high",
+          "aios_layers": ["skills", "connections", "intelligence"],
+          "prerequisite_layers": ["connections"],
+          "example_usage": "/insurance-verify --patients-tomorrow --flag-issues true",
+          "estimated_time_saved_monthly_hours": 12
+        },
+        {
+          "slug": "morning-huddle",
+          "name": "/morning-huddle",
+          "description": "Daily morning huddle briefing",
+          "what_it_does": "Generates daily briefing: today's schedule with patient notes, outstanding balances, treatment plans to discuss, inventory alerts, team schedule",
+          "tools_needed": ["PMS (via MCP/API)", "Calendar", "Context OS"],
+          "build_time_hours": 3,
+          "complexity": "moderate",
+          "aios_layers": ["skills", "data_os", "dashboard"],
+          "prerequisite_layers": ["connections", "context_os"],
+          "example_usage": "/morning-huddle --date today",
+          "estimated_time_saved_monthly_hours": 8
+        }
+      ]
+    },
+
+    "ecommerce": {
+      "skills": [
+        {
+          "slug": "product-launch",
+          "name": "/product-launch",
+          "description": "Coordinated product launch workflow",
+          "what_it_does": "Creates product in Shopify/WooCommerce, generates SEO-optimized description, prepares email announcement, schedules social media posts, sets up inventory alerts",
+          "tools_needed": ["Ecommerce platform (via MCP)", "Email marketing", "Social media", "Context OS"],
+          "build_time_hours": 6,
+          "complexity": "high",
+          "aios_layers": ["skills", "connections", "context_os"],
+          "prerequisite_layers": ["connections", "context_os"],
+          "example_usage": "/product-launch --product 'Summer Collection 2026' --date 2026-06-01",
+          "estimated_time_saved_monthly_hours": 10
+        },
+        {
+          "slug": "customer-winback",
+          "name": "/customer-winback",
+          "description": "Re-engage lapsed customers",
+          "what_it_does": "Identifies customers who haven't purchased in 90+ days, segments by purchase history, generates personalized win-back offers, schedules email sequences",
+          "tools_needed": ["Ecommerce platform (via MCP)", "Email marketing", "Analytics"],
+          "build_time_hours": 4,
+          "complexity": "moderate",
+          "aios_layers": ["skills", "data_os", "intelligence"],
+          "prerequisite_layers": ["connections", "data_os"],
+          "example_usage": "/customer-winback --days-lapsed 90 --offer 15-percent",
+          "estimated_time_saved_monthly_hours": 6
+        },
+        {
+          "slug": "inventory-report",
+          "name": "/inventory-report",
+          "description": "Smart inventory analysis and reorder recommendations",
+          "what_it_does": "Analyzes stock levels, calculates sell-through rates, predicts stockout dates, generates reorder recommendations with quantities based on sales velocity",
+          "tools_needed": ["Ecommerce platform (via MCP)", "Supplier data", "Analytics"],
+          "build_time_hours": 5,
+          "complexity": "moderate",
+          "aios_layers": ["skills", "data_os", "dashboard"],
+          "prerequisite_layers": ["connections", "data_os"],
+          "example_usage": "/inventory-report --alert-threshold 14-days --include-seasonal true",
+          "estimated_time_saved_monthly_hours": 8
+        },
+        {
+          "slug": "order-issue",
+          "name": "/order-issue",
+          "description": "Handle customer order issues",
+          "what_it_does": "Pulls order details, shipping tracking, payment status. Determines issue type, drafts response in brand voice, initiates refund/replacement if within policy, logs in CRM",
+          "tools_needed": ["Ecommerce platform (via MCP)", "Shipping (via API)", "CRM", "Context OS"],
+          "build_time_hours": 4,
+          "complexity": "moderate",
+          "aios_layers": ["skills", "connections", "context_os"],
+          "prerequisite_layers": ["connections", "context_os"],
+          "example_usage": "/order-issue --order ORD-12345 --type damaged",
+          "estimated_time_saved_monthly_hours": 6
+        }
+      ]
+    },
+
+    "coaching": {
+      "skills": [
+        {
+          "slug": "prep-session",
+          "name": "/prep-session",
+          "description": "Coaching session preparation",
+          "what_it_does": "Pulls client goals, last session notes, between-session check-ins, upcoming milestones. Generates session prep doc with suggested focus areas and powerful questions",
+          "tools_needed": ["Calendar (via MCP)", "Notes/CRM", "Context OS"],
+          "build_time_hours": 3,
+          "complexity": "moderate",
+          "aios_layers": ["skills", "context_os", "data_os"],
+          "prerequisite_layers": ["context_os"],
+          "example_usage": "/prep-session --client 'Sarah Johnson' --session-date tomorrow",
+          "estimated_time_saved_monthly_hours": 8
+        },
+        {
+          "slug": "session-summary",
+          "name": "/session-summary",
+          "description": "Post-session summary and action items",
+          "what_it_does": "Takes session notes, generates structured summary with key insights, action items for client, follow-up tasks for coach, updates client memory file",
+          "tools_needed": ["Notes/CRM", "Email", "Context OS"],
+          "build_time_hours": 2,
+          "complexity": "low",
+          "aios_layers": ["skills", "context_os"],
+          "prerequisite_layers": ["context_os"],
+          "example_usage": "/session-summary --client 'Sarah Johnson' --notes 'session_notes.md'",
+          "estimated_time_saved_monthly_hours": 6
+        },
+        {
+          "slug": "content-idea",
+          "name": "/content-idea",
+          "description": "Generate content ideas from coaching patterns",
+          "what_it_does": "Analyzes anonymized patterns across client sessions, identifies common themes, generates content ideas aligned with brand voice, drafts LinkedIn posts or newsletter sections",
+          "tools_needed": ["Context OS", "Content calendar", "LinkedIn (via Cowork)"],
+          "build_time_hours": 3,
+          "complexity": "moderate",
+          "aios_layers": ["skills", "context_os", "intelligence"],
+          "prerequisite_layers": ["context_os"],
+          "example_usage": "/content-idea --theme leadership --format linkedin-post",
+          "estimated_time_saved_monthly_hours": 4
+        },
+        {
+          "slug": "client-progress",
+          "name": "/client-progress",
+          "description": "Client progress report generation",
+          "what_it_does": "Compiles client journey data: goals set, milestones reached, sessions completed, key breakthroughs. Generates progress report for quarterly review with client",
+          "tools_needed": ["CRM/Notes", "Context OS", "Document templates"],
+          "build_time_hours": 4,
+          "complexity": "moderate",
+          "aios_layers": ["skills", "context_os", "data_os"],
+          "prerequisite_layers": ["context_os", "data_os"],
+          "example_usage": "/client-progress --client 'Sarah Johnson' --period Q1-2026",
+          "estimated_time_saved_monthly_hours": 4
+        }
+      ]
+    }
+  }
+}

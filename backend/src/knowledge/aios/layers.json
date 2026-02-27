@@ -1,0 +1,167 @@
+{
+  "description": "7-layer AIOS framework definition and assessment criteria",
+  "version": "1.0",
+  "last_updated": "2026-02-27",
+
+  "layers": [
+    {
+      "number": 1,
+      "id": "stack",
+      "name": "Stack",
+      "tagline": "Your existing tools",
+      "description": "The tools the business already uses — CRM, billing, PM, email, calendar, ERP. We assess API readiness, data portability, and MCP availability. Connect-first philosophy: keep what works.",
+      "examples": ["CRM", "Billing/Invoicing", "Project Management", "Email", "Calendar", "ERP", "Accounting"],
+      "assessment_criteria": {
+        "score_1_3": "Mostly closed/legacy tools with no APIs, data trapped in proprietary formats",
+        "score_4_6": "Mix of modern and legacy tools, some have APIs but not consistently used",
+        "score_7_10": "Modern stack with REST/GraphQL APIs, data accessible, tools chosen for openness"
+      },
+      "key_questions": [
+        "What tools do you use daily?",
+        "Can you export your data from each tool?",
+        "Do your tools have APIs or integration options?"
+      ]
+    },
+    {
+      "number": 2,
+      "id": "connections",
+      "name": "Connections",
+      "tagline": "The wiring between your tools",
+      "description": "MCP servers, native APIs, webhooks, automation platforms (Make/n8n) that wire tools together. The nervous system of the AIOS.",
+      "examples": ["MCP servers", "Native integrations", "REST APIs", "Webhooks", "Zapier/Make/n8n automations"],
+      "assessment_criteria": {
+        "score_1_3": "Tools are siloed, data manually copied between systems, no automations",
+        "score_4_6": "Some Zapier/Make automations, a few native integrations, but gaps remain",
+        "score_7_10": "Most tools connected via MCP or APIs, data flows automatically, webhooks for real-time sync"
+      },
+      "key_questions": [
+        "Which tools currently talk to each other?",
+        "Do you manually transfer data between tools?",
+        "Do you use any automation platforms (Zapier, Make, n8n)?"
+      ]
+    },
+    {
+      "number": 3,
+      "id": "intelligence",
+      "name": "Intelligence",
+      "tagline": "Claude Code + Cowork",
+      "description": "Claude Code is the builder — creates integrations, writes MCP connections, deploys agents, builds skills. Claude Cowork is the operator — handles web tasks, browser automation, computer use, real-time agentic work. Together they form the intelligence hub. Make/n8n/Zapier sit alongside for scheduled orchestration.",
+      "examples": ["Claude Code (builder)", "Claude Cowork (operator)", "Make/n8n (scheduler)", "Custom agents"],
+      "assessment_criteria": {
+        "score_1_3": "No AI tools in use, or only basic ChatGPT for ad-hoc questions",
+        "score_4_6": "Using Claude/ChatGPT for content, some exploration of automation, no systematic AI integration",
+        "score_7_10": "Claude Code actively building integrations, Cowork running operations, AI embedded in daily workflows"
+      },
+      "key_questions": [
+        "How do you currently use AI in your business?",
+        "Have you tried Claude Code or similar developer tools?",
+        "Do you have any AI-powered automations running?"
+      ]
+    },
+    {
+      "number": 4,
+      "id": "data_os",
+      "name": "Data OS",
+      "tagline": "Centralized business data",
+      "description": "All tool data accessible, structured, queryable. A single source of truth the AI layer can query: client records, financial data, project status, communications. Could be Supabase, Notion, Airtable, or custom DB.",
+      "examples": ["Unified client database", "Financial data warehouse", "Project status hub", "Communication archive"],
+      "assessment_criteria": {
+        "score_1_3": "Data scattered across tools with no centralization, can't answer basic cross-tool questions",
+        "score_4_6": "Some data centralized (e.g., CRM as hub), but many silos remain, manual reporting",
+        "score_7_10": "Single source of truth accessible to AI, cross-tool queries possible, automated data sync"
+      },
+      "key_questions": [
+        "Where does your most important business data live?",
+        "Can you easily get a 360-degree view of a client?",
+        "How do you generate business reports — manually or automated?"
+      ]
+    },
+    {
+      "number": 5,
+      "id": "skills",
+      "name": "Skills",
+      "tagline": "Custom Claude Code skills",
+      "description": "Custom Claude Code skills (slash commands) for business processes. Each skill encodes a workflow: /onboard-client, /generate-invoice, /prep-meeting, /analyze-competitor. These are the business's institutional knowledge made executable.",
+      "examples": ["/onboard-client", "/generate-invoice", "/prep-meeting", "/analyze-competitor", "/weekly-report"],
+      "assessment_criteria": {
+        "score_1_3": "No custom skills or automation scripts, all processes manual",
+        "score_4_6": "Some scripts or macros, maybe a few Make/Zapier workflows, but not systematic",
+        "score_7_10": "Library of Claude Code skills encoding key business processes, team actively creates and refines skills"
+      },
+      "key_questions": [
+        "What are your most repetitive business processes?",
+        "Do you have any documented SOPs that could be automated?",
+        "How do you onboard new team members on processes?"
+      ]
+    },
+    {
+      "number": 6,
+      "id": "context_os",
+      "name": "Context OS",
+      "tagline": "Business identity + memory",
+      "description": "The business's identity layer that makes AI personal and reliable: CLAUDE.md equivalent with business rules, brand voice, decision frameworks. Memory files with client preferences, project history. Goal tracking, process documentation, team profiles.",
+      "examples": ["CLAUDE.md (business rules)", "Client memory files", "Brand voice guide", "Decision frameworks", "Process SOPs"],
+      "assessment_criteria": {
+        "score_1_3": "No documented context, AI gives generic responses, institutional knowledge lives in people's heads",
+        "score_4_6": "Some documentation exists (brand guide, SOPs), but not in a format AI can use",
+        "score_7_10": "Rich Context OS with CLAUDE.md, client memory, process docs — AI produces work indistinguishable from the business"
+      },
+      "key_questions": [
+        "Is your brand voice documented?",
+        "Do you have SOPs for your key processes?",
+        "If you left the business for a month, could someone follow your processes from docs alone?"
+      ]
+    },
+    {
+      "number": 7,
+      "id": "dashboard",
+      "name": "Dashboard",
+      "tagline": "Single pane of glass",
+      "description": "A centralized command center to manage the AIOS. Could be a Notion workspace, custom web app, or Claude Code project structure. Shows active automations, data flows, recent AI actions, pending reviews, skill library, context health.",
+      "examples": ["Notion workspace", "Custom web dashboard", "Claude Code project", "Operational command center"],
+      "assessment_criteria": {
+        "score_1_3": "No central view, switching between many tools to understand business state",
+        "score_4_6": "Some dashboards in individual tools, maybe a Notion page, but no unified view",
+        "score_7_10": "Single pane of glass showing all AIOS activity, health metrics, and actionable insights"
+      },
+      "key_questions": [
+        "How do you check on the overall state of your business?",
+        "Do you have a dashboard or reporting hub?",
+        "How many tools do you check daily to stay informed?"
+      ]
+    }
+  ],
+
+  "maturity_levels": [
+    {
+      "id": "disconnected",
+      "name": "Disconnected",
+      "overall_score_range": [0, 25],
+      "description": "Tools exist but don't talk to each other. Data manually transferred. No AI integration.",
+      "typical_layer_scores": { "stack": 4, "connections": 1, "intelligence": 1, "data_os": 1, "skills": 1, "context_os": 1, "dashboard": 1 }
+    },
+    {
+      "id": "partially_connected",
+      "name": "Partially Connected",
+      "overall_score_range": [26, 50],
+      "description": "Some tools connected via Zapier/Make. Basic automations running. Starting to explore AI.",
+      "typical_layer_scores": { "stack": 6, "connections": 4, "intelligence": 3, "data_os": 3, "skills": 2, "context_os": 2, "dashboard": 3 }
+    },
+    {
+      "id": "automated",
+      "name": "Automated",
+      "overall_score_range": [51, 75],
+      "description": "Most tools connected. Claude Code in active use. Custom skills being built. Context OS started.",
+      "typical_layer_scores": { "stack": 7, "connections": 7, "intelligence": 6, "data_os": 5, "skills": 5, "context_os": 4, "dashboard": 5 }
+    },
+    {
+      "id": "ai_native",
+      "name": "AI-Native",
+      "overall_score_range": [76, 100],
+      "description": "Full AIOS operational. AI embedded in every process. Skills library mature. Context OS rich. Dashboard unified.",
+      "typical_layer_scores": { "stack": 9, "connections": 9, "intelligence": 8, "data_os": 8, "skills": 8, "context_os": 8, "dashboard": 7 }
+    }
+  ],
+
+  "overall_score_calculation": "Sum of all 7 layer scores (each 1-10) mapped to 1-100 scale: overall = round((sum_of_layers / 70) * 100)"
+}

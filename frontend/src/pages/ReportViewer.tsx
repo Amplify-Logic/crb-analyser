@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback, useMemo } from 'react'
+import { useState, useEffect, useCallback, useMemo, lazy, Suspense } from 'react'
 import { useParams, useSearchParams } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import apiClient from '../services/apiClient'
@@ -25,6 +25,8 @@ import { Sidebar, SidebarItem } from '../components/report/Sidebar/Sidebar'
 import { ContentPanel } from '../components/report/ContentPanel/ContentPanel'
 import { RefinerButton, RefinerSidebar } from '../components/report/Refiner'
 import { logger } from '../utils/logger'
+
+const SystemArchitectureDiagram = lazy(() => import('../components/report/SystemArchitectureDiagram'))
 
 // Premium skeleton loading component
 function SkeletonPulse({ className = '' }: { className?: string }) {
@@ -619,6 +621,7 @@ export default function ReportViewer() {
         const action = recommendations?.find(r => r.id === activeItem.id)
         return ['Actions', action?.title || '']
       }
+      case 'blueprint': return ['AIOS Blueprint']
       case 'playbook': return ['Playbook', getPlaybookLabel(activeItem.id || '')]
       case 'tool': {
         const toolNames: Record<string, string> = { roi: 'ROI Calculator', stack: 'Stack Analysis', insights: 'Industry Insights' }
@@ -633,6 +636,7 @@ export default function ReportViewer() {
     const items: SidebarItem[] = [
       { type: 'overview', id: null },
       ...sidebarFindings.map(f => ({ type: 'finding' as const, id: f.id })),
+      ...(report.system_architecture ? [{ type: 'blueprint' as const, id: null }] : []),
       ...sidebarActions.map(a => ({ type: 'action' as const, id: a.id })),
       ...sidebarPlaybookPhases.map(p => ({ type: 'playbook' as const, id: p.id })),
       { type: 'tool', id: 'roi' },
@@ -653,6 +657,7 @@ export default function ReportViewer() {
       case 'overview': return 'Overview'
       case 'finding': return findings?.find(f => f.id === item.id)?.title
       case 'action': return recommendations?.find(r => r.id === item.id)?.title
+      case 'blueprint': return 'AIOS Blueprint'
       case 'playbook': return getPlaybookLabel(item.id || '')
       case 'tool': {
         const toolNames: Record<string, string> = { roi: 'ROI Calculator', stack: 'Stack Analysis', insights: 'Industry Insights' }
@@ -822,6 +827,24 @@ export default function ReportViewer() {
           </div>
         )
 
+      case 'blueprint':
+        if (!report.system_architecture) return <div>Architecture data not available</div>
+        return (
+          <div className="space-y-6">
+            <div className="mb-6">
+              <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-1">
+                Your AIOS Blueprint
+              </h2>
+              <p className="text-gray-600 dark:text-gray-400">
+                How your tools connect into an AI-powered system
+              </p>
+            </div>
+            <Suspense fallback={<div className="h-[500px] animate-pulse bg-gray-100 dark:bg-gray-700 rounded-xl" />}>
+              <SystemArchitectureDiagram architecture={report.system_architecture} />
+            </Suspense>
+          </div>
+        )
+
       case 'playbook':
         return (
           <div className="space-y-6">
@@ -973,6 +996,7 @@ export default function ReportViewer() {
                 playbookPhases={sidebarPlaybookPhases}
                 activeItem={activeItem}
                 onItemClick={handleMobileItemClick}
+                hasBlueprint={!!report.system_architecture}
               />
             </div>
           </div>
@@ -989,6 +1013,7 @@ export default function ReportViewer() {
           playbookPhases={sidebarPlaybookPhases}
           activeItem={activeItem}
           onItemClick={setActiveItem}
+          hasBlueprint={!!report.system_architecture}
         />
 
         {/* Content Panel */}

@@ -1,0 +1,161 @@
+{
+  "description": "Per-industry Context OS templates — CLAUDE.md structure, memory organization, and initial setup prompts",
+  "version": "1.0",
+  "last_updated": "2026-02-27",
+
+  "industries": {
+    "professional-services": {
+      "claude_md_template": {
+        "sections": [
+          {
+            "title": "Business Identity",
+            "description": "Who you are, what you do, your specialization",
+            "example": "We are a mid-market accounting firm specializing in SME audit and tax advisory. Based in [city], serving [region]. Founded [year], [X] employees.",
+            "prompts": ["What does your firm specialize in?", "What's your market position?", "What makes you different from competitors?"]
+          },
+          {
+            "title": "Client Interaction Rules",
+            "description": "How you communicate, tone, standards",
+            "example": "Always use formal Dutch in client communications. Reference specific regulations by number. Never promise specific outcomes. Include disclaimer on all tax advice.",
+            "prompts": ["What tone do you use with clients?", "Any compliance rules for communications?", "What language(s) do you communicate in?"]
+          },
+          {
+            "title": "Decision Framework",
+            "description": "How decisions are made, approval chains",
+            "example": "Engagements over EUR 10K require partner approval. New service offerings need full partner meeting. Fee adjustments over 10% need written justification.",
+            "prompts": ["What are your approval thresholds?", "Who signs off on client engagements?", "What decisions require partner involvement?"]
+          },
+          {
+            "title": "Process Standards",
+            "description": "SOPs, quality standards, checklists",
+            "example": "Every audit follows our 47-step checklist. Client deliverables are reviewed by a second partner. Annual engagement letters updated by January 15.",
+            "prompts": ["What are your key processes?", "What quality checks exist?", "What deadlines are non-negotiable?"]
+          },
+          {
+            "title": "Service Catalog",
+            "description": "What you offer and standard pricing/packaging",
+            "example": "Core services: Annual audit (from EUR 5K), Tax advisory (hourly EUR 195), Payroll processing (per employee/month). Premium: CFO-as-a-service, M&A advisory.",
+            "prompts": ["What services do you offer?", "How are they priced?", "What's your most profitable service?"]
+          }
+        ],
+        "memory_structure": {
+          "clients/": "Per-client context: preferences, history, contacts, engagement terms",
+          "projects/": "Active engagement state: deadlines, open items, decisions made",
+          "knowledge/": "Industry-specific knowledge: regulations, benchmarks, best practices",
+          "team/": "Team member profiles: expertise, certifications, availability"
+        }
+      }
+    },
+
+    "dental": {
+      "claude_md_template": {
+        "sections": [
+          {
+            "title": "Practice Identity",
+            "description": "Practice type, specializations, patient base",
+            "example": "General dental practice with focus on cosmetic dentistry and implants. 3 dentists, 2 hygienists, 4 support staff. ~2,000 active patients.",
+            "prompts": ["What's your practice specialization?", "How many practitioners and staff?", "What's your patient volume?"]
+          },
+          {
+            "title": "Patient Communication Rules",
+            "description": "How you communicate with patients, compliance",
+            "example": "HIPAA-compliant communications only. Use patient-friendly language (not clinical jargon). Appointment reminders 48h and 24h before. Follow up within 24h of major procedures.",
+            "prompts": ["What are your HIPAA communication protocols?", "How do you handle appointment reminders?", "What's your follow-up policy after procedures?"]
+          },
+          {
+            "title": "Clinical Protocols",
+            "description": "Treatment planning, documentation standards",
+            "example": "All treatment plans require documented patient consent. X-rays reviewed by two practitioners for major procedures. Insurance pre-authorization for treatments over EUR 1,000.",
+            "prompts": ["What documentation is required for treatment plans?", "What are your insurance verification steps?", "What clinical review processes exist?"]
+          },
+          {
+            "title": "Operational Rules",
+            "description": "Scheduling, billing, inventory, compliance",
+            "example": "Schedule 15-min buffers between procedures. Same-day emergency slots: 2 per day. Insurance claims submitted within 48h. Monthly inventory audit of supplies.",
+            "prompts": ["How do you structure your schedule?", "What's your billing workflow?", "How do you manage supplies?"]
+          }
+        ],
+        "memory_structure": {
+          "patients/": "Patient preferences, treatment history notes (non-clinical), communication preferences",
+          "operations/": "Schedule templates, supplier contacts, insurance payer details",
+          "compliance/": "Regulatory requirements, audit schedules, certification renewals",
+          "team/": "Staff schedules, certifications, specialization areas"
+        }
+      }
+    },
+
+    "ecommerce": {
+      "claude_md_template": {
+        "sections": [
+          {
+            "title": "Brand Identity",
+            "description": "Brand voice, positioning, target audience",
+            "example": "Premium sustainable fashion for millennials. Voice: warm, knowledgeable, never pushy. Price range EUR 50-300. Key values: sustainability, craftsmanship, transparency.",
+            "prompts": ["What's your brand voice?", "Who is your target customer?", "What are your brand values?"]
+          },
+          {
+            "title": "Product Rules",
+            "description": "Product descriptions, pricing, launches",
+            "example": "All product descriptions follow our template: headline (max 60 chars), hero benefit, 3 feature bullets, material/sustainability info, care instructions. Never claim 'best' or 'cheapest'.",
+            "prompts": ["How do you write product descriptions?", "What claims can/can't you make?", "How do you handle pricing decisions?"]
+          },
+          {
+            "title": "Customer Service Standards",
+            "description": "Response times, refund policy, escalation",
+            "example": "Respond to all inquiries within 4 hours during business hours. Full refund within 30 days, no questions. Exchanges prioritized over refunds. Escalate to manager if customer mentions legal/social media.",
+            "prompts": ["What are your response time targets?", "What's your refund/return policy?", "When do issues get escalated?"]
+          },
+          {
+            "title": "Operations",
+            "description": "Fulfillment, inventory, marketing",
+            "example": "Ship within 24h of order. Low stock alert at 10 units. Never run ads on products with <20 units stock. Black Friday prep starts October 1. Email campaigns: max 2/week to any segment.",
+            "prompts": ["What are your fulfillment SLAs?", "How do you manage inventory alerts?", "What marketing rules do you follow?"]
+          }
+        ],
+        "memory_structure": {
+          "products/": "Product details, seasonal plans, supplier contacts",
+          "customers/": "VIP customer notes, complaint history, segment definitions",
+          "campaigns/": "Active marketing campaigns, performance benchmarks, content calendar",
+          "operations/": "Fulfillment partners, shipping rates, inventory rules"
+        }
+      }
+    },
+
+    "coaching": {
+      "claude_md_template": {
+        "sections": [
+          {
+            "title": "Practice Identity",
+            "description": "Coaching niche, methodology, credentials",
+            "example": "Executive leadership coach specializing in tech founders. ICF PCC certified. Methodology: combination of cognitive-behavioral and strengths-based approaches. 1-on-1 and group programs.",
+            "prompts": ["What's your coaching niche?", "What methodologies do you use?", "What certifications do you hold?"]
+          },
+          {
+            "title": "Client Engagement Rules",
+            "description": "Session structure, boundaries, confidentiality",
+            "example": "Sessions are 60 min. Between-session check-ins via Voxer. Strict confidentiality — never reference one client's situation with another. Minimum 3-month commitment. No advice-giving — questions only.",
+            "prompts": ["How are your sessions structured?", "What boundaries do you maintain?", "What's your confidentiality policy?"]
+          },
+          {
+            "title": "Content & Marketing Voice",
+            "description": "How you show up online, content rules",
+            "example": "LinkedIn: share insights, never brag about client results without permission. Newsletter: weekly, max 500 words, one actionable takeaway. Never use manipulative urgency tactics.",
+            "prompts": ["Where do you create content?", "What's your content voice?", "What marketing tactics do you avoid?"]
+          },
+          {
+            "title": "Program Design",
+            "description": "How programs are structured and priced",
+            "example": "1-on-1: EUR 500/session or EUR 5,000/quarter (12 sessions). Group: max 8 participants, EUR 2,000/person/quarter. VIP Day: EUR 3,000 full day intensive.",
+            "prompts": ["What programs do you offer?", "How are they priced?", "What's your enrollment process?"]
+          }
+        ],
+        "memory_structure": {
+          "clients/": "Client goals, session notes summaries, progress milestones",
+          "programs/": "Program structures, curriculum, enrollment status",
+          "content/": "Content ideas, published pieces, audience engagement data",
+          "business/": "Revenue tracking, pipeline, partnership opportunities"
+        }
+      }
+    }
+  }
+}

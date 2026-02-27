@@ -1,0 +1,195 @@
+{
+  "description": "Per-vendor MCP setup instructions — education module for AIOS reports",
+  "version": "1.0",
+  "last_updated": "2026-02-27",
+
+  "module": {
+    "title": "Connecting Your Tools via MCP",
+    "for_maturity": ["disconnected", "partially_connected", "automated"],
+    "estimated_time": "10-30 minutes per connection",
+    "outcome": "Your business tools connected to Claude Code via MCP",
+
+    "sections": [
+      {
+        "title": "What is MCP?",
+        "content": "MCP (Model Context Protocol) is an open standard that lets AI tools like Claude Code talk to your business software. Think of it as a universal adapter — instead of building custom integrations for each tool, MCP provides a standard way to connect.",
+        "key_benefits": [
+          "One-command setup for most tools",
+          "Secure — your data stays in your tools",
+          "Standardized — same pattern for every connection",
+          "Growing ecosystem — 8,600+ servers available"
+        ]
+      },
+      {
+        "title": "How to Add an MCP Connection",
+        "content": "Adding an MCP server to Claude Code takes one command. After that, Claude can interact with that tool directly.",
+        "general_steps": [
+          "Run the install command: claude mcp add <name> -- <server-command>",
+          "Authenticate if prompted (API key or OAuth)",
+          "Test by asking Claude about your data in that tool",
+          "Verify the connection works both ways (if bidirectional)"
+        ]
+      }
+    ],
+
+    "setup_guides": {
+      "crm": [
+        {
+          "vendor": "HubSpot",
+          "slug": "hubspot",
+          "install": "claude mcp add hubspot -- npx -y @hubspot/mcp",
+          "auth_type": "OAuth",
+          "setup_time_minutes": 10,
+          "what_you_can_do": ["Query contacts and deals", "Read company records", "Search across CRM objects", "View pipeline analytics"],
+          "tips": ["Currently read-only in public beta", "Free to use with any HubSpot plan"],
+          "common_first_queries": [
+            "Show me my open deals",
+            "Find all contacts at [company name]",
+            "What's my pipeline value this month?"
+          ]
+        },
+        {
+          "vendor": "Salesforce",
+          "slug": "salesforce",
+          "install": "claude mcp add salesforce -- npx -y @salesforce/mcp",
+          "auth_type": "OAuth",
+          "setup_time_minutes": 15,
+          "what_you_can_do": ["Query SOQL records", "Create and update contacts", "Pipeline analytics", "Case management"],
+          "tips": ["Requires Salesforce license", "Full CRUD operations supported"],
+          "common_first_queries": [
+            "Show me opportunities closing this quarter",
+            "List all open cases",
+            "What's our win rate this year?"
+          ]
+        },
+        {
+          "vendor": "Pipedrive",
+          "slug": "pipedrive",
+          "install": "claude mcp add pipedrive -- npx -y pipedrive-mcp",
+          "auth_type": "API Key",
+          "setup_time_minutes": 5,
+          "what_you_can_do": ["Manage deals and pipeline stages", "Track activities", "Update contact records", "Generate pipeline reports"],
+          "tips": ["Community server — all 45 API operations exposed", "Great for small sales teams"],
+          "common_first_queries": [
+            "Show me deals in negotiation stage",
+            "List today's activities",
+            "Who hasn't been contacted in 30 days?"
+          ]
+        }
+      ],
+      "payments": [
+        {
+          "vendor": "Stripe",
+          "slug": "stripe",
+          "install": "claude mcp add stripe -- npx -y @stripe/mcp --api-key=$STRIPE_SECRET_KEY",
+          "auth_type": "API Key",
+          "setup_time_minutes": 10,
+          "what_you_can_do": ["Create invoices", "Query payment history", "Manage subscriptions", "Customer lookup", "Revenue reports"],
+          "tips": ["Use a restricted API key with only the permissions you need", "Test with Stripe test mode first"],
+          "common_first_queries": [
+            "Show me this month's revenue",
+            "List overdue invoices",
+            "What subscriptions are up for renewal?"
+          ]
+        }
+      ],
+      "communication": [
+        {
+          "vendor": "Slack",
+          "slug": "slack",
+          "install": "claude mcp add slack -- npx -y @anthropic-ai/mcp-slack",
+          "auth_type": "OAuth",
+          "setup_time_minutes": 10,
+          "what_you_can_do": ["Search messages", "Post updates to channels", "Manage channels", "Read conversation history"],
+          "tips": ["Start with a dedicated #ai-updates channel", "Be careful with permissions — start read-only"],
+          "common_first_queries": [
+            "Search for messages about [topic] in the last week",
+            "Post a summary to #team-updates",
+            "What were the key decisions in #project-x today?"
+          ]
+        },
+        {
+          "vendor": "Gmail",
+          "slug": "gmail",
+          "install": "claude mcp add gmail -- npx -y @anthropic-ai/mcp-gmail",
+          "auth_type": "OAuth",
+          "setup_time_minutes": 10,
+          "what_you_can_do": ["Search emails", "Read email content", "Draft responses", "Manage labels"],
+          "tips": ["Great for meeting prep — pull recent client communications", "Use with /prep-meeting skill"],
+          "common_first_queries": [
+            "Show me unread emails from [client]",
+            "What emails did I get about [topic] this week?",
+            "Draft a reply to [sender]'s last email"
+          ]
+        }
+      ],
+      "project_management": [
+        {
+          "vendor": "Linear",
+          "slug": "linear",
+          "install": "claude mcp add linear -- npx -y @anthropic-ai/mcp-linear",
+          "auth_type": "API Key",
+          "setup_time_minutes": 5,
+          "what_you_can_do": ["Create and update issues", "Query project status", "Manage sprints", "Track team workload"],
+          "tips": ["Excellent for developer teams", "Use for automated standup reports"],
+          "common_first_queries": [
+            "What issues are assigned to me?",
+            "Show me the current sprint progress",
+            "Create an issue for [task description]"
+          ]
+        },
+        {
+          "vendor": "Notion",
+          "slug": "notion",
+          "install": "claude mcp add notion -- npx -y @anthropic-ai/mcp-notion",
+          "auth_type": "OAuth",
+          "setup_time_minutes": 10,
+          "what_you_can_do": ["Search pages and databases", "Create and update pages", "Query database records", "Manage content"],
+          "tips": ["Works great as an AIOS dashboard backend", "Connect client databases for automated updates"],
+          "common_first_queries": [
+            "Search for pages about [topic]",
+            "Update the status of [project] to In Progress",
+            "Create a new page in [database] with [details]"
+          ]
+        }
+      ],
+      "file_storage": [
+        {
+          "vendor": "Google Drive",
+          "slug": "gdrive",
+          "install": "claude mcp add gdrive -- npx -y @anthropic-ai/mcp-gdrive",
+          "auth_type": "OAuth",
+          "setup_time_minutes": 10,
+          "what_you_can_do": ["Search files", "Read document content", "Create documents", "Organize folders"],
+          "tips": ["Essential for document-heavy businesses", "Combine with Context OS for smart document retrieval"],
+          "common_first_queries": [
+            "Find the latest version of [document]",
+            "What files were modified this week?",
+            "Create a new document from this template"
+          ]
+        }
+      ]
+    },
+
+    "troubleshooting": {
+      "common_issues": [
+        {
+          "issue": "Server fails to start",
+          "solution": "Check Node.js version (16+ required). Run: node --version. Update if needed: nvm install --lts"
+        },
+        {
+          "issue": "Authentication error",
+          "solution": "API key may be expired or invalid. Regenerate in the vendor's settings. For OAuth, try: claude mcp remove <name> then re-add"
+        },
+        {
+          "issue": "No data returned",
+          "solution": "Check permissions — the API key may not have access to the data you're querying. Verify in the vendor's admin panel"
+        },
+        {
+          "issue": "Rate limited",
+          "solution": "Some vendors limit API calls. Wait a few minutes and try again. Consider caching for frequently accessed data"
+        }
+      ]
+    }
+  }
+}

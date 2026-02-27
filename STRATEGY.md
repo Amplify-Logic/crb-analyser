@@ -8,9 +8,77 @@
 
 ## Vision & Mission
 
-**Vision:** Become the go-to platform for businesses building their AI Operating System — connecting existing tools, automating workflows, and deploying AI agents.
+**Vision:** Become the leading AI-native consulting agency for businesses building their AI Operating System — using AI to deliver enterprise-grade analysis at SMB pricing, with a compounding data moat that grows with every engagement.
 
-**Mission:** Deliver architecture blueprints that show businesses exactly how to build AI workflows on their existing stack, at SMB pricing, in days not months.
+**Mission:** Deliver architecture blueprints that show businesses exactly how to build AI workflows on their existing stack, at SMB pricing, in days not months — fulfilled almost entirely by AI, reviewed by humans.
+
+---
+
+## AI-Native Agency Positioning
+
+> "Don't sell access to an AI tool for $50/month. Use the AI yourself and sell the finished work for $5,000." — Y Combinator, Requests for Startups 2026
+
+### What We Are
+
+CRB Analyser is an **AI-fulfilled consulting agency**, not a SaaS tool. The distinction matters:
+
+| SaaS Tool | AI-Native Agency (CRB) |
+|-----------|------------------------|
+| Sell access to software | Sell finished consulting deliverables |
+| Customer does the work | AI does the work, human reviews |
+| $50-200/mo margins | €147 per engagement, 95%+ margins |
+| Compete on features | Compete on output quality + data moat |
+| Growth = more users | Growth = more engagements = better data = better output |
+
+### Why This Model Wins
+
+Y Combinator's 2026 thesis: AI-native agencies get **software-like margins on service revenue**. Growth is decoupled from headcount.
+
+**CRB already operates this way:**
+- AI-powered adaptive quiz gathers context
+- AI-assisted workshop (90 minutes, AI-driven) deepens understanding
+- AI generates the full report — findings, ROI models, vendor comparisons, implementation roadmaps
+- Human reviews for accuracy and adds expert context
+- Delivery in 24-48 hours at €147
+
+**Cost structure per report:**
+- ~€2-5 in API calls (Claude, research agents)
+- ~30 min human review time
+- = 90%+ gross margins at €147, scaling to 95%+ as review automates further
+
+**Proof points in the market:**
+- Harper Insurance (YC-backed): AI handles 1,000+ customers/month vs 20-30 for human brokerages. Raised $47M.
+- YC RFS explicitly names design firms, ad agencies, and law firms as targets for this model.
+
+### The Data Moat (Our Core Defensibility)
+
+Every report compounds our advantage:
+
+```
+Report #1:     Base accuracy, generic benchmarks
+Report #50:    Industry-specific patterns validated
+Report #100:   Vendor pricing database unmatched
+Report #500:   Competitors can't replicate our knowledge base
+Report #1000:  Predictive — we know what works before we analyze
+```
+
+**What competitors (and "just use ChatGPT") can't replicate:**
+- Curated vendor pricing database with verified data
+- Industry-specific benchmarks from real implementations
+- The CRB framework with validated scoring
+- Pattern library of what actually gets implemented vs what doesn't
+- Compliance-aware recommendations with proper risk context
+- Trust network and referrals within professional communities
+- Live vendor pricing from autonomous scraping pipeline
+- The full AI-native pipeline — most competitors are pure SaaS (no consulting depth) or pure consulting (no AI leverage)
+
+Models are commodities. Data and methodology are moats.
+
+---
+
+## Computer Use & Automation Strategy
+
+> See `.claude/reference/computer-use.md` for full details on Playwright skills, Bowser QA, Cowork integration, and Computer Use API.
 
 ---
 
@@ -70,17 +138,28 @@ Instead of sequential expansion, we test all three markets at once with:
 
 > "CRB is the thesis it sells."
 
-We don't just analyze whether companies should restructure around AI. We *are* the demonstration.
+We don't just analyze whether companies should restructure around AI. We *are* the demonstration. We are the AI-native agency we recommend our clients become.
 
 **What this means:**
 
-| Old Model (Consulting Firm) | CRB Model |
-|-----------------------------|-----------|
-| Analysts researching industry | Knowledge base + AI |
-| Consultants conducting interviews | Adaptive quiz + AI workshop |
+| Old Model (Consulting Firm) | CRB Model (AI-Native Agency) |
+|-----------------------------|------------------------------|
+| Analysts researching industry | Knowledge base + AI research agents |
+| Consultants conducting interviews | Adaptive quiz + AI-assisted workshop |
 | Report writers drafting findings | AI-generated, human-reviewed reports |
 | Account managers coordinating | Self-serve flow |
+| Manual vendor research | Playwright + Computer Use autonomous scraping |
 | 6-week engagement, €15k+ | 90 minutes + 24-48hr delivery, €147 |
+| Revenue scales with headcount | Revenue scales with compute |
+
+**The AI-fulfilled pipeline:**
+
+```
+Quiz (AI-adaptive) → Workshop (AI-assisted, 90 min) → Research (AI agents)
+    → Analysis (AI scoring) → Report (AI-generated) → Review (Human, shrinking)
+```
+
+Every step except final review is AI-fulfilled. The human review step exists for quality assurance and trust — it will shrink as confidence in AI output grows, but may never fully disappear (and that's fine — it's a feature, not a bottleneck).
 
 **Structural discipline:**
 
@@ -88,6 +167,7 @@ We don't just analyze whether companies should restructure around AI. We *are* t
 2. **Hire for outcomes, not functions** - Only when AI is exhausted for a specific result.
 3. **No coordination overhead** - If you need meetings to align, you're already too big.
 4. **The €147 tier proves the model** - Enterprise-level analysis at SMB pricing only works with AI leverage.
+5. **Use AI to build AI** - Claude Code builds the platform. Cowork handles research tasks. Computer Use powers the scraping pipeline. We eat our own cooking at every layer.
 
 **The uncomfortable implication:**
 
@@ -207,26 +287,6 @@ These become foundation for the next thing.
 
 ---
 
-## Competitive Moat
-
-### What We're Building
-
-| Moat Layer | Description | Defensibility |
-|------------|-------------|---------------|
-| **Knowledge Compound** | Every analysis improves the next | Hard to replicate without volume |
-| **Professional Services Depth** | Compliance, ethics, regulatory context | Generic AI tools can't match |
-| **Trust Network** | Referrals within tight professional communities | Takes years to build |
-| **CRB Framework** | Structured methodology that delivers clear verdicts | Methodology can be copied, execution can't |
-
-### What Competitors Can't Copy
-
-1. **500+ professional services analyses** with validated outcomes
-2. **Industry-specific patterns** learned from real implementations
-3. **Compliance-aware recommendations** with proper risk context
-4. **Relationships** with professional associations and networks
-
----
-
 ## Risk Management
 
 ### Strategic Risks
@@ -235,8 +295,11 @@ These become foundation for the next thing.
 |------|--------|------------|
 | AI commoditization | Models get cheap, our value drops | Moat is knowledge + expertise, not AI itself |
 | Competitor with more capital | Outspend on marketing/features | Stay focused, compound faster in our niche |
-| Regulation changes | New compliance requirements | Feature, not bug - we help navigate change |
+| Regulation changes | New compliance requirements | Feature, not bug — we help navigate change |
 | Economic downturn | Firms cut discretionary spend | Position as cost-saving, not discretionary |
+| AI-native agency competitors | YC-funded agencies enter our verticals | Data moat + vertical depth. They start from zero knowledge |
+| Computer Use disruption | Clients use Cowork to DIY their own analysis | Our framework + data is the value, not the execution. Offer "bring your own Cowork" tier |
+| Platform risk (Anthropic) | Claude API changes, pricing shifts | Multi-model support already built (Gemini fallback). Stay model-agnostic |
 
 ### Execution Risks
 
@@ -317,42 +380,8 @@ After 90 days, we answer:
 
 ---
 
-## MVP Checklist
+## Signal Loop Gaps (Remaining)
 
-### Backend
-- [x] Auth (signup, login, logout)
-- [x] Quiz flow with adaptive questions
-- [x] AI-powered workshop session
-- [x] Agent analysis pipeline
-- [x] Findings + Recommendations with ROI
-- [x] Report generation with human review step
-- [x] Stripe checkout + webhooks
-
-### Frontend
-- [x] Landing page
-- [x] Auth flow
-- [x] Quiz wizard
-- [x] Report preview (teaser)
-- [x] Report viewer
-- [x] Payment flow
-
-### Signal Loop (Critical)
-- [x] Post-report feedback ("Which recs will you implement?")
 - [ ] Expertise system updates from analyses
-- [x] Analytics on key behaviors
 - [ ] 30-day follow-up mechanism
 - [ ] Pattern extraction from completed reports
-
----
-
-## Shortcuts
-
-| Short | Meaning |
-|-------|---------|
-| BL | Balance Loop |
-| STR | Speed to Revenue Loop |
-| SIL | Signal to Innovation Loop |
-| SEL | Sweat Equity Loop |
-| PMF | Product-Market Fit |
-| DF | Dogfooding |
-| PS | Professional Services |

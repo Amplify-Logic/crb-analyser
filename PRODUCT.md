@@ -21,7 +21,7 @@ We don't just list software recommendations. Our CRB framework analyzes your exi
 | Component | Description |
 |-----------|-------------|
 | **Quiz** | 5-7 minute adaptive assessment to understand business context |
-| **AI Workshop** | 90-minute AI-powered deep-dive gathering detailed operational context |
+| **AI-Assisted Workshop** | 90-minute AI-driven deep-dive — AI conducts the session, gathering detailed operational context |
 | **Human Review** | Every report reviewed by domain expert before delivery |
 | **Report Delivery** | 24-48 hours after workshop completion |
 | **Price** | €147 (enterprise-grade analysis at SMB pricing) |
@@ -70,13 +70,24 @@ Our value proposition centers on four key themes for professional services:
 
 Every recommendation presents options prioritized by implementation speed and disruption:
 
-| Priority | Option | When We Recommend |
-|----------|--------|-------------------|
-| 1st | **Connect & Automate** | Your tools work. Wire them together with AI workflows (MCP, APIs, Claude). |
-| 2nd | **Enhance with AI** | Add an intelligence layer — agents, predictive workflows, command stations. |
-| 3rd | **Targeted Upgrade** | One specific tool is a dead end. Replace ONLY that link in the chain. |
+| Priority | Option | When We Recommend | Example |
+|----------|--------|-------------------|---------|
+| 1st | **Connect & Automate** | Tool works, just needs wiring | "Keep HubSpot + Exact, build Claude workflow to sync deals → invoices" |
+| 2nd | **Enhance with AI** | Need intelligence on top of existing data | "Build an AI agent that monitors IoT usage data and flags churn risk" |
+| 3rd | **Targeted Upgrade** | Tool is a dead end — no API, fundamentally broken | "Migrate from spreadsheets to Odoo for inventory tracking" |
 
 **Connect-first philosophy:** We never recommend replacing software unless the existing tool genuinely cannot be integrated (no API, fundamentally broken, blocking growth). Most businesses can get 80% of the value by connecting what they have.
+
+### Decision Factors
+
+| Factor | Favors Connect/Enhance | Favors Replace |
+|--------|------------------------|----------------|
+| Tool has API | Yes — wire it up | - |
+| Tool fundamentally broken | - | Yes — it's blocking you |
+| Team already trained | Yes — don't retrain | - |
+| Data is trapped | - | Yes — if no export path |
+| Budget constrained | Yes — build, don't buy | - |
+| Technical capability | Yes — build workflows | Low — may need turnkey |
 
 > **Full AIOS methodology** → [FRAMEWORK.md](./FRAMEWORK.md#aios-options-model)
 
@@ -93,29 +104,6 @@ The Cost-Risk-Benefit framework analyzes every opportunity across **10 dimension
 Findings are prioritized as: **Quick Win** → **Strategic** → **Consider** → **Defer**
 
 > **Full CRB methodology, scoring, evidence requirements, and time horizons** → [FRAMEWORK.md](./FRAMEWORK.md)
-
----
-
-## Connect → Enhance → Replace Strategy
-
-For every automation opportunity, we evaluate in this order:
-
-| Strategy | Priority | When We Recommend | Example |
-|----------|----------|-------------------|---------|
-| **Connect** | 1st (default) | Tool works, just needs wiring | "Keep HubSpot + Exact, build Claude workflow to sync deals → invoices" |
-| **Enhance** | 2nd | Need intelligence on top of existing data | "Build an AI agent that monitors IoT usage data and flags churn risk" |
-| **Replace** | 3rd (last resort) | Tool is a dead end — no API, fundamentally broken | "Migrate from spreadsheets to Odoo for inventory tracking" |
-
-### Decision Factors
-
-| Factor | Favors Connect/Enhance | Favors Replace |
-|--------|------------------------|----------------|
-| Tool has API | Yes — wire it up | - |
-| Tool fundamentally broken | - | Yes — it's blocking you |
-| Team already trained | Yes — don't retrain | - |
-| Data is trapped | - | Yes — if no export path |
-| Budget constrained | Yes — build, don't buy | - |
-| Technical capability | Yes — build workflows | Low — may need turnkey |
 
 ---
 
@@ -397,7 +385,8 @@ AI Workshop Scheduling
     - Prep questions sent
     |
     v
-90-Minute AI Workshop
+90-Minute AI-Assisted Workshop
+    - AI drives the conversation
     - Deep-dive on operations
     - Current workflow mapping
     - Tool usage patterns
@@ -449,19 +438,3 @@ Each finding includes: Problem Statement, Opportunity, Three Options with CRB An
 
 > **Full report structure with CRB table format** → [FRAMEWORK.md](./FRAMEWORK.md#report-structure)
 
----
-
-## Shortcuts
-
-| Short | Meaning |
-|-------|---------|
-| CRB | Cost-Risk-Benefit (the core framework) |
-| 3O | Three Options model (Off-the-Shelf, Best-in-Class, Custom) |
-| 6C | Six Costs (Financial, Time, Opportunity, Complexity, Risk, Brand) |
-| 4B | Four Benefits (Financial, Time, Strategic, Quality) |
-| C/R | Connect vs Replace strategy |
-| ROI-CA | ROI Confidence-Adjusted |
-| KB | Knowledge Base |
-| PM | Practice Management software |
-| PS | Professional Services |
-| QW | Quick Win (high benefit, low cost/risk) |

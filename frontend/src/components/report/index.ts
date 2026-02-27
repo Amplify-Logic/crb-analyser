@@ -14,5 +14,8 @@ export { default as FourOptions } from './FourOptions'
 export { default as ValueSummary } from './ValueSummary'
 export { default as UpgradeCTA } from './UpgradeCTA'
 
+// Architecture
+export { default as SystemArchitectureDiagram } from './SystemArchitectureDiagram'
+
 // Animations
 export * from './animations'

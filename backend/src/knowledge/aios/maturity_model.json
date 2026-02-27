@@ -1,0 +1,179 @@
+{
+  "description": "AIOS maturity assessment rubric — how to score each layer and determine overall maturity",
+  "version": "1.0",
+  "last_updated": "2026-02-27",
+
+  "scoring_guide": {
+    "per_layer": {
+      "range": [1, 10],
+      "bands": {
+        "1-3": "Minimal or absent — this layer barely exists",
+        "4-6": "Developing — elements present but not systematic",
+        "7-10": "Mature — this layer is well-built and actively maintained"
+      }
+    },
+    "overall": {
+      "formula": "round((sum_of_7_layer_scores / 70) * 100)",
+      "range": [1, 100]
+    }
+  },
+
+  "assessment_signals": {
+    "stack": {
+      "positive": [
+        "Uses modern SaaS tools with REST APIs",
+        "Tools chosen partly for integration capability",
+        "Data exportable from most tools",
+        "Active subscriptions to API-friendly vendors"
+      ],
+      "negative": [
+        "Legacy on-premise software",
+        "Vendor lock-in with proprietary formats",
+        "Key tool has no API",
+        "Using free tiers that limit API access"
+      ]
+    },
+    "connections": {
+      "positive": [
+        "Active Zapier/Make/n8n automations running",
+        "MCP servers connected to Claude Code",
+        "Webhooks configured between key tools",
+        "Data syncs automatically between CRM and billing"
+      ],
+      "negative": [
+        "Manually copying data between tools",
+        "No automation platform in use",
+        "Tools operate as isolated silos",
+        "Integration attempts abandoned"
+      ]
+    },
+    "intelligence": {
+      "positive": [
+        "Claude Code installed and used regularly",
+        "Cowork handling browser-based tasks",
+        "AI agents running specific workflows",
+        "Team members comfortable with AI tools"
+      ],
+      "negative": [
+        "AI used only for ad-hoc chatting",
+        "No developer/technical AI tools",
+        "Fear or resistance to AI adoption",
+        "No systematic AI integration plan"
+      ]
+    },
+    "data_os": {
+      "positive": [
+        "Central database/hub for business data",
+        "Cross-tool reporting possible",
+        "AI can query business data directly",
+        "Client 360 view available"
+      ],
+      "negative": [
+        "Data scattered across many tools",
+        "Manual report compilation",
+        "Can't answer cross-tool questions",
+        "No single source of truth"
+      ]
+    },
+    "skills": {
+      "positive": [
+        "Custom Claude Code skills created",
+        "Team uses slash commands for processes",
+        "Skills documented and shared",
+        "Regular skill creation and refinement"
+      ],
+      "negative": [
+        "All processes fully manual",
+        "No automation scripts or macros",
+        "Processes live in people's heads",
+        "No repeatable automated workflows"
+      ]
+    },
+    "context_os": {
+      "positive": [
+        "CLAUDE.md or equivalent exists",
+        "Client context files maintained",
+        "Brand voice documented for AI",
+        "Process SOPs in AI-readable format"
+      ],
+      "negative": [
+        "No documented business context",
+        "AI gives generic responses",
+        "Institutional knowledge only in people",
+        "No brand/process documentation"
+      ]
+    },
+    "dashboard": {
+      "positive": [
+        "Unified business dashboard exists",
+        "AIOS health visible at a glance",
+        "Automated status reports",
+        "Single pane of glass for operations"
+      ],
+      "negative": [
+        "Check 10+ tools daily",
+        "No unified view of business state",
+        "Manual status compilation",
+        "Different views for different people"
+      ]
+    }
+  },
+
+  "transition_paths": {
+    "disconnected_to_partially_connected": {
+      "focus_layers": ["connections", "intelligence"],
+      "key_actions": [
+        "Connect 2-3 core tools via MCP or Zapier",
+        "Install Claude Code and run first automation",
+        "Set up one webhook for real-time data sync"
+      ],
+      "estimated_weeks": "2-4",
+      "quick_wins": [
+        "Connect CRM to email via MCP",
+        "Automate invoice creation from CRM deals",
+        "Set up Slack/Teams notifications for key events"
+      ]
+    },
+    "partially_connected_to_automated": {
+      "focus_layers": ["skills", "context_os", "data_os"],
+      "key_actions": [
+        "Build 3-5 core Claude Code skills for daily processes",
+        "Create CLAUDE.md with business identity and rules",
+        "Set up client memory files for top 10 clients",
+        "Centralize key data in a queryable format"
+      ],
+      "estimated_weeks": "4-8",
+      "quick_wins": [
+        "Create /prep-meeting skill",
+        "Write initial CLAUDE.md with brand voice",
+        "Set up client context files for active clients"
+      ]
+    },
+    "automated_to_ai_native": {
+      "focus_layers": ["dashboard", "skills", "context_os"],
+      "key_actions": [
+        "Build comprehensive skill library (10+ skills)",
+        "Rich Context OS with deep client memory",
+        "Unified dashboard for AIOS management",
+        "AI handles 80%+ of routine operations"
+      ],
+      "estimated_weeks": "8-16",
+      "quick_wins": [
+        "Build operational dashboard in Notion",
+        "Create skills for all recurring weekly tasks",
+        "Enrich Context OS with decision frameworks"
+      ]
+    }
+  },
+
+  "gap_templates": {
+    "no_connections": "Your tools are disconnected — data isn't flowing between systems automatically",
+    "no_intelligence": "No AI intelligence layer in place — Claude Code or equivalent not yet adopted",
+    "no_data_os": "Business data is scattered — no centralized data layer for AI to query",
+    "no_skills": "No custom skills or automated workflows — all processes are manual",
+    "no_context_os": "No Context OS — AI doesn't know your business identity, rules, or preferences",
+    "no_dashboard": "No unified dashboard — business state requires checking multiple tools",
+    "weak_stack_apis": "Current tools have limited API access — this constrains what can be connected",
+    "no_mcp": "No MCP connections — missing the fastest path to tool integration with Claude"
+  }
+}

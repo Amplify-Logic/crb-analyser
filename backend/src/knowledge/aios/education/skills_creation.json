@@ -1,0 +1,71 @@
+{
+  "description": "How to create custom Claude Code skills — education module for AIOS reports",
+  "version": "1.0",
+  "last_updated": "2026-02-27",
+
+  "module": {
+    "title": "Creating Custom Skills",
+    "for_maturity": ["automated", "ai_native"],
+    "estimated_time": "1 hour per skill",
+    "outcome": "Team-wide productivity skills like /onboard-client, /prep-meeting",
+
+    "sections": [
+      {
+        "title": "What Are Skills?",
+        "content": "Skills are reusable Claude Code commands that encode your business processes. Instead of explaining the same workflow every time, you teach Claude once and use a slash command from then on.",
+        "examples": [
+          "/onboard-client — runs your entire client onboarding checklist",
+          "/prep-meeting — generates a briefing doc before any client meeting",
+          "/weekly-report — compiles your weekly team report from all your tools",
+          "/generate-invoice — creates an invoice from your time tracking data"
+        ]
+      },
+      {
+        "title": "Anatomy of a Skill",
+        "content": "A skill is a markdown file in your Claude Code project that describes the workflow. Claude reads it and executes the steps.",
+        "structure": {
+          "file_location": ".claude/commands/skill-name.md",
+          "sections": [
+            "Name and description (what it does)",
+            "Prerequisites (what MCP connections it needs)",
+            "Input parameters (what the user provides)",
+            "Steps (the exact workflow to follow)",
+            "Output (what gets produced)",
+            "Examples (how to use it)"
+          ]
+        },
+        "example_skill": "# /prep-meeting\n\nPrepare a client meeting briefing.\n\n## Prerequisites\n- CRM connected via MCP\n- Calendar connected via MCP\n- Client context files in memory/clients/\n\n## Parameters\n- --client: Client name\n- --date: Meeting date\n\n## Steps\n1. Look up the client in CRM via MCP\n2. Read client context file from memory/clients/{client-slug}.md\n3. Check calendar for meeting details and attendees\n4. Pull recent communications (last 30 days)\n5. Compile briefing with: client overview, recent activity, open items, talking points\n\n## Output\nA briefing document saved to meetings/{date}-{client}.md"
+      },
+      {
+        "title": "Building Your First Skill",
+        "content": "Start with your most repetitive task — the one you do every week that follows the same pattern.",
+        "process": [
+          "Identify a repetitive workflow (something you do 4+ times/month)",
+          "Write down the exact steps you follow",
+          "Note which tools you touch at each step",
+          "Create the skill file in .claude/commands/",
+          "Test with a real case and refine",
+          "Share with your team"
+        ],
+        "tips": [
+          "Start simple — your first skill should have 3-5 steps",
+          "Use existing MCP connections — don't build new integrations just for one skill",
+          "Include error handling — what if the CRM lookup returns no results?",
+          "Test with edge cases — what about a new client with no history?",
+          "Iterate — skills get better with use, update them as you learn"
+        ]
+      },
+      {
+        "title": "Skill Library Best Practices",
+        "content": "As you build more skills, organize them into a library your whole team can use.",
+        "practices": [
+          "Name skills with verbs: /onboard, /generate, /prep, /review, /analyze",
+          "Document each skill with examples and prerequisites",
+          "Version your skills in git so changes are tracked",
+          "Review skills quarterly — remove unused ones, update outdated ones",
+          "Let team members propose new skills based on their pain points"
+        ]
+      }
+    ]
+  }
+}

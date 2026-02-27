@@ -9,12 +9,13 @@ Provides industry-specific data for CRB analysis including:
 - AI tools and LLM provider pricing
 """
 
+import hashlib
 import json
 import logging
 from functools import lru_cache
 from pathlib import Path
 from typing import Dict, Any, Optional, List
-from datetime import datetime
+from datetime import datetime, timezone
 
 from src.utils.quiz_utils import get_monthly_budget_range
 
@@ -959,3 +960,270 @@ def get_freshness_status(verified_at: str) -> str:
             return "stale"
     except (ValueError, AttributeError):
         return "unknown"
+
+
+# =============================================================================
+# AIOS KNOWLEDGE BASE
+# =============================================================================
+
+AIOS_DIR = KNOWLEDGE_BASE_PATH / "aios"
+
+
+@lru_cache(maxsize=16)
+def load_aios_data(file_name: str) -> Optional[Dict[str, Any]]:
+    """
+    Load an AIOS knowledge base file.
+
+    Args:
+        file_name: File name without extension (e.g., 'layers', 'maturity_model')
+
+    Returns:
+        Parsed JSON dict, or None if not found
+    """
+    file_path = AIOS_DIR / f"{file_name}.json"
+    return _load_json_file(file_path)
+
+
+def get_aios_layers() -> List[Dict[str, Any]]:
+    """Get the 7-layer AIOS framework definition."""
+    data = load_aios_data("layers")
+    return data.get("layers", []) if data else []
+
+
+def get_aios_maturity_model() -> Optional[Dict[str, Any]]:
+    """Get the AIOS maturity assessment rubric."""
+    return load_aios_data("maturity_model")
+
+
+def get_context_os_template(industry: str) -> Optional[Dict[str, Any]]:
+    """Get Context OS template for a specific industry."""
+    data = load_aios_data("context_os_templates")
+    if not data:
+        return None
+    normalized = normalize_industry(industry)
+    return data.get("industries", {}).get(normalized)
+
+
+def get_skills_catalog(industry: str) -> List[Dict[str, Any]]:
+    """Get skill templates for a specific industry."""
+    data = load_aios_data("skills_catalog")
+    if not data:
+        return []
+    normalized = normalize_industry(industry)
+    industry_data = data.get("industries", {}).get(normalized)
+    return industry_data.get("skills", []) if industry_data else []
+
+
+def get_dashboard_patterns() -> List[Dict[str, Any]]:
+    """Get dashboard architecture patterns."""
+    data = load_aios_data("dashboard_patterns")
+    return data.get("patterns", []) if data else []
+
+
+def get_education_module(module_name: str) -> Optional[Dict[str, Any]]:
+    """
+    Load an education module from the AIOS education directory.
+
+    Args:
+        module_name: Module name without extension
+            (e.g., 'claude_code_guide', 'context_os_setup')
+
+    Returns:
+        Education module data, or None if not found
+    """
+    file_path = AIOS_DIR / "education" / f"{module_name}.json"
+    data = _load_json_file(file_path)
+    return data.get("module") if data else None
+
+
+def get_education_modules_for_maturity(maturity_level: str) -> List[Dict[str, Any]]:
+    """
+    Get all education modules appropriate for a given AIOS maturity level.
+
+    Args:
+        maturity_level: One of 'disconnected', 'partially_connected',
+                       'automated', 'ai_native'
+
+    Returns:
+        List of education modules matching the maturity level
+    """
+    education_dir = AIOS_DIR / "education"
+    if not education_dir.exists():
+        return []
+
+    modules = []
+    for file_path in education_dir.glob("*.json"):
+        data = _load_json_file(file_path)
+        if not data:
+            continue
+        module = data.get("module", {})
+        for_maturity = module.get("for_maturity", [])
+        if maturity_level in for_maturity:
+            modules.append(module)
+
+    return modules
+
+
+# =============================================================================
+# WORKFLOW TEMPLATE SYNC
+# =============================================================================
+
+def _infer_aios_layers(workflow: Dict[str, Any]) -> List[str]:
+    """Infer AIOS layers involved from workflow data."""
+    layers = set()
+
+    # All workflows touch the stack layer (existing tools)
+    layers.add("stack")
+
+    # If connects tools, it's the connections layer
+    connects = workflow.get("connects", [])
+    if connects:
+        layers.add("connections")
+
+    # If uses MCP servers, it's connections + intelligence
+    mcp_servers = workflow.get("mcp_servers", [])
+    if mcp_servers:
+        layers.add("connections")
+        layers.add("intelligence")
+
+    # Complexity-based inference
+    complexity = workflow.get("complexity", "")
+    if complexity in ("medium", "high"):
+        layers.add("intelligence")
+
+    # If steps mention data centralization, aggregation, or reporting
+    steps = workflow.get("steps", [])
+    steps_text = " ".join(steps).lower()
+    if any(kw in steps_text for kw in ["aggregate", "central", "dashboard", "report", "analytics"]):
+        layers.add("data_os")
+    if any(kw in steps_text for kw in ["dashboard", "monitor", "overview"]):
+        layers.add("dashboard")
+    if any(kw in steps_text for kw in ["context", "memory", "preference", "brand", "template"]):
+        layers.add("context_os")
+    if any(kw in steps_text for kw in ["skill", "command", "automate workflow"]):
+        layers.add("skills")
+
+    return sorted(layers)
+
+
+def _compute_content_hash(workflow: Dict[str, Any]) -> str:
+    """Compute a content hash for a workflow dict."""
+    content = json.dumps(workflow, sort_keys=True)
+    return hashlib.sha256(content.encode()).hexdigest()[:16]
+
+
+def get_all_workflow_templates() -> List[Dict[str, Any]]:
+    """
+    Load all workflow templates from all industry directories,
+    enriched with AIOS layer data.
+
+    Returns:
+        List of workflow dicts with slug, industry, aios_layers_involved, etc.
+    """
+    all_workflows = []
+    workflow_files = list(KNOWLEDGE_BASE_PATH.glob("*/workflows.json"))
+
+    for wf_path in workflow_files:
+        industry = wf_path.parent.name
+        data = _load_json_file(wf_path)
+        if not data:
+            continue
+
+        for workflow in data.get("workflows", []):
+            wf_id = workflow.get("id", "")
+            slug = f"{industry}--{wf_id}"
+
+            # Use existing aios_layers_involved or infer them
+            aios_layers = workflow.get(
+                "aios_layers_involved",
+                _infer_aios_layers(workflow),
+            )
+
+            template = {
+                "slug": slug,
+                "name": workflow.get("name", ""),
+                "description": workflow.get("description", ""),
+                "industry": industry,
+                "category": workflow.get("category", "automation"),
+                "required_tools": workflow.get("connects", []),
+                "optional_tools": [],
+                "required_capabilities": workflow.get("prerequisites", []),
+                "pain_points_addressed": [],
+                "aios_layers_involved": aios_layers,
+                "complexity": workflow.get("complexity", "medium"),
+                "build_time_hours": workflow.get("build_time_hours"),
+                "mcp_servers_used": workflow.get("mcp_servers", []),
+                "claude_code_involved": workflow.get("complexity", "") in ("medium", "high"),
+                "cowork_involved": False,
+                "flow_diagram": None,
+                "estimated_monthly_value": workflow.get("estimated_monthly_value"),
+                "estimated_time_saved_hours": workflow.get("estimated_time_saved_hours"),
+                "source_file": str(wf_path.relative_to(KNOWLEDGE_BASE_PATH)),
+                "content_hash": _compute_content_hash(workflow),
+            }
+            all_workflows.append(template)
+
+    return all_workflows
+
+
+async def sync_workflow_templates() -> Dict[str, int]:
+    """
+    Sync workflow templates from KB JSON files to the workflow_templates DB table.
+
+    Performs upsert: inserts new workflows, updates changed ones (by content hash),
+    skips unchanged ones.
+
+    Returns:
+        Dict with counts: {'inserted': N, 'updated': N, 'unchanged': N, 'errors': N}
+    """
+    from src.config.supabase_client import get_async_supabase
+
+    supabase = await get_async_supabase()
+    templates = get_all_workflow_templates()
+    now = datetime.now(timezone.utc).isoformat()
+
+    stats = {"inserted": 0, "updated": 0, "unchanged": 0, "errors": 0}
+
+    for template in templates:
+        slug = template["slug"]
+
+        try:
+            # Check if exists
+            result = await supabase.table("workflow_templates").select(
+                "id, content_hash"
+            ).eq("slug", slug).execute()
+
+            existing = result.data[0] if result.data else None
+
+            if existing:
+                # Check if content changed
+                if existing.get("content_hash") == template["content_hash"]:
+                    stats["unchanged"] += 1
+                    continue
+
+                # Update existing
+                template["synced_at"] = now
+                template["updated_at"] = now
+                await supabase.table("workflow_templates").update(
+                    template
+                ).eq("id", existing["id"]).execute()
+                stats["updated"] += 1
+                logger.info("Updated workflow template: %s", slug)
+            else:
+                # Insert new
+                template["synced_at"] = now
+                await supabase.table("workflow_templates").insert(
+                    template
+                ).execute()
+                stats["inserted"] += 1
+                logger.info("Inserted workflow template: %s", slug)
+
+        except Exception:
+            logger.exception("Failed to sync workflow template: %s", slug)
+            stats["errors"] += 1
+
+    logger.info(
+        "Workflow template sync complete: %d inserted, %d updated, %d unchanged, %d errors",
+        stats["inserted"], stats["updated"], stats["unchanged"], stats["errors"],
+    )
+    return stats

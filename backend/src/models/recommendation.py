@@ -160,6 +160,24 @@ class AIOSConnectOption(BaseModel):
     pros: List[str] = Field(default_factory=list)
     cons: List[str] = Field(default_factory=list)
 
+    # AIOS layer enrichment
+    aios_layers_touched: List[str] = Field(
+        default_factory=list,
+        description="Which AIOS layers this option builds (e.g., connections, intelligence, skills)"
+    )
+    skills_created: Optional[List[str]] = Field(
+        None, description="Claude Code skills that result from this implementation"
+    )
+    context_needed: Optional[List[str]] = Field(
+        None, description="Context OS data needed (e.g., client profiles, process docs)"
+    )
+    education_prereq: Optional[str] = Field(
+        None, description="What to learn first (e.g., 'Claude Code basics')"
+    )
+    cowork_tasks: Optional[List[str]] = Field(
+        None, description="Tasks Cowork handles on an ongoing basis"
+    )
+
 
 class AIOSEnhanceOption(BaseModel):
     """Enhance with AI option — add intelligence layer on top."""

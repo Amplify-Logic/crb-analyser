@@ -1,0 +1,96 @@
+{
+  "description": "How to build your Context OS — education module for AIOS reports",
+  "version": "1.0",
+  "last_updated": "2026-02-27",
+
+  "module": {
+    "title": "Building Your Context OS",
+    "for_maturity": ["partially_connected", "automated"],
+    "estimated_time": "2 hours",
+    "outcome": "AI that knows your business identity, rules, and preferences",
+
+    "sections": [
+      {
+        "title": "Why Context OS Matters",
+        "content": "Without context, AI gives generic answers. With a rich Context OS, AI produces work that's indistinguishable from your own output. The Context OS is what transforms AI from a generic assistant into YOUR assistant.",
+        "before_after": [
+          {
+            "task": "Draft a client email",
+            "without_context": "Dear Client, I wanted to follow up on our recent discussion...",
+            "with_context": "Beste Henk, naar aanleiding van ons gesprek over de jaarrekening 2025 wil ik graag de volgende stappen bespreken..."
+          },
+          {
+            "task": "Prepare a proposal",
+            "without_context": "Generic proposal template with placeholder text",
+            "with_context": "Branded proposal using your pricing structure, referencing the client's specific situation from your last 3 meetings"
+          }
+        ]
+      },
+      {
+        "title": "Creating Your CLAUDE.md",
+        "content": "CLAUDE.md is the master file that tells AI who you are, how you work, and what rules to follow. Place it in the root of your Claude Code project.",
+        "steps": [
+          "Start with Business Identity: who you are, what you do, your specialization",
+          "Add Communication Rules: tone, language, compliance requirements",
+          "Add Decision Frameworks: approval thresholds, escalation rules",
+          "Add Process Standards: SOPs, quality checks, deadlines",
+          "Add Service Catalog: what you offer, pricing structure",
+          "Review and refine — let a colleague read it and spot gaps"
+        ],
+        "tips": [
+          "Write it like you're training a new employee on day one",
+          "Be specific — 'professional tone' is vague, 'formal Dutch, always use u-form' is clear",
+          "Include anti-patterns — what should AI NEVER do",
+          "Update it monthly as your business evolves"
+        ]
+      },
+      {
+        "title": "Setting Up Memory Files",
+        "content": "Memory files give AI persistent context about clients, projects, and operations. Organized in directories by topic.",
+        "structure": {
+          "memory/clients/": {
+            "purpose": "Per-client context that persists across sessions",
+            "example_file": "acme-bv.md",
+            "contents": [
+              "Contact: Jan de Vries (jan@acme.nl), CFO",
+              "Engagement: Annual audit + tax advisory since 2023",
+              "Preferences: Prefers email over phone. Meetings Tue/Thu only",
+              "Open items: Q4 VAT filing (due March 15), audit planning (April)",
+              "Notes: Price-sensitive, compare fees annually. Values speed over detail"
+            ]
+          },
+          "memory/projects/": {
+            "purpose": "Active project state and decisions",
+            "example_file": "acme-audit-2025.md",
+            "contents": [
+              "Status: Planning phase, kick-off scheduled Jan 20",
+              "Team: Lars (lead), Marianne (senior), Tom (junior)",
+              "Decision: Using new materiality threshold per 2025 standards",
+              "Blockers: Waiting for bank confirmations from ING"
+            ]
+          },
+          "memory/knowledge/": {
+            "purpose": "Industry knowledge accumulated over time",
+            "example_file": "audit-standards-2026.md",
+            "contents": [
+              "New ISA standards effective January 2026",
+              "Key change: enhanced risk assessment for going concern",
+              "Regulator focus areas: sustainability reporting, IT controls"
+            ]
+          }
+        }
+      },
+      {
+        "title": "Maintaining Your Context OS",
+        "content": "A Context OS only works if it's kept current. Build maintenance into your routine.",
+        "maintenance_tasks": [
+          { "task": "Update client files after significant meetings", "frequency": "After each meeting" },
+          { "task": "Review CLAUDE.md for accuracy", "frequency": "Monthly" },
+          { "task": "Archive completed project files", "frequency": "On project close" },
+          { "task": "Add new knowledge/insights", "frequency": "As encountered" },
+          { "task": "Remove outdated information", "frequency": "Quarterly" }
+        ]
+      }
+    ]
+  }
+}

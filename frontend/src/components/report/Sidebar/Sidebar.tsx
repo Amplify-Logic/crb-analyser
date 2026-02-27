@@ -1,8 +1,8 @@
 import { useState } from 'react'
-import { ChevronDown, ChevronRight } from 'lucide-react'
+import { ChevronDown, ChevronRight, Cable } from 'lucide-react'
 
 export interface SidebarItem {
-  type: 'overview' | 'finding' | 'action' | 'playbook' | 'tool'
+  type: 'overview' | 'finding' | 'action' | 'blueprint' | 'playbook' | 'tool'
   id: string | null
 }
 
@@ -34,12 +34,14 @@ export interface SidebarProps {
   playbookPhases: PlaybookPhase[]
   activeItem: SidebarItem
   onItemClick: (item: SidebarItem) => void
+  hasBlueprint?: boolean
   className?: string
 }
 
 interface SectionState {
   overview: boolean
   findings: boolean
+  blueprint: boolean
   actions: boolean
   playbook: boolean
   tools: boolean
@@ -71,11 +73,13 @@ export function Sidebar({
   playbookPhases,
   activeItem,
   onItemClick,
+  hasBlueprint = false,
   className = '',
 }: SidebarProps) {
   const [expanded, setExpanded] = useState<SectionState>({
     overview: true,
     findings: true,
+    blueprint: true,
     actions: true,
     playbook: true,
     tools: false,
@@ -169,6 +173,21 @@ export function Sidebar({
             </div>
           )}
         </div>
+
+        {/* Blueprint Section */}
+        {hasBlueprint && (
+          <div className="mb-2">
+            <button
+              onClick={() => onItemClick({ type: 'blueprint', id: null })}
+              className={itemClasses('blueprint', null)}
+            >
+              <span className="flex items-center gap-1">
+                <Cable className="w-4 h-4" />
+                AIOS Blueprint
+              </span>
+            </button>
+          </div>
+        )}
 
         {/* Actions Section */}
         <div className="mb-2">

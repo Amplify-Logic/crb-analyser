@@ -8,60 +8,39 @@ Prime the conversation with essential project context. Run this at the start of 
 /prime
 ```
 
-## Superpowers Reminder
-
-After priming, remember to use superpowers skills throughout the session:
-
-| When | Skill |
-|------|-------|
-| Before coding any feature | `superpowers:brainstorming` |
-| Writing code | `superpowers:test-driven-development` |
-| Writing tests | `superpowers:testing-anti-patterns` |
-| Debugging | `superpowers:systematic-debugging` |
-| Before claiming done | `superpowers:verification-before-completion` |
-| After major steps | `superpowers:requesting-code-review` |
-
 ## Instructions
 
-Read the following files to understand the project:
+**CLAUDE.md is already in context** — do NOT re-read it.
 
-1. **CLAUDE.md** - Development guidelines, commands, reference pointers
-2. **PRODUCT.md** - Domain model, CRB framework, target industries
-3. **STRATEGY.md** - Business strategy, decision framework
+### Step 1: Check recent activity
 
-Then provide a brief summary:
-- Current focus area
-- Key services involved
-- Any blockers or recent issues from git log
+Run these in parallel:
+- `git log --oneline -10` — recent commits, current focus
+- `ls -t docs/handoffs/ | head -3` — most recent handoff files
+- `ls -t docs/plans/ | head -5` — recent plans
 
-## After Priming
+### Step 2: Read the latest handoff
 
-Check for pending work:
-- `docs/handoffs/` - Recent session summaries
-- `docs/plans/` - Pending feature plans
-- `docs/evolution-log.md` - Recent system improvements
+Read only the **most recent** file from `docs/handoffs/` to understand where things left off.
 
-Ask: "What would you like to work on?"
+### Step 3: Situational context (read only if needed)
+
+| File | Read when... |
+|------|-------------|
+| `PRODUCT.md` | Task involves CRB framework, domain model, or industry logic |
+| `STRATEGY.md` | Task involves business decisions, pricing, or positioning |
+
+**Do NOT read these by default.** Most tasks (bug fixes, features, refactors) don't need them.
+
+### Step 4: Summarize
+
+Provide a brief summary:
+- Current branch and recent focus (from git log)
+- Last session's state (from handoff)
+- Any in-flight plans worth noting (from plan filenames)
+
+Then ask: **"What would you like to work on?"**
 
 ## Context Management
 
-Keep context light. Load task-specific reference ONLY when needed:
-
-| Task Type | Load Reference |
-|-----------|----------------|
-| API development | `.claude/reference/api-development.md` |
-| Frontend work | `.claude/reference/frontend-development.md` |
-| Report generation | `.claude/reference/report-quality.md` |
-| Vendor database | `.claude/reference/vendor-management.md` |
-| Testing | `.claude/reference/testing.md` |
-
-## Quick Reference
-
-After priming, the main project commands available:
-
-| Command | Purpose |
-|---------|---------|
-| `/plan-feature` | Create implementation plan (uses brainstorming + write-plan skills) |
-| `/execute [plan.md]` | Execute plan after context reset |
-| `/create-prd` | Generate PRD from discussion |
-| `/evolve` | Improve system after fixing bugs |
+Keep context light. Load task-specific references ONLY when the task requires them — see CLAUDE.md for the reference table.

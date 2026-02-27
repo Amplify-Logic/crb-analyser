@@ -1,0 +1,60 @@
+{
+  "description": "Getting Started with Claude Code — education module for AIOS reports",
+  "version": "1.0",
+  "last_updated": "2026-02-27",
+
+  "module": {
+    "title": "Getting Started with Claude Code",
+    "for_maturity": ["disconnected", "partially_connected"],
+    "estimated_time": "30 minutes",
+    "outcome": "First working automation between two of your tools",
+
+    "sections": [
+      {
+        "title": "What is Claude Code?",
+        "content": "Claude Code is Anthropic's official CLI tool that lets you use AI directly in your terminal. Think of it as having a technical co-worker who can read your files, run commands, connect to your tools, and build things for you — all through natural conversation.",
+        "key_points": [
+          "Works in your terminal/command line",
+          "Can read and write files, run commands",
+          "Connects to your tools via MCP (Model Context Protocol)",
+          "Builds custom skills (automated workflows)",
+          "Learns your business context over time"
+        ]
+      },
+      {
+        "title": "Installing Claude Code",
+        "content": "Installation takes about 5 minutes. You need Node.js installed, then run a single command.",
+        "steps": [
+          "Install Node.js if not already installed (nodejs.org)",
+          "Run: npm install -g @anthropic-ai/claude-code",
+          "Run: claude to start your first session",
+          "Follow the authentication prompts to connect your Anthropic account"
+        ]
+      },
+      {
+        "title": "Your First MCP Connection",
+        "content": "MCP (Model Context Protocol) is how Claude Code talks to your business tools. Adding an MCP server is like giving Claude Code a key to one of your tools.",
+        "steps": [
+          "Choose your most-used tool that has an MCP server",
+          "Run the install command (e.g., claude mcp add hubspot -- npx -y @hubspot/mcp)",
+          "Authenticate with the tool when prompted",
+          "Ask Claude Code something about your data (e.g., 'Show me my recent deals')"
+        ],
+        "common_first_connections": [
+          { "tool": "Google Drive", "command": "claude mcp add gdrive -- npx -y @anthropic-ai/mcp-gdrive", "what_you_can_do": "Search, read, and organize your documents" },
+          { "tool": "Slack", "command": "claude mcp add slack -- npx -y @anthropic-ai/mcp-slack", "what_you_can_do": "Search messages, post updates, manage channels" },
+          { "tool": "GitHub", "command": "claude mcp add github -- npx -y @anthropic-ai/mcp-github", "what_you_can_do": "Manage repos, issues, PRs" }
+        ]
+      },
+      {
+        "title": "Your First Automation",
+        "content": "Once connected, you can ask Claude Code to do things that span your tools. Start simple — combine data from two tools into something useful.",
+        "example_automations": [
+          "Pull my calendar for tomorrow and create a briefing from my CRM data for each meeting",
+          "Check my Stripe dashboard and summarize this month's revenue in Slack",
+          "Find all overdue invoices and draft follow-up emails"
+        ]
+      }
+    ]
+  }
+}

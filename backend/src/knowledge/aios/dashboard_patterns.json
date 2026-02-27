@@ -1,0 +1,150 @@
+{
+  "description": "Dashboard architecture patterns for the AIOS command center (Layer 7)",
+  "version": "1.0",
+  "last_updated": "2026-02-27",
+
+  "patterns": [
+    {
+      "id": "notion-workspace",
+      "name": "Notion Workspace",
+      "description": "Use Notion as the AIOS dashboard — databases for tracking, pages for documentation, views for different roles",
+      "best_for": ["Solo practitioners", "Small teams (1-10)", "Non-technical businesses"],
+      "complexity": "low",
+      "build_time_hours": 4,
+      "cost": "Free to EUR 10/user/month",
+      "pros": [
+        "No coding required",
+        "Beautiful and flexible",
+        "Native API for automation",
+        "Templates available",
+        "MCP server available"
+      ],
+      "cons": [
+        "Limited real-time data",
+        "Performance degrades with large datasets",
+        "Customization ceiling"
+      ],
+      "recommended_views": [
+        {
+          "name": "Operations Hub",
+          "shows": "Active automations, recent AI actions, pending reviews, alerts"
+        },
+        {
+          "name": "Skill Library",
+          "shows": "All custom skills with usage stats, last run, status"
+        },
+        {
+          "name": "Client Dashboard",
+          "shows": "Per-client overview: recent interactions, open items, context health"
+        },
+        {
+          "name": "AIOS Health",
+          "shows": "Layer scores, connection status, data freshness, error rates"
+        }
+      ],
+      "mcp_integration": "Connect via Notion MCP server for automated page updates"
+    },
+    {
+      "id": "claude-project",
+      "name": "Claude Code Project",
+      "description": "Use Claude Code project structure as the dashboard — CLAUDE.md as config, memory files as state, skills as actions",
+      "best_for": ["Technical founders", "Developer-led businesses", "Power users"],
+      "complexity": "low",
+      "build_time_hours": 2,
+      "cost": "Included with Claude subscription",
+      "pros": [
+        "Zero additional tools",
+        "Native to the AIOS",
+        "Instant skill access",
+        "Version controlled",
+        "Grows organically"
+      ],
+      "cons": [
+        "Text-based, no visual dashboards",
+        "Requires CLI comfort",
+        "No shared team views without git"
+      ],
+      "recommended_views": [
+        {
+          "name": "CLAUDE.md",
+          "shows": "Business rules, quick links, system status summary"
+        },
+        {
+          "name": "memory/ directory",
+          "shows": "Client files, project state, operational context"
+        },
+        {
+          "name": "skills/ directory",
+          "shows": "Available skills with descriptions and usage"
+        },
+        {
+          "name": "/status skill",
+          "shows": "Custom skill that queries all connected tools and reports system health"
+        }
+      ],
+      "mcp_integration": "Native — Claude Code IS the integration layer"
+    },
+    {
+      "id": "custom-web-app",
+      "name": "Custom Web Application",
+      "description": "Build a dedicated web dashboard — full control over data visualization, real-time updates, team access",
+      "best_for": ["Growing teams (10+)", "Data-heavy operations", "Businesses needing real-time monitoring"],
+      "complexity": "high",
+      "build_time_hours": 40,
+      "cost": "EUR 50-200/month hosting",
+      "pros": [
+        "Fully customizable",
+        "Real-time data",
+        "Role-based access",
+        "Custom visualizations",
+        "Scalable"
+      ],
+      "cons": [
+        "Significant build effort",
+        "Ongoing maintenance",
+        "Requires developer or Claude Code proficiency"
+      ],
+      "recommended_views": [
+        {
+          "name": "Executive Dashboard",
+          "shows": "KPIs, revenue metrics, AIOS health score, alerts"
+        },
+        {
+          "name": "Operations Center",
+          "shows": "Active automations, queued tasks, error logs, data flows"
+        },
+        {
+          "name": "Client Portal",
+          "shows": "Per-client view with project status, deliverables, communications"
+        },
+        {
+          "name": "AI Activity Log",
+          "shows": "What AI has done, decisions made, items pending human review"
+        }
+      ],
+      "mcp_integration": "Custom API endpoints that MCP servers and Claude Code skills can query/update",
+      "tech_suggestions": ["Next.js + Supabase", "Remix + PostgreSQL", "SvelteKit + Drizzle"]
+    }
+  ],
+
+  "recommendation_logic": {
+    "description": "How to recommend a dashboard pattern based on client profile",
+    "rules": [
+      {
+        "condition": "build_willingness == 'prefers-turnkey' OR ai_experience == 'none'",
+        "recommend": "notion-workspace",
+        "rationale": "Lowest barrier to entry, no coding required"
+      },
+      {
+        "condition": "build_willingness == 'eager' AND ai_experience == 'active-user'",
+        "recommend": "claude-project",
+        "rationale": "Natural extension of existing Claude Code usage"
+      },
+      {
+        "condition": "team_size > 10 OR data_volume == 'high'",
+        "recommend": "custom-web-app",
+        "rationale": "Needs role-based access and real-time data at scale"
+      }
+    ]
+  }
+}

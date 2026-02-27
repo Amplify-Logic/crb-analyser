@@ -1,0 +1,65 @@
+{
+  "description": "Getting Started with Claude Cowork — education module for browser-based AI tasks",
+  "version": "1.0",
+  "last_updated": "2026-02-27",
+
+  "module": {
+    "title": "Using Claude Cowork for Web Tasks",
+    "for_maturity": ["partially_connected", "automated"],
+    "estimated_time": "20 minutes",
+    "outcome": "Understanding when to use Cowork vs Code and your first browser automation",
+
+    "sections": [
+      {
+        "title": "Claude Code vs Claude Cowork",
+        "content": "Claude Code and Cowork serve different purposes. Code is the builder — it creates things, writes integrations, builds skills. Cowork is the operator — it can use any website or web app just like you would, clicking, typing, navigating.",
+        "comparison": [
+          { "task": "Build an MCP integration", "use": "Claude Code", "why": "Requires coding and file system access" },
+          { "task": "Fill out a web form", "use": "Cowork", "why": "Needs browser interaction" },
+          { "task": "Create a custom skill", "use": "Claude Code", "why": "Writes files and registers commands" },
+          { "task": "Research competitor pricing online", "use": "Cowork", "why": "Needs to browse websites" },
+          { "task": "Check insurance eligibility portal", "use": "Cowork", "why": "Web portal that needs login and navigation" },
+          { "task": "Generate a report from data", "use": "Claude Code", "why": "Data processing and file generation" }
+        ]
+      },
+      {
+        "title": "What Cowork Can Do",
+        "content": "Cowork uses computer use capabilities to interact with any web application. It can see screens, click buttons, type text, and navigate — just like a human assistant would.",
+        "capabilities": [
+          "Navigate web portals (insurance, banking, government sites)",
+          "Fill out online forms and applications",
+          "Extract data from websites without APIs",
+          "Perform multi-step web workflows",
+          "Take screenshots for documentation",
+          "Monitor web dashboards for changes"
+        ]
+      },
+      {
+        "title": "When to Use Cowork in Your AIOS",
+        "content": "Cowork fills the gaps where APIs and MCP servers don't exist. Some business tools only have web interfaces — Cowork can automate those too.",
+        "use_cases": [
+          {
+            "scenario": "Tool has no API",
+            "example": "Your dental PMS only has a web portal — Cowork can log in and extract patient data",
+            "maturity_needed": "partially_connected"
+          },
+          {
+            "scenario": "One-off web research",
+            "example": "Research 10 competitor websites and summarize their pricing",
+            "maturity_needed": "partially_connected"
+          },
+          {
+            "scenario": "Government/compliance portals",
+            "example": "Check tax filing status, download compliance certificates",
+            "maturity_needed": "automated"
+          },
+          {
+            "scenario": "Ongoing monitoring",
+            "example": "Check supplier websites weekly for price changes",
+            "maturity_needed": "automated"
+          }
+        ]
+      }
+    ]
+  }
+}
