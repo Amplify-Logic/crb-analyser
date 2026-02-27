@@ -5,6 +5,25 @@
 
 ---
 
+## 2026-02-27 - Report Math & Quality Pipeline Hardening
+
+**Symptom:** Generated reports had 6 critical bugs: all ROI costs were identical €500/€50, ROI exceeded 500% cap (588%), exec summary totals contradicted value summary by 3.1x, payback periods of 0.2 months (6 days), four_options scoring contradicted AIOS recommendation, and irrelevant vendors appeared (Lawmatics for accounting).
+
+**Root cause:** The AIOS pivot introduced new option types (`connect_and_automate`, `enhance_with_ai`, `targeted_upgrade`) but the calculation pipeline (`roi_calculator.py`, `report_service.py`, `report_generation_utils.py`) was never updated to handle them. AIOS options store costs as strings ("EUR 60-100") while legacy options use numbers. The `else` fallback branch silently served hardcoded defaults.
+
+**Bug class:** Logic (calculation pipeline didn't handle new types) + Integration (subsystems produced contradictory outputs)
+
+**System fix:**
+- `.claude/reference/report-quality.md`: Added "Calculation Pipeline Rules" section with:
+  - Option Type Checklist — mandatory checks when adding/modifying option types
+  - Cost Format Rules — string vs numeric parsing rules
+  - Consistency Rules — reconciliation, cap ordering, vendor filtering
+  - Updated Key Files table with ROI calculator and vendor utils
+
+**Prevents:** Any future option type addition breaking the calculation pipeline. The checklist ensures all downstream consumers (ROI calculation, cap logic, reconciliation, scoring alignment, vendor filtering) are updated together.
+
+---
+
 ## 2026-02-15 - Production Cleanup & Documentation Alignment
 
 **Change:** Major documentation cleanup to align all docs with 3-vertical launch.

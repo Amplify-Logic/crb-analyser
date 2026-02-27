@@ -138,11 +138,38 @@ Before shipping any report:
 - [ ] Custom build estimates include Claude Code hours and MCP servers needed
 - [ ] "Replace" option only appears when Connect is genuinely impossible (document why)
 
+## Calculation Pipeline Rules
+
+When adding or modifying option types (e.g., AIOS types like `connect_and_automate`), ALL downstream consumers must be updated:
+
+### Option Type Checklist
+When a new option type is added to the recommendation model:
+- [ ] `roi_calculator.py:_calculate_financials()` handles the new type's cost format
+- [ ] `report_service.py` confidence adjustment re-applies ROI cap (500%) after adjustment
+- [ ] `report_service.py:_finalize_report()` reconciles exec summary totals with value_summary
+- [ ] `four_options.py` scoring aligns with AIOS recommendation (not contradicting it)
+- [ ] `report_generation_utils.py` vendor filtering respects industry boundaries
+- [ ] Payback period has minimum 1-month floor (sub-month payback is not credible)
+
+### Cost Format Rules
+- **AIOS options** store costs as strings: `"EUR 60-100"`, `"2 weeks"` — must be parsed
+- **Legacy options** store costs as numbers: `implementation_cost: 500`, `monthly_cost: 50`
+- **Never assume** cost fields are numeric — always check and parse if string
+- **String cost parsing**: extract numbers with regex, use midpoint for ranges
+
+### Consistency Rules
+- Exec summary `total_value_potential` MUST equal `value_summary.total` (not LLM-estimated separately)
+- ROI cap (500%) must be applied AFTER any confidence adjustments, not before
+- `four_options.recommended` must not contradict `our_recommendation` without an explicit override note
+- Vendors must be filtered by industry — no legal CRMs for accounting firms
+
 ## Key Files
 
 | File | Purpose |
 |------|---------|
 | `skills/report-generation/` | Report section generators |
-| `services/report_service.py` | Orchestrates generation |
+| `skills/analysis/roi_calculator.py` | ROI calculation with AIOS cost extraction |
+| `skills/report_generation_utils.py` | Vendor loading with industry filtering |
+| `services/report_service.py` | Orchestrates generation, confidence adjustment, reconciliation |
 | `services/teaser_service.py` | Pre-payment preview |
 | `components/report/` | Frontend report components |
