@@ -2302,6 +2302,8 @@ IMPORTANT:
 
                                     if four_result.success:
                                         rec["four_options"] = four_result.data
+                                        # Align four_options with AIOS recommendation
+                                        rec = self._align_four_options(rec)
                                 except (ValueError, KeyError, TypeError, RuntimeError, Exception) as four_e:
                                     logger.warning("four_options_failed", finding_id=finding.get("id"), error=str(four_e), error_type=type(four_e).__name__)
 
@@ -2670,6 +2672,46 @@ Generate 5-10 recommendations. Return ONLY the JSON array."""
         except (APIError, APIConnectionError, RateLimitError, json.JSONDecodeError, ValueError, KeyError, TypeError) as e:
             logger.error("recommendations_generation_failed", error=str(e), error_type=type(e).__name__)
             return []
+
+    @staticmethod
+    def _align_four_options(rec: Dict[str, Any]) -> Dict[str, Any]:
+        """Ensure four_options scores don't contradict our_recommendation."""
+        four_options = rec.get("four_options", {})
+        our_rec = rec.get("our_recommendation", "")
+        if not four_options or not our_rec:
+            return rec
+
+        fo_recommended = four_options.get("recommended")
+        if hasattr(fo_recommended, "value"):
+            fo_recommended = fo_recommended.value
+
+        aios_to_four = {
+            "connect_and_automate": "connect",
+            "enhance_with_ai": "build",
+            "targeted_upgrade": "buy",
+        }
+        equivalent_four = aios_to_four.get(our_rec, "")
+
+        if fo_recommended and equivalent_four and str(fo_recommended) != equivalent_four:
+            four_options["recommendation_override"] = {
+                "four_options_ranked": str(fo_recommended),
+                "aios_recommendation": our_rec,
+                "note": (
+                    f"The AIOS analysis recommends '{our_rec}' based on this company's "
+                    f"specific readiness profile."
+                ),
+            }
+            # Update is_recommended flags on scores
+            scores = four_options.get("scores", [])
+            for score in scores:
+                if isinstance(score, dict):
+                    opt_val = score.get("option", "")
+                    if hasattr(opt_val, "value"):
+                        opt_val = opt_val.value
+                    score["is_recommended"] = (str(opt_val) == equivalent_four)
+
+        rec["four_options"] = four_options
+        return rec
 
     @staticmethod
     def _compute_crb_analysis(rec: Dict[str, Any]) -> Dict[str, Any]:
