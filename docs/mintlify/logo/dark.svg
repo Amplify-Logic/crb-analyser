@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 40">
+  <rect width="36" height="36" x="2" y="2" rx="6" fill="#07C983"/>
+  <text x="20" y="27" font-family="system-ui, sans-serif" font-size="20" font-weight="700" fill="white" text-anchor="middle">R</text>
+  <text x="50" y="27" font-family="system-ui, sans-serif" font-size="18" font-weight="600" fill="#f0f0f0">ReadyPath</text>
+</svg>

@@ -1,0 +1,135 @@
+---
+title: "Reports"
+description: "API endpoints for generating, retrieving, and managing CRB analysis reports with tiered findings, NET scores, and implementation roadmaps."
+icon: "file-chart-column"
+keywords: ["CRB report API", "generate report API", "AI analysis report API"]
+---
+
+# Reports API
+
+Generate, retrieve, and manage CRB analysis reports.
+
+## Generate a Report
+
+Trigger report generation from a completed quiz session and workshop.
+
+```bash
+POST /api/reports/generate
+```
+
+**Request Body:**
+
+```json
+{
+  "session_id": "qs_abc123",
+  "tier": "full",
+  "options": {
+    "include_vendor_comparison": true,
+    "include_implementation_roadmap": true
+  }
+}
+```
+
+**Response:**
+
+```json
+{
+  "status": "success",
+  "data": {
+    "report_id": "rpt_xyz789",
+    "status": "generating",
+    "estimated_completion": "2026-02-21T14:00:00Z"
+  }
+}
+```
+
+Report generation is asynchronous. Use the status endpoint or webhooks to know when it's ready.
+
+## Get Report Status
+
+```bash
+GET /api/reports/{report_id}/status
+```
+
+**Response:**
+
+```json
+{
+  "status": "success",
+  "data": {
+    "report_id": "rpt_xyz789",
+    "status": "human_review",
+    "progress": {
+      "ai_analysis": "completed",
+      "vendor_research": "completed",
+      "report_assembly": "completed",
+      "human_review": "in_progress"
+    }
+  }
+}
+```
+
+## Get Report
+
+Retrieve the full report after completion.
+
+```bash
+GET /api/reports/{report_id}
+```
+
+**Response (abbreviated):**
+
+```json
+{
+  "status": "success",
+  "data": {
+    "report_id": "rpt_xyz789",
+    "status": "delivered",
+    "executive_summary": {
+      "ai_readiness_score": 67,
+      "top_recommendation": "...",
+      "total_potential_value": 142500,
+      "currency": "EUR"
+    },
+    "findings": [
+      {
+        "id": "f_1",
+        "title": "Document Generation Automation",
+        "tier": "quick_win",
+        "net_score": 32200,
+        "options": {
+          "off_the_shelf": { "net_score": 32200, "recommended": true },
+          "best_in_class": { "net_score": 28500 },
+          "custom_build": { "net_score": 18200 }
+        }
+      }
+    ],
+    "roadmap": {
+      "phases": [...]
+    }
+  }
+}
+```
+
+## List Reports
+
+```bash
+GET /api/reports?status=delivered&limit=20
+```
+
+Returns paginated list of reports with summary data.
+
+## Report Webhooks
+
+Configure webhooks to receive notifications when report status changes:
+
+```bash
+POST /api/webhooks
+```
+
+```json
+{
+  "url": "https://your-app.com/webhooks/crb",
+  "events": ["report.completed", "report.delivered"]
+}
+```

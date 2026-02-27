@@ -1,0 +1,93 @@
+---
+title: "Scoring Methodology"
+sidebarTitle: "Scoring"
+description: "How ReadyPath calculates the AI Readiness Score (0-100), NET Score for recommendations, and Customer Value and Business Health scores that determine finding priority."
+icon: "star"
+keywords: ["AI readiness score", "CRB scoring methodology", "technology assessment scoring", "NET score calculation", "AI readiness benchmark"]
+---
+
+# Scoring Methodology
+
+ReadyPath uses three scoring systems to quantify technology decisions.
+
+## AI Readiness Score (0-100)
+
+Your overall readiness for AI and technology adoption, measured across 5 weighted dimensions:
+
+| Dimension | Weight | What It Measures |
+|-----------|--------|-----------------|
+| **Current Stack** | 20% | Quality and modernity of existing tools |
+| **Data Readiness** | 25% | Data quality, accessibility, and structure |
+| **Team Capability** | 20% | Technical skills and capacity for change |
+| **Process Maturity** | 15% | How well-defined and documented processes are |
+| **Strategic Alignment** | 20% | How well technology goals align with business goals |
+
+### Score Ranges
+
+| Range | Rating | Interpretation |
+|-------|--------|---------------|
+| 80-100 | **Excellent** | Ready for advanced AI adoption |
+| 60-79 | **Good** | Ready with some preparation needed |
+| 40-59 | **Moderate** | Foundation building required first |
+| 20-39 | **Developing** | Significant groundwork needed |
+| 0-19 | **Early** | Start with basics before considering AI |
+
+## NET Score
+
+The decision-making score applied to each recommendation option:
+
+```
+NET SCORE = Total Benefit - Total Cost - (Total Risk / 10)
+```
+
+| Component | Source |
+|-----------|--------|
+| Total Benefit | Sum of Financial + Time + Strategic + Quality benefits (confidence-adjusted) |
+| Total Cost | Sum of all 6 cost categories over evaluation period |
+| Total Risk | Sum of (Probability x Impact) across all risk categories |
+
+**The option with the highest NET score is the recommended choice.**
+
+### Example
+
+| | Off-the-Shelf | Best-in-Class | Custom Build |
+|-|---------------|---------------|--------------|
+| Benefit | EUR 45,000 | EUR 72,000 | EUR 95,000 |
+| Cost | EUR 12,000 | EUR 35,000 | EUR 65,000 |
+| Risk / 10 | EUR 800 | EUR 1,500 | EUR 3,200 |
+| **NET Score** | **EUR 32,200** | **EUR 35,500** | **EUR 26,800** |
+
+In this example, **Best-in-Class wins** — higher benefits justify the extra cost, and risk is manageable.
+
+## Customer Value Score (0-10)
+
+Measures the value delivered to your clients and customers:
+
+- Impact on service quality
+- Client experience improvement
+- Competitive differentiation
+- Revenue growth potential
+
+## Business Health Score (0-10)
+
+Measures impact on operational sustainability:
+
+- Operational efficiency gains
+- Risk reduction to the business
+- Team satisfaction and retention
+- Long-term cost trajectory
+
+## Dual-Pillar Validation
+
+Every recommendation must score positively on **both** Customer Value and Business Health:
+
+| Customer Value | Business Health | Decision |
+|---------------|----------------|----------|
+| High | High | **Recommend** |
+| High | Low | Caution — unsustainable |
+| Low | High | Caution — limited client impact |
+| Low | Low | **Do not recommend** |
+
+<Note>
+  CRB rejects recommendations that only benefit one pillar. A cost-cutting measure that hurts client experience, or a client-pleasing feature that damages margins, will be flagged.
+</Note>

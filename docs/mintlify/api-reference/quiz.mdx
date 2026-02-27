@@ -1,0 +1,133 @@
+---
+title: "Quiz Sessions"
+sidebarTitle: "Quiz"
+description: "API endpoints for creating and managing CRB adaptive quiz sessions, submitting answers, and retrieving AI Readiness Scores."
+icon: "clipboard-question"
+keywords: ["quiz API", "AI readiness quiz API", "assessment API"]
+---
+
+# Quiz Sessions API
+
+Create and manage adaptive quiz sessions programmatically.
+
+## Create a Quiz Session
+
+Start a new adaptive quiz session.
+
+```bash
+POST /api/quiz/sessions
+```
+
+**Request Body:**
+
+```json
+{
+  "industry": "professional-services",
+  "company_size": "10-50",
+  "metadata": {
+    "source": "api",
+    "partner_id": "partner_123"
+  }
+}
+```
+
+**Response:**
+
+```json
+{
+  "status": "success",
+  "data": {
+    "session_id": "qs_abc123",
+    "status": "created",
+    "first_question": {
+      "id": "q_1",
+      "text": "What industry does your company operate in?",
+      "type": "single_choice",
+      "options": [...]
+    }
+  }
+}
+```
+
+## Submit an Answer
+
+Submit an answer and receive the next adaptive question.
+
+```bash
+POST /api/quiz/sessions/{session_id}/answers
+```
+
+**Request Body:**
+
+```json
+{
+  "question_id": "q_1",
+  "answer": {
+    "choice": "professional-services",
+    "additional_context": "Law firm with 25 attorneys"
+  }
+}
+```
+
+**Response:**
+
+```json
+{
+  "status": "success",
+  "data": {
+    "next_question": {
+      "id": "q_2",
+      "text": "What tools do you currently use for document management?",
+      "type": "multi_choice",
+      "options": [...]
+    },
+    "progress": {
+      "questions_answered": 1,
+      "estimated_remaining": 5,
+      "confidence": 0.35
+    }
+  }
+}
+```
+
+## Get Quiz Results
+
+Retrieve the AI Readiness Score and teaser after quiz completion.
+
+```bash
+GET /api/quiz/sessions/{session_id}/results
+```
+
+**Response:**
+
+```json
+{
+  "status": "success",
+  "data": {
+    "ai_readiness_score": 67,
+    "dimensions": {
+      "current_stack": 72,
+      "data_readiness": 58,
+      "team_capability": 70,
+      "process_maturity": 63,
+      "strategic_alignment": 75
+    },
+    "industry_benchmark": {
+      "percentile": 65,
+      "industry_average": 52
+    },
+    "teaser": {
+      "top_findings": [...],
+      "primary_recommendation": "..."
+    }
+  }
+}
+```
+
+## List Sessions
+
+```bash
+GET /api/quiz/sessions?status=completed&limit=20
+```
+
+Returns paginated list of quiz sessions with summary data.

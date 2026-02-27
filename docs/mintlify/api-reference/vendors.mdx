@@ -1,0 +1,115 @@
+---
+title: "Vendors"
+description: "API endpoints for searching ReadyPath's vendor database — real-time pricing, feature comparisons, and integration compatibility data."
+icon: "building"
+keywords: ["vendor comparison API", "software vendor data", "vendor pricing API", "tool comparison API"]
+---
+
+# Vendors API
+
+Access ReadyPath's vendor database with real-time pricing, features, and integration data.
+
+## Search Vendors
+
+Search for vendors by category, industry, or capability.
+
+```bash
+GET /api/vendors/search?category=practice-management&industry=dental&limit=10
+```
+
+**Response:**
+
+```json
+{
+  "status": "success",
+  "data": {
+    "vendors": [
+      {
+        "id": "v_dentrix",
+        "name": "Dentrix",
+        "category": "practice-management",
+        "industries": ["dental"],
+        "pricing": {
+          "model": "per-location",
+          "starting_price": 399,
+          "currency": "EUR",
+          "period": "monthly",
+          "confidence": "high",
+          "last_verified": "2026-02-15"
+        },
+        "features": ["scheduling", "billing", "imaging", "patient-portal"],
+        "integrations": ["xray-systems", "insurance-clearinghouses"]
+      }
+    ],
+    "total": 15,
+    "page": 1
+  }
+}
+```
+
+## Get Vendor Details
+
+```bash
+GET /api/vendors/{vendor_id}
+```
+
+Returns full vendor profile including:
+- Detailed pricing tiers
+- Feature matrix
+- Integration list
+- Pros/cons
+- CRB analysis history
+
+## Compare Vendors
+
+Compare 2-4 vendors side by side.
+
+```bash
+POST /api/vendors/compare
+```
+
+**Request Body:**
+
+```json
+{
+  "vendor_ids": ["v_dentrix", "v_opendental", "v_eaglesoft"],
+  "criteria": ["pricing", "features", "integrations", "support"]
+}
+```
+
+**Response:**
+
+```json
+{
+  "status": "success",
+  "data": {
+    "comparison": {
+      "vendors": [...],
+      "criteria_scores": {
+        "pricing": { "v_dentrix": 7, "v_opendental": 9, "v_eaglesoft": 6 },
+        "features": { "v_dentrix": 8, "v_opendental": 7, "v_eaglesoft": 8 },
+        "integrations": { "v_dentrix": 7, "v_opendental": 6, "v_eaglesoft": 7 },
+        "support": { "v_dentrix": 8, "v_opendental": 5, "v_eaglesoft": 7 }
+      },
+      "recommendation": "v_dentrix",
+      "reasoning": "Best overall score across criteria with strong support."
+    }
+  }
+}
+```
+
+## Vendor Categories
+
+```bash
+GET /api/vendors/categories
+```
+
+Returns available vendor categories:
+- `practice-management`
+- `crm`
+- `marketing-automation`
+- `ai-tools`
+- `accounting`
+- `project-management`
+- `communication`
+- And more...

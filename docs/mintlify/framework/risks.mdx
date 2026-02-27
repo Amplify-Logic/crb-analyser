@@ -1,0 +1,85 @@
+---
+title: "Risk Assessment"
+sidebarTitle: "Risks"
+description: "CRB risk assessment covers 4 categories — Technical, Adoption, Vendor, and Market — each scored by probability and impact with specific mitigation strategies."
+icon: "triangle-exclamation"
+keywords: ["technology risk assessment", "software risk analysis", "vendor risk evaluation", "implementation risk", "adoption risk"]
+---
+
+# Risk Assessment Framework
+
+Risk in CRB analysis is not a vague "red/yellow/green" rating. Every risk is quantified with probability, impact, and concrete mitigation strategies.
+
+## 4 Risk Categories
+
+### Technical Risk
+
+Will the technology work as expected?
+
+| Factor | What We Assess |
+|--------|---------------|
+| **Integration complexity** | API compatibility, data format mismatches, middleware needs |
+| **Performance** | Scalability limits, latency, throughput constraints |
+| **Reliability** | Uptime history, failure modes, disaster recovery |
+| **Security** | Vulnerability history, compliance certifications, data handling |
+
+### Adoption Risk
+
+Will your team actually use it?
+
+| Factor | What We Assess |
+|--------|---------------|
+| **Learning curve** | Time to proficiency, training requirements |
+| **Change resistance** | Workflow disruption, habit changes required |
+| **Champion dependency** | Risk of adoption failing if key advocates leave |
+| **Parallel systems** | How long you'll run old and new systems together |
+
+### Vendor Risk
+
+Will the vendor be there when you need them?
+
+| Factor | What We Assess |
+|--------|---------------|
+| **Financial stability** | Funding status, revenue model, burn rate |
+| **Product direction** | Roadmap alignment, feature sunset history |
+| **Lock-in degree** | Data portability, API dependency, export options |
+| **Support quality** | Response times, escalation paths, documentation |
+
+### Market Risk
+
+Will the landscape shift under you?
+
+| Factor | What We Assess |
+|--------|---------------|
+| **Technology evolution** | Risk of the approach becoming obsolete |
+| **Competitive dynamics** | What competitors are adopting |
+| **Regulatory changes** | Upcoming compliance requirements |
+| **AI disruption** | How AI developments may change the equation |
+
+## Scoring Method
+
+Each risk is scored on two dimensions:
+
+| Dimension | Scale | Meaning |
+|-----------|-------|---------|
+| **Probability** | 0-100% | Likelihood of the risk materialising |
+| **Impact** | 1-10 | Severity if it does occur |
+
+**Risk Score** = `Probability x Impact`
+
+This feeds into the NET Score formula as `Risk / 10`, ensuring high-risk options are penalised proportionally.
+
+## Mitigation Strategies
+
+Every identified risk includes a specific mitigation:
+
+| Risk | Mitigation Example |
+|------|--------------------|
+| Integration fails | Proof-of-concept sprint before full commitment |
+| Low adoption | Pilot with champion team, measure before rollout |
+| Vendor instability | Contractual data portability clause, export schedule |
+| Technology obsolescence | Modular architecture, avoid deep vendor coupling |
+
+<Warning>
+  ReadyPath surfaces risks that vendors don't advertise. If a "risk-free" claim sounds too good to be true, it usually is.
+</Warning>

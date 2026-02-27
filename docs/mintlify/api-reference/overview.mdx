@@ -1,0 +1,101 @@
+---
+title: "API Overview"
+sidebarTitle: "Overview"
+description: "ReadyPath REST API for programmatic access to AI readiness assessments, quiz sessions, report generation, and vendor data."
+icon: "code"
+keywords: ["ReadyPath API", "CRB API", "AI readiness API", "technology assessment API", "ReadyPath integration"]
+---
+
+# ReadyPath API
+
+The ReadyPath API provides programmatic access to our AI-powered Cost-Risk-Benefit analysis platform. Use it to integrate CRB assessments into your own workflows, automate report generation, or build custom experiences on top of our analysis engine.
+
+## Base URL
+
+```
+https://api.readypath.ai/api
+```
+
+## Key Capabilities
+
+<Columns cols={2}>
+  <Card title="Quiz Sessions" icon="clipboard-question" href="/api-reference/quiz">
+    Create and manage adaptive quiz sessions programmatically.
+  </Card>
+  <Card title="Reports" icon="file-chart-column" href="/api-reference/reports">
+    Generate, retrieve, and manage CRB analysis reports.
+  </Card>
+  <Card title="Vendors" icon="building" href="/api-reference/vendors">
+    Search and retrieve vendor data, pricing, and comparisons.
+  </Card>
+  <Card title="Authentication" icon="lock" href="/api-reference/authentication">
+    API key management and authentication flow.
+  </Card>
+</Columns>
+
+## Response Format
+
+All endpoints return JSON:
+
+```json
+{
+  "status": "success",
+  "data": { ... },
+  "meta": {
+    "request_id": "req_abc123",
+    "timestamp": "2026-02-21T10:30:00Z"
+  }
+}
+```
+
+Error responses follow a consistent format:
+
+```json
+{
+  "status": "error",
+  "error": {
+    "code": "NOT_FOUND",
+    "message": "Report not found",
+    "details": {}
+  }
+}
+```
+
+## Rate Limits
+
+| Plan | Requests/minute | Concurrent |
+|------|----------------|------------|
+| Free | 10 | 2 |
+| Pro | 100 | 10 |
+| Enterprise | Custom | Custom |
+
+## SDKs
+
+<Tabs>
+  <Tab title="Python">
+    ```bash
+    pip install readypath
+    ```
+    ```python
+    from readypath import ReadyPathClient
+
+    client = ReadyPathClient(api_key="your-api-key")
+    session = client.quiz.create(industry="professional-services")
+    ```
+  </Tab>
+  <Tab title="JavaScript">
+    ```bash
+    npm install @readypath/sdk
+    ```
+    ```javascript
+    import { ReadyPathClient } from '@readypath/sdk';
+
+    const client = new ReadyPathClient({ apiKey: 'your-api-key' });
+    const session = await client.quiz.create({ industry: 'professional-services' });
+    ```
+  </Tab>
+</Tabs>
+
+<Note>
+  SDKs are coming soon. In the meantime, use the REST API directly with any HTTP client.
+</Note>

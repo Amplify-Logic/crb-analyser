@@ -1,0 +1,70 @@
+---
+title: "Connect vs Replace"
+description: "CRB's Connect vs Replace framework helps you decide whether to integrate new technology alongside existing tools or migrate to a new solution entirely."
+icon: "plug"
+keywords: ["connect vs replace", "software migration decision", "integrate vs migrate", "technology integration strategy", "when to replace software"]
+---
+
+# Connect vs Replace
+
+One of the most expensive mistakes in technology decisions is replacing a system that just needed an integration. CRB's Connect vs Replace framework prevents this.
+
+## The Framework
+
+| Strategy | When to Use | Typical Cost |
+|----------|------------|-------------|
+| **Connect** | Existing tool works well enough — add the new capability alongside it | Low (API integration) |
+| **Replace** | Existing tool is the bottleneck — migrate fully to a new solution | High (full migration) |
+
+## Decision Criteria
+
+### Choose Connect When
+
+- Your current tool handles 70%+ of requirements well
+- The gap is a specific capability, not overall quality
+- An API or integration exists between old and new
+- Your team has limited capacity for major changes
+- The switching cost exceeds the performance gap
+
+### Choose Replace When
+
+- Your current tool is the root cause of the problem
+- Multiple issues trace back to the same system
+- No reasonable integration path exists
+- The vendor is declining (sunset risk, poor support)
+- Technical debt in the current system is compounding
+
+## Real-World Examples
+
+### Connect: Adding AI to an Existing CRM
+
+**Situation**: CRM works well for client management, but lacks AI-powered insights.
+
+**Wrong approach**: Replace the entire CRM with an "AI-native" alternative.
+
+**Right approach**: Connect an AI analytics tool via API. Keep the CRM your team knows, add the capability you need.
+
+**Cost difference**: EUR 5,000 integration vs EUR 80,000 migration.
+
+### Replace: Outgrowing a Practice Management System
+
+**Situation**: Dental practice management software can't handle multi-location scheduling, reporting is manual, and the vendor hasn't shipped updates in 18 months.
+
+**Wrong approach**: Build integrations around a dying platform.
+
+**Right approach**: Migrate to a modern system. The current tool isn't a foundation to build on.
+
+**Cost difference**: EUR 15,000 migration vs EUR 25,000+ in ongoing workarounds.
+
+## How CRB Reports Present This
+
+Each recommendation in your report includes a Connect/Replace recommendation with:
+
+- **Rationale** — why this strategy for this specific finding
+- **Integration points** — what connects to what (for Connect)
+- **Migration plan** — phased approach with rollback (for Replace)
+- **Risk comparison** — risks of each strategy side by side
+
+<Note>
+  Connect is the default recommendation unless there's clear evidence that the existing tool is the problem. ReadyPath is biased toward preserving working systems.
+</Note>

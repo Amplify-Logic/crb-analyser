@@ -1,0 +1,157 @@
+{
+  "$schema": "https://mintlify.com/docs.json",
+  "theme": "mint",
+  "name": "ReadyPath",
+  "description": "AI-powered Cost-Risk-Benefit analysis for technology decisions. ReadyPath uses the CRB framework to replace 6-week consulting engagements with evidence-based reports in 24-48 hours.",
+  "colors": {
+    "primary": "#0D9373",
+    "light": "#07C983",
+    "dark": "#0A7B5E"
+  },
+  "logo": {
+    "light": "/logo/light.svg",
+    "dark": "/logo/dark.svg",
+    "href": "https://readypath.ai"
+  },
+  "favicon": "/favicon.svg",
+  "appearance": {
+    "default": "system"
+  },
+  "navbar": {
+    "links": [
+      {
+        "type": "github",
+        "href": "https://github.com/amplify-logic/readypath",
+        "label": "GitHub"
+      }
+    ],
+    "primary": {
+      "type": "button",
+      "label": "Take the Quiz",
+      "href": "https://readypath.ai/quiz"
+    }
+  },
+  "navigation": {
+    "global": {
+      "tabs": [
+        { "tab": "Documentation", "href": "/" },
+        { "tab": "CRB Framework", "href": "/framework" },
+        { "tab": "API Reference", "href": "/api-reference" }
+      ],
+      "anchors": [
+        {
+          "anchor": "Start Free Assessment",
+          "href": "https://readypath.ai/quiz",
+          "icon": "rocket"
+        }
+      ]
+    },
+    "tabs": [
+      {
+        "tab": "Documentation",
+        "groups": [
+          {
+            "group": "Getting Started",
+            "pages": [
+              "introduction",
+              "quickstart",
+              "how-it-works"
+            ]
+          },
+          {
+            "group": "Guides",
+            "pages": [
+              "guides/quiz-flow",
+              "guides/workshop",
+              "guides/reading-your-report",
+              "guides/connect-vs-replace"
+            ]
+          },
+          {
+            "group": "Industries",
+            "pages": [
+              "industries/professional-services",
+              "industries/dental-practices",
+              "industries/ecommerce"
+            ]
+          }
+        ]
+      },
+      {
+        "tab": "CRB Framework",
+        "groups": [
+          {
+            "group": "Framework Overview",
+            "pages": [
+              "framework/overview",
+              "framework/costs",
+              "framework/risks",
+              "framework/benefits"
+            ]
+          },
+          {
+            "group": "Methodology",
+            "pages": [
+              "framework/scoring",
+              "framework/three-options",
+              "framework/value-calculation"
+            ]
+          }
+        ]
+      },
+      {
+        "tab": "API Reference",
+        "groups": [
+          {
+            "group": "Overview",
+            "pages": [
+              "api-reference/overview",
+              "api-reference/authentication"
+            ]
+          },
+          {
+            "group": "Endpoints",
+            "pages": [
+              "api-reference/quiz",
+              "api-reference/reports",
+              "api-reference/vendors"
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "footer": {
+    "socials": {
+      "github": "https://github.com/amplify-logic",
+      "linkedin": "https://linkedin.com/company/amplify-logic"
+    },
+    "links": [
+      {
+        "header": "Product",
+        "items": [
+          { "label": "Take the Quiz", "href": "https://readypath.ai/quiz" },
+          { "label": "Pricing", "href": "https://readypath.ai/pricing" },
+          { "label": "Sample Report", "href": "/guides/reading-your-report" }
+        ]
+      },
+      {
+        "header": "Resources",
+        "items": [
+          { "label": "CRB Framework", "href": "/framework/overview" },
+          { "label": "API Docs", "href": "/api-reference/overview" },
+          { "label": "Blog", "href": "https://readypath.ai/blog" }
+        ]
+      }
+    ]
+  },
+  "api": {
+    "openapi": "openapi.json"
+  },
+  "seo": {
+    "metatags": {
+      "og:title": "ReadyPath - AI-Powered Cost-Risk-Benefit Analysis",
+      "og:description": "Evidence-based technology decision analysis. ReadyPath uses the CRB framework to replace expensive consulting with AI-powered reports delivered in 24-48 hours."
+    }
+  }
+}
