@@ -511,6 +511,98 @@ class TestROICalculatorSkill:
         assert "\u20ac" not in breakdown  # No EUR symbol
 
 
+class TestCalculateFinancials:
+    """Tests for _calculate_financials with AIOS option types."""
+
+    def test_connect_and_automate_uses_option_costs(self):
+        """AIOS connect_and_automate costs should come from the option, not defaults."""
+        skill = ROICalculatorSkill()
+        time_savings = {
+            "hours_per_week": 5.0,
+            "hours_per_month": 21.7,
+            "hours_per_year": 240.0,
+        }
+        recommendation = {
+            "our_recommendation": "connect_and_automate",
+            "options": {
+                "connect_and_automate": {
+                    "monthly_cost": "EUR 60-100",
+                    "build_time": "2 weeks",
+                }
+            },
+        }
+        company_data = {"hourly_rate": 95.0, "work_weeks": 48}
+        result = skill._calculate_financials(time_savings, recommendation, company_data)
+        # Monthly cost should be midpoint of 60-100 = 80, NOT default 50
+        assert result["monthly_cost"] == 80.0
+        # Implementation cost derived from "2 weeks" build time, NOT default 500
+        assert result["implementation_cost"] > 500
+
+    def test_enhance_with_ai_uses_option_costs(self):
+        """AIOS enhance_with_ai costs should come from the option."""
+        skill = ROICalculatorSkill()
+        time_savings = {
+            "hours_per_week": 3.0,
+            "hours_per_month": 13.0,
+            "hours_per_year": 144.0,
+        }
+        recommendation = {
+            "our_recommendation": "enhance_with_ai",
+            "options": {
+                "enhance_with_ai": {
+                    "monthly_cost": "EUR 200-400",
+                    "build_time": "3 weeks",
+                }
+            },
+        }
+        company_data = {"hourly_rate": 95.0, "work_weeks": 48}
+        result = skill._calculate_financials(time_savings, recommendation, company_data)
+        assert result["monthly_cost"] == 300.0  # midpoint of 200-400
+
+    def test_targeted_upgrade_uses_option_costs(self):
+        """AIOS targeted_upgrade costs should come from the option."""
+        skill = ROICalculatorSkill()
+        time_savings = {
+            "hours_per_week": 4.0,
+            "hours_per_month": 17.3,
+            "hours_per_year": 192.0,
+        }
+        recommendation = {
+            "our_recommendation": "targeted_upgrade",
+            "options": {
+                "targeted_upgrade": {
+                    "cost_range": "EUR 200-500/month",
+                    "migration_time": "4-6 weeks",
+                }
+            },
+        }
+        company_data = {"hourly_rate": 95.0, "work_weeks": 48}
+        result = skill._calculate_financials(time_savings, recommendation, company_data)
+        assert result["monthly_cost"] == 350.0  # midpoint of 200-500
+
+    def test_legacy_off_the_shelf_still_works(self):
+        """Legacy option types should still work."""
+        skill = ROICalculatorSkill()
+        time_savings = {
+            "hours_per_week": 5.0,
+            "hours_per_month": 21.7,
+            "hours_per_year": 240.0,
+        }
+        recommendation = {
+            "our_recommendation": "off_the_shelf",
+            "options": {
+                "off_the_shelf": {
+                    "implementation_cost": 1000,
+                    "monthly_cost": 150,
+                }
+            },
+        }
+        company_data = {"hourly_rate": 50.0, "work_weeks": 48}
+        result = skill._calculate_financials(time_savings, recommendation, company_data)
+        assert result["implementation_cost"] == 1000
+        assert result["monthly_cost"] == 150
+
+
 class TestROICalculatorIntegration:
     """Integration tests for ROI calculator."""
 

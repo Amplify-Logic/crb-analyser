@@ -357,20 +357,28 @@ Return ONLY a JSON object:
         # Get costs from recommendation
         options = recommendation.get("options", {})
         our_rec = recommendation.get("our_recommendation", "off_the_shelf")
+        option = options.get(our_rec, {})
 
-        if our_rec == "custom_solution":
-            option = options.get("custom_solution", {})
+        # AIOS option types — costs are string fields
+        if our_rec in ("connect_and_automate", "enhance_with_ai", "targeted_upgrade"):
+            implementation_cost, monthly_cost = self._extract_aios_costs(option, our_rec)
+        # Legacy option types — costs are numeric fields
+        elif our_rec == "custom_solution":
             cost_range = option.get("estimated_cost", {})
             implementation_cost = (cost_range.get("min", 5000) + cost_range.get("max", 15000)) / 2
             monthly_cost = option.get("monthly_running_cost", 50)
         elif our_rec == "best_in_class":
-            option = options.get("best_in_class", {})
             implementation_cost = option.get("implementation_cost", 2000)
             monthly_cost = option.get("monthly_cost", 200)
         else:  # off_the_shelf
-            option = options.get("off_the_shelf", {})
             implementation_cost = option.get("implementation_cost", 500)
             monthly_cost = option.get("monthly_cost", 50)
+
+        # Parse string costs if needed (legacy options sometimes have strings too)
+        if isinstance(monthly_cost, str):
+            monthly_cost = self._parse_eur_cost(monthly_cost)
+        if isinstance(implementation_cost, str):
+            implementation_cost = self._parse_eur_cost(implementation_cost)
 
         # Three-year projection
         three_year_gross = yearly_savings * 3
@@ -387,6 +395,74 @@ Return ONLY a JSON object:
             "three_year_total_cost": round(three_year_costs, 2),
             "three_year_net": round(three_year_net, 2),
         }
+
+    def _extract_aios_costs(
+        self,
+        option: Dict[str, Any],
+        option_type: str,
+    ) -> tuple:
+        """
+        Extract implementation_cost and monthly_cost from an AIOS option.
+
+        AIOS options store costs as strings: "EUR 60-100/month", "2 weeks build".
+        Returns (implementation_cost, monthly_cost) as floats.
+        """
+        # Monthly cost: from "monthly_cost" or "cost_range" fields
+        monthly_raw = option.get("monthly_cost", "") or option.get("cost_range", "") or ""
+        if isinstance(monthly_raw, str):
+            monthly_cost = self._parse_eur_cost(monthly_raw)
+        else:
+            monthly_cost = float(monthly_raw or 0)
+
+        # Implementation cost: derived from build_time or migration_time
+        build_time = option.get("build_time", "") or option.get("migration_time", "") or ""
+        if isinstance(build_time, str) and build_time:
+            # Parse time string to weeks, then estimate cost
+            weeks = self._parse_weeks(build_time)
+            # Estimate: 20 hrs/week * €75/hr for guided build
+            implementation_cost = weeks * 20 * 75
+        else:
+            # Fallback: estimate from option type
+            fallback = {
+                "connect_and_automate": 2000,
+                "enhance_with_ai": 4000,
+                "targeted_upgrade": 1500,
+            }
+            implementation_cost = fallback.get(option_type, 2000)
+
+        return implementation_cost, monthly_cost
+
+    @staticmethod
+    def _parse_eur_cost(cost_str: str) -> float:
+        """Parse EUR cost strings like '€20-50/month' or 'EUR 500' into a numeric value."""
+        import re
+        if not cost_str:
+            return 0.0
+        numbers = re.findall(r'[\d,]+(?:\.\d+)?', cost_str.replace(',', ''))
+        if not numbers:
+            return 0.0
+        nums = [float(n) for n in numbers]
+        if len(nums) >= 2:
+            return (nums[0] + nums[1]) / 2
+        return nums[0]
+
+    @staticmethod
+    def _parse_weeks(time_str: str) -> float:
+        """Parse time strings like '1 week', '2-4 weeks', '3 days' into weeks."""
+        import re
+        if not time_str:
+            return 2.0
+        numbers = re.findall(r'\d+\.?\d*', time_str)
+        if not numbers:
+            return 2.0
+        nums = [float(n) for n in numbers]
+        val = sum(nums) / len(nums)
+        lower = time_str.lower()
+        if 'day' in lower:
+            return val / 5
+        if 'month' in lower:
+            return val * 4
+        return val  # assume weeks
 
     def _calculate_roi_metrics(
         self,
