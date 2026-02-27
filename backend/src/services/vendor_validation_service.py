@@ -202,28 +202,41 @@ class VendorValidationService:
         warnings = []
         options = recommendation.get("options", {})
 
-        # Validate off_the_shelf
-        ots = options.get("off_the_shelf", {})
-        ots_vendor = ots.get("vendor", "") or ots.get("name", "")
+        def _extract_vendor(option: Dict) -> str:
+            """Extract vendor name from option dict (supports both legacy and AIOS formats)."""
+            # AIOS format: matched_vendor dict with vendor/name
+            mv = option.get("matched_vendor", {})
+            if isinstance(mv, dict):
+                v = mv.get("vendor", "") or mv.get("name", "")
+                if v:
+                    return v
+            # Legacy format: vendor or name at top level
+            return option.get("vendor", "") or option.get("name", "")
+
+        # Support both legacy keys and AIOS keys
+        # Legacy: off_the_shelf / best_in_class
+        # AIOS: targeted_upgrade / enhance_with_ai
+        ots = options.get("off_the_shelf", {}) or options.get("targeted_upgrade", {})
+        ots_vendor = _extract_vendor(ots)
         ots_match = self.lookup_vendor(ots_vendor)
 
-        if not ots_match.found:
+        if ots_vendor and not ots_match.found:
             warnings.append(f"Off-the-shelf vendor '{ots_vendor}' not in knowledge base")
         elif ots_match.match_type == "fuzzy_name":
             warnings.append(f"Off-the-shelf vendor '{ots_vendor}' matched via fuzzy match")
 
-        # Validate best_in_class
-        bic = options.get("best_in_class", {})
-        bic_vendor = bic.get("vendor", "") or bic.get("name", "")
+        # Validate best_in_class / enhance_with_ai
+        bic = options.get("best_in_class", {}) or options.get("enhance_with_ai", {})
+        bic_vendor = _extract_vendor(bic)
         bic_match = self.lookup_vendor(bic_vendor)
 
-        if not bic_match.found:
+        if bic_vendor and not bic_match.found:
             warnings.append(f"Best-in-class vendor '{bic_vendor}' not in knowledge base")
         elif bic_match.match_type == "fuzzy_name":
             warnings.append(f"Best-in-class vendor '{bic_vendor}' matched via fuzzy match")
 
-        # Overall validity
-        is_valid = ots_match.found and bic_match.found
+        # Overall validity - valid if we have no vendor warnings or if vendors matched
+        is_valid = (not ots_vendor or ots_match.found) and (not bic_vendor or bic_match.found)
 
         return ValidationResult(
             is_valid=is_valid,

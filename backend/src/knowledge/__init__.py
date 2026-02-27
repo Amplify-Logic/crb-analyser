@@ -648,6 +648,12 @@ def get_vendor_recommendations(industry: str, category: str = None) -> List[Dict
         return []
 
     categories = vendors_data.get("vendor_categories", [])
+    if not categories:
+        cats_dict = vendors_data.get("categories", {})
+        if isinstance(cats_dict, dict):
+            categories = list(cats_dict.values())
+        elif isinstance(cats_dict, list):
+            categories = cats_dict
 
     if category:
         for cat in categories:

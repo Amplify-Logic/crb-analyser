@@ -114,7 +114,7 @@ export default function B2BPlatforms() {
 
             <p className="text-xl text-gray-600 mb-8 max-w-2xl mx-auto">
               Get an architecture blueprint that connects your CRM, ERP, IoT, and billing
-              into one AI-powered operating system. No rip-and-replace.
+              into one AI-powered operating system. Only what makes sense for your stack.
             </p>
 
             <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-8">

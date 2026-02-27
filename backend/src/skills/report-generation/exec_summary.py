@@ -101,6 +101,7 @@ class ExecSummarySkill(LLMSkill[Dict[str, Any]]):
         expertise_context = self._build_expertise_context(expertise, industry)
 
         # Step 2: Generate qualitative summary using LLM (but NOT the AI score)
+        company_name = context.company_name or ""
         summary = await self._generate_summary(
             answers=answers,
             industry=industry,
@@ -109,6 +110,7 @@ class ExecSummarySkill(LLMSkill[Dict[str, Any]]):
             currency=currency,
             currency_symbol=currency_symbol,
             formula_ai_score=formula_ai_score,  # Pass the calculated score
+            company_name=company_name,
         )
 
         # Step 3: Override LLM's AI readiness score with formula-based score
@@ -248,6 +250,7 @@ class ExecSummarySkill(LLMSkill[Dict[str, Any]]):
         currency: str = "EUR",
         currency_symbol: str = "€",
         formula_ai_score: int = 50,
+        company_name: str = "",
     ) -> Dict[str, Any]:
         """
         Generate the executive summary using Claude.
@@ -283,8 +286,10 @@ INTERVIEW INSIGHTS:
 - Key quotes from interview: (summarized from {len(messages)} messages)
 """
 
-        prompt = f"""Generate an executive summary for a CRB (Cost/Risk/Benefit) Analysis report.
+        company_line = f"\nCOMPANY: {company_name}" if company_name else ""
 
+        prompt = f"""Generate an executive summary for a CRB (Cost/Risk/Benefit) Analysis report.
+{company_line}
 QUIZ ANSWERS:
 {json.dumps(answers, indent=2)}
 
@@ -341,6 +346,7 @@ STRICT REQUIREMENTS - Your output is INVALID if any are violated:
 4. total_value_potential MUST include calculation showing how you got the numbers
 5. Each top_opportunity MUST cite data_source (quiz question or benchmark)
 6. If expertise data shows scores differ from industry average by >15 points, MENTION IT
+7. key_insight MUST mention the company by name{"" if not company_name else f" ('{company_name}')"} — this is a personalized report, not generic advice
 
 Return ONLY the JSON, no explanation or markdown."""
 

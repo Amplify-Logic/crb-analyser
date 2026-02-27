@@ -44,7 +44,7 @@ logger = logging.getLogger(__name__)
 
 SEEDS_DIR = Path(__file__).parent / "seeds"
 
-SUPPORTED_INDUSTRIES = ["ecommerce", "dental", "professional-services"]
+SUPPORTED_INDUSTRIES = ["ecommerce", "dental", "professional-services", "b2b-platforms"]
 
 
 def load_seeds(industry: str = "ecommerce") -> Dict[str, Any]:
@@ -110,6 +110,7 @@ async def generate_single_report(
     scrape: bool = True,
     skip_review: bool = False,
     use_playwright: bool = False,
+    dev_mode: bool = False,
 ) -> Optional[Dict[str, Any]]:
     """
     Generate a single report from a seed.
@@ -184,7 +185,7 @@ async def generate_single_report(
     last_phase = None
     error = None
 
-    async for event in generate_report_streaming(session_id, report_tier, skip_review=skip_review):
+    async for event in generate_report_streaming(session_id, report_tier, skip_review=skip_review, dev_mode=dev_mode):
         if not event.startswith("data: "):
             continue
 
@@ -241,6 +242,7 @@ async def generate_from_url(
     report_tier: str = "quick",
     skip_review: bool = False,
     use_playwright: bool = False,
+    dev_mode: bool = False,
 ) -> Optional[Dict[str, Any]]:
     """Generate a report from a custom URL (ecommerce only)."""
     seed = {
@@ -269,11 +271,12 @@ async def generate_from_url(
         }
     }
 
-    return await generate_single_report(seed, seeds_data, report_tier, scrape=True, skip_review=skip_review, use_playwright=use_playwright)
+    return await generate_single_report(seed, seeds_data, report_tier, scrape=True, skip_review=skip_review, use_playwright=use_playwright, dev_mode=dev_mode)
 
 
 async def cmd_single(args: argparse.Namespace) -> None:
     """Generate a single report."""
+    dev_mode = getattr(args, 'dev_mode', False)
     if args.url:
         result = await generate_from_url(
             url=args.url,
@@ -282,6 +285,7 @@ async def cmd_single(args: argparse.Namespace) -> None:
             report_tier=args.report_tier,
             skip_review=args.no_review,
             use_playwright=args.playwright,
+            dev_mode=dev_mode,
         )
     else:
         seeds_data = load_seeds(args.industry)
@@ -289,6 +293,7 @@ async def cmd_single(args: argparse.Namespace) -> None:
         result = await generate_single_report(
             seed, seeds_data, args.report_tier,
             skip_review=args.no_review, use_playwright=args.playwright,
+            dev_mode=dev_mode,
         )
 
     if not result:
@@ -297,6 +302,7 @@ async def cmd_single(args: argparse.Namespace) -> None:
 
 async def cmd_batch(args: argparse.Namespace) -> None:
     """Generate multiple reports."""
+    dev_mode = getattr(args, 'dev_mode', False)
     if args.all_industries:
         industries = list_available_industries()
     else:
@@ -319,6 +325,7 @@ async def cmd_batch(args: argparse.Namespace) -> None:
             result = await generate_single_report(
                 seed, seeds_data, args.report_tier,
                 skip_review=args.no_review, use_playwright=args.playwright,
+                dev_mode=dev_mode,
             )
 
             if result:
@@ -370,6 +377,8 @@ def main() -> None:
                         help="Skip review/validation phase for faster iteration")
     parser.add_argument("--playwright", action="store_true",
                         help="Use Playwright for JS-rendered scraping (ecommerce only)")
+    parser.add_argument("--dev-mode", action="store_true", dest="dev_mode",
+                        help="Route LLM calls through Claude Code CLI (uses Max subscription instead of API credits)")
     parser.add_argument("-v", "--verbose", action="store_true", help="Verbose logging")
 
     args = parser.parse_args()

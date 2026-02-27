@@ -256,9 +256,9 @@ class ReviewService:
     - Unused insight capture
     """
 
-    def __init__(self, tier: str = "quick"):
+    def __init__(self, tier: str = "quick", client: Optional[Any] = None):
         self.tier = tier
-        self.client = Anthropic(api_key=settings.ANTHROPIC_API_KEY)
+        self.client = client if client is not None else Anthropic(api_key=settings.ANTHROPIC_API_KEY)
         self.expertise_store = get_expertise_store()
         self.self_improve_service = get_self_improve_service()
 

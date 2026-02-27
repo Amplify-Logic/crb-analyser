@@ -1,19 +1,30 @@
 """
 Recommendation Models
 
-Implements the Three Options pattern from AGENT-3 spec:
-- Off-the-shelf: Pre-built SaaS, fastest to implement
-- Best-in-class: Premium solution, more features
-- Custom solution: Built with AI/APIs, competitive advantage
+Implements the AIOS Options pattern (best-fit-first philosophy):
+- Connect & Automate: Wire existing tools with AI workflows
+- Enhance with AI: Add intelligence layer on top
+- Targeted Upgrade: Adopt dedicated tool when it genuinely serves the company best
+
+Backward compatible with legacy Three Options keys.
 """
 
 from datetime import datetime
-from typing import Optional, List, Dict, Any, Literal
+from typing import Optional, List, Dict, Any, Literal, Union
 from pydantic import BaseModel, Field
 
 
-# Option type literals
-OptionType = Literal["off_the_shelf", "best_in_class", "custom_solution"]
+# AIOS option types (primary)
+AIOSOptionType = Literal["connect_and_automate", "enhance_with_ai", "targeted_upgrade"]
+
+# Legacy option types (backward compat)
+LegacyOptionType = Literal["off_the_shelf", "best_in_class", "custom_solution"]
+
+# Combined for flexible validation
+OptionType = Literal[
+    "connect_and_automate", "enhance_with_ai", "targeted_upgrade",
+    "off_the_shelf", "best_in_class", "custom_solution",
+]
 ConfidenceLevel = Literal["high", "medium", "low"]
 TimeHorizon = Literal["short", "mid", "long"]
 RiskProbability = Literal["low", "medium", "high"]
@@ -136,22 +147,63 @@ class CustomSolutionDetail(BaseModel):
     )
 
 
+class AIOSConnectOption(BaseModel):
+    """Connect & Automate option — wire existing tools with AI workflows."""
+    approach: str = Field(default="", description="Specific steps connecting existing tools")
+    build_time: str = Field(default="", description="e.g., '1 week (solo) / 2 days (guided)'")
+    tools_used: List[str] = Field(default_factory=list, description="Existing + new tools")
+    mcp_servers: List[str] = Field(default_factory=list)
+    monthly_cost: str = Field(default="", description="EUR range")
+    prerequisite: Optional[str] = Field(None)
+    diy_complexity: Optional[str] = Field(None, description="low|moderate|high")
+    automation_flow: Optional[Dict[str, Any]] = Field(None, description="Nodes and edges")
+    pros: List[str] = Field(default_factory=list)
+    cons: List[str] = Field(default_factory=list)
+
+
+class AIOSEnhanceOption(BaseModel):
+    """Enhance with AI option — add intelligence layer on top."""
+    approach: str = Field(default="")
+    build_time: str = Field(default="")
+    tools_used: List[str] = Field(default_factory=list)
+    monthly_cost: str = Field(default="")
+    pros: List[str] = Field(default_factory=list)
+    cons: List[str] = Field(default_factory=list)
+
+
+class AIOSUpgradeOption(BaseModel):
+    """Targeted Upgrade option — adopt dedicated tool when it genuinely serves the company best."""
+    when_needed: str = Field(default="", description="When this option genuinely makes sense for this company")
+    tools: List[str] = Field(default_factory=list)
+    cost_range: str = Field(default="")
+    migration_time: str = Field(default="")
+    pros: List[str] = Field(default_factory=list)
+    cons: List[str] = Field(default_factory=list)
+
+
 class RecommendationOptions(BaseModel):
     """
-    The Three Options pattern - every recommendation includes all three.
+    AIOS Options pattern — connect-first philosophy.
+
+    Primary keys: connect_and_automate, enhance_with_ai, targeted_upgrade
+    Legacy keys: off_the_shelf, best_in_class, custom_solution (still accepted)
     """
-    off_the_shelf: OptionDetail = Field(
-        ...,
-        description="Pre-built SaaS solution - fastest, lowest upfront"
+    # AIOS format (primary)
+    connect_and_automate: Optional[AIOSConnectOption] = Field(
+        None, description="Wire existing tools with AI workflows"
     )
-    best_in_class: OptionDetail = Field(
-        ...,
-        description="Premium/enterprise solution - more features, higher cost"
+    enhance_with_ai: Optional[AIOSEnhanceOption] = Field(
+        None, description="Add intelligence layer on top of existing data"
     )
-    custom_solution: CustomSolutionDetail = Field(
-        ...,
-        description="Build with AI/APIs - perfect fit, competitive advantage"
+    targeted_upgrade: Optional[AIOSUpgradeOption] = Field(
+        None, description="Adopt dedicated SaaS tool when it genuinely serves the company best"
     )
+
+    # Legacy format (backward compat)
+    off_the_shelf: Optional[OptionDetail] = Field(None)
+    best_in_class: Optional[OptionDetail] = Field(None)
+    custom_solution: Optional[CustomSolutionDetail] = Field(None)
+
     our_recommendation: OptionType = Field(
         ...,
         description="Which option we recommend"

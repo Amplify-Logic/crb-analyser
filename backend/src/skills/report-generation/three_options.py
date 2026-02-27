@@ -4,10 +4,10 @@ AIOS Options Skill (formerly Three Options)
 Generates recommendations in the AIOS connect-first format:
 - Option A: Connect & Automate (wire existing tools with AI workflows)
 - Option B: Enhance with AI (add intelligence layer on top)
-- Option C: Targeted Upgrade (replace only as last resort)
+- Option C: Targeted Upgrade (adopt dedicated tool when it's genuinely the best fit)
 
 This skill:
-1. Takes a finding and generates three solution options (connect-first)
+1. Takes a finding and generates three solution options (best-fit-first)
 2. Integrates vendor pricing from knowledge base
 3. Calculates ROI with confidence adjustment
 4. Provides specific "our recommendation" with rationale
@@ -76,12 +76,12 @@ class ThreeOptionsSkill(LLMSkill[Dict[str, Any]]):
     """
     Generate AIOS Options recommendations for findings.
 
-    Connect-first philosophy: always lead with what can be built
-    on the existing stack, enhance second, replace only as last resort.
+    Best-fit-first philosophy: recommend whatever genuinely serves this
+    specific company best. Prefer connect as tiebreaker when options are close.
     """
 
     name = "three-options"
-    description = "Format recommendations in AIOS connect-first structure"
+    description = "Format recommendations in AIOS best-fit-first structure"
     version = "2.0.0"
 
     requires_llm = True
@@ -95,7 +95,7 @@ class ThreeOptionsSkill(LLMSkill[Dict[str, Any]]):
         "mcp_servers": [],
         "monthly_cost": "",
         "pros": ["Uses your existing stack", "Ships this week", "Fully customized"],
-        "cons": ["Requires API access", "Needs maintenance"],
+        "cons": ["Requires API access", "Needs maintenance", "Development labor cost"],
     }
 
     ENHANCE_WITH_AI_TEMPLATE = {
@@ -112,8 +112,8 @@ class ThreeOptionsSkill(LLMSkill[Dict[str, Any]]):
         "tools": [],
         "cost_range": "",
         "migration_time": "",
-        "pros": ["Pre-built solution", "Quick setup"],
-        "cons": ["Monthly SaaS cost", "Less customization", "Vendor lock-in"],
+        "pros": ["Pre-built solution", "Quick setup", "Vendor-managed maintenance", "Purpose-built for this problem"],
+        "cons": ["Monthly SaaS cost", "Less customization"],
     }
 
     # Legacy templates (for backward compat)
@@ -294,16 +294,16 @@ COMPANY CONTEXT:
 {ai_tools_context}
 
 ═══════════════════════════════════════════════════════════════════════════════
-AIOS OPTIONS PATTERN (Connect-First Philosophy)
+AIOS OPTIONS PATTERN (Best-Fit-First Philosophy)
 ═══════════════════════════════════════════════════════════════════════════════
 
-Generate ALL THREE options in this PRIORITY ORDER:
+Generate ALL THREE options:
 
-Option A: CONNECT & AUTOMATE (ALWAYS first choice)
+Option A: CONNECT & AUTOMATE
 - Wire existing tools together with AI workflows
 - Build with Claude Code, MCP servers, APIs
 - Include specific build time and tools used
-- Best for: Most situations — 80% of value comes from connecting what exists
+- Best for: Companies with engineering capacity, API-ready stacks, unique workflows
 
 Option B: ENHANCE WITH AI
 - Add an AI intelligence layer on top of existing data
@@ -311,16 +311,15 @@ Option B: ENHANCE WITH AI
 - Best for: When data exists but isn't being acted on
 
 Option C: TARGETED UPGRADE
-- Replace a specific tool ONLY if it genuinely blocks integration
-- ONLY when: No API, fundamentally broken, data is trapped
-- Best for: Dead-end tools that can't be connected
+- Adopt a dedicated SaaS tool that solves this problem natively
+- Best for: Lower total cost of ownership (including dev labor), compliance/certification requirements, companies with no engineering resources, dramatically faster time-to-value
 
 ═══════════════════════════════════════════════════════════════════════════════
 RECOMMENDATION DECISION (evaluate per finding)
 ═══════════════════════════════════════════════════════════════════════════════
 
 1. If no digital tool exists for this business function → recommend "targeted_upgrade"
-   Buy the foundation. ALWAYS recommend tools with strong APIs so they become
+   Buy the foundation. Recommend tools with strong APIs so they become
    connectable later. Frame as: "This is your foundation — once set up, we can
    wire AI workflows on top."
 
@@ -329,15 +328,21 @@ RECOMMENDATION DECISION (evaluate per finding)
    Replace with API-ready alternative. Frame as: "Your current tool traps your
    data. [Replacement] opens up integration possibilities."
 
-3. Everything else → recommend "connect_and_automate"
-   Adapt the complexity based on the client's readiness profile.
-   - Paper-based infrastructure: acknowledge the gap, show simpler automation paths
-   - Digitized with APIs: show full Claude Code / MCP integration workflows
-   - Low build willingness: emphasize managed tools (Zapier, Make) over raw APIs
-   - High build willingness: show Claude Code workflows with specific build steps
+3. If a dedicated SaaS solves it natively AND any of these apply:
+   - Total cost including dev labor is lower than building custom
+   - Company lacks engineering capacity to build and maintain
+   - Compliance or certification is required (e.g., FDA, HIPAA, PCI)
+   - Dramatically faster time-to-value (weeks vs months)
+   → recommend "targeted_upgrade" or "enhance_with_ai"
+
+4. If company has engineering capacity AND custom integration adds genuine value
+   (unique workflows, competitive differentiation, lower long-term cost)
+   → recommend "connect_and_automate"
+
+5. If options are genuinely close → prefer "connect_and_automate" as tiebreaker
 
 Always generate ALL THREE options regardless of recommendation.
-Always explain WHY this recommendation fits THIS client's readiness level.
+Always explain WHY this recommendation fits THIS client's situation.
 Never say "you're not technical enough" — AI-assisted building is accessible to everyone.
 Adapt the HOW, not the WHETHER.
 ═══════════════════════════════════════════════════════════════════════════════
@@ -383,7 +388,7 @@ Generate a JSON object with this structure:
             "cons": ["<con1>", "<con2>"]
         }},
         "targeted_upgrade": {{
-            "when_needed": "<explain when this is justified — ONLY if existing tool is a dead end>",
+            "when_needed": "<explain when this option genuinely makes sense for this company>",
             "tools": ["<vendor1>", "<vendor2>"],
             "cost_range": "<e.g., EUR 200-500/month>",
             "migration_time": "<e.g., 4-6 weeks>",
@@ -398,8 +403,8 @@ Generate a JSON object with this structure:
         "table": [
             {{"aspect": "Monthly cost", "connect_and_automate": "€X", "enhance_with_ai": "€Y", "targeted_upgrade": "€Z"}},
             {{"aspect": "Build/setup time", "connect_and_automate": "X hours", "enhance_with_ai": "Y weeks", "targeted_upgrade": "Z weeks"}},
-            {{"aspect": "Time to value", "connect_and_automate": "Days", "enhance_with_ai": "Weeks", "targeted_upgrade": "Months"}},
-            {{"aspect": "Disruption", "connect_and_automate": "Zero", "enhance_with_ai": "Low", "targeted_upgrade": "High"}},
+            {{"aspect": "Time to value", "connect_and_automate": "<actual estimate>", "enhance_with_ai": "<actual estimate>", "targeted_upgrade": "<actual estimate>"}},
+            {{"aspect": "Disruption", "connect_and_automate": "<actual estimate>", "enhance_with_ai": "<actual estimate>", "targeted_upgrade": "<actual estimate>"}},
             {{"aspect": "Maintenance", "connect_and_automate": "API monitoring", "enhance_with_ai": "Model tuning", "targeted_upgrade": "Vendor managed"}}
         ],
         "winner_for_this_company": "connect_and_automate|enhance_with_ai|targeted_upgrade",
@@ -413,11 +418,14 @@ Generate a JSON object with this structure:
     ]
 }}
 
+NOTE: For the comparison_summary table, do NOT default to favorable values for any option.
+Evaluate Time to value and Disruption honestly per situation.
+
 ═══════════════════════════════════════════════════════════════════════════════
 CRITICAL RULES
 ═══════════════════════════════════════════════════════════════════════════════
 - Evaluate the RECOMMENDATION DECISION logic above for EACH finding independently
-- NEVER recommend "targeted_upgrade" just because a "better" tool exists
+- Do NOT recommend "targeted_upgrade" SOLELY because a newer tool exists without clear benefit
 - Every connect_and_automate option MUST include build_time, tools_used, and automation_flow
 - For connect_and_automate: include "prerequisite" when the client lacks infrastructure
 - For connect_and_automate: include "diy_complexity" to set expectations
@@ -445,28 +453,30 @@ Return ONLY the JSON object."""
         """Get the system prompt for recommendation generation."""
         return """You are an expert AI architecture consultant generating AIOS (AI Operating System) recommendations for CRB Analysis reports.
 
-Your role: Help businesses connect what they have, automate what slows them down, and build what doesn't exist. Always lead with connecting existing tools.
+Your role: Help businesses connect what they have, automate what slows them down, and build what doesn't exist. Recommend what actually serves THIS company best.
 
 ═══════════════════════════════════════════════════════════════════════════════
 BANNED LANGUAGE - Using any of these INVALIDATES your output:
 ═══════════════════════════════════════════════════════════════════════════════
 - "seamless integration", "robust", "scalable", "enterprise-grade"
 - "unlock value", "drive efficiency", "optimize", "streamline"
-- "consider migrating to", "we recommend Tool X", "best-in-class solution"
+- "best-in-class solution"
 - "cutting-edge", "revolutionary", "transform your business"
 
-INSTEAD OF: "Consider migrating to Salesforce"
-USE: "Build a Claude workflow connecting HubSpot deals to Exact invoices — ships in 8 hours"
+Naming specific tools IS fine when justified. What's banned is empty marketing language.
+
+INSTEAD OF: "Consider migrating to a best-in-class solution"
+USE: "Pearl provides FDA-cleared imaging analysis — the only viable path for diagnostic AI"
 
 ═══════════════════════════════════════════════════════════════════════════════
-KEY PRINCIPLES (Connect-First)
+KEY PRINCIPLES (Best-Fit-First)
 ═══════════════════════════════════════════════════════════════════════════════
-1. CONNECT FIRST: Always show how to wire existing tools with AI workflows
+1. EVALUATE HONESTLY: Recommend what genuinely serves THIS company best
 2. VENDOR CATALOG: For targeted_upgrade options, ONLY use vendors from the VENDOR CATALOG. Never invent vendor names or prices.
 3. HONEST TRADE-OFFS: Every option has pros AND cons
 4. CONTEXT-AWARE: Recommendation MUST match company's existing stack, size, tech comfort
 5. BUILD TIME: Every connect option MUST include specific Claude Code hours
-6. REPLACE LAST: Only suggest replacing a tool when it genuinely has no API or is fundamentally broken
+6. TOTAL COST OF OWNERSHIP: Include development labor, not just API costs, for connect options
 
 ═══════════════════════════════════════════════════════════════════════════════
 NOTE: roi_percentage and payback_months will be calculated by the ROI Calculator Skill.
@@ -476,8 +486,9 @@ ADAPTIVE RECOMMENDATION RULES
 ═══════════════════════════════════════════════════════════════════════════════
 - Evaluate each finding against the client's readiness profile
 - If no tool exists or tool is a dead end → recommend "targeted_upgrade" (buy API-ready foundation)
-- Everything else → recommend "connect_and_automate" (adapt complexity to readiness)
-- Never recommend replacing software just because a "better" tool exists
+- If dedicated SaaS solves it natively AND (total cost incl. dev labor is lower, OR company lacks build capacity, OR compliance required, OR dramatically faster time-to-value) → recommend "targeted_upgrade" or "enhance_with_ai"
+- If company has engineering capacity AND custom integration adds genuine value → recommend "connect_and_automate"
+- If options are genuinely close → prefer "connect_and_automate" as tiebreaker
 - AI-assisted building is accessible to everyone — adapt the HOW, not the WHETHER
 - Be honest about implementation complexity and ongoing maintenance burden"""
 
@@ -665,7 +676,7 @@ STACK RECOMMENDATIONS:
                 "targeted_upgrade": self.TARGETED_UPGRADE_TEMPLATE.copy(),
             },
             "our_recommendation": "connect_and_automate",
-            "recommendation_rationale": "Start by connecting your existing tools with AI workflows for fastest time-to-value.",
+            "recommendation_rationale": "Recommendation pending — evaluate all three options for your specific situation.",
             "roi_percentage": 0,
             "payback_months": 0,
             "roi_pending_calculation": True,

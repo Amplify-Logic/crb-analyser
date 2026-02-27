@@ -442,7 +442,13 @@ class VendorService:
             return vendors
 
         except Exception as e:
-            logger.error(f"Failed to get vendors with tier boost for {industry}: {e}")
+            logger.warning(
+                "vendor_tier_boost_fallback_to_json",
+                industry=industry,
+                category=category,
+                error=str(e) or repr(e),
+                error_type=type(e).__name__,
+            )
             return self._get_vendors_from_json_with_boost(industry, category, finding_tags)
 
     async def _apply_industry_boosts(

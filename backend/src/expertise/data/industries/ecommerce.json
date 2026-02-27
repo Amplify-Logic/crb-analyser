@@ -1,8 +1,8 @@
 {
   "industry": "ecommerce",
-  "last_updated": "2026-02-24T12:00:00Z",
-  "total_analyses": 2,
-  "confidence": "low",
+  "last_updated": "2026-02-27T10:57:49.581562",
+  "total_analyses": 5,
+  "confidence": "medium",
   "pain_points": {
     "manual_order_processing": {
       "name": "Manual order processing and fulfillment",
@@ -559,13 +559,13 @@
       ]
     },
     "unknown": {
-      "count": 2,
-      "avg_readiness": 60.0,
+      "count": 5,
+      "avg_readiness": 54.8,
       "common_pain_points": []
     }
   },
-  "avg_ai_readiness": 60.0,
-  "avg_potential_savings": 258600.0,
+  "avg_ai_readiness": 54.8,
+  "avg_potential_savings": 138240.0,
   "common_tech_stacks": [
     "shopify",
     "klaviyo",

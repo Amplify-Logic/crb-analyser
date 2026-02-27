@@ -368,7 +368,26 @@ def validate_value_consistency(report: Dict[str, Any]) -> ValidationResult:
             total_rec_cost_max += cost_max
         else:
             monthly_cost = option.get("monthly_cost", 0) or 0
-            impl_weeks = option.get("implementation_weeks", 4) or 4
+            # AIOS options may have string costs like "€20-50/month"
+            if isinstance(monthly_cost, str):
+                import re as _re
+                nums = _re.findall(r'\d+\.?\d*', monthly_cost)
+                monthly_cost = sum(float(n) for n in nums) / max(len(nums), 1) if nums else 0
+            impl_weeks = option.get("implementation_weeks", 0) or 0
+            # AIOS options use build_time string instead of implementation_weeks
+            if impl_weeks == 0:
+                build_time = option.get("build_time", "") or option.get("migration_time", "")
+                if isinstance(build_time, str) and build_time:
+                    import re as _re
+                    nums = _re.findall(r'\d+\.?\d*', build_time)
+                    if nums:
+                        impl_weeks = sum(float(n) for n in nums) / len(nums)
+                        if 'day' in build_time.lower():
+                            impl_weeks /= 5
+                        elif 'month' in build_time.lower():
+                            impl_weeks *= 4
+                if impl_weeks == 0:
+                    impl_weeks = 4  # default
             # Estimate setup cost as impl_weeks × €500
             setup_cost = impl_weeks * 500
             annual_cost = monthly_cost * 12 + setup_cost

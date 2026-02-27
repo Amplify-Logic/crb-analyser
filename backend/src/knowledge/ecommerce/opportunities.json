@@ -41,7 +41,7 @@
             "shopify-mcp",
             "supabase-mcp"
           ],
-          "monthly_cost": "EUR 50-150 (API usage)",
+          "monthly_cost": "EUR 50-150/mo (API usage) + 12-18hrs initial build",
           "pros": [
             "Fully customized to your brand voice",
             "Deep product knowledge",
@@ -75,7 +75,7 @@
           ]
         },
         "targeted_upgrade": {
-          "when_needed": "Only if your current tools have no API or are fundamentally broken for ai customer service chatbot",
+          "when_needed": "When you want a turnkey chatbot with pre-built e-commerce integrations and no coding required",
           "tools": [
             "Gorgias Automate",
             "Tidio AI",
@@ -141,7 +141,7 @@
         ]
       },
       "our_recommendation": "connect_and_automate",
-      "recommendation_rationale": "Your existing tools likely support API integration. A Claude workflow connecting them for ai customer service chatbot ships in days, not weeks, and costs a fraction of a SaaS subscription."
+      "recommendation_rationale": "A custom support chatbot built with Claude Code and Shopify MCP gives you deep product knowledge and brand-specific responses that off-the-shelf chatbots can't match. With API access to your order data, it handles real-time lookups and personalized support."
     },
     {
       "id": "ai-product-descriptions",
@@ -183,7 +183,7 @@
             "shopify-mcp",
             "filesystem-mcp"
           ],
-          "monthly_cost": "EUR 50-150 (API usage)",
+          "monthly_cost": "EUR 50-150/mo (API usage) + 12-18hrs initial build",
           "pros": [
             "Perfect brand voice",
             "Direct CMS integration",
@@ -216,7 +216,7 @@
           ]
         },
         "targeted_upgrade": {
-          "when_needed": "Only if your current tools have no API or are fundamentally broken for ai-generated product descriptions & content",
+          "when_needed": "When building custom isn't practical or you want a managed solution with vendor support",
           "tools": [
             "Jasper",
             "Copy.ai",
@@ -261,7 +261,7 @@
         "assumptions": "AI-generated content still needs human review; brand voice consistency requires initial setup"
       },
       "our_recommendation": "connect_and_automate",
-      "recommendation_rationale": "Your existing tools likely support API integration. A Claude workflow connecting them for ai-generated product descriptions & content ships in days, not weeks, and costs a fraction of a SaaS subscription."
+      "recommendation_rationale": "Product descriptions can be generated directly from your catalog data using Claude API, giving you full control over brand voice and SEO strategy without per-listing fees."
     },
     {
       "id": "abandoned-cart-recovery",
@@ -305,7 +305,7 @@
             "twilio-mcp",
             "resend-mcp"
           ],
-          "monthly_cost": "EUR 50-150 (API usage)",
+          "monthly_cost": "EUR 50-150/mo (API usage) + 12-18hrs initial build",
           "pros": [
             "Fully personalized offers",
             "Custom discount logic",
@@ -337,7 +337,7 @@
           ]
         },
         "targeted_upgrade": {
-          "when_needed": "Only if your current tools have no API or are fundamentally broken for ai-powered abandoned cart recovery",
+          "when_needed": "When you want pre-built cart recovery flows with proven templates and multi-channel support",
           "tools": [
             "Klaviyo",
             "Omnisend",
@@ -397,7 +397,7 @@
         ]
       },
       "our_recommendation": "connect_and_automate",
-      "recommendation_rationale": "Your existing tools likely support API integration. A Claude workflow connecting them for ai-powered abandoned cart recovery ships in days, not weeks, and costs a fraction of a SaaS subscription."
+      "recommendation_rationale": "Abandoned cart recovery workflows can be built connecting your store data with email/SMS APIs, giving you full control over timing, messaging, and discount logic without platform fees."
     },
     {
       "id": "personalized-recommendations",
@@ -468,7 +468,7 @@
           ]
         },
         "targeted_upgrade": {
-          "when_needed": "Only if your current tools have no API or are fundamentally broken for ai-powered product recommendations",
+          "when_needed": "When you want pre-built recommendation algorithms with proven e-commerce conversion optimization",
           "tools": [
             "Nosto",
             "LimeSpot",
@@ -517,7 +517,7 @@
         "demand_expansion_potential": "20% increase in pages viewed per session"
       },
       "our_recommendation": "connect_and_automate",
-      "recommendation_rationale": "Your existing tools likely support API integration. A Claude workflow connecting them for ai-powered product recommendations ships in days, not weeks, and costs a fraction of a SaaS subscription."
+      "recommendation_rationale": "Product recommendations built with Claude API and your store data can leverage your unique customer behavior patterns for personalized suggestions without per-impression fees."
     },
     {
       "id": "inventory-forecasting",
@@ -561,7 +561,7 @@
             "google-sheets-mcp",
             "supabase-mcp"
           ],
-          "monthly_cost": "EUR 50-150 (API usage)",
+          "monthly_cost": "EUR 50-150/mo (API usage) + 12-18hrs initial build",
           "pros": [
             "Highest accuracy",
             "Incorporates unique factors",
@@ -594,7 +594,7 @@
           ]
         },
         "targeted_upgrade": {
-          "when_needed": "Only if your current tools have no API or are fundamentally broken for ai demand forecasting & inventory optimization",
+          "when_needed": "When you need purpose-built demand planning with supply chain integrations and proven forecasting models",
           "tools": [
             "Inventory Planner",
             "Stocky (Shopify)",
@@ -639,7 +639,7 @@
         "assumptions": "Forecast accuracy depends on data quality and product type; new products lack historical data for prediction"
       },
       "our_recommendation": "connect_and_automate",
-      "recommendation_rationale": "Your existing tools likely support API integration. A Claude workflow connecting them for ai demand forecasting & inventory optimization ships in days, not weeks, and costs a fraction of a SaaS subscription."
+      "recommendation_rationale": "Demand forecasting can be built by connecting your sales data with Claude API for pattern analysis. Custom models trained on your specific sales history outperform generic forecasts for your product mix."
     },
     {
       "id": "dynamic-pricing",
@@ -710,7 +710,7 @@
           ]
         },
         "targeted_upgrade": {
-          "when_needed": "Only if your current tools have no API or are fundamentally broken for ai-powered dynamic pricing",
+          "when_needed": "When you need enterprise-grade pricing intelligence with competitor monitoring and automated repricing",
           "tools": [
             "Prisync",
             "Competera",
@@ -755,7 +755,7 @@
         "assumptions": "Dynamic pricing works best with large catalogs and sufficient competition data; may not suit luxury/brand-image-focused products"
       },
       "our_recommendation": "connect_and_automate",
-      "recommendation_rationale": "Your existing tools likely support API integration. A Claude workflow connecting them for ai-powered dynamic pricing ships in days, not weeks, and costs a fraction of a SaaS subscription."
+      "recommendation_rationale": "Dynamic pricing rules can be built connecting your store API with competitor price monitoring and Claude-powered pricing logic, giving you full control over pricing strategy without revenue-share fees."
     },
     {
       "id": "automated-email-marketing",
@@ -799,7 +799,7 @@
             "resend-mcp",
             "supabase-mcp"
           ],
-          "monthly_cost": "EUR 50-150 (API usage)",
+          "monthly_cost": "EUR 50-150/mo (API usage) + 12-18hrs initial build",
           "pros": [
             "Full control",
             "Custom AI features",
@@ -832,7 +832,7 @@
           ]
         },
         "targeted_upgrade": {
-          "when_needed": "Only if your current tools have no API or are fundamentally broken for ai-powered email marketing automation",
+          "when_needed": "When you want a managed email platform with pre-built e-commerce flows and deliverability management",
           "tools": [
             "Klaviyo",
             "Omnisend",
@@ -877,7 +877,7 @@
         "assumptions": "Results depend on list quality, product type, and existing email maturity"
       },
       "our_recommendation": "connect_and_automate",
-      "recommendation_rationale": "Your existing tools likely support API integration. A Claude workflow connecting them for ai-powered email marketing automation ships in days, not weeks, and costs a fraction of a SaaS subscription."
+      "recommendation_rationale": "Email automation workflows built with Claude API and your customer data enable hyper-personalized campaigns and smart segmentation without per-subscriber platform fees."
     },
     {
       "id": "review-management",
@@ -920,7 +920,7 @@
             "twilio-mcp",
             "supabase-mcp"
           ],
-          "monthly_cost": "EUR 50-150 (API usage)",
+          "monthly_cost": "EUR 50-150/mo (API usage) + 12-18hrs initial build",
           "pros": [
             "No monthly fees",
             "Custom display",
@@ -953,7 +953,7 @@
           ]
         },
         "targeted_upgrade": {
-          "when_needed": "Only if your current tools have no API or are fundamentally broken for automated review collection & management",
+          "when_needed": "When you want a managed review platform with multi-channel collection and social proof widgets",
           "tools": [
             "Judge.me",
             "Yotpo",
@@ -1012,7 +1012,7 @@
         ]
       },
       "our_recommendation": "connect_and_automate",
-      "recommendation_rationale": "Your existing tools likely support API integration. A Claude workflow connecting them for automated review collection & management ships in days, not weeks, and costs a fraction of a SaaS subscription."
+      "recommendation_rationale": "Automated review collection via Twilio SMS/email after order delivery is a straightforward integration. Low ongoing cost and customized messaging, though you won't get advanced UGC widgets that dedicated platforms offer."
     },
     {
       "id": "ai-visual-search",
@@ -1082,7 +1082,7 @@
           ]
         },
         "targeted_upgrade": {
-          "when_needed": "Only if your current tools have no API or are fundamentally broken for ai-powered visual search & product discovery",
+          "when_needed": "When you want pre-trained visual search with proven product discovery and merchandising features",
           "tools": [
             "Syte",
             "ViSenze",
@@ -1132,7 +1132,7 @@
         "demand_expansion_potential": "15% increase in products viewed per session"
       },
       "our_recommendation": "connect_and_automate",
-      "recommendation_rationale": "Your existing tools likely support API integration. A Claude workflow connecting them for ai-powered visual search & product discovery ships in days, not weeks, and costs a fraction of a SaaS subscription."
+      "recommendation_rationale": "Visual search can be built with Claude's vision capabilities connected to your product catalog. Custom implementation lets you tailor the search experience to your specific product types and customer behavior."
     },
     {
       "id": "ai-fraud-detection",
@@ -1203,7 +1203,7 @@
           ]
         },
         "targeted_upgrade": {
-          "when_needed": "Only if your current tools have no API or are fundamentally broken for ai-powered fraud detection & prevention",
+          "when_needed": "Dedicated fraud platforms provide chargeback guarantees and network-scale fraud detection that custom models cannot match",
           "tools": [
             "Shopify Protect",
             "Signifyd",
@@ -1247,8 +1247,8 @@
         },
         "assumptions": "Effectiveness depends on fraud type mix; CNP fraud more detectable than friendly fraud; results improve over time"
       },
-      "our_recommendation": "connect_and_automate",
-      "recommendation_rationale": "Your existing tools likely support API integration. A Claude workflow connecting them for ai-powered fraud detection & prevention ships in days, not weeks, and costs a fraction of a SaaS subscription."
+      "our_recommendation": "targeted_upgrade",
+      "recommendation_rationale": "Fraud detection requires large-scale network data and chargeback guarantee programs that custom ML models cannot match. Platforms like Signifyd and Shopify Protect offer instant integration, chargeback guarantees, and fraud networks trained on millions of transactions — capabilities that a single store's data cannot replicate."
     },
     {
       "id": "ai-personalized-marketing",
@@ -1322,7 +1322,7 @@
           ]
         },
         "targeted_upgrade": {
-          "when_needed": "Only if your current tools have no API or are fundamentally broken for ai-powered personalized marketing & ad optimization",
+          "when_needed": "When you want enterprise-grade marketing automation with AI-driven audience segmentation and cross-channel orchestration",
           "tools": [
             "Triple Whale",
             "Elevar",
@@ -1383,7 +1383,7 @@
         ]
       },
       "our_recommendation": "connect_and_automate",
-      "recommendation_rationale": "Your existing tools likely support API integration. A Claude workflow connecting them for ai-powered personalized marketing & ad optimization ships in days, not weeks, and costs a fraction of a SaaS subscription."
+      "recommendation_rationale": "Personalized marketing workflows connecting your store data with Claude API enable smart audience segmentation and campaign optimization tailored to your specific customer base."
     },
     {
       "id": "ai-voice-commerce",
@@ -1427,7 +1427,7 @@
             "twilio-mcp",
             "supabase-mcp"
           ],
-          "monthly_cost": "EUR 50-150 (API usage)",
+          "monthly_cost": "EUR 50-150/mo (API usage) + 12-18hrs initial build",
           "pros": [
             "Fully branded experience",
             "Deep product knowledge",
@@ -1461,7 +1461,7 @@
           ]
         },
         "targeted_upgrade": {
-          "when_needed": "Only if your current tools have no API or are fundamentally broken for ai voice commerce & conversational shopping",
+          "when_needed": "When you want a managed conversational commerce platform with voice assistant integrations",
           "tools": [
             "Certainly",
             "Rep AI",
@@ -1511,7 +1511,7 @@
         "demand_expansion_potential": "10% increase in mobile conversion rate"
       },
       "our_recommendation": "connect_and_automate",
-      "recommendation_rationale": "Your existing tools likely support API integration. A Claude workflow connecting them for ai voice commerce & conversational shopping ships in days, not weeks, and costs a fraction of a SaaS subscription."
+      "recommendation_rationale": "Voice commerce workflows built with Claude API and your store data enable conversational shopping experiences customized to your brand and product catalog."
     }
   ],
   "quick_wins": [

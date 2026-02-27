@@ -227,15 +227,15 @@ class MathValidatorSkill(SyncSkill[Dict[str, Any]]):
                 # Extract number, handle K/M suffixes
                 revenue_str = revenue.replace("€", "").replace("$", "").replace(",", "")
                 if "m" in revenue_str.lower() or "million" in revenue_str.lower():
-                    numbers = re.findall(r'[\d.]+', revenue_str)
+                    numbers = re.findall(r'\d+\.?\d*', revenue_str)
                     if numbers:
                         context["annual_revenue"] = float(numbers[0]) * 1_000_000
                 elif "k" in revenue_str.lower():
-                    numbers = re.findall(r'[\d.]+', revenue_str)
+                    numbers = re.findall(r'\d+\.?\d*', revenue_str)
                     if numbers:
                         context["annual_revenue"] = float(numbers[0]) * 1_000
                 else:
-                    numbers = re.findall(r'[\d.]+', revenue_str)
+                    numbers = re.findall(r'\d+\.?\d*', revenue_str)
                     if numbers:
                         context["annual_revenue"] = float(numbers[0])
             else:

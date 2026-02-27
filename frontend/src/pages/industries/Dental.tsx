@@ -40,9 +40,9 @@ const SAMPLE_FINDINGS = [
   },
   {
     title: 'AI Treatment Planning',
-    verdict: 'Enhance',
-    verdictColor: 'amber',
-    description: 'Add an AI layer to your existing diagnostic workflow that suggests treatment plans and improves case acceptance.',
+    verdict: 'Upgrade',
+    verdictColor: 'blue',
+    description: 'FDA-cleared tools like Pearl and Overjet are the only viable path for diagnostic AI. They integrate with your imaging software and provide instant second reads.',
     roi: '€12,000/year',
   },
   {

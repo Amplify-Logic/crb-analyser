@@ -1,0 +1,33 @@
+{
+  "audit_id": "0377735d-2b80-4dfe-8449-d7b5c86ea2c5",
+  "timestamp": "2026-02-27T10:57:49.580125",
+  "industry": "ecommerce",
+  "company_size": "unknown",
+  "pain_points_found": [],
+  "processes_analyzed": [],
+  "recommendations_made": [],
+  "vendors_recommended": [],
+  "ai_readiness_score": 50,
+  "total_potential_savings": 50000.0,
+  "findings_count": 0,
+  "tools_used": {},
+  "token_usage": {
+    "usage": [],
+    "summary": {
+      "total_input_tokens": 0,
+      "total_output_tokens": 0,
+      "total_tokens": 0,
+      "estimated_cost_usd": 0.0,
+      "by_model": {},
+      "task_count": 0
+    }
+  },
+  "phases_completed": [
+    "executive_summary",
+    "findings",
+    "playbook",
+    "architecture",
+    "insights"
+  ],
+  "errors_encountered": []
+}

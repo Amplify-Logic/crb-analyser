@@ -330,7 +330,7 @@ RULES:
             pros=options_data.get("buy", {}).get("pros", []),
             cons=options_data.get("buy", {}).get("cons", []),
             cost=CostEstimate(
-                year_one_total=options_data.get("buy", {}).get("year_one_cost", 0)
+                year_one_total=options_data.get("buy", {}).get("year_one_cost") or 0
             ),
             vendor_verified=vendor_validation.get("verified", False),
             vendor_match_type=vendor_validation.get("match_type", "none"),
@@ -346,7 +346,7 @@ RULES:
             pros=connect_data.get("pros", []),
             cons=connect_data.get("cons", []),
             cost=CostEstimate(
-                year_one_total=connect_data.get("year_one_cost", 0)
+                year_one_total=connect_data.get("year_one_cost") or 0
             ),
         )
 
@@ -361,7 +361,7 @@ RULES:
             pros=build_data.get("pros", []),
             cons=build_data.get("cons", []),
             cost=CostEstimate(
-                year_one_total=build_data.get("year_one_cost", 0)
+                year_one_total=build_data.get("year_one_cost") or 0
             ),
         )
 
@@ -374,7 +374,7 @@ RULES:
             pros=hire_data.get("pros", []),
             cons=hire_data.get("cons", []),
             cost=CostEstimate(
-                year_one_total=hire_data.get("year_one_cost", 0)
+                year_one_total=hire_data.get("year_one_cost") or 0
             ),
         )
 

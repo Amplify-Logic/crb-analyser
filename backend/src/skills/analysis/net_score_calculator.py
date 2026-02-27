@@ -286,6 +286,9 @@ def _estimate_benefit_scores(option: OptionInput) -> BenefitScores:
         "connect": 40,
         "build": 75,
         "hire": 50,
+        "connect_and_automate": 45,
+        "enhance_with_ai": 50,
+        "targeted_upgrade": 45,
     }
     strategic = strategic_by_type.get(option.option_type, 40)
 
@@ -298,6 +301,9 @@ def _estimate_benefit_scores(option: OptionInput) -> BenefitScores:
         "connect": 45,
         "build": 65,
         "hire": 60,
+        "connect_and_automate": 55,
+        "enhance_with_ai": 60,
+        "targeted_upgrade": 60,
     }
     quality = quality_by_type.get(option.option_type, 50)
 
@@ -353,6 +359,12 @@ _OPTION_LABELS = {
     "connect": "Connect (Integrate)",
     "build": "Build (Custom)",
     "hire": "Hire (Agency/Freelancer)",
+}
+
+_AIOS_OPTION_LABELS = {
+    "connect_and_automate": "Connect & Automate",
+    "enhance_with_ai": "Enhance with AI",
+    "targeted_upgrade": "Targeted Upgrade",
 }
 
 
@@ -524,7 +536,53 @@ class NetScoreCalculatorSkill(SyncSkill[NetScoreResult]):
         monthly_savings = financial_impact.get("monthly_savings", 0)
         hours_saved = time_savings.get("hours_per_week", 0)
 
-        # Three-options format: off_the_shelf, best_in_class, custom_solution
+        # AIOS format: connect_and_automate, enhance_with_ai, targeted_upgrade
+        for opt_type in ["connect_and_automate", "enhance_with_ai", "targeted_upgrade"]:
+            opt = rec_options.get(opt_type)
+            if not opt:
+                continue
+
+            # AIOS options use string costs like "€20-50/month"
+            monthly_cost = self._parse_eur_cost(opt.get("monthly_cost", "")) if isinstance(opt.get("monthly_cost"), str) else opt.get("monthly_cost", 0)
+            cost_range = opt.get("cost_range", "")
+            impl_cost = self._parse_eur_cost(cost_range) if isinstance(cost_range, str) else 0
+
+            # Parse build_time like "1 week" or "2-4 weeks"
+            build_time = opt.get("build_time", "") or opt.get("migration_time", "")
+            impl_weeks = self._parse_weeks(build_time)
+
+            # Neutral defaults — actual differentiation comes from financial data
+            # (costs, timelines), not option category
+            complexity_map = {
+                "connect_and_automate": 3,
+                "enhance_with_ai": 3,
+                "targeted_upgrade": 3,
+            }
+            vendor_dep_map = {
+                "connect_and_automate": "medium",
+                "enhance_with_ai": "medium",
+                "targeted_upgrade": "medium",
+            }
+            reversal_map = {
+                "connect_and_automate": "Medium",
+                "enhance_with_ai": "Medium",
+                "targeted_upgrade": "Medium",
+            }
+
+            options_out.append({
+                "option_type": opt_type,
+                "label": _AIOS_OPTION_LABELS.get(opt_type, opt_type),
+                "implementation_cost": impl_cost,
+                "monthly_cost": monthly_cost,
+                "implementation_weeks": impl_weeks,
+                "monthly_savings": monthly_savings,
+                "hours_saved_per_week": hours_saved,
+                "implementation_complexity": complexity_map.get(opt_type, 3),
+                "vendor_dependency": vendor_dep_map.get(opt_type, "medium"),
+                "reversal_difficulty": reversal_map.get(opt_type, "Medium"),
+            })
+
+        # Legacy three-options format: off_the_shelf, best_in_class, custom_solution
         for opt_type in ["off_the_shelf", "best_in_class", "custom_solution"]:
             opt = rec_options.get(opt_type)
             if not opt:
@@ -617,6 +675,40 @@ class NetScoreCalculatorSkill(SyncSkill[NetScoreResult]):
             })
 
         return options_out
+
+    @staticmethod
+    def _parse_eur_cost(cost_str: str) -> float:
+        """Parse EUR cost strings like '€20-50/month' or '€500' into a numeric value."""
+        import re
+        if not cost_str:
+            return 0
+        # Find all numbers in the string
+        numbers = re.findall(r'[\d,]+(?:\.\d+)?', cost_str.replace(',', ''))
+        if not numbers:
+            return 0
+        nums = [float(n) for n in numbers]
+        # If range (e.g., "€20-50"), take midpoint
+        if len(nums) >= 2:
+            return (nums[0] + nums[1]) / 2
+        return nums[0]
+
+    @staticmethod
+    def _parse_weeks(time_str: str) -> float:
+        """Parse time strings like '1 week', '2-4 weeks', '3 days' into weeks."""
+        import re
+        if not time_str:
+            return 2  # default
+        numbers = re.findall(r'\d+\.?\d*', time_str)
+        if not numbers:
+            return 2
+        nums = [float(n) for n in numbers]
+        val = sum(nums) / len(nums)  # average if range
+        lower = time_str.lower()
+        if 'day' in lower:
+            return val / 5  # business days
+        if 'month' in lower:
+            return val * 4
+        return val  # assume weeks
 
     def _build_comparison_summary(self, scored_options: List[OptionNetScore]) -> str:
         """Build a one-sentence comparison summary."""

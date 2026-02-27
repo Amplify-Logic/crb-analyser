@@ -63,7 +63,7 @@ def _now_iso() -> str:
 async def cmd_vendors(args) -> dict:
     """Refresh stale vendors using research agent."""
     from src.agents.research.schemas import RefreshRequest, RefreshScope
-    from src.agents.research.refresh import refresh_vendors, get_stale_count
+    from src.agents.research.refresh import refresh_vendors, get_stale_count, apply_vendor_updates
 
     result = {
         "command": "vendors",

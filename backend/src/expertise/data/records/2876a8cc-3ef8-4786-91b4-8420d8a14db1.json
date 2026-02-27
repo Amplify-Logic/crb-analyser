@@ -1,0 +1,49 @@
+{
+  "audit_id": "2876a8cc-3ef8-4786-91b4-8420d8a14db1",
+  "timestamp": "2026-02-27T10:49:00.754040",
+  "industry": "professional-services",
+  "company_size": "unknown",
+  "pain_points_found": [],
+  "processes_analyzed": [],
+  "recommendations_made": [],
+  "vendors_recommended": [],
+  "ai_readiness_score": 65,
+  "total_potential_savings": 86400.0,
+  "findings_count": 0,
+  "tools_used": {},
+  "token_usage": {
+    "usage": [
+      {
+        "task": "generate_findings",
+        "model": "claude-opus-4-6",
+        "input_tokens": 16102,
+        "output_tokens": 10000
+      }
+    ],
+    "summary": {
+      "total_input_tokens": 16102,
+      "total_output_tokens": 10000,
+      "total_tokens": 26102,
+      "estimated_cost_usd": 0.9915,
+      "by_model": {
+        "claude-opus-4-6": {
+          "input": 16102,
+          "output": 10000,
+          "tasks": [
+            "generate_findings"
+          ],
+          "estimated_cost_usd": 0.9915
+        }
+      },
+      "task_count": 1
+    }
+  },
+  "phases_completed": [
+    "executive_summary",
+    "findings",
+    "playbook",
+    "architecture",
+    "insights"
+  ],
+  "errors_encountered": []
+}

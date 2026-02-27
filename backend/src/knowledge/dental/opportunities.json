@@ -41,7 +41,7 @@
             "twilio-mcp",
             "google-calendar-mcp"
           ],
-          "monthly_cost": "EUR 50-150 (API usage)",
+          "monthly_cost": "EUR 50-150/mo (API usage) + 12-18hrs initial build",
           "pros": [
             "Fully customized for your practice",
             "Speaks your brand voice",
@@ -73,7 +73,7 @@
           ]
         },
         "targeted_upgrade": {
-          "when_needed": "Only if your current tools have no API or are fundamentally broken for ai voice receptionist & call handling",
+          "when_needed": "When building custom isn't practical or you want a managed solution with vendor support",
           "tools": [
             "Smith.ai",
             "Ruby Receptionist",
@@ -123,7 +123,7 @@
       },
       "yc_reference": "Similar to Barti (eye care) which raised $12M Series A for AI receptionist + operating system",
       "our_recommendation": "connect_and_automate",
-      "recommendation_rationale": "Your existing tools likely support API integration. A Claude workflow connecting them for ai voice receptionist & call handling ships in days, not weeks, and costs a fraction of a SaaS subscription."
+      "recommendation_rationale": "An AI voice receptionist can be built by connecting your existing phone and scheduling tools with Claude Code and Twilio MCP. This gives you full control over call routing, brand voice, and booking logic at a fraction of managed service costs."
     },
     {
       "id": "automated-patient-communication",
@@ -164,7 +164,7 @@
             "twilio-mcp",
             "supabase-mcp"
           ],
-          "monthly_cost": "EUR 50-150 (API usage)",
+          "monthly_cost": "EUR 50-150/mo (API usage) + 12-18hrs initial build",
           "pros": [
             "Full customization",
             "Lower ongoing cost",
@@ -195,7 +195,7 @@
           ]
         },
         "targeted_upgrade": {
-          "when_needed": "Only if your current tools have no API or are fundamentally broken for automated patient communication system",
+          "when_needed": "When you want a turnkey HIPAA-compliant communication platform without development overhead",
           "tools": [
             "Weave",
             "Lighthouse 360",
@@ -237,8 +237,8 @@
         },
         "assumptions": "No-show reduction varies by patient demographics; some slots may not be refillable"
       },
-      "our_recommendation": "connect_and_automate",
-      "recommendation_rationale": "Your existing tools likely support API integration. A Claude workflow connecting them for automated patient communication system ships in days, not weeks, and costs a fraction of a SaaS subscription."
+      "our_recommendation": "enhance_with_ai",
+      "recommendation_rationale": "Patient communication requires HIPAA-compliant two-way messaging, automated recall campaigns, and practice management integration. Dental-specific platforms like Weave and RevenueWell provide this out of the box with compliance built in — building custom HIPAA-compliant messaging from scratch adds significant development and compliance burden for a practice without engineering staff."
     },
     {
       "id": "ai-insurance-verification",
@@ -304,7 +304,7 @@
           ]
         },
         "targeted_upgrade": {
-          "when_needed": "Only if your current tools have no API or are fundamentally broken for ai-powered insurance verification",
+          "when_needed": "When you want integrated verification with your practice management system and broad payer coverage",
           "tools": [
             "Vyne Dental",
             "Dentrix Ascend verification"
@@ -346,7 +346,7 @@
         "assumptions": "Savings depend on current manual process efficiency; not all verifications automate equally"
       },
       "our_recommendation": "connect_and_automate",
-      "recommendation_rationale": "Your existing tools likely support API integration. A Claude workflow connecting them for ai-powered insurance verification ships in days, not weeks, and costs a fraction of a SaaS subscription."
+      "recommendation_rationale": "Insurance verification can be automated with an RPA bot connecting to payer portals, extracting eligibility data, and feeding it into your practice management system. This approach works across all payers and avoids per-verification fees."
     },
     {
       "id": "online-scheduling",
@@ -387,7 +387,7 @@
             "google-calendar-mcp",
             "supabase-mcp"
           ],
-          "monthly_cost": "EUR 50-150 (API usage)",
+          "monthly_cost": "EUR 50-150/mo (API usage) + 12-18hrs initial build",
           "pros": [
             "Fully branded",
             "Custom rules",
@@ -416,7 +416,7 @@
           ]
         },
         "targeted_upgrade": {
-          "when_needed": "Only if your current tools have no API or are fundamentally broken for 24/7 online patient scheduling",
+          "when_needed": "When you want a managed scheduling solution with patient-facing marketplace and easy setup",
           "tools": [
             "LocalMed",
             "Zocdoc",
@@ -459,7 +459,7 @@
         "assumptions": "Online booking adoption varies; some patients prefer phone; requires staff training"
       },
       "our_recommendation": "connect_and_automate",
-      "recommendation_rationale": "Your existing tools likely support API integration. A Claude workflow connecting them for 24/7 online patient scheduling ships in days, not weeks, and costs a fraction of a SaaS subscription."
+      "recommendation_rationale": "A custom booking widget connected to your calendar and patient records gives you full control over scheduling rules, branding, and the patient experience — without monthly platform fees."
     },
     {
       "id": "ai-treatment-planning",
@@ -520,7 +520,7 @@
           ]
         },
         "targeted_upgrade": {
-          "when_needed": "Only if your current tools have no API or are fundamentally broken for ai-assisted treatment planning & imaging",
+          "when_needed": "FDA-cleared AI imaging is the recommended path — custom diagnostic AI requires regulatory approval that individual practices cannot obtain",
           "tools": [
             "Pearl",
             "Overjet",
@@ -562,8 +562,8 @@
         },
         "assumptions": "Case acceptance improvement varies; requires consistent use by all providers; results take time"
       },
-      "our_recommendation": "connect_and_automate",
-      "recommendation_rationale": "Your existing tools likely support API integration. A Claude workflow connecting them for ai-assisted treatment planning & imaging ships in days, not weeks, and costs a fraction of a SaaS subscription."
+      "our_recommendation": "targeted_upgrade",
+      "recommendation_rationale": "FDA-cleared AI imaging tools like Pearl and Overjet are the only viable path for diagnostic AI in dental practices. Custom-built solutions cannot obtain FDA clearance, and the liability risk of uncleared diagnostic tools is unacceptable. These purpose-built tools integrate directly with your imaging software and provide immediate clinical value."
     },
     {
       "id": "patient-financing",
@@ -603,7 +603,7 @@
             "stripe-mcp",
             "supabase-mcp"
           ],
-          "monthly_cost": "EUR 50-150 (API usage)",
+          "monthly_cost": "EUR 50-150/mo (API usage) + 12-18hrs initial build",
           "pros": [
             "No third-party fees",
             "Full control",
@@ -631,7 +631,7 @@
           ]
         },
         "targeted_upgrade": {
-          "when_needed": "Only if your current tools have no API or are fundamentally broken for in-house patient financing automation",
+          "when_needed": "Patient financing requires credit underwriting and regulatory compliance — dedicated platforms handle this natively with zero upfront cost",
           "tools": [
             "CareCredit",
             "Sunbit",
@@ -673,8 +673,8 @@
         },
         "assumptions": "Conversion varies by patient demographics; transaction fees reduce margin; some patients may default"
       },
-      "our_recommendation": "connect_and_automate",
-      "recommendation_rationale": "Your existing tools likely support API integration. A Claude workflow connecting them for in-house patient financing automation ships in days, not weeks, and costs a fraction of a SaaS subscription."
+      "our_recommendation": "targeted_upgrade",
+      "recommendation_rationale": "Patient financing requires credit underwriting, compliance with lending regulations, and chargeback protection — capabilities that cannot be built in-house. Dedicated platforms like CareCredit and Sunbit handle instant credit decisions, regulatory compliance, and collections, with zero upfront cost to the practice."
     },
     {
       "id": "reputation-reviews",
@@ -714,7 +714,7 @@
             "twilio-mcp",
             "google-maps-mcp"
           ],
-          "monthly_cost": "EUR 50-150 (API usage)",
+          "monthly_cost": "EUR 50-150/mo (API usage) + 12-18hrs initial build",
           "pros": [
             "Low ongoing cost",
             "Customized messaging"
@@ -741,7 +741,7 @@
           ]
         },
         "targeted_upgrade": {
-          "when_needed": "Only if your current tools have no API or are fundamentally broken for automated reputation & review management",
+          "when_needed": "When you want a managed solution with multi-platform review monitoring and response templates",
           "tools": [
             "Birdeye",
             "Podium",
@@ -783,7 +783,7 @@
         "assumptions": "Attribution from reviews to new patients is indirect; results compound over time; competitive market affects impact"
       },
       "our_recommendation": "connect_and_automate",
-      "recommendation_rationale": "Your existing tools likely support API integration. A Claude workflow connecting them for automated reputation & review management ships in days, not weeks, and costs a fraction of a SaaS subscription."
+      "recommendation_rationale": "Automated review requests can be built with Twilio MCP for SMS/email triggers after appointments. Low ongoing cost and customized messaging, though you won't get the advanced reputation dashboard that dedicated platforms offer."
     }
   ],
   "quick_wins": [

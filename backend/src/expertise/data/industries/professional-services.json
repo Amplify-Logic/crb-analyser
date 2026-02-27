@@ -1,7 +1,7 @@
 {
   "industry": "professional-services",
-  "last_updated": "2026-02-24T12:00:00Z",
-  "total_analyses": 1,
+  "last_updated": "2026-02-27T16:59:58.663359",
+  "total_analyses": 4,
   "confidence": "low",
   "pain_points": {
     "lost_billable_time": {
@@ -416,7 +416,7 @@
   "effective_patterns": [
     {
       "pattern": "AI time capture recovers 15-25% additional billable hours by detecting work from calendar, email, and document activity",
-      "recommendation": "Deploy Smokeball or Clio with AI time capture as first automation step — immediate ROI within 30 days",
+      "recommendation": "Deploy Smokeball or Clio with AI time capture as first automation step \u2014 immediate ROI within 30 days",
       "frequency": 1,
       "context": {
         "billable_professionals": 1,
@@ -479,12 +479,12 @@
     }
   ],
   "anti_patterns": [
-    "Full AI document drafting without human review — professional liability and malpractice risk requires partner oversight on all AI-generated content",
-    "Enterprise DMS (iManage, NetDocuments) for firms under 20 people — complexity and cost outweigh benefits at small scale",
-    "Building custom billing system instead of using Clio/PracticePanther — trust accounting and regulatory compliance too complex to DIY",
-    "AI chatbots for client communication on active legal matters — clients expect and deserve personal attention from their professional",
-    "Replacing all manual processes simultaneously — phased approach starting with time capture prevents disruption and change fatigue",
-    "Deploying AI research tools before implementing time capture — time capture has immediate measurable ROI while research tool ROI takes 3-6 months to materialize"
+    "Full AI document drafting without human review \u2014 professional liability and malpractice risk requires partner oversight on all AI-generated content",
+    "Enterprise DMS (iManage, NetDocuments) for firms under 20 people \u2014 complexity and cost outweigh benefits at small scale",
+    "Building custom billing system instead of using Clio/PracticePanther \u2014 trust accounting and regulatory compliance too complex to DIY",
+    "AI chatbots for client communication on active legal matters \u2014 clients expect and deserve personal attention from their professional",
+    "Replacing all manual processes simultaneously \u2014 phased approach starting with time capture prevents disruption and change fatigue",
+    "Deploying AI research tools before implementing time capture \u2014 time capture has immediate measurable ROI while research tool ROI takes 3-6 months to materialize"
   ],
   "size_specific": {
     "1-10": {
@@ -554,13 +554,13 @@
       ]
     },
     "unknown": {
-      "count": 1,
-      "avg_readiness": 60.0,
+      "count": 4,
+      "avg_readiness": 61.25,
       "common_pain_points": []
     }
   },
-  "avg_ai_readiness": 60.0,
-  "avg_potential_savings": 118000.0,
+  "avg_ai_readiness": 61.25,
+  "avg_potential_savings": 189850.0,
   "common_tech_stacks": [
     "clio",
     "practicepanther",

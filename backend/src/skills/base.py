@@ -499,6 +499,9 @@ class LLMSkill(BaseSkill[T]):
                 match = re.search(r'```(?:json)?\s*([\s\S]*?)```', response)
                 if match:
                     response = match.group(1)
+                else:
+                    # No closing ``` — strip opening line and try anyway
+                    response = re.sub(r'^```(?:json)?\s*', '', response.strip())
 
             return json.loads(response.strip())
 

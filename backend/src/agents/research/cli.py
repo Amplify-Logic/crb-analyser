@@ -33,9 +33,12 @@ from dotenv import load_dotenv
 # Load env before imports that need settings
 load_dotenv()
 
-from src.agents.research.schemas import RefreshRequest, RefreshScope, DiscoverRequest
+from src.agents.research.schemas import (
+    RefreshRequest, RefreshScope, DiscoverRequest,
+    VendorUpdate, FieldChange, DiscoveredVendor,
+)
 from src.agents.research.refresh import refresh_vendors, get_stale_count, apply_vendor_updates
-from src.agents.research.discover import discover_vendors, add_multiple_vendors, DiscoveredVendor
+from src.agents.research.discover import discover_vendors, add_multiple_vendors
 
 
 def print_progress(update: dict, output_format: str = "text"):
@@ -81,14 +84,27 @@ def print_progress(update: dict, output_format: str = "text"):
         error = update.get("error", "Unknown error")
         print(f"✗ {vendor}: {error}")
 
+    elif update_type == "scraping_pricing":
+        vendor = update.get("vendor", "")
+        print(f"    Scraping pricing for {vendor}...")
+
     elif update_type == "candidate":
         vendor = update.get("vendor", {})
         name = vendor.get("name", "Unknown")
         website = vendor.get("website", "")
         score = vendor.get("relevance_score", 0)
+        pricing = vendor.get("pricing")
         warning = vendor.get("warning")
         icon = "⚠️ " if warning else "  "
-        print(f"{icon}{name} ({website}) - {score:.0%} relevance")
+        pricing_info = ""
+        if pricing:
+            tiers = len(pricing.get("tiers", []))
+            starting = pricing.get("starting_price")
+            if starting:
+                pricing_info = f" | ${starting}/mo, {tiers} tiers"
+            elif tiers:
+                pricing_info = f" | {tiers} tiers"
+        print(f"{icon}{name} ({website}) - {score:.0%} relevance{pricing_info}")
         if warning:
             print(f"    Warning: {warning}")
 
@@ -103,6 +119,20 @@ def print_progress(update: dict, output_format: str = "text"):
         if "errors" in update:
             print(f"Errors: {update.get('errors', 0)}")
         print("="*60)
+
+
+def _reconstruct_updates(update_dicts: list[dict]) -> list[VendorUpdate]:
+    """Reconstruct VendorUpdate objects from yielded progress dicts."""
+    result = []
+    for u in update_dicts:
+        result.append(VendorUpdate(
+            vendor_slug=u["vendor_slug"],
+            vendor_name=u.get("vendor_name", u["vendor_slug"]),
+            source_url="",
+            changes=[FieldChange(**c) for c in u.get("changes", [])],
+            extracted_data=u.get("extracted_data"),
+        ))
+    return result
 
 
 async def cmd_refresh(args):
@@ -135,14 +165,23 @@ async def cmd_refresh(args):
     )
 
     updates = []
+    task_id = None
     async for update in refresh_vendors(request):
         print_progress(update, args.output)
+        if update.get("type") == "started":
+            task_id = update.get("task_id")
         if update.get("type") == "update":
             updates.append(update)
 
-    # If not dry run, prompt for approval
-    if not args.dry_run and updates and not args.auto_approve:
-        print("\nApply changes? [Y/n/select]: ", end="")
+    if not updates:
+        return
+
+    if args.dry_run:
+        return
+
+    # If not dry run, prompt for approval or auto-approve
+    if not args.auto_approve:
+        print("\nApply changes? [Y/n]: ", end="")
         sys.stdout.flush()
         try:
             response = input().strip().lower()
@@ -150,24 +189,29 @@ async def cmd_refresh(args):
             response = "n"
 
         if response in ("", "y", "yes"):
-            # Apply all
             slugs = [u.get("vendor_slug") for u in updates]
+            vendor_updates = _reconstruct_updates(updates)
             print(f"Applying {len(slugs)} updates...")
-            # Note: In CLI we'd need to reconstruct VendorUpdate objects
-            # For now, print what would be applied
-            print(f"Would apply updates to: {', '.join(slugs)}")
-            print("(Full apply requires running through API)")
+            result = await apply_vendor_updates(task_id or "", slugs, vendor_updates)
+            print(f"Applied {result['applied_count']} updates")
+            if result["errors"]:
+                for err in result["errors"]:
+                    print(f"  Error: {err}")
         else:
             print("Changes not applied.")
 
-    elif args.auto_approve and updates:
+    else:
         # Auto-approve non-significant changes
         non_significant = [u for u in updates if not u.get("has_significant_changes")]
         if non_significant:
             slugs = [u.get("vendor_slug") for u in non_significant]
-            print(f"\nAuto-approving {len(slugs)} non-significant updates...")
-            print(f"Would apply to: {', '.join(slugs)}")
-            print("(Full apply requires running through API)")
+            vendor_updates = _reconstruct_updates(non_significant)
+            print(f"\nAuto-applying {len(slugs)} non-significant updates...")
+            result = await apply_vendor_updates(task_id or "", slugs, vendor_updates)
+            print(f"Applied {result['applied_count']} updates")
+            if result["errors"]:
+                for err in result["errors"]:
+                    print(f"  Error: {err}")
 
         significant = [u for u in updates if u.get("has_significant_changes")]
         if significant:
@@ -192,9 +236,23 @@ async def cmd_discover(args):
         if update.get("type") == "candidate":
             candidates.append(update.get("vendor"))
 
-    if candidates:
-        print(f"\nFound {len(candidates)} new vendor candidates.")
-        print("Use the admin UI to review and add them.")
+    if not candidates:
+        print("\nNo new vendor candidates found.")
+        return
+
+    print(f"\nFound {len(candidates)} new vendor candidates.")
+
+    if args.auto_add:
+        # Convert dicts back to DiscoveredVendor objects and persist
+        vendor_objects = [DiscoveredVendor(**c) for c in candidates]
+        print(f"Adding {len(vendor_objects)} vendors to database...")
+        result = await add_multiple_vendors(vendor_objects)
+        print(f"Added {len(result['added'])} vendors")
+        if result["errors"]:
+            for err in result["errors"]:
+                print(f"  Error: {err}")
+    else:
+        print("Use --auto-add to add them, or use the admin UI to review.")
 
 
 async def cmd_stale_count(args):
@@ -238,6 +296,7 @@ def main():
     discover_parser.add_argument("--category", required=True, help="Category to search")
     discover_parser.add_argument("--industry", help="Industry to search")
     discover_parser.add_argument("--limit", type=int, default=20, help="Max candidates to return")
+    discover_parser.add_argument("--auto-add", action="store_true", help="Automatically add discovered vendors to database")
     discover_parser.add_argument("--output", choices=["text", "json"], default="text", help="Output format")
 
     # Stale count command

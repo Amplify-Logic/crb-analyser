@@ -13,6 +13,7 @@ import json
 import re
 import structlog
 from dataclasses import dataclass
+from datetime import date
 from typing import Optional
 from urllib.parse import urlparse, urljoin
 
@@ -474,7 +475,11 @@ def _stage1_identify_pricing(content: PageContent, vendor_name: str) -> dict:
     if len(text) > 8000:
         text = text[:8000]
 
-    prompt = f"""Analyze this content from {vendor_name}'s website and determine if it contains pricing information.
+    today = date.today().strftime("%B %d, %Y")
+
+    prompt = f"""Today's date: {today}
+
+Analyze this content from {vendor_name}'s website and determine if it contains current pricing information.
 
 <content>
 {text}
@@ -529,7 +534,11 @@ def _stage2_extract_details(content: PageContent, vendor_name: str, stage1_resul
     if len(text) > ScraperConfig.MAX_CONTENT_FOR_LLM:
         text = text[:ScraperConfig.MAX_CONTENT_FOR_LLM]
 
-    prompt = f"""Extract detailed pricing information for {vendor_name}.
+    today = date.today().strftime("%B %d, %Y")
+
+    prompt = f"""Today's date: {today}
+
+Extract detailed current pricing information for {vendor_name}.
 
 {context}
 

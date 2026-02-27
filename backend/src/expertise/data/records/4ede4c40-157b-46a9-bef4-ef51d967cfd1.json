@@ -1,0 +1,49 @@
+{
+  "audit_id": "4ede4c40-157b-46a9-bef4-ef51d967cfd1",
+  "timestamp": "2026-02-27T10:48:26.531259",
+  "industry": "ecommerce",
+  "company_size": "unknown",
+  "pain_points_found": [],
+  "processes_analyzed": [],
+  "recommendations_made": [],
+  "vendors_recommended": [],
+  "ai_readiness_score": 52,
+  "total_potential_savings": 52000.0,
+  "findings_count": 7,
+  "tools_used": {},
+  "token_usage": {
+    "usage": [
+      {
+        "task": "generate_findings",
+        "model": "claude-sonnet-4-6",
+        "input_tokens": 19064,
+        "output_tokens": 5479
+      }
+    ],
+    "summary": {
+      "total_input_tokens": 19064,
+      "total_output_tokens": 5479,
+      "total_tokens": 24543,
+      "estimated_cost_usd": 0.1394,
+      "by_model": {
+        "claude-sonnet-4-6": {
+          "input": 19064,
+          "output": 5479,
+          "tasks": [
+            "generate_findings"
+          ],
+          "estimated_cost_usd": 0.1394
+        }
+      },
+      "task_count": 1
+    }
+  },
+  "phases_completed": [
+    "executive_summary",
+    "findings",
+    "playbook",
+    "architecture",
+    "insights"
+  ],
+  "errors_encountered": []
+}

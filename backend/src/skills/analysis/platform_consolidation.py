@@ -268,6 +268,12 @@ def finding_matches_category(finding: Dict[str, Any], solves: List[str]) -> bool
     return False
 
 
+# Industries where the ecosystem is based on specialized point solutions
+# connected via APIs, NOT monolithic platforms. Skip platform consolidation
+# for these — the AIOS connect-first philosophy applies directly.
+SKIP_CONSOLIDATION_INDUSTRIES = {"ecommerce", "e-commerce"}
+
+
 def identify_platform_opportunities(
     findings: List[Dict[str, Any]],
     industry: str,
@@ -278,7 +284,28 @@ def identify_platform_opportunities(
 
     Returns which findings can be solved by a single platform vs needing
     individual point solutions.
+
+    Skips consolidation for e-commerce — the Shopify + specialized apps
+    ecosystem (Klaviyo, Gorgias, Sendcloud) works better with individual
+    connect-and-automate recommendations than a single platform like HubSpot.
     """
+    # E-commerce uses connect-first: Shopify + specialized apps, not one platform
+    if industry.lower() in SKIP_CONSOLIDATION_INDUSTRIES:
+        logger.info(
+            f"Skipping platform consolidation for {industry} — "
+            f"connect-first with specialized tools applies"
+        )
+        all_finding_ids = [
+            f.get("id", "") for f in findings if not f.get("is_not_recommended")
+        ]
+        return ConsolidationResult(
+            platform_recommendations=[],
+            point_solution_findings=all_finding_ids,
+            already_covered_findings=set(),
+            consolidation_savings="",
+            category_redundancies=[],
+        )
+
     # Track which findings map to which platform categories
     platform_matches: Dict[str, List[Dict[str, Any]]] = {}
     point_solution_matches: Dict[str, List[Dict[str, Any]]] = {}

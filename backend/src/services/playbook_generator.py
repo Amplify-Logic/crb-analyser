@@ -6,7 +6,7 @@ Generates personalized implementation playbooks from recommendations.
 Uses canonical models from src/models/playbook.py with full validation.
 """
 import json
-import logging
+import structlog
 import re
 import uuid
 from typing import Dict, Any, List, Optional
@@ -32,7 +32,7 @@ from src.models.playbook import (
 from src.skills import get_skill, SkillContext
 from src.expertise import get_expertise_store
 
-logger = logging.getLogger(__name__)
+logger = structlog.get_logger(__name__)
 
 
 # =============================================================================
@@ -71,8 +71,8 @@ MANDATORY RULES:
 
 Generate aggressive but achievable week-by-week plans with proper task dependencies."""
 
-    def __init__(self):
-        self.client = Anthropic(api_key=settings.ANTHROPIC_API_KEY)
+    def __init__(self, client: Optional[Any] = None):
+        self.client = client if client is not None else Anthropic(api_key=settings.ANTHROPIC_API_KEY)
 
     def _extract_personalization_context(
         self, quiz_answers: Dict[str, Any]
@@ -166,7 +166,13 @@ Generate aggressive but achievable week-by-week plans with proper task dependenc
         # --- Monthly ongoing cost ---
         monthly_cost: Optional[float] = None
         if option.get("monthly_cost") is not None:
-            monthly_cost = float(option["monthly_cost"])
+            raw_cost = option["monthly_cost"]
+            if isinstance(raw_cost, str):
+                import re as _re
+                nums = _re.findall(r'\d+\.?\d*', raw_cost)
+                monthly_cost = sum(float(n) for n in nums) / max(len(nums), 1) if nums else None
+            else:
+                monthly_cost = float(raw_cost)
         elif short_term.get("monthly") is not None:
             monthly_cost = float(short_term["monthly"])
 
@@ -1011,7 +1017,7 @@ Return ONLY valid JSON, no explanation."""
             )
 
         # Default by option type
-        if option_type == "custom_solution":
+        if option_type in ("custom_solution", "connect_and_automate"):
             return ImmediateFirstStep(
                 action="Create a GitHub repository for your project",
                 url="https://github.com/new",

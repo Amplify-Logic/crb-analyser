@@ -46,11 +46,11 @@ const SAMPLE_FINDINGS = [
     roi: '€48,000/year',
   },
   {
-    title: 'AI Product Descriptions',
-    verdict: 'Skip',
-    verdictColor: 'gray',
-    description: 'Your product catalog is stable. Manual descriptions are fine for now — focus on higher-impact areas.',
-    roi: 'Low impact',
+    title: 'Fraud Detection',
+    verdict: 'Upgrade',
+    verdictColor: 'blue',
+    description: 'Signifyd or Shopify Protect gives you chargeback guarantees and network-scale fraud detection that custom models can\'t match.',
+    roi: '€18,000/year',
   },
 ]
 
@@ -113,7 +113,7 @@ export default function Ecommerce() {
             </h1>
 
             <p className="text-xl text-gray-600 mb-8 max-w-2xl mx-auto">
-              Get an architecture blueprint showing what to connect, what to automate, and what to skip.
+              Get an architecture blueprint showing what to connect, what to buy, and what to skip.
               Real build estimates. Real ROI. No consultant fees.
             </p>
 

@@ -194,7 +194,10 @@ class Playbook(BaseModel):
     """Complete playbook for a recommendation option."""
     id: str
     recommendation_id: str
-    option_type: Literal["off_the_shelf", "best_in_class", "custom_solution"]
+    option_type: Literal[
+        "off_the_shelf", "best_in_class", "custom_solution",
+        "connect_and_automate", "enhance_with_ai", "targeted_upgrade",
+    ]
     total_weeks: int = Field(..., ge=1)
     immediate_first_step: Optional[ImmediateFirstStep] = None
     phases: List[Phase]

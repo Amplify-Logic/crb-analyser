@@ -11,6 +11,7 @@ Handles:
 import json
 import re
 import uuid
+from datetime import datetime
 from typing import AsyncGenerator, Optional
 from urllib.parse import urlparse
 
@@ -19,7 +20,7 @@ from anthropic import Anthropic
 
 from src.config.supabase_client import get_async_supabase
 
-from .schemas import DiscoveredVendor, DiscoverRequest
+from .schemas import DiscoveredVendor, DiscoverRequest, ExtractedPricing
 from .sources.web_search import search_vendors, extract_vendor_from_url
 from .sources.vendor_site import scrape_vendor_pricing
 
@@ -143,6 +144,39 @@ async def discover_vendors(
         vendor_info = await _extract_vendor_info(candidate, request.category)
 
         if vendor_info:
+            # Scrape pricing for the discovered vendor
+            yield {
+                "type": "scraping_pricing",
+                "vendor": vendor_info.name,
+                "website": vendor_info.website,
+            }
+            try:
+                pricing_result = await scrape_vendor_pricing(
+                    vendor_info.website, vendor_info.name
+                )
+                if pricing_result.get("success"):
+                    pricing_data = pricing_result.get("data")
+                    if isinstance(pricing_data, dict):
+                        pricing_data = ExtractedPricing(**pricing_data)
+                    vendor_info.pricing = pricing_data
+                    logger.info(
+                        "discovery_pricing_scraped",
+                        vendor=vendor_info.name,
+                        tiers=len((pricing_result.get("data") or {}).get("tiers", [])),
+                    )
+                else:
+                    logger.warning(
+                        "discovery_pricing_failed",
+                        vendor=vendor_info.name,
+                        error=pricing_result.get("error", "unknown"),
+                    )
+            except Exception as e:
+                logger.warning(
+                    "discovery_pricing_error",
+                    vendor=vendor_info.name,
+                    error=str(e),
+                )
+
             validated.append(vendor_info)
             yield {
                 "type": "candidate",
@@ -167,30 +201,32 @@ async def _extract_vendor_info(candidate: dict, category: str) -> Optional[Disco
     url = candidate["url"]
     title = candidate["title"]
     description = candidate["description"]
-    domain = candidate["domain"]
 
-    # Generate slug from domain
-    slug = extract_vendor_from_url(url)
-    if not slug:
-        return None
-
-    # Use Claude to extract vendor name and assess relevance
+    # Use Claude to extract vendor name, website, and assess relevance
     client = Anthropic()
 
-    prompt = f"""Analyze this search result and determine if it's a software vendor:
+    today = datetime.now().strftime("%B %d, %Y")
+
+    prompt = f"""Today's date: {today}
+
+Analyze this search result and determine if it's about a currently active software vendor:
 
 Title: {title}
 URL: {url}
 Description: {description}
 Target category: {category}
 
+IMPORTANT: The URL above may be a review site, blog, or press release — NOT the vendor's own website.
+You must identify the actual vendor and their real website domain.
+
 Return JSON:
 {{
     "is_vendor": true/false,
     "vendor_name": "extracted vendor/product name",
+    "vendor_website": "https://www.vendor-actual-domain.com",
     "description": "one sentence description of what the software does",
     "relevance_score": 0.0-1.0 (how relevant to {category}),
-    "warning": "any concerns, or null"
+    "warning": "any concerns (e.g. discontinued, acquired, rebranded), or null"
 }}
 
 Only JSON, no other text."""
@@ -214,11 +250,23 @@ Only JSON, no other text."""
         if not data.get("is_vendor", False):
             return None
 
+        # Use vendor's actual website (from LLM) rather than the search result URL
+        vendor_website = data.get("vendor_website") or url
+        vendor_name = data.get("vendor_name", title)
+
+        # Derive slug from vendor name (not URL domain) for accuracy
+        slug = _slugify_vendor_name(vendor_name)
+        if not slug:
+            # Fall back to domain extraction
+            slug = extract_vendor_from_url(vendor_website)
+        if not slug:
+            return None
+
         # Build discovered vendor
         vendor = DiscoveredVendor(
-            name=data.get("vendor_name", title),
+            name=vendor_name,
             slug=slug,
-            website=_normalize_website(url),
+            website=_normalize_website(vendor_website),
             description=data.get("description", description[:200]),
             category=category,
             sources=[candidate.get("source", "web")],
@@ -233,23 +281,43 @@ Only JSON, no other text."""
         return None
 
 
+def _slugify_vendor_name(name: str) -> Optional[str]:
+    """Convert vendor name to a URL-safe slug."""
+    if not name:
+        return None
+    # Lowercase, replace spaces/special chars with hyphens, strip extras
+    slug = re.sub(r"[^a-z0-9]+", "-", name.lower())
+    slug = slug.strip("-")
+    return slug if slug else None
+
+
 async def add_discovered_vendor(vendor: DiscoveredVendor) -> dict:
     """Add a discovered vendor to the database."""
     supabase = await get_async_supabase()
 
     try:
         # Insert vendor
+        insert_data = {
+            "slug": vendor.slug,
+            "name": vendor.name,
+            "category": vendor.category,
+            "website": vendor.website,
+            "description": vendor.description,
+            "status": "needs_review",  # New vendors need manual review
+            "verified_by": "research-agent-v1",
+        }
+
+        # Include pricing if scraped during discovery
+        if vendor.pricing:
+            pricing_data = vendor.pricing
+            if hasattr(pricing_data, "model_dump"):
+                pricing_data = pricing_data.model_dump()
+            insert_data["pricing"] = pricing_data
+            insert_data["verified_at"] = datetime.utcnow().isoformat()
+
         result = await (
             supabase.table("vendors")
-            .insert({
-                "slug": vendor.slug,
-                "name": vendor.name,
-                "category": vendor.category,
-                "website": vendor.website,
-                "description": vendor.description,
-                "status": "needs_review",  # New vendors need manual review
-                "verified_by": "research-agent-v1",
-            })
+            .insert(insert_data)
             .execute()
         )
 
@@ -310,12 +378,27 @@ def _normalize_website(url: str) -> str:
 def _is_non_vendor_url(url: str) -> bool:
     """Check if URL is likely not a vendor website."""
     non_vendor_patterns = [
+        # Review & comparison sites
         r"g2\.com",
         r"capterra\.com",
         r"trustradius\.com",
         r"softwareadvice\.com",
         r"getapp\.com",
         r"producthunt\.com",
+        r"solutionsreview\.com",
+        r"selecthub\.com",
+        r"sourceforge\.net",
+        r"slashdot\.org",
+        r"trustpilot\.com",
+        r"peerspot\.com",
+        # Press & news
+        r"businesswire\.com",
+        r"prnewswire\.com",
+        r"globenewswire\.com",
+        r"techcrunch\.com",
+        r"forbes\.com",
+        r"builtin\.com",
+        # Social & content
         r"wikipedia\.org",
         r"youtube\.com",
         r"linkedin\.com",
@@ -323,8 +406,12 @@ def _is_non_vendor_url(url: str) -> bool:
         r"facebook\.com",
         r"reddit\.com",
         r"medium\.com",
-        r"forbes\.com",
-        r"techcrunch\.com",
+        r"substack\.com",
+        # Aggregator / listicle sites
+        r"thedigitalprojectmanager\.com",
+        r"theresanaiforthat\.com",
+        r"efficient\.app/best",
+        # URL patterns
         r"blog\.",
         r"/blog/",
         r"/reviews?/",

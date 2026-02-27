@@ -8,6 +8,7 @@ Improvements:
 """
 
 import asyncio
+from datetime import date
 from typing import Optional
 
 import httpx
@@ -147,14 +148,15 @@ def _build_search_queries(category: str, industry: Optional[str] = None) -> list
     }
 
     category_term = category_terms.get(category, f"{category} software")
+    current_year = date.today().year
 
     # Industry-specific queries
     if industry:
-        queries.append(f"best {category_term} for {industry} 2026")
-        queries.append(f"{industry} {category_term} tools")
+        queries.append(f"best {category_term} for {industry} {current_year}")
+        queries.append(f"{industry} {category_term} tools {current_year}")
     else:
-        queries.append(f"best {category_term} 2026")
-        queries.append(f"top {category_term} small business")
+        queries.append(f"best {category_term} {current_year}")
+        queries.append(f"top {category_term} small business {current_year}")
 
     return queries
 

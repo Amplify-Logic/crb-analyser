@@ -33,7 +33,7 @@
             "google-calendar-mcp",
             "supabase-mcp"
           ],
-          "monthly_cost": "EUR 50-150 (API usage)",
+          "monthly_cost": "EUR 50-150/mo (API usage) + 12-18hrs initial build",
           "pros": [
             "Custom qualification logic",
             "Your intake process",
@@ -65,7 +65,7 @@
           ]
         },
         "targeted_upgrade": {
-          "when_needed": "Only if your current tools have no API or are fundamentally broken for ai voice receptionist & client intake",
+          "when_needed": "Turnkey AI receptionist services provide human+AI hybrid handling with zero development — ideal for firms without engineering staff",
           "tools": [
             "Smith.ai",
             "Ruby Receptionist",
@@ -97,8 +97,8 @@
         "demand_expansion_potential": "30% more client capacity utilized"
       },
       "yc_reference": "Similar to MDHub (mental health) and Auto Ace (car dealerships) for AI receptionist",
-      "our_recommendation": "connect_and_automate",
-      "recommendation_rationale": "Your existing tools likely support API integration. A Claude workflow connecting them for ai voice receptionist & client intake ships in days, not weeks, and costs a fraction of a SaaS subscription."
+      "our_recommendation": "targeted_upgrade",
+      "recommendation_rationale": "Professional services firms typically have zero engineering staff. Turnkey AI receptionist services like Smith.ai and Ruby provide human+AI hybrid handling, lead qualification, and CRM integration with zero development — operational in days, not weeks. The per-call cost is justified by captured leads that would otherwise go to voicemail."
     },
     {
       "id": "ai-time-capture",
@@ -152,7 +152,7 @@
             "gmail-mcp",
             "supabase-mcp"
           ],
-          "monthly_cost": "EUR 50-150 (API usage)",
+          "monthly_cost": "EUR 50-150/mo (API usage) + 12-18hrs initial build",
           "pros": [
             "Works with existing tools",
             "Custom billing rules",
@@ -186,7 +186,7 @@
           ]
         },
         "targeted_upgrade": {
-          "when_needed": "Only if your current tools have no API or are fundamentally broken for ai-powered time capture",
+          "when_needed": "When you want a managed time tracking platform with automatic capture and billing integration",
           "tools": [
             "Timely",
             "Harvest AI",
@@ -231,7 +231,7 @@
         "assumptions": "Not all recovered time will be billable; adoption varies by professional; results improve as AI learns patterns"
       },
       "our_recommendation": "connect_and_automate",
-      "recommendation_rationale": "Your existing tools likely support API integration. A Claude workflow connecting them for ai-powered time capture ships in days, not weeks, and costs a fraction of a SaaS subscription."
+      "recommendation_rationale": "AI time capture can be built by connecting your calendar, email, and document tools with Claude API to automatically detect billable activity. Custom logic matches your specific billing rules and matter codes."
     },
     {
       "id": "document-drafting-ai",
@@ -284,7 +284,7 @@
             "filesystem-mcp",
             "supabase-mcp"
           ],
-          "monthly_cost": "EUR 50-150 (API usage)",
+          "monthly_cost": "EUR 50-150/mo (API usage) + 12-18hrs initial build",
           "pros": [
             "Fully customized to firm templates",
             "No per-user cost",
@@ -318,7 +318,7 @@
           ]
         },
         "targeted_upgrade": {
-          "when_needed": "Only if your current tools have no API or are fundamentally broken for ai document drafting & templates",
+          "when_needed": "When you want purpose-built document automation with legal-specific templates and compliance features",
           "tools": [
             "Spellbook (Rally)",
             "Harvey AI",
@@ -363,7 +363,7 @@
         "assumptions": "AI drafts always need human review; complex bespoke documents see less benefit; adoption takes 2-4 weeks"
       },
       "our_recommendation": "connect_and_automate",
-      "recommendation_rationale": "Your existing tools likely support API integration. A Claude workflow connecting them for ai document drafting & templates ships in days, not weeks, and costs a fraction of a SaaS subscription."
+      "recommendation_rationale": "Document drafting with Claude API connected to your template library and matter data generates first drafts that follow your firm's specific style, clause preferences, and formatting standards."
     },
     {
       "id": "contract-review-ai",
@@ -445,7 +445,7 @@
           ]
         },
         "targeted_upgrade": {
-          "when_needed": "Only if your current tools have no API or are fundamentally broken for ai contract review & analysis",
+          "when_needed": "When you want enterprise-grade contract analysis with industry-specific clause libraries and risk scoring",
           "tools": [
             "Luminance",
             "Kira Systems",
@@ -490,7 +490,7 @@
         "assumptions": "AI review supplements but does not replace attorney judgment; bespoke contracts benefit less than standard agreements"
       },
       "our_recommendation": "connect_and_automate",
-      "recommendation_rationale": "Your existing tools likely support API integration. A Claude workflow connecting them for ai contract review & analysis ships in days, not weeks, and costs a fraction of a SaaS subscription."
+      "recommendation_rationale": "Contract review with Claude API can analyze documents against your firm's specific risk parameters, clause library, and negotiation playbook — more tailored than generic contract review platforms."
     },
     {
       "id": "client-intake-automation",
@@ -542,7 +542,7 @@
             "supabase-mcp",
             "resend-mcp"
           ],
-          "monthly_cost": "EUR 50-150 (API usage)",
+          "monthly_cost": "EUR 50-150/mo (API usage) + 12-18hrs initial build",
           "pros": [
             "Fully branded experience",
             "Custom intake logic",
@@ -576,7 +576,7 @@
           ]
         },
         "targeted_upgrade": {
-          "when_needed": "Only if your current tools have no API or are fundamentally broken for automated client intake & onboarding",
+          "when_needed": "When you want a managed intake platform with industry-specific forms, conflict checking, and CRM integration",
           "tools": [
             "Clio Grow",
             "Lawmatics",
@@ -621,7 +621,7 @@
         "assumptions": "Speed of intake matters most for consumer-facing practices; B2B matters less time-sensitive; conflict checking accuracy is critical"
       },
       "our_recommendation": "connect_and_automate",
-      "recommendation_rationale": "Your existing tools likely support API integration. A Claude workflow connecting them for automated client intake & onboarding ships in days, not weeks, and costs a fraction of a SaaS subscription."
+      "recommendation_rationale": "Client intake automation built with Claude Code can connect your website forms, CRM, and document management to create a seamless onboarding workflow tailored to your practice areas."
     },
     {
       "id": "ai-legal-research",
@@ -703,7 +703,7 @@
           ]
         },
         "targeted_upgrade": {
-          "when_needed": "Only if your current tools have no API or are fundamentally broken for ai-powered legal/regulatory research",
+          "when_needed": "When you want a managed legal research platform with verified case law databases and citation checking",
           "tools": [
             "CoCounsel (Thomson Reuters)",
             "Lexis+ AI",
@@ -748,7 +748,7 @@
         "assumptions": "AI research supplements but does not replace legal judgment; citation verification is essential; results vary by practice area complexity"
       },
       "our_recommendation": "connect_and_automate",
-      "recommendation_rationale": "Your existing tools likely support API integration. A Claude workflow connecting them for ai-powered legal/regulatory research ships in days, not weeks, and costs a fraction of a SaaS subscription."
+      "recommendation_rationale": "Legal research workflows with Claude API can analyze your specific research patterns and jurisdiction focus to surface relevant precedents and regulatory changes more efficiently than manual research."
     },
     {
       "id": "client-portal",
@@ -800,7 +800,7 @@
             "supabase-mcp",
             "resend-mcp"
           ],
-          "monthly_cost": "EUR 50-150 (API usage)",
+          "monthly_cost": "EUR 50-150/mo (API usage) + 12-18hrs initial build",
           "pros": [
             "Fully branded experience",
             "Custom workflow stages",
@@ -833,7 +833,7 @@
           ]
         },
         "targeted_upgrade": {
-          "when_needed": "Only if your current tools have no API or are fundamentally broken for client portal & self-service",
+          "when_needed": "When you want a managed client portal with secure document sharing, billing, and practice management integration",
           "tools": [
             "Clio Connect",
             "MyCase Client Portal",
@@ -878,7 +878,7 @@
         "assumptions": "Client adoption varies; older clients may prefer phone; portal value compounds as clients learn to self-serve"
       },
       "our_recommendation": "connect_and_automate",
-      "recommendation_rationale": "Your existing tools likely support API integration. A Claude workflow connecting them for client portal & self-service ships in days, not weeks, and costs a fraction of a SaaS subscription."
+      "recommendation_rationale": "A client portal built with Claude Code can connect your document management, billing, and matter tracking systems into a unified self-service experience branded to your firm."
     },
     {
       "id": "email-ai-assistant",
@@ -930,7 +930,7 @@
             "gmail-mcp",
             "supabase-mcp"
           ],
-          "monthly_cost": "EUR 50-150 (API usage)",
+          "monthly_cost": "EUR 50-150/mo (API usage) + 12-18hrs initial build",
           "pros": [
             "Firm-specific tone and templates",
             "Matter-aware drafting",
@@ -964,7 +964,7 @@
           ]
         },
         "targeted_upgrade": {
-          "when_needed": "Only if your current tools have no API or are fundamentally broken for ai email drafting & triage",
+          "when_needed": "When you want a managed email assistant with industry-specific templates and compliance guardrails",
           "tools": [
             "Microsoft Copilot for Outlook",
             "Google Gemini for Workspace",
@@ -1009,7 +1009,7 @@
         "assumptions": "Professionals still review all AI-drafted emails before sending; confidential communications need extra care; results improve with usage"
       },
       "our_recommendation": "connect_and_automate",
-      "recommendation_rationale": "Your existing tools likely support API integration. A Claude workflow connecting them for ai email drafting & triage ships in days, not weeks, and costs a fraction of a SaaS subscription."
+      "recommendation_rationale": "Email drafting and triage with Claude API connected to your email and matter management systems can prioritize urgent communications and draft context-aware responses using your firm's specific tone and templates."
     },
     {
       "id": "proposal-automation",
@@ -1064,7 +1064,7 @@
             "supabase-mcp",
             "google-docs-mcp"
           ],
-          "monthly_cost": "EUR 50-150 (API usage)",
+          "monthly_cost": "EUR 50-150/mo (API usage) + 12-18hrs initial build",
           "pros": [
             "Firm-specific content generation",
             "Auto-pulls relevant credentials",
@@ -1098,7 +1098,7 @@
           ]
         },
         "targeted_upgrade": {
-          "when_needed": "Only if your current tools have no API or are fundamentally broken for ai-assisted proposal & rfp response",
+          "when_needed": "When you want a managed proposal platform with content libraries, collaboration, and analytics",
           "tools": [
             "Qwilr",
             "PandaDoc",
@@ -1143,7 +1143,7 @@
         "assumptions": "AI-generated proposals need partner review and customization; content library quality drives output quality"
       },
       "our_recommendation": "connect_and_automate",
-      "recommendation_rationale": "Your existing tools likely support API integration. A Claude workflow connecting them for ai-assisted proposal & rfp response ships in days, not weeks, and costs a fraction of a SaaS subscription."
+      "recommendation_rationale": "Proposal generation with Claude API connected to your past proposals and case data enables personalized, data-driven responses that leverage your firm's track record and expertise."
     },
     {
       "id": "knowledge-management-ai",
@@ -1225,7 +1225,7 @@
           ]
         },
         "targeted_upgrade": {
-          "when_needed": "Only if your current tools have no API or are fundamentally broken for ai knowledge management",
+          "when_needed": "When you want an enterprise knowledge platform with advanced search, permissions, and compliance features",
           "tools": [
             "Guru",
             "Notion AI",
@@ -1270,7 +1270,7 @@
         "assumptions": "Knowledge management ROI is long-term and compounds; initial content curation effort is significant; adoption requires cultural change"
       },
       "our_recommendation": "connect_and_automate",
-      "recommendation_rationale": "Your existing tools likely support API integration. A Claude workflow connecting them for ai knowledge management ships in days, not weeks, and costs a fraction of a SaaS subscription."
+      "recommendation_rationale": "Knowledge management with Claude API can connect your document repositories, email archives, and matter files into a searchable knowledge base that surfaces relevant precedents and expertise."
     },
     {
       "id": "billing-collections",
@@ -1324,7 +1324,7 @@
             "supabase-mcp",
             "resend-mcp"
           ],
-          "monthly_cost": "EUR 50-150 (API usage)",
+          "monthly_cost": "EUR 50-150/mo (API usage) + 12-18hrs initial build",
           "pros": [
             "Custom fee structures",
             "AI billing narratives",
@@ -1359,7 +1359,7 @@
           ]
         },
         "targeted_upgrade": {
-          "when_needed": "Only if your current tools have no API or are fundamentally broken for automated billing & collections",
+          "when_needed": "When you want a managed billing platform with trust accounting, compliance, and payment processing",
           "tools": [
             "Clio Payments",
             "LawPay",
@@ -1404,7 +1404,7 @@
         "assumptions": "Online payment adoption is high for consumer clients; corporate clients may still require e-billing; collection improvement depends on existing process maturity"
       },
       "our_recommendation": "connect_and_automate",
-      "recommendation_rationale": "Your existing tools likely support API integration. A Claude workflow connecting them for automated billing & collections ships in days, not weeks, and costs a fraction of a SaaS subscription."
+      "recommendation_rationale": "Billing automation with Claude Code can connect your time tracking, matter management, and accounting systems to generate invoices and follow up on collections automatically."
     },
     {
       "id": "predictive-billing-analytics",
@@ -1486,7 +1486,7 @@
           ]
         },
         "targeted_upgrade": {
-          "when_needed": "Only if your current tools have no API or are fundamentally broken for predictive billing & revenue analytics",
+          "when_needed": "When you want managed financial analytics with industry benchmarks and predictive modeling",
           "tools": [
             "Brightflag",
             "Clocktimizer",
@@ -1531,7 +1531,7 @@
         "assumptions": "Prediction accuracy improves with more data; firm must act on budget alerts for value to materialize"
       },
       "our_recommendation": "connect_and_automate",
-      "recommendation_rationale": "Your existing tools likely support API integration. A Claude workflow connecting them for predictive billing & revenue analytics ships in days, not weeks, and costs a fraction of a SaaS subscription."
+      "recommendation_rationale": "Revenue analytics with Claude API connected to your billing and matter data can identify collection risks, predict cash flow, and surface pricing optimization opportunities specific to your practice areas."
     },
     {
       "id": "compliance-monitoring-ai",
@@ -1614,7 +1614,7 @@
           ]
         },
         "targeted_upgrade": {
-          "when_needed": "Only if your current tools have no API or are fundamentally broken for ai compliance monitoring & regulatory tracking",
+          "when_needed": "When you want a managed compliance platform with regulatory databases and automated monitoring",
           "tools": [
             "Docket Alarm",
             "ComplianceHR",
@@ -1664,7 +1664,7 @@
         "demand_expansion_potential": "30% more compliance clients manageable with same team"
       },
       "our_recommendation": "connect_and_automate",
-      "recommendation_rationale": "Your existing tools likely support API integration. A Claude workflow connecting them for ai compliance monitoring & regulatory tracking ships in days, not weeks, and costs a fraction of a SaaS subscription."
+      "recommendation_rationale": "Compliance monitoring with Claude API can track regulatory changes relevant to your practice areas and automatically flag client impacts — customized to your specific jurisdictions and compliance requirements."
     }
   ],
   "anti_patterns": [
