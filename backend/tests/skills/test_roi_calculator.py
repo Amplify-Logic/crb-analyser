@@ -127,7 +127,7 @@ class TestROICalculatorSkill:
         # ROI = (23400 / 1100) * 100 = 2127%
         assert metrics["roi_raw"] > 2000
         assert metrics["roi_adjusted"] == metrics["roi_raw"]  # High confidence = 1.0
-        assert metrics["payback_months"] < 1  # Very fast payback
+        assert metrics["payback_months"] >= 1.0  # Minimum 1 month floor
 
     def test_calculate_roi_with_medium_confidence(self):
         """Test confidence adjustment is applied."""
@@ -601,6 +601,32 @@ class TestCalculateFinancials:
         result = skill._calculate_financials(time_savings, recommendation, company_data)
         assert result["implementation_cost"] == 1000
         assert result["monthly_cost"] == 150
+
+
+class TestPaybackFloor:
+    def test_payback_not_less_than_one_month(self):
+        """Payback period should never be less than 1 month."""
+        skill = ROICalculatorSkill()
+        financial = {
+            "yearly_savings": 38000,
+            "yearly_cost": 600,
+            "implementation_cost": 500,
+        }
+        finding = {"confidence": "medium"}
+        result = skill._calculate_roi_metrics(financial, finding)
+        assert result["payback_months"] >= 1.0
+
+    def test_payback_realistic_for_high_roi(self):
+        """Even with very high ROI, payback should be at least 1 month."""
+        skill = ROICalculatorSkill()
+        financial = {
+            "yearly_savings": 100000,
+            "yearly_cost": 600,
+            "implementation_cost": 500,
+        }
+        finding = {"confidence": "high"}
+        result = skill._calculate_roi_metrics(financial, finding)
+        assert result["payback_months"] >= 1.0
 
 
 class TestROICalculatorIntegration:

@@ -502,9 +502,9 @@ Return ONLY a JSON object:
         factor = CONFIDENCE_FACTORS.get(confidence, 0.85)
         roi_adjusted = roi_raw * factor
 
-        # Payback period in months
+        # Payback period in months (minimum 1 month — sub-month payback is not credible)
         if net_annual > 0:
-            payback_months = (implementation_cost / (net_annual / 12))
+            payback_months = max(1.0, implementation_cost / (net_annual / 12))
         else:
             # Net annual is zero or negative - payback is very long or never
             if yearly_savings > 0:
