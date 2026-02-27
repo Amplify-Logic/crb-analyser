@@ -101,8 +101,8 @@ def extract_vendor_mentions(recommendations: List[Dict[str, Any]]) -> Dict[str, 
     """
     Extract vendor mentions from recommendations for partnership tracking.
 
-    Tracks which vendors appear in off_the_shelf and best_in_class options
-    to understand which vendors are recommended most frequently.
+    Tracks which vendors appear in recommendation options (both AIOS and legacy
+    formats) to understand which vendors are recommended most frequently.
 
     Returns:
         Dict with vendor_mentions list and category breakdown
@@ -110,33 +110,30 @@ def extract_vendor_mentions(recommendations: List[Dict[str, Any]]) -> Dict[str, 
     vendor_mentions = []
     category_counts: Dict[str, int] = {}
 
+    # Check both AIOS and legacy option keys for vendor references
+    _option_keys_to_check = [
+        ("targeted_upgrade", "targeted_upgrade"),
+        ("enhance_with_ai", "enhance_with_ai"),
+        ("connect_and_automate", "connect_and_automate"),
+        ("off_the_shelf", "off_the_shelf"),
+        ("best_in_class", "best_in_class"),
+    ]
+
     for rec in recommendations:
         options = rec.get("options", {})
         rec_title = rec.get("title", "Unknown")
 
-        # Track off_the_shelf vendor
-        off_shelf = options.get("off_the_shelf", {})
-        if off_shelf.get("vendor"):
-            vendor_name = off_shelf["vendor"]
-            vendor_mentions.append({
-                "vendor": vendor_name,
-                "option_type": "off_the_shelf",
-                "recommendation": rec_title,
-                "monthly_cost": off_shelf.get("monthly_cost"),
-            })
-            category_counts[vendor_name] = category_counts.get(vendor_name, 0) + 1
-
-        # Track best_in_class vendor
-        best_class = options.get("best_in_class", {})
-        if best_class.get("vendor"):
-            vendor_name = best_class["vendor"]
-            vendor_mentions.append({
-                "vendor": vendor_name,
-                "option_type": "best_in_class",
-                "recommendation": rec_title,
-                "monthly_cost": best_class.get("monthly_cost"),
-            })
-            category_counts[vendor_name] = category_counts.get(vendor_name, 0) + 1
+        for option_key, option_type in _option_keys_to_check:
+            option = options.get(option_key, {})
+            vendor_name = option.get("vendor") or option.get("name")
+            if vendor_name:
+                vendor_mentions.append({
+                    "vendor": vendor_name,
+                    "option_type": option_type,
+                    "recommendation": rec_title,
+                    "monthly_cost": option.get("monthly_cost"),
+                })
+                category_counts[vendor_name] = category_counts.get(vendor_name, 0) + 1
 
     return {
         "mentions": vendor_mentions,
@@ -162,17 +159,25 @@ class ReportGenerator:
     MAX_RETRIES = 3
     RETRY_DELAYS = [1, 2, 4]  # Exponential backoff delays in seconds
 
-    def __init__(self, quiz_session_id: str, tier: str = "quick", model_strategy: Optional[str] = None, skip_review: bool = False):
+    def __init__(self, quiz_session_id: str, tier: str = "quick", model_strategy: Optional[str] = None, skip_review: bool = False, dev_mode: bool = False):
         self.quiz_session_id = quiz_session_id
         self.tier = tier
         self.model_strategy = model_strategy  # Optional strategy override for dev testing
         self.skip_review = skip_review
-        self.client = Anthropic(api_key=settings.ANTHROPIC_API_KEY)
+        self.dev_mode = dev_mode
+
+        if dev_mode:
+            from src.config.claude_cli_client import ClaudeCodeClient
+            self.client = ClaudeCodeClient()
+            logger.info("DEV MODE: Using Claude CLI (Max subscription) instead of Anthropic API")
+        else:
+            self.client = Anthropic(api_key=settings.ANTHROPIC_API_KEY)
+
         self.context: Dict[str, Any] = {}
         self.report_id: Optional[str] = None
         self.token_tracker = TokenTracker()
         self._partial_data: Dict[str, Any] = {}  # Store partial results for recovery
-        self.review_service = ReviewService(tier=tier)  # Multi-model review & refinement
+        self.review_service = ReviewService(tier=tier, client=self.client if dev_mode else None)
         self.trace_collector: Optional[TraceCollector] = None  # Initialized when report_id is created
 
         # Apply model strategy overrides
@@ -883,6 +888,12 @@ class ReportGenerator:
             yield {"phase": "recommendations", "step": "Generating recommendations...", "progress": 60}
 
             recommendations = await self._generate_recommendations(findings)
+
+            # Enrich recommendations with crb_analysis computed from AIOS option costs
+            for rec in recommendations:
+                if not rec.get("crb_analysis") or not rec["crb_analysis"].get("cost", {}).get("total", 0):
+                    rec["crb_analysis"] = self._compute_crb_analysis(rec)
+
             self._partial_data["recommendations"] = recommendations  # Track for recovery
 
             # Emit preview of each recommendation
@@ -981,23 +992,68 @@ class ReportGenerator:
                         report_id=self.report_id,
                     )
 
-            # Update findings and recommendations - be resilient to missing columns
+            # Update findings and recommendations
+            # Save findings and recommendations first (core data)
+            # Then save math_validation separately (optional column)
+            logger.info(
+                "saving_findings_and_recommendations",
+                recs_count=len(recommendations),
+                findings_count=len(findings),
+                report_id=self.report_id,
+            )
             try:
                 await supabase.table("reports").update({
                     "recommendations": recommendations,
                     "findings": findings,
-                    "math_validation": validation_results,
                 }).eq("id", self.report_id).execute()
             except Exception as db_err:
-                if "column" in str(db_err).lower() and "schema cache" in str(db_err).lower():
-                    logger.warning("db_columns_missing_math_validation", error=str(db_err), report_id=self.report_id)
+                logger.error("db_save_recs_findings_failed", error=str(db_err), report_id=self.report_id)
+                # Try saving separately as last resort
+                try:
                     await supabase.table("reports").update({
                         "recommendations": recommendations,
+                    }).eq("id", self.report_id).execute()
+                    logger.info("recommendations_saved_separately", count=len(recommendations), report_id=self.report_id)
+                except Exception as rec_err:
+                    logger.error("recommendations_save_failed", error=str(rec_err), report_id=self.report_id)
+                try:
+                    await supabase.table("reports").update({
                         "findings": findings,
                     }).eq("id", self.report_id).execute()
+                    logger.info("findings_saved_separately", count=len(findings), report_id=self.report_id)
+                except Exception as find_err:
+                    logger.error("findings_save_failed", error=str(find_err), report_id=self.report_id)
+
+            # Verify recommendations actually persisted
+            try:
+                verify_result = await supabase.table("reports").select(
+                    "recommendations"
+                ).eq("id", self.report_id).single().execute()
+                saved_count = len(verify_result.data.get("recommendations") or []) if verify_result.data else 0
+                if saved_count != len(recommendations):
+                    logger.error(
+                        "recommendations_verification_mismatch",
+                        expected=len(recommendations),
+                        actual=saved_count,
+                        report_id=self.report_id,
+                    )
+                    # Retry save
+                    await supabase.table("reports").update({
+                        "recommendations": recommendations,
+                    }).eq("id", self.report_id).execute()
+                    logger.info("recommendations_retry_save_complete", count=len(recommendations), report_id=self.report_id)
                 else:
-                    logger.error("db_update_failed_math_validation", error=str(db_err), report_id=self.report_id)
-                    raise
+                    logger.info("recommendations_verified", count=saved_count, report_id=self.report_id)
+            except Exception as verify_err:
+                logger.warning("recommendations_verification_failed", error=str(verify_err), report_id=self.report_id)
+
+            # Save math_validation separately (column may not exist)
+            try:
+                await supabase.table("reports").update({
+                    "math_validation": validation_results,
+                }).eq("id", self.report_id).execute()
+            except Exception:
+                pass  # math_validation column is optional
 
             # Phase 5b: Identify quick wins
             yield {"phase": "quick_wins", "step": "Identifying quick wins...", "progress": 76}
@@ -1075,33 +1131,26 @@ class ReportGenerator:
 
             yield {"phase": "post_report", "step": "Follow-up plan ready", "progress": 94}
 
-            # Save all new enhanced report data - be resilient to missing columns
+            # Save enhanced report data (columns that exist in schema)
             try:
                 await supabase.table("reports").update({
                     "playbooks": playbooks,
                     "system_architecture": system_architecture,
                     "industry_insights": industry_insights,
                     "automation_summary": automation_summary,
+                }).eq("id", self.report_id).execute()
+            except Exception as db_err:
+                logger.error("enhanced_report_data_save_failed", error=str(db_err), report_id=self.report_id)
+                self._partial_data["_enhanced_save_failed"] = True
+
+            # Save post-report metadata (columns may not exist yet)
+            try:
+                await supabase.table("reports").update({
                     "follow_up_schedule": post_report_data.get("follow_up_schedule", {}),
                     "upsell_analysis": post_report_data.get("upsell_analysis", {}),
                 }).eq("id", self.report_id).execute()
-            except Exception as db_err:
-                if "column" in str(db_err).lower() and "schema cache" in str(db_err).lower():
-                    logger.warning("db_columns_missing_enhanced_data", error=str(db_err), report_id=self.report_id)
-                    try:
-                        await supabase.table("reports").update({
-                            "playbooks": playbooks,
-                            "system_architecture": system_architecture,
-                            "industry_insights": industry_insights,
-                            "automation_summary": automation_summary,
-                        }).eq("id", self.report_id).execute()
-                    except Exception as fallback_db_err:
-                        # Last resort - save nothing extra, set flag for upstream awareness
-                        logger.error("enhanced_report_data_save_failed", error=str(fallback_db_err), report_id=self.report_id, sections_lost=["playbooks", "system_architecture", "industry_insights", "automation_summary"])
-                        self._partial_data["_enhanced_save_failed"] = True
-                else:
-                    logger.error("db_update_failed_enhanced_data", error=str(db_err), report_id=self.report_id)
-                    raise
+            except Exception:
+                pass  # follow_up_schedule / upsell_analysis columns are optional
 
             # Phase 7: Finalize
             self.trace_collector.start_phase("finalization")
@@ -1220,7 +1269,7 @@ class ReportGenerator:
                                 rec["roi_calculation_note"] = "ROI could not be calculated with available data"
                                 rec.pop("roi_pending_calculation", None)
                                 logger.warning(f"[FINALIZE] ROI recalculation failed for {rec.get('id')}")
-                        except (ValueError, KeyError, TypeError, RuntimeError) as roi_e:
+                        except (ValueError, KeyError, TypeError, RuntimeError, Exception) as roi_e:
                             rec["roi_calculation_failed"] = True
                             rec["roi_calculation_note"] = "ROI could not be calculated with available data"
                             rec.pop("roi_pending_calculation", None)
@@ -1276,33 +1325,27 @@ class ReportGenerator:
             # ================================================================
 
             logger.info(f"[FINALIZE] Updating report status to qa_pending...")
+            # Save status + core metadata (these columns always exist)
             try:
-                # Try with all fields first including generation trace
                 await supabase.table("reports").update({
                     **update_data,
                     "token_usage": self.token_tracker.to_dict(),
                     "assumption_log": assumption_log,
+                }).eq("id", self.report_id).execute()
+                logger.info(f"[FINALIZE] Report status updated successfully")
+            except Exception as update_err:
+                logger.warning("finalize_status_update_partial", error=str(update_err), report_id=self.report_id)
+                # Minimal fallback: at least set the status
+                await supabase.table("reports").update(update_data).eq("id", self.report_id).execute()
+                logger.info(f"[FINALIZE] Report status updated with minimal data")
+
+            # Save generation trace separately (may fail if column missing or data too large)
+            try:
+                await supabase.table("reports").update({
                     "generation_trace": generation_trace.to_dict(),
                 }).eq("id", self.report_id).execute()
-                logger.info(f"[FINALIZE] Report status updated successfully with generation trace")
-            except Exception as update_err:
-                if "column" in str(update_err).lower() and "schema cache" in str(update_err).lower():
-                    # Column doesn't exist, try without generation_trace
-                    logger.warning("finalize_columns_missing_generation_trace", error=str(update_err), report_id=self.report_id)
-                    try:
-                        await supabase.table("reports").update({
-                            **update_data,
-                            "token_usage": self.token_tracker.to_dict(),
-                            "assumption_log": assumption_log,
-                        }).eq("id", self.report_id).execute()
-                        logger.info(f"[FINALIZE] Report status updated without generation_trace")
-                    except Exception as fallback_update_err:
-                        logger.error("finalize_fallback_update_failed", error=str(fallback_update_err), report_id=self.report_id, sections_lost=["token_usage", "assumption_log"])
-                        await supabase.table("reports").update(update_data).eq("id", self.report_id).execute()
-                        logger.info(f"[FINALIZE] Report status updated with minimal data")
-                else:
-                    logger.error("finalize_db_update_failed", error=str(update_err), report_id=self.report_id)
-                    raise
+            except Exception:
+                logger.warning("generation_trace_save_skipped", report_id=self.report_id)
 
             # Update quiz session - pending QA review
             logger.info(f"[FINALIZE] Updating quiz session status to qa_pending...")
@@ -1465,7 +1508,7 @@ class ReportGenerator:
                         f"ExecSummarySkill failed, using legacy method: "
                         f"{result.warnings}"
                     )
-            except (ValueError, KeyError, TypeError, RuntimeError) as e:
+            except (ValueError, KeyError, TypeError, RuntimeError, Exception) as e:
                 logger.warning("exec_summary_skill_failed", error=str(e), error_type=type(e).__name__)
 
         # Fall back to legacy method
@@ -1476,9 +1519,11 @@ class ReportGenerator:
         answers = self.context.get("answers", {})
         results = self.context.get("results", {})
         industry_knowledge = self.context.get("industry_knowledge", {})
+        company_name = self.context.get("company_name", "")
+        company_line = f"\nCOMPANY: {company_name}" if company_name else ""
 
         prompt = f"""Based on the following quiz responses, generate an executive summary for a CRB Analysis report.
-
+{company_line}
 QUIZ ANSWERS:
 {json.dumps(answers, indent=2)}
 
@@ -1520,7 +1565,7 @@ Generate a JSON executive summary with this EXACT structure:
 }}
 
 CRITICAL: The "shareable_summary" must be ONE sentence that a busy executive can forward to their team. It should state the situation AND the priority action.
-
+{f"CRITICAL: The key_insight MUST mention the company by name ('{company_name}')." if company_name else ""}
 Be realistic and honest. Include at least one "not_recommended" item.
 Return ONLY the JSON, no explanation."""
 
@@ -1766,7 +1811,9 @@ IMPORTANT:
 
                 # Validate category against allowed list
                 VALID_CATEGORIES = ["operations", "sales", "customer_experience", "finance", "marketing", "hr", "compliance", "technology"]
+                CATEGORY_ALIASES = {"client_experience": "customer_experience"}
                 category = finding.get("category", "operations")
+                category = CATEGORY_ALIASES.get(category, category)
                 if category not in VALID_CATEGORIES:
                     logger.warning(f"Invalid category '{category}' for finding '{finding.get('id')}', defaulting to 'operations'")
                     category = "operations"
@@ -1938,7 +1985,7 @@ IMPORTANT:
                             bic_monthly = bic_kb_pricing["monthly"]
                             bic_pricing_source = "knowledge_base"
 
-                    # Create a consolidated recommendation for the platform
+                    # Create a consolidated recommendation for the platform (AIOS format)
                     platform_finding_titles = platform_rec.finding_titles[:3]
                     rec = {
                         "id": f"rec-platform-{platform_rec.category}",
@@ -1959,12 +2006,29 @@ IMPORTANT:
                         "finding_titles": platform_rec.finding_titles,
                         "platform_category": platform_rec.category,
                         "options": {
-                            "off_the_shelf": {
-                                "name": platform_rec.recommended_vendor.title(),
-                                "vendor": platform_rec.recommended_vendor.title(),
-                                "monthly_cost": ots_monthly,
-                                "implementation_weeks": 2,
-                                "implementation_cost": ots_setup,
+                            "connect_and_automate": {
+                                "approach": "Build custom workflows with existing tools + Make/n8n",
+                                "build_time": "6 weeks",
+                                "tools_used": ["Make", "n8n", "Claude API"],
+                                "mcp_servers": [],
+                                "monthly_cost": f"EUR 50",
+                                "pros": ["Uses your existing stack", "Full control", "Lower ongoing cost"],
+                                "cons": ["Higher upfront build investment", "Requires maintenance"],
+                            },
+                            "enhance_with_ai": {
+                                "approach": f"Deploy {bic_name} with AI-powered features",
+                                "build_time": "4 weeks",
+                                "tools_used": [bic_name],
+                                "monthly_cost": f"EUR {bic_monthly}",
+                                "pricing_source": bic_pricing_source,
+                                "pros": ["More advanced AI features", "Better for scaling"],
+                                "cons": ["Higher cost", "Longer implementation"],
+                            },
+                            "targeted_upgrade": {
+                                "when_needed": f"If existing tools cannot be connected",
+                                "tools": [platform_rec.recommended_vendor.title()],
+                                "cost_range": f"EUR {ots_monthly}/mo + EUR {ots_setup} setup",
+                                "migration_time": "2 weeks",
                                 "pricing_source": ots_pricing_source,
                                 "pros": [
                                     f"Solves {len(platform_rec.solves_findings)} findings at once",
@@ -1974,38 +2038,33 @@ IMPORTANT:
                                 "cons": [
                                     "May have more features than needed",
                                     "Learning curve for full platform",
+                                    "Vendor lock-in",
                                 ],
                             },
-                            "best_in_class": {
-                                "name": bic_name,
-                                "vendor": bic_name,
-                                "monthly_cost": bic_monthly,
-                                "implementation_weeks": 4,
-                                "implementation_cost": bic_setup,
-                                "pricing_source": bic_pricing_source,
-                                "pros": ["More advanced features", "Better for scaling"],
-                                "cons": ["Higher cost", "Longer implementation"],
-                            },
-                            "custom_solution": {
-                                "approach": "Build custom workflows with existing tools + Make/n8n",
-                                "estimated_cost": {"min": 2000, "max": 5000},
-                                "monthly_running_cost": 50,
-                                "implementation_weeks": 6,
-                                "pros": ["Perfect fit", "Lower ongoing cost"],
-                                "cons": ["Higher upfront investment", "Requires maintenance"],
-                            },
                         },
-                        "our_recommendation": "off_the_shelf",
+                        "our_recommendation": (
+                            "targeted_upgrade"
+                            if len(platform_rec.solves_findings) >= 4
+                            else "connect_and_automate"
+                        ),
                         "recommendation_rationale": (
-                            f"A single {platform_rec.display_name} platform like {platform_rec.recommended_vendor.title()} "
-                            f"addresses {len(platform_rec.solves_findings)} of your findings instead of buying "
-                            f"separate tools for each. This simplifies training, reduces integration complexity, "
-                            f"and typically costs less than multiple point solutions."
+                            (
+                                f"{platform_rec.recommended_vendor.title()} addresses "
+                                f"{len(platform_rec.solves_findings)} findings in one platform — "
+                                f"lower total cost and faster time-to-value than building "
+                                f"{len(platform_rec.solves_findings)} separate integrations."
+                            )
+                            if len(platform_rec.solves_findings) >= 4
+                            else (
+                                f"Start by connecting your existing tools with AI workflows (Make/n8n + Claude) "
+                                f"to address {len(platform_rec.solves_findings)} findings. If integration proves "
+                                f"insufficient, consider {platform_rec.recommended_vendor.title()} as a platform upgrade."
+                            )
                         ),
                         "assumptions": [
                             f"Platform addresses {len(platform_rec.solves_findings)} related findings",
-                            f"Off-the-shelf pricing: {'verified from knowledge base' if ots_pricing_source == 'knowledge_base' else 'estimated (not verified)'}",
-                            f"Best-in-class pricing: {'verified from knowledge base' if bic_pricing_source == 'knowledge_base' else 'estimated (not verified)'}",
+                            f"Connect option pricing: estimated based on Make/n8n + Claude API",
+                            f"Upgrade option pricing: {'verified from knowledge base' if ots_pricing_source == 'knowledge_base' else 'estimated (not verified)'}",
                         ],
                         "consolidation_note": consolidation.consolidation_savings,
                     }
@@ -2058,7 +2117,7 @@ IMPORTANT:
                                 rec["roi_percentage"] = 0
                                 rec["payback_months"] = 0
                                 rec["roi_warning"] = "ROI calculation failed - requires manual review"
-                        except (ValueError, KeyError, TypeError, RuntimeError) as roi_e:
+                        except (ValueError, KeyError, TypeError, RuntimeError, Exception) as roi_e:
                             logger.warning("platform_roi_calculation_failed", platform=platform_rec.category, error=str(roi_e), error_type=type(roi_e).__name__)
                             rec["roi_percentage"] = 0
                             rec["payback_months"] = 0
@@ -2103,6 +2162,12 @@ IMPORTANT:
 
                                     if vendor_result.success:
                                         vendor_data = vendor_result.data
+                                        # AIOS format enrichment
+                                        if vendor_data.get("off_the_shelf") and rec.get("options", {}).get("targeted_upgrade"):
+                                            rec["options"]["targeted_upgrade"]["matched_vendor"] = vendor_data["off_the_shelf"]
+                                        if vendor_data.get("best_in_class") and rec.get("options", {}).get("enhance_with_ai"):
+                                            rec["options"]["enhance_with_ai"]["matched_vendor"] = vendor_data["best_in_class"]
+                                        # Legacy format fallback
                                         if vendor_data.get("off_the_shelf") and rec.get("options", {}).get("off_the_shelf"):
                                             rec["options"]["off_the_shelf"]["matched_vendor"] = vendor_data["off_the_shelf"]
                                         if vendor_data.get("best_in_class") and rec.get("options", {}).get("best_in_class"):
@@ -2112,7 +2177,7 @@ IMPORTANT:
                                             "confidence": vendor_data.get("match_confidence"),
                                             "alternatives": vendor_data.get("alternatives", []),
                                         }
-                                except (ValueError, KeyError, TypeError, RuntimeError) as vendor_e:
+                                except (ValueError, KeyError, TypeError, RuntimeError, Exception) as vendor_e:
                                     logger.warning("vendor_matching_failed", finding_id=finding.get("id"), error=str(vendor_e), error_type=type(vendor_e).__name__)
 
                             # Enrich with detailed ROI analysis
@@ -2138,7 +2203,7 @@ IMPORTANT:
                                             rec["roi_confidence_adjusted"] = roi_result.data.get("roi_confidence_adjusted")
                                             rec["payback_months"] = roi_result.data.get("payback_months")
                                             rec.pop("roi_pending_calculation", None)
-                                except (ValueError, KeyError, TypeError, RuntimeError) as roi_e:
+                                except (ValueError, KeyError, TypeError, RuntimeError, Exception) as roi_e:
                                     logger.warning("roi_calculation_skipped", finding_id=finding.get("id"), error=str(roi_e), error_type=type(roi_e).__name__)
 
                             # Validate ROI values
@@ -2204,7 +2269,7 @@ IMPORTANT:
                                                 rec["recommendation_source"] = "llm_confirmed"
                                         else:
                                             rec["recommendation_source"] = "llm_confirmed"
-                                except (ValueError, KeyError, TypeError, RuntimeError) as ns_e:
+                                except (ValueError, KeyError, TypeError, RuntimeError, Exception) as ns_e:
                                     logger.warning("net_score_calculation_failed", finding_id=finding.get("id"), error=str(ns_e), error_type=type(ns_e).__name__)
 
                             # Enrich with four-options personalized recommendations
@@ -2219,7 +2284,7 @@ IMPORTANT:
 
                                     if four_result.success:
                                         rec["four_options"] = four_result.data
-                                except (ValueError, KeyError, TypeError, RuntimeError) as four_e:
+                                except (ValueError, KeyError, TypeError, RuntimeError, Exception) as four_e:
                                     logger.warning("four_options_failed", finding_id=finding.get("id"), error=str(four_e), error_type=type(four_e).__name__)
 
                             # Add automation insight from finding's connect_path
@@ -2250,7 +2315,7 @@ IMPORTANT:
                                 }
 
                             return rec
-                        except (ValueError, KeyError, TypeError, RuntimeError) as e:
+                        except Exception as e:
                             logger.warning("three_options_skill_failed", finding_id=finding.get("id"), error=str(e), error_type=type(e).__name__)
                             return None
 
@@ -2289,7 +2354,7 @@ IMPORTANT:
                     )
                     return recommendations
 
-            except (ValueError, KeyError, TypeError, RuntimeError) as e:
+            except (ValueError, KeyError, TypeError, RuntimeError, Exception) as e:
                 logger.warning("recommendations_skill_failed", error=str(e), error_type=type(e).__name__, findings_count=len(findings))
 
         # Fall back to legacy method
@@ -2319,27 +2384,31 @@ AVAILABLE VENDORS FOR THIS INDUSTRY:
 {ai_tools_context}
 
 ═══════════════════════════════════════════════════════════════════════════════
-AIOS OPTIONS PATTERN (REQUIRED - Connect-First Philosophy)
+AIOS OPTIONS PATTERN (REQUIRED - Best-Fit-First)
 ═══════════════════════════════════════════════════════════════════════════════
 
-For EACH recommendation, provide ALL THREE options in this priority:
+For EACH recommendation, provide ALL THREE options:
 
-1. connect_and_automate (ALWAYS first choice): How to wire existing tools together with AI workflows.
+1. connect_and_automate: How to wire existing tools together with AI workflows.
+   Best when: company has engineering capacity, stack has APIs, unique workflows.
    Include: Claude Code build time, MCP servers needed, which existing tools are connected.
 
 2. enhance_with_ai: Add an AI intelligence layer on top of existing data/workflows.
    Include: What the AI agent does, what data it needs, deployment timeline.
 
-3. targeted_upgrade: Replace a specific tool ONLY if it genuinely blocks integration.
-   Include: Why existing tool is a dead end (no API, broken, data trapped), what to replace with.
+3. targeted_upgrade: Adopt a dedicated SaaS tool when it genuinely serves the company better.
+   Include: Why this tool is the right fit, what it solves natively, total cost comparison.
 
 RECOMMENDATION DECISION (evaluate per finding):
 1. If no digital tool exists for this function → recommend "targeted_upgrade" (buy API-ready foundation)
 2. If existing tool is a dead end (no API, data trapped) → recommend "targeted_upgrade" (replace with API-ready)
-3. Everything else → recommend "connect_and_automate" (adapt complexity to client readiness)
+3. If dedicated SaaS solves it natively AND (total cost incl. dev labor is lower, OR company lacks build capacity, OR compliance required, OR dramatically faster time-to-value) → recommend "targeted_upgrade" or "enhance_with_ai"
+4. If company has engineering capacity AND custom integration adds genuine value → recommend "connect_and_automate"
+5. If options are genuinely close → prefer "connect_and_automate" as tiebreaker
 
 CRITICAL RULES:
-- NEVER recommend "targeted_upgrade" just because a "better" tool exists
+- Do recommend "targeted_upgrade" when a dedicated tool genuinely solves the problem better/cheaper/faster
+- Do NOT recommend "targeted_upgrade" SOLELY because a newer tool exists without clear benefit
 - Every connect_and_automate option MUST include build_time and tools_used
 - When recommending targeted_upgrade, frame it as foundation for future automation
 - Include MCP servers where applicable
@@ -2399,7 +2468,7 @@ For each recommendation, use this EXACT structure:
             "cons": ["Needs training data", "Gradual rollout"]
         }},
         "targeted_upgrade": {{
-            "when_needed": "<Only if current tool has no API or is fundamentally broken>",
+            "when_needed": "<explain when this option genuinely makes sense>",
             "tools": ["<specific replacement tool>"],
             "cost_range": "<e.g. €200-500/month>",
             "migration_time": "<e.g. 4-6 weeks>",
@@ -2407,8 +2476,8 @@ For each recommendation, use this EXACT structure:
             "cons": ["Monthly SaaS cost", "Locked into vendor"]
         }}
     }},
-    "our_recommendation": "connect_and_automate",
-    "recommendation_rationale": "<why connecting existing tools is the best path for THIS business>",
+    "our_recommendation": "<best fit: connect_and_automate|enhance_with_ai|targeted_upgrade>",
+    "recommendation_rationale": "<why THIS specific option is the best path for THIS business>",
     "assumptions": [
         "<assumption 1 with specific numbers>",
         "<assumption 2 with specific numbers>",
@@ -2423,7 +2492,7 @@ CRITICAL REQUIREMENTS:
 2. connect_and_automate MUST include build_time, tools_used, and mcp_servers
 3. Cost and benefit numbers must be realistic and consistent across options
 4. Recommendation rationale must be specific to THIS business context
-5. Lead with CONNECT — only suggest replacement when tool genuinely blocks integration
+5. Recommend what genuinely serves THIS company best — prefer connect as tiebreaker when close
 
 Generate 5-10 recommendations. Return ONLY the JSON array."""
 
@@ -2544,7 +2613,7 @@ Generate 5-10 recommendations. Return ONLY the JSON array."""
                             rec["roi_percentage"] = 0
                             rec["payback_months"] = 0
                             rec["roi_warning"] = f"Finding {finding_id} not found for ROI calculation"
-                    except (ValueError, KeyError, TypeError, RuntimeError) as roi_e:
+                    except (ValueError, KeyError, TypeError, RuntimeError, Exception) as roi_e:
                         logger.warning("legacy_roi_calculation_failed", recommendation=rec.get("title"), error=str(roi_e), error_type=type(roi_e).__name__)
                         rec["roi_percentage"] = 0
                         rec["payback_months"] = 0
@@ -2583,6 +2652,107 @@ Generate 5-10 recommendations. Return ONLY the JSON array."""
         except (APIError, APIConnectionError, RateLimitError, json.JSONDecodeError, ValueError, KeyError, TypeError) as e:
             logger.error("recommendations_generation_failed", error=str(e), error_type=type(e).__name__)
             return []
+
+    @staticmethod
+    def _compute_crb_analysis(rec: Dict[str, Any]) -> Dict[str, Any]:
+        """
+        Compute crb_analysis from AIOS option costs.
+
+        AIOS options store costs as free-text strings (e.g. "EUR 50-150").
+        This method parses them and builds a proper CRBAnalysis-compatible dict
+        so downstream code (verdict, value_summary, PDF) can read structured costs.
+        """
+        # Skip if crb_analysis already has cost data
+        existing = rec.get("crb_analysis", {})
+        if existing and existing.get("cost", {}).get("total", 0) > 0:
+            return existing
+
+        our_rec = rec.get("our_recommendation", "connect_and_automate")
+        options = rec.get("options", {})
+        chosen = options.get(our_rec, {})
+
+        # Parse monthly cost from string
+        monthly_cost_raw = chosen.get("monthly_cost", "") or chosen.get("cost_range", "") or ""
+        if isinstance(monthly_cost_raw, str):
+            nums = re.findall(r'[\d,]+(?:\.\d+)?', monthly_cost_raw.replace(',', ''))
+            if nums:
+                parsed = [float(n) for n in nums]
+                monthly_cost = (parsed[0] + parsed[1]) / 2 if len(parsed) >= 2 else parsed[0]
+            else:
+                monthly_cost = 0.0
+        else:
+            monthly_cost = float(monthly_cost_raw or 0)
+
+        # Parse implementation cost from build_time
+        build_time = chosen.get("build_time", "") or chosen.get("migration_time", "")
+        impl_cost = 0.0
+        if build_time and isinstance(build_time, str):
+            nums = re.findall(r'\d+\.?\d*', build_time)
+            if nums:
+                parsed = [float(n) for n in nums]
+                avg_val = sum(parsed) / len(parsed)
+                lower = build_time.lower()
+                if 'hour' in lower:
+                    impl_cost = avg_val * 75  # EUR 75/hour consultant rate
+                elif 'day' in lower:
+                    impl_cost = avg_val * 600  # 8 hours * EUR 75
+                elif 'month' in lower:
+                    impl_cost = avg_val * 4 * 5 * 600  # weeks * days * day_rate
+                else:
+                    # Assume weeks
+                    impl_cost = avg_val * 5 * 600  # days * day_rate
+
+        # Year 1 costs
+        annual_software = int(monthly_cost * 12)
+        implementation = int(impl_cost)
+        training = int(impl_cost * 0.1)  # ~10% of implementation for training
+
+        # Year 2-3 costs (no implementation, just ongoing)
+        maintenance = int(monthly_cost * 0.15 * 12)  # 15% of software for maintenance
+        upgrades = int(monthly_cost * 0.1 * 12)  # 10% for upgrades
+
+        total_cost = annual_software + implementation + training + (maintenance * 2) + (upgrades * 2)
+
+        # Benefits from ROI if available
+        roi_pct = rec.get("roi_percentage", 0) or 0
+        year_one_investment = annual_software + implementation + training
+        if roi_pct > 0 and year_one_investment > 0:
+            annual_benefit = int(year_one_investment * roi_pct / 100)
+            short_benefit = int(annual_benefit * 0.3)
+            mid_benefit = int(annual_benefit * 0.8)
+            long_benefit = annual_benefit
+        else:
+            short_benefit = 0
+            mid_benefit = 0
+            long_benefit = 0
+
+        total_benefit = short_benefit + mid_benefit + long_benefit
+
+        return {
+            "cost": {
+                "short_term": {
+                    "software": annual_software,
+                    "implementation": implementation,
+                    "training": training,
+                },
+                "mid_term": {
+                    "software": annual_software,
+                    "maintenance": maintenance,
+                },
+                "long_term": {
+                    "software": annual_software,
+                    "upgrades": upgrades,
+                },
+                "total": total_cost,
+            },
+            "risk": [],
+            "benefit": {
+                "short_term": {"value_saved": short_benefit, "value_created": 0},
+                "mid_term": {"value_saved": mid_benefit, "value_created": 0},
+                "long_term": {"value_saved": long_benefit, "value_created": 0},
+                "total": total_benefit,
+            },
+        }
 
     def _enrich_build_it_yourself(self, recommendation_title: str, custom: Dict[str, Any]) -> Dict[str, Any]:
         """
@@ -2704,7 +2874,7 @@ Generate 5-10 recommendations. Return ONLY the JSON array."""
                         f"RoadmapSkill failed, using legacy method: "
                         f"{result.warnings}"
                     )
-            except (ValueError, KeyError, TypeError, RuntimeError) as e:
+            except Exception as e:
                 logger.warning("roadmap_skill_failed", error=str(e), error_type=type(e).__name__)
 
         # Fall back to legacy method
@@ -2814,18 +2984,30 @@ Return ONLY the JSON."""
                 continue
 
             # Get the recommended option's costs
-            our_rec = rec.get("our_recommendation", "off_the_shelf")
+            our_rec = rec.get("our_recommendation", "connect_and_automate")
             options = rec.get("options", {})
             chosen_option = options.get(our_rec, {})
 
-            if our_rec == "custom_solution":
-                # Custom solution: use estimated_cost range
+            if our_rec in ("custom_solution", "connect_and_automate"):
+                # Connect/custom: use estimated_cost range or monthly_cost string
                 cost_range = chosen_option.get("estimated_cost", {})
-                implementation_cost = (cost_range.get("min", 0) + cost_range.get("max", 0)) / 2
+                if cost_range:
+                    implementation_cost = (cost_range.get("min", 0) + cost_range.get("max", 0)) / 2
+                else:
+                    implementation_cost = 0
                 monthly_cost = chosen_option.get("monthly_running_cost", 0) or 0
+                # AIOS monthly_cost may be a string like "EUR 50"
+                if isinstance(monthly_cost, str):
+                    import re
+                    nums = re.findall(r'\d+', monthly_cost)
+                    monthly_cost = int(nums[0]) if nums else 0
             else:
                 implementation_cost = chosen_option.get("implementation_cost", 0) or 0
                 monthly_cost = chosen_option.get("monthly_cost", 0) or 0
+                if isinstance(monthly_cost, str):
+                    import re
+                    nums = re.findall(r'\d+', monthly_cost)
+                    monthly_cost = int(nums[0]) if nums else 0
 
             # Total first year investment
             annual_cost = implementation_cost + (monthly_cost * 12)
@@ -3018,7 +3200,7 @@ Return ONLY the JSON."""
                         f"VerdictSkill failed, using legacy method: "
                         f"{result.warnings}"
                     )
-            except (ValueError, KeyError, TypeError, RuntimeError) as e:
+            except (ValueError, KeyError, TypeError, RuntimeError, Exception) as e:
                 logger.warning("verdict_skill_failed", error=str(e), error_type=type(e).__name__)
 
         # Fall back to legacy method
@@ -3209,14 +3391,14 @@ Return ONLY the JSON."""
 
     async def _generate_playbooks(self, recommendations: List[Dict]) -> List[Dict[str, Any]]:
         """Generate playbooks for top recommendations."""
-        playbook_gen = PlaybookGenerator()
+        playbook_gen = PlaybookGenerator(client=self.client if self.dev_mode else None)
         playbooks = []
 
         # Generate playbook for top 3 recommendations
         for rec in recommendations[:3]:
             try:
                 # Generate for the recommended option
-                our_rec = rec.get("our_recommendation", "off_the_shelf")
+                our_rec = rec.get("our_recommendation", "connect_and_automate")
                 playbook = await playbook_gen.generate_playbook(
                     recommendation=rec,
                     option_type=our_rec,
@@ -3224,7 +3406,7 @@ Return ONLY the JSON."""
                     industry_context=self.context.get("industry_knowledge", {}),
                 )
                 playbooks.append(playbook.model_dump(mode='json'))
-            except (ValueError, KeyError, TypeError, RuntimeError) as e:
+            except (ValueError, KeyError, TypeError, RuntimeError, Exception) as e:
                 logger.warning("playbook_generation_failed", recommendation_id=rec.get("id"), error=str(e), error_type=type(e).__name__)
 
         return playbooks
@@ -3293,10 +3475,11 @@ Return ONLY the JSON."""
                         finding["validation_issues"] = validation.get("issues", [])
                         finding["validation_warnings"] = validation.get("warnings", [])
 
-            except (ValueError, KeyError, TypeError, RuntimeError) as e:
+            except (ValueError, KeyError, TypeError, RuntimeError, Exception) as e:
                 logger.warning("math_validation_failed", finding_id=finding.get("id"), error=str(e), error_type=type(e).__name__)
 
         # Also update recommendations with adjusted confidence
+        ROI_CAP = 500
         for rec in recommendations:
             finding_id = rec.get("finding_id")
             if finding_id in confidence_adjustments:
@@ -3308,6 +3491,10 @@ Return ONLY the JSON."""
                     rec["roi_percentage_original"] = original_roi
                     rec["roi_percentage"] = round(original_roi * factor, 1)
                     rec["roi_adjusted_reason"] = f"Math validation: {adj['reason']}"
+                    # Re-apply cap after confidence adjustment
+                    if rec["roi_percentage"] > ROI_CAP:
+                        rec["roi_percentage"] = ROI_CAP
+                        rec["roi_capped"] = True
 
         return {
             "validated": True,
@@ -3359,7 +3546,7 @@ Return ONLY the JSON."""
                     )
                     return result.data
 
-            except (ValueError, KeyError, TypeError, RuntimeError) as e:
+            except (ValueError, KeyError, TypeError, RuntimeError, Exception) as e:
                 logger.warning("quick_win_skill_failed", error=str(e), error_type=type(e).__name__)
 
         # Fallback: simple quick win detection
@@ -3419,7 +3606,7 @@ Return ONLY the JSON."""
                         f"adoption, risk={competitor_result.data.get('risk_assessment', {}).get('risk_level')}"
                     )
 
-            except (ValueError, KeyError, TypeError, RuntimeError) as e:
+            except (ValueError, KeyError, TypeError, RuntimeError, Exception) as e:
                 logger.warning("competitor_analysis_failed", error=str(e), error_type=type(e).__name__)
 
         # Enrich with industry benchmarking
@@ -3436,7 +3623,7 @@ Return ONLY the JSON."""
                         f"percentile={benchmarker_result.data.get('ai_readiness', {}).get('percentile')}"
                     )
 
-            except (ValueError, KeyError, TypeError, RuntimeError) as e:
+            except (ValueError, KeyError, TypeError, RuntimeError, Exception) as e:
                 logger.warning("industry_benchmarking_failed", error=str(e), error_type=type(e).__name__)
 
         return result
@@ -3490,7 +3677,7 @@ Return ONLY the JSON."""
                 logger.warning(f"AutomationSummarySkill failed: {result.warnings}")
                 return {"opportunities": [], "_generation_failed": True, "_failure_reason": "Automation summary skill returned no data"}
 
-        except (ValueError, KeyError, TypeError, RuntimeError) as e:
+        except (ValueError, KeyError, TypeError, RuntimeError, Exception) as e:
             logger.warning("automation_summary_failed", error=str(e), error_type=type(e).__name__)
             return {"opportunities": [], "_generation_failed": True, "_failure_reason": str(e)}
 
@@ -3532,7 +3719,7 @@ Return ONLY the JSON."""
                         f"complexity={followup_result.data.get('complexity')}"
                     )
 
-            except (ValueError, KeyError, TypeError, RuntimeError) as e:
+            except (ValueError, KeyError, TypeError, RuntimeError, Exception) as e:
                 logger.warning("followup_scheduler_failed", error=str(e), error_type=type(e).__name__)
                 # Provide minimal fallback
                 result["follow_up_schedule"] = {
@@ -3568,7 +3755,7 @@ Return ONLY the JSON."""
                         else:
                             logger.info("No upsell recommended for this customer")
 
-                except (ValueError, KeyError, TypeError, RuntimeError) as e:
+                except (ValueError, KeyError, TypeError, RuntimeError, Exception) as e:
                     logger.warning("upsell_identifier_failed", error=str(e), error_type=type(e).__name__)
                     result["upsell_analysis"] = {
                         "upsell_recommended": False,
@@ -3583,13 +3770,13 @@ Return ONLY the JSON."""
         return result
 
 
-async def generate_report_for_quiz(quiz_session_id: str, tier: str = "quick") -> str:
+async def generate_report_for_quiz(quiz_session_id: str, tier: str = "quick", dev_mode: bool = False) -> str:
     """
     Generate a report for a quiz session.
 
     Returns the report ID.
     """
-    generator = ReportGenerator(quiz_session_id, tier)
+    generator = ReportGenerator(quiz_session_id, tier, dev_mode=dev_mode)
 
     report_id = None
     async for update in generator.generate_report():
@@ -3605,6 +3792,7 @@ async def generate_report_streaming(
     tier: str = "quick",
     model_strategy: Optional[str] = None,
     skip_review: bool = False,
+    dev_mode: bool = False,
 ) -> AsyncGenerator[str, None]:
     """
     Generate a report with SSE streaming updates.
@@ -3622,10 +3810,11 @@ async def generate_report_streaming(
             - "multi_provider": Cross-provider validation
             - "budget": DeepSeek V3 primary
         skip_review: Skip the review/validation phase for faster iteration
+        dev_mode: Route LLM calls through Claude Code CLI (Max subscription)
 
     Yields SSE-formatted events.
     """
-    generator = ReportGenerator(quiz_session_id, tier, model_strategy=model_strategy, skip_review=skip_review)
+    generator = ReportGenerator(quiz_session_id, tier, model_strategy=model_strategy, skip_review=skip_review, dev_mode=dev_mode)
 
     async for update in generator.generate_report():
         yield f"data: {json.dumps(update)}\n\n"
