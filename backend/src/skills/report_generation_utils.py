@@ -79,6 +79,51 @@ FINDING_CATEGORY_KEYWORDS: Dict[str, List[str]] = {
 }
 
 
+# Vendors that are industry-specific and should NOT appear outside their vertical
+INDUSTRY_SPECIFIC_VENDORS: Dict[str, set] = {
+    # Legal-only vendors
+    "legal": {
+        "lawmatics", "clio", "smokeball", "practice panther", "mycase",
+        "rocket matter", "litify", "filevine",
+    },
+    # Dental-only vendors
+    "dental": {
+        "dentrix", "open dental", "curve dental", "eaglesoft",
+        "pearl", "overjet", "videahealth", "weave",
+    },
+    # E-commerce-only vendors
+    "ecommerce": {
+        "gorgias", "triple whale", "northbeam", "lifetimely",
+        "klaviyo", "postscript", "rebuy",
+    },
+}
+
+# Vendors that are generic tools, not relevant for most professional services
+EXCLUDED_FROM_PROFESSIONAL_SERVICES: set = {
+    "apify", "deepgram", "lawmatics", "gorgias", "triple whale",
+}
+
+
+def _is_vendor_relevant_for_industry(vendor_name: str, industry: str) -> bool:
+    """Check if a vendor is relevant for the given industry."""
+    name_lower = vendor_name.lower().strip()
+    industry_lower = industry.lower().replace("-", "_").replace(" ", "_")
+
+    # Check if vendor belongs to a different industry's exclusive list
+    for vertical, exclusive_vendors in INDUSTRY_SPECIFIC_VENDORS.items():
+        if name_lower in exclusive_vendors:
+            # Only allow if the current industry matches this vertical
+            if vertical not in industry_lower:
+                return False
+
+    # Check professional-services exclusion list
+    if "professional" in industry_lower or "accounting" in industry_lower:
+        if name_lower in EXCLUDED_FROM_PROFESSIONAL_SERVICES:
+            return False
+
+    return True
+
+
 def get_relevant_vendor_categories(finding: Dict[str, Any]) -> List[str]:
     """
     Detect which vendor categories are relevant to a finding based on its text.
@@ -236,9 +281,12 @@ def load_kb_vendors_for_finding(
     vendor_summaries: List[Dict[str, str]] = []
 
     def _add_vendor(vendor: Dict[str, Any]) -> None:
-        """Add vendor to results if not already seen."""
+        """Add vendor to results if not already seen and relevant for industry."""
         name_key = vendor.get("name", "").lower().strip()
         if not name_key or name_key in seen_names:
+            return
+        # Industry relevance filter
+        if not _is_vendor_relevant_for_industry(name_key, industry):
             return
         summary = _extract_vendor_summary(vendor)
         if summary:
