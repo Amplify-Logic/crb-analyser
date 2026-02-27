@@ -1072,6 +1072,24 @@ class ReportGenerator:
             value_summary = self._calculate_value_summary(findings, recommendations)
             methodology_notes = self._generate_methodology_notes()
 
+            # Reconcile exec summary totals with calculated value_summary
+            # (exec summary total_value_potential is LLM-estimated; value_summary is formula-calculated)
+            if value_summary and value_summary.get("total"):
+                vs_total = value_summary["total"]
+                if vs_total.get("min", 0) > 0 or vs_total.get("max", 0) > 0:
+                    executive_summary["total_value_potential"] = {
+                        "min": vs_total["min"],
+                        "max": vs_total["max"],
+                        "projection_years": value_summary.get("projection_years", 3),
+                        "reconciled": True,
+                        "note": "Derived from detailed finding-level calculations",
+                    }
+                    logger.info(
+                        "reconciled_exec_summary_totals",
+                        min_value=vs_total["min"],
+                        max_value=vs_total["max"],
+                    )
+
             # Generate verdict - the honest consultant assessment
             verdict = await self._generate_verdict(executive_summary, findings, recommendations, value_summary)
 
