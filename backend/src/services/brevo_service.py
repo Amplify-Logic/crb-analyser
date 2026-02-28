@@ -36,21 +36,17 @@ class BrevoLists(int, Enum):
     PAID_CUSTOMERS = 2
     # Industry-specific lists
     INDUSTRY_DENTAL = 10
-    INDUSTRY_HOME_SERVICES = 11
     INDUSTRY_PROFESSIONAL = 12
-    INDUSTRY_RECRUITING = 13
-    INDUSTRY_COACHING = 14
-    INDUSTRY_VETERINARY = 15
+    INDUSTRY_ECOMMERCE = 16
+    INDUSTRY_B2B_PLATFORMS = 17
 
 
 # Map industry slugs to list IDs
 INDUSTRY_TO_LIST: dict[str, int] = {
     "dental": BrevoLists.INDUSTRY_DENTAL,
-    "home-services": BrevoLists.INDUSTRY_HOME_SERVICES,
     "professional-services": BrevoLists.INDUSTRY_PROFESSIONAL,
-    "recruiting": BrevoLists.INDUSTRY_RECRUITING,
-    "coaching": BrevoLists.INDUSTRY_COACHING,
-    "veterinary": BrevoLists.INDUSTRY_VETERINARY,
+    "ecommerce": BrevoLists.INDUSTRY_ECOMMERCE,
+    "b2b-platforms": BrevoLists.INDUSTRY_B2B_PLATFORMS,
 }
 
 
@@ -354,6 +350,34 @@ class BrevoService:
             )
         )
 
+    async def send_reengagement_email(
+        self,
+        email: str,
+        company_name: str,
+        nudge_number: int,
+        template_id_first: int = 3,  # Set in Brevo dashboard
+        template_id_second: int = 4,  # Set in Brevo dashboard
+    ) -> dict:
+        """
+        Send a quiz re-engagement nudge email.
+
+        nudge_number=1: "Your report is ready, complete checkout."
+        nudge_number=2: "Last chance — your session expires in 24h."
+        """
+        template_id = template_id_first if nudge_number == 1 else template_id_second
+
+        return await self.send_transactional_email(
+            TransactionalEmailData(
+                to_email=email,
+                to_name=company_name or "there",
+                template_id=template_id,
+                params={
+                    "company_name": company_name or "your company",
+                    "nudge_number": nudge_number,
+                },
+            )
+        )
+
     # =========================================================================
     # Campaign Stats (Optional - for monitoring)
     # =========================================================================
@@ -376,6 +400,25 @@ def get_brevo_service() -> BrevoService:
     if _brevo_service is None:
         _brevo_service = BrevoService()
     return _brevo_service
+
+
+# =============================================================================
+# Module-level convenience functions
+# =============================================================================
+
+
+async def send_reengagement_email(
+    to_email: str,
+    company_name: str,
+    nudge_number: int,
+) -> dict:
+    """Send a re-engagement email via the singleton Brevo service."""
+    service = get_brevo_service()
+    return await service.send_reengagement_email(
+        email=to_email,
+        company_name=company_name,
+        nudge_number=nudge_number,
+    )
 
 
 # =============================================================================
