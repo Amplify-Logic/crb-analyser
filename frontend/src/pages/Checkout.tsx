@@ -15,6 +15,34 @@ interface QuizAnswer {
   answer: string | string[]
 }
 
+type QuizAnswerMap = Record<string, string | string[]>
+
+function normalizeQuizAnswers(raw: unknown): QuizAnswerMap {
+  if (!raw) return {}
+
+  if (Array.isArray(raw)) {
+    return raw.reduce<QuizAnswerMap>((acc, item) => {
+      if (item && typeof item === 'object' && 'questionId' in item && 'answer' in item) {
+        const questionId = String((item as QuizAnswer).questionId)
+        const answer = (item as QuizAnswer).answer
+        acc[questionId] = answer
+      }
+      return acc
+    }, {})
+  }
+
+  if (typeof raw === 'object') {
+    return Object.entries(raw as Record<string, unknown>).reduce<QuizAnswerMap>((acc, [key, value]) => {
+      if (typeof value === 'string' || Array.isArray(value)) {
+        acc[key] = value as string | string[]
+      }
+      return acc
+    }, {})
+  }
+
+  return {}
+}
+
 const TIER_INFO = {
   ai: {
     name: 'Readiness Report',
@@ -54,7 +82,7 @@ export default function Checkout() {
   const [email, setEmail] = useState('')
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
-  const [quizAnswers, setQuizAnswers] = useState<QuizAnswer[]>([])
+  const [quizAnswers, setQuizAnswers] = useState<QuizAnswerMap>({})
   const [quizResults, setQuizResults] = useState<QuizResults | null>(null)
 
   useEffect(() => {
@@ -73,7 +101,12 @@ export default function Checkout() {
     const savedEmail = sessionStorage.getItem('userEmail')
 
     if (answersStr) {
-      setQuizAnswers(JSON.parse(answersStr))
+      try {
+        const parsed = JSON.parse(answersStr)
+        setQuizAnswers(normalizeQuizAnswers(parsed))
+      } catch {
+        setQuizAnswers({})
+      }
     }
     if (resultsStr) {
       setQuizResults(JSON.parse(resultsStr))
@@ -97,7 +130,7 @@ export default function Checkout() {
       return
     }
 
-    if (!email.includes('@')) {
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
       setError('Please enter a valid email address')
       return
     }
@@ -106,12 +139,18 @@ export default function Checkout() {
     setError(null)
 
     try {
-      const response = await apiClient.post<{ checkout_url: string }>('/payments/guest-checkout', {
+      const response = await apiClient.post<{ checkout_url: string; quiz_session_id?: string }>('/api/payments/guest-checkout', {
         tier,
         email,
-        quiz_answers: quizAnswers.reduce((acc, a) => ({ ...acc, [a.questionId]: a.answer }), {}),
+        quiz_answers: quizAnswers,
         quiz_results: quizResults,
+        quiz_session_id: sessionStorage.getItem('quizSessionId') || undefined,
       })
+
+      // Canonical session ID from backend guest-checkout session.
+      if (response.data.quiz_session_id) {
+        sessionStorage.setItem('quizSessionId', response.data.quiz_session_id)
+      }
 
       // Redirect to Stripe checkout
       window.location.href = response.data.checkout_url
@@ -332,11 +371,15 @@ export default function Checkout() {
                   </li>
                   <li className="flex gap-2">
                     <span className="font-semibold">3.</span>
+                    A domain expert reviews every recommendation
+                  </li>
+                  <li className="flex gap-2">
+                    <span className="font-semibold">4.</span>
                     Receive your personalized report via email
                   </li>
                   {tier === 'human' && (
                     <li className="flex gap-2">
-                      <span className="font-semibold">4.</span>
+                      <span className="font-semibold">5.</span>
                       Book your 60-min strategy call
                     </li>
                   )}

@@ -39,7 +39,7 @@ interface WorkshopConfirmationProps {
     ratings: ConfirmationRating
     corrections: ConfirmationCorrection[]
     priorityOrder: string[]
-  }) => void
+  }) => Promise<void>
   onBack?: () => void
 }
 
@@ -60,6 +60,7 @@ export default function WorkshopConfirmation({
   const [editedItems, setEditedItems] = useState<{ [category: string]: string[] }>({})
   const [orderedPainPoints, setOrderedPainPoints] = useState(painPoints)
   const [isSubmitting, setIsSubmitting] = useState(false)
+  const [submitError, setSubmitError] = useState<string | null>(null)
 
   // Check if all cards are rated
   const allRated = cards.every(card => ratings[card.category])
@@ -97,12 +98,19 @@ export default function WorkshopConfirmation({
     if (!canContinue) return
 
     setIsSubmitting(true)
+    setSubmitError(null)
 
-    onComplete({
-      ratings,
-      corrections,
-      priorityOrder: orderedPainPoints.map(p => p.id),
-    })
+    try {
+      await onComplete({
+        ratings,
+        corrections,
+        priorityOrder: orderedPainPoints.map(p => p.id),
+      })
+    } catch (err: any) {
+      setSubmitError(err?.message || 'Could not save your confirmation. Please try again.')
+    } finally {
+      setIsSubmitting(false)
+    }
   }
 
   const getDisplayItems = (card: ConfirmationCard) => {
@@ -302,6 +310,9 @@ export default function WorkshopConfirmation({
             </button>
           )}
           <div className="flex-1" />
+          {submitError && (
+            <span className="text-sm text-red-600 mr-3">{submitError}</span>
+          )}
           <button
             onClick={handleSubmit}
             disabled={!canContinue || isSubmitting}

@@ -56,10 +56,12 @@ const SAMPLE_FINDINGS = [
 
 const SOFTWARE = [
   { name: 'Shopify', category: 'Platform' },
+  { name: 'WooCommerce', category: 'Platform' },
   { name: 'Gorgias', category: 'Support' },
   { name: 'Klaviyo', category: 'Email/SMS' },
-  { name: 'Triple Whale', category: 'Attribution' },
-  { name: 'Northbeam', category: 'Attribution' },
+  { name: 'Mollie', category: 'Payments' },
+  { name: 'Sendcloud', category: 'Shipping' },
+  { name: 'Channable', category: 'Feed Mgmt' },
   { name: 'Recharge', category: 'Subscriptions' },
 ]
 
@@ -81,9 +83,6 @@ export default function Ecommerce() {
             <span className="text-sm font-medium text-gray-600">E-commerce</span>
           </div>
           <div className="flex items-center gap-4">
-            <Link to="/" className="text-sm text-gray-500 hover:text-gray-900 transition">
-              All Industries
-            </Link>
             <Link to="/login" className="text-sm font-medium text-gray-600 hover:text-gray-900 transition">
               Sign In
             </Link>
@@ -107,9 +106,9 @@ export default function Ecommerce() {
             </div>
 
             <h1 className="text-4xl sm:text-5xl font-bold text-gray-900 mb-6 leading-tight">
-              40% of your support tickets
+              Stop automating
               <br />
-              <span className="text-primary-600">could answer themselves.</span>
+              <span className="text-primary-600">the wrong things.</span>
             </h1>
 
             <p className="text-xl text-gray-600 mb-8 max-w-2xl mx-auto">
@@ -169,6 +168,30 @@ export default function Ecommerce() {
               </span>
             </div>
           </motion.div>
+        </div>
+      </section>
+
+      {/* Social Proof */}
+      <section className="py-8 px-4 border-b border-gray-100">
+        <div className="max-w-4xl mx-auto flex flex-wrap justify-center gap-8 text-sm text-gray-500">
+          <span className="flex items-center gap-2">
+            <svg className="w-4 h-4 text-primary-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+            </svg>
+            Built on analysis of 50+ e-commerce operations
+          </span>
+          <span className="flex items-center gap-2">
+            <svg className="w-4 h-4 text-primary-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+            EU-focused: GDPR-compliant tools, EUR pricing
+          </span>
+          <span className="flex items-center gap-2">
+            <svg className="w-4 h-4 text-primary-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+            </svg>
+            Independent — we don't sell software
+          </span>
         </div>
       </section>
 
@@ -338,7 +361,7 @@ export default function Ecommerce() {
       <footer className="py-8 px-4 border-t border-gray-100">
         <div className="max-w-6xl mx-auto flex flex-col md:flex-row justify-between items-center gap-4">
           <Logo size="sm" showIcon={false} linkToHome={false} />
-          <p className="text-sm text-gray-500">© 2026 ReadyPath. No BS, just clarity.</p>
+          <p className="text-sm text-gray-500">© 2026 Ready Path. No BS, just clarity.</p>
           <div className="flex gap-6 text-sm text-gray-500">
             <Link to="/privacy" className="hover:text-gray-900 transition">Privacy</Link>
             <Link to="/terms" className="hover:text-gray-900 transition">Terms</Link>

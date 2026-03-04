@@ -5,8 +5,18 @@ import { logger } from '../utils/logger'
 import { SUPPORT_EMAIL } from '../constants'
 import apiClient from '../services/apiClient'
 
-/** Statuses the backend sets after a successful payment webhook. */
-const PAID_STATUSES = ['paid', 'generating', 'completed', 'report_delivered']
+/** Statuses indicating payment completed and workflow can continue. */
+const PAID_STATUSES = [
+  'processing_payment',
+  'paid',
+  'generating',
+  'workshop_started',
+  'workshop_complete',
+  'qa_pending',
+  'released',
+  'completed',
+  'report_delivered',
+]
 
 /** Maximum number of polling attempts (webhook may lag behind redirect). */
 const MAX_POLL_ATTEMPTS = 10

@@ -1,5 +1,5 @@
-import { useState, useEffect, useRef } from 'react'
-import { useParams, useNavigate } from 'react-router-dom'
+import { useEffect, useRef, useState } from 'react'
+import { useNavigate, useParams } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import { Logo } from '../components/Logo'
 import { API_BASE } from '../services/apiClient'
@@ -20,13 +20,34 @@ const INITIAL_STEPS: ProgressStep[] = [
   { id: 'roadmap', label: 'Building your roadmap', status: 'pending' },
 ]
 
+const STEP_ORDER: ProgressStep['id'][] = ['intake', 'research', 'opportunities', 'roi', 'recommendations', 'roadmap']
+
+const PHASE_TO_STEP: Record<string, ProgressStep['id']> = {
+  loading: 'intake',
+  waiting: 'intake',
+  research: 'research',
+  analysis: 'opportunities',
+  findings: 'opportunities',
+  review: 'opportunities',
+  validation: 'roi',
+  recommendations: 'recommendations',
+  quick_wins: 'recommendations',
+  roadmap: 'roadmap',
+  playbooks: 'roadmap',
+  architecture: 'roadmap',
+  insights: 'roadmap',
+  automation_summary: 'roadmap',
+  post_report: 'roadmap',
+  finalizing: 'roadmap',
+}
+
 const TIPS = [
-  "Our AI analyzes over 500 data points from your responses.",
-  "We compare your business against 50+ industry benchmarks.",
-  "Each recommendation includes real vendor pricing.",
-  "ROI calculations show all assumptions transparently.",
+  'Our AI analyzes over 500 data points from your responses.',
+  'We compare your business against 50+ industry benchmarks.',
+  'Each recommendation includes real vendor pricing.',
+  'ROI calculations show all assumptions transparently.',
   "Your report includes 'build it yourself' alternatives.",
-  "We tell you what NOT to do - that's often more valuable.",
+  'We tell you what NOT to do - that is often more valuable.',
 ]
 
 export default function ReportProgress() {
@@ -39,8 +60,8 @@ export default function ReportProgress() {
   const [currentTip, setCurrentTip] = useState(0)
   const [error, setError] = useState<string | null>(null)
   const [isComplete, setIsComplete] = useState(false)
+  const [reportId, setReportId] = useState<string | null>(null)
 
-  // Rotate tips
   useEffect(() => {
     const interval = setInterval(() => {
       setCurrentTip(prev => (prev + 1) % TIPS.length)
@@ -48,7 +69,6 @@ export default function ReportProgress() {
     return () => clearInterval(interval)
   }, [])
 
-  // Warn before leaving
   useEffect(() => {
     const handleBeforeUnload = (e: BeforeUnloadEvent) => {
       if (!isComplete && !error) {
@@ -60,67 +80,109 @@ export default function ReportProgress() {
     return () => window.removeEventListener('beforeunload', handleBeforeUnload)
   }, [isComplete, error])
 
-  // SSE connection
+  const updateStepsFromPhase = (phase?: string, detail?: string) => {
+    if (!phase) return
+    const stepId = PHASE_TO_STEP[phase]
+    if (!stepId) return
+
+    const activeIndex = STEP_ORDER.indexOf(stepId)
+    if (activeIndex < 0) return
+
+    setSteps(prev =>
+      prev.map((step, index) => {
+        if (index < activeIndex) return { ...step, status: 'completed', detail: undefined }
+        if (index === activeIndex) return { ...step, status: 'active', detail }
+        return { ...step, status: 'pending', detail: undefined }
+      })
+    )
+  }
+
   useEffect(() => {
-    // For demo/development: simulate progress if no real endpoint
-    const simulateProgress = async () => {
-      for (let i = 0; i < INITIAL_STEPS.length; i++) {
-        await new Promise(resolve => setTimeout(resolve, 2000))
-        setSteps(prev => prev.map((step, idx) => ({
-          ...step,
-          status: idx < i ? 'completed' : idx === i ? 'active' : 'pending'
-        })))
-        setProgress(Math.round(((i + 1) / INITIAL_STEPS.length) * 100))
-      }
-      await new Promise(resolve => setTimeout(resolve, 1000))
-      setSteps(prev => prev.map(step => ({ ...step, status: 'completed' })))
-      setProgress(100)
-      setIsComplete(true)
+    if (!id) {
+      setError('Missing quiz session ID for report generation.')
+      return
     }
 
-    // Try SSE first, fall back to simulation
-    try {
-      const eventSource = new EventSource(`${API_BASE}/api/reports/${id}/progress`, {
-        withCredentials: true
-      })
-      eventSourceRef.current = eventSource
+    const checkStatusFallback = async () => {
+      try {
+        const response = await fetch(`${API_BASE}/api/reports/status/${id}`, {
+          credentials: 'include',
+        })
 
-      eventSource.onmessage = (event) => {
-        try {
-          const data = JSON.parse(event.data)
+        if (!response.ok) {
+          throw new Error('Could not fetch report status')
+        }
 
-          if (data.type === 'progress') {
-            setSteps(prev => prev.map(step => {
-              if (step.id === data.step_id) {
-                return { ...step, status: data.status, detail: data.detail }
+        const data = await response.json()
+        if (typeof data.progress === 'number') {
+          setProgress(data.progress)
+        }
+
+        if (data.report_id && ['completed', 'qa_pending', 'released'].includes(data.report_status)) {
+          setReportId(data.report_id)
+          setProgress(100)
+          setSteps(prev => prev.map(step => ({ ...step, status: 'completed', detail: undefined })))
+          setIsComplete(true)
+          setError(null)
+          return
+        }
+
+        updateStepsFromPhase(data.report_status || data.status, 'Live stream disconnected. Waiting for updates...')
+        setError('Live update connection dropped. Your report is still processing; refresh to reconnect.')
+      } catch {
+        setError('Unable to connect to report updates. Please retry in a moment.')
+      }
+    }
+
+    const eventSource = new EventSource(`${API_BASE}/api/reports/stream/${id}`, {
+      withCredentials: true,
+    })
+    eventSourceRef.current = eventSource
+
+    eventSource.onmessage = event => {
+      try {
+        const data = JSON.parse(event.data)
+        const phase = data.phase as string | undefined
+        const detail = data.step as string | undefined
+
+        if (typeof data.progress === 'number') {
+          setProgress(data.progress)
+        }
+
+        if (phase === 'complete') {
+          setReportId(data.report_id || null)
+          setProgress(100)
+          setSteps(prev => prev.map(step => ({ ...step, status: 'completed', detail: undefined })))
+          setIsComplete(true)
+          setError(null)
+          eventSource.close()
+          return
+        }
+
+        if (phase === 'error') {
+          setError(detail || 'Report generation failed.')
+          setSteps(prev =>
+            prev.map(step => {
+              if (step.status === 'active') {
+                return { ...step, status: 'error', detail: detail || step.detail }
               }
               return step
-            }))
-            setProgress(data.progress || 0)
-          }
-
-          if (data.type === 'complete') {
-            setIsComplete(true)
-            eventSource.close()
-          }
-
-          if (data.type === 'error') {
-            setError(data.message)
-            eventSource.close()
-          }
-        } catch {
-          // Invalid JSON, ignore
+            })
+          )
+          eventSource.close()
+          return
         }
-      }
 
-      eventSource.onerror = () => {
+        updateStepsFromPhase(phase, detail)
+      } catch {
+        setError('Received malformed progress update from server.')
         eventSource.close()
-        // Fall back to simulation for demo
-        simulateProgress()
       }
-    } catch {
-      // SSE not supported or endpoint unavailable, simulate
-      simulateProgress()
+    }
+
+    eventSource.onerror = () => {
+      eventSource.close()
+      void checkStatusFallback()
     }
 
     return () => {
@@ -128,16 +190,14 @@ export default function ReportProgress() {
     }
   }, [id])
 
-  // Navigate to report when complete
   const handleViewReport = () => {
-    navigate(`/report/${id}`)
+    navigate(`/report/${reportId || id}`)
   }
 
   const activeStep = steps.find(s => s.status === 'active')
 
   return (
     <div className="min-h-screen bg-gray-50">
-      {/* Nav */}
       <nav className="fixed top-0 left-0 right-0 z-50 bg-white/80 backdrop-blur-md border-b border-gray-100">
         <div className="max-w-6xl mx-auto px-4 py-4">
           <Logo size="sm" showIcon={false} />
@@ -146,7 +206,6 @@ export default function ReportProgress() {
 
       <div className="pt-24 pb-20 px-4">
         <div className="max-w-2xl mx-auto">
-          {/* Header */}
           <div className="text-center mb-8">
             <h1 className="text-3xl font-bold text-gray-900 mb-2">
               {isComplete ? 'Your Report is Ready!' : 'Generating Your Report'}
@@ -154,13 +213,11 @@ export default function ReportProgress() {
             <p className="text-gray-600">
               {isComplete
                 ? 'Your personalized AI analysis is complete.'
-                : 'We\'re analyzing your workshop responses. This takes 1-2 minutes.'}
+                : 'We are analyzing your workshop responses. This takes 1-2 minutes.'}
             </p>
           </div>
 
-          {/* Progress Card */}
           <div className="bg-white rounded-2xl p-8 shadow-sm border border-gray-100 mb-6">
-            {/* Progress Bar */}
             <div className="mb-8">
               <div className="flex justify-between text-sm mb-2">
                 <span className="text-gray-600">Progress</span>
@@ -176,7 +233,6 @@ export default function ReportProgress() {
               </div>
             </div>
 
-            {/* Steps */}
             <div className="space-y-4">
               {steps.map((step, index) => (
                 <motion.div
@@ -186,13 +242,17 @@ export default function ReportProgress() {
                   transition={{ delay: index * 0.1 }}
                   className="flex items-center gap-4"
                 >
-                  {/* Icon */}
-                  <div className={`w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 ${
-                    step.status === 'completed' ? 'bg-green-100' :
-                    step.status === 'active' ? 'bg-primary-100' :
-                    step.status === 'error' ? 'bg-red-100' :
-                    'bg-gray-100'
-                  }`}>
+                  <div
+                    className={`w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 ${
+                      step.status === 'completed'
+                        ? 'bg-green-100'
+                        : step.status === 'active'
+                          ? 'bg-primary-100'
+                          : step.status === 'error'
+                            ? 'bg-red-100'
+                            : 'bg-gray-100'
+                    }`}
+                  >
                     {step.status === 'completed' && (
                       <svg className="w-4 h-4 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
@@ -209,30 +269,29 @@ export default function ReportProgress() {
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
                       </svg>
                     )}
-                    {step.status === 'pending' && (
-                      <div className="w-2 h-2 bg-gray-300 rounded-full" />
-                    )}
+                    {step.status === 'pending' && <div className="w-2 h-2 bg-gray-300 rounded-full" />}
                   </div>
 
-                  {/* Label */}
                   <div className="flex-1">
-                    <span className={`font-medium ${
-                      step.status === 'completed' ? 'text-green-700' :
-                      step.status === 'active' ? 'text-primary-700' :
-                      step.status === 'error' ? 'text-red-700' :
-                      'text-gray-400'
-                    }`}>
+                    <span
+                      className={`font-medium ${
+                        step.status === 'completed'
+                          ? 'text-green-700'
+                          : step.status === 'active'
+                            ? 'text-primary-700'
+                            : step.status === 'error'
+                              ? 'text-red-700'
+                              : 'text-gray-400'
+                      }`}
+                    >
                       {step.label}
                     </span>
-                    {step.detail && step.status === 'active' && (
-                      <p className="text-sm text-gray-500">{step.detail}</p>
-                    )}
+                    {step.detail && step.status === 'active' && <p className="text-sm text-gray-500">{step.detail}</p>}
                   </div>
                 </motion.div>
               ))}
             </div>
 
-            {/* Error State */}
             {error && (
               <div className="mt-6 p-4 bg-red-50 rounded-xl border border-red-100">
                 <p className="text-red-800 font-medium">Something went wrong</p>
@@ -246,13 +305,8 @@ export default function ReportProgress() {
               </div>
             )}
 
-            {/* Complete State */}
             {isComplete && (
-              <motion.div
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                className="mt-8"
-              >
+              <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="mt-8">
                 <button
                   onClick={handleViewReport}
                   className="w-full py-4 bg-primary-600 text-white font-semibold rounded-xl hover:bg-primary-700 transition shadow-lg shadow-primary-600/25 text-lg"
@@ -263,7 +317,6 @@ export default function ReportProgress() {
             )}
           </div>
 
-          {/* Tips */}
           {!isComplete && !error && (
             <motion.div
               key={currentTip}
@@ -284,7 +337,6 @@ export default function ReportProgress() {
             </motion.div>
           )}
 
-          {/* What's being analyzed */}
           {!isComplete && activeStep && (
             <div className="mt-6 text-center text-sm text-gray-500">
               Currently: {activeStep.label.toLowerCase()}

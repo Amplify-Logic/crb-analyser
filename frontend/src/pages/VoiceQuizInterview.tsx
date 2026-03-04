@@ -164,7 +164,7 @@ export default function VoiceQuizInterview() {
   const [companyName, setCompanyName] = useState('')
   const [_companyProfile, setCompanyProfile] = useState<CompanyProfile | null>(null)
   const [questions, setQuestions] = useState<QuizQuestion[]>([])
-  const [industry, setIndustry] = useState('general')
+  const [industry, setIndustry] = useState('ecommerce')
 
   // Refs
   const messagesEndRef = useRef<HTMLDivElement>(null)
@@ -187,7 +187,7 @@ export default function VoiceQuizInterview() {
   useEffect(() => {
     const name = sessionStorage.getItem('companyName')
     const profileStr = sessionStorage.getItem('companyProfile')
-    const storedIndustry = sessionStorage.getItem('quizIndustry') || 'general'
+    const storedIndustry = sessionStorage.getItem('quizIndustry') || 'ecommerce'
 
     if (name) setCompanyName(name)
     setIndustry(storedIndustry)

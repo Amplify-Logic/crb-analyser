@@ -23,6 +23,7 @@ interface AdoptionStat {
   adoption_percentage: number
   average_outcome: string
   crb?: InsightCRB  // Optional for backwards compatibility with legacy data
+  source?: string
 }
 
 interface OpportunityMap {
@@ -266,6 +267,9 @@ export default function InsightsTab({ insights }: InsightsTabProps) {
                     {stat.crb.risk_level} risk
                   </span>
                 </div>
+              )}
+              {stat.source && (
+                <p className="text-[10px] text-gray-400 mt-1">Source: {stat.source}</p>
               )}
             </motion.div>
           ))}

@@ -254,21 +254,35 @@ export default function VoiceRecorder({
         )}
       </motion.button>
 
-      {/* Label */}
-      <div className={`mt-3 text-center ${sizeConfig.text}`}>
-        {state === 'idle' && (
-          <span className="text-gray-600">Tap to talk</span>
-        )}
-        {state === 'recording' && (
-          <div className="flex flex-col items-center">
-            <span className="text-red-600 font-medium">{formatDuration(duration)}</span>
-            <span className="text-gray-500 text-sm">Tap to stop</span>
-          </div>
-        )}
-        {state === 'processing' && (
-          <span className="text-yellow-600">Processing...</span>
-        )}
-      </div>
+      {/* Label — compact for small size */}
+      {size === 'small' ? (
+        <div className="mt-1.5 text-center text-xs">
+          {state === 'idle' && (
+            <span className="text-gray-400">Tap to talk</span>
+          )}
+          {state === 'recording' && (
+            <span className="text-red-500 font-medium">{formatDuration(duration)}</span>
+          )}
+          {state === 'processing' && (
+            <span className="text-gray-400">Processing...</span>
+          )}
+        </div>
+      ) : (
+        <div className={`mt-3 text-center ${sizeConfig.text}`}>
+          {state === 'idle' && (
+            <span className="text-gray-600">Tap to talk</span>
+          )}
+          {state === 'recording' && (
+            <div className="flex flex-col items-center">
+              <span className="text-red-600 font-medium">{formatDuration(duration)}</span>
+              <span className="text-gray-500 text-sm">Tap to stop</span>
+            </div>
+          )}
+          {state === 'processing' && (
+            <span className="text-yellow-600">Processing...</span>
+          )}
+        </div>
+      )}
 
       {/* Error message */}
       <AnimatePresence>

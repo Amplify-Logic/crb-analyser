@@ -309,6 +309,7 @@ export default function ReportViewer() {
   const { id: reportId } = useParams<{ id: string }>()
   const [searchParams] = useSearchParams()
   const quizSessionId = searchParams.get('quiz')
+  const emailParam = searchParams.get('email')
 
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
@@ -347,6 +348,16 @@ export default function ReportViewer() {
     loadReport()
   }, [reportId, quizSessionId])
 
+  // Auto-poll when report is generating
+  useEffect(() => {
+    if (error === 'generating') {
+      const interval = setInterval(() => {
+        loadReport()
+      }, 10000)
+      return () => clearInterval(interval)
+    }
+  }, [error])
+
   // Prepare sidebar data - must be before early returns (Rules of Hooks)
   // Enrich findings with connect/replace paths from automation_summary
   const enrichedFindings = useMemo(() => {
@@ -382,6 +393,17 @@ export default function ReportViewer() {
       priority: r.priority,
     })), [report?.recommendations])
 
+  // Detect currency from company location
+  const { detectedCurrency, detectedLocale } = useMemo(() => {
+    const location = report?.company_profile?.location || ''
+    const isNZ = location.toLowerCase().includes('zealand') || location.toLowerCase().includes('nz')
+    const isAU = location.toLowerCase().includes('australia') || location.toLowerCase().includes('au')
+    return {
+      detectedCurrency: isNZ ? 'NZD' : isAU ? 'AUD' : 'EUR',
+      detectedLocale: isNZ ? 'en-NZ' : isAU ? 'en-AU' : 'de-DE',
+    }
+  }, [report?.company_profile?.location])
+
   // Map playbook recommendation_id -> recommendation title for labels
   const recommendationTitles = useMemo(() => {
     const titles: Record<string, string> = {}
@@ -404,7 +426,12 @@ export default function ReportViewer() {
       id: pb.id,
       title: getPlaybookLabel(pb.id, index),
       completedTasks: getCompletedTasks(pb.id).length,
-      totalTasks: pb.phases?.reduce((sum: number, phase: any) => sum + (phase.tasks?.length || 0), 0) || 0,
+      totalTasks: pb.phases?.reduce((sum: number, phase: any) => {
+        if (phase.weeks && Array.isArray(phase.weeks)) {
+          return sum + phase.weeks.reduce((wSum: number, w: any) => wSum + (w.tasks?.length || 0), 0)
+        }
+        return sum + (phase.tasks?.length || 0)
+      }, 0) || 0,
     }))
   }, [report?.playbooks, getCompletedTasks, recommendationTitles])
 
@@ -420,11 +447,13 @@ export default function ReportViewer() {
         const industryParam = industryMatch ? `?industry=${industryMatch[1]}` : ''
         response = await apiClient.get<Report>(`/api/reports/sample${industryParam}`)
       } else if (reportId) {
-        response = await apiClient.get<Report>(`/api/reports/public/${reportId}`)
+        const emailQuery = emailParam ? `?email=${encodeURIComponent(emailParam)}` : ''
+        response = await apiClient.get<Report>(`/api/reports/public/${reportId}${emailQuery}`)
       } else if (quizSessionId) {
         response = await apiClient.get<{ id: string }>(`/api/reports/by-quiz/${quizSessionId}`)
         if (response.data.id) {
-          response = await apiClient.get<Report>(`/api/reports/public/${response.data.id}`)
+          const emailQuery = emailParam ? `?email=${encodeURIComponent(emailParam)}` : ''
+          response = await apiClient.get<Report>(`/api/reports/public/${response.data.id}${emailQuery}`)
         }
       }
 
@@ -469,12 +498,19 @@ export default function ReportViewer() {
             </svg>
           </div>
           <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-3">Report is Being Generated</h2>
-          <p className="text-gray-600 dark:text-gray-400 mb-6 leading-relaxed">Your report is still being generated. This usually takes a few minutes. Please check back shortly.</p>
+          <p className="text-gray-600 dark:text-gray-400 mb-6 leading-relaxed">Your report is still being generated. This usually takes a few minutes. We'll automatically check for updates.</p>
+          <div className="flex items-center justify-center gap-2 text-sm text-blue-600 dark:text-blue-400 mb-4">
+            <svg className="w-4 h-4 animate-spin" fill="none" viewBox="0 0 24 24">
+              <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+              <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
+            </svg>
+            <span>Checking every 10 seconds...</span>
+          </div>
           <button
             onClick={() => { setError(null); loadReport() }}
             className="px-6 py-3 bg-blue-600 text-white rounded-xl font-medium hover:bg-blue-700 transition"
           >
-            Refresh
+            Check Now
           </button>
         </motion.div>
       </div>
@@ -565,21 +601,12 @@ export default function ReportViewer() {
   // Extract company profile data for personalization
   // Handle industry which can be a string or object {primary_industry, sub_industry}
   const INDUSTRY_DISPLAY_NAMES: Record<string, string> = {
-    'home_services': 'Home Services & Trades',
-    'home-services': 'Home Services & Trades',
     'professional_services': 'Professional Services',
-    'healthcare': 'Healthcare',
+    'professional-services': 'Professional Services',
     'dental': 'Dental Practice',
-    'retail': 'Retail',
-    'hospitality': 'Hospitality',
-    'construction': 'Construction',
-    'real_estate': 'Real Estate',
-    'legal': 'Legal Services',
-    'accounting': 'Accounting & Finance',
-    'marketing': 'Marketing & Advertising',
-    'technology': 'Technology',
-    'manufacturing': 'Manufacturing',
-    'general': 'General Business',
+    'ecommerce': 'E-commerce',
+    'b2b_platforms': 'B2B Platforms',
+    'b2b-platforms': 'B2B Platforms',
   }
 
   const extractIndustry = (profile: any): string => {
@@ -772,10 +799,10 @@ export default function ReportViewer() {
             {report.math_validation && (
               <div className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-4">
                 <div className="flex items-center gap-2">
-                  <span className={`w-2.5 h-2.5 rounded-full ${report.math_validation.issues_found === 0 ? 'bg-green-500' : 'bg-amber-500'}`} />
+                  <span className={`w-2.5 h-2.5 rounded-full ${(report.math_validation.issues_found ?? 0) === 0 ? 'bg-green-500' : 'bg-amber-500'}`} />
                   <span className="text-sm font-medium text-gray-700 dark:text-gray-300">Data Quality</span>
                   <span className="text-sm text-gray-500 dark:text-gray-400">
-                    {report.math_validation.issues_found === 0
+                    {(report.math_validation.issues_found ?? 0) === 0
                       ? 'All checks passed'
                       : `${report.math_validation.issues_found} issue(s) detected`}
                   </span>
@@ -809,6 +836,8 @@ export default function ReportViewer() {
               compactCount={0}
               totalCount={findings?.length}
               currentIndex={findingGlobalIndex >= 0 ? findingGlobalIndex : undefined}
+              currency={detectedCurrency}
+              locale={detectedLocale}
             />
           </div>
         )
@@ -895,13 +924,6 @@ export default function ReportViewer() {
       case 'tool':
         switch (activeItem.id) {
           case 'roi':
-            // Detect currency from company location (NZ = NZD, AU = AUD, default EUR)
-            const location = report.company_profile?.location || ''
-            const isNZ = location.toLowerCase().includes('zealand') || location.toLowerCase().includes('nz')
-            const isAU = location.toLowerCase().includes('australia') || location.toLowerCase().includes('au')
-            const detectedCurrency = isNZ ? 'NZD' : isAU ? 'AUD' : 'EUR'
-            const detectedLocale = isNZ ? 'en-NZ' : isAU ? 'en-AU' : 'de-DE'
-
             return (
               <div className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-6">
                 <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">ROI Calculator</h3>
@@ -918,7 +940,7 @@ export default function ReportViewer() {
             return (
               <div className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-6">
                 <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">Your Stack</h3>
-                <StackTab architecture={report.system_architecture} />
+                <StackTab architecture={report.system_architecture} currency={detectedCurrency} locale={detectedLocale} />
               </div>
             )
           case 'insights':
@@ -1026,8 +1048,8 @@ export default function ReportViewer() {
         >
           {renderContent()}
 
-          {/* Dev Mode Panel - Only visible in dev mode */}
-          {import.meta.env.DEV && report && reportId && activeItem.type === 'overview' && (
+          {/* Dev Mode Panel - Only visible in dev mode with ?dev=true */}
+          {import.meta.env.DEV && searchParams.get('dev') === 'true' && report && reportId && activeItem.type === 'overview' && (
             <div className="mt-8">
               <DevModePanel
                 reportId={reportId}

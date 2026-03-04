@@ -67,11 +67,14 @@ interface SystemArchitecture {
 
 interface StackTabProps {
   architecture: SystemArchitecture
+  currency?: string
+  locale?: string
 }
 
-export default function StackTab({ architecture }: StackTabProps) {
+export default function StackTab({ architecture, currency = 'EUR', locale = 'de-DE' }: StackTabProps) {
   const [viewMode, setViewMode] = useState<'saas' | 'diy'>('diy')
   const [selectedNode, setSelectedNode] = useState<ToolNode | null>(null)
+  const [showAllAutomations, setShowAllAutomations] = useState(false)
 
   if (!architecture || !architecture.cost_comparison) {
     return (
@@ -94,9 +97,9 @@ export default function StackTab({ architecture }: StackTabProps) {
   }
 
   const formatCurrency = (value: number) => {
-    return new Intl.NumberFormat('de-DE', {
+    return new Intl.NumberFormat(locale, {
       style: 'currency',
-      currency: 'EUR',
+      currency,
       maximumFractionDigits: 0
     }).format(value)
   }
@@ -177,6 +180,13 @@ export default function StackTab({ architecture }: StackTabProps) {
                     <p className="font-medium text-gray-900">{tool.name}</p>
                   </div>
                   <p className="text-xs text-gray-500 ml-8">Already owned</p>
+                  {tool.crb?.risk_level && (
+                    <span className={`text-xs px-2 py-0.5 rounded-full ml-8 ${
+                      tool.crb.risk_level === 'low' ? 'bg-green-100 text-green-700' : 'bg-yellow-100 text-yellow-700'
+                    }`}>
+                      {tool.crb.benefit?.includes('API score') ? tool.crb.benefit.split('—')[0].trim() : 'Connected'}
+                    </span>
+                  )}
                 </motion.div>
               ))}
             </div>
@@ -220,18 +230,26 @@ export default function StackTab({ architecture }: StackTabProps) {
           <div>
             <h4 className="text-sm font-medium text-gray-500 mb-4 text-center">AUTOMATIONS</h4>
             <div className="space-y-3">
-              {automations.slice(0, 4).map((auto, idx) => (
+              {automations.slice(0, showAllAutomations ? automations.length : 6).map((auto, idx) => (
                 <div
                   key={auto.id || `auto-${idx}`}
                   className="p-4 bg-green-50 rounded-xl border-2 border-green-200"
                 >
-                  <p className="font-medium text-green-900 text-sm">{auto.name}</p>
+                  <p className="font-medium text-green-900 text-sm line-clamp-2">{auto.name}</p>
                   <p className="text-xs text-green-600 mt-1">{auto.trigger}</p>
                   {auto.action && (
-                    <p className="text-xs text-green-700 mt-1">{auto.action}</p>
+                    <p className="text-xs text-green-700 mt-1 line-clamp-2">{auto.action}</p>
                   )}
                 </div>
               ))}
+              {automations.length > 6 && !showAllAutomations && (
+                <button
+                  onClick={() => setShowAllAutomations(true)}
+                  className="text-sm text-green-600 hover:text-green-800 font-medium"
+                >
+                  Show all {automations.length} automations
+                </button>
+              )}
             </div>
           </div>
         </div>
@@ -307,12 +325,18 @@ export default function StackTab({ architecture }: StackTabProps) {
               <span className="text-sm font-normal text-gray-500">/mo</span>
             </p>
             <div className="mt-3 space-y-1">
-              {cost_comparison.saas_route.items.map((item, i) => (
-                <div key={i} className="flex justify-between text-sm">
-                  <span className="text-gray-600">{item.name}</span>
-                  <span className="text-gray-900">{formatCurrency(item.monthly_cost)}</span>
-                </div>
-              ))}
+              {cost_comparison.saas_route.items.length === 1 &&
+               (cost_comparison.saas_route.items[0].name === 'Multiple SaaS tools' ||
+                cost_comparison.saas_route.items[0].name === 'Estimated SaaS equivalent') ? (
+                <p className="text-xs text-gray-500 italic">Estimated based on equivalent SaaS tools</p>
+              ) : (
+                cost_comparison.saas_route.items.map((item, i) => (
+                  <div key={i} className="flex justify-between text-sm">
+                    <span className="text-gray-600">{item.name}</span>
+                    <span className="text-gray-900">{formatCurrency(item.monthly_cost)}</span>
+                  </div>
+                ))
+              )}
             </div>
           </div>
 

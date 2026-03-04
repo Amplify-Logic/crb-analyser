@@ -15,9 +15,17 @@ body {
   .text-balance {
     text-wrap: balance;
   }
-  
+
   .glass-panel {
     @apply bg-white/70 backdrop-blur-md border border-white/20 shadow-glass;
+  }
+
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
   }
 }
 
@@ -105,7 +113,7 @@ body {
   @page {
     margin: 1in;
     @bottom-center {
-      content: "CRB Analyser Report";
+      content: "Ready Path Report";
     }
   }
 }

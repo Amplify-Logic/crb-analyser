@@ -74,6 +74,21 @@ export default function Workshop() {
   // Upload modal
   const [showUploader, setShowUploader] = useState(false)
 
+  // Warn before closing tab during active workshop phases
+  useEffect(() => {
+    const activePhases: WorkshopPhase[] = ['confirmation', 'deepdive', 'milestone', 'synthesis']
+
+    if (!activePhases.includes(phase)) return
+
+    const handleBeforeUnload = (e: BeforeUnloadEvent) => {
+      e.preventDefault()
+      e.returnValue = '' // Chrome requires this
+    }
+
+    window.addEventListener('beforeunload', handleBeforeUnload)
+    return () => window.removeEventListener('beforeunload', handleBeforeUnload)
+  }, [phase])
+
   // Initialize workshop
   useEffect(() => {
     if (!sessionId) {
@@ -174,6 +189,7 @@ export default function Workshop() {
     priorityOrder: string[]
   }) => {
     try {
+      setError(null)
       await apiClient.post('/api/workshop/confirm', {
         session_id: sessionId,
         ratings: data.ratings,
@@ -198,8 +214,10 @@ export default function Workshop() {
       }))
 
       setPhase('deepdive')
-    } catch (err) {
+    } catch (err: any) {
       logger.error('Confirm error:', err)
+      setError(err?.message || 'Failed to save confirmation. Please try again.')
+      throw err
     }
   }
 
@@ -213,7 +231,15 @@ export default function Workshop() {
   }
 
   // Handle milestone continue
-  const handleMilestoneContinue = () => {
+  const handleMilestoneContinue = (feedback: string) => {
+    if (feedback === 'needs_edit') {
+      // Re-enter deepdive for the SAME pain point (don't advance index)
+      // Backend will generate followup questions targeting data gaps
+      setPhase('deepdive')
+      return
+    }
+
+    // Original logic: advance to next pain point or synthesis
     const nextIndex = state.currentPainPointIndex + 1
 
     if (nextIndex >= state.painPoints.length) {
@@ -237,6 +263,7 @@ export default function Workshop() {
   // Handle workshop complete
   const handleComplete = async (finalAnswers: Record<string, any>) => {
     setPhase('loading')
+    setError(null)
 
     try {
       await apiClient.post('/api/workshop/complete', {
@@ -247,14 +274,34 @@ export default function Workshop() {
         retry: true,
       })
 
+      let reportId: string | null = null
+      if (sessionId) {
+        try {
+          const { data } = await apiClient.get<{ id: string; status: string }>(`/api/reports/by-quiz/${sessionId}`, {
+            timeout: 15000,
+            retry: true,
+          })
+          reportId = data?.id || null
+        } catch (lookupErr) {
+          logger.warn('Report ID not available yet; falling back to progress page', lookupErr)
+        }
+      }
+
       setPhase('complete')
 
       // Navigate to report after delay
       setTimeout(() => {
+        if (reportId) {
+          navigate(`/report/${reportId}`)
+          return
+        }
         navigate(`/report/${sessionId}/progress`)
       }, 3000)
-    } catch (err) {
+    } catch (err: any) {
       logger.error('Complete error:', err)
+      setError(err?.message || 'Failed to finalize workshop. Please try again.')
+      setPhase('synthesis')
+      throw err
     }
   }
 
@@ -500,13 +547,13 @@ export default function Workshop() {
       <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white pb-32">
         <div className="bg-white border-b border-gray-100">
           <div className="max-w-3xl mx-auto px-4 py-6">
-            <h1 className="text-xl font-bold text-gray-900">Final Questions</h1>
-            <p className="text-sm text-gray-500">Just a few more details for your report</p>
+            <h1 className="text-xl font-bold text-gray-900">{state.companyName}'s Technology Roadmap</h1>
+            <p className="text-sm text-gray-500">Review your findings and finalize your report</p>
           </div>
         </div>
 
         <div className="max-w-3xl mx-auto px-4 py-8">
-          <SynthesisForm onComplete={handleComplete} />
+          <SynthesisForm sessionId={sessionId!} onComplete={handleComplete} />
         </div>
       </div>
     )

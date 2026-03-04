@@ -18,12 +18,10 @@ interface KnowledgeEditorProps {
 }
 
 const INDUSTRIES = [
-  'dental',
-  'home-services',
   'professional-services',
-  'recruiting',
-  'coaching',
-  'veterinary',
+  'dental',
+  'ecommerce',
+  'b2b-platforms',
 ]
 
 function formatDate(dateString?: string): string {
@@ -190,7 +188,7 @@ export default function KnowledgeEditor({
               Industry
             </label>
             <select
-              value={formData.industry || ''}
+              value={formData.industry || 'ecommerce'}
               onChange={(e) => handleFieldChange('industry', e.target.value || undefined)}
               className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
             >

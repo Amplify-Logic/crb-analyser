@@ -51,7 +51,7 @@ interface WorkshopMilestoneProps {
   painPointId: string
   painPointLabel: string
   isLastPainPoint: boolean
-  onContinue: () => void
+  onContinue: (feedback: string) => void
   onEdit?: () => void
 }
 
@@ -148,11 +148,11 @@ export default function WorkshopMilestone({
         }),
       })
 
-      onContinue()
+      onContinue(feedback)
     } catch (err) {
       logger.error('Feedback error:', err)
       // Continue anyway
-      onContinue()
+      onContinue(feedback)
     } finally {
       setIsSubmitting(false)
     }
@@ -364,7 +364,7 @@ export default function WorkshopMilestone({
           </motion.div>
         )}
 
-        {/* Data Gaps */}
+        {/* Data Gaps - Actionable */}
         {milestone.dataGaps.length > 0 && (
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -372,20 +372,23 @@ export default function WorkshopMilestone({
             transition={{ delay: 0.3 }}
             className="bg-yellow-50 rounded-xl p-4 border border-yellow-200"
           >
-            <div className="flex items-start gap-3">
-              <svg className="w-5 h-5 text-yellow-600 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-              </svg>
-              <div>
-                <p className="text-sm font-medium text-yellow-800 mb-1">
-                  Additional info would improve this estimate:
-                </p>
-                <ul className="text-sm text-yellow-700 list-disc list-inside">
-                  {milestone.dataGaps.map((gap, i) => (
-                    <li key={i}>{gap}</li>
-                  ))}
-                </ul>
-              </div>
+            <h4 className="font-medium text-yellow-800 mb-2">
+              Want to strengthen this analysis?
+            </h4>
+            <div className="space-y-2">
+              {milestone.dataGaps.map((gap, i) => (
+                <button
+                  key={i}
+                  onClick={() => {
+                    setFeedback('needs_edit')
+                    setNotes(`I want to provide more detail about: ${gap}`)
+                  }}
+                  className="w-full text-left px-3 py-2 bg-white rounded-lg border border-yellow-200
+                             hover:border-yellow-400 hover:bg-yellow-50 transition-colors text-sm text-yellow-900"
+                >
+                  Tell me more about: {gap}
+                </button>
+              ))}
             </div>
           </motion.div>
         )}

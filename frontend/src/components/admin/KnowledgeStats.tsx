@@ -45,7 +45,7 @@ export default function KnowledgeStats() {
   const [stats, setStats] = useState<EmbeddingStats | null>(null)
   const [loading, setLoading] = useState(true)
   const [searchQuery, setSearchQuery] = useState('')
-  const [searchIndustry, setSearchIndustry] = useState('')
+  const [searchIndustry, setSearchIndustry] = useState('ecommerce')
   const [searchResults, setSearchResults] = useState<SearchResult[]>([])
   const [searching, setSearching] = useState(false)
   const [reembedding, setReembedding] = useState<string | null>(null)
@@ -293,12 +293,10 @@ export default function KnowledgeStats() {
             className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
           >
             <option value="">All Industries</option>
-            <option value="dental">Dental</option>
-            <option value="home-services">Home Services</option>
             <option value="professional-services">Professional Services</option>
-            <option value="recruiting">Recruiting</option>
-            <option value="coaching">Coaching</option>
-            <option value="veterinary">Veterinary</option>
+            <option value="dental">Dental</option>
+            <option value="ecommerce">E-commerce</option>
+            <option value="b2b-platforms">B2B Platforms</option>
           </select>
           <button
             onClick={handleSearch}

@@ -104,8 +104,8 @@ export function Sidebar({
   return (
     <aside className={`w-[280px] h-full border-r border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 flex flex-col overflow-hidden ${className}`}>
       {/* Header */}
-      <div className="p-4 border-b border-gray-200 dark:border-gray-700">
-        <h2 className="font-semibold text-gray-900 dark:text-white truncate">
+      <div className="p-4 border-b border-gray-200 dark:border-gray-700 overflow-hidden">
+        <h2 className="font-semibold text-gray-900 dark:text-white truncate max-w-full text-base">
           {companyName}
         </h2>
         <p className="text-sm text-gray-500 dark:text-gray-400">{industry}</p>

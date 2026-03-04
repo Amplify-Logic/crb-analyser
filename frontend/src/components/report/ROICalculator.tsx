@@ -25,10 +25,13 @@ interface ROIResults {
   hoursSavedYearly: number
   implementationCost: number
   monthlyCost: number
-  monthlySavings: number
-  yearlySavings: number
+  grossMonthlySavings: number
+  grossYearlySavings: number
+  netMonthlySavings: number
+  netYearlySavings: number
+  firstYearInvestment: number
   roiPercentage: number
-  breakevenMonths: number
+  breakevenMonths: number | null
   threeYearNet: number
 }
 
@@ -93,6 +96,50 @@ const APPROACH_RISK = {
   custom: { level: 'high', bar: 0.7, display: 'Higher (maintenance burden)' },
 }
 
+const INPUT_LIMITS = {
+  hoursWeekly: { min: 1, max: 80 },
+  hourlyRate: { min: 20, max: 500 },
+  automationRate: { min: 0.1, max: 0.95 },
+}
+
+function clamp(value: number, min: number, max: number): number {
+  return Math.min(max, Math.max(min, value))
+}
+
+function toNumber(value: unknown, fallback: number): number {
+  if (typeof value === 'number' && Number.isFinite(value)) {
+    return value
+  }
+  if (typeof value === 'string') {
+    const parsed = Number(value)
+    if (Number.isFinite(parsed)) {
+      return parsed
+    }
+  }
+  return fallback
+}
+
+function parseMonetaryValue(value: unknown): number {
+  if (typeof value === 'number' && Number.isFinite(value)) {
+    return value
+  }
+  if (typeof value !== 'string') {
+    return 0
+  }
+
+  const matches = value.replace(/,/g, '').match(/\d+(?:\.\d+)?/g)
+  if (!matches || matches.length === 0) {
+    return 0
+  }
+
+  const numbers = matches.map(Number).filter(Number.isFinite)
+  if (numbers.length === 0) {
+    return 0
+  }
+
+  return numbers.length > 1 ? (numbers[0] + numbers[1]) / 2 : numbers[0]
+}
+
 export default function ROICalculator({
   recommendations,
   valueSummary,
@@ -103,66 +150,71 @@ export default function ROICalculator({
   // Extract actual values from report data
   const reportDefaults = useMemo(() => {
     // Calculate total hours from value_saved
-    const hoursPerWeek = valueSummary?.value_saved?.hours_per_week || 12
-    const hourlyRate = valueSummary?.value_saved?.hourly_rate || 85
-
-    // Calculate costs from recommendations
-    const totalMonthlyCost = recommendations.reduce((sum, rec) => {
-      const option = rec.options?.connect_and_automate || rec.options?.enhance_with_ai || rec.options?.best_in_class || rec.options?.off_the_shelf
-      const cost = typeof option?.monthly_cost === 'number' ? option.monthly_cost : 0
-      return sum + cost
-    }, 0)
-
-    const totalImplementationCost = recommendations.reduce((sum, rec) => {
-      return sum + (rec.crb_analysis?.cost?.total || 0)
-    }, 0)
-
-    // Calculate benefits
-    const totalAnnualBenefit = recommendations.reduce((sum, rec) => {
-      return sum + (rec.crb_analysis?.benefit?.total || 0)
-    }, 0)
-
-    // Average ROI and payback from recommendations
-    const avgRoi = recommendations.length > 0
-      ? recommendations.reduce((sum, rec) => sum + (rec.roi_percentage || 0), 0) / recommendations.length
-      : 300
-
-    const avgPayback = recommendations.length > 0
-      ? recommendations.reduce((sum, rec) => sum + (rec.payback_months || 0), 0) / recommendations.length
-      : 3
+    const rawHours = toNumber(valueSummary?.value_saved?.hours_per_week, 12)
+    const rawHourlyRate = toNumber(valueSummary?.value_saved?.hourly_rate, 85)
 
     return {
-      hoursPerWeek,
-      hourlyRate,
-      totalMonthlyCost,
-      totalImplementationCost,
-      totalAnnualBenefit,
-      avgRoi: Math.round(avgRoi),
-      avgPayback: Math.round(avgPayback * 10) / 10,
+      hoursPerWeek: Math.round(clamp(rawHours, INPUT_LIMITS.hoursWeekly.min, INPUT_LIMITS.hoursWeekly.max)),
+      hourlyRate: Math.round(clamp(rawHourlyRate, INPUT_LIMITS.hourlyRate.min, INPUT_LIMITS.hourlyRate.max)),
     }
-  }, [recommendations, valueSummary])
+  }, [valueSummary])
 
   // Dynamic approach costs based on report data
   const approachCosts = useMemo(() => {
+    const getRecommendedOption = (rec: ReportRecommendation) => {
+      const recommended = rec.options?.[rec.our_recommendation]
+      if (recommended) return recommended
+      return rec.options?.enhance_with_ai || rec.options?.targeted_upgrade || rec.options?.best_in_class || rec.options?.off_the_shelf
+    }
+
     const saasMonthly = recommendations.reduce((sum, rec) => {
-      const option = rec.options?.enhance_with_ai || rec.options?.targeted_upgrade || rec.options?.best_in_class || rec.options?.off_the_shelf
-      const cost = typeof option?.monthly_cost === 'number' ? option.monthly_cost : 0
+      const option = getRecommendedOption(rec)
+      const cost = parseMonetaryValue(option?.monthly_cost ?? option?.monthly_running_cost ?? option?.cost_range)
       return sum + cost
     }, 0) || DEFAULT_APPROACH_COSTS.saas.monthly
 
     const saasImplementation = recommendations.reduce((sum, rec) => {
-      const weeks = rec.options?.enhance_with_ai?.implementation_weeks || rec.options?.targeted_upgrade?.implementation_weeks || rec.options?.best_in_class?.implementation_weeks || rec.options?.off_the_shelf?.implementation_weeks || 2
-      return sum + (weeks * 200) // Rough estimate: €200 per week of setup time
-    }, 0) || DEFAULT_APPROACH_COSTS.saas.implementation
+      const explicitTotal = toNumber(rec.crb_analysis?.cost?.total, 0)
+      if (explicitTotal > 0) {
+        return sum + explicitTotal
+      }
+
+      const option = getRecommendedOption(rec)
+      const weeks = toNumber(option?.implementation_weeks, 2)
+      return sum + (weeks * 200)
+    }, 0)
 
     const customMin = recommendations.reduce((sum, rec) => {
-      return sum + (rec.options?.connect_and_automate?.estimated_cost?.min || rec.options?.custom_solution?.estimated_cost?.min || 0)
-    }, 0) || DEFAULT_APPROACH_COSTS.custom.implementation
+      return sum + toNumber(
+        rec.options?.connect_and_automate?.estimated_cost?.min
+        ?? rec.options?.custom_solution?.estimated_cost?.min,
+        0
+      )
+    }, 0)
+
+    const normalizedSaasMonthly = Math.max(0, Math.round(saasMonthly))
+    const normalizedSaasImplementation = Math.max(
+      0,
+      Math.round(saasImplementation > 0 ? saasImplementation : DEFAULT_APPROACH_COSTS.saas.implementation)
+    )
+    const normalizedCustomImplementation = Math.max(
+      0,
+      Math.round(customMin > 0 ? customMin : normalizedSaasImplementation * 2)
+    )
 
     return {
-      diy: { implementation: 0, monthly: Math.round(saasMonthly * 0.5) },
-      saas: { implementation: saasImplementation, monthly: saasMonthly },
-      custom: { implementation: customMin, monthly: 50 },
+      diy: {
+        implementation: 0,
+        monthly: Math.max(0, Math.round(normalizedSaasMonthly * 0.4)),
+      },
+      saas: {
+        implementation: normalizedSaasImplementation,
+        monthly: normalizedSaasMonthly,
+      },
+      custom: {
+        implementation: normalizedCustomImplementation,
+        monthly: Math.max(50, Math.round(normalizedSaasMonthly * 0.35)),
+      },
     }
   }, [recommendations])
 
@@ -196,21 +248,27 @@ export default function ROICalculator({
     const hoursSavedMonthly = hoursSavedWeekly * 4.33
     const hoursSavedYearly = hoursSavedMonthly * 12
 
-    const monthlySavings = hoursSavedMonthly * inputs.hourlyRate
-    const yearlySavings = monthlySavings * 12
+    const grossMonthlySavings = hoursSavedMonthly * inputs.hourlyRate
+    const grossYearlySavings = grossMonthlySavings * 12
 
     const implementationCost = approach.implementation
     const monthlyCost = approach.monthly
 
-    const netMonthlySavings = monthlySavings - monthlyCost
-    const breakevenMonths = implementationCost > 0 && netMonthlySavings > 0
-      ? implementationCost / netMonthlySavings
-      : 0
+    const netMonthlySavings = grossMonthlySavings - monthlyCost
+    const netYearlySavings = grossYearlySavings - monthlyCost * 12
+    const firstYearInvestment = implementationCost + monthlyCost * 12
 
-    const threeYearNet = (yearlySavings - monthlyCost * 12) * 3 - implementationCost
-    const roiPercentage = implementationCost > 0
-      ? ((yearlySavings - monthlyCost * 12) / implementationCost) * 100
-      : 999
+    let breakevenMonths: number | null = null
+    if (implementationCost === 0) {
+      breakevenMonths = netMonthlySavings > 0 ? 0 : null
+    } else if (netMonthlySavings > 0) {
+      breakevenMonths = implementationCost / netMonthlySavings
+    }
+
+    const threeYearNet = netYearlySavings * 3 - implementationCost
+    const roiPercentage = firstYearInvestment > 0
+      ? (netYearlySavings / firstYearInvestment) * 100
+      : 0
 
     return {
       hoursSavedWeekly: Math.round(hoursSavedWeekly * 10) / 10,
@@ -218,10 +276,13 @@ export default function ROICalculator({
       hoursSavedYearly: Math.round(hoursSavedYearly),
       implementationCost,
       monthlyCost,
-      monthlySavings: Math.round(monthlySavings),
-      yearlySavings: Math.round(yearlySavings),
+      grossMonthlySavings: Math.round(grossMonthlySavings),
+      grossYearlySavings: Math.round(grossYearlySavings),
+      netMonthlySavings: Math.round(netMonthlySavings),
+      netYearlySavings: Math.round(netYearlySavings),
+      firstYearInvestment: Math.round(firstYearInvestment),
       roiPercentage: Math.round(roiPercentage),
-      breakevenMonths: Math.max(0, parseFloat(breakevenMonths.toFixed(1))),
+      breakevenMonths: breakevenMonths === null ? null : Math.max(0, parseFloat(breakevenMonths.toFixed(1))),
       threeYearNet: Math.round(threeYearNet),
     }
   }, [inputs, approachCosts])
@@ -237,7 +298,7 @@ export default function ROICalculator({
         : `${formatCurrency(approach.monthly)}/mo`,
       riskDisplay: risk.display,
       riskBar: risk.bar,
-      benefitDisplay: `${formatCurrency(results.monthlySavings)}/mo saved`,
+      benefitDisplay: `${formatCurrency(results.netMonthlySavings)}/mo net saved`,
       timeBenefit: `${results.hoursSavedWeekly.toFixed(1)} hrs/wk freed`,
     }
   }, [inputs.implementationApproach, results, approachCosts, formatCurrency])
@@ -246,7 +307,7 @@ export default function ROICalculator({
   const chartData = useMemo(() => {
     const currentData = {
       name: 'Current',
-      value: results.yearlySavings - results.monthlyCost * 12,
+      value: results.netYearlySavings,
     }
 
     if (!compareMode || selectedScenarios.length === 0) {
@@ -257,7 +318,7 @@ export default function ROICalculator({
       .filter(s => selectedScenarios.includes(s.id))
       .map(s => ({
         name: s.name,
-        value: s.results.yearlySavings - s.results.monthlyCost * 12,
+        value: s.results.netYearlySavings,
       }))
 
     return [currentData, ...scenarioData]
@@ -265,7 +326,27 @@ export default function ROICalculator({
 
   // Handlers
   const handleInputChange = useCallback((field: keyof ROIInputs, value: number | string) => {
-    setInputs(prev => ({ ...prev, [field]: value }))
+    setInputs((prev) => {
+      if (field === 'implementationApproach') {
+        if (value === 'diy' || value === 'saas' || value === 'custom') {
+          return { ...prev, implementationApproach: value }
+        }
+        return prev
+      }
+
+      if (field === 'hoursWeekly') {
+        const next = Math.round(clamp(toNumber(value, prev.hoursWeekly), INPUT_LIMITS.hoursWeekly.min, INPUT_LIMITS.hoursWeekly.max))
+        return { ...prev, hoursWeekly: next }
+      }
+
+      if (field === 'hourlyRate') {
+        const next = Math.round(clamp(toNumber(value, prev.hourlyRate), INPUT_LIMITS.hourlyRate.min, INPUT_LIMITS.hourlyRate.max))
+        return { ...prev, hourlyRate: next }
+      }
+
+      const next = clamp(toNumber(value, prev.automationRate), INPUT_LIMITS.automationRate.min, INPUT_LIMITS.automationRate.max)
+      return { ...prev, automationRate: parseFloat(next.toFixed(2)) }
+    })
   }, [])
 
   const handleSaveScenario = useCallback(() => {
@@ -388,8 +469,8 @@ export default function ROICalculator({
             </div>
             <input
               type="range"
-              min="1"
-              max="40"
+              min={INPUT_LIMITS.hoursWeekly.min}
+              max={INPUT_LIMITS.hoursWeekly.max}
               step="1"
               value={inputs.hoursWeekly}
               onChange={(e) => handleInputChange('hoursWeekly', parseInt(e.target.value))}
@@ -397,8 +478,8 @@ export default function ROICalculator({
             />
             <div className="flex justify-between text-xs text-gray-400 mt-1">
               <span>1 hr</span>
-              <span>20 hrs</span>
               <span>40 hrs</span>
+              <span>80 hrs</span>
             </div>
           </div>
 
@@ -414,8 +495,8 @@ export default function ROICalculator({
             </div>
             <input
               type="range"
-              min="20"
-              max="300"
+              min={INPUT_LIMITS.hourlyRate.min}
+              max={INPUT_LIMITS.hourlyRate.max}
               step="5"
               value={inputs.hourlyRate}
               onChange={(e) => handleInputChange('hourlyRate', parseInt(e.target.value))}
@@ -423,9 +504,9 @@ export default function ROICalculator({
             />
             <div className="flex justify-between text-xs text-gray-400 mt-1">
               <span>20</span>
-              <span>100</span>
-              <span>200</span>
+              <span>150</span>
               <span>300</span>
+              <span>500</span>
             </div>
           </div>
 
@@ -441,8 +522,8 @@ export default function ROICalculator({
             </div>
             <input
               type="range"
-              min="0.2"
-              max="0.95"
+              min={INPUT_LIMITS.automationRate.min}
+              max={INPUT_LIMITS.automationRate.max}
               step="0.05"
               value={inputs.automationRate}
               onChange={(e) => handleInputChange('automationRate', parseFloat(e.target.value))}
@@ -504,27 +585,29 @@ export default function ROICalculator({
           <div className="p-4 bg-green-50 rounded-xl text-center">
             <p className="text-xs text-green-600 uppercase tracking-wide mb-1">Monthly Savings</p>
             <p className="text-2xl font-bold text-green-700">
-              {formatCurrency(results.monthlySavings - results.monthlyCost)}
+              {formatCurrency(results.netMonthlySavings)}
             </p>
             <p className="text-xs text-green-600">net of costs</p>
           </div>
           <div className="p-4 bg-blue-50 rounded-xl text-center">
             <p className="text-xs text-blue-600 uppercase tracking-wide mb-1">Yearly Savings</p>
             <p className="text-2xl font-bold text-blue-700">
-              {formatCurrency(results.yearlySavings - results.monthlyCost * 12)}
+              {formatCurrency(results.netYearlySavings)}
             </p>
           </div>
           <div className="p-4 bg-purple-50 rounded-xl text-center">
             <p className="text-xs text-purple-600 uppercase tracking-wide mb-1">ROI</p>
             <p className="text-2xl font-bold text-purple-700">
-              {results.roiPercentage > 999 ? '999+' : results.roiPercentage}%
+              {results.roiPercentage}%
             </p>
             <p className="text-xs text-purple-600">first year</p>
           </div>
           <div className="p-4 bg-orange-50 rounded-xl text-center">
             <p className="text-xs text-orange-600 uppercase tracking-wide mb-1">Breakeven</p>
             <p className="text-2xl font-bold text-orange-700">
-              {results.breakevenMonths === 0 ? 'Immediate' : `${results.breakevenMonths} mo`}
+              {results.breakevenMonths === null
+                ? 'No payback'
+                : (results.breakevenMonths === 0 ? 'Immediate' : `${results.breakevenMonths} mo`)}
             </p>
           </div>
         </div>
@@ -618,7 +701,7 @@ export default function ROICalculator({
                   <div className="flex items-center gap-4">
                     <div className="text-right">
                       <p className="text-lg font-bold text-green-600">
-                        {formatCurrency(scenario.results.yearlySavings - scenario.results.monthlyCost * 12)}/yr
+                        {formatCurrency(scenario.results.netYearlySavings)}/yr
                       </p>
                       <p className="text-xs text-gray-500">
                         {scenario.results.roiPercentage}% ROI

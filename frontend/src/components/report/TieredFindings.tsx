@@ -59,9 +59,11 @@ interface TieredFindingsProps {
   compactCount?: number
   totalCount?: number
   currentIndex?: number
+  currency?: string
+  locale?: string
 }
 
-function AgentOpportunityCard({ opportunity }: { opportunity: AgentOpportunity }) {
+function AgentOpportunityCard({ opportunity, currency = 'EUR', locale = 'de-DE' }: { opportunity: AgentOpportunity; currency?: string; locale?: string }) {
   return (
     <div className="mt-4 p-4 bg-indigo-50 dark:bg-indigo-900/20 border border-indigo-200 dark:border-indigo-800 rounded-lg">
       <div className="flex items-center gap-2 mb-2">
@@ -80,7 +82,7 @@ function AgentOpportunityCard({ opportunity }: { opportunity: AgentOpportunity }
           <div>
             <span className="text-gray-500">Est. monthly value</span>
             <p className="font-semibold text-indigo-700 dark:text-indigo-300">
-              {new Intl.NumberFormat('de-DE', { style: 'currency', currency: 'EUR', maximumFractionDigits: 0 }).format(Number(opportunity.estimated_impact.monthly_value_eur))}
+              {new Intl.NumberFormat(locale, { style: 'currency', currency, maximumFractionDigits: 0 }).format(Number(opportunity.estimated_impact.monthly_value_eur))}
             </p>
           </div>
         )}
@@ -109,10 +111,12 @@ function getImpactLabel(globalIndex: number): string {
   return 'Moderate Impact'
 }
 
-function HeroFindingCard({ finding, index, globalIndex }: { finding: Finding; index: number; globalIndex: number }) {
+function HeroFindingCard({ finding, index, globalIndex, currency = 'EUR', locale = 'de-DE' }: { finding: Finding; index: number; globalIndex: number; currency?: string; locale?: string }) {
   const formatCurrency = (value: number) =>
-    new Intl.NumberFormat('de-DE', { style: 'currency', currency: 'EUR', maximumFractionDigits: 0 }).format(value)
+    new Intl.NumberFormat(locale, { style: 'currency', currency, maximumFractionDigits: 0 }).format(value)
   const verdict = getVerdict(finding)
+  const annualSavings = finding.value_saved?.annual_savings ?? 0
+  const potentialRevenue = finding.value_created?.potential_revenue ?? 0
 
   return (
     <motion.div
@@ -159,24 +163,24 @@ function HeroFindingCard({ finding, index, globalIndex }: { finding: Finding; in
       <p className="text-gray-600 dark:text-gray-400 mb-4">
         {finding.description}
       </p>
-      {(finding.value_saved?.annual_savings || finding.value_created?.potential_revenue) && (
+      {(annualSavings > 0 || potentialRevenue > 0) && (
         <div className="flex gap-4 pt-4 border-t border-gray-200 dark:border-gray-700">
-          {finding.value_saved?.annual_savings && (
+          {annualSavings > 0 && (
             <div>
               <p className="text-xs text-gray-500">Potential Savings</p>
-              <p className="text-lg font-bold text-green-600">{formatCurrency(finding.value_saved.annual_savings)}/yr</p>
+              <p className="text-lg font-bold text-green-600">{formatCurrency(annualSavings)}/yr</p>
             </div>
           )}
-          {finding.value_created?.potential_revenue && (
+          {potentialRevenue > 0 && (
             <div>
               <p className="text-xs text-gray-500">Revenue Potential</p>
-              <p className="text-lg font-bold text-blue-600">{formatCurrency(finding.value_created.potential_revenue)}</p>
+              <p className="text-lg font-bold text-blue-600">{formatCurrency(potentialRevenue)}</p>
             </div>
           )}
         </div>
       )}
       {finding.agent_opportunity && (
-        <AgentOpportunityCard opportunity={finding.agent_opportunity} />
+        <AgentOpportunityCard opportunity={finding.agent_opportunity} currency={currency} locale={locale} />
       )}
       {finding.automation_flow?.nodes?.length > 0 && (
         <div className="mt-4">
@@ -244,7 +248,7 @@ function CompactFindingCard({ finding }: { finding: Finding }) {
   )
 }
 
-export default function TieredFindings({ findings, heroCount = 3, compactCount = 4, totalCount, currentIndex }: TieredFindingsProps) {
+export default function TieredFindings({ findings, heroCount = 3, compactCount = 4, totalCount, currentIndex, currency = 'EUR', locale = 'de-DE' }: TieredFindingsProps) {
   const [showAll, setShowAll] = useState(false)
 
   // Sort by combined score
@@ -273,7 +277,7 @@ export default function TieredFindings({ findings, heroCount = 3, compactCount =
       {/* Hero Findings */}
       <div className="space-y-4 mb-6">
         {heroFindings.map((finding, i) => (
-          <HeroFindingCard key={finding.id} finding={finding} index={i} globalIndex={currentIndex ?? i} />
+          <HeroFindingCard key={finding.id} finding={finding} index={i} globalIndex={currentIndex ?? i} currency={currency} locale={locale} />
         ))}
       </div>
 

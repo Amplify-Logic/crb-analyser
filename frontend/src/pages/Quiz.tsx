@@ -186,16 +186,8 @@ interface TeaserReport {
 
 const INDUSTRY_COPY: Record<string, { heading: string; subheading: string }> = {
   ecommerce: {
-    heading: "Let's analyze your e-commerce stack",
-    subheading: "We'll scan your store, detect your platform and tools, and find where AI can boost revenue and cut support costs.",
-  },
-  dental: {
-    heading: "Let's analyze your dental practice",
-    subheading: "We'll research your practice and identify where AI can streamline operations, reduce no-shows, and improve patient experience.",
-  },
-  'professional-services': {
-    heading: "Let's analyze your firm",
-    subheading: "We'll research your business and find where AI can automate admin, improve client delivery, and increase margins.",
+    heading: "Let's analyze your store",
+    subheading: "We'll scan your store, detect your platform and tools, and find where AI can boost revenue and cut costs.",
   },
 }
 
@@ -534,7 +526,7 @@ export default function Quiz() {
         const response = await fetch(`${API_BASE}/api/quiz/sessions`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ email: tempEmail, tier: 'full' }),
+          body: JSON.stringify({ email: tempEmail, tier: 'ai' }),
         })
 
         if (response.ok) {
@@ -755,7 +747,7 @@ export default function Quiz() {
     clearSavedProgress()
 
     // Navigate to checkout with tier
-    const tierParam = tier === 'report_only' ? 'report' : 'report_plus_call'
+    const tierParam = tier === 'report_only' ? 'ai' : 'human'
     navigate(`/checkout?tier=${tierParam}&session_id=${sessionId}`)
   }
 
@@ -973,11 +965,11 @@ export default function Quiz() {
 
   if (phase === 'researching') {
     const researchSteps = [
-      { label: 'Scanning website', icon: '🌐', done: researchProgress >= 20, active: researchProgress > 0 && researchProgress < 20 },
-      { label: 'Searching LinkedIn', icon: '💼', done: researchProgress >= 40, active: researchProgress >= 20 && researchProgress < 40 },
+      { label: 'Scanning your store', icon: '🌐', done: researchProgress >= 20, active: researchProgress > 0 && researchProgress < 20 },
+      { label: 'Researching your brand', icon: '💼', done: researchProgress >= 40, active: researchProgress >= 20 && researchProgress < 40 },
       { label: 'Finding news & updates', icon: '📰', done: researchProgress >= 60, active: researchProgress >= 40 && researchProgress < 60 },
-      { label: 'Analyzing tech stack', icon: '⚙️', done: researchProgress >= 80, active: researchProgress >= 60 && researchProgress < 80 },
-      { label: 'Generating questions', icon: '✨', done: researchProgress >= 95, active: researchProgress >= 80 && researchProgress < 95 },
+      { label: 'Detecting your stack', icon: '⚙️', done: researchProgress >= 80, active: researchProgress >= 60 && researchProgress < 80 },
+      { label: 'Building your questions', icon: '✨', done: researchProgress >= 95, active: researchProgress >= 80 && researchProgress < 95 },
     ]
 
     return (
@@ -1210,41 +1202,17 @@ export default function Quiz() {
     // Industry-specific verified stats for the value hook
     // All stats verified against actual source URLs
     const industryHooks: Record<string, { stat: string; source: string; sourceUrl: string; cta: string }> = {
-      'dental': {
-        stat: 'Automated reminders reduce dental no-shows by up to 38%',
-        source: 'Patient Reminder Statistics',
-        sourceUrl: 'https://www.dialoghealth.com/post/patient-appointment-reminder-statistics',
-        cta: 'Complete the interview to discover your specific opportunities'
+      'ecommerce': {
+        stat: 'AI-powered product recommendations drive up to 35% of e-commerce revenue',
+        source: 'McKinsey Digital Commerce',
+        sourceUrl: 'https://www.mckinsey.com/capabilities/growth-marketing-and-sales/our-insights/the-value-of-getting-personalization-right-or-wrong-is-multiplying',
+        cta: 'Complete the interview to find your revenue growth opportunities'
       },
-      'recruiting': {
-        stat: 'Recruiters using AI save a full day per week (20% of time)',
-        source: 'LinkedIn Future of Recruiting 2025',
-        sourceUrl: 'https://business.linkedin.com/talent-solutions/resources/future-of-recruiting',
-        cta: 'Complete the interview to find your biggest time savings'
-      },
-      'coaching': {
-        stat: '47% of coaches now use digital platforms — are you keeping up?',
-        source: 'ICF Global Coaching Study 2025',
-        sourceUrl: 'https://coachingfederation.org/resource/2025-icf-global-coaching-study-executive-summary/',
-        cta: 'Complete the interview to find your efficiency gains'
-      },
-      'home-services': {
-        stat: 'Technicians spend 30% of their day on admin, only 29% on actual service',
-        source: 'Salesforce Field Service Trends',
-        sourceUrl: 'https://www.zuper.co/field-service/field-service-management-trends-2025',
-        cta: 'Complete the interview to find your efficiency gains'
-      },
-      'veterinary': {
-        stat: '39% of vet practices want AI tools — early adopters gain the edge',
-        source: 'AAHA/Digitail Survey 2024',
-        sourceUrl: 'https://www.aaha.org/trends-magazine/trends-may-2024/applications-of-ai-in-veterinary-practice/',
-        cta: 'Complete the interview to discover your opportunities'
-      },
-      'professional-services': {
-        stat: 'Lawyers bill just 37% of their day (2.9 hours) — AI can change that',
-        source: 'Clio Legal Trends Report 2024',
-        sourceUrl: 'https://www.clio.com/resources/legal-trends/2024-report/',
-        cta: 'Complete the interview to find your billable hour gains'
+      'b2b-platforms': {
+        stat: 'B2B companies using AI see 50% more leads and 60% lower costs',
+        source: 'Harvard Business Review',
+        sourceUrl: 'https://hbr.org/2023/04/how-b2b-businesses-can-get-ai-right',
+        cta: 'Complete the interview to find your platform growth opportunities'
       }
     }
 
@@ -2521,7 +2489,7 @@ export default function Quiz() {
                 <p className="text-gray-500 mb-6">One-time payment • Delivered within 24 hours</p>
 
                 <button
-                  onClick={() => navigate('/checkout?tier=full')}
+                  onClick={() => navigate('/checkout?tier=ai')}
                   className="w-full py-4 bg-primary-600 text-white font-semibold rounded-xl hover:bg-primary-700 transition shadow-lg shadow-primary-600/25 text-lg"
                 >
                   Get Your Report →
