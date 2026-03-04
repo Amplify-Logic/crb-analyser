@@ -68,23 +68,24 @@ function DevModeTestGenerator({ navigate }: DevModeTestGeneratorProps) {
         annual_revenue: { value: industryData.annualRevenue }
       },
       tech_stack: {
-        technologies_detected: industryData.techStack.slice(0, 3).map(t => ({ value: t }))
+        technologies_detected: industryData.techStack.map(t => ({ value: t }))
       }
     }
 
+    // Use full quiz answers if available, fall back to basic fields
     const mockAnswers = {
-      industry: testCompany.industry,
-      company_size: industryData.employeeRange,
-      employee_count: industryData.employeeCount,
-      pain_points: industryData.painPoints,
-      biggest_challenge: industryData.biggestChallenge,
-      current_tools: industryData.currentTools,
-      automation_experience: industryData.automationExperience,
-      ai_budget: industryData.aiBudget,
-      manual_hours_weekly: industryData.manualHoursWeekly,
-      tech_comfort: 'comfortable',
-      // Include interview responses in answers for dev context
-      interview_responses: industryData.interview.map(m => m.content),
+      ...industryData.quizAnswers,
+      // Always include interview responses for report context
+      interview_responses: industryData.interview
+        .filter(m => m.role === 'user')
+        .map(m => m.content),
+      // Include workshop deep-dive transcripts if available
+      ...(industryData.workshopDeepDives ? {
+        workshop_deep_dives: industryData.workshopDeepDives.map(dd => ({
+          pain_point: dd.painPoint,
+          transcript: dd.conversation,
+        })),
+      } : {}),
     }
 
     // Full interview messages with assistant questions interspersed
@@ -341,7 +342,7 @@ function DevModeTestGenerator({ navigate }: DevModeTestGeneratorProps) {
               <option value={-1}>{'\uD83C\uDFB2'} Random</option>
               {testCompanies.map((company, idx) => (
                 <option key={company.name} value={idx}>
-                  {company.name} ({company.industry})
+                  {company.name} ({company.subtype.replace('ecommerce-', '')})
                 </option>
               ))}
             </select>
