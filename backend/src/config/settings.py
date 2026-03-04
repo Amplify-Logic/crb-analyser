@@ -3,7 +3,6 @@ CRB Analyser Configuration Settings
 """
 
 import logging
-import re
 from functools import lru_cache
 from typing import List, Optional
 from urllib.parse import urlparse
@@ -22,6 +21,8 @@ class Settings(BaseSettings):
     APP_ENV: str = "development"
     DEBUG: bool = False
     LOG_LEVEL: str = "INFO"
+    ENABLE_DEV_ROUTES: bool = False
+    DEV_ADMIN_BYPASS: bool = False
 
     # Server
     HOST: str = "0.0.0.0"
@@ -103,6 +104,11 @@ class Settings(BaseSettings):
 
     # Email Marketing (Brevo) - For nurture sequences
     BREVO_API_KEY: Optional[str] = None
+
+    # Telegram Bot
+    TELEGRAM_BOT_TOKEN: Optional[str] = None
+    TELEGRAM_ADMIN_CHAT_ID: Optional[str] = None  # Your personal chat ID
+    TELEGRAM_WEBHOOK_SECRET: Optional[str] = None  # Webhook verification token
 
     # Monitoring
     LOGFIRE_TOKEN: Optional[str] = None
@@ -210,6 +216,10 @@ class Settings(BaseSettings):
                 issues.append("STRIPE_WEBHOOK_SECRET is not set (required in production)")
             if "change-me" in self.SECRET_KEY.lower():
                 issues.append("SECRET_KEY is still set to default value")
+            if self.ENABLE_DEV_ROUTES:
+                issues.append("ENABLE_DEV_ROUTES must be false in production")
+            if self.DEV_ADMIN_BYPASS:
+                issues.append("DEV_ADMIN_BYPASS must be false in production")
 
         return issues
 

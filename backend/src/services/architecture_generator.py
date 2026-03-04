@@ -103,6 +103,16 @@ class SystemArchitecture(BaseModel):
 # TOOL DATABASE
 # =============================================================================
 
+# Slug aliases for normalizing tool names from quiz answers
+SLUG_ALIASES = {
+    "google-analytics": "google_analytics",
+    "ga4": "google_analytics",
+    "google analytics": "google_analytics",
+    "woocommerce": "woocommerce",
+    "ship-station": "shipstation",
+    "send-cloud": "sendcloud",
+}
+
 # Tool database with costs and categories
 TOOL_DATABASE = {
     # AI Models
@@ -148,6 +158,17 @@ TOOL_DATABASE = {
     # Analytics
     "google_analytics": {"name": "Google Analytics", "category": "existing", "monthly_cost": 0, "icon": "bar-chart"},
     "mixpanel": {"name": "Mixpanel", "category": "existing", "monthly_cost": 89, "icon": "bar-chart"},
+
+    # Ecommerce
+    "shopify": {"name": "Shopify", "category": "existing", "monthly_cost": 36, "icon": "shopping-cart"},
+    "klaviyo": {"name": "Klaviyo", "category": "existing", "monthly_cost": 45, "icon": "mail"},
+    "gorgias": {"name": "Gorgias", "category": "existing", "monthly_cost": 60, "icon": "message"},
+    "tidio": {"name": "Tidio", "category": "existing", "monthly_cost": 29, "icon": "message"},
+    "shipstation": {"name": "ShipStation", "category": "existing", "monthly_cost": 30, "icon": "truck"},
+    "sendcloud": {"name": "Sendcloud", "category": "existing", "monthly_cost": 25, "icon": "truck"},
+    "woocommerce": {"name": "WooCommerce", "category": "existing", "monthly_cost": 0, "icon": "shopping-cart"},
+    "inventory_planner": {"name": "Inventory Planner", "category": "existing", "monthly_cost": 100, "icon": "package"},
+    "triple_whale": {"name": "Triple Whale", "category": "existing", "monthly_cost": 100, "icon": "bar-chart"},
 }
 
 # SaaS alternatives with costs
@@ -164,6 +185,85 @@ SAAS_ALTERNATIVES = {
 
 
 # =============================================================================
+# HELPER FUNCTIONS
+# =============================================================================
+
+def _derive_trigger(title: str, rec: Dict[str, Any]) -> str:
+    """Derive a meaningful trigger from recommendation title and data."""
+    title_lower = title.lower()
+
+    if "order" in title_lower and ("rout" in title_lower or "track" in title_lower):
+        return "New order placed in Shopify"
+    if "cart" in title_lower and ("abandon" in title_lower or "recovery" in title_lower):
+        return "Cart abandoned for 1+ hours"
+    if "email" in title_lower or "klaviyo" in title_lower or "dormant" in title_lower:
+        return "Subscriber inactive for 90+ days"
+    if "support" in title_lower or "chatbot" in title_lower or "inquir" in title_lower:
+        return "Customer support ticket received"
+    if "inventory" in title_lower or "forecast" in title_lower or "restock" in title_lower:
+        return "Stock level drops below threshold"
+    if "product" in title_lower and ("description" in title_lower or "content" in title_lower):
+        return "New product added to catalog"
+    if "review" in title_lower:
+        return "New product review posted"
+    if "return" in title_lower:
+        return "Return request submitted"
+    if "segment" in title_lower or "personali" in title_lower:
+        return "Customer behavior data updated"
+    if "conversion" in title_lower or "analytics" in title_lower or "data" in title_lower:
+        return "Weekly data sync triggered"
+    if "recommend" in title_lower or "aov" in title_lower or "cross-sell" in title_lower:
+        return "Customer views product page"
+    if "fulfillment" in title_lower or "shipping" in title_lower:
+        return "Order ready for fulfillment"
+
+    # Generic but better than "When X occurs"
+    return "Triggered by schedule or event"
+
+
+def _parse_build_hours(build_time: str) -> float:
+    """Parse build hours from strings like '8-12 hours' or '2-3 weeks'."""
+    if not build_time:
+        return 8  # Default
+    build_time = build_time.lower()
+    import re
+    numbers = re.findall(r'(\d+(?:\.\d+)?)', build_time)
+    if not numbers:
+        return 8
+    avg = sum(float(n) for n in numbers) / len(numbers)
+    if "week" in build_time:
+        return avg * 20  # 20 hours per week
+    if "day" in build_time:
+        return avg * 4  # 4 hours per day
+    return avg  # Assume hours
+
+
+def _parse_cost_from_range(cost_range: str, tool_name: str) -> Optional[float]:
+    """Parse a monthly cost from a cost_range string for a specific tool."""
+    if not cost_range:
+        return None
+    import re
+    tool_lower = tool_name.lower()
+    cost_lower = cost_range.lower()
+
+    patterns = [
+        rf'{re.escape(tool_lower)}[^€\d]*[€EUR]*\s*(\d+)',
+        rf'(\d+)[^€\d]*{re.escape(tool_lower)}',
+    ]
+    for pattern in patterns:
+        match = re.search(pattern, cost_lower)
+        if match:
+            return float(match.group(1))
+
+    # Fallback: first number in the string
+    match = re.search(r'[€EUR]\s*(\d+)', cost_range)
+    if match:
+        return float(match.group(1))
+
+    return None
+
+
+# =============================================================================
 # ARCHITECTURE GENERATOR
 # =============================================================================
 
@@ -174,6 +274,7 @@ class ArchitectureGenerator:
         self,
         recommendations: List[Dict[str, Any]],
         quiz_answers: Dict[str, Any],
+        existing_stack: Optional[List[Dict[str, Any]]] = None,
     ) -> SystemArchitecture:
         """Generate complete system architecture."""
 
@@ -208,50 +309,135 @@ class ArchitectureGenerator:
                     is_existing=True,
                 ))
 
-        # Build AI layer from recommendations
-        ai_layer = [
-            ToolNode(
-                id="ai-claude",
-                name="Claude Sonnet 4.5",
-                category="ai_brain",
-                icon="brain",
-                monthly_cost=50,
-                crb=NodeCRB(
-                    cost="~€50/mo at typical usage",
-                    risk="API dependency",
-                    risk_level="low",
-                    benefit="Powers all AI automations",
-                    powers=["Lead scoring", "Content generation", "Support responses"],
-                ),
-                position=Position(x=200, y=0, column="ai_layer"),
-            ),
-            ToolNode(
-                id="ai-automation",
-                name="Make.com",
-                category="automation",
-                icon="zap",
-                monthly_cost=20,
-                crb=NodeCRB(
-                    cost="€20/mo",
-                    risk="Workflow complexity",
-                    risk_level="low",
-                    benefit="Connects all tools",
-                    powers=["Workflows", "Triggers", "Scheduling"],
-                ),
-                position=Position(x=200, y=100, column="ai_layer"),
-            ),
-        ]
+        # Fallback: use existing_stack data if current_tools matching fails
+        if not existing_tools and existing_stack:
+            for i, stack_tool in enumerate(existing_stack[:6]):
+                slug = stack_tool.get("slug", stack_tool.get("name", ""))
+                tool_info = self._match_tool(slug)
+                api_score = stack_tool.get("api_score", 0)
+                tool_name = tool_info["name"] if tool_info else slug.replace("-", " ").title()
+                existing_tools.append(ToolNode(
+                    id=f"existing-{i}",
+                    name=tool_name,
+                    category="existing",
+                    icon=tool_info.get("icon") if tool_info else None,
+                    monthly_cost=0,
+                    crb=NodeCRB(
+                        cost="Already owned",
+                        risk="Low" if api_score >= 3 else "Medium — limited API",
+                        risk_level="low" if api_score >= 3 else "medium",
+                        benefit=f"API score {api_score}/5 — {'strong' if api_score >= 3 else 'limited'} integration potential",
+                        powers=[],
+                    ),
+                    position=Position(x=0, y=i * 100, column="existing"),
+                    is_existing=True,
+                ))
 
-        # Build automations from recommendations
+        # Build AI layer from what recommendations actually use
+        ai_tools_seen: Dict[str, Dict[str, Any]] = {}  # deduplicate
+        for rec in recommendations:
+            connect = rec.get("options", {}).get("connect_and_automate", {})
+            for tool_name in connect.get("tools_used", []):
+                tool_lower = tool_name.lower()
+                # Categorize
+                if "claude" in tool_lower:
+                    if "claude" not in ai_tools_seen:
+                        model_name = "Claude Sonnet 4.5"
+                        monthly = 50
+                        if "haiku" in tool_lower:
+                            model_name = "Claude Haiku 4.5"
+                            monthly = 20
+                        elif "opus" in tool_lower:
+                            model_name = "Claude Opus 4.5"
+                            monthly = 150
+                        ai_tools_seen["claude"] = {
+                            "name": model_name, "category": "ai_brain",
+                            "monthly_cost": monthly, "icon": "brain",
+                            "powers": [],
+                        }
+                elif "make" in tool_lower:
+                    if "make" not in ai_tools_seen:
+                        ai_tools_seen["make"] = {
+                            "name": "Make.com", "category": "automation",
+                            "monthly_cost": 20, "icon": "zap",
+                            "powers": [],
+                        }
+                elif "supabase" in tool_lower:
+                    if "supabase" not in ai_tools_seen:
+                        ai_tools_seen["supabase"] = {
+                            "name": "Supabase", "category": "database",
+                            "monthly_cost": 0, "icon": "database",
+                            "powers": [],
+                        }
+                elif "railway" in tool_lower or "vercel" in tool_lower:
+                    key = "hosting"
+                    if key not in ai_tools_seen:
+                        ai_tools_seen[key] = {
+                            "name": tool_name, "category": "hosting",
+                            "monthly_cost": 5 if "railway" in tool_lower else 0,
+                            "icon": "cloud",
+                            "powers": [],
+                        }
+
+            # Track which recs each AI tool powers
+            rec_title = rec.get("title", "")[:40]
+            for key in ai_tools_seen:
+                if key in ["claude", "make"]:  # These power most automations
+                    if rec_title not in ai_tools_seen[key]["powers"]:
+                        ai_tools_seen[key]["powers"].append(rec_title)
+
+        # Fallback if nothing extracted
+        if not ai_tools_seen:
+            ai_tools_seen["claude"] = {
+                "name": "Claude Sonnet 4.5", "category": "ai_brain",
+                "monthly_cost": 50, "icon": "brain", "powers": [],
+            }
+            ai_tools_seen["make"] = {
+                "name": "Make.com", "category": "automation",
+                "monthly_cost": 20, "icon": "zap", "powers": [],
+            }
+
+        ai_layer = []
+        for i, (key, tool_data) in enumerate(ai_tools_seen.items()):
+            ai_layer.append(ToolNode(
+                id=f"ai-{key}",
+                name=tool_data["name"],
+                category=tool_data["category"],
+                icon=tool_data.get("icon"),
+                monthly_cost=tool_data["monthly_cost"],
+                crb=NodeCRB(
+                    cost=f"~€{tool_data['monthly_cost']}/mo" if tool_data["monthly_cost"] > 0 else "Free tier",
+                    risk="API dependency" if tool_data["category"] == "ai_brain" else "Low",
+                    risk_level="low",
+                    benefit=f"Powers {len(tool_data['powers'])} automations",
+                    powers=tool_data["powers"][:5],
+                ),
+                position=Position(x=200, y=i * 100, column="ai_layer"),
+            ))
+
+        # Build automations from recommendations with real data
         automations = []
-        for i, rec in enumerate(recommendations[:5]):
+        for i, rec in enumerate(recommendations[:6]):
             title = rec.get("title", "Automation")
+
+            # Extract real trigger from finding context
+            connect = rec.get("options", {}).get("connect_and_automate", {})
+            approach = connect.get("approach", "")
+
+            # Derive trigger from the finding's category/context
+            trigger = _derive_trigger(title, rec)
+            action = approach[:80] if approach else rec.get("description", "Automated action")[:80]
+
+            # Get tools from the selected/connect option
+            tools = connect.get("tools_used", ["claude"])
+            tool_keys = [t.lower().split()[0] for t in tools[:3]]
+
             automations.append(AutomationNode(
                 id=f"auto-{i}",
-                name=title[:30] if len(title) > 30 else title,
-                trigger=f"When {title.lower().split()[0] if title else 'event'} occurs",
-                action=rec.get("description", "")[:50] if rec.get("description") else "Automated action",
-                tools_used=["claude", "make"],
+                name=title,  # Full title — frontend handles overflow
+                trigger=trigger,
+                action=action,
+                tools_used=tool_keys,
                 output_type="action",
             ))
 
@@ -291,6 +477,11 @@ class ArchitectureGenerator:
     def _match_tool(self, tool_key: str) -> Optional[Dict[str, Any]]:
         """Match a tool key to our database."""
         tool_key = tool_key.lower().strip()
+        # Check aliases first
+        normalized = SLUG_ALIASES.get(tool_key, tool_key.replace("-", "_"))
+        if normalized in TOOL_DATABASE:
+            return TOOL_DATABASE[normalized]
+        # Fuzzy fallback
         for key, info in TOOL_DATABASE.items():
             if key in tool_key or tool_key in info["name"].lower():
                 return info
@@ -301,44 +492,61 @@ class ArchitectureGenerator:
         recommendations: List[Dict[str, Any]],
         ai_layer: List[ToolNode],
     ) -> CostComparison:
-        """Calculate SaaS vs DIY cost comparison."""
+        """Calculate SaaS vs DIY cost comparison from actual recommendation data."""
 
-        # DIY costs
+        # === DIY ROUTE: from connect_and_automate options ===
+        diy_items_seen: Dict[str, float] = {}
+        total_build_hours = 0.0
+
+        for node in ai_layer:
+            if node.name not in diy_items_seen:
+                diy_items_seen[node.name] = node.monthly_cost
+
+        for rec in recommendations:
+            connect = rec.get("options", {}).get("connect_and_automate", {})
+            build_time = connect.get("build_time", "")
+            hours = _parse_build_hours(build_time)
+            total_build_hours += hours
+
         diy_items = [
-            CostItem(name=node.name, monthly_cost=node.monthly_cost, category="diy")
-            for node in ai_layer
+            CostItem(name=name, monthly_cost=cost, category="diy")
+            for name, cost in diy_items_seen.items()
         ]
-        diy_items.append(CostItem(name="Supabase", monthly_cost=0, category="diy"))
-        diy_items.append(CostItem(name="Vercel", monthly_cost=0, category="diy"))
-
         diy_total = sum(item.monthly_cost for item in diy_items)
-        build_cost = 2400  # Typical freelancer cost for initial setup
 
-        # SaaS costs (what they'd pay for equivalent functionality)
-        saas_items = []
-        saas_total = 0
-        matched_categories = set()
+        # Build cost = total hours x EUR 50/hr (freelancer rate)
+        build_cost = max(total_build_hours * 50, 500)  # Minimum EUR 500
 
-        for rec in recommendations[:5]:
-            title_lower = rec.get("title", "").lower()
-            for key, saas in SAAS_ALTERNATIVES.items():
-                if key not in matched_categories:
-                    if key.replace("_", " ") in title_lower or key.replace("_", "") in title_lower:
-                        saas_items.append(CostItem(
-                            name=saas["name"],
-                            monthly_cost=saas["monthly_cost"],
-                            category="saas",
-                        ))
-                        saas_total += saas["monthly_cost"]
-                        matched_categories.add(key)
-                        break
+        # === SAAS ROUTE: from targeted_upgrade options ===
+        saas_items_seen: Dict[str, float] = {}
 
-        # Ensure minimum SaaS cost for comparison
-        if saas_total < 200:
-            saas_total = 400
-            saas_items = [
-                CostItem(name="Multiple SaaS tools", monthly_cost=400, category="saas")
-            ]
+        for rec in recommendations[:6]:
+            tu = rec.get("options", {}).get("targeted_upgrade", {})
+            tools = tu.get("tools", [])
+            cost_range = tu.get("cost_range", "")
+
+            matched = tu.get("matched_vendor", {})
+            vendor_cost = matched.get("monthly_cost") if matched else None
+
+            for tool_name in tools:
+                if tool_name and tool_name not in saas_items_seen and "no matching" not in tool_name.lower():
+                    tool_cost = _parse_cost_from_range(cost_range, tool_name)
+                    if not tool_cost and vendor_cost:
+                        tool_cost = float(vendor_cost)
+                    if not tool_cost:
+                        tool_cost = 50  # Conservative estimate
+                    saas_items_seen[tool_name] = tool_cost
+
+        saas_items = [
+            CostItem(name=name, monthly_cost=cost, category="saas")
+            for name, cost in saas_items_seen.items()
+        ]
+        saas_total = sum(item.monthly_cost for item in saas_items)
+
+        # Ensure we have at least something
+        if not saas_items:
+            saas_total = diy_total * 3  # Rough 3x multiplier
+            saas_items = [CostItem(name="Estimated SaaS equivalent", monthly_cost=saas_total, category="saas")]
 
         monthly_savings = saas_total - diy_total
         savings_pct = (monthly_savings / saas_total * 100) if saas_total > 0 else 0

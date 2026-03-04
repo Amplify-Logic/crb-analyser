@@ -13,12 +13,12 @@ Usage:
 
     # Get prompt with business context
     prompt = get_crb_prompt(
-        industry="home_services",
+        industry="ecommerce",
         business_context={
-            "company_name": "ABC Plumbing",
-            "team_size": "12 technicians",
-            "current_software": "Housecall Pro",
-            "main_pain_point": "Scheduling inefficiency",
+            "company_name": "StyleHaus",
+            "team_size": "8 employees",
+            "current_software": "Shopify",
+            "main_pain_point": "Customer service volume",
         }
     )
 """

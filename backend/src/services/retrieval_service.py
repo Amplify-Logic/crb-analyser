@@ -288,7 +288,8 @@ class RetrievalService:
         vendors_limit: int = 5,
         opportunities_limit: int = 5,
         case_studies_limit: int = 3,
-        patterns_limit: int = 3
+        patterns_limit: int = 3,
+        similarity_threshold: float = 0.5,
     ) -> RetrievalContext:
         """
         Comprehensive search across all knowledge types.
@@ -310,17 +311,28 @@ class RetrievalService:
             supabase = await get_async_supabase()
 
             # Use the multi-type search function
-            response = await supabase.rpc(
-                "search_all_knowledge",
-                {
-                    "query_embedding": embedding,
-                    "match_count_per_type": max(
-                        vendors_limit, opportunities_limit,
-                        case_studies_limit, patterns_limit
-                    ),
-                    "filter_industry": industry
-                }
-            ).execute()
+            rpc_payload = {
+                "query_embedding": embedding,
+                "match_count_per_type": max(
+                    vendors_limit, opportunities_limit,
+                    case_studies_limit, patterns_limit
+                ),
+                "filter_industry": industry,
+                "similarity_threshold": similarity_threshold,
+            }
+
+            try:
+                response = await supabase.rpc(
+                    "search_all_knowledge",
+                    rpc_payload,
+                ).execute()
+            except Exception:
+                # Backward compatibility for environments on old RPC signature.
+                rpc_payload.pop("similarity_threshold", None)
+                response = await supabase.rpc(
+                    "search_all_knowledge",
+                    rpc_payload,
+                ).execute()
 
             results = response.data or []
 

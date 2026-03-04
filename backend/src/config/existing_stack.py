@@ -111,103 +111,6 @@ DENTAL_SOFTWARE: List[SoftwareOption] = [
     {"slug": "romexis", "name": "Romexis", "category": "Imaging"},
 ]
 
-RECRUITING_SOFTWARE: List[SoftwareOption] = [
-    # ATS (Applicant Tracking Systems)
-    {"slug": "bullhorn", "name": "Bullhorn", "category": "ATS"},
-    {"slug": "greenhouse", "name": "Greenhouse", "category": "ATS"},
-    {"slug": "lever", "name": "Lever", "category": "ATS"},
-    {"slug": "workable", "name": "Workable", "category": "ATS"},
-    {"slug": "jobvite", "name": "Jobvite", "category": "ATS"},
-    {"slug": "icims", "name": "iCIMS", "category": "ATS"},
-    {"slug": "manatal", "name": "Manatal", "category": "ATS"},
-    {"slug": "recruitee", "name": "Recruitee", "category": "ATS"},
-    {"slug": "jazz-hr", "name": "JazzHR", "category": "ATS"},
-    {"slug": "teamtailor", "name": "Teamtailor", "category": "ATS"},
-    {"slug": "breezy-hr", "name": "Breezy HR", "category": "ATS"},
-
-    # Sourcing & Outreach
-    {"slug": "linkedin-recruiter", "name": "LinkedIn Recruiter", "category": "Sourcing"},
-    {"slug": "hiretual", "name": "Hiretual (hireEZ)", "category": "Sourcing"},
-    {"slug": "gem", "name": "Gem", "category": "Sourcing"},
-    {"slug": "entelo", "name": "Entelo", "category": "Sourcing"},
-    {"slug": "seekout", "name": "SeekOut", "category": "Sourcing"},
-
-    # Assessment
-    {"slug": "hirevue", "name": "HireVue", "category": "Assessment"},
-    {"slug": "codility", "name": "Codility", "category": "Assessment"},
-    {"slug": "hackerrank", "name": "HackerRank", "category": "Assessment"},
-    {"slug": "testgorilla", "name": "TestGorilla", "category": "Assessment"},
-]
-
-HOME_SERVICES_SOFTWARE: List[SoftwareOption] = [
-    # Job Management
-    {"slug": "jobber", "name": "Jobber", "category": "Job Management"},
-    {"slug": "servicetitan", "name": "ServiceTitan", "category": "Job Management"},
-    {"slug": "housecall-pro", "name": "Housecall Pro", "category": "Job Management"},
-    {"slug": "buildertrend", "name": "Buildertrend", "category": "Job Management"},
-    {"slug": "coconstruct", "name": "CoConstruct", "category": "Job Management"},
-    {"slug": "procore", "name": "Procore", "category": "Job Management"},
-    {"slug": "fieldedge", "name": "FieldEdge", "category": "Job Management"},
-    {"slug": "servicem8", "name": "ServiceM8", "category": "Job Management"},
-
-    # Estimating
-    {"slug": "buildertrend", "name": "Buildertrend (Estimating)", "category": "Estimating"},
-    {"slug": "stack", "name": "STACK", "category": "Estimating"},
-    {"slug": "planswift", "name": "PlanSwift", "category": "Estimating"},
-    {"slug": "clear-estimates", "name": "Clear Estimates", "category": "Estimating"},
-
-    # Fleet & Dispatch
-    {"slug": "dispatch", "name": "Dispatch", "category": "Dispatch"},
-    {"slug": "commusoft", "name": "Commusoft", "category": "Dispatch"},
-    {"slug": "fergus", "name": "Fergus", "category": "Job Management"},
-]
-
-VETERINARY_SOFTWARE: List[SoftwareOption] = [
-    # Practice Management
-    {"slug": "evetpractice", "name": "eVetPractice", "category": "Practice Management"},
-    {"slug": "avimark", "name": "AVImark", "category": "Practice Management"},
-    {"slug": "cornerstone", "name": "Cornerstone", "category": "Practice Management"},
-    {"slug": "impromed", "name": "ImproMed", "category": "Practice Management"},
-    {"slug": "vetter-software", "name": "Vetter Software", "category": "Practice Management"},
-    {"slug": "hippo-manager", "name": "Hippo Manager", "category": "Practice Management"},
-    {"slug": "covetrus-pulse", "name": "Covetrus Pulse", "category": "Practice Management"},
-    {"slug": "evet-practice", "name": "eVetPractice", "category": "Practice Management"},
-
-    # Client Communication
-    {"slug": "petdesk", "name": "PetDesk", "category": "Client Communication"},
-    {"slug": "vet2pet", "name": "Vet2Pet", "category": "Client Communication"},
-    {"slug": "allydvm", "name": "AllyDVM", "category": "Client Communication"},
-    {"slug": "vetspire", "name": "Vetspire", "category": "Client Communication"},
-
-    # Lab & Diagnostics
-    {"slug": "idexx", "name": "IDEXX VetLab", "category": "Lab & Diagnostics"},
-    {"slug": "zoetis", "name": "Zoetis", "category": "Lab & Diagnostics"},
-    {"slug": "antech", "name": "Antech Diagnostics", "category": "Lab & Diagnostics"},
-]
-
-COACHING_SOFTWARE: List[SoftwareOption] = [
-    # Coaching Platforms
-    {"slug": "coachaccountable", "name": "CoachAccountable", "category": "Coaching Platform"},
-    {"slug": "paperbell", "name": "Paperbell", "category": "Coaching Platform"},
-    {"slug": "practice", "name": "Practice", "category": "Coaching Platform"},
-    {"slug": "satori", "name": "Satori", "category": "Coaching Platform"},
-    {"slug": "nudge-coach", "name": "Nudge Coach", "category": "Coaching Platform"},
-    {"slug": "delenta", "name": "Delenta", "category": "Coaching Platform"},
-
-    # Course & Content
-    {"slug": "kajabi", "name": "Kajabi", "category": "Course Platform"},
-    {"slug": "teachable", "name": "Teachable", "category": "Course Platform"},
-    {"slug": "thinkific", "name": "Thinkific", "category": "Course Platform"},
-    {"slug": "podia", "name": "Podia", "category": "Course Platform"},
-    {"slug": "circle", "name": "Circle", "category": "Community"},
-    {"slug": "mighty-networks", "name": "Mighty Networks", "category": "Community"},
-
-    # Payments
-    {"slug": "stripe", "name": "Stripe", "category": "Payments"},
-    {"slug": "gumroad", "name": "Gumroad", "category": "Payments"},
-    {"slug": "payhip", "name": "Payhip", "category": "Payments"},
-]
-
 PROFESSIONAL_SERVICES_SOFTWARE: List[SoftwareOption] = [
     # Practice Management (Accounting/Legal)
     {"slug": "cch-axcess", "name": "CCH Axcess", "category": "Practice Management"},
@@ -232,45 +135,14 @@ PROFESSIONAL_SERVICES_SOFTWARE: List[SoftwareOption] = [
     {"slug": "bill-com", "name": "Bill.com", "category": "Billing"},
 ]
 
-PHYSICAL_THERAPY_SOFTWARE: List[SoftwareOption] = [
-    # PT Practice Management
-    {"slug": "webpt", "name": "WebPT", "category": "Practice Management"},
-    {"slug": "clinicient", "name": "Clinicient", "category": "Practice Management"},
-    {"slug": "net-health", "name": "Net Health (ReDoc)", "category": "Practice Management"},
-    {"slug": "prompt-emr", "name": "Prompt EMR", "category": "Practice Management"},
-    {"slug": "better-pt", "name": "BetterPT", "category": "Practice Management"},
-    {"slug": "jane-app", "name": "Jane App", "category": "Practice Management"},
-    {"slug": "simple-practice", "name": "SimplePractice", "category": "Practice Management"},
-    {"slug": "drchrono", "name": "DrChrono", "category": "Practice Management"},
-
-    # Patient Engagement
-    {"slug": "physitrack", "name": "Physitrack", "category": "Patient Engagement"},
-    {"slug": "medbridge", "name": "MedBridge", "category": "Patient Engagement"},
-    {"slug": "pt-ally", "name": "PT Ally", "category": "Patient Engagement"},
-]
-
-MEDSPA_SOFTWARE: List[SoftwareOption] = [
-    # MedSpa/Aesthetic Practice Management
-    {"slug": "aesthetics-pro", "name": "AestheticsPro", "category": "Practice Management"},
-    {"slug": "boulevard", "name": "Boulevard", "category": "Practice Management"},
-    {"slug": "vagaro", "name": "Vagaro", "category": "Practice Management"},
-    {"slug": "zenoti", "name": "Zenoti", "category": "Practice Management"},
-    {"slug": "meevo", "name": "Meevo 2", "category": "Practice Management"},
-    {"slug": "pabau", "name": "Pabau", "category": "Practice Management"},
-    {"slug": "aesthetic-record", "name": "Aesthetic Record", "category": "Practice Management"},
-
-    # Marketing & Reviews
-    {"slug": "demandforce", "name": "Demandforce", "category": "Marketing"},
-    {"slug": "realself", "name": "RealSelf", "category": "Marketing"},
-    {"slug": "podium", "name": "Podium", "category": "Reviews"},
-]
-
 ECOMMERCE_SOFTWARE: List[SoftwareOption] = [
     # E-Commerce Platforms
     {"slug": "shopify", "name": "Shopify", "category": "Platform"},
     {"slug": "woocommerce", "name": "WooCommerce", "category": "Platform"},
     {"slug": "bigcommerce", "name": "BigCommerce", "category": "Platform"},
     {"slug": "magento", "name": "Magento / Adobe Commerce", "category": "Platform"},
+    {"slug": "squarespace", "name": "Squarespace", "category": "Platform"},
+    {"slug": "wix", "name": "Wix", "category": "Platform"},
 
     # Customer Support
     {"slug": "gorgias", "name": "Gorgias", "category": "Support"},
@@ -285,6 +157,8 @@ ECOMMERCE_SOFTWARE: List[SoftwareOption] = [
     # Attribution & Analytics
     {"slug": "triple-whale", "name": "Triple Whale", "category": "Attribution"},
     {"slug": "northbeam", "name": "Northbeam", "category": "Attribution"},
+    {"slug": "lifetimely", "name": "Lifetimely", "category": "Analytics"},
+    {"slug": "polar-analytics", "name": "Polar Analytics", "category": "Analytics"},
 
     # Subscriptions & Loyalty
     {"slug": "recharge", "name": "Recharge", "category": "Subscriptions"},
@@ -296,6 +170,19 @@ ECOMMERCE_SOFTWARE: List[SoftwareOption] = [
     {"slug": "shipstation", "name": "ShipStation", "category": "Fulfillment"},
     {"slug": "shipbob", "name": "ShipBob", "category": "Fulfillment"},
     {"slug": "returnly", "name": "Returnly / Loop", "category": "Returns"},
+    {"slug": "loop-returns", "name": "Loop Returns", "category": "Returns"},
+    {"slug": "returngo", "name": "ReturnGO", "category": "Returns"},
+
+    # EU Logistics & Payments
+    {"slug": "sendcloud", "name": "Sendcloud", "category": "Shipping (EU)"},
+    {"slug": "picqer", "name": "Picqer", "category": "Warehouse (EU)"},
+    {"slug": "mollie", "name": "Mollie", "category": "Payments (EU)"},
+    {"slug": "channable", "name": "Channable", "category": "Feed Management"},
+
+    # Marketplaces
+    {"slug": "bol-com", "name": "Bol.com", "category": "Marketplace (EU)"},
+    {"slug": "zalando", "name": "Zalando", "category": "Marketplace (EU)"},
+    {"slug": "kaufland", "name": "Kaufland", "category": "Marketplace (EU)"},
 ]
 
 
@@ -341,13 +228,7 @@ B2B_PLATFORMS_SOFTWARE: List[SoftwareOption] = [
 
 INDUSTRY_SOFTWARE_MAP: dict[str, List[SoftwareOption]] = {
     "dental": DENTAL_SOFTWARE,
-    "recruiting": RECRUITING_SOFTWARE,
-    "home-services": HOME_SERVICES_SOFTWARE,
-    "veterinary": VETERINARY_SOFTWARE,
-    "coaching": COACHING_SOFTWARE,
     "professional-services": PROFESSIONAL_SERVICES_SOFTWARE,
-    "physical-therapy": PHYSICAL_THERAPY_SOFTWARE,
-    "medspa": MEDSPA_SOFTWARE,
     "ecommerce": ECOMMERCE_SOFTWARE,
     "b2b-platforms": B2B_PLATFORMS_SOFTWARE,
 }

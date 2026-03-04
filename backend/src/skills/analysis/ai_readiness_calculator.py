@@ -153,6 +153,17 @@ class AIReadinessCalculator(SyncSkill[AIReadinessBreakdown]):
             improvement_suggestions=suggestions,
         )
 
+    # E-commerce platform API quality bonuses (0-4 points)
+    # Shopify has the best API ecosystem, others vary
+    ECOMMERCE_PLATFORM_BONUS: Dict[str, int] = {
+        "shopify": 4,
+        "woocommerce": 3,
+        "bigcommerce": 3,
+        "magento": 2,
+        "squarespace": 0,
+        "wix": 0,
+    }
+
     def _calculate_tech_stack_score(
         self,
         existing_stack: List[Dict[str, Any]],
@@ -162,12 +173,13 @@ class AIReadinessCalculator(SyncSkill[AIReadinessBreakdown]):
         Calculate tech stack openness score (0-30).
 
         Based on:
-        - Average API score of existing tools (0-5 scale → 0-18 points)
-        - Tool integration rating from quiz (1-10 → 0-12 points)
+        - Average API score of existing tools (0-5 scale → 0-16 points)
+        - Tool integration rating from quiz (1-10 → 0-10 points)
+        - E-commerce platform bonus (0-4 points, ecommerce only)
         """
         max_score = 30
 
-        # Component 1: API scores from stack assessment (0-18 points)
+        # Component 1: API scores from stack assessment (0-16 points)
         if existing_stack:
             api_scores = [
                 tool.get("api_score", 3)
@@ -175,30 +187,38 @@ class AIReadinessCalculator(SyncSkill[AIReadinessBreakdown]):
                 if isinstance(tool.get("api_score"), (int, float))
             ]
             avg_api_score = sum(api_scores) / len(api_scores) if api_scores else 3
-            api_points = min(18, int((avg_api_score / 5) * 18))
+            api_points = min(16, int((avg_api_score / 5) * 16))
         else:
             # No stack data - use moderate default
             avg_api_score = 3
-            api_points = 11  # Middle ground
+            api_points = 10  # Middle ground
 
-        # Component 2: Integration rating from quiz (0-12 points)
+        # Component 2: Integration rating from quiz (0-10 points)
         integration_rating = answers.get("integration_issues", 5)
         if isinstance(integration_rating, str):
             try:
                 integration_rating = int(integration_rating)
             except ValueError:
                 integration_rating = 5
-        integration_points = min(12, int((integration_rating / 10) * 12))
+        integration_points = min(10, int((integration_rating / 10) * 10))
 
-        score = min(max_score, api_points + integration_points)
+        # Component 3: E-commerce platform bonus (0-4 points)
+        platform = str(answers.get("ecommerce_platform", "")).lower()
+        platform_bonus = self.ECOMMERCE_PLATFORM_BONUS.get(platform, 0)
+
+        score = min(max_score, api_points + integration_points + platform_bonus)
+
+        factors = [
+            f"Tool API scores: {avg_api_score:.1f}/5 avg",
+            f"Integration rating: {integration_rating}/10",
+        ]
+        if platform_bonus > 0:
+            factors.append(f"Platform bonus: +{platform_bonus} ({platform} API quality)")
 
         return {
             "score": score,
             "details": {
-                "factors": [
-                    f"Tool API scores: {avg_api_score:.1f}/5 avg",
-                    f"Integration rating: {integration_rating}/10",
-                ],
+                "factors": factors,
                 "api_average": round(avg_api_score, 1),
                 "tools_assessed": len(existing_stack),
             },
@@ -431,7 +451,7 @@ class AIReadinessCalculator(SyncSkill[AIReadinessBreakdown]):
 def calculate_ai_readiness(
     quiz_answers: Dict[str, Any],
     existing_stack: Optional[List[Dict[str, Any]]] = None,
-    industry: str = "general",
+    industry: str = "ecommerce",
 ) -> Dict[str, Any]:
     """
     Calculate AI readiness score directly without skill context.

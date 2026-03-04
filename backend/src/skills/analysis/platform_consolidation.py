@@ -268,22 +268,43 @@ def finding_matches_category(finding: Dict[str, Any], solves: List[str]) -> bool
     return False
 
 
+# Which platform categories are valid for each industry.
+# Industries not listed here allow all categories (default behavior).
+INDUSTRY_PLATFORM_ALLOWLIST: Dict[str, List[str]] = {
+    "dental": ["dental-practice-management", "all-in-one-crm"],
+    "accounting": ["professional-services-automation", "all-in-one-crm"],
+    "legal": ["professional-services-automation", "all-in-one-crm"],
+    "hvac": ["field-service-management", "all-in-one-crm"],
+    "plumbing": ["field-service-management", "all-in-one-crm"],
+    "electrical": ["field-service-management", "all-in-one-crm"],
+    "cleaning": ["field-service-management", "all-in-one-crm"],
+}
+
 # Industries where the ecosystem is based on specialized point solutions
 # connected via APIs, NOT monolithic platforms. Skip platform consolidation
 # for these — the AIOS connect-first philosophy applies directly.
-SKIP_CONSOLIDATION_INDUSTRIES = {"ecommerce", "e-commerce"}
+SKIP_CONSOLIDATION_INDUSTRIES = {
+    "ecommerce", "e-commerce",
+    "b2b-platforms", "b2b platforms",
+    "professional-services", "professional services",
+}
 
 
 def identify_platform_opportunities(
     findings: List[Dict[str, Any]],
     industry: str,
     existing_stack: Optional[List[Dict[str, Any]]] = None,
+    excluded_categories: Optional[Set[str]] = None,
 ) -> ConsolidationResult:
     """
     Analyze findings to identify platform consolidation opportunities.
 
     Returns which findings can be solved by a single platform vs needing
     individual point solutions.
+
+    Args:
+        excluded_categories: Platform category slugs to skip (e.g., from
+            not-recommended findings that contradict these categories).
 
     Skips consolidation for e-commerce — the Shopify + specialized apps
     ecosystem (Klaviyo, Gorgias, Sendcloud) works better with individual
@@ -306,6 +327,13 @@ def identify_platform_opportunities(
             category_redundancies=[],
         )
 
+    # Filter platform categories by industry allowlist
+    # Unknown industries → allow NO platform categories (safe default)
+    # Only industries explicitly listed get platform consolidation
+    allowed_categories = INDUSTRY_PLATFORM_ALLOWLIST.get(
+        industry.lower(), []
+    )
+
     # Track which findings map to which platform categories
     platform_matches: Dict[str, List[Dict[str, Any]]] = {}
     point_solution_matches: Dict[str, List[Dict[str, Any]]] = {}
@@ -320,6 +348,11 @@ def identify_platform_opportunities(
         # Check platform categories first
         matched_platform = False
         for cat_slug, cat_info in PLATFORM_CATEGORIES.items():
+            if cat_slug not in allowed_categories:
+                continue  # Skip categories not valid for this industry
+            if excluded_categories and cat_slug in excluded_categories:
+                logger.info(f"Skipping {cat_slug} — contradicts not-recommended finding")
+                continue
             if finding_matches_category(finding, cat_info["solves"]):
                 if cat_slug not in platform_matches:
                     platform_matches[cat_slug] = []
@@ -390,12 +423,14 @@ def identify_platform_opportunities(
 
     # Calculate consolidation savings message
     total_consolidated = len(covered_findings)
+    actual_tool_count = len(existing_stack) if existing_stack else 0
     savings_msg = ""
     if total_consolidated >= 2:
         savings_msg = (
-            f"By using {len(platform_recommendations)} platform(s) instead of "
-            f"{total_consolidated} separate tools, you simplify your stack and "
-            f"reduce integration complexity."
+            f"By consolidating {total_consolidated} capabilities into "
+            f"{len(platform_recommendations)} platform(s), you reduce tool sprawl"
+            + (f" from your current {actual_tool_count} tools" if actual_tool_count > 0 else "")
+            + "."
         )
 
     return ConsolidationResult(
@@ -432,8 +467,6 @@ def _select_best_vendor(
 
     # Industry-specific preferences
     industry_preferences = {
-        "home-services": ["jobber", "housecall-pro", "servicetitan"],
-        "home_services": ["jobber", "housecall-pro", "servicetitan"],
         "dental": ["dentrix", "curve-dental", "open-dental"],
         "professional-services": ["connectwise", "hubspot"],
     }

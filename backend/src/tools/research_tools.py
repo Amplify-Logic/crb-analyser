@@ -87,7 +87,7 @@ async def search_industry_benchmarks(
     audit_id: str,
 ) -> Dict[str, Any]:
     """Search for industry-specific benchmarks from knowledge base."""
-    industry = inputs.get("industry", context.get("industry", "general"))
+    industry = inputs.get("industry", context.get("industry", "professional-services"))
     metric_type = inputs.get("metric_type")
 
     # Normalize and get benchmarks from knowledge base

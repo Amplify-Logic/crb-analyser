@@ -120,19 +120,26 @@ class AutomationSummarySkill(SyncSkill[AutomationSummary]):
         scores = []
         for tool in existing_stack:
             api_score = tool.get("api_score")
-            if api_score is not None:
-                try:
-                    score = int(api_score)
-                    scores.append(score)
-                    tools.append(StackAssessmentItem(
-                        name=tool.get("name", tool.get("slug", "Unknown")),
-                        slug=tool.get("slug", "unknown"),
-                        api_score=max(1, min(5, score)),  # Clamp to 1-5
-                        category=tool.get("category"),
-                    ))
-                except (ValueError, TypeError):
-                    logger.warning(f"Invalid API score for tool: {tool}")
-                    continue
+            if api_score is None:
+                # Look up from vendor knowledge base
+                from src.knowledge import get_vendor_by_slug
+                kb_vendor = get_vendor_by_slug(tool.get("slug", ""))
+                if kb_vendor:
+                    api_score = kb_vendor.get("api_score", 3)
+                else:
+                    api_score = 3  # Neutral default for unknown tools
+            try:
+                score = int(api_score)
+                scores.append(score)
+                tools.append(StackAssessmentItem(
+                    name=tool.get("name", tool.get("slug", "Unknown")),
+                    slug=tool.get("slug", "unknown"),
+                    api_score=max(1, min(5, score)),  # Clamp to 1-5
+                    category=tool.get("category"),
+                ))
+            except (ValueError, TypeError):
+                logger.warning(f"Invalid API score for tool: {tool}")
+                continue
 
         # Calculate average
         average_score = mean(scores) if scores else 0

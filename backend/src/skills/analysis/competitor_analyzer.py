@@ -60,35 +60,23 @@ INDUSTRY_AI_ADOPTION = {
         "source": "GoTu AI in Dentistry 2025",
         "common_areas": ["scheduling", "imaging", "patient_communication"],
     },
-    "home-services": {
-        "adoption_rate": "70%",
-        "adoption_trend": "accelerating",
-        "source": "Zuper FSM Trends 2025",
-        "common_areas": ["scheduling", "routing", "invoicing"],
-    },
     "professional-services": {
         "adoption_rate": "71%",
         "adoption_trend": "mainstream",
         "source": "Industry reports 2025",
         "common_areas": ["document_automation", "research", "client_communication"],
     },
-    "recruiting": {
-        "adoption_rate": "67%",
-        "adoption_trend": "mainstream",
-        "source": "StaffingHub 2025",
-        "common_areas": ["resume_screening", "candidate_matching", "scheduling"],
-    },
-    "coaching": {
-        "adoption_rate": "40%",
-        "adoption_trend": "increasing",
-        "source": "ICF Global Coaching Study 2025",
-        "common_areas": ["scheduling", "content_creation", "client_tracking"],
-    },
-    "veterinary": {
-        "adoption_rate": "39%",
-        "adoption_trend": "increasing",
-        "source": "AAHA/Digitail Survey 2024",
-        "common_areas": ["scheduling", "records", "client_communication"],
+    "ecommerce": {
+        "adoption_rate": "52%",
+        "adoption_trend": "accelerating",
+        "source": "Shopify/HubSpot Commerce Report 2025",
+        "common_areas": [
+            "product_descriptions",
+            "customer_service",
+            "personalization",
+            "email_marketing",
+            "inventory_forecasting",
+        ],
     },
 }
 
@@ -123,6 +111,24 @@ AI_IMPLEMENTATION_AREAS = {
         "typical_tools": ["QuickBooks", "FreshBooks", "Stripe"],
         "benefits": ["Faster payment collection", "Fewer billing errors"],
         "implementation_effort": "low",
+    },
+    "product_descriptions": {
+        "description": "AI-generated product content, titles, and SEO descriptions",
+        "typical_tools": ["Shopify Magic", "Jasper", "Claude API"],
+        "benefits": ["60-80% faster content creation", "Up to 43% higher CTR"],
+        "implementation_effort": "low",
+    },
+    "personalization": {
+        "description": "AI-powered product recommendations and personalized shopping experiences",
+        "typical_tools": ["Nosto", "Rebuy", "Dynamic Yield"],
+        "benefits": ["10-15% AOV increase", "Higher conversion rates"],
+        "implementation_effort": "medium",
+    },
+    "inventory_forecasting": {
+        "description": "AI demand prediction and stock level optimization",
+        "typical_tools": ["Inventory Planner", "Prediko", "Cogsy"],
+        "benefits": ["30% fewer stockouts", "20% less overstock"],
+        "implementation_effort": "medium",
     },
 }
 
@@ -271,18 +277,6 @@ class CompetitorAnalyzerSkill(LLMSkill[Dict[str, Any]]):
                     "description": "Tech-forward independent practices",
                     "ai_usage": "Online booking, automated recalls, digital intake",
                     "competitive_advantage": "Better patient experience, staff efficiency",
-                },
-            ],
-            "home-services": [
-                {
-                    "description": "National franchise operations",
-                    "ai_usage": "AI routing, automated scheduling, smart dispatching",
-                    "competitive_advantage": "More jobs per day, predictable service windows",
-                },
-                {
-                    "description": "Tech-enabled regional players",
-                    "ai_usage": "Online booking, automated invoicing, customer portal",
-                    "competitive_advantage": "Professional image, faster payments",
                 },
             ],
             "professional-services": [

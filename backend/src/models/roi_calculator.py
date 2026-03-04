@@ -275,22 +275,10 @@ class ROICalculator(BaseModel):
 # =============================================================================
 
 INDUSTRY_DEMAND_EXPANSION_DEFAULTS: Dict[str, Dict] = {
-    "home-services": {
-        "typical_expansion_rate": 0.25,  # 25% more capacity utilized
-        "trigger": "AI receptionist captures after-hours calls, AI dispatch fits more jobs/day",
-        "example": "HVAC company: 24/7 booking → 25% more jobs booked → need more technicians",
-        "revenue_multiplier": 1.25
-    },
     "dental": {
         "typical_expansion_rate": 0.20,  # 20% more patients
         "trigger": "AI scheduling fills gaps, reduces no-shows, handles patient communication",
         "example": "Dental practice: 50% less admin → lower overhead → competitive pricing → 20% more patients",
-        "revenue_multiplier": 1.20
-    },
-    "veterinary": {
-        "typical_expansion_rate": 0.20,
-        "trigger": "AI handles appointment booking, reminders, follow-ups",
-        "example": "Vet clinic: AI receptionist → capture emergency calls 24/7 → 20% more visits",
         "revenue_multiplier": 1.20
     },
     "professional-services": {
@@ -299,18 +287,18 @@ INDUSTRY_DEMAND_EXPANSION_DEFAULTS: Dict[str, Dict] = {
         "example": "Law firm: 40% less admin time → 30% more billable hours available",
         "revenue_multiplier": 1.30
     },
-    "recruiting": {
-        "typical_expansion_rate": 0.40,  # 40% more placements
-        "trigger": "AI screens candidates, handles initial outreach, schedules interviews",
-        "example": "Staffing agency: 10x faster screening → 40% more placements per recruiter",
-        "revenue_multiplier": 1.40
-    },
-    "coaching": {
-        "typical_expansion_rate": 0.25,
-        "trigger": "AI handles scheduling, session prep, follow-ups, admin",
-        "example": "Business coach: AI assistant → 25% more client capacity",
+    "ecommerce": {
+        "typical_expansion_rate": 0.25,  # 25% more orders processed
+        "trigger": "AI handles customer service, product recommendations, inventory optimization",
+        "example": "E-commerce store: AI chatbot + personalization → 25% more conversions",
         "revenue_multiplier": 1.25
-    }
+    },
+    "b2b-platforms": {
+        "typical_expansion_rate": 0.30,  # 30% more platform throughput
+        "trigger": "AI handles onboarding, support, matching, workflow automation",
+        "example": "B2B platform: AI-driven matching + automated onboarding → 30% more transactions",
+        "revenue_multiplier": 1.30
+    },
 }
 
 

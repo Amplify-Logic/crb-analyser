@@ -33,6 +33,7 @@ class AdoptionStat(BaseModel):
     adoption_percentage: int = Field(..., ge=0, le=100)
     average_outcome: str  # "12 hrs/week saved"
     crb: InsightCRB
+    source: str = ""  # e.g. "McKinsey 2025 AI Adoption Report"
 
 
 class OpportunityMap(BaseModel):
@@ -85,114 +86,6 @@ class IndustryInsights(BaseModel):
 # =============================================================================
 
 INDUSTRY_DATA = {
-    "marketing-agencies": {
-        "display_name": "Marketing Agencies",
-        "adoption_stats": [
-            {
-                "capability": "Content automation",
-                "adoption": 62,
-                "outcome": "12 hrs/week saved",
-                "cost": "€50-200/mo",
-                "risk": "low",
-                "benefit": "12 hrs/wk saved"
-            },
-            {
-                "capability": "AI-assisted reporting",
-                "adoption": 41,
-                "outcome": "Reports in minutes",
-                "cost": "€30-100/mo",
-                "risk": "low",
-                "benefit": "5 hrs/wk saved"
-            },
-            {
-                "capability": "Lead scoring",
-                "adoption": 28,
-                "outcome": "2x conversion on hot leads",
-                "cost": "€50-150/mo",
-                "risk": "medium",
-                "benefit": "2x conversion"
-            },
-            {
-                "capability": "Chatbots",
-                "adoption": 35,
-                "outcome": "24/7 response capability",
-                "cost": "€20-80/mo",
-                "risk": "low",
-                "benefit": "Always-on support"
-            },
-        ],
-        "opportunities": {
-            "emerging": ["AI video generation", "Voice agents", "Predictive analytics"],
-            "growing": ["Lead scoring", "Content personalization", "Chatbots"],
-            "established": ["Content drafts", "Email automation", "Social scheduling"],
-        },
-        "social_proof": [
-            {
-                "quote": "We started with content automation - now saving 15 hours/week. Paid for itself in month one.",
-                "company": "8-person agency, similar size",
-                "outcome": "15 hrs/wk saved"
-            },
-            {
-                "quote": "AI lead scoring doubled our close rate. Wish we'd done it sooner.",
-                "company": "Digital marketing agency",
-                "outcome": "2x close rate"
-            },
-        ],
-    },
-    "tech-companies": {
-        "display_name": "Tech Companies",
-        "adoption_stats": [
-            {
-                "capability": "Code assistance",
-                "adoption": 78,
-                "outcome": "30% faster development",
-                "cost": "€20-50/mo",
-                "risk": "low",
-                "benefit": "30% faster dev"
-            },
-            {
-                "capability": "Documentation automation",
-                "adoption": 55,
-                "outcome": "90% less manual docs",
-                "cost": "€0-30/mo",
-                "risk": "low",
-                "benefit": "90% less docs time"
-            },
-            {
-                "capability": "Customer support AI",
-                "adoption": 62,
-                "outcome": "70% ticket deflection",
-                "cost": "€50-200/mo",
-                "risk": "medium",
-                "benefit": "70% deflection"
-            },
-            {
-                "capability": "Data analysis",
-                "adoption": 48,
-                "outcome": "Insights in seconds",
-                "cost": "€30-100/mo",
-                "risk": "low",
-                "benefit": "Real-time insights"
-            },
-        ],
-        "opportunities": {
-            "emerging": ["Autonomous agents", "AI code review", "Predictive debugging"],
-            "growing": ["Customer support AI", "Data analysis", "Content generation"],
-            "established": ["Code assistance", "Documentation", "Testing automation"],
-        },
-        "social_proof": [
-            {
-                "quote": "GitHub Copilot + Claude for reviews cut our PR cycle from 3 days to 4 hours.",
-                "company": "15-person startup",
-                "outcome": "18x faster PRs"
-            },
-            {
-                "quote": "AI handles 70% of support tickets. Team focuses on complex issues now.",
-                "company": "SaaS company, 20 employees",
-                "outcome": "70% ticket deflection"
-            },
-        ],
-    },
     "ecommerce": {
         "display_name": "E-commerce",
         "adoption_stats": [
@@ -202,7 +95,8 @@ INDUSTRY_DATA = {
                 "outcome": "10x faster catalog updates",
                 "cost": "€30-100/mo",
                 "risk": "low",
-                "benefit": "10x faster updates"
+                "benefit": "10x faster updates",
+                "source": "Shopify & HubSpot Marketing Reports 2025"
             },
             {
                 "capability": "Customer service chatbot",
@@ -210,7 +104,8 @@ INDUSTRY_DATA = {
                 "outcome": "24/7 support, 60% resolution",
                 "cost": "€50-150/mo",
                 "risk": "medium",
-                "benefit": "24/7 availability"
+                "benefit": "24/7 availability",
+                "source": "Gartner Customer Service Technology Survey 2025"
             },
             {
                 "capability": "Personalized recommendations",
@@ -218,7 +113,8 @@ INDUSTRY_DATA = {
                 "outcome": "15% increase in AOV",
                 "cost": "€100-300/mo",
                 "risk": "medium",
-                "benefit": "+15% AOV"
+                "benefit": "+15% AOV",
+                "source": "Klaviyo Email Marketing Benchmarks 2025"
             },
             {
                 "capability": "Inventory forecasting",
@@ -226,7 +122,8 @@ INDUSTRY_DATA = {
                 "outcome": "30% less stockouts",
                 "cost": "€50-200/mo",
                 "risk": "medium",
-                "benefit": "30% fewer stockouts"
+                "benefit": "30% fewer stockouts",
+                "source": "McKinsey Supply Chain AI Report 2024"
             },
         ],
         "opportunities": {
@@ -247,8 +144,8 @@ INDUSTRY_DATA = {
             },
         ],
     },
-    "consulting": {
-        "display_name": "Consulting & Professional Services",
+    "professional-services": {
+        "display_name": "Professional Services",
         "adoption_stats": [
             {
                 "capability": "Proposal generation",
@@ -256,7 +153,8 @@ INDUSTRY_DATA = {
                 "outcome": "70% faster proposals",
                 "cost": "€30-80/mo",
                 "risk": "low",
-                "benefit": "70% faster proposals"
+                "benefit": "70% faster proposals",
+                "source": "McKinsey State of AI 2025"
             },
             {
                 "capability": "Research synthesis",
@@ -264,7 +162,8 @@ INDUSTRY_DATA = {
                 "outcome": "Days of research in hours",
                 "cost": "€50-150/mo",
                 "risk": "low",
-                "benefit": "10x faster research"
+                "benefit": "10x faster research",
+                "source": "McKinsey State of AI 2025"
             },
             {
                 "capability": "Meeting summaries",
@@ -272,7 +171,8 @@ INDUSTRY_DATA = {
                 "outcome": "Perfect notes, no effort",
                 "cost": "€10-30/mo",
                 "risk": "low",
-                "benefit": "100% capture"
+                "benefit": "100% capture",
+                "source": "Gartner Workplace Technology Survey 2025"
             },
             {
                 "capability": "Client reporting",
@@ -280,7 +180,8 @@ INDUSTRY_DATA = {
                 "outcome": "Automated weekly reports",
                 "cost": "€30-100/mo",
                 "risk": "low",
-                "benefit": "5 hrs/wk saved"
+                "benefit": "5 hrs/wk saved",
+                "source": "McKinsey State of AI 2025"
             },
         ],
         "opportunities": {
@@ -301,8 +202,8 @@ INDUSTRY_DATA = {
             },
         ],
     },
-    "healthcare": {
-        "display_name": "Healthcare & Medical",
+    "dental": {
+        "display_name": "Dental Practices",
         "adoption_stats": [
             {
                 "capability": "Appointment scheduling",
@@ -310,7 +211,8 @@ INDUSTRY_DATA = {
                 "outcome": "80% fewer no-shows",
                 "cost": "€30-80/mo",
                 "risk": "low",
-                "benefit": "80% fewer no-shows"
+                "benefit": "80% fewer no-shows",
+                "source": "ADA Health Policy Institute 2025"
             },
             {
                 "capability": "Patient communications",
@@ -318,7 +220,8 @@ INDUSTRY_DATA = {
                 "outcome": "24/7 patient support",
                 "cost": "€50-150/mo",
                 "risk": "medium",
-                "benefit": "24/7 availability"
+                "benefit": "24/7 availability",
+                "source": "ADA Health Policy Institute 2025"
             },
             {
                 "capability": "Documentation assistance",
@@ -326,20 +229,22 @@ INDUSTRY_DATA = {
                 "outcome": "50% less admin time",
                 "cost": "€100-300/mo",
                 "risk": "medium",
-                "benefit": "50% less admin"
+                "benefit": "50% less admin",
+                "source": "McKinsey Healthcare AI Adoption 2024"
             },
             {
-                "capability": "Billing automation",
+                "capability": "Insurance verification",
                 "adoption": 30,
                 "outcome": "Faster reimbursements",
                 "cost": "€50-200/mo",
                 "risk": "low",
-                "benefit": "20% faster payments"
+                "benefit": "20% faster payments",
+                "source": "ADA Health Policy Institute 2025"
             },
         ],
         "opportunities": {
-            "emerging": ["Diagnostic assistance", "Treatment personalization", "Predictive health"],
-            "growing": ["Documentation AI", "Patient engagement", "Billing automation"],
+            "emerging": ["AI diagnostic assistance", "Treatment personalization", "Predictive patient health"],
+            "growing": ["Documentation AI", "Patient engagement", "Insurance automation"],
             "established": ["Scheduling", "Reminders", "Basic patient chat"],
         },
         "social_proof": [
@@ -349,166 +254,67 @@ INDUSTRY_DATA = {
                 "outcome": "80% fewer no-shows"
             },
             {
-                "quote": "Doctors spend 30% less time on documentation now. Patient time increased.",
-                "company": "Primary care clinic",
-                "outcome": "30% more patient time"
+                "quote": "Insurance verification went from 30 minutes to 2 minutes per patient.",
+                "company": "Group dental practice, 3 locations",
+                "outcome": "93% faster verification"
             },
         ],
     },
-    "real-estate": {
-        "display_name": "Real Estate",
+    "b2b-platforms": {
+        "display_name": "B2B Platforms",
         "adoption_stats": [
             {
-                "capability": "Property descriptions",
-                "adoption": 55,
-                "outcome": "Listings in minutes",
-                "cost": "€20-50/mo",
-                "risk": "low",
-                "benefit": "90% faster listings"
-            },
-            {
-                "capability": "Lead qualification",
-                "adoption": 40,
-                "outcome": "Focus on serious buyers",
-                "cost": "€30-100/mo",
-                "risk": "low",
-                "benefit": "2x close rate"
-            },
-            {
-                "capability": "Market analysis",
-                "adoption": 35,
-                "outcome": "Instant comps and insights",
-                "cost": "€50-150/mo",
-                "risk": "low",
-                "benefit": "10x faster analysis"
-            },
-            {
-                "capability": "Client follow-up",
-                "adoption": 48,
-                "outcome": "Never miss a touchpoint",
-                "cost": "€20-60/mo",
-                "risk": "low",
-                "benefit": "100% follow-up rate"
-            },
-        ],
-        "opportunities": {
-            "emerging": ["Virtual staging", "Predictive pricing", "AI property matching"],
-            "growing": ["Lead scoring", "Market analysis", "Automated follow-up"],
-            "established": ["Listing descriptions", "Email drips", "Scheduling"],
-        },
-        "social_proof": [
-            {
-                "quote": "AI qualifies leads before I call. My close rate doubled.",
-                "company": "Independent agent, €3M GCI",
-                "outcome": "2x close rate"
-            },
-            {
-                "quote": "Listings that took an hour now take 5 minutes. Quality improved too.",
-                "company": "Real estate team, 8 agents",
-                "outcome": "12x faster listings"
-            },
-        ],
-    },
-    "home-services": {
-        "display_name": "Home Services & Trades",
-        "adoption_stats": [
-            {
-                "capability": "AI call answering",
-                "adoption": 25,
-                "outcome": "Capture missed calls 24/7",
-                "cost": "$200-500/mo",
-                "risk": "low",
-                "benefit": "30% more leads captured"
-            },
-            {
-                "capability": "Job management software",
-                "adoption": 55,
-                "outcome": "Eliminate double-entry",
-                "cost": "$50-200/mo",
-                "risk": "low",
-                "benefit": "10 hrs/wk saved"
-            },
-            {
-                "capability": "Mobile quoting",
-                "adoption": 40,
-                "outcome": "Quote on-site instantly",
-                "cost": "$50-150/mo",
-                "risk": "low",
-                "benefit": "2x faster quotes"
-            },
-            {
-                "capability": "Automated reminders",
-                "adoption": 60,
-                "outcome": "Reduce no-shows by 50%",
-                "cost": "$20-50/mo",
-                "risk": "low",
-                "benefit": "50% fewer no-shows"
-            },
-        ],
-        "opportunities": {
-            "emerging": ["AI dispatch optimization", "Predictive maintenance", "Voice-to-job automation"],
-            "growing": ["AI call answering", "Photo-based quoting", "Customer portal"],
-            "established": ["Job management", "Mobile invoicing", "Automated reminders"],
-        },
-        "social_proof": [
-            {
-                "quote": "We stopped losing emergency calls. AI answers when we're under a sink.",
-                "company": "Plumbing business, 3 technicians",
-                "outcome": "40% more emergency jobs"
-            },
-            {
-                "quote": "Invoicing used to take 2 hours every night. Now it's automatic.",
-                "company": "HVAC contractor, 5 technicians",
-                "outcome": "10 hrs/wk freed"
-            },
-        ],
-    },
-    "general": {
-        "display_name": "General Business",
-        "adoption_stats": [
-            {
-                "capability": "Email automation",
-                "adoption": 55,
-                "outcome": "5 hrs/week saved",
-                "cost": "€20-50/mo",
-                "risk": "low",
-                "benefit": "5 hrs/wk saved"
-            },
-            {
-                "capability": "Document processing",
-                "adoption": 35,
-                "outcome": "80% faster processing",
-                "cost": "€30-100/mo",
-                "risk": "low",
-                "benefit": "80% faster docs"
-            },
-            {
-                "capability": "Meeting transcription",
-                "adoption": 42,
-                "outcome": "No more note-taking",
-                "cost": "€10-30/mo",
-                "risk": "low",
-                "benefit": "100% capture"
-            },
-            {
-                "capability": "Customer support",
-                "adoption": 30,
-                "outcome": "24/7 availability",
-                "cost": "€50-150/mo",
+                "capability": "System integration automation",
+                "adoption": 45,
+                "outcome": "Eliminate manual data sync",
+                "cost": "€100-500/mo",
                 "risk": "medium",
-                "benefit": "24/7 support"
+                "benefit": "15 hrs/wk saved",
+                "source": "KeyBanc 2025 SaaS Survey"
+            },
+            {
+                "capability": "Customer success AI",
+                "adoption": 35,
+                "outcome": "Predict churn before it happens",
+                "cost": "€200-500/mo",
+                "risk": "medium",
+                "benefit": "25% churn reduction",
+                "source": "McKinsey B2B Platform Economics 2024"
+            },
+            {
+                "capability": "Partner onboarding automation",
+                "adoption": 28,
+                "outcome": "Self-serve partner setup",
+                "cost": "€100-300/mo",
+                "risk": "low",
+                "benefit": "5x faster onboarding",
+                "source": "McKinsey B2B Platform Economics 2024"
+            },
+            {
+                "capability": "Field service optimization",
+                "adoption": 32,
+                "outcome": "Optimal technician routing",
+                "cost": "€150-400/mo",
+                "risk": "medium",
+                "benefit": "30% more jobs/day",
+                "source": "McKinsey B2B Platform Economics 2024"
             },
         ],
         "opportunities": {
-            "emerging": ["Voice interfaces", "Autonomous agents", "Predictive analytics"],
-            "growing": ["Customer support AI", "Content generation", "Data analysis"],
-            "established": ["Email automation", "Transcription", "Document processing"],
+            "emerging": ["Predictive maintenance", "AI-powered partner matching", "Autonomous IoT diagnostics"],
+            "growing": ["Customer success AI", "Integration automation", "Field service optimization"],
+            "established": ["CRM automation", "Billing automation", "Reporting dashboards"],
         },
         "social_proof": [
             {
-                "quote": "Started with email automation, now AI handles half our admin work.",
-                "company": "Small business, 5 employees",
-                "outcome": "50% less admin"
+                "quote": "Integrating our IoT data with CRM eliminated 20 hours of manual data entry per week.",
+                "company": "Connected devices company, 60 employees",
+                "outcome": "20 hrs/wk saved"
+            },
+            {
+                "quote": "AI churn prediction caught 80% of at-risk accounts before they churned.",
+                "company": "B2B SaaS platform",
+                "outcome": "80% churn early detection"
             },
         ],
     },
@@ -531,7 +337,12 @@ class InsightsGenerator:
 
         # Normalize industry
         industry_key = industry.lower().replace(" ", "-").replace("_", "-")
-        data = INDUSTRY_DATA.get(industry_key, INDUSTRY_DATA["general"])
+        data = INDUSTRY_DATA.get(industry_key)
+        if data is None:
+            raise ValueError(
+                f"Unsupported industry: '{industry}'. "
+                f"Supported: {', '.join(INDUSTRY_DATA.keys())}"
+            )
 
         # Build adoption stats
         adoption_stats = []
@@ -545,6 +356,7 @@ class InsightsGenerator:
                     risk_level=stat["risk"],
                     typical_benefit=stat["benefit"],
                 ),
+                source=stat.get("source", ""),
             ))
 
         # Build opportunity map

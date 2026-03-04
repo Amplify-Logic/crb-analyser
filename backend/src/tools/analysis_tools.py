@@ -145,7 +145,7 @@ async def identify_ai_opportunities(
     audit_id: str,
 ) -> Dict[str, Any]:
     """Identify AI implementation opportunities."""
-    process_area = inputs.get("process_area", "general")
+    process_area = inputs.get("process_area", "productivity")
 
     # AI opportunity templates by area
     ai_opportunities = {
@@ -219,7 +219,7 @@ async def identify_ai_opportunities(
                 "time_to_value": "2-4 weeks",
             },
         ],
-        "general": [
+        "productivity": [
             {
                 "opportunity": "AI assistant for employee productivity",
                 "potential_impact": "10-20% productivity boost per employee",
@@ -236,7 +236,7 @@ async def identify_ai_opportunities(
     }
 
     area_key = process_area.lower().replace(" ", "_")
-    opportunities = ai_opportunities.get(area_key, ai_opportunities["general"])
+    opportunities = ai_opportunities.get(area_key, ai_opportunities["productivity"])
 
     return {
         "process_area": process_area,

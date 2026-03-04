@@ -180,6 +180,9 @@ class FindingGenerationSkill(LLMSkill[List[Dict[str, Any]]]):
 
         # Extract tool categories from context (from quiz current_tools answer)
         tool_categories = context.current_tool_categories or answers.get("current_tools", [])
+        semantic_retrieval = context.metadata.get("semantic_retrieval", {})
+        if not isinstance(semantic_retrieval, dict):
+            semantic_retrieval = {}
 
         # Generate findings using LLM
         findings = await self._generate_findings(
@@ -187,6 +190,7 @@ class FindingGenerationSkill(LLMSkill[List[Dict[str, Any]]]):
             industry=industry,
             opportunities=opportunities,
             benchmarks=benchmarks,
+            semantic_retrieval=semantic_retrieval,
             expertise_context=expertise_context,
             existing_stack=existing_stack,
             max_findings=max_findings,
@@ -374,6 +378,7 @@ class FindingGenerationSkill(LLMSkill[List[Dict[str, Any]]]):
         industry: str,
         opportunities: List[Dict[str, Any]],
         benchmarks: Dict[str, Any],
+        semantic_retrieval: Optional[Dict[str, Any]],
         expertise_context: Dict[str, Any],
         existing_stack: List[Dict[str, Any]],
         max_findings: int,
@@ -452,6 +457,17 @@ IMPORTANT:
         tool_categories_context = self._format_tool_categories(tool_categories)
         has_tool_categories = bool(tool_categories)
 
+        semantic_items: List[Dict[str, Any]] = []
+        semantic_retrieval = semantic_retrieval or {}
+        for source_key in ("opportunities", "vendors", "case_studies", "patterns"):
+            for item in semantic_retrieval.get(source_key, [])[:3]:
+                semantic_items.append({
+                    "type": source_key.rstrip("s"),
+                    "title": item.get("title", ""),
+                    "similarity": item.get("similarity"),
+                    "summary": str(item.get("content", ""))[:220],
+                })
+
         prompt = f"""Analyze the quiz responses and generate findings for a CRB Analysis report.
 
 CURRENCY: {currency} (use {currency_symbol} symbol for all monetary values)
@@ -466,6 +482,9 @@ INDUSTRY OPPORTUNITIES AVAILABLE:
 
 INDUSTRY BENCHMARKS:
 {json.dumps(benchmarks, indent=2) if benchmarks else "Use general industry standards"}
+
+SEMANTICALLY RETRIEVED CONTEXT (RAG):
+{json.dumps(semantic_items, indent=2) if semantic_items else "No semantic retrieval available"}
 
 {stack_context}
 {tool_categories_context}

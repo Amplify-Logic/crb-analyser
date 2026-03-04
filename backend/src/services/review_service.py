@@ -267,7 +267,7 @@ class ReviewService:
         content: Dict[str, Any],
         content_type: str,
         original_sources: Dict[str, Any],
-        industry: str = "general",
+        industry: str = "professional-services",
     ) -> Dict[str, Any]:
         """
         Review generated content and refine with research.

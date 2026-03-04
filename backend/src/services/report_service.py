@@ -13,7 +13,7 @@ import uuid
 from datetime import datetime
 from typing import Dict, Any, Optional, List, AsyncGenerator
 
-from anthropic import Anthropic, RateLimitError, APIError, APIConnectionError
+from anthropic import Anthropic, AsyncAnthropic, RateLimitError, APIError, APIConnectionError
 
 
 def clean_json_string(content: str) -> str:
@@ -97,6 +97,59 @@ from src.services.crb_calculation_service import get_effective_hourly_rate
 logger = structlog.get_logger(__name__)
 
 
+TIER_ALIASES = {
+    "ai": "quick",
+    "quick": "quick",
+    "human": "full",
+    "full": "full",
+    "report_plus_call": "full",
+}
+
+
+def normalize_report_tier(tier: Optional[str]) -> str:
+    """Normalize purchased/report tiers to generation tiers."""
+    if not tier:
+        return "quick"
+    return TIER_ALIASES.get(str(tier).strip().lower(), "quick")
+
+
+def _titles_contradict(not_rec_title: str, rec_title: str) -> bool:
+    """Check if a not-recommended finding title contradicts a recommendation title.
+
+    Detects when a not-recommended finding says "X Replacement" and a rec
+    offers that same category (e.g., "PMS Replacement NOT RECOMMENDED" vs
+    "Dental Practice Management Platform").
+    """
+    # Extract key noun phrases from not-recommended title
+    nr_keywords = set(not_rec_title.replace("-", " ").split())
+    rec_keywords = set(rec_title.replace("-", " ").split())
+
+    # Remove common stop words
+    stop_words = {"is", "not", "recommended", "the", "a", "an", "for", "and", "or", "of"}
+    nr_keywords -= stop_words
+    rec_keywords -= stop_words
+
+    if not nr_keywords or not rec_keywords:
+        return False
+
+    # Check for significant keyword overlap (>= 2 shared words)
+    overlap = nr_keywords & rec_keywords
+    if len(overlap) >= 2:
+        return True
+
+    # Check specific contradiction patterns
+    contradiction_pairs = [
+        ({"practice", "management"}, {"practice", "management"}),
+        ({"pms"}, {"practice", "management"}),
+        ({"replacement"}, {"platform", "upgrade"}),
+    ]
+    for nr_pattern, rec_pattern in contradiction_pairs:
+        if nr_pattern.issubset(nr_keywords) and rec_pattern.issubset(rec_keywords):
+            return True
+
+    return False
+
+
 def extract_vendor_mentions(recommendations: List[Dict[str, Any]]) -> Dict[str, Any]:
     """
     Extract vendor mentions from recommendations for partnership tracking.
@@ -161,7 +214,8 @@ class ReportGenerator:
 
     def __init__(self, quiz_session_id: str, tier: str = "quick", model_strategy: Optional[str] = None, skip_review: bool = False, dev_mode: bool = False):
         self.quiz_session_id = quiz_session_id
-        self.tier = tier
+        self.customer_tier = tier
+        self.tier = normalize_report_tier(tier)
         self.model_strategy = model_strategy  # Optional strategy override for dev testing
         self.skip_review = skip_review
         self.dev_mode = dev_mode
@@ -169,15 +223,17 @@ class ReportGenerator:
         if dev_mode:
             from src.config.claude_cli_client import ClaudeCodeClient
             self.client = ClaudeCodeClient()
+            self.async_client = AsyncAnthropic(api_key=settings.ANTHROPIC_API_KEY)
             logger.info("DEV MODE: Using Claude CLI (Max subscription) instead of Anthropic API")
         else:
             self.client = Anthropic(api_key=settings.ANTHROPIC_API_KEY)
+            self.async_client = AsyncAnthropic(api_key=settings.ANTHROPIC_API_KEY)
 
         self.context: Dict[str, Any] = {}
         self.report_id: Optional[str] = None
         self.token_tracker = TokenTracker()
         self._partial_data: Dict[str, Any] = {}  # Store partial results for recovery
-        self.review_service = ReviewService(tier=tier, client=self.client if dev_mode else None)
+        self.review_service = ReviewService(tier=self.tier, client=self.client if dev_mode else None)
         self.trace_collector: Optional[TraceCollector] = None  # Initialized when report_id is created
 
         # Apply model strategy overrides
@@ -258,7 +314,7 @@ class ReportGenerator:
         """
         from src.services.readiness_profile import build_readiness_profile
 
-        industry = self.context.get("industry", "general")
+        industry = self.context.get("industry", "ecommerce")
 
         # Get expertise data for this industry
         try:
@@ -304,6 +360,36 @@ class ReportGenerator:
         readiness_profile = build_readiness_profile(answers)
         logger.info("readiness_profile", **readiness_profile)
 
+        # Build workshop findings from milestones + deep-dives
+        workshop_findings: List[Dict[str, Any]] = []
+        workshop_data = self.context.get("workshop_data", {})
+        if workshop_data:
+            for milestone in workshop_data.get("milestones", []):
+                workshop_findings.append({
+                    "pain_point": milestone.get("pain_point_label"),
+                    "finding": milestone.get("finding"),
+                    "roi": milestone.get("roi"),
+                    "vendors": milestone.get("vendors"),
+                    "user_feedback": milestone.get("user_feedback"),
+                    "user_notes": milestone.get("user_notes"),
+                })
+
+            # Add deep-dive transcripts as enrichment
+            for dd in workshop_data.get("deep_dives", []):
+                workshop_findings.append({
+                    "pain_point": dd.get("pain_point_label"),
+                    "transcript_summary": dd.get("transcript", [])[-5:],
+                    "finding": dd.get("finding"),
+                })
+
+        metadata: Dict[str, Any] = {"readiness_profile": readiness_profile}
+        semantic_retrieval = self.context.get("semantic_retrieval", {})
+        if semantic_retrieval:
+            metadata["semantic_retrieval"] = semantic_retrieval
+        if workshop_findings:
+            metadata["workshop_findings"] = workshop_findings
+            metadata["workshop_confidence"] = workshop_data.get("confidence", {})
+
         return SkillContext(
             industry=industry,
             company_name=self.context.get("company_name"),
@@ -317,14 +403,15 @@ class ReportGenerator:
             existing_stack=existing_stack,
             current_tool_categories=self.context.get("current_tool_categories"),
             user_profile=user_profile,
-            metadata={"readiness_profile": readiness_profile},
+            metadata=metadata,
         )
 
-    def _call_claude(self, task: str, prompt: str, max_tokens: int = 4000) -> str:
+    async def _call_claude(self, task: str, prompt: str, max_tokens: int = 4000) -> str:
         """
         Call Claude with appropriate model routing, token tracking, and retry logic.
 
         Implements exponential backoff for rate limits and transient errors.
+        Uses async client to avoid blocking the event loop during retries.
 
         Args:
             task: Task identifier for model routing
@@ -344,7 +431,7 @@ class ReportGenerator:
 
         for attempt in range(self.MAX_RETRIES):
             try:
-                response = self.client.messages.create(
+                response = await self.async_client.messages.create(
                     model=model,
                     max_tokens=max_tokens,
                     system=self.SYSTEM_PROMPT,
@@ -385,7 +472,7 @@ class ReportGenerator:
                         f"Rate limit hit for task '{task}', retrying in {delay}s "
                         f"(attempt {attempt + 1}/{self.MAX_RETRIES})"
                     )
-                    time_module.sleep(delay)
+                    await asyncio.sleep(delay)
                     continue
                 logger.error(f"Rate limit exhausted for task '{task}' after {self.MAX_RETRIES} attempts")
                 if self.trace_collector:
@@ -400,7 +487,7 @@ class ReportGenerator:
                         f"Connection error for task '{task}', retrying in {delay}s "
                         f"(attempt {attempt + 1}/{self.MAX_RETRIES})"
                     )
-                    time_module.sleep(delay)
+                    await asyncio.sleep(delay)
                     continue
                 logger.error(f"Connection failed for task '{task}' after {self.MAX_RETRIES} attempts")
                 if self.trace_collector:
@@ -489,7 +576,7 @@ class ReportGenerator:
         else:
             return {
                 "type": "unknown",
-                "message": f"An unexpected error occurred: {str(error)}",
+                "message": "An unexpected error occurred. Our team has been notified.",
                 "retryable": False,
             }
 
@@ -561,6 +648,18 @@ class ReportGenerator:
             }
             if interview_completed:
                 logger.info(f"Loaded interview data: {len(self.context['interview']['transcript'])} messages")
+
+            # Load workshop data if available (90-min deep-dive session)
+            workshop_data = quiz_data.get("workshop_data", {})
+            if workshop_data:
+                self.context["workshop_data"] = workshop_data
+                milestones = workshop_data.get("milestones", [])
+                deep_dives = workshop_data.get("deep_dives", [])
+                logger.info(
+                    "workshop_data_loaded",
+                    milestones=len(milestones),
+                    deep_dives=len(deep_dives),
+                )
 
             # Load validated assumptions if validation session was completed
             validated_assumptions = quiz_data.get("validated_assumptions", [])
@@ -851,7 +950,7 @@ class ReportGenerator:
                         content={"findings": findings},
                         content_type="findings",
                         original_sources=original_sources,
-                        industry=self.context.get("industry", "general"),
+                        industry=self.context.get("industry", "ecommerce"),
                     )
 
                     # Use refined findings
@@ -1419,7 +1518,7 @@ class ReportGenerator:
                 logger.info(f"[FINALIZE] Calling expertise_service.learn_from_analysis...")
                 await expertise_service.learn_from_analysis(
                     audit_id=self.report_id,
-                    industry=self.context.get("industry", "general"),
+                    industry=self.context.get("industry", "ecommerce"),
                     company_size=self.context.get("answers", {}).get("employee_count", "unknown"),
                     context=learning_context,
                     execution_metrics=execution_metrics,
@@ -1472,11 +1571,23 @@ class ReportGenerator:
                     else:
                         raise
 
+            # Keep quiz session state in sync with terminal report failure.
+            try:
+                await supabase.table("quiz_sessions").update({
+                    "status": "failed",
+                }).eq("id", self.quiz_session_id).execute()
+            except Exception as session_err:
+                logger.warning(
+                    "quiz_session_failure_status_update_failed",
+                    quiz_session_id=self.quiz_session_id,
+                    error=str(session_err),
+                )
+
             yield {
                 "phase": "error",
                 "step": error_info["message"],
                 "progress": 0,
-                "error": str(e),
+                "error": error_info["message"],
                 "error_info": error_info,
                 "has_partial_data": bool(self._partial_data),
                 "report_id": self.report_id,  # Include report_id for potential retry
@@ -1518,12 +1629,21 @@ class ReportGenerator:
         return updated_answers
 
     def _extract_industry(self) -> str:
-        """Extract and normalize industry from quiz answers."""
+        """Extract and normalize industry from quiz answers.
+
+        Raises:
+            ValueError: If no industry is found or industry is unsupported.
+        """
         answers = self.context.get("answers", {})
         results = self.context.get("results", {})
 
         # Try to get industry from various sources
-        industry = answers.get("industry") or results.get("industry") or "general"
+        industry = answers.get("industry") or results.get("industry")
+        if not industry:
+            raise ValueError(
+                "No industry found in quiz answers or results. "
+                "Industry is required for report generation."
+            )
         return normalize_industry(industry)
 
     async def _generate_executive_summary(self) -> Dict[str, Any]:
@@ -1627,7 +1747,7 @@ Return ONLY the JSON, no explanation."""
         }
 
         try:
-            content = self._call_claude("generate_executive_summary", prompt, max_tokens=2000)
+            content = await self._call_claude("generate_executive_summary", prompt, max_tokens=2000)
             summary = safe_parse_json(content, default_summary)
             if not isinstance(summary, dict):
                 summary = default_summary
@@ -1655,6 +1775,13 @@ Return ONLY the JSON, no explanation."""
                 context = self._get_skill_context()
                 # Pass tier info for finding count
                 context.metadata["tier"] = self.tier
+
+                # Include workshop milestones as pre-validated findings
+                workshop_data = self.context.get("workshop_data", {})
+                if workshop_data and workshop_data.get("milestones"):
+                    context.metadata["workshop_validated_findings"] = workshop_data["milestones"]
+                    context.metadata["workshop_confidence"] = workshop_data.get("confidence", {})
+
                 result = await skill.run(context)
 
                 if result.success:
@@ -1697,11 +1824,32 @@ Return ONLY the JSON, no explanation."""
         for cs in semantic_retrieval.get("case_studies", []):
             valid_sources.append(f"Case Study: {cs.get('title')}")
 
+        # Build workshop context for prompt injection
+        workshop_prompt_section = ""
+        workshop_data = self.context.get("workshop_data", {})
+        if workshop_data and workshop_data.get("milestones"):
+            workshop_milestones = workshop_data["milestones"]
+            workshop_prompt_section = f"""
+═══════════════════════════════════════════════════════════════════════════════
+WORKSHOP DATA (USER-VALIDATED — PRIORITIZE THESE)
+═══════════════════════════════════════════════════════════════════════════════
+
+The user completed a 90-minute workshop where they validated these findings.
+These are HIGH confidence because the user confirmed them directly.
+
+WORKSHOP MILESTONES:
+{json.dumps(workshop_milestones, indent=2)}
+
+IMPORTANT: Workshop-validated findings should be prioritized over quiz-inferred findings.
+Use the user's exact words and numbers from workshop conversations.
+
+"""
+
         prompt = f"""Analyze the quiz responses and generate findings for a CRB report.
 
 QUIZ ANSWERS:
 {json.dumps(answers, indent=2)}
-
+{workshop_prompt_section}
 INDUSTRY OPPORTUNITIES AVAILABLE:
 {json.dumps(opportunities[:5], indent=2) if opportunities else "None specific"}
 
@@ -1834,7 +1982,7 @@ IMPORTANT:
 - Include exactly {min_not_recommended} not-recommended findings"""
 
         try:
-            content = self._call_claude("generate_findings", prompt, max_tokens=10000)
+            content = await self._call_claude("generate_findings", prompt, max_tokens=10000)
             findings = safe_parse_json(content, [])
 
             if not isinstance(findings, list):
@@ -1951,13 +2099,35 @@ IMPORTANT:
 
                 # === PLATFORM CONSOLIDATION ===
                 # Identify which findings can be solved by ONE platform
-                industry = self.context.get("industry", "general")
+                industry = self.context.get("industry", "ecommerce")
                 existing_stack = self.context.get("existing_stack", [])
+
+                # Build set of platform categories explicitly NOT recommended
+                not_recommended_themes: set[str] = set()
+                for f in findings:
+                    if f.get("is_not_recommended"):
+                        title_lower = f.get("title", "").lower()
+                        desc_lower = f.get("description", "").lower()
+                        combined = title_lower + " " + desc_lower
+                        if any(kw in combined for kw in
+                               ["practice management", "pms replacement", "replace exquise",
+                                "replace dentrix", "replace eaglesoft"]):
+                            not_recommended_themes.add("dental-practice-management")
+                        if any(kw in combined for kw in
+                               ["voice receptionist", "ai receptionist", "replace receptionist"]):
+                            not_recommended_themes.add("call-handling")
+                        if any(kw in combined for kw in
+                               ["diagnostic imaging", "ai imaging"]):
+                            not_recommended_themes.add("ai-imaging")
+
+                if not_recommended_themes:
+                    logger.info(f"Not-recommended themes detected: {not_recommended_themes}")
 
                 consolidation = identify_platform_opportunities(
                     findings=recommendable,
                     industry=industry,
                     existing_stack=existing_stack,
+                    excluded_categories=not_recommended_themes,
                 )
 
                 if consolidation.platform_recommendations:
@@ -2042,8 +2212,14 @@ IMPORTANT:
                             + (f" and {len(platform_rec.solves_findings) - 3} more" if len(platform_rec.solves_findings) > 3 else "")
                         ),
                         "why_it_matters": {
-                            "customer_value": "Single platform means consistent customer experience across scheduling, quoting, and communication",
-                            "business_health": "Reduces complexity, training, and integration costs vs separate tools",
+                            "customer_value": (
+                                f"Solves {', '.join(platform_finding_titles)} through one integrated platform "
+                                f"instead of managing {len(platform_rec.solves_findings)} separate tools"
+                            ),
+                            "business_health": (
+                                f"Eliminates {len(platform_rec.solves_findings)} integration points, "
+                                f"reducing maintenance overhead and data sync issues"
+                            ),
                         },
                         "priority": "high",
                         "is_platform_recommendation": True,
@@ -2392,6 +2568,28 @@ IMPORTANT:
                             if alt.get("slug", "").lower() not in seen_vendors
                         ]
 
+                # Post-process: remove recs that contradict not-recommended findings
+                not_rec_titles = {
+                    f.get("title", "").lower()
+                    for f in findings if f.get("is_not_recommended")
+                }
+                if not_rec_titles:
+                    filtered_recommendations = []
+                    for rec in recommendations:
+                        rec_title_lower = rec.get("title", "").lower()
+                        contradicts = False
+                        for nr_title in not_rec_titles:
+                            if _titles_contradict(nr_title, rec_title_lower):
+                                logger.warning(
+                                    f"Removing recommendation '{rec.get('title')}' "
+                                    f"— contradicts not-recommended finding '{nr_title}'"
+                                )
+                                contradicts = True
+                                break
+                        if not contradicts:
+                            filtered_recommendations.append(rec)
+                    recommendations = filtered_recommendations
+
                 if recommendations:
                     logger.info(
                         f"Recommendations generated via skill "
@@ -2544,7 +2742,7 @@ CRITICAL REQUIREMENTS:
 Generate 5-10 recommendations. Return ONLY the JSON array."""
 
         try:
-            content = self._call_claude("generate_recommendations", prompt, max_tokens=12000)
+            content = await self._call_claude("generate_recommendations", prompt, max_tokens=12000)
             recommendations = safe_parse_json(content, [])
 
             if not isinstance(recommendations, list):
@@ -2740,8 +2938,7 @@ Generate 5-10 recommendations. Return ONLY the JSON array."""
         rec["four_options"] = four_options
         return rec
 
-    @staticmethod
-    def _compute_crb_analysis(rec: Dict[str, Any]) -> Dict[str, Any]:
+    def _compute_crb_analysis(self, rec: Dict[str, Any]) -> Dict[str, Any]:
         """
         Compute crb_analysis from AIOS option costs.
 
@@ -2832,7 +3029,7 @@ Generate 5-10 recommendations. Return ONLY the JSON array."""
                 },
                 "total": total_cost,
             },
-            "risk": [],
+            "risk": self._generate_risks(rec, monthly_cost, impl_cost),
             "benefit": {
                 "short_term": {"value_saved": short_benefit, "value_created": 0},
                 "mid_term": {"value_saved": mid_benefit, "value_created": 0},
@@ -2840,6 +3037,56 @@ Generate 5-10 recommendations. Return ONLY the JSON array."""
                 "total": total_benefit,
             },
         }
+
+    def _generate_risks(
+        self, rec: Dict[str, Any], monthly_cost: float, impl_cost: float
+    ) -> List[Dict[str, Any]]:
+        """Generate 2-3 risks for a recommendation based on cost, complexity, and context."""
+        risks: List[Dict[str, Any]] = []
+        our_rec = rec.get("our_recommendation", "connect_and_automate")
+        is_platform = rec.get("is_platform_recommendation", False)
+
+        # Risk 1: Implementation/adoption risk (always present)
+        if our_rec == "targeted_upgrade" or is_platform:
+            risks.append({
+                "description": "Staff adoption may be slower than planned — learning curve for new platform",
+                "probability": "medium",
+                "impact_eur": int(monthly_cost * 3) if monthly_cost > 0 else 500,
+                "mitigation": "Run a 2-week trial with one workflow before full commitment",
+            })
+        else:
+            risks.append({
+                "description": "Integration may require more configuration than estimated",
+                "probability": "low",
+                "impact_eur": int(impl_cost * 0.3) if impl_cost > 0 else 300,
+                "mitigation": "Start with one integration, validate before connecting others",
+            })
+
+        # Risk 2: Vendor/compatibility risk (for platforms and upgrades)
+        if is_platform or our_rec == "targeted_upgrade":
+            risks.append({
+                "description": "Existing tool API compatibility unverified — integration may fail",
+                "probability": "medium",
+                "impact_eur": int(monthly_cost * 6) if monthly_cost > 0 else 1000,
+                "mitigation": "Contact vendor sales to confirm API compatibility before signing",
+            })
+
+        # Risk 3: Compliance risk (for EU countries)
+        country = self.context.get("answers", {}).get("country", "")
+        locations = self.context.get("answers", {}).get("locations", "")
+        country_str = str(country or locations or "").upper()
+        eu_indicators = ("NL", "DE", "FR", "BE", "AT", "IT", "ES", "EU",
+                         "NETHERLANDS", "AMSTERDAM", "GERMANY", "FRANCE",
+                         "BELGIUM", "DUTCH")
+        if any(ind in country_str for ind in eu_indicators):
+            risks.append({
+                "description": "GDPR compliance: verify vendor's data processing agreement covers EU requirements",
+                "probability": "low",
+                "impact_eur": 5000,
+                "mitigation": "Request vendor's DPA and verify data residency before migration",
+            })
+
+        return risks[:3]
 
     def _enrich_build_it_yourself(self, recommendation_title: str, custom: Dict[str, Any]) -> Dict[str, Any]:
         """
@@ -3009,7 +3256,7 @@ Put quick wins first. Be specific and actionable.
 Return ONLY the JSON."""
 
         try:
-            content = self._call_claude("generate_roadmap", prompt, max_tokens=3000)
+            content = await self._call_claude("generate_roadmap", prompt, max_tokens=3000)
             roadmap = safe_parse_json(content, {"short_term": [], "mid_term": [], "long_term": []})
             if not isinstance(roadmap, dict):
                 return {"short_term": [], "mid_term": [], "long_term": []}
@@ -3039,6 +3286,29 @@ Return ONLY the JSON."""
             factor = CONFIDENCE_FACTORS.get(confidence, 0.85)
             total_hours_saved_raw += hours
             total_hours_saved_adjusted += hours * factor
+
+        # Labor capacity sanity check — can't save more hours than exist
+        company_size = self.context.get("answers", {}).get("company_size", "small")
+        admin_hours = self.context.get("answers", {}).get("admin_hours_weekly", 0) or 0
+
+        if admin_hours <= 0:
+            size_to_admin_hours = {
+                "solo": 15, "small": 25, "medium": 60, "large": 120,
+                "1-10": 25, "11-50": 60, "51-200": 120, "200+": 200,
+            }
+            admin_hours = size_to_admin_hours.get(str(company_size).lower(), 40)
+
+        capacity_capped = False
+        original_hours = total_hours_saved_adjusted
+        if total_hours_saved_adjusted > admin_hours * 0.9:
+            total_hours_saved_adjusted = admin_hours * 0.9
+            capacity_capped = True
+            logger.warning(
+                f"[VALUE_CALC] Hours capped: {original_hours:.1f} -> {total_hours_saved_adjusted:.1f} "
+                f"(admin capacity: {admin_hours} hrs/week for {company_size} team)"
+            )
+            cap_ratio = total_hours_saved_adjusted / original_hours if original_hours > 0 else 1.0
+            total_hours_saved_raw = total_hours_saved_raw * cap_ratio
 
         hourly_rate = self._get_effective_hourly_rate()
         time_savings_raw = total_hours_saved_raw * hourly_rate * 52  # Annual
@@ -3135,11 +3405,16 @@ Return ONLY the JSON."""
         return {
             "value_saved": {
                 "hours_per_week": round(total_hours_saved_adjusted, 1),
-                "hours_per_week_raw": total_hours_saved_raw,
+                "hours_per_week_raw": round(total_hours_saved_raw, 1),
                 "hourly_rate": hourly_rate,
                 "time_savings_annual": int(time_savings_adjusted),
                 "time_savings_annual_raw": int(time_savings_raw),
                 "subtotal": {"min": time_savings_min, "max": time_savings_max},
+                "capacity_capped": capacity_capped,
+                "capacity_note": (
+                    f"Original estimates totaled {original_hours:.1f} hrs/week, adjusted to "
+                    f"{total_hours_saved_adjusted:.1f} hrs/week based on {admin_hours} hrs/week admin capacity"
+                ) if capacity_capped else None,
             },
             "value_created": {
                 "from_findings": int(value_created_adjusted),
@@ -3160,7 +3435,7 @@ Return ONLY the JSON."""
 
     def _generate_methodology_notes(self) -> Dict[str, Any]:
         """Generate methodology notes and disclaimers."""
-        industry = self.context.get("industry", "general")
+        industry = self.context.get("industry", "ecommerce")
         industry_slug = self.context.get("company_profile", {}).get("industry_slug", industry)
 
         # Check if industry has KB data
@@ -3208,42 +3483,30 @@ Return ONLY the JSON."""
 
     # Industry-specific verdict adjustments
     INDUSTRY_VERDICT_ADJUSTMENTS = {
-        "marketing-agencies": {
-            "ai_readiness_boost": 5,  # Already using AI tools like Canva, ChatGPT
-            "risk_tolerance": "medium",
-            "quick_win_emphasis": True,
-            "context_note": "Marketing agencies typically have higher AI familiarity"
-        },
-        "tech-companies": {
-            "ai_readiness_boost": 10,  # High baseline tech literacy
-            "risk_tolerance": "high",
-            "quick_win_emphasis": False,  # Can handle complex implementations
-            "context_note": "Tech companies can implement more sophisticated solutions"
-        },
-        "ecommerce": {
+        "professional-services": {
             "ai_readiness_boost": 3,
             "risk_tolerance": "medium",
             "quick_win_emphasis": True,
-            "context_note": "E-commerce benefits from customer service and personalization AI"
+            "context_note": "Professional services benefit from document automation and client management AI"
         },
-        "retail": {
+        "dental": {
             "ai_readiness_boost": 0,
-            "risk_tolerance": "low",  # More conservative
+            "risk_tolerance": "low",
             "quick_win_emphasis": True,
-            "context_note": "Retail should focus on proven AI tools first"
+            "context_note": "Dental practices should focus on proven AI tools for scheduling and patient communication"
         },
-        "music-studios": {
-            "ai_readiness_boost": 2,
-            "risk_tolerance": "medium",
+        "ecommerce": {
+            "ai_readiness_boost": 5,
+            "risk_tolerance": "medium-high",
             "quick_win_emphasis": True,
-            "context_note": "Creative industries benefit from AI augmentation, not replacement"
+            "context_note": "E-commerce stacks are API-rich — prioritize Connect-first strategies (Shopify Flow, Klaviyo webhooks, Gorgias automations) before building custom AI"
         },
-        "general": {
-            "ai_readiness_boost": 0,
+        "b2b-platforms": {
+            "ai_readiness_boost": 5,
             "risk_tolerance": "medium",
-            "quick_win_emphasis": True,
-            "context_note": "Start with quick wins to build confidence"
-        }
+            "quick_win_emphasis": False,
+            "context_note": "B2B platforms can leverage AI for data analysis and customer insights"
+        },
     }
 
     async def _generate_verdict(
@@ -3307,10 +3570,10 @@ Return ONLY the JSON."""
         including when AI is NOT the answer for them right now.
         """
         # Get industry adjustments
-        industry = self.context.get("industry", "general")
+        industry = self.context.get("industry", "ecommerce")
         adjustments = self.INDUSTRY_VERDICT_ADJUSTMENTS.get(
             industry,
-            self.INDUSTRY_VERDICT_ADJUSTMENTS["general"]
+            self.INDUSTRY_VERDICT_ADJUSTMENTS["ecommerce"]
         )
 
         # Base scores
@@ -3728,6 +3991,7 @@ Return ONLY the JSON."""
         architecture = arch_gen.generate_architecture(
             recommendations=recommendations,
             quiz_answers=self.context.get("answers", {}),
+            existing_stack=self.context.get("existing_stack", []),
         )
         return architecture.model_dump()
 
@@ -3739,7 +4003,7 @@ Return ONLY the JSON."""
 
         # Base insights
         insights = insights_gen.generate_insights(
-            industry=self.context.get("industry", "general"),
+            industry=self.context.get("industry", "ecommerce"),
             ai_readiness_score=ai_score,
         )
         result = insights.model_dump()
@@ -3851,8 +4115,8 @@ Return ONLY the JSON."""
             "upsell_analysis": {},
         }
 
-        # Get the customer tier from context
-        customer_tier = self.tier  # "quick", "full", or "human"
+        # Keep purchased tier for post-report follow-up and upsell logic.
+        customer_tier = self.customer_tier or self.tier
 
         # Generate follow-up schedule
         followup_skill = get_skill("followup-scheduler", client=self.client)
@@ -3986,11 +4250,13 @@ async def get_report(report_id: str) -> Optional[Dict[str, Any]]:
 
 
 async def get_report_by_quiz_session(quiz_session_id: str) -> Optional[Dict[str, Any]]:
-    """Get a report by quiz session ID."""
+    """Get the latest report by quiz session ID."""
     supabase = await get_async_supabase()
 
     result = await supabase.table("reports").select("*").eq(
         "quiz_session_id", quiz_session_id
-    ).single().execute()
+    ).order("created_at", desc=True).limit(1).execute()
 
-    return result.data if result.data else None
+    if not result.data:
+        return None
+    return result.data[0]

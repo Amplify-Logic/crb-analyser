@@ -39,9 +39,10 @@ async def send_report_ready_email(
         from sendgrid import SendGridAPIClient
         from sendgrid.helpers.mail import Mail, Email, To, Content, Attachment, FileContent, FileName, FileType, Disposition
 
-        # Build report URL
+        # Build report URL with email for access verification
         base_url = settings.CORS_ORIGINS.split(",")[0]
-        report_url = f"{base_url}/report/{report_id}"
+        from urllib.parse import quote
+        report_url = f"{base_url}/report/{report_id}?email={quote(to_email)}"
 
         # Build email content
         opportunities_html = ""
@@ -55,7 +56,7 @@ async def send_report_ready_email(
         <html>
         <body style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px;">
             <div style="text-align: center; margin-bottom: 30px;">
-                <h1 style="color: #6366f1; margin: 0;">CRB Analyser</h1>
+                <h1 style="color: #6366f1; margin: 0;">Ready Path</h1>
                 <p style="color: #666;">Your AI Readiness Report is Ready</p>
             </div>
 
@@ -86,7 +87,7 @@ async def send_report_ready_email(
             </div>
 
             <div style="text-align: center; padding: 20px; color: #999; font-size: 12px;">
-                <p>CRB Analyser - AI Implementation Insights for SMBs</p>
+                <p>Ready Path - AI Implementation Insights for SMBs</p>
                 <p>Questions? Reply to this email.</p>
             </div>
         </body>
@@ -152,7 +153,7 @@ async def send_payment_confirmation_email(
         <html>
         <body style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px;">
             <div style="text-align: center; margin-bottom: 30px;">
-                <h1 style="color: #6366f1; margin: 0;">CRB Analyser</h1>
+                <h1 style="color: #6366f1; margin: 0;">Ready Path</h1>
                 <p style="color: #666;">Payment Confirmation</p>
             </div>
 
@@ -173,7 +174,7 @@ async def send_payment_confirmation_email(
             </div>
 
             <div style="text-align: center; padding: 20px; color: #999; font-size: 12px;">
-                <p>CRB Analyser - AI Implementation Insights for SMBs</p>
+                <p>Ready Path - AI Implementation Insights for SMBs</p>
                 <p>Questions? Reply to this email.</p>
             </div>
         </body>
@@ -219,7 +220,7 @@ async def send_report_failed_email(
         <html>
         <body style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px;">
             <div style="text-align: center; margin-bottom: 30px;">
-                <h1 style="color: #6366f1; margin: 0;">CRB Analyser</h1>
+                <h1 style="color: #6366f1; margin: 0;">Ready Path</h1>
                 <p style="color: #666;">Report Generation Issue</p>
             </div>
 
@@ -248,7 +249,7 @@ async def send_report_failed_email(
             </div>
 
             <div style="text-align: center; padding: 20px; color: #999; font-size: 12px;">
-                <p>CRB Analyser - AI Implementation Insights for SMBs</p>
+                <p>Ready Path - AI Implementation Insights for SMBs</p>
             </div>
         </body>
         </html>
@@ -327,7 +328,7 @@ async def send_teaser_report_email(
             </div>
 
             <p style="color: #999; font-size: 12px; text-align: center;">
-                CRB Analyser - AI-Powered Business Audits
+                Ready Path - AI-Powered Business Audits
             </p>
         </body>
         </html>
@@ -421,7 +422,7 @@ async def send_welcome_email(
         message = Mail(
             from_email=Email(settings.SENDGRID_FROM_EMAIL, settings.SENDGRID_FROM_NAME),
             to_emails=To(to_email),
-            subject="Welcome to CRB Analyser - Your Account is Ready",
+            subject="Welcome to Ready Path - Your Account is Ready",
             html_content=Content("text/html", html_content),
         )
 
@@ -461,9 +462,10 @@ async def send_follow_up_email(
         from sendgrid import SendGridAPIClient
         from sendgrid.helpers.mail import Mail, Email, To, Content
 
-        # Build URLs
+        # Build URLs with email for access verification
         base_url = settings.CORS_ORIGINS.split(",")[0]
-        report_url = f"{base_url}/report/{report_id}"
+        from urllib.parse import quote
+        report_url = f"{base_url}/report/{report_id}?email={quote(to_email)}"
         booking_url = "https://calendly.com/crb-analyser/implementation-call"
 
         # Build opportunity section
@@ -483,7 +485,7 @@ async def send_follow_up_email(
         <html>
         <body style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px;">
             <div style="text-align: center; margin-bottom: 30px;">
-                <h1 style="color: #6366f1; margin: 0;">CRB Analyser</h1>
+                <h1 style="color: #6366f1; margin: 0;">Ready Path</h1>
                 <p style="color: #666;">How's Your AI Implementation Going?</p>
             </div>
 
@@ -524,7 +526,7 @@ async def send_follow_up_email(
             </div>
 
             <div style="text-align: center; padding: 20px; color: #999; font-size: 12px;">
-                <p>CRB Analyser - AI Implementation Insights for SMBs</p>
+                <p>Ready Path - AI Implementation Insights for SMBs</p>
                 <p>Questions? Reply to this email.</p>
             </div>
         </body>

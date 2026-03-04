@@ -159,7 +159,7 @@ Extract insights and return as JSON with this structure:
       "relevance_reason": "Why this relevance level - be specific",
       "tags": {{
         "topics": ["relevant", "topic", "tags"],
-        "industries": ["all"] or ["dental", "home-services", "professional-services", etc.],
+        "industries": ["all"] or ["dental", "professional-services", "ecommerce", "b2b-platforms"],
         "use_in": ["report", "quiz_results", "landing", "email"],
         "user_stages": ["considering", "early_adopter", "scaling"]
       }}
@@ -375,7 +375,7 @@ async def extract_insights_from_content(
     skill = InsightExtractionSkill(client=client)
 
     context = SkillContext(
-        industry="general",
+        industry="professional-services",
         metadata={
             "extraction_input": {
                 "raw_content": raw_content,

@@ -109,7 +109,7 @@ Complete analysis before making any recommendations.
             intake = intake_result.data
 
             # Build context
-            industry = client.get("industry", "general")
+            industry = client.get("industry", "ecommerce")
             self.context = {
                 "audit": audit,
                 "client": client,

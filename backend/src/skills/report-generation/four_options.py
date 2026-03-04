@@ -70,7 +70,7 @@ class FourOptionsSkill(LLMSkill[Dict[str, Any]]):
         finding = context.finding or {}
         profile: UserProfile = context.user_profile
         vendors = context.vendors or []
-        industry = context.industry or "general"
+        industry = context.industry or "ecommerce"
         currency_symbol = context.currency_symbol
         quiz_answers = context.quiz_answers or {}
 

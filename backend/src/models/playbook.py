@@ -174,7 +174,7 @@ class PersonalizationContext(BaseModel):
     budget_monthly: int = Field(500, ge=0)
     existing_tools: List[str] = Field(default_factory=list)
     primary_pain_point: str = ""
-    industry: str = "general"
+    industry: str = "professional-services"
     urgency: Literal["asap", "normal", "flexible"] = "normal"
 
 

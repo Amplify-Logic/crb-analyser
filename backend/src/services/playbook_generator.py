@@ -69,6 +69,8 @@ MANDATORY RULES:
 - Phase crb_summary.total_cost MUST be non-zero when phases include paid tools.
 - Include Claude Code build hours and MCP servers where applicable.
 
+CRITICAL: Your playbook must ONLY reference concepts, tools, and workflows that apply to the client's stated industry. A dental practice playbook should NEVER mention field technicians, dispatch routing, or service zones. A plumbing company playbook should NEVER mention patient records or clinical notes. Match your language and examples to the industry.
+
 Generate aggressive but achievable week-by-week plans with proper task dependencies."""
 
     def __init__(self, client: Optional[Any] = None):
@@ -124,7 +126,7 @@ Generate aggressive but achievable week-by-week plans with proper task dependenc
             budget_monthly=budget,
             existing_tools=existing_tools,
             primary_pain_point=quiz_answers.get("biggest_challenge", ""),
-            industry=quiz_answers.get("industry", "general"),
+            industry=quiz_answers.get("industry", "professional-services"),
             urgency=urgency,
         )
 
@@ -254,6 +256,7 @@ Generate aggressive but achievable week-by-week plans with proper task dependenc
         context: PersonalizationContext,
         total_weeks: int,
         cost_context: Optional[Dict[str, Any]] = None,
+        quiz_answers: Optional[Dict[str, Any]] = None,
     ) -> str:
         """Build the LLM prompt for playbook generation."""
         executor_guidance = {
@@ -294,6 +297,34 @@ Generate aggressive but achievable week-by-week plans with proper task dependenc
                 lines.append(f"- Key risks: {'; '.join(risk_strs)}")
             financial_section = "\n".join(lines)
 
+        # Determine compliance framework from country/location
+        _qa = quiz_answers or {}
+        country_str = str(_qa.get("country", "") or _qa.get("locations", "") or "").upper()
+        eu_indicators = ("NL", "DE", "FR", "BE", "AT", "IT", "ES", "EU",
+                         "NETHERLANDS", "AMSTERDAM", "GERMANY", "FRANCE",
+                         "BELGIUM", "DUTCH", "VIENNA", "BERLIN", "PARIS")
+        is_eu = any(ind in country_str for ind in eu_indicators)
+        is_healthcare = context.industry.lower() in ("dental", "medical", "healthcare")
+        if is_eu:
+            compliance = "GDPR"
+        elif is_healthcare:
+            compliance = "HIPAA"
+        else:
+            compliance = "general"
+        wrong_compliance = "HIPAA" if compliance == "GDPR" else "GDPR"
+
+        team_executor = (
+            "owner does everything" if context.team_size == "solo"
+            else "assign to relevant team members"
+        )
+        industry_rules = f"""
+CRITICAL INDUSTRY RULES:
+- Industry: {context.industry}. Generate content ONLY relevant to {context.industry} practices.
+- Compliance: Use {compliance} (NOT {wrong_compliance}).
+- NEVER reference field technicians, service zones, dispatch, or routing unless the industry is field services (HVAC, plumbing, electrical).
+- NEVER reference clinical diagnostics, imaging, or treatment planning unless the recommendation specifically addresses those areas.
+- All role references must match {context.team_size} team: {team_executor}."""
+
         return f"""Generate a detailed implementation playbook.
 
 RECOMMENDATION: {recommendation.get('title')}
@@ -310,6 +341,7 @@ PERSONALIZATION:
 - Industry: {context.industry}
 - Urgency: {context.urgency}
 - Primary pain: {context.primary_pain_point}
+{industry_rules}
 
 TOTAL WEEKS: {total_weeks}
 
@@ -725,7 +757,7 @@ Return ONLY valid JSON, no explanation."""
 
         if skill:
             try:
-                industry = industry_context.get("industry", "general")
+                industry = industry_context.get("industry", "professional-services")
 
                 # Get expertise data for this industry
                 try:
@@ -930,6 +962,7 @@ Return ONLY valid JSON, no explanation."""
         prompt = self._build_generation_prompt(
             recommendation, option_type, option, context, total_weeks,
             cost_context=cost_context,
+            quiz_answers=quiz_answers,
         )
 
         try:

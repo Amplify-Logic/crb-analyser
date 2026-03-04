@@ -121,7 +121,7 @@ class MilestoneSynthesisSkill(LLMSkill[Dict[str, Any]]):
             industry=context.industry,
         )
 
-        system = self._get_system_prompt()
+        system = self._get_system_prompt(company_name=company_name, industry=context.industry)
 
         result = await self.call_llm_json(prompt, system)
 
@@ -284,13 +284,38 @@ class MilestoneSynthesisSkill(LLMSkill[Dict[str, Any]]):
 
         return None
 
-    def _get_system_prompt(self) -> str:
-        return """You are a business analyst synthesizing discovery interview data into actionable insights.
+    def _get_system_prompt(
+        self, company_name: str = "the company", industry: str = "ecommerce"
+    ) -> str:
+        base = f"""You are a senior technology strategist synthesizing a discovery conversation \
+into an actionable insight for {company_name} ({industry}).
 
-Your output will be shown directly to the user as a "draft finding" during a workshop.
-Be specific, use their exact numbers and context, and provide realistic ROI calculations.
+Write as if presenting to the client — use THEIR words, reference THEIR specific numbers \
+and examples. The finding should make them think "this consultant really understands my business."
+
+When calculating ROI:
+- Use their actual numbers when provided (quote them)
+- If estimating, clearly state your assumptions
+- Include a conservative and optimistic scenario
+- Factor in the {industry} benchmark when relevant
+- Consider both time savings AND revenue/quality impact
+
+Your tone: confident, data-driven, but accessible. Not academic — practical.
 
 Always return valid JSON matching the requested schema. Be conservative with ROI estimates."""
+
+        # Add ecommerce-specific framing when relevant
+        if industry == "ecommerce":
+            base += """
+
+ECOMMERCE CONTEXT:
+- Frame findings around store operations: order management, returns, inventory, marketing, support
+- Reference e-commerce benchmarks: conversion rates (2-3%), return rates (20-30%), support ticket costs (€5-15/ticket)
+- Consider multi-channel complexity: webshop, marketplaces, social commerce
+- EU-specific: GDPR compliance costs, cross-border shipping, VAT handling
+- Common quick wins: automated WISMO responses, smart inventory reordering, review request automation"""
+
+        return base
 
     def _build_prompt(
         self,

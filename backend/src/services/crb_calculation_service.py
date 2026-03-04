@@ -39,17 +39,10 @@ INDUSTRY_HOURLY_RATES_EUR: Dict[str, float] = {
     "professional-services": 125,  # Legal/accounting/consulting avg
     "professional_services": 125,  # Alternate slug format
     "dental": 85,                  # Dental practice staff avg
-    "ecommerce": 35,              # E-commerce operations avg
-    "e-commerce": 35,             # Alternate slug format
+    "ecommerce": 55,              # E-commerce blended avg (junior ops €30-40, senior €50-70, founder €75-150)
+    "e-commerce": 55,             # Alternate slug format
     "b2b-platforms": 75,          # B2B/IoT platform operations avg
     "b2b_platforms": 75,          # Alternate slug format
-    "home-services": 65,          # Trades avg
-    "home_services": 65,          # Alternate slug format
-    "recruiting": 75,             # Recruiter avg
-    "coaching": 100,              # Business coaching avg
-    "veterinary": 70,             # Vet practice avg
-    "music-studios": 55,          # Studio engineer avg
-    "music_studios": 55,          # Alternate slug format
     "default": 50,                # Fallback
 }
 
@@ -112,6 +105,20 @@ def get_effective_hourly_rate(
                 "invalid salary value",
                 extra={"salary": salary, "industry": industry},
             )
+
+    # 2b. average_team_cost from quiz (select question with ranges)
+    avg_cost = answers.get("average_team_cost")
+    if avg_cost and avg_cost != "not_sure":
+        _COST_MIDPOINTS: Dict[str, float] = {
+            "under_25": 20.0,
+            "25_50": 37.5,
+            "50_75": 62.5,
+            "75_100": 87.5,
+            "over_100": 125.0,
+        }
+        midpoint = _COST_MIDPOINTS.get(str(avg_cost))
+        if midpoint is not None:
+            return midpoint, "based on team cost range from quiz"
 
     # 3. Industry default
     industry_lower = industry.lower().strip() if industry else ""
