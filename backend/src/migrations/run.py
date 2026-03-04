@@ -3,7 +3,7 @@
 CLI script to run database migrations.
 
 Usage:
-    python -m src.migrations.run [status|migrate]
+    python -m src.migrations.run [status|drift-check]
 """
 
 import sys
@@ -12,6 +12,7 @@ import logging
 
 from src.config.supabase_client import get_supabase
 from src.migrations.migrator import Migrator
+from src.scripts.check_migration_drift import main as run_drift_check
 
 logging.basicConfig(
     level=logging.INFO,
@@ -45,34 +46,32 @@ async def run_status():
 
 
 async def run_migrate():
-    """Run pending migrations."""
-    supabase = get_supabase()
-    migrator = Migrator(supabase)
-
-    print("\n=== Running Migrations ===")
-
-    successful, failed = await migrator.run_all_pending()
-
-    print(f"\nResults: {successful} successful, {failed} failed")
-
-    if failed > 0:
-        sys.exit(1)
+    """Deprecated migration command."""
+    print(
+        "\nDirect SQL execution from Python is deprecated.\n"
+        "Use Supabase CLI for migrations:\n"
+        "  supabase db push\n"
+    )
+    sys.exit(1)
 
 
 async def main():
     if len(sys.argv) < 2:
-        print("Usage: python -m src.migrations.run [status|migrate]")
+        print("Usage: python -m src.migrations.run [status|drift-check|migrate]")
         sys.exit(1)
 
     command = sys.argv[1]
 
     if command == "status":
         await run_status()
+    elif command == "drift-check":
+        exit_code = run_drift_check()
+        sys.exit(exit_code)
     elif command == "migrate":
         await run_migrate()
     else:
         print(f"Unknown command: {command}")
-        print("Available commands: status, migrate")
+        print("Available commands: status, drift-check, migrate")
         sys.exit(1)
 
 

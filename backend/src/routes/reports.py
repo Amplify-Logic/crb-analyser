@@ -23,6 +23,7 @@ from src.services.report_service import (
     get_report as get_report_by_id,
     get_report_by_quiz_session,
     generate_report_streaming,
+    normalize_report_tier,
 )
 from src.services.storage_service import (
     get_storage_service,
@@ -34,6 +35,8 @@ logger = logging.getLogger(__name__)
 
 # Lock expiry for report generation (5 minutes)
 REPORT_GENERATION_LOCK_TTL = 300
+PAID_SESSION_STATUSES = {"paid", "generating", "completed", "qa_pending", "released"}
+PUBLIC_REPORT_READY_STATUSES = {"completed", "released"}
 
 router = APIRouter()
 
@@ -119,10 +122,10 @@ async def get_sample_report_endpoint(industry: Optional[str] = None):
 
 
 @router.get("/public/{report_id}")
-async def get_public_report(report_id: str):
+async def get_public_report(report_id: str, email: Optional[str] = None):
     """
     Get a report by ID (public access for quiz-based reports).
-    Requires payment to have been completed.
+    Requires payment to have been completed and email verification.
     """
     try:
         report = await get_report_by_id(report_id)
@@ -141,7 +144,7 @@ async def get_public_report(report_id: str):
         if quiz_session_id:
             supabase = await get_async_supabase()
             session_result = await supabase.table("quiz_sessions").select(
-                "status, company_profile, company_name, company_website"
+                "status, company_profile, company_name, company_website, email"
             ).eq("id", quiz_session_id).single().execute()
 
             if session_result.data:
@@ -149,20 +152,34 @@ async def get_public_report(report_id: str):
                 company_profile = session_result.data.get("company_profile")
                 company_name = session_result.data.get("company_name")
                 company_website = session_result.data.get("company_website")
+                session_email = session_result.data.get("email", "")
+
+                # Verify email matches the quiz session (case-insensitive)
+                if session_email and not session_email.startswith(("quiz_", "cli-")):
+                    if not email or email.lower().strip() != session_email.lower().strip():
+                        raise HTTPException(
+                            status_code=status.HTTP_403_FORBIDDEN,
+                            detail="Access denied. Please use the link from your email."
+                        )
+
                 # Only allow access if payment was completed
                 # qa_pending and released are post-generation states that indicate paid access
-                if session_status not in ["paid", "completed", "generating", "qa_pending", "released"]:
+                if session_status not in PAID_SESSION_STATUSES:
                     raise HTTPException(
                         status_code=status.HTTP_402_PAYMENT_REQUIRED,
                         detail="Payment required to access this report"
                     )
 
-        # Only return completed/viewable reports
-        viewable_statuses = ["completed", "qa_pending", "released"]
-        if report.get("status") not in viewable_statuses:
+        # Only return reports that are QA-released (plus legacy completed reports).
+        report_status = report.get("status")
+        if report_status not in PUBLIC_REPORT_READY_STATUSES:
+            if report_status == "qa_pending":
+                message = "Report is under final quality review. Please check back shortly."
+            else:
+                message = "Report is being generated. Please check back shortly."
             return {
-                "status": report.get("status"),
-                "message": "Report is being generated. Please check back shortly.",
+                "status": report_status,
+                "message": message,
             }
 
         return {
@@ -223,7 +240,11 @@ async def get_report_by_quiz(quiz_session_id: str):
             "id": report["id"],
             "status": report.get("status"),
             "tier": report.get("tier"),
-            "executive_summary": report.get("executive_summary") if report.get("status") == "completed" else None,
+            "executive_summary": (
+                report.get("executive_summary")
+                if report.get("status") in PUBLIC_REPORT_READY_STATUSES
+                else None
+            ),
         }
 
     except HTTPException:
@@ -259,7 +280,7 @@ async def _poll_existing_generation(quiz_session_id: str):
             status = result.data.get("status")
             report_id = result.data.get("report_id")
 
-            if status == "completed" and report_id:
+            if status in ["completed", "qa_pending", "released"] and report_id:
                 yield f"data: {json.dumps({'phase': 'complete', 'report_id': report_id, 'progress': 100})}\n\n"
                 return
             elif status == "generating":
@@ -268,6 +289,9 @@ async def _poll_existing_generation(quiz_session_id: str):
                 yield f"data: {json.dumps({'phase': 'generating', 'step': 'Report generation in progress...', 'progress': progress})}\n\n"
             elif status in ["paid"]:
                 yield f"data: {json.dumps({'phase': 'waiting', 'step': 'Waiting for generation to start...', 'progress': 5})}\n\n"
+            elif status in ["failed", "qa_rejected"]:
+                yield f"data: {json.dumps({'phase': 'error', 'step': f'Generation ended with status: {status}', 'progress': 0})}\n\n"
+                return
             else:
                 yield f"data: {json.dumps({'phase': 'error', 'step': f'Unexpected status: {status}', 'progress': 0})}\n\n"
                 return
@@ -283,7 +307,7 @@ async def _poll_existing_generation(quiz_session_id: str):
 
 
 @router.get("/stream/{quiz_session_id}")
-async def stream_report_generation(quiz_session_id: str, raw_request: Request, tier: str = "quick"):
+async def stream_report_generation(quiz_session_id: str, raw_request: Request, tier: Optional[str] = None):
     """
     Server-Sent Events stream for report generation progress.
 
@@ -309,7 +333,7 @@ async def stream_report_generation(quiz_session_id: str, raw_request: Request, t
     # Validate session exists and has been paid for
     supabase = await get_async_supabase()
     session_check = await supabase.table("quiz_sessions").select(
-        "id, status"
+        "id, status, tier, report_id"
     ).eq("id", quiz_session_id).single().execute()
 
     if not session_check.data:
@@ -318,20 +342,36 @@ async def stream_report_generation(quiz_session_id: str, raw_request: Request, t
             detail="Quiz session not found"
         )
 
-    paid_statuses = [
-        "paid", "generating", "workshop_started", "workshop_complete",
-        "report_generating", "report_delivered", "completed",
-        "qa_pending", "released",
-    ]
-    if session_check.data.get("status") not in paid_statuses:
+    session_status = session_check.data.get("status")
+    existing_report_id = session_check.data.get("report_id")
+
+    # If report is already finalized, return an immediate completion event.
+    if session_status in ["completed", "qa_pending", "released"] and existing_report_id:
+        async def completed_event_generator():
+            yield f"data: {json.dumps({'phase': 'complete', 'report_id': existing_report_id, 'progress': 100})}\n\n"
+        return StreamingResponse(
+            completed_event_generator(),
+            media_type="text/event-stream",
+            headers={
+                "Cache-Control": "no-cache",
+                "Connection": "keep-alive",
+                "X-Accel-Buffering": "no",
+            },
+        )
+
+    # Stream endpoint should only start/continue active generation sessions.
+    stream_allowed_statuses = {"paid", "generating"}
+    if session_status not in stream_allowed_statuses:
         logger.warning(
-            f"Stream report called with unpaid session status={session_check.data.get('status')} "
+            f"Stream report called with invalid session status={session_status} "
             f"for quiz_session_id={quiz_session_id}"
         )
         raise HTTPException(
             status_code=status.HTTP_403_FORBIDDEN,
-            detail="Session must be paid before generating a report"
+            detail="Session is not in a report-generation state"
         )
+
+    requested_tier = normalize_report_tier(tier or session_check.data.get("tier"))
 
     lock_key = f"report_generation:{quiz_session_id}"
 
@@ -354,7 +394,7 @@ async def stream_report_generation(quiz_session_id: str, raw_request: Request, t
                 return
 
             # We have the lock (or Redis unavailable), proceed with generation
-            async for event in generate_report_streaming(quiz_session_id, tier):
+            async for event in generate_report_streaming(quiz_session_id, requested_tier):
                 yield event
 
         except Exception as e:
@@ -434,7 +474,10 @@ async def get_report_status(quiz_session_id: str):
         progress_map = {
             "generating": 50,  # Rough midpoint
             "completed": 100,
+            "qa_pending": 100,
+            "released": 100,
             "failed": 0,
+            "partial": 0,
         }
 
         return {
@@ -486,9 +529,8 @@ async def regenerate_report(quiz_session_id: str, raw_request: Request, tier: Op
 
         # Check if paid - session must have completed payment before report generation
         paid_statuses = [
-            "paid", "completed", "generating", "workshop_started",
-            "workshop_complete", "report_generating", "report_delivered",
-            "qa_pending", "released",
+            "paid", "completed", "generating",
+            "failed", "qa_rejected", "qa_pending", "released",
         ]
         if quiz["status"] not in paid_statuses:
             logger.warning(
@@ -501,7 +543,7 @@ async def regenerate_report(quiz_session_id: str, raw_request: Request, tier: Op
             )
 
         # Use specified tier or original tier
-        report_tier = tier or quiz.get("tier", "quick")
+        report_tier = normalize_report_tier(tier or quiz.get("tier", "quick"))
 
         # Mark existing report as superseded if it exists
         if quiz.get("report_id"):
@@ -565,13 +607,13 @@ async def download_public_pdf(report_id: str):
 
             if session_result.data:
                 session_status = session_result.data.get("status")
-                if session_status not in ["paid", "completed", "generating", "qa_pending", "released"]:
+                if session_status not in PAID_SESSION_STATUSES:
                     raise HTTPException(
                         status_code=status.HTTP_402_PAYMENT_REQUIRED,
                         detail="Payment required to access this report"
                     )
 
-        if report.get("status") != "completed":
+        if report.get("status") not in PUBLIC_REPORT_READY_STATUSES:
             raise HTTPException(
                 status_code=status.HTTP_400_BAD_REQUEST,
                 detail="Report is not ready yet"

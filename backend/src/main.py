@@ -10,7 +10,7 @@ from contextlib import asynccontextmanager
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-from src.config.settings import settings
+from src.config.settings import settings, validate_startup_config
 from src.config.supabase_client import init_supabase, close_supabase
 from src.config.redis_client import init_redis, close_redis
 from src.config.observability import setup_observability
@@ -31,6 +31,14 @@ logger = logging.getLogger(__name__)
 async def lifespan(app: FastAPI):
     """Application lifespan events."""
     logger.info(f"Starting {settings.APP_NAME}...")
+
+    # Validate critical configuration before starting
+    try:
+        validate_startup_config()
+        logger.info("Startup configuration validated")
+    except ValueError as e:
+        logger.error(f"Startup configuration validation failed: {e}")
+        raise
 
     # Startup
     try:
@@ -53,9 +61,28 @@ async def lifespan(app: FastAPI):
     except Exception as e:
         logger.warning(f"Could not start scheduler: {e}")
 
+    # Start Telegram bot (webhook mode)
+    try:
+        from src.telegram.bot import create_bot_application
+        bot_app = create_bot_application()
+        if bot_app:
+            await bot_app.initialize()
+            logger.info("Telegram bot initialized")
+    except Exception as e:
+        logger.warning(f"Could not initialize Telegram bot: {e}")
+
     yield
 
     # Shutdown
+    # Shutdown Telegram bot
+    try:
+        from src.telegram.bot import get_bot_application
+        bot_app = get_bot_application()
+        if bot_app:
+            await bot_app.shutdown()
+    except Exception:
+        pass
+
     shutdown_scheduler()
     await close_redis()
     await close_supabase()
@@ -122,6 +149,7 @@ from src.routes import (
     workshop_router,
     admin_insights_router,
     refiner_router,
+    telegram_router,
 )
 
 # Health routes (no prefix - routes define their own paths)
@@ -143,12 +171,14 @@ app.include_router(expertise_router, tags=["Expertise"])  # Agent self-improveme
 app.include_router(validation_router, prefix="/api/validation", tags=["Validation"])  # Assumption validation before report
 app.include_router(knowledge_admin_router, prefix="/api/admin/knowledge", tags=["Knowledge Admin"])  # Knowledge base management
 app.include_router(admin_qa_router, prefix="/api/admin/qa", tags=["QA Review"])  # Human QA review workflow
-app.include_router(dev_feedback_router, prefix="/api/dev", tags=["Dev Feedback"])  # Dev mode feedback & context
+if (settings.is_development or settings.DEBUG) and settings.ENABLE_DEV_ROUTES:
+    app.include_router(dev_feedback_router, prefix="/api/dev", tags=["Dev Feedback"])  # Dev mode feedback & context
 app.include_router(admin_vendors_router, prefix="/api/admin", tags=["Vendor Admin"])  # Vendor database management
 app.include_router(admin_research_router, prefix="/api/admin/research", tags=["Vendor Research"])  # Vendor research agent
 app.include_router(workshop_router, prefix="/api/workshop", tags=["Workshop"])  # 90-minute personalized workshop
 app.include_router(admin_insights_router, prefix="/api/admin/insights", tags=["Insights Admin"])  # Curated insights management
 app.include_router(refiner_router, prefix="/api/reports", tags=["Refiner"])  # Report refiner conversations
+app.include_router(telegram_router, prefix="/api/telegram", tags=["Telegram"])
 
 
 # ============================================================================

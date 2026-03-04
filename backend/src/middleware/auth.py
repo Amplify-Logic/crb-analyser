@@ -6,12 +6,11 @@ Supports both Bearer token (Authorization header) and HTTP-only cookies.
 """
 
 import logging
-from typing import Optional
 from dataclasses import dataclass
+from typing import Optional
 
-from fastapi import Depends, HTTPException, status, Request, Query
-from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
-from jose import JWTError, jwt
+from fastapi import Depends, HTTPException, Query, Request, status
+from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
 
 from src.config.settings import settings
 from src.config.supabase_client import get_async_supabase
@@ -166,35 +165,36 @@ async def require_admin(
     """
     Require user to have admin role.
 
-    In development mode, bypasses auth entirely and returns a dev admin user.
-    In production, requires a valid JWT with role='admin'.
+    Requires a valid JWT with role='admin'.
+    Optional development bypass can be enabled explicitly via DEV_ADMIN_BYPASS.
     """
-    if settings.is_development:
-        # Dev bypass: try to get real user, but fall back to dev admin
-        token = get_token_from_request(request, credentials)
-        if not token:
-            logger.info("Dev mode: admin bypass active (no token)")
-            return CurrentUser(
-                id="dev-admin",
-                email="dev@localhost",
-                workspace_id="dev-workspace",
-                role="admin",
-            )
-        # Token present — validate normally but grant admin regardless
-        try:
-            user = await get_current_user(request, credentials)
-            user.role = "admin"
-            return user
-        except HTTPException:
-            logger.info("Dev mode: admin bypass active (invalid token)")
-            return CurrentUser(
-                id="dev-admin",
-                email="dev@localhost",
-                workspace_id="dev-workspace",
-                role="admin",
+    if settings.DEV_ADMIN_BYPASS:
+        if settings.is_production:
+            logger.error("DEV_ADMIN_BYPASS is enabled in production; refusing startup-safe bypass")
+            raise HTTPException(
+                status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+                detail="Invalid admin bypass configuration",
             )
 
-    # Production: strict admin check
+        # Explicit local bypass: try to resolve a real user first.
+        token = get_token_from_request(request, credentials)
+        if token:
+            try:
+                user = await get_current_user(request, credentials)
+                user.role = "admin"
+                return user
+            except HTTPException:
+                pass
+
+        logger.warning("DEV_ADMIN_BYPASS enabled: granting local admin access")
+        return CurrentUser(
+            id="dev-admin",
+            email="dev@localhost",
+            workspace_id="dev-workspace",
+            role="admin",
+        )
+
+    # Strict admin check
     user = await get_current_user(request, credentials)
     if user.role != "admin":
         raise HTTPException(

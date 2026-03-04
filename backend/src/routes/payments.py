@@ -1,27 +1,27 @@
 """
 Payment Routes
 
-Stripe integration for CRB Analyser payments.
+Stripe integration for Ready Path payments.
 """
 
 import asyncio
 import logging
 import secrets
 import string
-import stripe
-from typing import Optional, Dict, Any
 from datetime import datetime
+from typing import Any, Dict, Optional
 
-from fastapi import APIRouter, Depends, HTTPException, status, Request, Header, BackgroundTasks
-from pydantic import BaseModel
+import stripe
+from fastapi import APIRouter, BackgroundTasks, Depends, Header, HTTPException, Request, status
+from pydantic import BaseModel, EmailStr
 
+from src.config.redis_client import get_redis
 from src.config.settings import settings
 from src.config.supabase_client import get_async_supabase
-from src.config.redis_client import get_redis
-from src.middleware.auth import require_workspace, CurrentUser
-from src.services.report_service import generate_report_for_quiz, get_report
-from src.services.email import send_report_ready_email, send_payment_confirmation_email, send_welcome_email
+from src.middleware.auth import CurrentUser, require_workspace
 from src.services.brevo_service import get_brevo_service
+from src.services.email import send_payment_confirmation_email, send_report_ready_email, send_welcome_email
+from src.services.report_service import generate_report_for_quiz, get_report
 
 logger = logging.getLogger(__name__)
 
@@ -44,10 +44,11 @@ class CheckoutRequest(BaseModel):
 
 class GuestCheckoutRequest(BaseModel):
     """Guest checkout request from quiz flow."""
-    tier: str  # 'quick' or 'full'
-    email: str
+    tier: str  # 'ai' or 'human'
+    email: EmailStr
     quiz_answers: dict
     quiz_results: dict
+    quiz_session_id: Optional[str] = None
     success_url: Optional[str] = None
     cancel_url: Optional[str] = None
 
@@ -56,6 +57,94 @@ class CheckoutResponse(BaseModel):
     """Checkout session response."""
     checkout_url: str
     session_id: str
+    quiz_session_id: Optional[str] = None
+
+
+WEBHOOK_EVENT_TABLE = "stripe_webhook_events"
+
+
+async def _claim_webhook_event(supabase, event: dict) -> bool:
+    """
+    Claim webhook event for processing.
+
+    Returns False when the event is already processed (or currently processing),
+    so duplicate deliveries can be acknowledged safely.
+    """
+    event_id = event.get("id")
+    if not event_id:
+        logger.warning("Stripe webhook event missing id; processing without durable idempotency")
+        return True
+
+    event_type = event.get("type", "unknown")
+    now = datetime.utcnow().isoformat()
+
+    try:
+        await supabase.table(WEBHOOK_EVENT_TABLE).insert({
+            "event_id": event_id,
+            "event_type": event_type,
+            "status": "processing",
+            "attempts": 1,
+            "received_at": now,
+            "updated_at": now,
+        }).execute()
+        return True
+    except Exception as e:
+        error_text = str(e).lower()
+        duplicate_markers = ("duplicate", "unique", "23505")
+        if not any(marker in error_text for marker in duplicate_markers):
+            raise
+
+        existing = await supabase.table(WEBHOOK_EVENT_TABLE).select(
+            "status, attempts"
+        ).eq("event_id", event_id).limit(1).execute()
+        row = existing.data[0] if existing.data else None
+
+        if not row:
+            return False
+
+        status_value = row.get("status")
+        attempts = int(row.get("attempts") or 1)
+
+        if status_value == "processed":
+            logger.info(f"Webhook event {event_id} already processed; deduplicating")
+            return False
+
+        if status_value == "processing":
+            logger.info(f"Webhook event {event_id} already processing; deduplicating")
+            return False
+
+        await supabase.table(WEBHOOK_EVENT_TABLE).update({
+            "status": "processing",
+            "attempts": attempts + 1,
+            "last_error": None,
+            "updated_at": now,
+        }).eq("event_id", event_id).execute()
+        return True
+
+
+async def _mark_webhook_event_processed(supabase, event_id: Optional[str]) -> None:
+    """Mark webhook event as processed."""
+    if not event_id:
+        return
+    now = datetime.utcnow().isoformat()
+    await supabase.table(WEBHOOK_EVENT_TABLE).update({
+        "status": "processed",
+        "processed_at": now,
+        "last_error": None,
+        "updated_at": now,
+    }).eq("event_id", event_id).execute()
+
+
+async def _mark_webhook_event_failed(supabase, event_id: Optional[str], error_message: str) -> None:
+    """Mark webhook event as failed and persist error for retry visibility."""
+    if not event_id:
+        return
+    now = datetime.utcnow().isoformat()
+    await supabase.table(WEBHOOK_EVENT_TABLE).update({
+        "status": "failed",
+        "last_error": error_message[:2000],
+        "updated_at": now,
+    }).eq("event_id", event_id).execute()
 
 
 # ============================================================================
@@ -152,7 +241,7 @@ async def create_user_from_quiz_session(
         }).execute()
 
         # Create client
-        industry = session.get("company_profile", {}).get("industry", {}).get("primary_industry", {}).get("value", "general")
+        industry = session.get("company_profile", {}).get("industry", {}).get("primary_industry", {}).get("value", "professional-services")
         client_result = await supabase.table("clients").insert({
             "workspace_id": created_workspace_id,
             "name": company_name,
@@ -314,7 +403,7 @@ async def create_guest_checkout(request: GuestCheckoutRequest):
         supabase = await get_async_supabase()
 
         # Get pricing based on tier
-        tier_config = {
+        tier_config: Dict[str, Dict[str, Any]] = {
             "ai": {
                 "price": 147,
                 "name": "CRB Report",
@@ -345,19 +434,43 @@ async def create_guest_checkout(request: GuestCheckoutRequest):
                 detail=f"Invalid tier: {request.tier}"
             )
 
-        # Store quiz data for later retrieval
+        # Store quiz data for later retrieval.
+        # Reuse existing quiz session when provided to keep one canonical ID
+        # across quiz -> checkout -> workshop -> report.
         quiz_data = {
             "email": request.email,
             "tier": request.tier,
             "answers": request.quiz_answers,
             "results": request.quiz_results,
             "status": "pending_payment",
-            "created_at": datetime.utcnow().isoformat(),
+            "updated_at": datetime.utcnow().isoformat(),
         }
+        quiz_session_id: Optional[str] = None
 
-        # Insert into quiz_sessions table (temporary storage)
-        quiz_result = await supabase.table("quiz_sessions").insert(quiz_data).execute()
-        quiz_session_id = quiz_result.data[0]["id"]
+        if request.quiz_session_id:
+            existing_session = await supabase.table("quiz_sessions").select(
+                "id, status"
+            ).eq("id", request.quiz_session_id).limit(1).execute()
+
+            existing_row = existing_session.data[0] if existing_session.data else None
+            if existing_row and existing_row.get("status") in {"in_progress", "pending_payment"}:
+                await supabase.table("quiz_sessions").update(quiz_data).eq(
+                    "id", request.quiz_session_id
+                ).execute()
+                quiz_session_id = request.quiz_session_id
+
+        if not quiz_session_id:
+            quiz_result = await supabase.table("quiz_sessions").insert({
+                **quiz_data,
+                "created_at": datetime.utcnow().isoformat(),
+            }).execute()
+            quiz_session_id = quiz_result.data[0]["id"]
+
+        if not quiz_session_id:
+            raise HTTPException(
+                status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+                detail="Failed to create quiz session for checkout",
+            )
 
         # Default URLs
         base_url = settings.CORS_ORIGINS.split(",")[0]  # First CORS origin
@@ -372,7 +485,7 @@ async def create_guest_checkout(request: GuestCheckoutRequest):
                     "price_data": {
                         "currency": "eur",
                         "product_data": {
-                            "name": f"CRB Analyser - {tier_info['name']}",
+                            "name": f"Ready Path - {tier_info['name']}",
                             "description": tier_info["description"],
                         },
                         "unit_amount": int(tier_info["price"] * 100),  # Convert to cents
@@ -401,6 +514,7 @@ async def create_guest_checkout(request: GuestCheckoutRequest):
         return CheckoutResponse(
             checkout_url=session.url,
             session_id=session.id,
+            quiz_session_id=quiz_session_id,
         )
 
     except stripe.error.StripeError as e:
@@ -444,17 +558,32 @@ async def stripe_webhook(
         except stripe.error.SignatureVerificationError:
             raise HTTPException(status_code=400, detail="Invalid signature")
 
-        # Handle specific events
-        if event["type"] == "checkout.session.completed":
-            await handle_checkout_completed(event["data"]["object"], background_tasks)
-        elif event["type"] == "checkout.session.expired":
-            await handle_checkout_expired(event["data"]["object"])
-        elif event["type"] == "charge.refunded":
-            await handle_charge_refunded(event["data"]["object"])
-        elif event["type"] == "payment_intent.succeeded":
-            logger.info(f"Payment succeeded: {event['data']['object']['id']}")
-        elif event["type"] == "payment_intent.payment_failed":
-            await handle_payment_failed(event["data"]["object"])
+        supabase = await get_async_supabase()
+        should_process = await _claim_webhook_event(supabase, event)
+        if not should_process:
+            return {"received": True, "deduplicated": True}
+
+        try:
+            # Handle specific events
+            if event["type"] == "checkout.session.completed":
+                await handle_checkout_completed(event["data"]["object"], background_tasks)
+            elif event["type"] == "checkout.session.expired":
+                await handle_checkout_expired(event["data"]["object"])
+            elif event["type"] == "charge.refunded":
+                await handle_charge_refunded(event["data"]["object"])
+            elif event["type"] == "payment_intent.succeeded":
+                logger.info(f"Payment succeeded: {event['data']['object']['id']}")
+            elif event["type"] == "payment_intent.payment_failed":
+                await handle_payment_failed(event["data"]["object"])
+
+            await _mark_webhook_event_processed(supabase, event.get("id"))
+        except Exception as processing_error:
+            await _mark_webhook_event_failed(
+                supabase,
+                event.get("id"),
+                str(processing_error),
+            )
+            raise
 
         return {"received": True}
 
@@ -527,6 +656,7 @@ async def handle_checkout_completed(session: dict, background_tasks: BackgroundT
 
     except Exception as e:
         logger.error(f"Handle checkout error: {e}")
+        raise
     finally:
         # Release lock (let it expire naturally if release fails)
         if redis and lock_acquired:
@@ -694,17 +824,27 @@ async def handle_guest_checkout_completed(session: dict, background_tasks: Backg
             if email:
                 await send_payment_confirmation_email(email, tier, amount)
 
-        # Update status to generating and schedule background report generation
-        await supabase.table("quiz_sessions").update({
-            "status": "generating",
-        }).eq("id", quiz_session_id).execute()
+        # Telegram notification (fire-and-forget)
+        try:
+            from src.telegram.notifications import notify_payment
+            asyncio.create_task(notify_payment(
+                amount=int(amount),
+                currency="EUR",
+                company=company_name,
+                email=email or "",
+                tier=tier,
+            ))
+        except Exception:
+            pass  # Never block payment flow for notification failure
 
-        # Schedule report generation in background (returns immediately to Stripe)
-        logger.info(f"Scheduling background report generation for quiz session {quiz_session_id}")
-        background_tasks.add_task(_generate_report_background, quiz_session_id, tier, email)
+        logger.info(
+            f"Guest checkout completed for quiz {quiz_session_id}; "
+            "report generation will start after workshop completion"
+        )
 
     except Exception as e:
         logger.error(f"Handle guest checkout error: {e}", exc_info=True)
+        raise
     finally:
         # Release lock (let it expire naturally if release fails)
         if redis and lock_acquired:

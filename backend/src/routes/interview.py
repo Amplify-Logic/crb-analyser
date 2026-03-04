@@ -220,7 +220,7 @@ async def generate_ai_response(
     user_message: str,
     context: InterviewContext,
     previous_messages: List[MessageContext],
-    industry: str = "general",
+    industry: str = "professional-services",
 ) -> tuple[str, List[str], int, bool]:
     """
     Generate an AI-powered response using FollowUpQuestionSkill.
@@ -564,11 +564,11 @@ async def interview_respond(request: InterviewRespondRequest, raw_request: Reque
         previous_messages = context.previous_messages or []
 
         # Get industry from company profile
-        industry = "general"
+        industry = "professional-services"
         if context.company_profile:
             industry = context.company_profile.get("industry", {}).get(
                 "primary_industry", {}
-            ).get("value", "general")
+            ).get("value", "professional-services")
 
         response, topics, progress, is_complete = await generate_ai_response(
             user_message=request.message,
@@ -632,7 +632,7 @@ async def interview_complete(request: InterviewCompleteRequest):
 
         # Get industry from session answers
         answers = session.get("answers", {})
-        industry = answers.get("industry", "general")
+        industry = answers.get("industry", "professional-services")
 
         # Extract pain points using PainExtractionSkill
         pain_points_data = {}
@@ -912,7 +912,7 @@ async def get_interview_confidence(session_id: str):
         # Get company profile and industry
         company_profile = session.get("company_profile", {})
         answers = session.get("answers", {})
-        industry = answers.get("industry", "general")
+        industry = answers.get("industry", "professional-services")
 
         # Run confidence skill
         client = get_anthropic_client()
@@ -1041,7 +1041,7 @@ async def trigger_report_generation(request: TriggerReportRequest):
         if should_recalculate:
             company_profile = session.get("company_profile", {})
             answers = session.get("answers", {})
-            industry = answers.get("industry", "general")
+            industry = answers.get("industry", "professional-services")
 
             client = get_anthropic_client()
             skill = get_skill("interview-confidence", client=client)

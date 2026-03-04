@@ -29,7 +29,7 @@ import argparse
 import asyncio
 import json
 import sys
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 from pathlib import Path
 from typing import Optional
 
@@ -53,7 +53,7 @@ VENDOR_STALE_DAYS = 90
 
 
 def _now_iso() -> str:
-    return datetime.utcnow().isoformat()
+    return datetime.now(timezone.utc).isoformat()
 
 
 # =============================================================================
@@ -183,7 +183,7 @@ def cmd_kb_audit(args) -> dict:
     }
 
     # Audit industry knowledge files
-    industries = ["dental", "ecommerce", "professional-services"]
+    industries = ["dental", "ecommerce", "professional-services", "b2b-platforms"]
     data_types = ["benchmarks", "opportunities", "processes", "vendors"]
 
     for industry in industries:
@@ -285,7 +285,7 @@ def _audit_file(file_path: Path) -> dict:
             "entry_count": _count_entries(data),
         }
 
-    days_old = (datetime.utcnow() - updated_date).days
+    days_old = (datetime.now(timezone.utc) - updated_date).days
 
     if days_old <= 7:
         freshness = "fresh"
@@ -459,13 +459,33 @@ async def cmd_all(args) -> dict:
     expertise_result = cmd_expertise_health(args)
     results["pipeline"].append(expertise_result)
 
-    # 4. Auto-action triggers based on audit results
+    # 4. Database hygiene audit
+    print("\n" + "=" * 60)
+    print("STEP 4: Database Hygiene Audit")
+    print("=" * 60)
+    try:
+        from src.cli.db_audit import run_audit as run_db_audit
+        db_result = await run_db_audit(fix=False)
+        results["pipeline"].append({"command": "db-audit", **db_result.get("summary", {})})
+        db_health = db_result.get("health", "unknown")
+        print(f"  Health: {db_health.upper()}")
+        print(f"  Tables: {db_result['summary']['tables_audited']} audited, "
+              f"{db_result['summary']['tables_clean']} clean, "
+              f"{db_result['summary']['tables_dirty']} with issues")
+        if db_result["summary"]["total_invalid_rows"] > 0:
+            print(f"  Invalid rows: {db_result['summary']['total_invalid_rows']}")
+            print(f"  Run: make db-audit-fix  to clean up")
+    except Exception as e:
+        logger.error("db_audit_failed", error=str(e))
+        print(f"  DB audit failed: {e}")
+
+    # 5. Auto-action triggers based on audit results
     auto_actions = _evaluate_auto_actions(kb_result, vendor_result, expertise_result)
     results["auto_actions"] = auto_actions
 
     if auto_actions:
         print("\n" + "=" * 60)
-        print("STEP 4: Auto-Actions Triggered")
+        print("STEP 5: Auto-Actions Triggered")
         print("=" * 60)
         for action in auto_actions:
             print(f"  [{action['severity']}] {action['action']}: {action['reason']}")

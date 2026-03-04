@@ -255,7 +255,7 @@ async def submit_feedback(feedback: ReportFeedback):
 
             if session_result.data:
                 answers = session_result.data.get("answers", {})
-                industry = answers.get("industry", "general")
+                industry = answers.get("industry", "professional-services")
 
                 # Learn from feedback
                 service = get_self_improve_service()

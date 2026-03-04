@@ -35,49 +35,34 @@ SCENARIOS = [
         "should_not_include": [],
     },
     {
-        "name": "Solo Coach: Client Management",
-        "industry": "coaching",
+        "name": "E-Commerce: Customer Service Automation",
+        "industry": "ecommerce",
         "finding": {
-            "title": "Need client scheduling and payments",
-            "description": "Solo executive coach needs simple client management, scheduling, and payment processing.",
-            "category": "practice_management",
+            "title": "High customer service volume",
+            "description": "DTC brand processing 500+ tickets/week needs AI-powered customer service automation and chatbot.",
+            "category": "customer_service",
         },
         "company_context": {
-            "employee_count": 1,
-            "budget": "low",
+            "employee_count": 15,
+            "budget": "moderate",
         },
-        "expected_tier1": ["paperbell", "coachaccountable", "honeybook"],
-        "should_not_include": ["coachhub"],  # Enterprise solution, not for solos
-    },
-    {
-        "name": "5-Location MedSpa: Unified Management",
-        "industry": "medspa",
-        "finding": {
-            "title": "Need unified multi-location management",
-            "description": "5-location medspa chain needs unified appointment booking, inventory, and reporting across all locations.",
-            "category": "practice_management",
-        },
-        "company_context": {
-            "employee_count": 50,
-            "budget": "high",
-        },
-        "expected_tier1": ["mangomint", "boulevard", "zenoti"],
+        "expected_tier1": ["gorgias", "zendesk", "tidio"],
         "should_not_include": [],
     },
     {
-        "name": "Small HVAC: Budget Field Service",
-        "industry": "home-services",
+        "name": "B2B Platform: Onboarding Automation",
+        "industry": "b2b-platforms",
         "finding": {
-            "title": "Field service software for small team",
-            "description": "Small HVAC company with 3 technicians needs scheduling and invoicing. Budget under $100/month.",
-            "category": "field_service",
+            "title": "Slow customer onboarding process",
+            "description": "B2B SaaS platform needs to automate customer onboarding and reduce time-to-value.",
+            "category": "onboarding",
         },
         "company_context": {
-            "employee_count": 5,
-            "budget": "low",
+            "employee_count": 30,
+            "budget": "high",
         },
-        "expected_tier1": ["jobber", "housecall-pro"],
-        "should_not_include": ["servicetitan"],  # Too expensive for budget
+        "expected_tier1": ["intercom", "hubspot", "pendo"],
+        "should_not_include": [],
     },
 ]
 

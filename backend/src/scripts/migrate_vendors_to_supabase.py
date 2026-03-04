@@ -47,11 +47,9 @@ VENDOR_CATEGORIES_PATH = KNOWLEDGE_BASE_PATH / "vendors"
 # Industry folders with vendor files
 INDUSTRY_FOLDERS = [
     "dental",
-    "home-services",
     "professional-services",
-    "recruiting",
-    "coaching",
-    "veterinary",
+    "ecommerce",
+    "b2b-platforms",
 ]
 
 

@@ -12,11 +12,12 @@ import logging
 from datetime import datetime, timedelta, timezone
 from typing import Optional, Dict, Any, List
 
-from fastapi import APIRouter, HTTPException, Request, status, Query
+from fastapi import APIRouter, Depends, HTTPException, Request, status, Query
 from fastapi.responses import StreamingResponse
 from pydantic import BaseModel, EmailStr, field_validator
 
 from src.middleware.security import email_limiter
+from src.middleware.auth import CurrentUser, require_admin
 
 from src.config.supabase_client import get_async_supabase
 from src.config.redis_client import get_redis
@@ -676,8 +677,8 @@ async def get_software_options(industry: Optional[str] = Query(None, description
     industry-specific recommendations (T1 vendors shown first).
     Falls back to hardcoded list if Supabase unavailable.
 
-    Accepts either industry slug (e.g., "home-services") or full name
-    (e.g., "Plumbing and Gas Fitting Services").
+    Accepts either industry slug (e.g., "professional-services") or full name
+    (e.g., "Accounting Firm").
     """
     from src.services.vendor_service import vendor_service
 
@@ -697,66 +698,23 @@ async def get_software_options(industry: Optional[str] = Query(None, description
         }
 
     # Map industry names to slugs (handles both slug and full name inputs)
+    # Only 4 supported industries: professional-services, dental, ecommerce, b2b-platforms
     industry_name_to_slug = {
-        # Home Services / Trades
-        "plumbing": "home-services",
-        "plumbing and gas fitting services": "home-services",
-        "plumbing & gas fitting": "home-services",
-        "hvac": "home-services",
-        "electrical": "home-services",
-        "electrical services": "home-services",
-        "roofing": "home-services",
-        "landscaping": "home-services",
-        "cleaning services": "home-services",
-        "home services": "home-services",
-        "construction": "home-services",
-        "contracting": "home-services",
-        "trades": "home-services",
-        # Dental
-        "dental": "dental",
-        "dentistry": "dental",
-        "dental practice": "dental",
-        "dental services": "dental",
-        "orthodontics": "dental",
-        # Veterinary
-        "veterinary": "veterinary",
-        "veterinary services": "veterinary",
-        "animal hospital": "veterinary",
-        "pet care": "veterinary",
-        "vet clinic": "veterinary",
-        # Recruitment
-        "recruitment": "recruitment",
-        "recruiting": "recruitment",
-        "staffing": "recruitment",
-        "staffing agency": "recruitment",
-        "talent acquisition": "recruitment",
-        "hr services": "recruitment",
         # Professional Services
         "professional services": "professional-services",
+        "professional-services": "professional-services",
         "accounting": "professional-services",
         "accounting firm": "professional-services",
         "legal": "professional-services",
         "law firm": "professional-services",
         "consulting": "professional-services",
         "business consulting": "professional-services",
-        # Physical Therapy
-        "physical therapy": "physical-therapy",
-        "physiotherapy": "physical-therapy",
-        "pt practice": "physical-therapy",
-        "rehabilitation": "physical-therapy",
-        "chiropractic": "physical-therapy",
-        # MedSpa
-        "medspa": "medspa",
-        "medical spa": "medspa",
-        "aesthetics": "medspa",
-        "cosmetic clinic": "medspa",
-        "beauty clinic": "medspa",
-        # Coaching
-        "coaching": "coaching",
-        "life coaching": "coaching",
-        "business coaching": "coaching",
-        "executive coaching": "coaching",
-        "consulting and coaching": "coaching",
+        # Dental
+        "dental": "dental",
+        "dentistry": "dental",
+        "dental practice": "dental",
+        "dental services": "dental",
+        "orthodontics": "dental",
         # E-Commerce
         "ecommerce": "ecommerce",
         "e-commerce": "ecommerce",
@@ -767,6 +725,14 @@ async def get_software_options(industry: Optional[str] = Query(None, description
         "shopify": "ecommerce",
         "online store": "ecommerce",
         "retail": "ecommerce",
+        # B2B Platforms
+        "b2b-platforms": "b2b-platforms",
+        "b2b platforms": "b2b-platforms",
+        "b2b": "b2b-platforms",
+        "b2b platform": "b2b-platforms",
+        "b2b saas": "b2b-platforms",
+        "saas": "b2b-platforms",
+        "platform": "b2b-platforms",
     }
 
     # Normalize the industry input
@@ -775,8 +741,7 @@ async def get_software_options(industry: Optional[str] = Query(None, description
 
     # Also try partial matching for longer names
     if industry_slug == industry_lower and industry_slug not in [
-        "dental", "veterinary", "recruitment", "coaching", "medspa",
-        "home-services", "professional-services", "physical-therapy", "ecommerce"
+        "professional-services", "dental", "ecommerce", "b2b-platforms"
     ]:
         # Try partial match
         for name, slug in industry_name_to_slug.items():
@@ -983,7 +948,7 @@ def _calculate_preliminary_results(answers: Dict[str, Any], industry: Optional[s
             "min": int(base_value * value_multiplier * 0.7),
             "max": int(base_value * value_multiplier * 1.3),
         },
-        "industry": industry or answers.get("industry", "general"),
+        "industry": industry or answers.get("industry", "professional-services"),
         "calculated_at": datetime.utcnow().isoformat(),
     }
 
@@ -1318,7 +1283,7 @@ async def get_dynamic_questions(session_id: str):
             }
 
         # Fall back to standard questions
-        industry = session.get("answers", {}).get("industry", "general")
+        industry = session.get("answers", {}).get("industry", "professional-services")
         standard_sections = get_questionnaire(industry)
 
         return {
@@ -1442,13 +1407,26 @@ class DevPreviewRequest(BaseModel):
     interview_messages: Optional[List[Dict[str, str]]] = []
 
 
+def _ensure_dev_routes_enabled() -> None:
+    """Block DEV-only routes unless explicitly enabled in non-production."""
+    if settings.is_production or not settings.ENABLE_DEV_ROUTES:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Not found",
+        )
+
+
 @router.post("/dev/preview")
-async def generate_dev_preview(request_data: DevPreviewRequest):
+async def generate_dev_preview(
+    request_data: DevPreviewRequest,
+    _: CurrentUser = Depends(require_admin),
+):
     """
     DEV ONLY: Generate preview without needing a real session.
 
     Accepts company profile and answers directly.
     """
+    _ensure_dev_routes_enabled()
     try:
         interview_data = {"messages": request_data.interview_messages or []}
 
@@ -1604,7 +1582,7 @@ async def generate_session_teaser(
                         email=real_email,
                         first_name=company_profile.get("basics", {}).get("name", {}).get("value", "").split()[0] if company_profile.get("basics", {}).get("name", {}).get("value") else "there",
                         company_name=teaser.get("company_name", "Your Company"),
-                        industry=teaser.get("industry", answers.get("industry", "general")),
+                        industry=teaser.get("industry", answers.get("industry", "professional-services")),
                         quiz_score=score,
                         ai_readiness_level=readiness_level,
                         report_id=session_id,
@@ -1654,13 +1632,17 @@ class DevTestReportRequest(BaseModel):
 
 
 @router.post("/dev/generate-test-report")
-async def generate_test_report(request_data: DevTestReportRequest):
+async def generate_test_report(
+    request_data: DevTestReportRequest,
+    _: CurrentUser = Depends(require_admin),
+):
     """
     DEV ONLY: Generate a full report for testing without payment.
 
     Creates a quiz session with test data and triggers report generation.
     Returns the report ID so you can view it in the report viewer.
     """
+    _ensure_dev_routes_enabled()
     import uuid
     from src.services.report_service import generate_report_streaming
 
@@ -1789,13 +1771,17 @@ async def generate_test_report(request_data: DevTestReportRequest):
 
 
 @router.post("/dev/generate-test-report/stream")
-async def generate_test_report_stream(request_data: DevTestReportRequest):
+async def generate_test_report_stream(
+    request_data: DevTestReportRequest,
+    _: CurrentUser = Depends(require_admin),
+):
     """
     DEV ONLY: Generate a full report with streaming progress updates.
 
     Creates a quiz session and streams SSE events for real-time progress.
     Frontend should use EventSource to consume this endpoint.
     """
+    _ensure_dev_routes_enabled()
     import uuid
     from src.services.report_service import generate_report_streaming
 
@@ -1938,7 +1924,7 @@ async def get_session_debug_data(session_id: str):
 
         session = result.data
         answers = session.get("answers", {})
-        industry = answers.get("industry", "general")
+        industry = answers.get("industry", "professional-services")
 
         # Load knowledge base data for this industry
         kb_context = get_industry_context(industry)
@@ -2118,7 +2104,7 @@ async def start_adaptive_quiz(request: AdaptiveStartRequest):
         session = result.data
         company_profile_data = session.get("company_profile", {})
         answers = session.get("answers", {})
-        industry = answers.get("industry", "general")
+        industry = answers.get("industry", "professional-services")
 
         # Convert to CompanyProfile model
         try:
@@ -2210,7 +2196,7 @@ async def submit_adaptive_answer(request: AdaptiveAnswerRequest):
         session = result.data
         company_profile_data = session.get("company_profile", {})
         answers = session.get("answers", {})
-        industry = answers.get("industry", "general")
+        industry = answers.get("industry", "professional-services")
 
         # Load or create confidence state
         confidence_data = session.get("confidence_state", {})

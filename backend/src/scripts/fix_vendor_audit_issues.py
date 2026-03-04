@@ -79,20 +79,11 @@ PRICING_FIXES = [
 # Tier adjustments
 TIER_ADJUSTMENTS = [
     {
-        "slug": "servicetitan",
-        "industry": "home-services",
+        "slug": "shopify-plus",
+        "industry": "ecommerce",
         "issue": "Tier 1 but too expensive for small businesses. Should add company_size restrictions.",
         "action": "add_notes",
-        "notes": "Enterprise only. Best for 10+ techs with $500K+ revenue. Not recommended for small teams on budget."
-    },
-    {
-        "slug": "zenoti",
-        "industry": "medspa",
-        "issue": "Currently Tier 2 but is enterprise leader. Should be Tier 1 for multi-location.",
-        "action": "promote",
-        "new_tier": 1,
-        "new_boost": 8,
-        "notes": "Enterprise leader for multi-location. Best for 3+ locations."
+        "notes": "Enterprise only. Best for businesses with $1M+ revenue. Not recommended for small stores on budget."
     },
 ]
 

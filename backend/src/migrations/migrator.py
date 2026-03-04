@@ -15,11 +15,16 @@ logger = logging.getLogger(__name__)
 
 
 class Migrator:
-    """Handles database migrations for Supabase/PostgreSQL."""
+    """
+    Legacy migration helper.
+
+    Source-of-truth migrations now live in backend/supabase/migrations and
+    should be applied via Supabase CLI (`supabase db push`).
+    """
 
     def __init__(self, supabase: Client):
         self.supabase = supabase
-        self.migrations_dir = Path(__file__).parent / "versions"
+        self.migrations_dir = Path(__file__).resolve().parents[2] / "supabase" / "migrations"
 
     async def ensure_migrations_table(self) -> None:
         """Create schema_migrations table if it doesn't exist."""
