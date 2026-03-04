@@ -345,12 +345,12 @@ class TestVendorMatchingSkill:
         skill = VendorMatchingSkill(client=mock_client)
 
         context = SkillContext(
-            industry="unknown-industry",
+            industry="dental",
             metadata={
                 "finding": {
                     "id": "finding-001",
-                    "title": "Very specific obscure requirement",
-                    "description": "Something with no vendor matches",
+                    "title": "Very specific obscure requirement with no vendor matches",
+                    "description": "Quantum entanglement dental laser calibration system",
                 },
                 "company_context": {},
             }
@@ -387,7 +387,7 @@ class TestVendorMatchingIntegration:
         skill = VendorMatchingSkill(client=mock_client)
 
         context = SkillContext(
-            industry="home-services",
+            industry="professional-services",
             metadata={
                 "finding": {
                     "id": "finding-001",

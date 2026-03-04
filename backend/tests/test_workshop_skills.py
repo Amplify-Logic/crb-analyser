@@ -67,7 +67,7 @@ class TestAdaptiveSignalDetectorSkill:
 
     @pytest.mark.asyncio
     async def test_empty_metadata(self, skill):
-        context = SkillContext(industry="general", metadata={})
+        context = SkillContext(industry="ecommerce", metadata={})
         result = await skill.run(context)
         assert result.success is True
         assert result.data["technical"] is False
@@ -93,7 +93,7 @@ class TestWorkshopQuestionSkill:
     @pytest.fixture
     def deep_dive_context(self):
         return SkillContext(
-            industry="marketing-agencies",
+            industry="professional-services",
             metadata={
                 "phase": "deepdive",
                 "current_pain_point": "client_reporting",
@@ -128,7 +128,7 @@ class TestWorkshopQuestionSkill:
     @pytest.mark.asyncio
     async def test_handles_last_stage(self, skill, mock_client):
         context = SkillContext(
-            industry="marketing-agencies",
+            industry="professional-services",
             metadata={
                 "phase": "deepdive",
                 "current_pain_point": "client_reporting",
@@ -185,7 +185,7 @@ class TestMilestoneSynthesisSkill:
     @pytest.fixture
     def synthesis_context(self):
         return SkillContext(
-            industry="marketing-agencies",
+            industry="professional-services",
             metadata={
                 "pain_point_id": "reporting",
                 "pain_point_label": "Client Reporting",

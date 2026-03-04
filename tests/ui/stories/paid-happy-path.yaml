@@ -1,0 +1,26 @@
+stories:
+  - name: "Paid Happy Path - Quiz to Report"
+    url: "http://localhost:5174/checkout?tier=ai"
+    priority: critical
+    requires:
+      quiz_session_id: "A valid in_progress or pending_payment quiz session in sessionStorage"
+      stripe_mode: "Use Stripe test mode or mocked payment confirmation"
+    workflow: |
+      Open checkout and verify order summary and email input render.
+      Enter a valid email and click the payment CTA.
+      Verify the request is sent to /api/payments/guest-checkout.
+      Verify sessionStorage quizSessionId is set/updated from the checkout response.
+
+      Simulate successful payment redirect to /checkout/success?session_id=<stripe_session_id>.
+      Verify payment confirmation polls /api/quiz/sessions/{quizSessionId}.
+      Verify "Start Workshop Now" is available once status is paid/generating/completed.
+
+      Enter workshop via /workshop?session_id=<quizSessionId>.
+      Complete confirmation, deep-dive, and synthesis.
+      Verify workshop completion resolves to /api/reports/by-quiz/{quizSessionId}.
+      Verify navigation lands on /report/{reportId} when ready,
+      otherwise /report/{quizSessionId}/progress until report_id is emitted.
+
+      On progress page, verify EventSource connects to /api/reports/stream/{quizSessionId}.
+      Verify progress events advance step statuses.
+      Verify completion event includes report_id and "View Your Report" opens /report/{reportId}.

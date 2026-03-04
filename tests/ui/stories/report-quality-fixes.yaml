@@ -1,0 +1,44 @@
+stories:
+  - name: "Report Viewer - No Undefined in Data Quality Badge"
+    url: "http://localhost:5174/report/7c98253a-515a-4ef6-8968-3169dd98a322?dev=true"
+    workflow: |
+      1. Navigate to the report URL and wait for the page to fully load
+      2. Scroll down to find the "Data Quality" indicator section (look for text containing "Data Quality")
+      3. Take a screenshot of the Data Quality badge area
+      4. VERIFY: The Data Quality text does NOT contain the word "undefined" anywhere
+      5. VERIFY: The badge shows either "All checks passed" OR a number followed by "issue(s) detected" (e.g. "3 issue(s) detected") — never "undefined issue(s) detected"
+      6. Take a final screenshot showing the verification result
+
+  - name: "Report Viewer - No Stray Zero in Findings"
+    url: "http://localhost:5174/report/7c98253a-515a-4ef6-8968-3169dd98a322?dev=true"
+    workflow: |
+      1. Navigate to the report URL and wait for the page to fully load
+      2. Look for the findings/recommendations section — click on "Findings" or "Recommendations" tab if present
+      3. Scroll through all finding cards
+      4. Take a screenshot of the findings area
+      5. VERIFY: No finding card shows a bare "0" as text where a savings or revenue value should be. Values should either show a formatted currency amount (e.g. "€1,200/yr") or not be displayed at all
+      6. VERIFY: If a finding has "Potential Savings" or "Revenue Potential" labels, the values next to them are formatted currency amounts, not "0"
+      7. Take a final screenshot
+
+  - name: "Report Viewer - Adoption Stats Have Source Citations"
+    url: "http://localhost:5174/report/7c98253a-515a-4ef6-8968-3169dd98a322?dev=true"
+    workflow: |
+      1. Navigate to the report URL and wait for the page to fully load
+      2. Find and click the "Insights" or "Industry Insights" tab/section in the report
+      3. Wait for the insights content to load
+      4. Look for adoption statistics cards — they show capabilities with percentage bars (e.g. "Product descriptions 52%")
+      5. Take a screenshot of the adoption stats section
+      6. VERIFY: At least one adoption stat card shows a "Source:" citation in small gray text below it (e.g. "Source: McKinsey State of AI 2025")
+      7. Take a final screenshot showing a source citation is visible
+
+  - name: "Report Viewer - No Field Service Vendors for B2B Platform"
+    url: "http://localhost:5174/report/7c98253a-515a-4ef6-8968-3169dd98a322?dev=true"
+    workflow: |
+      1. Navigate to the report URL and wait for the page to fully load
+      2. Look for the recommendations section — click on "Recommendations" or "Actions" tab if present
+      3. Scroll through all recommendation cards and option cards
+      4. Take a screenshot of the recommendations area
+      5. VERIFY: The text "Housecall" does NOT appear anywhere on the page (this is a field-service vendor inappropriate for B2B platforms)
+      6. VERIFY: The text "Servicetitan" or "ServiceTitan" does NOT appear anywhere on the page
+      7. Note: This report is for a B2B platform company (PartsBridge Industrial). Field service management vendors should NOT be recommended.
+      8. Take a final screenshot

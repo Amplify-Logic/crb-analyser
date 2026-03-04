@@ -135,6 +135,53 @@ class TestWebhook:
             # Webhook may process (mock bypasses sig check) or reject (real sig check)
             assert response.status_code in [200, 400]
 
+    def test_webhook_returns_deduplicated_for_processed_event(self):
+        """Duplicate webhook deliveries should be acknowledged without re-processing."""
+        with patch('src.routes.payments.stripe') as mock_stripe, \
+             patch('src.routes.payments.get_async_supabase', new_callable=AsyncMock) as mock_supabase, \
+             patch('src.routes.payments._claim_webhook_event', new_callable=AsyncMock) as mock_claim:
+            mock_stripe.Webhook.construct_event.return_value = {
+                "id": "evt_test_duplicate",
+                "type": "payment_intent.succeeded",
+                "data": {"object": {"id": "pi_123"}}
+            }
+            mock_supabase.return_value = AsyncMock()
+            mock_claim.return_value = False
+
+            response = client.post(
+                "/api/payments/webhook",
+                content=b'{"id":"evt_test_duplicate","type":"payment_intent.succeeded"}',
+                headers={"stripe-signature": "valid_test_signature"}
+            )
+
+            assert response.status_code == 200
+            assert response.json().get("deduplicated") is True
+
+    def test_webhook_returns_500_when_event_processing_fails(self):
+        """Webhook must return 500 so Stripe retries on internal failures."""
+        with patch('src.routes.payments.stripe') as mock_stripe, \
+             patch('src.routes.payments.get_async_supabase', new_callable=AsyncMock) as mock_supabase, \
+             patch('src.routes.payments._claim_webhook_event', new_callable=AsyncMock) as mock_claim, \
+             patch('src.routes.payments._mark_webhook_event_failed', new_callable=AsyncMock) as mock_mark_failed, \
+             patch('src.routes.payments.handle_checkout_completed', new_callable=AsyncMock) as mock_handle:
+            mock_stripe.Webhook.construct_event.return_value = {
+                "id": "evt_test_failure",
+                "type": "checkout.session.completed",
+                "data": {"object": {"id": "cs_123", "metadata": {}}}
+            }
+            mock_supabase.return_value = AsyncMock()
+            mock_claim.return_value = True
+            mock_handle.side_effect = RuntimeError("processing exploded")
+
+            response = client.post(
+                "/api/payments/webhook",
+                content=b'{"id":"evt_test_failure","type":"checkout.session.completed"}',
+                headers={"stripe-signature": "valid_test_signature"}
+            )
+
+            assert response.status_code == 500
+            assert mock_mark_failed.await_count == 1
+
 
 class TestCheckoutSession:
     """Tests for authenticated checkout session endpoint."""

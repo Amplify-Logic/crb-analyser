@@ -481,15 +481,16 @@ class TestGetAvailableIndustries:
         industries = get_available_industries()
 
         assert isinstance(industries, list)
-        assert len(industries) >= 5  # We created at least 5 question banks
+        assert len(industries) >= 4  # 4 supported industries
 
     def test_includes_known_industries(self):
         """Should include industries we created."""
         industries = get_available_industries()
 
         assert "dental" in industries
-        assert "coaching" in industries
-        assert "veterinary" in industries
+        assert "professional_services" in industries
+        assert "ecommerce" in industries
+        assert "b2b_platforms" in industries
 
     def test_industries_are_sorted(self):
         """Industries should be sorted alphabetically."""

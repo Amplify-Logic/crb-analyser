@@ -358,7 +358,7 @@ class TestCompetitorAnalyzerSkill:
     def test_industry_adoption_data(self):
         """Test industry adoption data is defined."""
         assert "dental" in INDUSTRY_AI_ADOPTION
-        assert "home-services" in INDUSTRY_AI_ADOPTION
+        assert "professional-services" in INDUSTRY_AI_ADOPTION
 
         dental = INDUSTRY_AI_ADOPTION["dental"]
         assert "adoption_rate" in dental

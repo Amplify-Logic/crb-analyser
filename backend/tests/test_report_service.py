@@ -245,6 +245,7 @@ class TestReportGeneratorIntegration:
             generator.tier = "quick"
             generator.token_tracker = TokenTracker()
             generator.client = MagicMock()
+            generator.async_client = MagicMock()
             generator.MAX_RETRIES = 3
             generator.RETRY_DELAYS = [0.01, 0.02, 0.04]  # Fast for testing
             generator.SYSTEM_PROMPT = "test"
@@ -255,7 +256,8 @@ class TestReportGeneratorIntegration:
             mock_response.content = [MagicMock(text="success")]
             mock_response.usage = MagicMock(input_tokens=10, output_tokens=5)
 
-            generator.client.messages.create = MagicMock(
+            from unittest.mock import AsyncMock
+            generator.async_client.messages.create = AsyncMock(
                 side_effect=[
                     RateLimitError("Rate limited", response=MagicMock(), body={}),
                     RateLimitError("Rate limited", response=MagicMock(), body={}),
@@ -263,9 +265,9 @@ class TestReportGeneratorIntegration:
                 ]
             )
 
-            result = generator._call_claude("test_task", "test prompt")
+            result = await generator._call_claude("test_task", "test prompt")
             assert result == "success"
-            assert generator.client.messages.create.call_count == 3
+            assert generator.async_client.messages.create.call_count == 3
 
     def test_error_categorization(self):
         """Errors should be categorized correctly."""
@@ -409,3 +411,78 @@ class TestConfidenceScoring:
         non_zero_levels = sum(1 for c in confidence_counts.values() if c > 0)
         assert non_zero_levels >= 2, \
             f"Should have variety in confidence levels: {confidence_counts}"
+
+
+# =============================================================================
+# Ecommerce-Specific Tests
+# =============================================================================
+
+class TestEcommerceReportDefaults:
+    """Verify ecommerce report uses correct defaults after lock-in."""
+
+    def test_ecommerce_hourly_rate_default(self):
+        """Ecommerce default hourly rate should be EUR 55."""
+        from src.services.crb_calculation_service import get_effective_hourly_rate
+        rate, source = get_effective_hourly_rate("ecommerce", None)
+        assert rate == 55.0, f"Expected EUR 55/hr, got {rate}"
+        assert "industry default" in source
+
+    def test_ecommerce_user_provided_hourly_rate(self):
+        """User-provided average_team_cost should override default."""
+        from src.services.crb_calculation_service import get_effective_hourly_rate
+        rate, source = get_effective_hourly_rate("ecommerce", {"average_team_cost": "50_75"})
+        assert rate == 62.5, f"Expected midpoint EUR 62.5/hr, got {rate}"
+        assert "team cost range" in source
+
+    def test_ecommerce_verdict_adjustments(self):
+        """Ecommerce verdict adjustments should use updated values."""
+        from src.services.report_service import ReportGenerator
+        adjustments = ReportGenerator.INDUSTRY_VERDICT_ADJUSTMENTS["ecommerce"]
+        assert adjustments["ai_readiness_boost"] == 5, "boost should be 5"
+        assert adjustments["risk_tolerance"] == "medium-high", "risk_tolerance should be medium-high"
+        assert adjustments["quick_win_emphasis"] is True
+
+    def test_ecommerce_competitor_analysis_not_generic(self):
+        """Ecommerce competitor analysis should use 52% adoption, not generic 30%."""
+        from src.skills.analysis.competitor_analyzer import INDUSTRY_AI_ADOPTION
+        assert "ecommerce" in INDUSTRY_AI_ADOPTION, "ecommerce missing from INDUSTRY_AI_ADOPTION"
+        assert INDUSTRY_AI_ADOPTION["ecommerce"]["adoption_rate"] == "52%"
+        assert INDUSTRY_AI_ADOPTION["ecommerce"]["source"] == "Shopify/HubSpot Commerce Report 2025"
+
+    def test_ecommerce_curated_insights_file_exists(self):
+        """Ecommerce curated insights JSON should exist."""
+        from pathlib import Path
+        insights_path = (
+            Path(__file__).parent.parent
+            / "src" / "knowledge" / "insights" / "curated" / "ecommerce.json"
+        )
+        assert insights_path.exists(), f"Missing curated insights: {insights_path}"
+
+    def test_ecommerce_curated_insights_have_content(self):
+        """Ecommerce curated insights should have at least 8 entries."""
+        import json
+        from pathlib import Path
+        insights_path = (
+            Path(__file__).parent.parent
+            / "src" / "knowledge" / "insights" / "curated" / "ecommerce.json"
+        )
+        with open(insights_path) as f:
+            data = json.load(f)
+        insights = data.get("insights", [])
+        assert len(insights) >= 8, f"Expected 8+ insights, got {len(insights)}"
+
+    def test_ecommerce_curated_insights_tagged_correctly(self):
+        """All ecommerce curated insights should be tagged with ecommerce industry."""
+        import json
+        from pathlib import Path
+        insights_path = (
+            Path(__file__).parent.parent
+            / "src" / "knowledge" / "insights" / "curated" / "ecommerce.json"
+        )
+        with open(insights_path) as f:
+            data = json.load(f)
+        for insight in data.get("insights", []):
+            industries = insight.get("tags", {}).get("industries", [])
+            assert "ecommerce" in industries, (
+                f"Insight '{insight.get('id')}' not tagged with ecommerce"
+            )

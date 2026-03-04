@@ -242,41 +242,21 @@ class TestGetEffectiveHourlyRate:
         assert "industry default" in source
 
     def test_industry_default_ecommerce(self):
-        """ecommerce industry returns 35 EUR/hr."""
+        """ecommerce industry returns 55 EUR/hr."""
         rate, source = get_effective_hourly_rate(industry="ecommerce")
-        assert rate == 35
+        assert rate == 55
         assert "industry default" in source
 
     def test_industry_default_e_commerce_hyphen(self):
-        """e-commerce (hyphenated) also returns 35 EUR/hr."""
+        """e-commerce (hyphenated) also returns 55 EUR/hr."""
         rate, source = get_effective_hourly_rate(industry="e-commerce")
-        assert rate == 35
+        assert rate == 55
         assert "industry default" in source
 
-    def test_industry_default_home_services(self):
-        """home-services industry returns 65 EUR/hr."""
-        rate, source = get_effective_hourly_rate(industry="home-services")
-        assert rate == 65
-
-    def test_industry_default_recruiting(self):
-        """recruiting industry returns 75 EUR/hr."""
-        rate, source = get_effective_hourly_rate(industry="recruiting")
+    def test_industry_default_b2b_platforms(self):
+        """b2b-platforms industry returns 75 EUR/hr."""
+        rate, source = get_effective_hourly_rate(industry="b2b-platforms")
         assert rate == 75
-
-    def test_industry_default_coaching(self):
-        """coaching industry returns 100 EUR/hr."""
-        rate, source = get_effective_hourly_rate(industry="coaching")
-        assert rate == 100
-
-    def test_industry_default_veterinary(self):
-        """veterinary industry returns 70 EUR/hr."""
-        rate, source = get_effective_hourly_rate(industry="veterinary")
-        assert rate == 70
-
-    def test_industry_default_music_studios(self):
-        """music-studios industry returns 55 EUR/hr."""
-        rate, source = get_effective_hourly_rate(industry="music-studios")
-        assert rate == 55
 
     def test_industry_case_insensitive(self):
         """Industry matching is case-insensitive."""
@@ -315,10 +295,10 @@ class TestGetEffectiveHourlyRate:
     def test_none_quiz_answers_uses_industry_or_default(self):
         """None quiz_answers is treated as empty dict."""
         rate, source = get_effective_hourly_rate(
-            industry="coaching",
+            industry="b2b-platforms",
             quiz_answers=None,
         )
-        assert rate == 100
+        assert rate == 75
         assert "industry default" in source
 
 
@@ -336,13 +316,8 @@ class TestIndustryHourlyRates:
         "dental",
         "ecommerce",
         "e-commerce",
-        "home-services",
-        "home_services",
-        "recruiting",
-        "coaching",
-        "veterinary",
-        "music-studios",
-        "music_studios",
+        "b2b-platforms",
+        "b2b_platforms",
         "default",
     ]
 
@@ -368,8 +343,7 @@ class TestIndustryHourlyRates:
         variants = [
             ("professional-services", "professional_services"),
             ("e-commerce", "ecommerce"),
-            ("home-services", "home_services"),
-            ("music-studios", "music_studios"),
+            ("b2b-platforms", "b2b_platforms"),
         ]
         for hyphen, underscore in variants:
             assert INDUSTRY_HOURLY_RATES_EUR[hyphen] == INDUSTRY_HOURLY_RATES_EUR[underscore], (

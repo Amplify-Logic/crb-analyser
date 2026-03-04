@@ -4,7 +4,7 @@ E2E Smoke Tests for All 4 Verticals
 Tests the critical path for each primary industry:
 - professional-services (EUR 125/hr)
 - dental (EUR 85/hr)
-- ecommerce (EUR 35/hr)
+- ecommerce (EUR 55/hr)
 - b2b-platforms (EUR 75/hr)
 
 Covers:
@@ -27,7 +27,7 @@ from src.knowledge import (
     get_industry_context,
     get_relevant_opportunities,
     get_vendor_recommendations,
-    PRIMARY_INDUSTRIES,
+    SUPPORTED_INDUSTRIES,
     list_primary_industries,
 )
 from src.services.crb_calculation_service import (
@@ -58,7 +58,7 @@ DATA_TYPES = ["processes", "opportunities", "benchmarks", "vendors"]
 EXPECTED_HOURLY_RATES = {
     "professional-services": 125.0,
     "dental": 85.0,
-    "ecommerce": 35.0,
+    "ecommerce": 55.0,
     "b2b-platforms": 75.0,
 }
 
@@ -203,7 +203,7 @@ class TestHourlyRates:
     @pytest.mark.parametrize("industry,expected_rate", [
         ("professional-services", 125.0),
         ("dental", 85.0),
-        ("ecommerce", 35.0),
+        ("ecommerce", 55.0),
         ("b2b-platforms", 75.0),
     ])
     def test_industry_default_rate(self, industry, expected_rate):
@@ -216,7 +216,7 @@ class TestHourlyRates:
 
     @pytest.mark.parametrize("industry,expected_rate", [
         ("professional_services", 125.0),
-        ("e-commerce", 35.0),
+        ("e-commerce", 55.0),
         ("b2b_platforms", 75.0),
     ])
     def test_alternate_slug_rates(self, industry, expected_rate):
@@ -239,7 +239,7 @@ class TestHourlyRates:
     def test_salary_takes_precedence_over_industry(self):
         """Salary should override industry default but not explicit hourly rate."""
         rate, source = get_effective_hourly_rate("ecommerce", {"salary": 72800})
-        assert rate == 35.0  # 72800 / 2080 = 35
+        assert rate == 35.0  # 72800 / 2080 = 35 (overrides industry default of 55)
         assert "derived from annual salary" in source
 
     def test_unknown_industry_falls_back(self):
@@ -522,10 +522,116 @@ class TestIndustryNormalization:
         """Various industry name inputs should normalize correctly."""
         assert normalize_industry(input_slug) == expected
 
-    def test_unknown_industry_returns_general(self):
-        """Unknown industries should normalize to 'general'."""
-        result = normalize_industry("underwater_basket_weaving")
-        assert result == "general"
+    def test_unknown_industry_raises_value_error(self):
+        """Unknown industries should raise ValueError."""
+        with pytest.raises(ValueError, match="Unsupported industry"):
+            normalize_industry("underwater_basket_weaving")
+
+
+# =============================================================================
+# 7. Ecommerce-Specific Depth Tests
+# =============================================================================
+
+class TestEcommerceOpportunitiesCoverLandingPagePromises:
+    """Landing page promises 4 pain points — verify opportunities back them."""
+
+    def test_opportunities_cover_chatbot(self):
+        """Landing page pain point: Support ticket overload → chatbot opportunity."""
+        data = load_industry_data("ecommerce", "opportunities")
+        opp_ids = [o["id"] for o in data.get("ai_opportunities", [])]
+        assert "ai-customer-service-chatbot" in opp_ids
+
+    def test_opportunities_cover_inventory(self):
+        """Landing page pain point: Inventory forecasting → inventory opportunity."""
+        data = load_industry_data("ecommerce", "opportunities")
+        opp_ids = [o["id"] for o in data.get("ai_opportunities", [])]
+        assert "inventory-forecasting" in opp_ids
+
+    def test_opportunities_cover_returns(self):
+        """Landing page pain point: Returns processing → returns opportunity."""
+        data = load_industry_data("ecommerce", "opportunities")
+        opp_ids = [o["id"] for o in data.get("ai_opportunities", [])]
+        assert "ai-returns-optimization" in opp_ids
+
+    def test_opportunities_cover_attribution(self):
+        """Landing page pain point: Attribution confusion → attribution opportunity."""
+        data = load_industry_data("ecommerce", "opportunities")
+        opp_ids = [o["id"] for o in data.get("ai_opportunities", [])]
+        assert "ai-marketing-attribution" in opp_ids
+
+    def test_opportunities_cover_subscriptions(self):
+        """Subscription commerce is a sub-vertical — need opportunity data."""
+        data = load_industry_data("ecommerce", "opportunities")
+        opp_ids = [o["id"] for o in data.get("ai_opportunities", [])]
+        assert "ai-subscription-management" in opp_ids
+
+
+class TestEcommerceStackPickerIncludesEuTools:
+    """Stack picker must include EU-relevant tools."""
+
+    def test_eu_tools_in_stack_picker(self):
+        """Key EU tools must be in ECOMMERCE_SOFTWARE list."""
+        from src.config.existing_stack import ECOMMERCE_SOFTWARE
+        slugs = [s["slug"] for s in ECOMMERCE_SOFTWARE]
+        eu_tools = ["sendcloud", "mollie", "channable", "picqer"]
+        for tool in eu_tools:
+            assert tool in slugs, f"EU tool '{tool}' missing from stack picker"
+
+    def test_quiz_platforms_in_stack_picker(self):
+        """All quiz platform options must have a stack picker entry."""
+        from src.config.existing_stack import ECOMMERCE_SOFTWARE
+        slugs = [s["slug"] for s in ECOMMERCE_SOFTWARE]
+        platforms = ["shopify", "woocommerce", "bigcommerce", "magento", "squarespace", "wix"]
+        for platform in platforms:
+            assert platform in slugs, f"Quiz platform '{platform}' missing from stack picker"
+
+
+class TestEcommerceVendorKbCoversQuizPlatforms:
+    """For each quiz platform option, verify a vendor entry exists."""
+
+    def test_vendor_coverage_for_quiz_platforms(self):
+        """Every platform in the quiz should have vendor KB data."""
+        data = load_industry_data("ecommerce", "vendors")
+        vendor_names = []
+        for cat in data.get("vendor_categories", []):
+            for v in cat.get("vendors", []):
+                vendor_names.append(v["name"].lower())
+
+        platforms_expected = ["shopify", "woocommerce", "bigcommerce", "squarespace", "wix", "magento"]
+        for platform in platforms_expected:
+            assert any(platform in name for name in vendor_names), (
+                f"No vendor KB entry for quiz platform '{platform}'"
+            )
+
+
+class TestEcommerceHourlyRateFromQuiz:
+    """Verify average_team_cost quiz answer overrides default hourly rate."""
+
+    def test_quiz_answer_25_50_uses_midpoint(self):
+        """25-50 range should use 37.5 EUR/hr midpoint."""
+        rate, source = get_effective_hourly_rate("ecommerce", {"average_team_cost": "25_50"})
+        assert rate == 37.5
+        assert "team cost range" in source
+
+    def test_quiz_answer_75_100_uses_midpoint(self):
+        """75-100 range should use 87.5 EUR/hr midpoint."""
+        rate, source = get_effective_hourly_rate("ecommerce", {"average_team_cost": "75_100"})
+        assert rate == 87.5
+        assert "team cost range" in source
+
+    def test_quiz_answer_not_sure_falls_through(self):
+        """'Not sure' should fall through to industry default."""
+        rate, source = get_effective_hourly_rate("ecommerce", {"average_team_cost": "not_sure"})
+        assert rate == 55.0
+        assert "industry default" in source
+
+    def test_explicit_hourly_rate_beats_team_cost(self):
+        """Explicit hourly_rate should take priority over average_team_cost."""
+        rate, source = get_effective_hourly_rate(
+            "ecommerce", {"hourly_rate": 80, "average_team_cost": "25_50"}
+        )
+        assert rate == 80.0
+        assert "provided by user" in source
 
     def test_primary_industries_list(self):
         """Primary industries should be exactly our 4 verticals."""

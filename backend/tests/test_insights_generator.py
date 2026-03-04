@@ -49,23 +49,22 @@ class TestInsightsGeneratorBase:
 
     def test_generates_insights_for_known_industry(self):
         gen = InsightsGenerator()
-        result = gen.generate_insights(industry="marketing-agencies", ai_readiness_score=50)
+        result = gen.generate_insights(industry="professional-services", ai_readiness_score=50)
         assert isinstance(result, IndustryInsights)
-        assert result.industry == "marketing-agencies"
+        assert result.industry == "professional-services"
         assert len(result.adoption_stats) > 0
         assert len(result.social_proof) > 0
 
-    def test_falls_back_to_general_for_unknown_industry(self):
+    def test_raises_for_unknown_industry(self):
         gen = InsightsGenerator()
-        result = gen.generate_insights(industry="unknown-industry", ai_readiness_score=50)
-        assert result.industry == "unknown-industry"
-        assert result.industry_display_name == "General Business"
+        with pytest.raises(ValueError, match="Unsupported industry"):
+            gen.generate_insights(industry="unknown-industry", ai_readiness_score=50)
 
     def test_best_fit_based_on_readiness(self):
         gen = InsightsGenerator()
-        high = gen.generate_insights(industry="general", ai_readiness_score=80)
-        mid = gen.generate_insights(industry="general", ai_readiness_score=55)
-        low = gen.generate_insights(industry="general", ai_readiness_score=30)
+        high = gen.generate_insights(industry="dental", ai_readiness_score=80)
+        mid = gen.generate_insights(industry="dental", ai_readiness_score=55)
+        low = gen.generate_insights(industry="dental", ai_readiness_score=30)
         assert high.opportunity_map.best_fit == "emerging"
         assert mid.opportunity_map.best_fit == "growing"
         assert low.opportunity_map.best_fit == "established"
@@ -90,7 +89,7 @@ class TestCuratedInsightsIntegration:
         mock_get_service.return_value = mock_service
 
         gen = InsightsGenerator()
-        result = gen.generate_insights(industry="marketing-agencies", ai_readiness_score=50)
+        result = gen.generate_insights(industry="professional-services", ai_readiness_score=50)
 
         assert "curated_insights" in result.model_dump()
         curated = result.model_dump()["curated_insights"]
@@ -113,7 +112,7 @@ class TestCuratedInsightsIntegration:
         mock_get_service.return_value = mock_service
 
         gen = InsightsGenerator()
-        result = gen.generate_insights(industry="marketing-agencies", ai_readiness_score=50)
+        result = gen.generate_insights(industry="professional-services", ai_readiness_score=50)
 
         curated = result.model_dump()["curated_insights"]
         assert len(curated["case_studies"]) == 1
@@ -134,7 +133,7 @@ class TestCuratedInsightsIntegration:
         mock_get_service.return_value = mock_service
 
         gen = InsightsGenerator()
-        result = gen.generate_insights(industry="general", ai_readiness_score=50)
+        result = gen.generate_insights(industry="ecommerce", ai_readiness_score=50)
 
         curated = result.model_dump()["curated_insights"]
         assert len(curated["statistics"]) == 1
@@ -147,11 +146,11 @@ class TestCuratedInsightsIntegration:
         mock_get_service.return_value = mock_service
 
         gen = InsightsGenerator()
-        gen.generate_insights(industry="healthcare", ai_readiness_score=50)
+        gen.generate_insights(industry="dental", ai_readiness_score=50)
 
         mock_service.get_insights_for_surface.assert_called_once_with(
             use_in=UseIn.REPORT,
-            industry="healthcare",
+            industry="dental",
             limit=10,
         )
 
@@ -161,7 +160,7 @@ class TestCuratedInsightsIntegration:
         mock_get_service.side_effect = Exception("Service unavailable")
 
         gen = InsightsGenerator()
-        result = gen.generate_insights(industry="general", ai_readiness_score=50)
+        result = gen.generate_insights(industry="b2b-platforms", ai_readiness_score=50)
 
         # Should still return base insights
         assert isinstance(result, IndustryInsights)
@@ -184,7 +183,7 @@ class TestCuratedInsightsIntegration:
         mock_get_service.return_value = mock_service
 
         gen = InsightsGenerator()
-        result = gen.generate_insights(industry="general", ai_readiness_score=50)
+        result = gen.generate_insights(industry="ecommerce", ai_readiness_score=50)
         curated = result.model_dump()["curated_insights"]
 
         assert len(curated["trends"]) == 1

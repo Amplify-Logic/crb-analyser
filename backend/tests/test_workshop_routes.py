@@ -131,7 +131,7 @@ class TestWorkshopStartEndpoint:
                 "basics": {"name": {"value": "Acme Corp"}},
             },
             "answers": {
-                "industry": "marketing-agencies",
+                "industry": "professional-services",
                 "pain_points": ["Client reporting takes too long"],
             },
             "workshop_data": {},
