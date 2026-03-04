@@ -49,6 +49,28 @@ Every recommendation must score positively on BOTH pillars:
 └─────────────────────────────────────────────────────────────┘
 ```
 
+### NET SCORE Formula
+
+```
+NET SCORE = Benefit - Cost - (Risk / 10)
+```
+
+Findings are prioritized as: **Quick Win** → **Strategic** → **Consider** → **Defer**
+
+### Confidence-Adjusted Estimates
+
+Every estimate carries a confidence level that adjusts the reported value:
+
+| Level | Factor | Criteria |
+|-------|--------|----------|
+| **HIGH** | 1.0 | User-provided numbers, verified benchmark |
+| **MEDIUM** | 0.85 | Industry pattern likely applies, one strong data point |
+| **LOW** | 0.70 | Significant assumptions required |
+
+`adjusted_estimate = base_estimate * confidence_factor`
+
+**Display rules:** Always show "Estimated", always show confidence level, use ranges for LOW confidence, source every benchmark.
+
 ### Time Horizons (All Three Required)
 
 | Horizon | Timeframe | Focus |
@@ -169,33 +191,31 @@ Examples:
 
 ---
 
-## The Three Options Pattern
+## AIOS Options Model
 
-Every recommendation MUST include three options:
+Every recommendation presents options prioritized by implementation speed and disruption:
 
-### Option A: Off-the-Shelf
-- **What**: Existing SaaS, minimal customization
-- **When**: Fast implementation needed, standard use case
-- **Pros**: Quick, low risk, proven
-- **Cons**: Limited differentiation, ongoing fees
+### Option 1: Connect & Automate
+- **What**: Wire existing tools together with AI workflows (MCP, APIs, Claude)
+- **When**: Tools work, just need connecting
+- **Verdict**: Connect
 
-### Option B: Best-in-Class
-- **What**: Premium vendor, full implementation
-- **When**: Serious investment, need full capabilities
-- **Pros**: Comprehensive, supported, scalable
-- **Cons**: Higher cost, longer implementation
+### Option 2: Enhance with AI
+- **What**: Add an intelligence layer — agents, predictive workflows, command stations
+- **When**: Need intelligence on top of existing data
+- **Verdict**: Enhance
 
-### Option C: Custom AI Solution
-- **What**: Built specifically for them
-- **When**: Unique needs, want competitive moat
-- **Pros**: Tailored, owned, differentiating
-- **Cons**: Higher upfront cost, needs maintenance
+### Option 3: Add to Stack
+- **What**: Introduce a new tool to fill a gap where nothing exists
+- **When**: No existing tool covers this capability
+- **Verdict**: Add
 
-**Why always include Custom:**
-- AI development costs dropping 50%+ year over year
-- Can become competitive advantage
-- Opens minds to possibilities
-- We offer this as services tier (€2K+)
+### Option 4: Targeted Upgrade
+- **What**: Replace one specific tool that is a dead end
+- **When**: Tool has no API, is fundamentally broken, or blocks growth — last resort
+- **Verdict**: Replace
+
+**Connect-first philosophy:** We never recommend replacing software unless the existing tool genuinely cannot be integrated. Most businesses can get 80% of the value by connecting what they have.
 
 ---
 
@@ -263,22 +283,27 @@ CRB ANALYSIS
 ROI: [X]% over 3 years
 Payback Period: [X] months
 
-OPTIONS
+AIOS OPTIONS
 ┌─────────────────────────────────────────────────────────┐
-│ Option A: Off-the-Shelf                                 │
-│ Tool: [Name]  │ Cost: €X/mo │ Time: X weeks            │
-│ Pros: ...     │ Cons: ...                               │
-├─────────────────────────────────────────────────────────┤
-│ Option B: Best-in-Class                                 │
-│ Tool: [Name]  │ Cost: €X/mo │ Time: X weeks            │
-│ Pros: ...     │ Cons: ...                               │
-├─────────────────────────────────────────────────────────┤
-│ Option C: Custom AI Solution                            │
+│ Connect & Automate                                      │
 │ Approach: ... │ Cost: €X    │ Time: X weeks            │
+│ Pros: ...     │ Cons: ...                               │
+├─────────────────────────────────────────────────────────┤
+│ Enhance with AI                                         │
+│ Approach: ... │ Cost: €X    │ Time: X weeks            │
+│ Pros: ...     │ Cons: ...                               │
+├─────────────────────────────────────────────────────────┤
+│ Add to Stack                                            │
+│ Tool: [Name]  │ Cost: €X/mo │ Time: X weeks            │
+│ Pros: ...     │ Cons: ...                               │
+├─────────────────────────────────────────────────────────┤
+│ Targeted Upgrade (only if existing tool is a dead end)  │
+│ Tool: [Name]  │ Cost: €X/mo │ Time: X weeks            │
 │ Pros: ...     │ Cons: ...                               │
 └─────────────────────────────────────────────────────────┘
 
-RECOMMENDATION: [Which option and why]
+NET SCORE: [X] = Benefit - Cost - (Risk / 10)
+VERDICT: [Connect | Enhance | Add | Replace]
 ```
 
 ### 5. Implementation Roadmap
@@ -350,11 +375,13 @@ RECOMMENDATION: [Which option and why]
 
 ### Confidence Levels
 
-| Level | Criteria | Display |
-|-------|----------|---------|
-| **High** | Multiple reliable sources, direct evidence | Green indicator |
-| **Medium** | Single reliable source or inferred | Yellow indicator |
-| **Low** | Estimated, limited data | Gray indicator |
+| Level | Factor | Criteria | Display |
+|-------|--------|----------|---------|
+| **High** | 1.0 | Multiple reliable sources, direct evidence | Green indicator |
+| **Medium** | 0.85 | Single reliable source or inferred | Yellow indicator |
+| **Low** | 0.70 | Estimated, limited data | Gray indicator |
+
+All estimates are adjusted: `adjusted_estimate = base_estimate * confidence_factor`
 
 ### Transparency Rules
 
@@ -458,3 +485,4 @@ See [PRODUCT.md](./PRODUCT.md#target-industries) for current industry details.
 1. Professional Services (accounting, legal, consulting)
 2. Dental Practices
 3. E-commerce
+4. B2B Platforms (IoT, hardware-to-platform, subscription hardware)

@@ -1,72 +1,42 @@
 # CRB Analyser - System Architecture
 
-> Last updated: December 2025
+> Last updated: February 2026
 
-This document describes the core architecture of CRB Analyser, focusing on the three-layer intelligence system that powers analysis and report generation.
+This document describes the internal architecture of CRB Analyser — the three-layer intelligence system that powers analysis and report generation.
 
----
-
-## Table of Contents
-
-1. [System Overview](#system-overview)
-2. [The Three-Layer Intelligence System](#the-three-layer-intelligence-system)
-3. [Layer 1: Knowledge Base (Static Data)](#layer-1-knowledge-base-static-data)
-4. [Layer 2: Expertise System (Learned Data)](#layer-2-expertise-system-learned-data)
-5. [Layer 3: Skills System (Reusable Code)](#layer-3-skills-system-reusable-code)
-6. [How the Layers Work Together](#how-the-layers-work-together)
-7. [Data Flow](#data-flow)
-8. [Directory Structure](#directory-structure)
+> For product domain → [PRODUCT.md](../../PRODUCT.md) | For infrastructure → [INFRASTRUCTURE.md](../../INFRASTRUCTURE.md) | For CRB methodology → [FRAMEWORK.md](../../FRAMEWORK.md)
 
 ---
 
 ## System Overview
 
-CRB Analyser is an AI-powered Cost/Risk/Benefit analysis platform. It helps businesses understand where AI can add value through:
+CRB Analyser is an AI-native consulting agency that delivers architecture blueprints through:
 
-1. **Quiz/Interview** - Collect business context
-2. **Analysis** - AI-powered opportunity identification
-3. **Report** - Actionable recommendations with ROI
+1. **Quiz** — Adaptive assessment to understand business context
+2. **Workshop** — 90-minute AI-assisted deep-dive gathering operational context
+3. **Analysis** — AI-powered opportunity identification with CRB scoring
+4. **Report** — AIOS recommendations with Connect/Enhance/Add/Replace verdicts
 
 The intelligence behind this comes from three complementary layers:
 
 ```
 ┌─────────────────────────────────────────────────────────────────────┐
-│                                                                     │
 │  LAYER 3: SKILLS (Code)                                             │
-│  HOW to execute - Reusable workflows, templates, proven code        │
-│                                                                     │
+│  HOW to execute — Reusable workflows, templates, proven code        │
 ├─────────────────────────────────────────────────────────────────────┤
-│                                                                     │
 │  LAYER 2: EXPERTISE (Learned Data)                                  │
-│  WHAT to look for - Patterns learned from past analyses             │
-│                                                                     │
+│  WHAT to look for — Patterns learned from past analyses             │
 ├─────────────────────────────────────────────────────────────────────┤
-│                                                                     │
 │  LAYER 1: KNOWLEDGE (Static Data)                                   │
-│  Facts and benchmarks - Curated vendor/industry data                │
-│                                                                     │
+│  Facts and benchmarks — Curated vendor/industry data                │
 └─────────────────────────────────────────────────────────────────────┘
 ```
 
----
-
-## The Three-Layer Intelligence System
-
-### Why Three Layers?
-
-Each layer serves a distinct purpose:
-
 | Layer | Type | Purpose | Updates |
 |-------|------|---------|---------|
-| **Knowledge** | Static Data | Facts, benchmarks, vendor pricing | Manually curated |
+| **Knowledge** | Static Data | Facts, benchmarks, vendor pricing | Manually curated + research agents |
 | **Expertise** | Learned Data | Patterns from past analyses | Automatic after each analysis |
 | **Skills** | Reusable Code | Proven workflows and templates | Developer-maintained |
-
-### The Key Insight
-
-From the video ["MCP Is Dead (Here's the Skills Replacement)"](https://www.youtube.com/watch?v=...):
-
-> "Skills are a way to take something that the agent has figured out through open-ended code execution and turn it into a reusable building block."
 
 **Without Skills:** The agent regenerates prompts and logic from scratch each time.
 **With Skills:** The agent executes proven code workflows, using expertise as context.
@@ -77,7 +47,7 @@ From the video ["MCP Is Dead (Here's the Skills Replacement)"](https://www.youtu
 
 **Location:** `backend/src/knowledge/`
 
-The Knowledge Base contains curated, verified data about industries and vendors.
+Curated, verified data about industries and vendors. This is our data moat — it compounds with every engagement.
 
 ### Structure
 
@@ -88,23 +58,24 @@ knowledge/
 │   ├── automation.json         # n8n, Make, Zapier
 │   ├── crm.json
 │   ├── customer_support.json
-│   ├── scheduling.json
 │   └── ...
 │
-├── ai_tools/
-│   └── llm_providers.json      # Claude, GPT pricing
+├── ai_tools/                   # LLM provider pricing
+├── aios/                       # AIOS framework data
+├── benchmarks/                 # Cross-industry benchmarks
+├── insights/                   # Curated trend data
+├── patterns/                   # AI implementation playbooks
+├── platforms/                  # Platform integration data
 │
-├── dental/                     # Industry-specific
-│   ├── processes.json          # Common workflows
-│   ├── opportunities.json      # AI automation opportunities
-│   ├── benchmarks.json         # Industry metrics
-│   └── vendors.json            # Industry-relevant vendors
+├── professional-services/      # Active vertical
+├── dental/                     # Active vertical
+├── ecommerce/                  # Active vertical
+├── b2b-platforms/              # Active vertical
 │
-├── home-services/
-├── professional-services/
-├── recruiting/
-├── coaching/
-└── veterinary/
+├── coaching/                   # Exploratory (not launched)
+├── home-services/              # Exploratory (not launched)
+├── recruiting/                 # Exploratory (not launched)
+└── veterinary/                 # Exploratory (not launched)
 ```
 
 ### Key Functions
@@ -125,7 +96,7 @@ All knowledge base data must be verified:
 
 ```json
 {
-  "verified_date": "2025-12",
+  "verified_date": "2026-02",
   "source": "https://...",
   "status": "verified"
 }
@@ -137,7 +108,7 @@ All knowledge base data must be verified:
 
 **Location:** `backend/src/expertise/`
 
-The Expertise System learns from each analysis to improve future recommendations.
+Learns from each analysis to improve future recommendations. This is the compounding engine.
 
 ### How It Works
 
@@ -161,7 +132,6 @@ Agent now knows:
 ### Data Structures
 
 ```python
-# IndustryExpertise - Per-industry learning
 class IndustryExpertise:
     industry: str
     total_analyses: int
@@ -175,33 +145,14 @@ class IndustryExpertise:
     avg_ai_readiness: float
     avg_potential_savings: float
 
-# VendorExpertise - Cross-industry vendor learning
 class VendorExpertise:
-    vendors: Dict[str, VendorFit]  # What works for which use cases
+    vendors: Dict[str, VendorFit]
     category_insights: Dict[str, List[str]]
 
-# ExecutionExpertise - How the agent performs
 class ExecutionExpertise:
     tool_success_rates: Dict[str, float]
     failure_patterns: List[str]
     prompt_effectiveness: Dict[str, PromptEffectiveness]
-```
-
-### Key Functions
-
-```python
-from src.expertise import (
-    get_expertise_store,        # Get/save expertise files
-    get_self_improve_service,   # Learning engine
-)
-
-# Before analysis: Load expertise
-store = get_expertise_store()
-expertise = store.get_all_expertise_context("dental")
-
-# After analysis: Learn
-service = get_self_improve_service()
-await service.learn_from_analysis(audit_id, industry, ...)
 ```
 
 ### Confidence Levels
@@ -220,8 +171,6 @@ await service.learn_from_analysis(audit_id, industry, ...)
 
 Skills are reusable code workflows that execute specific tasks consistently.
 
-### Key Distinction
-
 | Expertise | Skills |
 |-----------|--------|
 | DATA layer | CODE layer |
@@ -233,79 +182,72 @@ Skills are reusable code workflows that execute specific tasks consistently.
 
 ```
 skills/
-├── __init__.py                 # Skill loader
-├── base.py                     # BaseSkill class
-├── registry.py                 # Skill discovery
+├── base.py                         # BaseSkill / SyncSkill classes
+├── registry.py                     # Auto-discovery
+├── report_generation_utils.py      # Shared report utilities
 │
-├── report-generation/          # Report skills
-│   ├── skill.md                # Documentation
-│   ├── exec_summary.py         # Executive summary generator
-│   ├── three_options.py        # Three Options formatter
-│   └── pdf_layout.py           # PDF generation
+├── analysis/                       # Scoring & validation (16 skills)
+│   ├── net_score_calculator.py     # NET SCORE = Benefit - Cost - (Risk/10)
+│   ├── math_validator.py           # ROI/financial validation
+│   ├── vendor_matching.py          # Match vendors to opportunities
+│   ├── platform_consolidation.py   # Stack consolidation analysis
+│   ├── roi_calculator.py           # ROI with confidence adjustment
+│   ├── ai_readiness_calculator.py  # AI readiness scoring
+│   ├── industry_benchmarker.py     # Benchmark comparisons
+│   ├── quick_win_identifier.py     # Find quick wins
+│   ├── source_validator.py         # Verify data sources
+│   └── ...
 │
-├── finding-generation/         # Finding skills
-│   ├── skill.md
-│   ├── structure.py            # Consistent finding format
-│   ├── scoring.py              # Two Pillars scoring
-│   └── confidence.py           # Confidence assignment
+├── report-generation/              # Report output (9 skills)
+│   ├── exec_summary.py             # Executive summary
+│   ├── four_options.py             # AIOS options (Connect/Enhance/Add/Replace)
+│   ├── three_options.py            # Legacy 3-option format (fallback)
+│   ├── automation_summary.py       # Automation roadmap
+│   ├── system_architecture.py      # AIOS architecture diagram
+│   ├── verdict.py                  # Final verdict generation
+│   ├── roadmap.py                  # Implementation roadmap
+│   └── finding_generation.py       # Finding structure
 │
-├── interview/                  # Interview skills
-│   ├── skill.md
-│   ├── followup.py             # Adaptive follow-ups
-│   ├── extraction.py           # Pain point extraction
-│   └── probing.py              # Deep-dive questions
+├── browser/                        # Web scraping (3 skills)
+│   ├── playwright_browser.py       # Core browser automation
+│   ├── enhanced_scraper.py         # Playwright + httpx fallback
+│   └── vendor_scraper.py           # Vendor pricing extraction
 │
-└── industry/                   # Industry-specific skills
+├── workshop/                       # AI-assisted workshop (3 skills)
+│   ├── question_skill.py           # Adaptive questions
+│   ├── signal_detector.py          # Detect buying signals
+│   └── milestone_skill.py          # Track workshop progress
+│
+├── interview/                      # Interview phase
+│   ├── followup.py                 # Adaptive follow-ups
+│   ├── extraction.py               # Pain point extraction
+│   └── probing.py                  # Deep-dive questions
+│
+├── extraction/                     # Data extraction
+│   └── insight_extraction.py       # Extract insights from analysis
+│
+└── industry/                       # Industry-specific skills
     ├── dental/
-    │   ├── skill.md
-    │   └── analysis.py
-    └── home-services/
-        ├── skill.md
-        └── analysis.py
+    └── ...
 ```
 
 ### Skill Anatomy
 
-Each skill contains:
-
-1. **skill.md** - When to use, how it works
-2. **Scripts** - Python code that executes the workflow
-3. **Templates** - Reusable output formats
-4. **Examples** - Reference implementations
-
 ```python
-# Example: skills/report-generation/exec_summary.py
-
-class ExecSummarySkill(BaseSkill):
+class ExecSummarySkill(SyncSkill):
     name = "executive-summary"
     description = "Generate compelling executive summaries"
 
     def execute(self, report_data: dict, expertise: IndustryExpertise = None):
-        """
-        Generate executive summary using proven structure.
-
-        Args:
-            report_data: Full report context
-            expertise: Optional industry expertise for calibration
-        """
         # Proven template structure
         hook = self._generate_hook(report_data)
-        comparison = self._generate_comparison(expertise)
-
         return {
             "headline": hook,
             "key_insight": self._extract_key_insight(report_data),
-            "scores": self._format_scores(report_data, comparison),
+            "scores": self._format_scores(report_data),
             "verdict_summary": self._summarize_verdict(report_data)
         }
 ```
-
-### Benefits of Skills
-
-1. **Consistency** - Same output format every time
-2. **Efficiency** - No regenerating logic from scratch
-3. **Token Reduction** - ~50% fewer tokens per report
-4. **Maintainability** - Change in one place, affects all reports
 
 ---
 
@@ -317,58 +259,52 @@ class ExecSummarySkill(BaseSkill):
 ┌─────────────────────────────────────────────────────────────────────┐
 │                         BEFORE ANALYSIS                             │
 ├─────────────────────────────────────────────────────────────────────┤
-│                                                                     │
 │  Knowledge provides:           Expertise provides:                  │
 │  • Industry benchmarks         • Known pain points                  │
 │  • Vendor database             • Effective patterns                 │
 │  • Process templates           • Anti-patterns to avoid             │
 │                                                                     │
 │  Skills loaded:                                                     │
-│  • interview/followup.py       • finding-generation/structure.py   │
-│  • report-generation/*.py                                           │
-│                                                                     │
+│  • workshop/question_skill.py  • analysis/net_score_calculator.py  │
+│  • report-generation/*.py      • analysis/vendor_matching.py       │
 └────────────────────────────────────┬────────────────────────────────┘
                                      │
                                      ▼
 ┌─────────────────────────────────────────────────────────────────────┐
 │                         DURING ANALYSIS                             │
 ├─────────────────────────────────────────────────────────────────────┤
-│                                                                     │
-│  Interview Phase:                                                   │
-│  • Skill: interview/followup.py generates adaptive questions        │
+│  Workshop Phase:                                                    │
+│  • Skill: workshop/question_skill.py generates adaptive questions   │
+│  • Skill: workshop/signal_detector.py detects buying signals        │
 │  • Expertise: Injects known pain points to probe                    │
 │                                                                     │
 │  Finding Generation:                                                │
-│  • Skill: finding-generation/structure.py ensures consistent format │
+│  • Skill: report-generation/finding_generation.py structures output │
 │  • Expertise: Calibrates scores to industry averages                │
 │  • Knowledge: Provides benchmark data                               │
 │                                                                     │
 │  Recommendation Generation:                                         │
-│  • Skill: report-generation/three_options.py formats options        │
+│  • Skill: report-generation/four_options.py formats AIOS options    │
+│  • Skill: analysis/net_score_calculator.py computes NET SCORE       │
 │  • Expertise: Uses effective_patterns for proven recommendations    │
 │  • Knowledge: Pulls vendor pricing                                  │
-│                                                                     │
 └────────────────────────────────────┬────────────────────────────────┘
                                      │
                                      ▼
 ┌─────────────────────────────────────────────────────────────────────┐
 │                         AFTER ANALYSIS                              │
 ├─────────────────────────────────────────────────────────────────────┤
-│                                                                     │
 │  SelfImproveService.learn_from_analysis():                          │
 │  • Updates IndustryExpertise with new pain points                   │
 │  • Records which vendors were recommended                           │
 │  • Tracks tool success rates                                        │
 │  • Optional LLM reflection for deeper insights                      │
-│                                                                     │
 └─────────────────────────────────────────────────────────────────────┘
 ```
 
 ### Code Example: Integrated Flow
 
 ```python
-# In report_service.py
-
 async def generate_report(self):
     # LAYER 1: Load knowledge
     industry_knowledge = get_industry_context(self.industry)
@@ -386,7 +322,7 @@ async def generate_report(self):
         knowledge=industry_knowledge
     )
 
-    # After analysis: Update expertise
+    # After analysis: Update expertise (compounding loop)
     await get_self_improve_service().learn_from_analysis(
         audit_id=self.audit_id,
         industry=self.industry,
@@ -396,114 +332,11 @@ async def generate_report(self):
 
 ---
 
-## Data Flow
-
-```
-                    ┌─────────────────┐
-                    │   User Input    │
-                    │  (Quiz/Interview)│
-                    └────────┬────────┘
-                             │
-                             ▼
-              ┌──────────────────────────────┐
-              │      ReportGenerator         │
-              │                              │
-              │  ┌────────────────────────┐  │
-              │  │  Load Context          │  │
-              │  │  • Knowledge (static)  │  │
-              │  │  • Expertise (learned) │  │
-              │  │  • Skills (code)       │  │
-              │  └───────────┬────────────┘  │
-              │              │               │
-              │              ▼               │
-              │  ┌────────────────────────┐  │
-              │  │  Execute Skills        │  │
-              │  │  • Interview skill     │  │
-              │  │  • Finding skill       │  │
-              │  │  • Report skills       │  │
-              │  └───────────┬────────────┘  │
-              │              │               │
-              └──────────────┼───────────────┘
-                             │
-                             ▼
-              ┌──────────────────────────────┐
-              │    SelfImproveService        │
-              │    (Learn from analysis)     │
-              └──────────────┬───────────────┘
-                             │
-                             ▼
-              ┌──────────────────────────────┐
-              │    Updated Expertise         │
-              │    (Better next time)        │
-              └──────────────────────────────┘
-```
-
----
-
-## Directory Structure
-
-```
-backend/
-├── src/
-│   ├── knowledge/              # LAYER 1: Static Data
-│   │   ├── __init__.py         # Loaders and helpers
-│   │   ├── schemas.py          # Data models
-│   │   ├── vendors/            # Vendor database (by category)
-│   │   ├── ai_tools/           # LLM provider pricing
-│   │   ├── dental/             # Industry: Dental
-│   │   ├── home-services/      # Industry: Home Services
-│   │   ├── professional-services/
-│   │   ├── recruiting/
-│   │   ├── coaching/
-│   │   └── veterinary/
-│   │
-│   ├── expertise/              # LAYER 2: Learned Data
-│   │   ├── __init__.py         # Exports
-│   │   ├── schemas.py          # IndustryExpertise, VendorExpertise, etc.
-│   │   ├── store.py            # File-based persistence
-│   │   ├── self_improve.py     # Learning engine
-│   │   └── data/               # Expertise files (auto-generated)
-│   │       ├── industries/     # Per-industry expertise
-│   │       ├── vendors.json    # Vendor learning
-│   │       ├── execution.json  # Execution learning
-│   │       └── records/        # Analysis records
-│   │
-│   ├── skills/                 # LAYER 3: Reusable Code
-│   │   ├── __init__.py         # Skill loader
-│   │   ├── base.py             # BaseSkill class
-│   │   ├── registry.py         # Skill discovery
-│   │   ├── report-generation/  # Report skills
-│   │   ├── finding-generation/ # Finding skills
-│   │   ├── interview/          # Interview skills
-│   │   └── industry/           # Industry-specific skills
-│   │
-│   ├── services/               # Business logic
-│   │   ├── report_service.py   # Main report generator
-│   │   ├── playbook_generator.py
-│   │   └── ...
-│   │
-│   └── routes/                 # API endpoints
-│       ├── reports.py
-│       ├── interview.py
-│       └── ...
-│
-└── docs/
-    ├── ARCHITECTURE.md         # This document
-    └── ...
-```
-
----
-
 ## Related Documents
 
-- [CLAUDE.md](../CLAUDE.md) - Development guide and shortcuts
-- [TARGET_INDUSTRIES.md](TARGET_INDUSTRIES.md) - Industry prioritization
-- [plans/](plans/) - Implementation plans
-
----
-
-## Changelog
-
-| Date | Change |
-|------|--------|
-| 2025-12-25 | Initial architecture document - Skills + Expertise integration |
+- [CLAUDE.md](../../CLAUDE.md) — Development guide
+- [PRODUCT.md](../../PRODUCT.md) — Product domain, verticals, user journey
+- [INFRASTRUCTURE.md](../../INFRASTRUCTURE.md) — Deployment, services, operations
+- [FRAMEWORK.md](../../FRAMEWORK.md) — CRB methodology, AIOS options, scoring
+- [SKILLS_STRATEGY.md](./SKILLS_STRATEGY.md) — Skills design philosophy
+- [SKILLS_INTEGRATION_MAP.md](./SKILLS_INTEGRATION_MAP.md) — How skills connect to services

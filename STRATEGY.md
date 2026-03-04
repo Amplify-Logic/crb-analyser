@@ -93,44 +93,76 @@ We solve this by:
 
 ---
 
-## Strategic Focus: Parallel Vertical Launch
+## Strategic Focus: E-commerce Lock-In
 
-### The Bet
+### The Decision
 
-> "Launch three verticals simultaneously. Let the market tell us which converts best."
+> "We tested four verticals. E-commerce showed the strongest signals. Now we go deep."
 
-Instead of sequential expansion, we test all three markets at once with:
-- Same core platform and CRB framework
-- Same €147 price point
-- Different landing pages and messaging
-- Vertical-specific knowledge bases
+After parallel testing, we locked in on e-commerce because:
+- **Measurable ROI** — store owners track every automation's impact
+- **Volume market** — millions of Shopify/WooCommerce stores globally
+- **Automation-hungry** — most e-commerce operations are repetitive and rule-based
+- **EU advantage** — deep knowledge of EU tools (Mollie, Sendcloud, Channable) and regulations (AI Act, DSA, EAA) is a genuine moat
 
-### Why Parallel Launch?
+### What Lock-In Means
 
-| Factor | Advantage |
-|--------|-----------|
-| **Faster Signal** | Learn which market has best PMF in weeks, not years |
-| **Shared Infrastructure** | 80% of platform is industry-agnostic |
-| **Lower Risk** | If one vertical fails, others may succeed |
-| **Compounding Data** | Cross-industry patterns emerge faster |
+| Area | Before (Parallel) | After (Lock-In) |
+|------|-------------------|-----------------|
+| Landing page | 4 industry pages | Single e-commerce page (/ redirects to /ecommerce) |
+| Quiz defaults | Generic | E-commerce language ("your store", "your stack") |
+| Knowledge base | Thin across 4 | Deep on 1 (16 pain points, 12 processes, 50+ vendors) |
+| Hourly rate | €35 default | €55 ecommerce default |
+| Workshop | Generic questions | E-commerce probes (returns, inventory, attribution) |
+| Expertise data | Low confidence | High confidence (23 analyses) |
 
-### Four Verticals
-
-| Vertical | Why It Could Win | Risk |
-|----------|------------------|------|
-| **Professional Services** | Compliance-focused, referral-driven, budget available | Slower sales cycles |
-| **Dental** | Clear processes, tech-forward, high-ticket services | Niche community |
-| **E-commerce** | Volume market, automation-hungry, measurable ROI | Crowded space |
-| **B2B Platforms** | Hardware-to-platform companies scaling lean, complex integrations | Niche but high-value |
-
-### Success Signals (First 90 Days)
+### Success Signals
 
 | Metric | Target | What It Tells Us |
 |--------|--------|------------------|
-| Quiz completions | 100+ per vertical | Is the message landing? |
-| Quiz → Paid conversion | >5% | Is €147 the right price? |
-| Workshop completion | >80% | Is the process working? |
-| Best vertical gap | 2x difference | Where to double down |
+| Quiz completions | 100+ | Is the e-commerce message landing? |
+| Quiz → Paid conversion | >5% | Is €147 right for e-commerce? |
+| Workshop completion | >80% | Does the e-commerce workshop flow? |
+| **"Disappointment test"** | **10+ store owners** | **Would they be massively disappointed if CRB disappeared?** |
+
+> Other verticals (dental, professional-services, b2b-platforms) remain accessible for existing sessions and bookmarks, but receive no new investment until e-commerce PMF is proven.
+
+---
+
+## Go-to-Market Engine
+
+> Source: Priestley's LAPS framework — Leads, Appointments, Presentations, Sales.
+
+The strategy has metrics, but metrics don't generate revenue — a **weekly sales rhythm** does. This is the engine that turns parallel vertical testing into actual cashflow.
+
+### The LAPS Cadence
+
+```
+LEADS → APPOINTMENTS → PRESENTATIONS → SALES
+  ↑                                        |
+  └────── Referrals + repeat ──────────────┘
+```
+
+| Step | What It Means for CRB | Weekly Target (per vertical) |
+|------|----------------------|------------------------------|
+| **Leads** | Quiz starts, landing page visits, content clicks | 50+ |
+| **Appointments** | Quiz completions (our "appointment" is the quiz) | 25+ |
+| **Presentations** | Report previews shown, workshop invites sent | 10+ |
+| **Sales** | Paid reports at €147 | 2-3 |
+
+### Weekly Rhythm
+
+| Day | Action |
+|-----|--------|
+| Monday | Review last week's LAPS numbers per vertical. What converted, what didn't? |
+| Tue-Thu | Execute: content, outreach, partnerships that generate leads |
+| Friday | Review pipeline. How many leads became appointments? Appointments became sales? |
+
+**The discipline:** Every week, same rhythm. Don't skip the tracking. Don't skip the review. The rhythm compounds — one good week teaches you what to repeat next week.
+
+### Why This Matters
+
+Most AI startups build product and wait for organic growth. The 99% who fail are the ones who skip the sales rhythm. CRB's advantage is that the **quiz IS the sales funnel** — completing it is both the appointment and the product demo. But we still need to drive leads into the top of the funnel, every single week.
 
 ---
 
@@ -307,7 +339,7 @@ These become foundation for the next thing.
 |------|--------|------------|
 | Report quality issues | Reputation damage | Human review on every report |
 | Data accuracy problems | Wrong recommendations | Source verification, confidence levels |
-| Scaling too fast | Quality drops, brand damage | Phase gates: 50 reports before next industry |
+| Scaling too fast | Quality drops, brand damage | Quality gates: 50 reports per vertical before reducing human review |
 | Scope creep | Lose focus, burn resources | Strict feature prioritization |
 
 ---
@@ -346,20 +378,21 @@ These become foundation for the next thing.
 
 | KPI | Target | Purpose |
 |-----|--------|---------|
-| Quiz completions (total) | 300+ | Validate traffic/messaging |
-| Paid reports (total) | 15+ | Prove willingness to pay |
+| Quiz completions (total) | 400+ | Validate traffic/messaging |
+| Paid reports (total) | 30+ | Real PMF requires 30-150 paying customers, not 15 |
 | Best vertical identified | Clear leader | Know where to focus |
 | Workshop completion rate | 80%+ | Validate process works |
 | NPS | 50+ | Quality baseline |
+| "Would be disappointed" users | 10+ per vertical | The PMF signal that matters most |
 
 ### Per-Vertical Tracking
 
-| Metric | Professional Services | Dental | E-commerce |
-|--------|----------------------|--------|------------|
-| Quiz starts | Track | Track | Track |
-| Quiz completions | Track | Track | Track |
-| Conversion to paid | Track | Track | Track |
-| Workshop completion | Track | Track | Track |
+| Metric | Professional Services | Dental | E-commerce | B2B Platforms |
+|--------|----------------------|--------|------------|---------------|
+| Quiz starts | Track | Track | Track | Track |
+| Quiz completions | Track | Track | Track | Track |
+| Conversion to paid | Track | Track | Track | Track |
+| Workshop completion | Track | Track | Track | Track |
 
 ### Decision Point (Day 90)
 
@@ -373,10 +406,94 @@ After 90 days, we answer:
 
 ## Before Claiming "Done"
 
-- [ ] Does it solve a professional services firm's real pain?
+- [ ] Does it solve a real pain for our target verticals?
 - [ ] Did we ship the smallest useful version first?
 - [ ] Is there a feedback mechanism built in?
 - [ ] Would we be proud to show this to a managing partner?
+
+---
+
+## Market Validation: The Adoption Gap (Feb 2026)
+
+Source: Stacked Podcast analysis — AI adoption data + practitioner sentiment.
+
+### The Numbers
+
+- **84%** of the global population has **never used AI**
+- **~16%** have used free tools (free ChatGPT, Google AI in search)
+- **0.3%** pay for AI services (~$20/mo plans)
+- **0.04%** use AI for advanced tasks like coding
+
+**Implication:** CRB's customers sit in the 84-99.96%. We're not selling to AI-native people — we're selling clarity to the overwhelmed majority. €147 is their entry point into structured AI adoption.
+
+### Validated Messaging Angles
+
+| Insight | Messaging Angle | Where to Use |
+|---------|----------------|--------------|
+| **AI made everything suboptimal** | **"AI just made every business on earth inefficient overnight. The question isn't whether to optimize — it's what to optimize first."** | **Hero copy, keynotes, thought leadership** |
+| **Easily quantifiable = easy sale** | **"We don't sell vague 'AI transformation'. We show you exactly how much you save, with which tools, in which workflows."** | **Sales conversations, objection handling** |
+| Businesses automate the wrong things | "Most businesses work hard on the wrong automation. We show you which 20% of your stack delivers 80% of the AI value." | Landing pages, quiz intro |
+| AI tool overwhelm = "tutorial hell" | "Stop evaluating AI tools. Start implementing the right ones." | Ad copy, email sequences |
+| DIY with ChatGPT is inconsistent | "Generic AI gives you genius one day, garbage the next. Our framework delivers consistent, reliable results." | Objection handling, FAQ |
+| Trust breaks instantly | "AI generates. Humans verify. One wrong recommendation erodes trust faster than ten good ones build it." | Workshop positioning, report delivery |
+| Data/distribution is the only moat | Reinforces our compounding expertise strategy — models are commodities, methodology + data is the moat | Internal strategy alignment |
+| People know what to do but don't act | "You already know AI matters. We give you the blueprint to actually do something about it." | CTA copy, follow-up emails |
+| "You're already paying for AI" | "You're already paying for AI tools. We make sure they actually work together." | Pricing page, conversion copy |
+
+### Positioning Refinement
+
+**Against DIY/ChatGPT:** Higher floor wins. CRB delivers consistent 8/10 results, not a coin flip between 10/10 and 2/10. Framework-driven analysis removes the variance.
+
+**Against traditional consulting:** 48 hours and €147 vs 6 weeks and €15K. Same rigour, AI-fulfilled, human-reviewed.
+
+**Against doing nothing:** The 0.04% stat. Your competitors who figure this out first win. The gap between "aware of AI" and "implementing AI" is where money is made — or lost.
+
+---
+
+## Long-term: Asset Formalization & Exit
+
+> Source: Priestley's 6-step entrepreneurial journey — Steps 5 & 6.
+
+Even pre-PMF, the decisions we make now shape what's acquirable later. Think about it early, execute on it later.
+
+### Formalizable Assets
+
+Every engagement compounds these assets. Track and formalize them deliberately:
+
+| Asset | Current State | Formalized State |
+|-------|---------------|------------------|
+| CRB Framework | Code + scoring logic | Registered IP, published methodology |
+| Vendor Database | JSON files, growing | Proprietary dataset with verified pricing |
+| Industry Benchmarks | Per-vertical knowledge base | Cross-industry benchmark database |
+| Case Studies | None yet | 50+ with before/after metrics |
+| Content Library | Landing pages, quiz copy | Brand book, video explainers, training materials |
+| Customer Data | Quiz responses, reports | Anonymized adoption patterns dataset |
+
+### Quality of Earnings (Shape Revenue Early)
+
+| Revenue Type | Value to Acquirer | CRB Path |
+|-------------|-------------------|----------|
+| Recurring subscription | Highest | Post-report monitoring, quarterly re-analysis |
+| Repeatable product | High | €147 reports (scalable, predictable) |
+| One-off services | Low | Avoid — workshops should lead to reports, not standalone |
+
+**Decisions this shapes now:**
+- Prioritize the €147 report as the core revenue unit (repeatable, scalable)
+- Build toward a subscription layer (quarterly re-analysis, implementation tracking)
+- Resist custom consulting engagements that don't scale
+- Track EBITDA from day one, not just revenue
+
+### Exit Thinking (Not Yet, But Shape For It)
+
+Three buyer types to keep in mind:
+
+| Buyer Type | Why They'd Want CRB | What They Value |
+|-----------|---------------------|-----------------|
+| **Strategic** | Consulting firm wanting AI-native capability | Methodology + customer base + data moat |
+| **Financial** | PE/VC wanting recurring revenue at 95% margins | Quality of earnings + growth trajectory |
+| **Trophy** | AI company wanting credibility in consulting | Brand + case studies + framework IP |
+
+**We don't need to pursue exit now.** But every decision should leave the door open: clean financials, documented IP, formalized assets, recurring revenue. Companies that build with exit hygiene from day one sell for multiples of those that scramble to formalize later.
 
 ---
 

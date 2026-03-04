@@ -1,7 +1,7 @@
-# Database & Infrastructure Reference
+# Database Reference
 
-> Load this when working on database schema, migrations, Supabase queries, or environment setup.
-> NOT here: vendor-specific tables → `vendor-management.md` | API route patterns → `api-development.md`
+> Load this when working on database schema, migrations, or Supabase queries.
+> NOT here: vendor-specific tables → `vendor-management.md` | API route patterns → `api-development.md` | env vars, deployment, infra → [INFRASTRUCTURE.md](../../INFRASTRUCTURE.md)
 
 ---
 
@@ -79,51 +79,6 @@ supabase db push --linked
 
 ---
 
-## Environment Variables
+## Environment Variables & Debugging
 
-```bash
-# Backend (required)
-SUPABASE_URL=
-SUPABASE_SERVICE_KEY=
-SECRET_KEY=
-ANTHROPIC_API_KEY=
-STRIPE_SECRET_KEY=
-STRIPE_WEBHOOK_SECRET=
-
-# Backend (optional)
-REDIS_URL=redis://localhost:6379
-BRAVE_API_KEY=              # Web search
-TAVILY_API_KEY=             # Alternative search
-BREVO_API_KEY=              # Email service
-OPENAI_API_KEY=             # For embeddings/GPT
-GOOGLE_AI_API_KEY=          # Gemini models
-DEEPSEEK_API_KEY=           # Budget model option
-LOGFIRE_TOKEN=              # Observability
-
-# Frontend
-VITE_API_BASE_URL=http://localhost:8383
-VITE_STRIPE_PUBLISHABLE_KEY=
-```
-
----
-
-## Debugging
-
-```bash
-# Verbose backend logs
-uvicorn src.main:app --reload --port 8383 --log-level debug
-
-# Check Redis
-redis-cli KEYS "*"
-redis-cli GET "key_name"
-
-# Supabase logs
-# Check dashboard: https://app.supabase.com/project/_/logs
-```
-
-| Issue | Check |
-|-------|-------|
-| Auth failing | JWT token expiry, Supabase config, RLS policies |
-| Stream not updating | SSE connection, CORS headers, nginx buffering |
-| Report failing | Claude API key, tool errors in logs, rate limits |
-| Payment failing | Stripe keys (test vs live), webhook URL, event types |
+> See [INFRASTRUCTURE.md](../../INFRASTRUCTURE.md) for full env var reference, health checks, and operational runbook.

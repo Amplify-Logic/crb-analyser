@@ -1,6 +1,6 @@
 # CRB Analyser - Development Guide
 
-> **Domain concepts** → [PRODUCT.md](./PRODUCT.md) | **Business strategy** → [STRATEGY.md](./STRATEGY.md)
+> **Domain concepts** → [PRODUCT.md](./PRODUCT.md) | **Business strategy** → [STRATEGY.md](./STRATEGY.md) | **Infrastructure** → [INFRASTRUCTURE.md](./INFRASTRUCTURE.md)
 
 ---
 
@@ -33,7 +33,7 @@ Load ONLY when working on the relevant task type:
 | Report generation, findings | `.claude/reference/report-quality.md` |
 | Vendor database, research agents | `.claude/reference/vendor-management.md` |
 | Writing or fixing tests | `.claude/reference/testing.md` |
-| Database, migrations, env vars | `.claude/reference/database.md` |
+| Database, migrations, env vars | `.claude/reference/database.md` + [INFRASTRUCTURE.md](./INFRASTRUCTURE.md) |
 | Skills system, agent tools | `.claude/reference/skills.md` |
 | Knowledge base, curated insights | `.claude/reference/knowledge-base.md` |
 | Browser automation, Cowork, Bowser QA | `.claude/reference/computer-use.md` |

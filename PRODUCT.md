@@ -30,7 +30,7 @@ We don't just list software recommendations. Our CRB framework analyzes your exi
 
 ## Messaging Pillars
 
-Our value proposition centers on four key themes for professional services:
+Our value proposition centers on four key themes:
 
 ### 1. Compliance & Risk Management
 > "Make AI decisions with the same rigor you apply to client work."
@@ -52,9 +52,10 @@ Our value proposition centers on four key themes for professional services:
 > "From confusion to clarity in 48 hours, not 6 weeks."
 
 - Enterprise-quality analysis at a fraction of consulting costs
-- Clear verdicts: Proceed, Wait, or Skip
-- Three Options model removes analysis paralysis
+- Clear verdicts: Connect, Enhance, Replace, or Add
+- AIOS Options model removes analysis paralysis
 - Specific tools, prices, and implementation steps
+- Breaks "AI tool hell" — stop evaluating, start implementing
 
 ### 4. Competitive Positioning
 > "Your competitors are adopting AI. Know which tools give real advantage."
@@ -63,6 +64,7 @@ Our value proposition centers on four key themes for professional services:
 - Benchmarks against similar firms
 - Strategic recommendations tied to business goals
 - Clear differentiation opportunities
+- 84% of people have never used AI — early movers in your industry win disproportionately
 
 ---
 
@@ -74,7 +76,8 @@ Every recommendation presents options prioritized by implementation speed and di
 |----------|--------|-------------------|---------|
 | 1st | **Connect & Automate** | Tool works, just needs wiring | "Keep HubSpot + Exact, build Claude workflow to sync deals → invoices" |
 | 2nd | **Enhance with AI** | Need intelligence on top of existing data | "Build an AI agent that monitors IoT usage data and flags churn risk" |
-| 3rd | **Targeted Upgrade** | Tool is a dead end — no API, fundamentally broken | "Migrate from spreadsheets to Odoo for inventory tracking" |
+| 3rd | **Add to Stack** | Gap where no tool exists | "Add Klaviyo for email automation — nothing in your stack covers this" |
+| 4th | **Targeted Upgrade** | Tool is a dead end — no API, fundamentally broken | "Migrate from spreadsheets to Odoo for inventory tracking" |
 
 **Connect-first philosophy:** We never recommend replacing software unless the existing tool genuinely cannot be integrated (no API, fundamentally broken, blocking growth). Most businesses can get 80% of the value by connecting what they have.
 
@@ -125,145 +128,69 @@ Every estimate carries a confidence level that adjusts the reported value:
 
 ---
 
-## Target Industries
+## Target Industry: E-commerce
 
-### Parallel Launch Strategy
+### E-commerce Lock-In
 
-> **Same platform. Same price. Same framework. Different landing pages.**
-> Let the market tell us which vertical converts best.
+> **One vertical. Deep expertise. Win the niche before expanding.**
 
-We launch all three verticals simultaneously with:
-- Shared CRB analysis engine
-- Vertical-specific knowledge bases
-- Industry-tailored landing pages and messaging
-- Common €147 price point
+We focus exclusively on e-commerce with:
+- Deep ecommerce knowledge base (16 pain points, 12 processes, 50+ vendor entries)
+- EU-focused tooling: Mollie, Sendcloud, Channable, Picqer, Bol.com integrations
+- Industry-specific landing page, quiz copy, and workshop questions
+- €147 price point for full CRB report
 
----
-
-### Vertical 1: Professional Services
-
-**Slug:** `professional-services`
-
-**Customer Profile:**
-- Partners/principals who make technology decisions
-- Compliance-aware (understand risk, value documentation)
-- Time-pressured (billable hours matter)
-- Mid-market sweet spot (€500K - €20M revenue)
-
-**Segments:** Accounting, Legal, Consulting, Architecture/Engineering, Financial Advisory
-
-**Key Pain Points:**
-| Pain Point | Impact |
-|------------|--------|
-| Client Onboarding | 3-5 hours per client in manual intake |
-| Time Tracking | 10-20% revenue leakage from unbilled work |
-| Document Management | Version chaos, compliance gaps |
-| Client Communication | Update requests eat billable time |
-
-**Software Ecosystem:**
-| Category | Key Vendors |
-|----------|-------------|
-| Practice Management | Clio, Karbon, Practice Ignition, Canopy |
-| Time & Billing | Harvest, Toggl, FreshBooks, Xero |
-| Automation | n8n, Make, Zapier |
-| AI Tools | Claude, ChatGPT, Harvey (legal) |
+**Why e-commerce first:**
+- Measurable ROI — store owners can track the impact of every automation
+- Volume market — millions of Shopify/WooCommerce stores globally
+- Automation-hungry — most operations are repetitive and rule-based
+- EU advantage — our deep knowledge of EU tools and regulations is a moat
 
 ---
 
-### Vertical 2: Dental Practices
-
-**Slug:** `dental`
-
-**Customer Profile:**
-- Practice owners and office managers
-- Solo practices, group practices, DSOs
-- Already using practice management software
-- High-ticket services support tool investment
-
-**Key Pain Points:**
-| Pain Point | Impact |
-|------------|--------|
-| Patient Recall | No-shows cost €200-500 per missed appointment |
-| Insurance Verification | 15-30 min per patient, delays treatment |
-| Treatment Planning | Manual case presentation, low acceptance rates |
-| No-Show Management | 10-15% no-show rate typical |
-
-**Software Ecosystem:**
-| Category | Key Vendors |
-|----------|-------------|
-| Practice Management | Dentrix, Open Dental, Curve Dental, Eaglesoft |
-| Patient Communication | Weave, RevenueWell, Lighthouse 360 |
-| Insurance | Vyne Dental, DentalXChange |
-| AI Tools | Pearl, Overjet, VideaHealth |
-
----
-
-### Vertical 3: E-commerce
+### Customer Profile
 
 **Slug:** `ecommerce`
 
-**Customer Profile:**
 - DTC brands, marketplace sellers, B2B wholesale
 - €500K - €10M annual revenue
-- Already on Shopify/WooCommerce
+- Already on Shopify/WooCommerce/Magento
 - Scaling operations, feeling pain
+- EU-based or EU-selling (our primary strength)
 
-**Key Pain Points:**
-| Pain Point | Impact |
-|------------|--------|
-| Customer Support | Repetitive queries consume 40%+ of support time |
-| Inventory Forecasting | Stockouts and overstock eat margins |
-| Returns Processing | Manual handling costs €5-15 per return |
-| Marketing Attribution | Can't tell what's working |
+### Key Pain Points
 
-**Software Ecosystem:**
+| Pain Point | Impact | Frequency |
+|------------|--------|-----------|
+| Customer Support | Repetitive queries consume 40%+ of support time | Very high |
+| Abandoned Carts | 70% average abandonment rate | Very high |
+| Returns Processing | Manual handling costs €5-15 per return | High |
+| Inventory Forecasting | Stockouts and overstock eat margins | High |
+| Marketing Attribution | Can't tell what's working post-iOS | High |
+| Multi-channel Sync | Inconsistent inventory/pricing across channels | Medium-high |
+| EU Compliance | AI Act, DSA, EAA, GDPR, VAT complexity | Medium-high |
+
+### Software Ecosystem
+
 | Category | Key Vendors |
 |----------|-------------|
-| Platform | Shopify, WooCommerce, BigCommerce |
-| Customer Support | Gorgias, Zendesk, Intercom |
-| Email/SMS | Klaviyo, Omnisend, Postscript |
-| Analytics | Triple Whale, Northbeam, Lifetimely |
-
----
-
-### Vertical 4: B2B Platforms
-
-**Slug:** `b2b-platforms`
-
-**Customer Profile:**
-- Hardware-to-platform companies (IoT devices, connected products, subscription hardware)
-- 20-200 employees, scaling rapidly with lean teams
-- Complex stacks: custom IoT + ERP + CRM + field service
-- Already AI-forward, looking for architecture help at scale
-
-**Key Pain Points:**
-| Pain Point | Impact |
-|------------|--------|
-| System Integration Gaps | Manual data sync between CRM, ERP, IoT, billing |
-| Scaling Operations | Processes that worked at 20 people break at 100 |
-| Partner Channel Management | Onboarding and managing distributors across countries |
-| Field Service Coordination | Scheduling, parts, technician routing at scale |
-
-**Software Ecosystem:**
-| Category | Key Vendors |
-|----------|-------------|
-| IoT Platform | Azure IoT Hub, AWS IoT Core, custom |
-| ERP | Exact Online, NetSuite, Odoo |
-| CRM | HubSpot, Salesforce |
-| Field Service | Salesforce FSL, ServiceMax, Zuper |
-| Subscription Billing | Chargebee, Zuora, Stripe Billing |
-| Partner Management | Impartner, PartnerStack |
-
----
+| Platform | Shopify, WooCommerce, BigCommerce, Magento |
+| Customer Support | Gorgias, Tidio, Zendesk |
+| Email/SMS | Klaviyo, Omnisend |
+| Payments | Mollie (EU), Stripe, Adyen |
+| Shipping | Sendcloud, ShipStation, Monta |
+| Feed Management | Channable, ChannelEngine |
+| Returns | Loop Returns, ReturnGO |
+| Analytics | Triple Whale, Lifetimely, Polar Analytics |
 
 ### Launch Markets
 
-| Market | Currency | Priority Verticals |
-|--------|----------|-------------------|
-| Netherlands | EUR | Professional Services, E-commerce |
-| UK | GBP | All three |
-| Australia | AUD | Dental, Professional Services |
-| USA | USD | E-commerce, Dental |
+| Market | Currency | Notes |
+|--------|----------|-------|
+| Netherlands | EUR | Home market, deepest knowledge |
+| DACH (DE/AT/CH) | EUR | Largest EU e-commerce market |
+| UK | GBP | Strong Shopify penetration |
+| Nordics | EUR/SEK/DKK/NOK | High digital adoption |
 
 ---
 
@@ -279,14 +206,14 @@ backend/src/knowledge/
 │   └── ...
 ├── ai_tools/
 │   └── llm_providers.json  # Claude, GPT pricing
-├── professional-services/  # Phase 1 industry data
+├── professional-services/  # Industry data
 │   ├── processes.json      # Common workflows
 │   ├── opportunities.json  # AI automation opportunities
 │   ├── benchmarks.json     # Industry metrics
 │   └── vendors.json        # Relevant software
-├── dental/                 # Phase 2 (build when entering)
+├── dental/                 # Industry data
 │   └── ...
-├── ecommerce/              # Phase 3 (build when entering)
+├── ecommerce/              # Industry data
 │   └── ...
 └── patterns/
     └── ai_implementation_playbook.json
@@ -420,7 +347,7 @@ Report Delivery (24-48 hours)
 ### The Promise
 - You get an architecture blueprint specific to YOUR stack
 - No generic "buy this tool" advice — we show what to build and connect
-- Clear verdicts: Connect, Enhance, or Replace
+- Clear verdicts: Connect, Enhance, Replace, or Add
 - Enterprise-quality analysis at €147, not €15,000
 
 ### What We're NOT
@@ -432,9 +359,9 @@ Report Delivery (24-48 hours)
 
 ## Report Structure
 
-Executive Summary → Detailed Findings (3-5) → Implementation Roadmap → Appendices
+Executive Summary → Strategic Overview → Findings → Recommendations (with AIOS Options + CRB Analysis) → Implementation Roadmap → Appendix
 
-Each finding includes: Problem Statement, Opportunity, Three Options with CRB Analysis, Verdict, and Implementation Path.
+Each recommendation includes: Problem Statement, Opportunity, AIOS Options (Connect/Enhance/Add/Replace) with CRB Analysis, NET SCORE, Verdict, and Implementation Path.
 
 > **Full report structure with CRB table format** → [FRAMEWORK.md](./FRAMEWORK.md#report-structure)
 
