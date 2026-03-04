@@ -44,10 +44,10 @@ function DevModeTestGenerator({ navigate }: DevModeTestGeneratorProps) {
       : testCompanies[Math.floor(Math.random() * testCompanies.length)]
     setSelectedCompany(testCompany)
 
-    // Get industry-specific test data
-    const industryData = industryTestData[testCompany.industry]
+    // Get subtype-specific test data
+    const industryData = industryTestData[testCompany.subtype]
     if (!industryData) {
-      setError(`No test data configured for industry: ${testCompany.industry}`)
+      setError(`No test data configured for subtype: ${testCompany.subtype}`)
       setIsGenerating(false)
       return
     }
@@ -202,7 +202,7 @@ function DevModeTestGenerator({ navigate }: DevModeTestGeneratorProps) {
           {selectedCompany && (
             <div className="mb-4">
               <h3 className="text-lg font-bold text-gray-900">{selectedCompany.name}</h3>
-              <p className="text-sm text-gray-500 capitalize">{selectedCompany.industry.replace('-', ' ')}</p>
+              <p className="text-sm text-gray-500 capitalize">{selectedCompany.subtype.replace('ecommerce-', 'E-commerce: ')}</p>
             </div>
           )}
 
