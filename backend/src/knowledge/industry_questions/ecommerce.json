@@ -165,6 +165,23 @@
       "tags": ["staffing", "scale"]
     },
     {
+      "id": "average_team_cost",
+      "question": "What's the approximate average hourly cost of your team (including yourself)?",
+      "input_type": "select",
+      "options": [
+        {"value": "under_25", "label": "Under \u20ac25/hr"},
+        {"value": "25_50", "label": "\u20ac25-50/hr"},
+        {"value": "50_75", "label": "\u20ac50-75/hr"},
+        {"value": "75_100", "label": "\u20ac75-100/hr"},
+        {"value": "over_100", "label": "Over \u20ac100/hr"},
+        {"value": "not_sure", "label": "Not sure"}
+      ],
+      "target_categories": ["quantifiable_metrics", "company_basics"],
+      "expected_boosts": {"quantifiable_metrics": 15, "company_basics": 10},
+      "priority": 2,
+      "tags": ["cost", "hourly_rate"]
+    },
+    {
       "id": "inventory_management",
       "question": "How do you currently manage your inventory?",
       "input_type": "select",

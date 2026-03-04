@@ -1,7 +1,7 @@
 {
   "industry": "dental",
-  "last_updated": "2026-02-24T12:00:00Z",
-  "total_analyses": 7,
+  "last_updated": "2026-02-27T23:48:49.241235",
+  "total_analyses": 9,
   "confidence": "medium",
   "pain_points": {
     "patient_no_shows": {
@@ -493,13 +493,13 @@
       ]
     },
     "unknown": {
-      "count": 2,
-      "avg_readiness": 60.0,
+      "count": 4,
+      "avg_readiness": 58.25,
       "common_pain_points": []
     }
   },
-  "avg_ai_readiness": 62.57142857142857,
-  "avg_potential_savings": 481428.5714285714,
+  "avg_ai_readiness": 61.22222222222222,
+  "avg_potential_savings": 577981.4444444445,
   "common_tech_stacks": [
     "dentrix",
     "eaglesoft",

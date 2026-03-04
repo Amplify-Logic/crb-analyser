@@ -595,6 +595,314 @@
       },
       "our_recommendation": "connect_and_automate",
       "recommendation_rationale": "Your Notion + Slack already contain the knowledge. A Claude workflow extracting and structuring it is the fastest path to scalable onboarding."
+    },
+    {
+      "id": "ai-churn-prediction",
+      "name": "AI-Powered Churn Prediction",
+      "description": "Machine learning model that analyzes usage patterns, support interactions, and engagement signals to predict which accounts will churn 60-90 days before it happens",
+      "category": "strategic",
+      "impact": {
+        "value_saved": {
+          "time_hours_per_week": 6,
+          "description": "Proactive intervention replaces reactive account recovery"
+        },
+        "value_created": {
+          "description": "Save at-risk accounts before they churn, protect ARR",
+          "potential_revenue_impact": "Saving 3-5 accounts per quarter at €5,000+ ARR each"
+        }
+      },
+      "customer_value_score": 9,
+      "business_health_score": 10,
+      "implementation": {
+        "complexity": "medium",
+        "timeline_weeks": 4,
+        "required_data": ["Device usage data (6+ months)", "Support ticket history", "Billing and contract data", "Customer engagement signals"]
+      },
+      "options": {
+        "connect_and_automate": {
+          "approach": "Build a Claude workflow that aggregates usage trends, support tickets, login frequency, and billing data to generate a weekly churn risk scorecard with specific intervention recommendations per account",
+          "build_time": "16-24 hours",
+          "tools_used": ["Claude Code", "IoT data API", "CRM API", "Support tool API"],
+          "mcp_servers": [],
+          "monthly_cost": "EUR 100-200 (API usage)",
+          "pros": ["Uses your rich IoT data as primary signal", "Custom scoring for your business model", "Actionable recommendations, not just scores"],
+          "cons": ["Rule-based initially, improves with feedback", "Needs threshold tuning over first month"]
+        },
+        "enhance_with_ai": {
+          "approach": "Deploy predictive ML model trained on your historical churn data that scores accounts in real-time and triggers automated CS playbooks",
+          "build_time": "4-6 weeks",
+          "tools_used": ["Claude API", "IoT platform", "CS platform"],
+          "monthly_cost": "EUR 300-600",
+          "pros": ["Learns from actual churn events", "Real-time scoring", "Automated interventions"],
+          "cons": ["Needs 12+ months of churn history for training", "Takes 2-3 months to calibrate"]
+        },
+        "targeted_upgrade": {
+          "when_needed": "Only if you have no usage data pipeline or CS is completely manual",
+          "tools": ["Gainsight", "Vitally", "Planhat"],
+          "cost_range": "EUR 500-2000/month",
+          "migration_time": "4-8 weeks",
+          "pros": ["Purpose-built CS platform", "Health scoring included", "Playbook engine"],
+          "cons": ["High cost", "May not handle IoT data natively", "Generic models"]
+        }
+      },
+      "our_recommendation": "connect_and_automate",
+      "recommendation_rationale": "Your IoT usage data is the single strongest churn predictor — a usage drop of 30%+ over 2 weeks predicts churn with 80%+ accuracy. A Claude workflow connecting this signal to CS actions ships in days.",
+      "roi_example": {
+        "scenario": "B2B platform with 200 customers, 12% annual churn, €8,000 average ARR",
+        "cost": "EUR 150/month (API usage)",
+        "value_created": "Identify and save at-risk accounts before they churn",
+        "roi_analysis": {
+          "conservative": {"roi_percentage": 1000, "payback_months": 1, "note": "Save 2 accounts/quarter"},
+          "expected": {"roi_percentage": 2000, "payback_months": 1, "note": "Save 4 accounts/quarter"},
+          "optimistic": {"roi_percentage": 3000, "payback_months": 1, "note": "Save 6 accounts/quarter + reduce overall churn 30%"}
+        },
+        "assumptions": "Not all flagged accounts can be saved; intervention success rate typically 30-50%; requires CS team follow-through"
+      }
+    },
+    {
+      "id": "automated-partner-onboarding",
+      "name": "Automated Partner Onboarding",
+      "description": "Self-serve partner setup with guided configuration, automated training, and milestone tracking that reduces time-to-first-install",
+      "category": "efficiency",
+      "impact": {
+        "value_saved": {
+          "time_hours_per_week": 12,
+          "description": "Eliminates manual partner setup, training coordination, and progress tracking"
+        },
+        "value_created": {
+          "description": "Faster partner activation, consistent onboarding experience, scalable channel growth",
+          "potential_revenue_impact": "40-60% reduction in time from partner signing to first installation"
+        }
+      },
+      "customer_value_score": 8,
+      "business_health_score": 9,
+      "implementation": {
+        "complexity": "medium",
+        "timeline_weeks": 4,
+        "required_data": ["Partner onboarding checklist", "Training materials", "System access provisioning steps", "Certification requirements"]
+      },
+      "options": {
+        "connect_and_automate": {
+          "approach": "Build an onboarding automation with Claude Code that creates partner accounts, provisions system access, delivers training modules in sequence, tracks completion, and escalates blockers automatically",
+          "build_time": "20-30 hours",
+          "tools_used": ["Claude Code", "Partner portal API", "LMS/training platform", "CRM API"],
+          "mcp_servers": [],
+          "monthly_cost": "EUR 100-200 (API usage)",
+          "pros": ["Custom to your partner types", "Automated milestone tracking", "Self-serve reduces internal load"],
+          "cons": ["Requires well-documented onboarding process", "Needs training content created upfront"]
+        },
+        "enhance_with_ai": {
+          "approach": "Deploy AI onboarding assistant that adapts the onboarding path based on partner type, provides contextual help, and predicts which partners need extra support",
+          "build_time": "4-6 weeks",
+          "tools_used": ["Claude API", "Partner portal", "Analytics"],
+          "monthly_cost": "EUR 300-500",
+          "pros": ["Adaptive onboarding paths", "Predictive support needs", "Partner satisfaction scoring"],
+          "cons": ["More complex setup", "Needs historical partner performance data"]
+        },
+        "targeted_upgrade": {
+          "when_needed": "Only if you have no partner portal or onboarding is entirely manual with no documentation",
+          "tools": ["Impartner", "PartnerStack", "Salesforce PRM"],
+          "cost_range": "EUR 1000-3000/month",
+          "migration_time": "8-12 weeks",
+          "pros": ["Enterprise PRM platform", "Built-in onboarding workflows", "Analytics"],
+          "cons": ["Very high cost", "Long implementation", "May not fit your custom workflows"]
+        }
+      },
+      "our_recommendation": "connect_and_automate",
+      "recommendation_rationale": "You already have a partner portal. Automating the onboarding steps (account provisioning, training delivery, certification tracking) on top of it scales your partner channel without adding operations headcount."
+    },
+    {
+      "id": "ai-documentation-knowledge-base",
+      "name": "AI Documentation & Knowledge Base",
+      "description": "Auto-generate and maintain API documentation, partner guides, and contextual help from codebase and support interactions",
+      "category": "efficiency",
+      "impact": {
+        "value_saved": {
+          "time_hours_per_week": 8,
+          "description": "Eliminates manual documentation writing and reduces repetitive support questions"
+        },
+        "value_created": {
+          "description": "Always-current documentation, fewer support tickets, better developer experience",
+          "potential_revenue_impact": "20-30% reduction in support tickets related to 'how-to' questions"
+        }
+      },
+      "customer_value_score": 8,
+      "business_health_score": 8,
+      "implementation": {
+        "complexity": "low",
+        "timeline_weeks": 2,
+        "required_data": ["API codebase", "Existing documentation", "Support ticket history", "FAQ data"]
+      },
+      "options": {
+        "connect_and_automate": {
+          "approach": "Build a Claude workflow that reads your API codebase, generates documentation, cross-references support tickets for common issues, and auto-updates docs when code changes",
+          "build_time": "8-12 hours",
+          "tools_used": ["Claude Code", "GitHub API", "Support tool API"],
+          "mcp_servers": [],
+          "monthly_cost": "EUR 50-100 (API usage)",
+          "pros": ["Always in sync with codebase", "Learns from support tickets", "Low cost"],
+          "cons": ["Generated docs need human review", "Complex edge cases may be missed"]
+        },
+        "enhance_with_ai": {
+          "approach": "Deploy AI knowledge base with conversational search, auto-categorization of support content, and proactive documentation gap detection",
+          "build_time": "3-4 weeks",
+          "tools_used": ["Claude API", "Knowledge base platform", "Support tool"],
+          "monthly_cost": "EUR 200-400",
+          "pros": ["Conversational search", "Auto-categorization", "Gap detection"],
+          "cons": ["Needs initial knowledge seeding", "More complex deployment"]
+        },
+        "targeted_upgrade": {
+          "when_needed": "Only if you have no existing documentation platform or knowledge base",
+          "tools": ["GitBook", "ReadMe", "Mintlify"],
+          "cost_range": "EUR 100-500/month",
+          "migration_time": "2-4 weeks",
+          "pros": ["Beautiful API docs", "Developer portal", "Analytics"],
+          "cons": ["Still needs content creation", "Separate from codebase"]
+        }
+      },
+      "our_recommendation": "connect_and_automate",
+      "recommendation_rationale": "Your API codebase is the source of truth. A Claude workflow generating docs from code and cross-referencing support tickets ensures documentation stays current without manual effort."
+    },
+    {
+      "id": "revenue-analytics-forecasting",
+      "name": "Revenue Analytics & Forecasting",
+      "description": "AI-powered MRR prediction, cohort analysis, and revenue attribution across channels with automated reporting",
+      "category": "strategic",
+      "impact": {
+        "value_saved": {
+          "time_hours_per_week": 8,
+          "description": "Replaces manual spreadsheet modeling and report compilation"
+        },
+        "value_created": {
+          "description": "Accurate revenue forecasts, data-driven pricing decisions, investor-ready metrics",
+          "potential_revenue_impact": "3-5% revenue uplift from data-driven pricing and churn prevention"
+        }
+      },
+      "customer_value_score": 7,
+      "business_health_score": 9,
+      "implementation": {
+        "complexity": "medium",
+        "timeline_weeks": 3,
+        "required_data": ["Billing and subscription data", "Customer acquisition data", "Usage data per account"]
+      },
+      "options": {
+        "connect_and_automate": {
+          "approach": "Build a Claude workflow that aggregates billing, usage, and CRM data to generate MRR waterfall charts, cohort retention analysis, and revenue forecasts with confidence intervals",
+          "build_time": "16-20 hours",
+          "tools_used": ["Claude Code", "ERP/billing API", "CRM API", "IoT data API"],
+          "mcp_servers": [],
+          "monthly_cost": "EUR 100-200 (API usage)",
+          "pros": ["Custom to your revenue model", "Includes IoT usage data", "Investor-ready output"],
+          "cons": ["Needs clean billing data", "Forecasting accuracy improves over time"]
+        },
+        "enhance_with_ai": {
+          "approach": "Deploy AI revenue intelligence platform with predictive forecasting, scenario modeling, and automated board reporting",
+          "build_time": "4-6 weeks",
+          "tools_used": ["Claude API", "Revenue platform", "BI tools"],
+          "monthly_cost": "EUR 400-800",
+          "pros": ["Predictive scenario modeling", "Board-ready dashboards", "Benchmarking"],
+          "cons": ["Higher cost", "Complex setup", "Needs data integration"]
+        },
+        "targeted_upgrade": {
+          "when_needed": "Only if you need enterprise-grade revenue analytics with team collaboration and audit trails",
+          "tools": ["ChartMogul", "Baremetrics", "ProfitWell (Paddle)"],
+          "cost_range": "EUR 200-1000/month",
+          "migration_time": "2-4 weeks",
+          "pros": ["Subscription analytics purpose-built", "Beautiful dashboards", "Benchmarking"],
+          "cons": ["May not handle usage-based billing natively", "Cost scales with MRR"]
+        }
+      },
+      "our_recommendation": "connect_and_automate",
+      "recommendation_rationale": "Your billing, CRM, and IoT data combined give you richer revenue insights than any generic SaaS analytics tool. A Claude workflow connecting these sources generates investor-ready forecasts that account for your unique hybrid model."
+    }
+  ],
+  "anti_patterns": [
+    {
+      "id": "enterprise-platform-early",
+      "name": "Enterprise PRM/CRM Before Product-Market Fit",
+      "why_avoid": "Salesforce/ServiceNow implementations take 3-6 months and €50K+; premature for <200 customers",
+      "what_instead": "Use HubSpot + custom workflows until you have repeatable sales motion, then evaluate enterprise tools"
+    },
+    {
+      "id": "rebuild-vs-integrate",
+      "name": "Rebuilding Instead of Integrating",
+      "why_avoid": "B2B platforms often want to build everything in-house; custom CRM, custom billing, custom analytics. This fragments focus.",
+      "what_instead": "Integrate best-of-breed tools (HubSpot, Stripe, etc.) with your core platform via API. Build only what's truly differentiated."
+    },
+    {
+      "id": "ai-before-data-pipeline",
+      "name": "Deploying AI Without Clean Data Pipeline",
+      "why_avoid": "AI/ML models are only as good as the data feeding them. Many B2B platforms have fragmented data across IoT platform, CRM, and ERP.",
+      "what_instead": "First establish reliable data sync between systems (Step 1: cross-system sync), then layer AI on clean, unified data."
+    }
+  ],
+  "quick_wins": [
+    {
+      "name": "Automate deal-to-invoice pipeline",
+      "time_to_implement": "1-2 weeks",
+      "cost": "EUR 100-200/month (API usage)",
+      "impact": "Eliminate 15+ hours/week of manual data sync"
+    },
+    {
+      "name": "Set up IoT usage-based churn alerts",
+      "time_to_implement": "2-3 days",
+      "cost": "EUR 50-100/month",
+      "impact": "Catch at-risk accounts 60-90 days before churn"
+    },
+    {
+      "name": "Create partner performance dashboard",
+      "time_to_implement": "3-5 days",
+      "cost": "EUR 50-100/month",
+      "impact": "Data-driven partner management, identify underperformers"
+    },
+    {
+      "name": "Deploy automated CS playbooks",
+      "time_to_implement": "1-2 weeks",
+      "cost": "EUR 100-200/month",
+      "impact": "Systematic CS at scale — low usage nudges, high usage upsells"
+    }
+  ],
+  "implementation_sequence": [
+    {
+      "phase": 1,
+      "name": "Data Foundation",
+      "opportunities": ["cross-system-sync-engine", "usage-billing-automation"],
+      "rationale": "Clean data flow between systems is the foundation for everything else — fix this first"
+    },
+    {
+      "phase": 2,
+      "name": "Revenue Protection",
+      "opportunities": ["predictive-churn-detection", "ai-churn-prediction", "automated-cs-playbooks"],
+      "rationale": "Protect existing revenue before investing in growth"
+    },
+    {
+      "phase": 3,
+      "name": "Channel Scale",
+      "opportunities": ["automated-installation-onboarding", "automated-partner-onboarding", "self-service-partner-portal", "partner-performance-dashboard"],
+      "rationale": "Scale partner channel with automation once core data and CS are solid"
+    },
+    {
+      "phase": 4,
+      "name": "Intelligence Layer",
+      "opportunities": ["bundle-optimization-intelligence", "revenue-analytics-forecasting", "ai-documentation-knowledge-base", "institutional-knowledge-capture"],
+      "rationale": "Strategic AI that multiplies value of earlier improvements"
+    }
+  ],
+  "not_recommended": [
+    {
+      "name": "Custom CRM for B2B platform sales",
+      "reason": "HubSpot handles B2B deal flow well; custom CRM is a 6-month project that fragments focus from core product",
+      "alternative": "Use HubSpot with custom properties and API integrations"
+    },
+    {
+      "name": "Enterprise CS platform before 200 customers",
+      "reason": "Gainsight/Vitally are €500-2000/month and require significant setup; overkill for early-stage",
+      "alternative": "Build Claude workflows on top of CRM for CS playbooks until you hit 200+ customers"
+    },
+    {
+      "name": "Building custom analytics/BI from scratch",
+      "reason": "Custom dashboarding is a maintenance burden; better to use tools that exist",
+      "alternative": "Use Claude workflows for automated reports, Metabase/Superset for ad-hoc analysis"
     }
   ]
 }

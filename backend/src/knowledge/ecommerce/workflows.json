@@ -1,101 +1,292 @@
 {
   "industry": "ecommerce",
-  "description": "Pre-built AI workflow templates for e-commerce businesses",
+  "last_updated": "2026-03",
+  "description": "Pre-built AI workflow templates for e-commerce businesses. Includes Shopify, WooCommerce, and platform-agnostic variants.",
   "workflows": [
     {
       "id": "order-status-automation",
       "name": "Order Status Auto-Response",
-      "description": "Connect Shopify order data to support tool — auto-respond to WISMO queries",
+      "description": "Connect store order data to support tool — auto-respond to WISMO (Where Is My Order) queries",
       "trigger": "Customer asks 'where is my order'",
-      "connects": ["shopify", "support_tool"],
-      "mcp_servers": ["shopify-mcp"],
+      "connects": ["ecommerce_platform", "support_tool"],
+      "platform_variants": {
+        "shopify": {"mcp_servers": ["shopify-mcp"], "integration": "Shopify API via MCP"},
+        "woocommerce": {"mcp_servers": ["woocommerce-api"], "integration": "WooCommerce REST API"},
+        "platform_agnostic": {"integration": "Any platform with order API access"}
+      },
       "build_time_hours": 4,
       "complexity": "low",
       "steps": [
-        "Pull order status from Shopify API using order ID or email",
+        "Pull order status from store API using order ID or email",
+        "Fetch tracking info from carrier API (via Sendcloud/ShipStation if available)",
         "Format tracking info into customer-friendly response",
         "Auto-reply via support tool API or email",
         "Log interaction for CS team visibility"
       ],
-      "prerequisites": ["Shopify store with API access", "Support tool with API (Gorgias, Zendesk, or email)"],
-      "estimated_monthly_value": 800
+      "prerequisites": ["E-commerce store with API access", "Support tool with API (Gorgias, Zendesk, Tidio, or email)"],
+      "estimated_monthly_value": 800,
+      "eu_note": "Must disclose AI interaction per EU AI Act (effective Aug 2026)"
     },
     {
       "id": "inventory-alert-reorder",
-      "name": "Smart Inventory Alert & Reorder",
-      "description": "Monitor stock levels and trigger reorder workflows when thresholds are hit",
+      "name": "Smart Inventory Alert & Auto-Reorder",
+      "description": "Monitor stock levels, trigger reorder workflows when thresholds are hit, and auto-generate purchase orders",
       "trigger": "Stock level drops below threshold for any SKU",
-      "connects": ["shopify", "supplier_portal", "slack"],
-      "mcp_servers": ["shopify-mcp"],
+      "connects": ["ecommerce_platform", "supplier_portal", "slack"],
+      "platform_variants": {
+        "shopify": {"mcp_servers": ["shopify-mcp"], "integration": "Shopify Inventory API"},
+        "woocommerce": {"mcp_servers": ["woocommerce-api"], "integration": "WooCommerce Stock Management API"},
+        "platform_agnostic": {"integration": "Any platform with inventory API + Picqer/Cin7 for WMS"}
+      },
       "build_time_hours": 6,
       "complexity": "low",
       "steps": [
-        "Monitor Shopify inventory levels via API polling",
+        "Monitor inventory levels via API polling or webhooks",
         "Detect SKUs below reorder threshold",
-        "Calculate optimal reorder quantity from sales velocity",
-        "Send reorder request to supplier or alert to Slack",
-        "Update inventory forecast dashboard"
+        "Calculate optimal reorder quantity from sales velocity and lead times",
+        "Auto-generate purchase order (or send reorder request to supplier/Slack)",
+        "Update inventory forecast dashboard",
+        "For multi-warehouse: optimize allocation across EU fulfillment centers"
       ],
-      "prerequisites": ["Shopify store", "Defined reorder thresholds per SKU"],
+      "prerequisites": ["E-commerce store", "Defined reorder thresholds per SKU", "Supplier contact info or portal"],
       "estimated_monthly_value": 1200
     },
     {
       "id": "return-processing-automation",
-      "name": "Automated Return Processing",
-      "description": "Customer submits return → AI evaluates policy → auto-approve or flag for review",
+      "name": "Automated Return Processing with Exchange-First Logic",
+      "description": "Customer submits return → AI evaluates policy → suggest exchange → auto-approve or flag for review",
       "trigger": "Customer initiates a return request",
-      "connects": ["shopify", "support_tool", "shipping_provider"],
-      "mcp_servers": ["shopify-mcp"],
+      "connects": ["ecommerce_platform", "support_tool", "shipping_provider"],
+      "platform_variants": {
+        "shopify": {"mcp_servers": ["shopify-mcp"], "tools": ["Loop Returns", "ReturnGO"]},
+        "woocommerce": {"tools": ["AfterShip Returns", "ReturnGO"]},
+        "platform_agnostic": {"tools": ["ReturnGO", "AfterShip Returns", "Narvar"]}
+      },
       "build_time_hours": 8,
       "complexity": "medium",
       "steps": [
         "Parse return request details (order ID, reason, condition)",
         "Check against return policy rules (timeframe, condition, value)",
+        "Suggest exchange first to retain revenue (63.5% retention rate from exchange-first strategies)",
         "Auto-approve returns that meet policy criteria",
-        "Generate return shipping label via shipping provider API",
+        "Generate return shipping label via Sendcloud/ShipStation API",
         "Send customer confirmation with label and instructions",
-        "Flag edge cases for human review"
+        "Flag edge cases for human review",
+        "Track return reasons for product improvement insights"
       ],
-      "prerequisites": ["Shopify store", "Defined return policy rules", "Shipping provider API access"],
-      "estimated_monthly_value": 1500
+      "prerequisites": ["E-commerce store", "Defined return policy rules", "Shipping provider API access"],
+      "estimated_monthly_value": 1500,
+      "eu_note": "EU mandates 14-day return right (Consumer Rights Directive). Right to Repair (July 2026) extends warranty 12 months if consumer chooses repair."
     },
     {
       "id": "abandoned-cart-recovery",
       "name": "AI-Personalized Cart Recovery",
-      "description": "Detect abandoned carts and send personalized recovery messages based on browsing context",
+      "description": "Detect abandoned carts and send personalized recovery messages based on browsing context and cart value",
       "trigger": "Cart abandoned for 1+ hours",
-      "connects": ["shopify", "email_tool", "sms_tool"],
-      "mcp_servers": ["shopify-mcp"],
+      "connects": ["ecommerce_platform", "email_tool", "sms_tool"],
+      "platform_variants": {
+        "shopify": {"mcp_servers": ["shopify-mcp"], "tools": ["Klaviyo", "Omnisend"]},
+        "woocommerce": {"tools": ["Klaviyo", "Omnisend", "AutomateWoo"]},
+        "platform_agnostic": {"tools": ["Klaviyo", "Omnisend"], "integration": "Any platform with cart webhook/API"}
+      },
       "build_time_hours": 6,
       "complexity": "medium",
       "steps": [
-        "Detect abandoned cart events from Shopify webhooks",
-        "Analyze cart contents and customer browsing history",
-        "Generate personalized recovery message with Claude",
-        "Send via email (Klaviyo/Omnisend API) or SMS",
+        "Detect abandoned cart events from webhooks",
+        "Analyze cart contents, value, and customer browsing history",
+        "Generate personalized recovery message with Claude API",
+        "Apply dynamic discount logic based on cart value and customer tier",
+        "Send via email (Klaviyo/Omnisend API) and/or SMS",
+        "Multi-step sequence: 1hr, 24hr, 72hr touchpoints",
         "Track recovery rate and optimize messaging"
       ],
-      "prerequisites": ["Shopify store", "Email or SMS tool with API"],
-      "estimated_monthly_value": 2000
+      "prerequisites": ["E-commerce store", "Email or SMS tool with API", "GDPR-compliant opt-in for EU customers"],
+      "estimated_monthly_value": 2500,
+      "eu_note": "GDPR requires explicit opt-in for cart recovery emails/SMS. Double opt-in standard in DE."
     },
     {
       "id": "review-response-automation",
       "name": "Automated Review Response",
       "description": "Monitor new reviews and draft personalized responses for owner approval",
       "trigger": "New product review posted",
-      "connects": ["review_platform", "shopify"],
-      "mcp_servers": [],
+      "connects": ["review_platform", "ecommerce_platform"],
+      "platform_variants": {
+        "shopify": {"tools": ["Yotpo", "Judge.me", "Loox"]},
+        "woocommerce": {"tools": ["Yotpo", "Judge.me", "WooCommerce Reviews"]},
+        "platform_agnostic": {"tools": ["Google Business", "Trustpilot", "Yotpo"]}
+      },
       "build_time_hours": 4,
       "complexity": "low",
       "steps": [
         "Monitor review platforms for new reviews via API or webhook",
         "Analyze sentiment and extract key themes",
-        "Draft personalized response matching brand voice",
+        "Draft personalized response matching brand voice with Claude API",
         "Route to owner for quick approval or auto-post for positive reviews",
-        "Flag negative reviews for priority human response"
+        "Flag negative reviews for priority human response",
+        "Track review response rate and sentiment trends"
       ],
-      "prerequisites": ["Review platform with API (Google Business, Trustpilot, or Shopify reviews)"],
-      "estimated_monthly_value": 600
+      "prerequisites": ["Review platform with API (Yotpo, Judge.me, Google Business, or Trustpilot)"],
+      "estimated_monthly_value": 600,
+      "eu_note": "EU Omnibus Directive (in force since 2022) requires transparency on review authenticity. AI-generated responses must be honest."
+    },
+    {
+      "id": "ai-merchandising",
+      "name": "AI-Powered Collection Merchandising",
+      "description": "Automatically sort and prioritize products within collections based on real-time sales data, inventory levels, and margins",
+      "trigger": "Daily/hourly collection refresh or manual trigger",
+      "connects": ["ecommerce_platform", "analytics"],
+      "platform_variants": {
+        "shopify": {"tools": ["Kimonix", "Entaice", "PA: Product & Collection Sort"]},
+        "woocommerce": {"tools": ["Custom via WooCommerce API"]},
+        "platform_agnostic": {"tools": ["Klevu", "Bloomreach"]}
+      },
+      "build_time_hours": 6,
+      "complexity": "low",
+      "steps": [
+        "Connect product catalog and sales data via API",
+        "Define merchandising rules (prioritize high-margin, demote out-of-stock, boost trending)",
+        "AI analyzes sales velocity, inventory, conversion rate, and margin per product",
+        "Auto-sort collection pages based on optimized ranking",
+        "Demote low-stock items to prevent overselling frustration",
+        "A/B test merchandising strategies",
+        "Report on revenue impact of sorting changes"
+      ],
+      "prerequisites": ["E-commerce store with 200+ products", "Sales history (30+ days)", "Collection/category pages"],
+      "estimated_monthly_value": 1000,
+      "note": "Reduces manual merchandising time by 80-90%. Especially valuable during sales events and seasonal changes."
+    },
+    {
+      "id": "predictive-restocking",
+      "name": "Predictive Restocking & Auto-PO",
+      "description": "AI analyzes sales velocity, seasonality, and supplier lead times to auto-generate purchase orders before stockouts occur",
+      "trigger": "Weekly forecast refresh or inventory drop below safety stock",
+      "connects": ["ecommerce_platform", "inventory_tool", "supplier_portal"],
+      "platform_variants": {
+        "shopify": {"tools": ["Prediko", "Inventory Planner", "Cogsy", "Stocky"]},
+        "woocommerce": {"tools": ["Inventory Planner", "Custom via API"]},
+        "platform_agnostic": {"tools": ["Cin7", "Brightpearl", "Veeqo"]}
+      },
+      "build_time_hours": 12,
+      "complexity": "medium",
+      "steps": [
+        "Ingest historical sales data (12+ months ideal)",
+        "Build demand forecast model accounting for seasonality, trends, promotions",
+        "Calculate safety stock levels per SKU based on lead time variability",
+        "Generate reorder recommendations when projected stock hits safety threshold",
+        "Auto-create purchase orders with optimized quantities",
+        "Route PO for approval or auto-send to supplier",
+        "Track forecast accuracy and adjust models",
+        "For EU multi-warehouse: optimize allocation across fulfillment centers"
+      ],
+      "prerequisites": ["E-commerce store with 12+ months sales data", "Defined supplier lead times", "Inventory management tool or API"],
+      "estimated_monthly_value": 2000,
+      "note": "AI reduces forecasting errors by 20-50% and cuts lost sales by up to 65%. Critical for seasonal businesses."
+    },
+    {
+      "id": "dynamic-pricing",
+      "name": "Dynamic Pricing & Competitor Monitoring",
+      "description": "Monitor competitor prices and automatically adjust pricing based on demand, inventory, and competitive positioning",
+      "trigger": "Daily price check or competitor price change detected",
+      "connects": ["ecommerce_platform", "pricing_tool", "analytics"],
+      "platform_variants": {
+        "shopify": {"tools": ["Prisync", "Omnia Retail", "Custom via Shopify API"]},
+        "woocommerce": {"tools": ["Prisync", "Omnia Retail", "Custom via WooCommerce API"]},
+        "platform_agnostic": {"tools": ["Prisync", "Competera", "Intelligence Node"]}
+      },
+      "build_time_hours": 10,
+      "complexity": "medium",
+      "steps": [
+        "Connect competitor URLs or feeds to monitoring tool",
+        "Define pricing rules (match, beat by X%, maintain margin floor)",
+        "AI analyzes demand signals, inventory levels, and competitive landscape",
+        "Generate price adjustment recommendations per SKU",
+        "Apply changes via store API (with approval gate or auto-apply for low-risk changes)",
+        "Track margin impact and revenue changes",
+        "Alert on significant competitor price moves"
+      ],
+      "prerequisites": ["E-commerce store with 200+ SKUs", "6+ months historical sales data", "Competitor identification"],
+      "estimated_monthly_value": 1500,
+      "eu_note": "EU price transparency rules require showing original prices correctly in promotions."
+    },
+    {
+      "id": "customer-segmentation",
+      "name": "AI Customer Segmentation & Lifecycle Marketing",
+      "description": "Automatically segment customers by behavior, value, and lifecycle stage for targeted marketing campaigns",
+      "trigger": "Weekly segment refresh or new customer milestone (first purchase, repeat, at-risk churn)",
+      "connects": ["ecommerce_platform", "email_tool", "analytics"],
+      "platform_variants": {
+        "shopify": {"tools": ["Klaviyo Predictive Analytics", "Lifetimely", "Nosto"]},
+        "woocommerce": {"tools": ["Klaviyo", "Omnisend", "Custom RFM analysis"]},
+        "platform_agnostic": {"tools": ["Klaviyo", "Bloomreach Engagement", "Insider"]}
+      },
+      "build_time_hours": 8,
+      "complexity": "medium",
+      "steps": [
+        "Connect customer purchase history and behavior data",
+        "Build RFM (Recency, Frequency, Monetary) segmentation model",
+        "Add AI predictive layers: churn risk, purchase propensity, predicted CLV",
+        "Create automated campaigns per segment (VIP, at-risk, win-back, new buyer nurture)",
+        "Personalize product recommendations per segment in emails",
+        "Track segment movement and campaign performance",
+        "Optimize based on conversion data"
+      ],
+      "prerequisites": ["E-commerce store with 1,000+ customers", "Email marketing platform", "Purchase history data"],
+      "estimated_monthly_value": 1800,
+      "note": "Advanced segmentation drives 3-5x email revenue per send vs batch-and-blast. Klaviyo flows generate 41% of email revenue from just 5.3% of sends."
+    },
+    {
+      "id": "social-commerce-content",
+      "name": "AI Social Commerce Content Pipeline",
+      "description": "Generate and optimize product content for TikTok Shop, Instagram Shopping, and social selling channels",
+      "trigger": "New product launch, weekly content calendar, or trending topic detected",
+      "connects": ["ecommerce_platform", "social_platforms", "content_tools"],
+      "platform_variants": {
+        "shopify": {"tools": ["Shopify Magic", "Meta Shops integration", "TikTok Shop connector"]},
+        "woocommerce": {"tools": ["Meta for WooCommerce", "TikTok for WooCommerce"]},
+        "platform_agnostic": {"tools": ["Photoroom", "Canva AI", "Opus Clip", "Synthesia"]}
+      },
+      "build_time_hours": 6,
+      "complexity": "low",
+      "steps": [
+        "Select products for social promotion (trending, high-margin, new arrivals)",
+        "Generate product images optimized for social platforms (Photoroom for backgrounds, Canva AI for layouts)",
+        "Create short-form video content from product photos/videos (Opus Clip, Synthesia)",
+        "Write AI-generated captions with trending hashtags (Claude API)",
+        "Schedule posts across platforms",
+        "Monitor engagement and sales attribution",
+        "Repurpose top-performing content across channels"
+      ],
+      "prerequisites": ["E-commerce store with product images", "Social media business accounts", "Content creation tools"],
+      "estimated_monthly_value": 800,
+      "note": "Social commerce projected to surpass $100B in US alone by 2026. TikTok Shop growing 48% YoY."
+    },
+    {
+      "id": "eu-compliance-automation",
+      "name": "EU Compliance Automation Dashboard",
+      "description": "Automated monitoring and management of EU regulatory compliance across EAA, AI Act, GDPR, DSA, and consumer rights",
+      "trigger": "Weekly compliance scan or regulatory change alert",
+      "connects": ["ecommerce_platform", "compliance_tools"],
+      "platform_variants": {
+        "shopify": {"tools": ["Cookiebot", "Siteimprove", "Shopify GDPR features"]},
+        "woocommerce": {"tools": ["Cookiebot", "axe DevTools", "WP Consent API"]},
+        "platform_agnostic": {"tools": ["Cookiebot", "Siteimprove", "OneTrust"]}
+      },
+      "build_time_hours": 10,
+      "complexity": "medium",
+      "steps": [
+        "Set up automated accessibility scanning (WCAG 2.1 AA — EAA requirement)",
+        "Configure GDPR-compliant cookie consent management with equal-prominence reject button",
+        "Add AI interaction disclosure labels to chatbots (AI Act requirement)",
+        "Generate DSA transparency reports (standardized templates since July 2025)",
+        "Implement warranty/guarantee notices on product pages (Consumer Rights Directive — Sept 2026)",
+        "Set up VAT automation for cross-border sales (IOSS changes July 2026)",
+        "Schedule regular compliance audit scans",
+        "Track upcoming deadlines (AI Act full enforcement Aug 2026, Right to Repair July 2026)"
+      ],
+      "prerequisites": ["E-commerce store", "Admin access to store and hosting", "Budget for compliance tools (EUR 50-500/month)"],
+      "estimated_monthly_value": 500,
+      "eu_specific": true,
+      "note": "Non-compliance penalties can be severe: up to EUR 35M or 7% global turnover (AI Act), EUR 500K per EAA infringement. Proactive compliance is significantly cheaper than fines."
     }
   ]
 }

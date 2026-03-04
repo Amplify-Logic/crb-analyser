@@ -784,6 +784,321 @@
       },
       "our_recommendation": "connect_and_automate",
       "recommendation_rationale": "Automated review requests can be built with Twilio MCP for SMS/email triggers after appointments. Low ongoing cost and customized messaging, though you won't get the advanced reputation dashboard that dedicated platforms offer."
+    },
+    {
+      "id": "ai-patient-acquisition",
+      "name": "AI-Powered Patient Acquisition",
+      "description": "Optimize Google Ads, landing pages, and lead scoring to attract and convert new patients cost-effectively",
+      "category": "growth",
+      "impact": {
+        "value_saved": {
+          "time_hours_per_week": 8,
+          "description": "Automates ad campaign management, lead follow-up, and conversion tracking"
+        },
+        "value_created": {
+          "description": "Lower cost-per-acquisition, higher quality leads, better ad ROI",
+          "potential_revenue_impact": "20-40% reduction in cost per new patient"
+        }
+      },
+      "customer_value_score": 8,
+      "business_health_score": 9,
+      "implementation": {
+        "complexity": "medium",
+        "timeline_weeks": 3,
+        "required_data": ["Google Ads account", "Website analytics", "Patient source tracking"]
+      },
+      "options": {
+        "connect_and_automate": {
+          "approach": "Build AI-powered ad optimization with Claude Code connecting Google Ads API, landing page builder, and CRM. Auto-adjust bids based on conversion data, generate ad copy variations, and score incoming leads.",
+          "build_time": "16-24 hours",
+          "mcp_servers": [],
+          "tools_used": ["Claude Code", "Google Ads API", "Analytics API", "CRM"],
+          "monthly_cost": "EUR 100-200 (API usage) + ad spend",
+          "pros": ["Full control over ad strategy", "Custom lead scoring", "No agency fees"],
+          "cons": ["Requires Google Ads expertise to set up", "Needs ongoing optimization"]
+        },
+        "enhance_with_ai": {
+          "approach": "Deploy AI marketing platform that manages campaigns end-to-end with machine learning optimization",
+          "build_time": "2-4 weeks",
+          "tools_used": ["Patient Pop", "Dental Intelligence Marketing"],
+          "monthly_cost": "€500-1000/month",
+          "pros": ["Dental-specific targeting", "Managed campaigns", "Performance analytics"],
+          "cons": ["Higher cost", "Less control over strategy"]
+        },
+        "targeted_upgrade": {
+          "when_needed": "When you want a dental-specific marketing agency that handles everything",
+          "tools": ["Patient Pop", "Scorpion", "Dental Marketing Guy"],
+          "cost_range": "€800-2000/month",
+          "migration_time": "4-6 weeks",
+          "pros": ["Full-service marketing", "Dental expertise", "Proven playbooks"],
+          "cons": ["High monthly cost", "Lock-in contracts", "Less transparency"]
+        }
+      },
+      "roi_example": {
+        "scenario": "Practice spending €2,000/month on Google Ads with €150 cost per new patient",
+        "cost": "€300/month (AI tools)",
+        "value_created": "Reduce cost-per-acquisition and increase conversion rate",
+        "roi_analysis": {
+          "conservative": {"roi_percentage": 200, "payback_months": 3, "note": "20% CPA reduction"},
+          "expected": {"roi_percentage": 400, "payback_months": 2, "note": "35% CPA reduction + more conversions"},
+          "optimistic": {"roi_percentage": 600, "payback_months": 1, "note": "50% CPA reduction + 2x conversion rate"}
+        },
+        "assumptions": "Results depend on current ad efficiency, market competition, and landing page quality"
+      },
+      "our_recommendation": "connect_and_automate",
+      "recommendation_rationale": "Google Ads API and analytics data are accessible. A Claude workflow optimizing bids, generating ad variations, and scoring leads gives you agency-level optimization without agency-level fees."
+    },
+    {
+      "id": "automated-claims-processing",
+      "name": "Automated Insurance Claims Processing",
+      "description": "Reduce claim rejections and speed up reimbursement with AI-powered claims submission, error detection, and follow-up automation",
+      "category": "efficiency",
+      "impact": {
+        "value_saved": {
+          "time_hours_per_week": 15,
+          "description": "Eliminates manual claim submission, error correction, and follow-up calls"
+        },
+        "value_created": {
+          "description": "Fewer claim denials, faster reimbursement cycles, improved cash flow",
+          "potential_revenue_impact": "15-25% reduction in claim rejections"
+        }
+      },
+      "customer_value_score": 8,
+      "business_health_score": 10,
+      "implementation": {
+        "complexity": "medium",
+        "timeline_weeks": 4,
+        "required_data": ["Practice management system", "Insurance portal access", "Historical claims data"]
+      },
+      "options": {
+        "connect_and_automate": {
+          "approach": "Build AI claims processor with Claude Code that validates claims before submission, detects common rejection patterns, auto-corrects errors, and tracks reimbursement status",
+          "build_time": "20-30 hours",
+          "mcp_servers": [],
+          "tools_used": ["Claude Code", "PMS API", "Insurance portal API"],
+          "monthly_cost": "EUR 150-300",
+          "pros": ["Works with any payer", "Learns from your rejection patterns", "Custom to your coding practices"],
+          "cons": ["Complex initial setup", "Insurance portal changes require maintenance"]
+        },
+        "enhance_with_ai": {
+          "approach": "Deploy AI claims management platform with predictive denial prevention and automated appeal generation",
+          "build_time": "3-5 weeks",
+          "tools_used": ["Vyne Dental Claims", "DentalXChange"],
+          "monthly_cost": "€400-700/month",
+          "pros": ["Pre-built payer integrations", "Denial prediction AI", "Appeal automation"],
+          "cons": ["Higher monthly cost", "May not cover all payers"]
+        },
+        "targeted_upgrade": {
+          "when_needed": "When claims volume is high and you want a fully managed clearinghouse with AI enhancement",
+          "tools": ["Vyne Dental", "DentalXChange", "Tesia Clearinghouse"],
+          "cost_range": "€300-600/month",
+          "migration_time": "4-6 weeks",
+          "pros": ["Electronic claims submission", "Real-time eligibility", "ERA processing"],
+          "cons": ["Per-claim fees add up", "Limited AI capabilities in basic tiers"]
+        }
+      },
+      "roi_example": {
+        "scenario": "Practice submitting 500 claims/month with 12% rejection rate",
+        "cost": "€500/month",
+        "value_created": "Reduce rejections and speed up reimbursement cycle",
+        "roi_analysis": {
+          "conservative": {"roi_percentage": 250, "payback_months": 3, "note": "30% fewer rejections"},
+          "expected": {"roi_percentage": 450, "payback_months": 2, "note": "50% fewer rejections + faster resubmission"},
+          "optimistic": {"roi_percentage": 700, "payback_months": 1, "note": "70% fewer rejections + automated appeals"}
+        },
+        "assumptions": "Average claim value €200-400; rejection handling costs €25-50 per claim in staff time"
+      },
+      "our_recommendation": "connect_and_automate",
+      "recommendation_rationale": "Claims processing follows patterns that AI excels at detecting. A Claude workflow analyzing your historical rejections and pre-validating claims before submission can dramatically reduce your rejection rate."
+    },
+    {
+      "id": "ai-dental-imaging",
+      "name": "AI Dental Imaging Analysis",
+      "description": "AI-assisted cavity detection, periodontal assessment, and treatment planning from X-rays and CBCT scans",
+      "category": "efficiency",
+      "impact": {
+        "value_saved": {
+          "time_hours_per_week": 5,
+          "description": "Faster image analysis, fewer missed findings, reduced second opinions"
+        },
+        "value_created": {
+          "description": "Improved diagnostic accuracy, higher case acceptance through visual AI overlays",
+          "potential_revenue_impact": "10-20% increase in treatment acceptance when patients see AI-annotated images"
+        }
+      },
+      "customer_value_score": 9,
+      "business_health_score": 8,
+      "implementation": {
+        "complexity": "low",
+        "timeline_weeks": 3,
+        "required_data": ["Digital X-ray system", "DICOM-compatible imaging"]
+      },
+      "options": {
+        "connect_and_automate": {
+          "approach": "Not feasible — dental diagnostic AI requires FDA/CE clearance that cannot be obtained by individual practices",
+          "build_time": "N/A",
+          "mcp_servers": [],
+          "tools_used": [],
+          "monthly_cost": "N/A",
+          "pros": [],
+          "cons": ["FDA/CE clearance required", "Medical liability concerns", "Not feasible for individual practices"]
+        },
+        "enhance_with_ai": {
+          "approach": "Deploy FDA-cleared AI imaging platform that integrates with your existing digital X-ray system for real-time analysis",
+          "build_time": "2-3 weeks",
+          "tools_used": ["Pearl Second Opinion", "Overjet Clinical Intelligence"],
+          "monthly_cost": "€400-800/month",
+          "pros": ["FDA/CE cleared", "Real-time analysis", "Patient-facing visual aids", "Clinical decision support"],
+          "cons": ["Monthly subscription", "Requires digital imaging system"]
+        },
+        "targeted_upgrade": {
+          "when_needed": "FDA-cleared AI dental imaging is the only viable path — this is a 'buy, don't build' category",
+          "tools": ["Pearl", "Overjet", "VideaHealth", "Dentistry.AI"],
+          "cost_range": "€300-700/month",
+          "migration_time": "2-4 weeks",
+          "pros": ["FDA-cleared diagnostics", "Direct imaging integration", "Measurable accuracy improvements"],
+          "cons": ["Requires digital imaging", "Learning curve for clinical staff"]
+        }
+      },
+      "roi_example": {
+        "scenario": "Practice with €60K/month production, 42% treatment acceptance rate",
+        "cost": "€500/month",
+        "value_created": "Improve case acceptance through AI-annotated imaging and better diagnostic support",
+        "roi_analysis": {
+          "conservative": {"roi_percentage": 200, "payback_months": 4, "note": "3% acceptance increase"},
+          "expected": {"roi_percentage": 450, "payback_months": 2, "note": "6% acceptance increase"},
+          "optimistic": {"roi_percentage": 700, "payback_months": 1, "note": "10% acceptance increase + fewer missed findings"}
+        },
+        "assumptions": "Acceptance improvement varies by practice; requires consistent provider adoption; AI is a second read, not a replacement for clinical judgment"
+      },
+      "our_recommendation": "enhance_with_ai",
+      "recommendation_rationale": "Dental imaging AI must be FDA/CE-cleared — this is a regulatory requirement, not a preference. Pearl and Overjet are the leaders with published clinical accuracy data. Building custom diagnostic AI is not an option for dental practices."
+    },
+    {
+      "id": "staff-scheduling-optimization",
+      "name": "Staff Scheduling Optimization",
+      "description": "AI-driven demand forecasting and staff scheduling that maximizes chair utilization and minimizes overtime",
+      "category": "efficiency",
+      "impact": {
+        "value_saved": {
+          "time_hours_per_week": 6,
+          "description": "Eliminates manual schedule juggling and reduces overstaffing"
+        },
+        "value_created": {
+          "description": "Higher chair utilization, reduced overtime costs, better patient flow",
+          "potential_revenue_impact": "10-15% improvement in chair utilization"
+        }
+      },
+      "customer_value_score": 7,
+      "business_health_score": 8,
+      "implementation": {
+        "complexity": "medium",
+        "timeline_weeks": 3,
+        "required_data": ["Appointment history", "Staff availability", "Procedure duration data"]
+      },
+      "options": {
+        "connect_and_automate": {
+          "approach": "Build demand forecasting model with Claude Code using historical appointment data to predict busy periods, optimize staff schedules, and flag gaps or overlaps",
+          "build_time": "12-18 hours",
+          "mcp_servers": [],
+          "tools_used": ["Claude Code", "PMS API", "Google Calendar MCP"],
+          "monthly_cost": "EUR 50-100 (API usage)",
+          "pros": ["Custom to your practice patterns", "Uses existing PMS data", "Low cost"],
+          "cons": ["Needs 6+ months of appointment history", "Manual schedule adjustments still needed"]
+        },
+        "enhance_with_ai": {
+          "approach": "Deploy AI scheduling platform with real-time optimization, demand prediction, and automated staff notifications",
+          "build_time": "3-4 weeks",
+          "tools_used": ["Dental Intelligence", "Practice by Numbers"],
+          "monthly_cost": "€300-600/month",
+          "pros": ["Real-time analytics", "Automated notifications", "Benchmarking against peers"],
+          "cons": ["Higher cost", "May duplicate PMS scheduling features"]
+        },
+        "targeted_upgrade": {
+          "when_needed": "When your practice has multiple locations or complex multi-provider scheduling needs",
+          "tools": ["Dental Intelligence", "Practice by Numbers", "Denticon (for DSOs)"],
+          "cost_range": "€300-800/month",
+          "migration_time": "3-5 weeks",
+          "pros": ["Multi-location support", "Provider performance tracking", "Production analytics"],
+          "cons": ["Cost scales with locations", "Data migration complexity"]
+        }
+      },
+      "roi_example": {
+        "scenario": "Practice with 6 operatories averaging 65% utilization",
+        "cost": "€200/month",
+        "value_created": "Optimize staff scheduling to increase chair utilization",
+        "roi_analysis": {
+          "conservative": {"roi_percentage": 200, "payback_months": 4, "note": "5% utilization improvement"},
+          "expected": {"roi_percentage": 400, "payback_months": 2, "note": "10% utilization improvement"},
+          "optimistic": {"roi_percentage": 600, "payback_months": 1, "note": "15% utilization + reduced overtime"}
+        },
+        "assumptions": "Each 1% utilization improvement ≈ €500-800/month additional production; requires staff buy-in for schedule changes"
+      },
+      "our_recommendation": "connect_and_automate",
+      "recommendation_rationale": "Your PMS already has all the appointment and scheduling data. A Claude workflow analyzing patterns and predicting demand gives you 80% of the value of premium analytics tools at a fraction of the cost."
+    },
+    {
+      "id": "patient-communication-hub",
+      "name": "Patient Communication Hub",
+      "description": "Unified multi-channel patient communication (SMS, email, portal) with AI-drafted responses and automated follow-ups",
+      "category": "efficiency",
+      "impact": {
+        "value_saved": {
+          "time_hours_per_week": 12,
+          "description": "Consolidates all patient communication into one platform with AI assistance"
+        },
+        "value_created": {
+          "description": "Faster response times, consistent messaging, better patient experience",
+          "potential_revenue_impact": "15-20% improvement in patient retention through better engagement"
+        }
+      },
+      "customer_value_score": 9,
+      "business_health_score": 9,
+      "implementation": {
+        "complexity": "medium",
+        "timeline_weeks": 3,
+        "required_data": ["Patient contact preferences", "Communication history", "PMS integration"]
+      },
+      "options": {
+        "connect_and_automate": {
+          "approach": "Build unified communication hub with Claude Code connecting SMS (Twilio), email, and patient portal. AI drafts responses to common inquiries, routes complex questions to staff, and automates follow-up sequences.",
+          "build_time": "16-24 hours",
+          "mcp_servers": ["twilio-mcp"],
+          "tools_used": ["Claude Code", "Twilio MCP", "Email API", "PMS API"],
+          "monthly_cost": "EUR 100-250 (API + messaging costs)",
+          "pros": ["Full control over messaging", "Custom AI responses", "Multi-channel unified inbox"],
+          "cons": ["HIPAA compliance responsibility", "Development and maintenance required"]
+        },
+        "enhance_with_ai": {
+          "approach": "Deploy dental communication platform with AI-powered messaging, two-way texting, and automated campaigns",
+          "build_time": "2-3 weeks",
+          "tools_used": ["Weave Complete", "RevenueWell"],
+          "monthly_cost": "€400-700/month",
+          "pros": ["HIPAA compliant out-of-box", "VoIP included", "Dental-specific templates"],
+          "cons": ["Higher monthly cost", "May replace existing phone system"]
+        },
+        "targeted_upgrade": {
+          "when_needed": "When HIPAA compliance burden of custom-built solution outweighs the cost savings",
+          "tools": ["Weave", "RevenueWell", "Solutionreach", "Lighthouse 360"],
+          "cost_range": "€300-600/month",
+          "migration_time": "2-4 weeks",
+          "pros": ["Turnkey HIPAA compliance", "Proven dental templates", "Easy setup"],
+          "cons": ["Monthly subscription", "Less customization"]
+        }
+      },
+      "roi_example": {
+        "scenario": "Practice handling 200+ patient messages/week across phone, email, and portal",
+        "cost": "€400/month",
+        "value_created": "Consolidate communication channels and automate routine responses",
+        "roi_analysis": {
+          "conservative": {"roi_percentage": 200, "payback_months": 3, "note": "30% response time reduction"},
+          "expected": {"roi_percentage": 400, "payback_months": 2, "note": "50% automation of routine messages"},
+          "optimistic": {"roi_percentage": 600, "payback_months": 1, "note": "70% automation + improved retention"}
+        },
+        "assumptions": "Routine inquiries (scheduling, billing, insurance) make up 60-70% of patient messages"
+      },
+      "our_recommendation": "enhance_with_ai",
+      "recommendation_rationale": "Patient communication in dental requires HIPAA-compliant two-way messaging, VoIP integration, and dental-specific templates. Platforms like Weave provide this natively — building custom HIPAA-compliant messaging adds significant compliance burden that most practices shouldn't take on."
     }
   ],
   "quick_wins": [
@@ -827,6 +1142,52 @@
       "name": "Building your own patient portal",
       "reason": "HIPAA compliance complexity; patients expect standardized experiences",
       "alternative": "Use portal from communication platform (Weave, NexHealth)"
+    }
+  ],
+  "anti_patterns": [
+    {
+      "id": "custom-diagnostic-ai",
+      "name": "Building Custom Diagnostic AI",
+      "why_avoid": "FDA/CE clearance requirements make custom medical AI prohibitively expensive and legally risky for practices",
+      "what_instead": "Use FDA-cleared solutions like Pearl or Overjet that have published clinical accuracy data"
+    },
+    {
+      "id": "all-in-one-before-basics",
+      "name": "Deploying All-in-One Platform Before Fixing Basics",
+      "why_avoid": "Practices often buy comprehensive platforms (Weave, RevenueWell) before they've fixed basic scheduling and recall processes — the platform amplifies existing chaos",
+      "what_instead": "Fix core workflows first (reminders, recall, insurance verification), then layer on comprehensive platforms"
+    },
+    {
+      "id": "custom-hipaa-messaging",
+      "name": "Building Custom HIPAA-Compliant Messaging",
+      "why_avoid": "HIPAA compliance for patient messaging requires BAA agreements, encryption, audit trails, and breach notification procedures that are expensive to build and maintain",
+      "what_instead": "Use dental-specific communication platforms that include HIPAA compliance out of the box"
+    }
+  ],
+  "implementation_sequence": [
+    {
+      "phase": 1,
+      "name": "Patient Communication & No-Shows",
+      "opportunities": ["automated-patient-communication", "patient-intake-digitization"],
+      "rationale": "Immediate ROI from reduced no-shows and streamlined intake — foundational for all other improvements"
+    },
+    {
+      "phase": 2,
+      "name": "Revenue Protection",
+      "opportunities": ["ai-insurance-verification", "automated-claims-processing", "patient-financing"],
+      "rationale": "Protect and accelerate revenue through better insurance handling and financing options"
+    },
+    {
+      "phase": 3,
+      "name": "Growth & Acquisition",
+      "opportunities": ["ai-voice-receptionist", "online-scheduling", "ai-patient-acquisition", "reputation-reviews"],
+      "rationale": "Capture more patients through 24/7 availability, online booking, and reputation management"
+    },
+    {
+      "phase": 4,
+      "name": "Advanced AI & Optimization",
+      "opportunities": ["ai-dental-imaging", "staff-scheduling-optimization", "patient-communication-hub"],
+      "rationale": "Higher complexity tools that multiply the value of earlier improvements"
     }
   ]
 }

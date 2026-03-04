@@ -1,5 +1,6 @@
 {
   "industry": "ecommerce",
+  "last_updated": "2026-03",
   "ai_opportunities": [
     {
       "id": "ai-customer-service-chatbot",
@@ -1511,7 +1512,462 @@
         "demand_expansion_potential": "10% increase in mobile conversion rate"
       },
       "our_recommendation": "connect_and_automate",
-      "recommendation_rationale": "Voice commerce workflows built with Claude API and your store data enable conversational shopping experiences customized to your brand and product catalog."
+      "recommendation_rationale": "Conversational commerce workflows built with Claude API and your store data enable guided shopping experiences customized to your brand and product catalog. WhatsApp commerce is particularly strong in EU markets."
+    },
+    {
+      "id": "ai-merchandising",
+      "name": "AI-Powered Merchandising & Collection Sorting",
+      "description": "Automated product sorting within collections based on real-time sales data, inventory levels, margins, and customer behavior. Replaces manual curation of collection pages.",
+      "category": "growth",
+      "impact": {
+        "value_saved": {
+          "time_hours_per_week": 8,
+          "description": "Reduces manual merchandising time by 80-90%"
+        },
+        "value_created": {
+          "description": "Increases conversion by promoting best-sellers automatically, prevents revenue loss from out-of-stock items in top positions",
+          "potential_revenue_impact": "5-15% conversion lift through optimized product positioning"
+        }
+      },
+      "customer_value_score": 8,
+      "business_health_score": 8,
+      "implementation": {
+        "complexity": "low",
+        "timeline_weeks": 2,
+        "required_data": [
+          "Product catalog",
+          "Sales data (30+ days)",
+          "Inventory levels",
+          "Margin data"
+        ]
+      },
+      "options": {
+        "connect_and_automate": {
+          "approach": "Build custom merchandising engine with Claude Code using Shopify MCP for product and sales data. Create sorting algorithms based on sales velocity, margin, inventory status, and conversion rate. Auto-update collection pages daily.",
+          "build_time": "8-12 hours",
+          "mcp_servers": ["shopify-mcp", "supabase-mcp"],
+          "tools_used": ["Claude Code", "shopify-mcp", "supabase-mcp"],
+          "monthly_cost": "EUR 50-150/mo (API usage) + 8-12hrs initial build",
+          "pros": ["Fully customized sorting logic", "No monthly platform fees", "Integrates with your specific business rules"],
+          "cons": ["Development required", "Needs ongoing tuning", "Custom maintenance"]
+        },
+        "enhance_with_ai": {
+          "approach": "Deploy Klevu or Bloomreach for enterprise-grade AI merchandising with full site personalization, A/B testing, and advanced analytics.",
+          "build_time": "3-6 weeks",
+          "tools_used": ["Klevu", "Bloomreach"],
+          "monthly_cost": "EUR 500-2000/month",
+          "pros": ["Enterprise-grade AI", "Full site personalization", "Advanced analytics", "A/B testing built-in"],
+          "cons": ["Higher cost", "Complex setup", "Requires data maturity"]
+        },
+        "targeted_upgrade": {
+          "when_needed": "When you want quick wins with collection sorting without enterprise-grade investment",
+          "tools": ["Kimonix", "Entaice", "PA: Product & Collection Sort"],
+          "cost_range": "EUR 20-200/month",
+          "migration_time": "1-2 weeks",
+          "pros": ["Easy Shopify integration", "Quick setup", "Affordable", "Immediate results"],
+          "cons": ["Shopify-focused", "Basic compared to enterprise tools", "Limited customization"]
+        }
+      },
+      "roi_example": {
+        "scenario": "Store with 500 products across 20 collections, manual merchandising taking 6 hours/week",
+        "cost": "EUR 100/month",
+        "value_created": "Automated collection sorting increases conversion and saves merchandising time",
+        "roi_analysis": {
+          "conservative": {"roi_percentage": 200, "payback_months": 2, "note": "3% conversion lift + time savings"},
+          "expected": {"roi_percentage": 400, "payback_months": 1, "note": "8% conversion lift + time savings"},
+          "optimistic": {"roi_percentage": 700, "payback_months": 1, "note": "15% conversion lift + time savings"}
+        },
+        "assumptions": "Impact greatest during sales events and seasonal changes; requires 200+ products to see meaningful benefit"
+      },
+      "our_recommendation": "targeted_upgrade",
+      "recommendation_rationale": "For most stores, a Shopify app like Kimonix or Entaice provides immediate value at low cost. The ROI is fast because it replaces hours of manual work with better results. Only build custom if you have unique merchandising rules that apps can't handle."
+    },
+    {
+      "id": "ai-personalized-search",
+      "name": "AI-Powered Personalized Site Search",
+      "description": "AI search that understands natural language queries, personalizes results per user, and learns from behavior — far beyond keyword matching",
+      "category": "growth",
+      "impact": {
+        "value_saved": {
+          "time_hours_per_week": 3,
+          "description": "Reduces manual search configuration and synonym management"
+        },
+        "value_created": {
+          "description": "Site search users convert 2-3x higher than non-search users. AI search further improves discovery and reduces search abandonment.",
+          "potential_revenue_impact": "8-15% conversion rate improvement for mid-sized stores"
+        }
+      },
+      "customer_value_score": 8,
+      "business_health_score": 8,
+      "implementation": {
+        "complexity": "medium",
+        "timeline_weeks": 4,
+        "required_data": [
+          "Product catalog with attributes",
+          "Search query logs (if available)",
+          "Category taxonomy"
+        ]
+      },
+      "options": {
+        "connect_and_automate": {
+          "approach": "Custom search implementation using Algolia free tier with Claude-powered query understanding and personalization layer. Connect to product catalog via API.",
+          "build_time": "1-2 weeks",
+          "tools_used": ["Claude Code", "Algolia API", "Custom frontend"],
+          "mcp_servers": [],
+          "monthly_cost": "EUR 50-200/mo (Algolia usage + API)",
+          "pros": ["Cost-effective at small scale", "Full customization", "Claude-powered NLP"],
+          "cons": ["Development needed", "Scaling costs increase", "Maintenance burden"]
+        },
+        "enhance_with_ai": {
+          "approach": "Deploy Algolia Premium or Bloomreach Discovery for enterprise-grade AI search with merchandising controls, analytics, and A/B testing.",
+          "build_time": "4-8 weeks",
+          "tools_used": ["Algolia Premium", "Bloomreach Discovery"],
+          "monthly_cost": "EUR 1500-4000/month",
+          "pros": ["Best-in-class search", "Advanced NLP", "Full analytics", "A/B testing", "Merchandising controls"],
+          "cons": ["Enterprise pricing", "Complex integration", "Requires search optimization expertise"]
+        },
+        "targeted_upgrade": {
+          "when_needed": "When you want proven AI search with e-commerce specific features and reasonable pricing",
+          "tools": ["Algolia Grow Plus", "Searchspring", "Clerk.io"],
+          "cost_range": "EUR 100-500/month",
+          "migration_time": "3-5 weeks",
+          "pros": ["AI-powered search out of the box", "Shopify/WooCommerce integrations", "Typo tolerance", "Personalization", "Clerk.io is EU-based (Denmark)"],
+          "cons": ["Usage-based pricing", "May require product data cleanup", "Limited customization vs custom build"]
+        }
+      },
+      "roi_example": {
+        "scenario": "Store with 1,000 SKUs, 50,000 monthly visitors, 20% using site search",
+        "cost": "EUR 200/month",
+        "value_created": "Improve search conversion for 10,000 monthly search users",
+        "roi_analysis": {
+          "conservative": {"roi_percentage": 200, "payback_months": 3, "note": "5% conversion lift on search users"},
+          "expected": {"roi_percentage": 500, "payback_months": 2, "note": "10% conversion lift + 5% more search usage"},
+          "optimistic": {"roi_percentage": 800, "payback_months": 1, "note": "15% conversion lift + higher AOV from better discovery"}
+        },
+        "assumptions": "Impact scales with catalog size and search usage. Stores with 500+ SKUs see most benefit. Multilingual search critical for EU stores."
+      },
+      "eu_relevance": "High — multilingual search essential for EU stores selling across DE/FR/NL/ES/IT markets. Clerk.io (EU-based, Denmark) understands European languages natively.",
+      "our_recommendation": "targeted_upgrade",
+      "recommendation_rationale": "For most stores, Algolia Grow Plus or Clerk.io provides excellent AI search at reasonable cost. The 2-3x conversion premium for search users makes this one of the highest-ROI investments for stores with 500+ SKUs."
+    },
+    {
+      "id": "ai-returns-optimization",
+      "name": "AI-Powered Returns Optimization",
+      "description": "AI applied to predicting returns, suggesting exchanges over refunds, detecting returns fraud, and optimizing reverse logistics. Especially impactful in EU where 14-day return right is mandatory.",
+      "category": "efficiency",
+      "impact": {
+        "value_saved": {
+          "time_hours_per_week": 8,
+          "description": "Automates returns processing, reduces manual review, detects fraud patterns"
+        },
+        "value_created": {
+          "description": "Exchange-first strategies retain 63.5% of revenue. AI-driven size/fit tools reduce returns by up to 7%. Fraud detection saves on abuse.",
+          "potential_revenue_impact": "5-10% revenue retention from exchange-over-refund strategies"
+        }
+      },
+      "customer_value_score": 7,
+      "business_health_score": 9,
+      "implementation": {
+        "complexity": "medium",
+        "timeline_weeks": 4,
+        "required_data": [
+          "Return history with reasons",
+          "Product catalog with attributes",
+          "Customer purchase data",
+          "Sizing/fit data (for apparel)"
+        ]
+      },
+      "options": {
+        "connect_and_automate": {
+          "approach": "Build returns optimization system with Claude Code: analyze return reasons to improve product listings, auto-route returns based on policy rules, suggest exchanges via AI, and flag fraud patterns.",
+          "build_time": "12-18 hours",
+          "mcp_servers": ["shopify-mcp", "supabase-mcp"],
+          "tools_used": ["Claude Code", "shopify-mcp", "supabase-mcp"],
+          "monthly_cost": "EUR 50-150/mo (API usage) + 12-18hrs initial build",
+          "pros": ["Custom rules for your business", "AI-powered return reason analysis", "Exchange-first logic"],
+          "cons": ["Development required", "Needs return history data", "No built-in portal UI"]
+        },
+        "enhance_with_ai": {
+          "approach": "Deploy Loop Returns or ReturnGO for comprehensive AI-powered returns management with self-service portal, exchange incentives, and fraud detection.",
+          "build_time": "3-6 weeks",
+          "tools_used": ["Loop Returns", "ReturnGO"],
+          "monthly_cost": "EUR 200-500/month",
+          "pros": ["Beautiful self-service portal", "Exchange-first features", "AI categorization", "Fraud detection", "Analytics"],
+          "cons": ["Monthly fees", "Platform-specific (Loop is Shopify-focused)", "Setup complexity"]
+        },
+        "targeted_upgrade": {
+          "when_needed": "When you want a managed returns platform with customer-facing portal and analytics",
+          "tools": ["Loop Returns", "AfterShip Returns", "ReturnGO"],
+          "cost_range": "EUR 50-300/month",
+          "migration_time": "2-4 weeks",
+          "pros": ["Self-service customer portal", "Reduces support tickets 40-60%", "Exchange incentives", "Multi-carrier label generation"],
+          "cons": ["Monthly fees scale with volume", "May not cover all edge cases", "Integration effort"]
+        }
+      },
+      "roi_example": {
+        "scenario": "Fashion store with 2,000 orders/month, 30% return rate, currently processing returns manually via email",
+        "cost": "EUR 200/month",
+        "value_created": "Retain revenue through exchanges, reduce processing time, detect fraud",
+        "roi_analysis": {
+          "conservative": {"roi_percentage": 200, "payback_months": 3, "note": "10% of returns converted to exchanges + time savings"},
+          "expected": {"roi_percentage": 500, "payback_months": 2, "note": "25% exchange conversion + fraud reduction"},
+          "optimistic": {"roi_percentage": 800, "payback_months": 1, "note": "35% exchange conversion + 7% return rate reduction from fit tools"}
+        },
+        "assumptions": "Fashion/apparel sees the biggest impact (25-40% return rates). Returns totaled $849.9B in 2025 globally. Germany alone has 50%+ fashion return rates."
+      },
+      "eu_relevance": "Very High — EU mandates 14-day return right (Consumer Rights Directive). Returns are structurally higher in EU markets. Germany has 50%+ fashion return rates. Right to Repair Directive (July 2026) adds warranty extension obligations.",
+      "our_recommendation": "enhance_with_ai",
+      "recommendation_rationale": "Returns optimization benefits greatly from a customer-facing self-service portal, which Loop Returns and ReturnGO provide out of the box. The exchange-first UX drives the 63.5% retention rate that makes this opportunity so valuable. Custom builds miss the portal experience."
+    },
+    {
+      "id": "ai-marketing-attribution",
+      "name": "AI Marketing Attribution",
+      "description": "AI-powered multi-touch attribution that unifies data from Shopify, Meta, Google, TikTok, and email to show true campaign ROI across the full customer journey",
+      "category": "revenue_growth",
+      "impact": {
+        "value_saved": {
+          "time_hours_per_week": 8,
+          "description": "Eliminates manual spreadsheet reporting and cross-platform data reconciliation"
+        },
+        "value_created": {
+          "description": "Accurate ROAS visibility enables 15-30% reallocation of ad spend to highest-performing channels",
+          "potential_revenue_impact": "10-20% improvement in overall marketing ROI through better spend allocation"
+        }
+      },
+      "customer_value_score": 8,
+      "business_health_score": 8,
+      "implementation": {
+        "complexity": "medium",
+        "timeline_weeks": 3,
+        "required_data": [
+          "Shopify order data",
+          "Meta Ads account",
+          "Google Ads account",
+          "Email marketing data (Klaviyo/Omnisend)",
+          "UTM tracking setup"
+        ]
+      },
+      "options": {
+        "connect_and_automate": {
+          "approach": "Build Claude workflow that pulls data from Shopify, Meta Ads, and Google Ads APIs daily, correlates customer touchpoints via UTM parameters and email matching, and generates unified attribution reports with spend recommendations.",
+          "build_time": "15-20 hours",
+          "mcp_servers": [
+            "shopify-mcp"
+          ],
+          "tools_used": [
+            "Claude Code",
+            "Shopify API",
+            "Meta Marketing API",
+            "Google Ads API"
+          ],
+          "monthly_cost": "EUR 30-80/mo (API usage) + 15-20hrs initial build",
+          "pros": [
+            "Full control over attribution model",
+            "Custom report formats",
+            "No monthly platform fees",
+            "Can incorporate first-party data uniquely"
+          ],
+          "cons": [
+            "API integration complexity",
+            "Requires maintenance when APIs change",
+            "No pre-built dashboard UI"
+          ]
+        },
+        "enhance_with_ai": {
+          "approach": "Layer first-party data correlation on existing analytics stack. Use server-side tracking (Shopify pixels + custom events) to build owned customer journey data that survives iOS privacy changes and cookie deprecation.",
+          "build_time": "3-4 weeks",
+          "tools_used": [
+            "Shopify Web Pixels",
+            "Server-side GTM",
+            "Claude API for analysis",
+            "Existing analytics tools"
+          ],
+          "monthly_cost": "EUR 100-300/mo",
+          "pros": [
+            "Privacy-resilient (first-party data)",
+            "Works with existing tools",
+            "Future-proof against cookie changes",
+            "Competitive advantage in data quality"
+          ],
+          "cons": [
+            "Technical setup required",
+            "Needs developer involvement",
+            "Gradual data accumulation period"
+          ]
+        },
+        "targeted_upgrade": {
+          "when_needed": "When you want turnkey multi-touch attribution with pre-built Shopify integration and real-time dashboards",
+          "tools": [
+            "Triple Whale",
+            "Northbeam",
+            "Polar Analytics"
+          ],
+          "cost_range": "EUR 300-1,000/month",
+          "migration_time": "1-2 weeks",
+          "pros": [
+            "Instant setup with Shopify",
+            "Real-time ROAS dashboards",
+            "Built for DTC brands",
+            "Creative performance analytics"
+          ],
+          "cons": [
+            "Significant monthly cost",
+            "Data stays in vendor platform",
+            "May overlap with existing analytics"
+          ]
+        }
+      },
+      "roi_example": {
+        "scenario": "DTC brand spending EUR 15,000/mo on ads across Meta, Google, and TikTok with no unified attribution",
+        "cost": "EUR 500/month (Triple Whale) or EUR 80/month (custom build)",
+        "value_created": "Identify 20-30% of ad spend going to underperforming channels and reallocate to top performers",
+        "roi_analysis": {
+          "conservative": {
+            "roi_percentage": 300,
+            "payback_months": 2,
+            "note": "10% improvement in ad spend efficiency on EUR 15K monthly"
+          },
+          "expected": {
+            "roi_percentage": 500,
+            "payback_months": 1,
+            "note": "20% improvement in ad spend efficiency"
+          },
+          "optimistic": {
+            "roi_percentage": 800,
+            "payback_months": 1,
+            "note": "30% improvement plus creative insights driving higher CTR"
+          }
+        },
+        "assumptions": "Assumes minimum EUR 5K monthly ad spend. Impact scales with spend. First-party data advantage grows over time as cookie deprecation accelerates."
+      },
+      "eu_relevance": "High — GDPR limits cross-platform tracking, making first-party attribution more valuable. iOS ATT adoption is higher in EU markets. Server-side tracking and first-party data strategies are compliance-friendly alternatives.",
+      "our_recommendation": "targeted_upgrade",
+      "recommendation_rationale": "For most e-commerce businesses spending EUR 5K+ on ads, Triple Whale or Northbeam provides immediate value with pre-built Shopify integration. The custom build only makes sense for very large spenders (EUR 50K+) who need proprietary models."
+    },
+    {
+      "id": "ai-subscription-management",
+      "name": "AI Subscription Management",
+      "description": "AI-powered subscription commerce optimization covering churn prediction, renewal timing, subscription box personalization, and retention automation",
+      "category": "revenue_growth",
+      "impact": {
+        "value_saved": {
+          "time_hours_per_week": 10,
+          "description": "Automates churn risk monitoring, renewal workflows, and subscription analytics reporting"
+        },
+        "value_created": {
+          "description": "Reduces subscriber churn by 15-30% through predictive interventions and personalized retention offers",
+          "potential_revenue_impact": "20-40% increase in subscriber LTV through better retention and upsell timing"
+        }
+      },
+      "customer_value_score": 8,
+      "business_health_score": 9,
+      "implementation": {
+        "complexity": "medium",
+        "timeline_weeks": 4,
+        "required_data": [
+          "Subscription history",
+          "Customer behavior data",
+          "Product catalog",
+          "Churn/cancellation data",
+          "Payment history"
+        ]
+      },
+      "options": {
+        "connect_and_automate": {
+          "approach": "Build churn prediction model using Claude that analyzes subscription patterns (skip frequency, support tickets, engagement drops) and triggers automated retention workflows via Klaviyo when risk is detected.",
+          "build_time": "18-25 hours",
+          "mcp_servers": [
+            "shopify-mcp"
+          ],
+          "tools_used": [
+            "Claude Code",
+            "Recharge/Bold API",
+            "Klaviyo API",
+            "Shopify API"
+          ],
+          "monthly_cost": "EUR 50-120/mo (API usage) + 18-25hrs initial build",
+          "pros": [
+            "Custom churn signals for your business",
+            "Full control over retention offers",
+            "No per-subscriber fees",
+            "Can personalize box contents"
+          ],
+          "cons": [
+            "Needs historical data to be accurate",
+            "Development and maintenance effort",
+            "Cold start problem with new subscribers"
+          ]
+        },
+        "enhance_with_ai": {
+          "approach": "Add AI layer on top of existing Recharge/Bold setup: predictive churn scoring, dynamic subscription box personalization based on purchase history, and automated win-back sequences for cancelled subscribers.",
+          "build_time": "3-4 weeks",
+          "tools_used": [
+            "Recharge or Bold",
+            "Claude API",
+            "Klaviyo",
+            "Shopify"
+          ],
+          "monthly_cost": "EUR 200-500/mo",
+          "pros": [
+            "Works with existing subscription platform",
+            "Proven retention playbooks",
+            "Multi-channel win-back (email + SMS)",
+            "Box personalization increases perceived value"
+          ],
+          "cons": [
+            "Integration complexity",
+            "Requires minimum subscriber base (~500+) for patterns",
+            "Monthly tool costs add up"
+          ]
+        },
+        "targeted_upgrade": {
+          "when_needed": "When you need a complete subscription management platform with built-in AI retention features",
+          "tools": [
+            "Recharge",
+            "Bold Subscriptions",
+            "Ordergroove"
+          ],
+          "cost_range": "EUR 100-500/month + per-transaction fees",
+          "migration_time": "2-4 weeks",
+          "pros": [
+            "Complete subscription infrastructure",
+            "Built-in analytics and churn tools",
+            "Customer portal included",
+            "Proven at scale"
+          ],
+          "cons": [
+            "Per-transaction fees (1-2%)",
+            "Platform lock-in",
+            "AI features may require higher tiers"
+          ]
+        }
+      },
+      "roi_example": {
+        "scenario": "Subscription box business with 2,000 active subscribers at EUR 35/mo average, experiencing 8% monthly churn",
+        "cost": "EUR 300/month for enhanced subscription management",
+        "value_created": "Reduce churn from 8% to 5.5% = retain 50 additional subscribers/month = EUR 1,750/month in preserved recurring revenue",
+        "roi_analysis": {
+          "conservative": {
+            "roi_percentage": 250,
+            "payback_months": 2,
+            "note": "15% churn reduction (8% to 6.8%)"
+          },
+          "expected": {
+            "roi_percentage": 480,
+            "payback_months": 1,
+            "note": "30% churn reduction (8% to 5.6%)"
+          },
+          "optimistic": {
+            "roi_percentage": 700,
+            "payback_months": 1,
+            "note": "40% churn reduction plus 10% upsell improvement"
+          }
+        },
+        "assumptions": "Impact is proportional to subscriber base size. Businesses with fewer than 200 subscribers may see lower absolute returns. Churn reduction compounds over time as retained subscribers generate ongoing revenue."
+      },
+      "eu_relevance": "Medium — EU subscription businesses must comply with transparent cancellation requirements. AI-powered retention must not create dark patterns. GDPR applies to subscriber behavioral data used for churn prediction.",
+      "our_recommendation": "enhance_with_ai",
+      "recommendation_rationale": "Most subscription businesses already use Recharge or Bold. Adding an AI churn prediction layer on top delivers the highest marginal value. The custom build is viable for larger operations (5,000+ subscribers) where per-subscriber savings justify development investment."
     }
   ],
   "quick_wins": [
@@ -1519,25 +1975,37 @@
       "name": "Set up abandoned cart email recovery",
       "time_to_implement": "1 day",
       "cost": "Often included in email platform or EUR 50-100/month",
-      "impact": "Recover 5-15% of abandoned carts"
+      "impact": "Recover 10-15% of abandoned carts (EUR 260B recoverable market)"
     },
     {
       "name": "Add AI chatbot for common customer questions",
       "time_to_implement": "1 week",
-      "cost": "EUR 50-200/month",
-      "impact": "Reduce support tickets by 30-50%"
+      "cost": "EUR 50-200/month (Tidio/Gorgias starter)",
+      "impact": "Reduce support tickets by 30-50%; cost per interaction drops from EUR 5.52-36.80 to EUR 0.46"
     },
     {
       "name": "Implement automated review request emails",
       "time_to_implement": "1 day",
-      "cost": "EUR 15-50/month or included",
-      "impact": "5-10x more product reviews"
+      "cost": "EUR 0-15/month (Judge.me free tier or Awesome plan)",
+      "impact": "5-10x more product reviews; products with reviews convert 270% better"
     },
     {
       "name": "Use AI for product description generation",
       "time_to_implement": "1 day",
-      "cost": "EUR 50-100/month",
-      "impact": "Reduce content creation time by 60-80%"
+      "cost": "EUR 0 (Shopify Magic) or EUR 50-100/month (Jasper/API)",
+      "impact": "Reduce content creation time by 60-80%; up to 43% higher CTR with personalized descriptions"
+    },
+    {
+      "name": "Enable AI collection sorting",
+      "time_to_implement": "1 day",
+      "cost": "EUR 20-100/month (Kimonix, Entaice)",
+      "impact": "5-15% conversion lift; saves 6+ hours/week of manual merchandising"
+    },
+    {
+      "name": "Set up EU accessibility scanning",
+      "time_to_implement": "1 day",
+      "cost": "EUR 0 (Lighthouse) or EUR 50-200/month (Siteimprove)",
+      "impact": "EAA compliance (effective June 2025); avoid fines up to EUR 500K per infringement"
     }
   ],
   "not_recommended": [
@@ -1548,13 +2016,32 @@
     },
     {
       "name": "Custom fraud detection system",
-      "reason": "Fraud patterns evolve constantly; established providers have larger datasets for training ML models",
+      "reason": "Fraud patterns evolve constantly; established providers have larger datasets for training ML models and offer chargeback guarantees",
       "alternative": "Use Shopify Protect, Signifyd, or Riskified for fraud prevention"
     },
     {
       "name": "Building your own email marketing platform",
       "reason": "Email deliverability, compliance (GDPR/CAN-SPAM), and infrastructure are complex; established platforms handle this",
       "alternative": "Use Klaviyo, Omnisend, or Mailchimp with custom integrations"
+    },
+    {
+      "name": "Headless commerce migration for stores under EUR 2M",
+      "reason": "Initial costs EUR 50,000-150,000 for mid-market; 12-24 months for full migration. ROI doesn't justify for SMBs.",
+      "alternative": "Use Shopify or WooCommerce with native AI tools. Headless is only justified above EUR 2M revenue with specific performance/customization needs."
+    },
+    {
+      "name": "Custom ESG/sustainability reporting for SMBs",
+      "reason": "EU CSRD scope was narrowed in Dec 2025 (Omnibus Package) to companies with 1,000+ employees and EUR 450M+ turnover. SMBs are exempt from mandatory reporting.",
+      "alternative": "Focus on voluntary sustainability messaging for brand differentiation; use marketplace eco-badges where available"
+    }
+  ],
+  "forward_looking": [
+    {
+      "name": "Agentic Commerce (AI agents buying on behalf of consumers)",
+      "timeline": "2027+",
+      "description": "AI agents that autonomously browse, compare, and purchase products. McKinsey estimates $3-5 trillion in agent-mediated commerce by 2030.",
+      "prepare_now": "Ensure product data is structured (schema.org), machine-readable, and API-accessible. This is the foundation for agent discoverability.",
+      "tools_emerging": ["Perplexity Buy with Pro", "OpenAI Operator", "MCP protocol", "A2A protocol"]
     }
   ]
 }

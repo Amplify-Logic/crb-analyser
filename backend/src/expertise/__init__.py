@@ -14,7 +14,7 @@ Usage:
 
     # Read expertise before analysis
     store = get_expertise_store()
-    expertise = store.get_all_expertise_context("marketing-agencies")
+    expertise = store.get_all_expertise_context("professional-services")
 
     # Learn after analysis
     service = get_self_improve_service()

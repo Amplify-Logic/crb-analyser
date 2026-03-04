@@ -1,8 +1,8 @@
 {
   "industry": "ecommerce",
-  "last_updated": "2026-02",
-  "verification_status": "UNVERIFIED",
-  "verification_note": "Pricing requires verification from vendor websites",
+  "last_updated": "2026-03",
+  "verification_status": "VERIFIED",
+  "verification_note": "Pricing verified 2026-03-03 against vendor websites and industry pricing trackers. EUR conversions at 0.92 rate where applicable. Shopify 'Grow' plan (formerly 'Shopify'). Lifetimely changed to Free/M/L/XL tiers. Klaviyo now bills on active profiles.",
   "vendor_categories": [
     {
       "category": "ecommerce-platforms",
@@ -13,49 +13,109 @@
           "name": "Shopify",
           "website": "shopify.com",
           "pricing": {
-            "basic": {"price": 36, "currency": "EUR", "period": "month", "features": ["Online store", "2 staff accounts", "Basic reports"]},
-            "shopify": {"price": 105, "currency": "EUR", "period": "month", "features": ["5 staff accounts", "Professional reports", "Lower transaction fees"]},
-            "advanced": {"price": 399, "currency": "EUR", "period": "month", "features": ["15 staff accounts", "Custom reports", "Lowest transaction fees"]}
+            "starter": {"price": 5, "currency": "EUR", "period": "month", "features": ["Social selling", "Link-in-bio storefront"]},
+            "basic": {"price": 33, "currency": "EUR", "period": "month", "annual_price": 25, "features": ["Online store", "2 staff accounts", "Basic reports", "1.5% + 0.25 EUR card fees (EU)"]},
+            "grow": {"price": 88, "currency": "EUR", "period": "month", "annual_price": 66, "features": ["5 staff accounts", "Professional reports", "1.3% + 0.25 EUR card fees (EU)", "Gift cards"], "note": "Formerly 'Shopify' plan"},
+            "advanced": {"price": 384, "currency": "EUR", "period": "month", "annual_price": 288, "features": ["15 staff accounts", "Custom reports", "1.1% + 0.25 EUR card fees (EU)", "Third-party calculated shipping"]},
+            "plus": {"price": 2116, "currency": "EUR", "period": "month", "features": ["Enterprise features", "Shopify Flow", "Custom checkout", "Dedicated support"]}
           },
+          "ai_capabilities": ["Shopify Magic (AI product descriptions, email copy, image editing)", "Sidekick AI assistant (store management, analytics, automation)", "AI image generation", "Proactive growth opportunity detection"],
           "best_for": "Most SMB e-commerce businesses wanting ease of use and ecosystem",
-          "pros": ["Largest app ecosystem", "Easy to use", "Excellent uptime", "Great mobile experience", "Strong community"],
+          "pros": ["Largest app ecosystem", "Easy to use", "Excellent uptime", "Great mobile experience", "Free AI tools (Magic + Sidekick)"],
           "cons": ["Transaction fees unless using Shopify Payments", "Theme customization limits", "App costs add up"],
           "company_sizes": ["startup", "smb", "mid-market"],
           "integrations": ["Thousands of apps", "Major marketing platforms", "Payment gateways", "Shipping carriers"],
-          "pricing_verified_date": "2026-02",
-          "verified": false
+          "pricing_verified_date": "2026-03",
+          "verified": true
         },
         {
           "name": "WooCommerce",
           "website": "woocommerce.com",
           "pricing": {
             "core": {"price": 0, "currency": "EUR", "period": "month", "features": ["Open source", "WordPress plugin", "Unlimited products"]},
-            "hosting_typical": {"price": 20, "currency": "EUR", "period": "month", "features": ["Managed WordPress hosting required"]},
-            "extensions_typical": {"price": 50, "currency": "EUR", "period": "month", "features": ["Premium plugins and extensions"]}
+            "hosting_shared": {"price": 10, "currency": "EUR", "period": "month", "features": ["Basic shared hosting"]},
+            "hosting_managed": {"price": 50, "currency": "EUR", "period": "month", "features": ["Managed WordPress hosting (recommended)"]},
+            "extensions_typical": {"min": 50, "max": 100, "currency": "EUR", "period": "month", "features": ["Premium plugins and extensions"]},
+            "total_small_store_annual": {"min": 69, "max": 846, "currency": "EUR", "period": "year"},
+            "total_mid_store_annual": {"min": 1306, "max": 6026, "currency": "EUR", "period": "year"}
           },
           "best_for": "Businesses wanting full control and already using WordPress",
-          "pros": ["Free core", "Unlimited customization", "No transaction fees", "Large plugin ecosystem", "Full ownership"],
+          "pros": ["Free core", "Unlimited customization", "No transaction fees (only gateway fees)", "Large plugin ecosystem", "Full ownership"],
           "cons": ["Requires WordPress knowledge", "Hosting responsibility", "Security management", "Extension costs add up"],
           "company_sizes": ["startup", "smb", "mid-market"],
           "integrations": ["WordPress ecosystem", "Major payment gateways", "Shipping plugins", "Marketing tools"],
-          "pricing_verified_date": "2026-02",
-          "verified": false
+          "pricing_verified_date": "2026-03",
+          "verified": true
         },
         {
           "name": "BigCommerce",
           "website": "bigcommerce.com",
           "pricing": {
-            "standard": {"price": 39, "currency": "EUR", "period": "month", "features": ["Online store", "Unlimited products", "Multi-channel"]},
-            "plus": {"price": 105, "currency": "EUR", "period": "month", "features": ["Customer segmentation", "Abandoned cart saver", "Persistent cart"]},
-            "pro": {"price": 399, "currency": "EUR", "period": "month", "features": ["Custom facets", "Price lists", "Google customer reviews"]}
+            "standard": {"price": 36, "currency": "EUR", "period": "month", "annual_price": 27, "features": ["Online store", "Unlimited products", "Multi-channel", "Up to $50K/yr revenue"]},
+            "plus": {"price": 97, "currency": "EUR", "period": "month", "annual_price": 73, "features": ["Customer segmentation", "Abandoned cart saver", "Persistent cart", "Up to $180K/yr revenue"]},
+            "pro": {"price": 367, "currency": "EUR", "period": "month", "annual_price": 275, "features": ["Custom facets", "Price lists", "Google customer reviews", "Up to $400K/yr revenue"]},
+            "enterprise": {"price": "custom", "features": ["No revenue limits", "Custom API calls", "Priority support"]}
           },
           "best_for": "Growing businesses needing built-in features without heavy app reliance",
-          "pros": ["No transaction fees", "Strong built-in features", "Multi-channel selling", "B2B capabilities"],
-          "cons": ["Fewer themes than Shopify", "Revenue-based plan limits", "Smaller app ecosystem"],
+          "pros": ["No transaction fees on any plan", "Strong built-in features", "Multi-channel selling", "B2B capabilities", "Unlimited products/storage/bandwidth"],
+          "cons": ["Revenue-based plan limits", "Smaller app ecosystem than Shopify", "Fewer themes"],
           "company_sizes": ["smb", "mid-market"],
           "integrations": ["Amazon", "eBay", "Facebook", "Google Shopping", "Major payment gateways"],
-          "pricing_verified_date": "2026-02",
-          "verified": false
+          "pricing_verified_date": "2026-03",
+          "verified": true
+        },
+        {
+          "name": "Squarespace",
+          "website": "squarespace.com",
+          "pricing": {
+            "personal": {"price": 14, "currency": "EUR", "period": "month", "annual_price": 11, "features": ["Website builder", "Free domain", "SSL", "Basic analytics"]},
+            "business": {"price": 26, "currency": "EUR", "period": "month", "annual_price": 20, "features": ["E-commerce basic", "3% transaction fee", "Pop-ups", "Advanced analytics"]},
+            "basic_commerce": {"price": 28, "currency": "EUR", "period": "month", "annual_price": 24, "features": ["No transaction fees", "POS", "Customer accounts", "Product reviews"]},
+            "advanced_commerce": {"price": 52, "currency": "EUR", "period": "month", "annual_price": 40, "features": ["Abandoned cart recovery", "Subscriptions", "Advanced shipping", "Commerce APIs"]}
+          },
+          "ai_capabilities": ["AI text generation for product descriptions", "AI image editing", "Design suggestions"],
+          "best_for": "Design-focused brands with smaller catalogs who prioritize aesthetics over app ecosystem",
+          "pros": ["Beautiful templates", "All-in-one platform", "No hosting management", "Good for content-heavy stores"],
+          "cons": ["Limited e-commerce features vs Shopify", "Small app ecosystem", "Limited API access", "No multi-currency on lower plans"],
+          "company_sizes": ["startup", "smb"],
+          "integrations": ["Limited third-party integrations", "Zapier", "Mailchimp", "PayPal", "Stripe"],
+          "pricing_verified_date": "2026-03",
+          "verified": true
+        },
+        {
+          "name": "Wix",
+          "website": "wix.com",
+          "pricing": {
+            "light": {"price": 12, "currency": "EUR", "period": "month", "features": ["Basic website", "2GB storage"]},
+            "core": {"price": 24, "currency": "EUR", "period": "month", "features": ["Online store", "50GB storage", "Basic e-commerce"]},
+            "business": {"price": 30, "currency": "EUR", "period": "month", "features": ["Dropshipping", "Marketplace", "Subscriptions", "100GB storage"]},
+            "business_elite": {"price": 142, "currency": "EUR", "period": "month", "features": ["Unlimited storage", "Priority support", "Advanced shipping"]}
+          },
+          "ai_capabilities": ["ADI (AI site builder)", "AI text creator", "AI image generator", "AI SEO assistant"],
+          "best_for": "Very small stores or non-technical founders who want drag-and-drop simplicity",
+          "pros": ["Very easy to use", "AI site builder", "Affordable entry", "Built-in marketing tools"],
+          "cons": ["Limited scalability", "Cannot switch templates after launch", "Smaller e-commerce feature set", "Less professional for larger operations"],
+          "company_sizes": ["startup", "smb"],
+          "integrations": ["Wix App Market", "Zapier", "Major payment gateways"],
+          "pricing_verified_date": "2026-03",
+          "verified": true
+        },
+        {
+          "name": "Magento / Adobe Commerce",
+          "website": "business.adobe.com/products/magento/magento-commerce.html",
+          "pricing": {
+            "open_source": {"price": 0, "currency": "EUR", "period": "month", "features": ["Self-hosted", "Full source code", "Community support"]},
+            "hosting_typical": {"min": 50, "max": 500, "currency": "EUR", "period": "month", "features": ["Managed Magento hosting"]},
+            "adobe_commerce": {"price": "custom", "features": ["Cloud hosting", "B2B features", "AI personalization", "Dedicated support"], "note": "Starts ~EUR 20,000/yr"}
+          },
+          "ai_capabilities": ["Adobe Sensei AI (product recommendations, visual search, personalization)", "Live Search with ML ranking", "Intelligent re-ranking"],
+          "best_for": "Larger operations (EUR 3M+) needing maximum customization and B2B capabilities",
+          "pros": ["Unlimited customization", "Strong B2B features", "Multi-store from single admin", "Huge extension marketplace"],
+          "cons": ["High development costs", "Steep learning curve", "Requires dedicated hosting", "Expensive to maintain"],
+          "company_sizes": ["mid-market", "enterprise"],
+          "integrations": ["Adobe ecosystem", "ERPs", "Major payment gateways", "Custom integrations"],
+          "pricing_verified_date": "2026-03",
+          "verified": true
         }
       ]
     },
@@ -68,54 +128,58 @@
           "name": "Gorgias",
           "website": "gorgias.com",
           "pricing": {
-            "starter": {"price": 10, "currency": "EUR", "period": "month", "features": ["50 tickets/month", "Live chat", "Shopify integration"]},
-            "basic": {"price": 60, "currency": "EUR", "period": "month", "features": ["300 tickets/month", "Automation", "Multi-channel"]},
-            "pro": {"price": 360, "currency": "EUR", "period": "month", "features": ["2000 tickets/month", "Revenue statistics", "Automation add-on"]},
-            "advanced": {"price": 900, "currency": "EUR", "period": "month", "features": ["5000 tickets/month", "Dedicated success manager"]}
+            "starter": {"price": 9, "currency": "EUR", "period": "month", "features": ["50 tickets/month", "3 seats", "Live chat", "Shopify integration"], "overage": "0.37 EUR/ticket"},
+            "basic": {"price": 55, "currency": "EUR", "period": "month", "features": ["300 tickets/month", "Unlimited agents", "Automation", "Multi-channel"], "overage": "0.37 EUR/ticket"},
+            "pro": {"price": 331, "currency": "EUR", "period": "month", "features": ["2000 tickets/month", "Revenue statistics", "Automation add-on"], "overage": "0.33 EUR/ticket"},
+            "advanced": {"price": 828, "currency": "EUR", "period": "month", "features": ["5000 tickets/month", "Dedicated success manager"], "overage": "0.33 EUR/ticket"},
+            "enterprise": {"price": "custom", "features": ["Custom ticket volume", "Custom integrations", "SLA"]}
           },
           "best_for": "Shopify stores wanting e-commerce-native support",
-          "pros": ["Built for e-commerce", "Deep Shopify integration", "Order data in sidebar", "Revenue tracking", "AI automate"],
-          "cons": ["Per-ticket pricing can get expensive", "Limited outside e-commerce"],
+          "pros": ["Built for e-commerce", "Deep Shopify integration", "Order data in sidebar", "Revenue tracking", "AI automate", "Unlimited agents on Basic+"],
+          "cons": ["Per-ticket pricing can get expensive at scale", "Limited outside e-commerce"],
           "company_sizes": ["startup", "smb", "mid-market"],
-          "ai_capabilities": ["Auto-responses", "Ticket classification", "Sentiment analysis", "Intent detection"],
+          "ai_capabilities": ["Auto-responses", "Ticket classification", "Sentiment analysis", "Intent detection", "AI agent for tier-1 support"],
           "integrations": ["Shopify", "BigCommerce", "Magento", "Klaviyo", "Yotpo", "Attentive"],
-          "pricing_verified_date": "2026-02",
-          "verified": false
+          "pricing_verified_date": "2026-03",
+          "verified": true
         },
         {
           "name": "Zendesk",
           "website": "zendesk.com",
           "pricing": {
-            "suite_team": {"price": 55, "currency": "EUR", "period": "month", "features": ["Ticketing", "Email & social", "Help center"]},
-            "suite_growth": {"price": 89, "currency": "EUR", "period": "month", "features": ["Multiple ticket forms", "SLA management", "Self-service portal"]},
-            "suite_professional": {"price": 115, "currency": "EUR", "period": "month", "features": ["Custom analytics", "Skills-based routing", "HIPAA eligible"]}
+            "suite_team": {"price": 51, "currency": "EUR", "period": "month", "per": "agent", "billing": "annual", "features": ["Ticketing", "Email & social", "Help center"]},
+            "suite_growth": {"price": 82, "currency": "EUR", "period": "month", "per": "agent", "billing": "annual", "features": ["Multiple ticket forms", "SLA management", "Self-service portal", "Multilingual"]},
+            "suite_professional": {"price": 106, "currency": "EUR", "period": "month", "per": "agent", "billing": "annual", "features": ["Custom analytics", "Skills-based routing", "HIPAA eligible"]},
+            "suite_enterprise": {"price": 155, "currency": "EUR", "period": "month", "per": "agent", "billing": "annual", "features": ["Custom roles", "Advanced AI", "Sandbox"]}
           },
+          "ai_addon": {"price": 46, "currency": "EUR", "period": "month", "per": "agent", "features": ["Advanced AI capabilities"]},
           "best_for": "Businesses wanting enterprise-grade support capabilities",
           "pros": ["Powerful platform", "Extensive integrations", "Multi-channel", "Strong analytics", "AI features"],
-          "cons": ["Not e-commerce specific", "Per-agent pricing gets expensive", "Complex setup"],
+          "cons": ["Not e-commerce specific", "Per-agent pricing gets expensive", "Complex setup", "Monthly billing ~20% higher"],
           "company_sizes": ["smb", "mid-market", "enterprise"],
           "ai_capabilities": ["AI agent (Zendesk AI)", "Intelligent routing", "Predictive CSAT", "Auto-tagging"],
           "integrations": ["Shopify", "WooCommerce", "Salesforce", "Slack", "Jira", "Most major platforms"],
-          "pricing_verified_date": "2026-02",
-          "verified": false
+          "pricing_verified_date": "2026-03",
+          "verified": true
         },
         {
           "name": "Tidio",
           "website": "tidio.com",
           "pricing": {
-            "free": {"price": 0, "currency": "EUR", "period": "month", "features": ["Live chat", "50 conversations/month", "Basic chatbot"]},
-            "starter": {"price": 29, "currency": "EUR", "period": "month", "features": ["100 conversations/month", "Live visitor list", "Analytics"]},
-            "growth": {"price": 59, "currency": "EUR", "period": "month", "features": ["Up to 2000 conversations", "Advanced analytics", "Permissions"]},
-            "tidio_ai": {"price": 29, "currency": "EUR", "period": "month", "features": ["AI chatbot add-on", "FAQ wizard", "Smart responses"]}
+            "free": {"price": 0, "currency": "EUR", "period": "month", "features": ["Live chat", "50 conversations (lifetime)", "Basic chatbot"]},
+            "starter": {"price": 27, "currency": "EUR", "period": "month", "features": ["100 conversations/month", "Live visitor list", "Analytics"]},
+            "growth": {"price": 54, "currency": "EUR", "period": "month", "features": ["250-2000 conversations", "Advanced analytics", "Permissions"], "max_price": 321},
+            "plus": {"price": 689, "currency": "EUR", "period": "month", "features": ["2000-5000 conversations", "Dedicated support"]},
+            "lyro_ai_addon": {"price": 36, "currency": "EUR", "period": "month", "features": ["AI chatbot (Lyro)", "50-100 AI conversations", "Scales to 644 EUR/mo at volume"]}
           },
           "best_for": "Small stores wanting affordable live chat with AI",
-          "pros": ["Free tier available", "Easy setup", "Good chatbot builder", "Affordable AI add-on"],
-          "cons": ["Basic compared to Gorgias for e-commerce", "Limited e-commerce integrations on free tier"],
+          "pros": ["Free tier available", "Easy setup", "Good chatbot builder", "Lyro AI addon is affordable entry point"],
+          "cons": ["Unused conversation capacity doesn't roll over", "Auto-upgrades when exceeding quota", "Limited e-commerce integrations on free tier"],
           "company_sizes": ["startup", "smb"],
           "ai_capabilities": ["AI chatbot (Lyro)", "FAQ automation", "Smart replies", "Intent recognition"],
           "integrations": ["Shopify", "WooCommerce", "WordPress", "Messenger", "Instagram"],
-          "pricing_verified_date": "2026-02",
-          "verified": false
+          "pricing_verified_date": "2026-03",
+          "verified": true
         }
       ]
     },
@@ -128,53 +192,61 @@
           "name": "Klaviyo",
           "website": "klaviyo.com",
           "pricing": {
-            "free": {"price": 0, "currency": "EUR", "period": "month", "features": ["Up to 250 contacts", "500 email sends", "Basic flows"]},
-            "email": {"price": 45, "currency": "EUR", "period": "month", "features": ["Up to 1,500 contacts", "Unlimited sends", "A/B testing"]},
-            "email_sms": {"price": 60, "currency": "EUR", "period": "month", "features": ["Email + SMS", "Up to 1,500 contacts"]}
+            "free": {"price": 0, "currency": "EUR", "period": "month", "features": ["Up to 250 active profiles", "500 email sends/mo", "150 SMS credits", "Email support for 60 days"]},
+            "email_500": {"price": 18, "currency": "EUR", "period": "month", "features": ["Up to 500 active profiles", "Unlimited sends", "A/B testing"]},
+            "email_1000": {"price": 28, "currency": "EUR", "period": "month", "features": ["Up to 1,000 active profiles"]},
+            "email_5000": {"price": 92, "currency": "EUR", "period": "month", "features": ["Up to 5,000 active profiles"]},
+            "email_10000": {"price": 138, "currency": "EUR", "period": "month", "features": ["Up to 10,000 active profiles"]},
+            "email_50000": {"price": 1564, "currency": "EUR", "period": "month", "features": ["Up to 50,000 active profiles"]},
+            "email_sms_500": {"price": 32, "currency": "EUR", "period": "month", "features": ["Email + SMS", "Up to 500 active profiles"]}
           },
+          "pricing_model": "Based on active profiles (changed from email volume in 2025). Auto-upgrades when profile count exceeds tier. 25% price increase cap for existing customers.",
           "best_for": "E-commerce businesses wanting data-driven email and SMS marketing",
-          "pros": ["Built for e-commerce", "Deep Shopify integration", "Powerful segmentation", "Revenue attribution", "Pre-built flows"],
-          "cons": ["Gets expensive with large lists", "Learning curve for advanced features", "SMS costs extra"],
+          "pros": ["Built for e-commerce", "Deep Shopify integration", "Powerful segmentation", "Revenue attribution", "Pre-built flows", "Predictive analytics"],
+          "cons": ["Gets expensive with large lists", "Billing based on active profiles", "SMS costs extra"],
           "company_sizes": ["startup", "smb", "mid-market"],
-          "ai_capabilities": ["Predictive analytics", "Send time optimization", "Subject line suggestions", "Smart sending"],
+          "ai_capabilities": ["Predictive analytics", "Send time optimization", "Subject line suggestions", "Smart sending", "Predictive CLV", "Churn prediction"],
           "integrations": ["Shopify", "BigCommerce", "WooCommerce", "Magento", "Facebook", "Google Ads"],
-          "pricing_verified_date": "2026-02",
-          "verified": false
+          "pricing_verified_date": "2026-03",
+          "verified": true
         },
         {
           "name": "Omnisend",
           "website": "omnisend.com",
           "pricing": {
             "free": {"price": 0, "currency": "EUR", "period": "month", "features": ["Up to 250 contacts", "500 emails/month", "Basic flows"]},
-            "standard": {"price": 16, "currency": "EUR", "period": "month", "features": ["Up to 500 contacts", "6,000 emails/month", "SMS"]},
-            "pro": {"price": 59, "currency": "EUR", "period": "month", "features": ["Unlimited emails", "Advanced reporting", "Priority support"]}
+            "standard_500": {"price": 15, "currency": "EUR", "period": "month", "features": ["Up to 500 contacts", "6,000 emails/month", "60 SMS", "Web push"]},
+            "standard_5000": {"price": 60, "currency": "EUR", "period": "month", "features": ["Up to 5,000 contacts"]},
+            "standard_10000": {"price": 106, "currency": "EUR", "period": "month", "features": ["Up to 10,000 contacts"]},
+            "pro_500": {"price": 54, "currency": "EUR", "period": "month", "features": ["Unlimited emails", "Free SMS credits", "Advanced reporting", "Priority support"]},
+            "pro_5000": {"price": 83, "currency": "EUR", "period": "month", "features": ["Up to 5,000 contacts", "Unlimited emails"]}
           },
           "best_for": "SMB e-commerce stores wanting affordable omnichannel marketing",
-          "pros": ["Affordable pricing", "Easy to use", "E-commerce focused", "SMS + email + push", "Pre-built automations"],
+          "pros": ["Affordable pricing", "Easy to use", "E-commerce focused", "SMS + email + push", "Pre-built automations", "30% off first 3 months quarterly"],
           "cons": ["Less powerful segmentation than Klaviyo", "Fewer integrations", "Basic analytics on lower tiers"],
           "company_sizes": ["startup", "smb"],
           "ai_capabilities": ["Smart segmentation", "Product recommendations", "Campaign booster"],
           "integrations": ["Shopify", "BigCommerce", "WooCommerce", "Magento"],
-          "pricing_verified_date": "2026-02",
-          "verified": false
+          "pricing_verified_date": "2026-03",
+          "verified": true
         },
         {
           "name": "Mailchimp",
           "website": "mailchimp.com",
           "pricing": {
-            "free": {"price": 0, "currency": "EUR", "period": "month", "features": ["Up to 500 contacts", "1,000 emails/month", "Basic templates"]},
-            "essentials": {"price": 13, "currency": "EUR", "period": "month", "features": ["Up to 500 contacts", "5,000 emails/month", "A/B testing"]},
-            "standard": {"price": 20, "currency": "EUR", "period": "month", "features": ["Up to 500 contacts", "6,000 emails/month", "Automations", "Retargeting"]},
-            "premium": {"price": 350, "currency": "EUR", "period": "month", "features": ["Advanced segmentation", "Multivariate testing", "Phone support"]}
+            "free": {"price": 0, "currency": "EUR", "period": "month", "features": ["Up to 250 contacts", "500 emails/month", "Basic templates"], "note": "Reduced from 500 contacts in Jan 2026"},
+            "essentials": {"price": 12, "currency": "EUR", "period": "month", "features": ["Up to 500 contacts", "5,000 emails/month (10x contacts)", "A/B testing"]},
+            "standard": {"price": 18, "currency": "EUR", "period": "month", "features": ["Up to 500 contacts", "6,000 emails/month (12x contacts)", "Automations", "Retargeting"]},
+            "premium": {"price": 322, "currency": "EUR", "period": "month", "features": ["10,000+ contacts", "150,000 emails/month (15x contacts)", "Advanced segmentation", "Multivariate testing", "Phone support"]}
           },
           "best_for": "Small businesses starting with email marketing",
           "pros": ["Well-known brand", "Easy to use", "Free tier", "Landing pages included", "Good templates"],
-          "cons": ["Less e-commerce focused than Klaviyo", "Pricing increases quickly", "Limited automation on lower tiers"],
+          "cons": ["Free tier shrinking (250 contacts now)", "Less e-commerce focused than Klaviyo", "Pricing increases with Intuit ownership", "Limited automation on lower tiers"],
           "company_sizes": ["startup", "smb"],
           "ai_capabilities": ["Creative assistant", "Send time optimization", "Content optimizer", "Predictive demographics"],
           "integrations": ["Shopify", "WooCommerce", "Squarespace", "Major platforms"],
-          "pricing_verified_date": "2026-02",
-          "verified": false
+          "pricing_verified_date": "2026-03",
+          "verified": true
         }
       ]
     },
@@ -187,18 +259,27 @@
           "name": "Triple Whale",
           "website": "triplewhale.com",
           "pricing": {
-            "starter": {"price": 100, "currency": "EUR", "period": "month", "features": ["Dashboard", "Pixel tracking", "Basic attribution"]},
-            "growth": {"price": 250, "currency": "EUR", "period": "month", "features": ["Advanced attribution", "Customer journeys", "Cohort analysis"]},
-            "enterprise": {"price": "custom", "features": ["Custom models", "API access", "Dedicated support"]}
+            "founders_dash": {"price": 0, "currency": "EUR", "period": "month", "features": ["Basic dashboard", "Post-purchase survey"]},
+            "growth": {"price": 119, "currency": "EUR", "period": "month", "features": ["Dashboard", "Pixel tracking", "Anomaly detection"], "note": "Base price; scales with GMV"},
+            "pro": {"price": 183, "currency": "EUR", "period": "month", "features": ["AI recommendations", "RFM audiences", "Advanced attribution"]},
+            "enterprise": {"price": 257, "currency": "EUR", "period": "month", "features": ["Creative insights", "Product analytics", "Dedicated CSM"]},
+            "gmv_scaling": {
+              "1m_to_2_5m": 505,
+              "5m_to_7m": 1039,
+              "50m_plus": "custom",
+              "currency": "EUR",
+              "period": "month"
+            }
           },
+          "pricing_model": "GMV-based pricing; annual billing saves ~16.6%",
           "best_for": "DTC brands wanting clear attribution across marketing channels",
-          "pros": ["Built for DTC/e-commerce", "Clean dashboard", "Multi-touch attribution", "Profit tracking", "Creative analytics"],
-          "cons": ["Expensive for small stores", "Requires sufficient traffic for accuracy", "Shopify focused"],
+          "pros": ["Built for DTC/e-commerce", "Clean dashboard", "Multi-touch attribution", "Profit tracking", "Creative analytics", "Free founder tier"],
+          "cons": ["Gets expensive at scale (GMV-based)", "Requires sufficient traffic for accuracy", "Shopify focused"],
           "company_sizes": ["smb", "mid-market"],
           "ai_capabilities": ["AI attribution modeling", "Anomaly detection", "Forecasting", "Creative performance AI"],
           "integrations": ["Shopify", "Facebook Ads", "Google Ads", "TikTok", "Klaviyo", "Google Analytics"],
-          "pricing_verified_date": "2026-02",
-          "verified": false
+          "pricing_verified_date": "2026-03",
+          "verified": true
         },
         {
           "name": "Google Analytics 4",
@@ -213,25 +294,27 @@
           "company_sizes": ["startup", "smb", "mid-market", "enterprise"],
           "ai_capabilities": ["Predictive audiences", "Anomaly detection", "Automated insights"],
           "integrations": ["Google Ads", "Google Search Console", "BigQuery", "Looker Studio", "Most platforms"],
-          "pricing_verified_date": "2026-02",
-          "verified": false
+          "pricing_verified_date": "2026-03",
+          "verified": true
         },
         {
-          "name": "Lifetimely",
+          "name": "Lifetimely by AMP",
           "website": "lifetimely.io",
           "pricing": {
-            "basic": {"price": 34, "currency": "EUR", "period": "month", "features": ["LTV analytics", "Cohort analysis", "Basic reports"]},
-            "pro": {"price": 75, "currency": "EUR", "period": "month", "features": ["Profit & loss", "Customer segmentation", "Benchmarks"]},
-            "plus": {"price": 155, "currency": "EUR", "period": "month", "features": ["Predictive LTV", "Advanced segmentation", "API access"]}
+            "free": {"price": 0, "currency": "EUR", "period": "month", "features": ["Predictive LTV models", "Customer behavior analytics"]},
+            "m_medium": {"price": 137, "currency": "EUR", "period": "month", "features": ["Daily P&L", "Custom dashboards", "Benchmarks"]},
+            "l_large": {"price": 275, "currency": "EUR", "period": "month", "features": ["Marketing attribution", "Segmentation"]},
+            "xl": {"price": 459, "currency": "EUR", "period": "month", "features": ["Priority support", "App onboarding"]}
           },
+          "pricing_note": "Plan names changed from Basic/Pro/Plus to Free/M/L/XL",
           "best_for": "DTC brands focused on customer lifetime value and profitability",
-          "pros": ["LTV focused", "Clean profit tracking", "Cohort analysis", "Shopify integration"],
-          "cons": ["Shopify only", "Limited to LTV/profitability metrics"],
+          "pros": ["LTV focused", "Clean profit tracking", "Cohort analysis", "Shopify integration", "Free tier available"],
+          "cons": ["Shopify only", "Limited to LTV/profitability metrics", "Significant price increase from old plans"],
           "company_sizes": ["smb", "mid-market"],
           "ai_capabilities": ["Predictive LTV", "Customer scoring", "Churn prediction"],
           "integrations": ["Shopify", "Facebook Ads", "Google Ads"],
-          "pricing_verified_date": "2026-02",
-          "verified": false
+          "pricing_verified_date": "2026-03",
+          "verified": true
         }
       ]
     },
@@ -244,51 +327,194 @@
           "name": "ShipStation",
           "website": "shipstation.com",
           "pricing": {
-            "starter": {"price": 10, "currency": "EUR", "period": "month", "features": ["50 shipments/month", "1 user", "Branded labels"]},
-            "accelerate": {"price": 30, "currency": "EUR", "period": "month", "features": ["500 shipments/month", "3 users", "Automation rules"]},
-            "scale": {"price": 130, "currency": "EUR", "period": "month", "features": ["Unlimited shipments", "10 users", "Custom branding"]}
+            "starter": {"price": 9, "currency": "EUR", "period": "month", "features": ["50 shipments/month", "Branded labels"]},
+            "growth": {"price": 28, "currency": "EUR", "period": "month", "features": ["500 shipments/month", "Automation rules"]},
+            "growth_1k": {"price": 55, "currency": "EUR", "period": "month", "features": ["1,000 shipments/month"]},
+            "scale": {"price": 92, "currency": "EUR", "period": "month", "features": ["2,000 shipments/month", "Advanced features"]},
+            "high_volume": {"price": 368, "currency": "EUR", "period": "month", "features": ["Unlimited shipments"]}
           },
+          "pricing_note": "Plans auto-adjust based on monthly order volume. 300+ carrier integrations.",
           "best_for": "Multi-carrier shipping management and label generation",
-          "pros": ["Multi-carrier rate comparison", "Automation rules", "Multi-channel", "Branded tracking", "Batch processing"],
-          "cons": ["Shipment limits on lower tiers", "Not a full inventory system", "Per-user pricing"],
+          "pros": ["Multi-carrier rate comparison", "Automation rules", "Multi-channel", "Branded tracking", "Batch processing", "300+ carriers"],
+          "cons": ["Volume-based auto-adjustment", "Not a full inventory system"],
           "company_sizes": ["startup", "smb", "mid-market"],
           "ai_capabilities": ["Smart shipping rules", "Rate optimization"],
           "integrations": ["Shopify", "WooCommerce", "BigCommerce", "Amazon", "eBay", "Major carriers"],
-          "pricing_verified_date": "2026-02",
-          "verified": false
+          "pricing_verified_date": "2026-03",
+          "verified": true
+        },
+        {
+          "name": "Sendcloud",
+          "website": "sendcloud.com",
+          "eu_focus": true,
+          "pricing": {
+            "essential": {"price": 0, "currency": "EUR", "period": "month", "features": ["Basic shipping", "Tracking", "Limited labels"]},
+            "growth": {"price": 75, "currency": "EUR", "period": "month", "features": ["Up to 1,000 labels/mo", "Tracking emails", "5 shop integrations", "10 shipping rules"], "overage": "0.08 EUR/extra label"},
+            "business": {"price": 149, "currency": "EUR", "period": "month", "features": ["Unlimited integrations", "Custom carrier contracts", "Advanced rules"], "overage": "0.07 EUR/extra label"},
+            "premium": {"price": "custom", "features": ["Full API access", "Dedicated support"]}
+          },
+          "best_for": "European e-commerce businesses needing multi-carrier shipping with pre-negotiated EU rates",
+          "pros": ["160+ EU carriers", "Pre-negotiated carrier rates", "Native returns portal", "100+ shop integrations", "Strong cross-border EU shipping"],
+          "cons": ["EU-focused (limited outside Europe)", "Label overage fees add up"],
+          "company_sizes": ["startup", "smb", "mid-market"],
+          "ai_capabilities": ["Smart carrier selection", "Delivery prediction"],
+          "integrations": ["Shopify", "WooCommerce", "Magento", "Lightspeed", "BigCommerce", "Bol.com"],
+          "pricing_verified_date": "2026-03",
+          "verified": true
         },
         {
           "name": "ShipBob",
           "website": "shipbob.com",
           "pricing": {
             "fulfillment": {"price": "custom", "features": ["Pick, pack, ship", "Multi-warehouse", "2-day shipping", "Returns processing"]},
-            "note": "Pricing based on storage, pick/pack fees, and shipping volume"
+            "setup_fee": {"value": 897, "currency": "EUR", "note": "One-time"},
+            "monthly_minimum": {"value": 253, "currency": "EUR"},
+            "per_order": {"min": 4.60, "max": 9.20, "currency": "EUR"},
+            "storage": {"value": 4.60, "currency": "EUR", "unit": "per container/month"},
+            "note": "Custom pricing based on storage, pick/pack fees, and shipping volume. Best suited for 200+ orders/month."
           },
           "best_for": "Brands wanting to outsource fulfillment with 3PL",
           "pros": ["2-day shipping network", "Multi-warehouse distribution", "Returns handling", "Shopify integration", "Analytics"],
-          "cons": ["Volume commitments", "Less control over fulfillment", "Can be expensive for heavy/oversized items"],
+          "cons": ["Volume commitments", "Less control over fulfillment", "15-30% postage markup over carrier rates", "No published pricing"],
           "company_sizes": ["smb", "mid-market"],
           "ai_capabilities": ["Inventory distribution optimization", "Demand forecasting"],
           "integrations": ["Shopify", "BigCommerce", "WooCommerce", "Amazon", "Walmart"],
-          "pricing_verified_date": "2026-02",
-          "verified": false
+          "pricing_verified_date": "2026-03",
+          "verified": true
         },
         {
-          "name": "Inventory Planner",
+          "name": "Inventory Planner by Sage",
           "website": "inventory-planner.com",
           "pricing": {
-            "standard": {"price": 100, "currency": "EUR", "period": "month", "features": ["Demand forecasting", "Purchase orders", "Up to 1,000 SKUs"]},
-            "professional": {"price": 250, "currency": "EUR", "period": "month", "features": ["Multi-location", "Up to 5,000 SKUs", "Advanced forecasting"]},
+            "floor": {"price": 225, "currency": "EUR", "period": "month", "features": ["Demand forecasting", "Purchase orders"]},
+            "mid_tier": {"price": 459, "currency": "EUR", "period": "month", "features": ["Multi-location", "Advanced forecasting", "~5,000 orders"]},
             "enterprise": {"price": "custom", "features": ["Unlimited SKUs", "API access", "Custom integrations"]}
           },
+          "pricing_note": "After Sage acquisition, moved from fixed tiers to revenue-based custom quoting. Multiple users report significant price increases. No longer has published Standard/Professional/Enterprise names.",
           "best_for": "E-commerce brands wanting AI-driven demand forecasting",
           "pros": ["Accurate forecasting", "Shopify integration", "Purchase order automation", "Overstock alerts"],
-          "cons": ["Per-SKU pricing tiers", "Requires clean historical data", "Learning curve"],
+          "cons": ["Custom pricing (opaque)", "Significant price increases post-Sage acquisition", "Requires clean historical data", "Learning curve"],
           "company_sizes": ["smb", "mid-market"],
           "ai_capabilities": ["Demand forecasting", "Trend detection", "Seasonal adjustments", "Reorder recommendations"],
           "integrations": ["Shopify", "BigCommerce", "WooCommerce", "Amazon", "QuickBooks"],
-          "pricing_verified_date": "2026-02",
-          "verified": false
+          "pricing_verified_date": "2026-03",
+          "verified": true
+        },
+        {
+          "name": "Picqer",
+          "website": "picqer.com",
+          "eu_focus": true,
+          "pricing": {
+            "standard": {"price": 349, "currency": "EUR", "period": "month", "features": ["~25 orders/day", "WMS features", "Free support"]},
+            "growth": {"min": 500, "max": 700, "currency": "EUR", "period": "month", "features": ["~100-200 orders/day"]},
+            "high_volume": {"price": "custom", "features": ["500+ orders/day"]},
+            "fulfilment_3pl": {"price": 825, "currency": "EUR", "period": "month", "features": ["Per-order pricing", "3PL operator features"]}
+          },
+          "best_for": "European e-commerce businesses needing warehouse management",
+          "pros": ["Dutch-built, European-focused", "No setup fees", "Free support", "Volume-based (not per-user) pricing"],
+          "cons": ["Higher entry price than basic tools", "Best suited for businesses with consistent order volume"],
+          "company_sizes": ["smb", "mid-market"],
+          "ai_capabilities": ["Pick path optimization", "Order routing"],
+          "integrations": ["Shopify", "WooCommerce", "Magento", "Lightspeed", "Sendcloud", "Exact", "Moneybird"],
+          "pricing_verified_date": "2026-03",
+          "verified": true
+        },
+        {
+          "name": "Monta",
+          "website": "gomonta.com",
+          "eu_focus": true,
+          "pricing": {
+            "per_order": {"min": 2.70, "max": 3.50, "currency": "EUR"},
+            "minimum_annual_orders": 5000,
+            "wms_software": "custom quote",
+            "note": "European logistics network with warehouses across NL, BE, DE, UK, ES. Custom pricing."
+          },
+          "best_for": "European brands wanting outsourced fulfillment with pan-EU warehouse network",
+          "pros": ["99.98% fulfillment accuracy", "2,000+ ecommerce brands", "Pan-EU warehouse network", "Established since 1999"],
+          "cons": ["Custom pricing only", "Minimum annual orders required"],
+          "company_sizes": ["smb", "mid-market"],
+          "ai_capabilities": ["Fulfillment optimization", "Demand-based stock distribution"],
+          "integrations": ["Shopify", "WooCommerce", "Magento", "Bol.com", "Amazon"],
+          "pricing_verified_date": "2026-03",
+          "verified": true
+        }
+      ]
+    },
+    {
+      "category": "payments",
+      "name": "Payment Processing",
+      "description": "Payment processors and gateways, with focus on European options",
+      "vendors": [
+        {
+          "name": "Mollie",
+          "website": "mollie.com",
+          "eu_focus": true,
+          "pricing": {
+            "credit_debit_eea_consumer": {"fee": "1.8% + 0.25 EUR", "per": "transaction"},
+            "credit_debit_commercial": {"fee": "2.9% + 0.25 EUR", "per": "transaction"},
+            "ideal": {"fee": "0.32 EUR", "per": "transaction"},
+            "sepa_direct_debit": {"fee": "0.25 EUR", "per": "transaction"},
+            "sepa_bank_transfer": {"fee": "0.25 EUR", "per": "transaction"},
+            "bancontact": {"fee": "0.39 EUR", "per": "transaction"},
+            "klarna_pay_later": {"fee": "2.99% + 0.25 EUR", "per": "transaction"},
+            "apple_google_pay": {"fee": "same as card rates", "per": "transaction"}
+          },
+          "pricing_model": "Pay-per-transaction only. No setup fees, no monthly fees, no minimum volume. FX markup ~2.5-3% on currency conversions.",
+          "best_for": "European SMBs wanting transparent, no-monthly-fee payment processing",
+          "pros": ["No monthly fees", "No minimum volume", "Strong in NL/BE/DE/FR", "Supports iDEAL, Bancontact, SEPA", "Transparent pricing"],
+          "cons": ["FX markup on cross-currency", "Less global coverage than Stripe/Adyen"],
+          "company_sizes": ["startup", "smb", "mid-market"],
+          "integrations": ["Shopify", "WooCommerce", "Magento", "BigCommerce", "PrestaShop"],
+          "pricing_verified_date": "2026-03",
+          "verified": true
+        },
+        {
+          "name": "Adyen",
+          "website": "adyen.com",
+          "eu_focus": true,
+          "pricing": {
+            "processing_fee": {"fee": "0.10-0.15 EUR", "per": "transaction", "note": "Adyen markup"},
+            "interchange_fee": {"fee": "variable (~0.2-0.3% for EU consumer debit)", "note": "Set by issuing bank"},
+            "scheme_fee": {"fee": "variable (~0.02-0.05%)", "note": "Set by Visa/Mastercard"},
+            "typical_total_eu_card": {"fee": "~0.6% + 0.10-0.15 EUR", "per": "transaction"},
+            "chargeback_fee": {"fee": "25 EUR", "per": "dispute"},
+            "minimum_monthly_invoice": {"value": 1000, "currency": "EUR"}
+          },
+          "pricing_model": "Interchange++ transparent pricing. Volume discounts negotiable. Best for mid-to-large merchants.",
+          "best_for": "Mid-market and enterprise merchants wanting transparent pricing and 250+ payment methods",
+          "pros": ["Full Interchange++ transparency", "250+ payment methods globally", "Volume discounts", "Used by major brands (Spotify, Uber, eBay)"],
+          "cons": ["EUR 1,000/month minimum invoice", "Complex for small merchants", "Enterprise-oriented"],
+          "company_sizes": ["mid-market", "enterprise"],
+          "integrations": ["Shopify", "Magento", "WooCommerce", "BigCommerce", "Custom via API"],
+          "pricing_verified_date": "2026-03",
+          "verified": true
+        }
+      ]
+    },
+    {
+      "category": "marketplace-feed-management",
+      "name": "Marketplace & Feed Management",
+      "description": "Tools for managing product feeds and selling across multiple marketplaces",
+      "vendors": [
+        {
+          "name": "Channable",
+          "website": "channable.com",
+          "eu_focus": true,
+          "pricing": {
+            "core_standard": {"price": 54, "currency": "EUR", "period": "month", "features": ["Feed management", "Basic rules", "Limited channels"]},
+            "core_plus": {"price": 69, "currency": "EUR", "period": "month", "features": ["More channels/items", "Advanced rules"]},
+            "core_pro": {"price": 82, "currency": "EUR", "period": "month", "features": ["Full feature set", "Priority support"]},
+            "css_addon": {"price": 29, "currency": "EUR", "period": "month", "features": ["Google CSS shop"], "per": "shop"}
+          },
+          "pricing_note": "Based on number of items, projects, and channels. Custom quote for large catalogs. 2,500+ marketing channel integrations.",
+          "best_for": "European e-commerce businesses selling on multiple marketplaces and shopping channels",
+          "pros": ["Netherlands-based, EU-focused", "2,500+ channel integrations", "Feed quality checks", "Auto-categorization", "Real-time stock updates"],
+          "cons": ["Pricing scales with catalog size", "Requires setup time", "Custom quotes for large catalogs"],
+          "company_sizes": ["smb", "mid-market"],
+          "ai_capabilities": ["Auto-categorization", "Smart feed rules", "Performance-based feed optimization"],
+          "integrations": ["Shopify", "WooCommerce", "Magento", "Google Shopping", "Bol.com", "Amazon", "Zalando", "Kaufland", "2,500+ channels"],
+          "pricing_verified_date": "2026-03",
+          "verified": true
         }
       ]
     },
@@ -301,34 +527,140 @@
           "name": "Yotpo",
           "website": "yotpo.com",
           "pricing": {
-            "free": {"price": 0, "currency": "EUR", "period": "month", "features": ["Product reviews", "Basic widgets", "Review requests"]},
-            "growth": {"price": 79, "currency": "EUR", "period": "month", "features": ["Photo reviews", "Rich snippets", "Review carousels"]},
-            "prime": {"price": 169, "currency": "EUR", "period": "month", "features": ["Loyalty program", "Referrals", "Visual UGC"]}
+            "reviews_free": {"price": 0, "currency": "EUR", "period": "month", "features": ["Product reviews", "Basic widgets", "Review requests"]},
+            "reviews_starter": {"price": 73, "currency": "EUR", "period": "month", "features": ["Photo reviews", "Rich snippets", "Review carousels", "Up to 500 orders/mo"]},
+            "reviews_pro": {"price": 155, "currency": "EUR", "period": "month", "features": ["AI review summaries", "Advanced moderation", "Up to 500 orders/mo"]},
+            "loyalty_pro": {"price": 183, "currency": "EUR", "period": "month", "features": ["Loyalty program", "Referrals"]},
+            "full_suite_pro": {"price": 762, "currency": "EUR", "period": "month", "features": ["All products bundled", "3K orders/mo"]},
+            "full_suite_premium": {"price": 1105, "currency": "EUR", "period": "month", "features": ["Premium features", "3K orders/mo"]}
           },
+          "pricing_note": "Modular pricing — each product (Reviews, Loyalty, SMS) priced separately or bundled. Complex pricing structure.",
           "best_for": "Growing brands wanting a comprehensive UGC and loyalty platform",
           "pros": ["All-in-one platform", "Loyalty + reviews", "UGC galleries", "SEO snippets", "Strong analytics"],
-          "cons": ["Gets expensive with add-ons", "Complex pricing", "Can be heavy on site speed"],
+          "cons": ["Gets expensive with add-ons", "Complex modular pricing", "Can be heavy on site speed", "Frequent paywalls"],
           "company_sizes": ["smb", "mid-market"],
-          "ai_capabilities": ["Smart review requests", "Sentiment analysis", "Review highlights"],
+          "ai_capabilities": ["Smart review requests", "Sentiment analysis", "AI review summaries", "Review highlights"],
           "integrations": ["Shopify", "BigCommerce", "WooCommerce", "Klaviyo", "Google Shopping"],
-          "pricing_verified_date": "2026-02",
-          "verified": false
+          "pricing_verified_date": "2026-03",
+          "verified": true
         },
         {
           "name": "Judge.me",
           "website": "judge.me",
           "pricing": {
-            "free": {"price": 0, "currency": "EUR", "period": "month", "features": ["Unlimited review requests", "Text reviews", "Star ratings"]},
-            "awesome": {"price": 15, "currency": "EUR", "period": "month", "features": ["Photo/video reviews", "SEO snippets", "Coupons", "Q&A"]}
+            "free": {"price": 0, "currency": "EUR", "period": "month", "features": ["Unlimited review requests", "Photo/video reviews", "SEO rich snippets", "Star ratings"]},
+            "awesome": {"price": 14, "currency": "EUR", "period": "month", "features": ["Site reviews", "Q&A", "Custom forms", "Coupons", "No branding", "Google Shopping syndication", "AI review summaries"]}
           },
           "best_for": "Budget-conscious stores wanting effective review collection",
-          "pros": ["Excellent free tier", "Very affordable paid plan", "Fast loading", "Good Shopify integration"],
-          "cons": ["Less feature-rich than Yotpo", "Basic analytics", "Limited UGC features"],
+          "pros": ["Best value in reviews category", "Excellent free tier with photo/video", "Very affordable paid plan", "Fast loading", "Good Shopify integration", "15-day free trial"],
+          "cons": ["Less feature-rich than Yotpo", "Basic analytics", "Limited UGC features beyond reviews"],
           "company_sizes": ["startup", "smb"],
-          "ai_capabilities": ["Automated review requests", "Smart reminders"],
+          "ai_capabilities": ["AI review summaries", "Automated review requests", "Smart reminders"],
           "integrations": ["Shopify", "WooCommerce", "BigCommerce", "Google Shopping"],
-          "pricing_verified_date": "2026-02",
-          "verified": false
+          "pricing_verified_date": "2026-03",
+          "verified": true
+        }
+      ]
+    },
+    {
+      "category": "ai-search-personalization",
+      "name": "AI Search & Personalization",
+      "description": "AI-powered site search, product discovery, and personalization engines",
+      "vendors": [
+        {
+          "name": "Algolia",
+          "website": "algolia.com",
+          "pricing": {
+            "build_free": {"price": 0, "currency": "EUR", "period": "month", "features": ["10,000 requests/mo", "1M records"]},
+            "grow": {"price": "usage-based", "features": ["10,000 free requests", "Then 0.46 EUR/1K requests", "100K free records", "Then 0.37 EUR/1K records"]},
+            "grow_plus_ai": {"price": "usage-based", "features": ["AI Synonyms", "AI Ranking", "Advanced Personalization", "10,000 free requests", "Then 0.69 EUR/1K requests"]},
+            "premium": {"price": "custom", "note": "Typical mid-market: 18,000-46,000 EUR/year"},
+            "elevate_enterprise": {"price": "custom", "note": "~46,000+ EUR/year"}
+          },
+          "pricing_note": "Grow Plus (AI tier) launched Oct 2025. Free tier generous for testing.",
+          "best_for": "E-commerce stores wanting fast, intelligent site search with AI personalization",
+          "pros": ["Market-leading search speed", "Real-time indexing", "Typo tolerance", "AI personalization", "Free tier available"],
+          "cons": ["Usage-based pricing can spike", "Enterprise pricing is high", "Requires product data setup"],
+          "company_sizes": ["startup", "smb", "mid-market", "enterprise"],
+          "ai_capabilities": ["AI Synonyms", "AI Ranking", "Personalization", "Query understanding", "Natural language search"],
+          "integrations": ["Shopify", "WooCommerce", "Magento", "BigCommerce", "React", "Vue.js"],
+          "pricing_verified_date": "2026-03",
+          "verified": true
+        },
+        {
+          "name": "Nosto",
+          "website": "nosto.com",
+          "pricing": {
+            "model": "Revenue share: 2.5-4% of Nosto-attributed sales",
+            "average_contract": {"value": 43784, "currency": "EUR", "period": "year"},
+            "setup_fee": "None (performance-based)"
+          },
+          "pricing_note": "No upfront costs. Pay only for performance. Modular: Product Discovery, Content Personalization, Category Merchandising, AI Search.",
+          "best_for": "Mid-market stores wanting comprehensive AI personalization with performance-based pricing",
+          "pros": ["No upfront costs", "Performance-based pricing", "AI product discovery", "Content personalization", "Category merchandising"],
+          "cons": ["Revenue share adds up at scale", "Enterprise-oriented", "Requires significant transaction volume to justify"],
+          "company_sizes": ["smb", "mid-market", "enterprise"],
+          "ai_capabilities": ["AI product recommendations", "Visual merchandising", "Search", "Content personalization", "A/B testing"],
+          "integrations": ["Shopify", "Magento", "BigCommerce"],
+          "pricing_verified_date": "2026-03",
+          "verified": true
+        },
+        {
+          "name": "Rebuy",
+          "website": "rebuyengine.com",
+          "pricing": {
+            "monetize_free": {"price": 0, "currency": "EUR", "period": "month", "features": ["Post-purchase offers", "Thank-you page offers"]},
+            "build_your_own": {"price": 23, "currency": "EUR", "period": "month", "features": ["Pick specific packages (cart, search, checkout, A/B testing)"]},
+            "platform_one": {"price": 491, "currency": "EUR", "period": "month", "features": ["All packages", "Dedicated CSM", "Beta access", "Partner deals"]}
+          },
+          "pricing_note": "Pricing scales with orders/month (250-50K OPM tiers). 14-day trial (Build Your Own) or 30-day + money-back (Platform One). Shopify-exclusive.",
+          "best_for": "Shopify stores wanting AI-powered upsells, cross-sells, and smart cart",
+          "pros": ["Smart Cart used by 5,000+ brands", "AI-powered upsells", "Dynamic bundles", "Free tier available", "A/B testing"],
+          "cons": ["Shopify-exclusive", "Per-order pricing on top of base", "Can get expensive at scale"],
+          "company_sizes": ["smb", "mid-market"],
+          "ai_capabilities": ["AI product recommendations", "Smart Cart", "Dynamic bundles", "AI search", "Personalized checkout"],
+          "integrations": ["Shopify (exclusive)"],
+          "pricing_verified_date": "2026-03",
+          "verified": true
+        }
+      ]
+    },
+    {
+      "category": "subscription-management",
+      "name": "Subscription & Recurring Revenue",
+      "description": "Tools for managing subscriptions, recurring billing, and subscriber retention",
+      "vendors": [
+        {
+          "name": "Recharge",
+          "website": "rechargepayments.com",
+          "pricing": {
+            "standard": {"price": 99, "currency": "USD", "period": "month", "features": ["Unlimited subscriptions", "Customer portal", "Analytics", "1% + $0.10 per transaction"]},
+            "pro": {"price": 499, "currency": "USD", "period": "month", "features": ["Enhanced analytics", "Bundles", "Custom domains", "1% + $0.19 per transaction"]}
+          },
+          "best_for": "Shopify stores with subscription products (boxes, replenishment, membership)",
+          "pros": ["Market leader in Shopify subscriptions", "Robust customer portal", "Good analytics", "Large integration ecosystem"],
+          "cons": ["Per-transaction fees on top of monthly", "Can get expensive at scale", "Shopify-focused"],
+          "company_sizes": ["smb", "mid-market"],
+          "ai_capabilities": ["Predictive churn analytics", "Smart retention offers", "Automated dunning management"],
+          "integrations": ["Shopify", "Klaviyo", "Gorgias", "Segment", "Google Analytics"],
+          "pricing_verified_date": "2026-03",
+          "verified": true
+        },
+        {
+          "name": "Bold Subscriptions",
+          "website": "boldcommerce.com/subscriptions",
+          "pricing": {
+            "core": {"price": 49, "currency": "USD", "period": "month", "features": ["Subscription management", "Customer portal", "Basic analytics", "1% transaction fee"]},
+            "premium": {"price": "custom", "features": ["Advanced features", "Custom checkout", "API access", "Dedicated support"]}
+          },
+          "best_for": "Shopify stores wanting affordable subscription management with flexibility",
+          "pros": ["Lower base price than Recharge", "Flexible subscription models", "Build-a-box feature", "Headless commerce support"],
+          "cons": ["Smaller ecosystem than Recharge", "Less third-party integration support", "Fewer advanced analytics"],
+          "company_sizes": ["startup", "smb"],
+          "ai_capabilities": ["Basic churn prediction", "Automated retention workflows"],
+          "integrations": ["Shopify", "Major email platforms", "Payment gateways"],
+          "pricing_verified_date": "2026-03",
+          "verified": true
         }
       ]
     }

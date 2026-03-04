@@ -81,6 +81,48 @@
       ],
       "prerequisites": ["PMS with treatment plan data", "Patient communication channel"],
       "estimated_monthly_value": 2500
+    },
+    {
+      "id": "review-reputation-management",
+      "name": "Online Review & Reputation Management",
+      "description": "Automatically request reviews from satisfied patients post-appointment, monitor online reputation across platforms, and flag negative sentiment for immediate response",
+      "trigger": "Appointment completed (checkout in PMS)",
+      "connects": ["practice_management_system", "google_business_profile", "review_platforms", "sms_tool"],
+      "mcp_servers": [],
+      "build_time_hours": 6,
+      "complexity": "low",
+      "steps": [
+        "Detect appointment completion in PMS",
+        "Check patient satisfaction score or NPS from post-visit survey",
+        "For satisfied patients (score 8+), send personalized review request via SMS/email",
+        "Include direct Google Business Profile review link",
+        "Monitor incoming reviews across Google, Yelp, Healthgrades",
+        "Flag negative reviews (< 3 stars) for immediate staff response",
+        "Generate weekly reputation summary with trends and actionable insights"
+      ],
+      "prerequisites": ["Practice management system with checkout tracking", "SMS/email service", "Google Business Profile access"],
+      "estimated_monthly_value": 2000
+    },
+    {
+      "id": "patient-intake-digitization",
+      "name": "Patient Intake & Forms Digitization",
+      "description": "Send digital intake forms to new patients before their first visit, pre-populate known data from insurance verification, and sync completed forms directly into the PMS",
+      "trigger": "New patient appointment booked",
+      "connects": ["practice_management_system", "patient_portal", "insurance_portal", "email_tool"],
+      "mcp_servers": [],
+      "build_time_hours": 8,
+      "complexity": "medium",
+      "steps": [
+        "Detect new patient appointment booking in PMS",
+        "Generate personalized digital intake form package (medical history, insurance, consent)",
+        "Pre-populate fields with data from insurance pre-verification if available",
+        "Send intake forms via email/SMS with secure link to patient portal",
+        "Track form completion status and send reminders for incomplete forms",
+        "On completion, validate data and sync directly into PMS patient record",
+        "Flag missing or inconsistent information for front desk review before appointment"
+      ],
+      "prerequisites": ["Practice management system with API", "Digital forms platform or patient portal", "Secure patient communication channel"],
+      "estimated_monthly_value": 1800
     }
   ]
 }

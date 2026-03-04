@@ -55,10 +55,6 @@ AI_TOOLS_TYPES = [
 # =============================================================================
 
 INDUSTRY_MAPPING = {
-    # ==========================================================================
-    # PRIMARY INDUSTRIES (Launch Priority)
-    # ==========================================================================
-
     # Professional Services (Legal, Accounting, Consulting)
     "professional_services": "professional-services",
     "professional-services": "professional-services",
@@ -81,7 +77,7 @@ INDUSTRY_MAPPING = {
     "orthodontics": "dental",
     "oral_surgery": "dental",
 
-    # E-commerce (Launch Priority)
+    # E-commerce
     "ecommerce": "ecommerce",
     "e-commerce": "ecommerce",
     "e_commerce": "ecommerce",
@@ -108,129 +104,14 @@ INDUSTRY_MAPPING = {
     "water-tech": "b2b-platforms",
     "cleantech": "b2b-platforms",
     "hydration": "b2b-platforms",
-
-    # ==========================================================================
-    # SECONDARY INDUSTRIES (Phase 2) - Placeholders for future
-    # ==========================================================================
-
-    # Home Services (HVAC, Plumbing, Electrical)
-    "home-services": "home-services",
-    "home_services": "home-services",
-    "home services": "home-services",
-    "hvac": "home-services",
-    "plumbing": "home-services",
-    "plumber": "home-services",
-    "electrical": "home-services",
-    "electrician": "home-services",
-    "contractor": "home-services",
-    "home_improvement": "home-services",
-    "field_service": "home-services",
-    "trades": "home-services",
-
-    # Recruiting/Staffing
-    "recruiting": "recruiting",
-    "staffing": "recruiting",
-    "recruitment": "recruiting",
-    "hr_agency": "recruiting",
-
-    # Coaching
-    "coaching": "coaching",
-    "business_coaching": "coaching",
-    "executive_coaching": "coaching",
-
-    # Veterinary/Pet Care
-    "veterinary": "veterinary",
-    "vet": "veterinary",
-    "pet_care": "veterinary",
-    "animal_hospital": "veterinary",
-
-    # ==========================================================================
-    # EXPANSION INDUSTRIES (Phase 3) - Placeholders for future
-    # ==========================================================================
-
-    # Physical Therapy/Chiropractic
-    "physical-therapy": "physical-therapy",
-    "physical_therapy": "physical-therapy",
-    "pt": "physical-therapy",
-    "chiropractic": "physical-therapy",
-    "chiropractor": "physical-therapy",
-
-    # MedSpa/Beauty
-    "medspa": "medspa",
-    "med_spa": "medspa",
-    "medical_spa": "medspa",
-    "beauty": "medspa",
-    "aesthetics": "medspa",
-
-    # ==========================================================================
-    # LEGACY INDUSTRIES (Dropped - kept for backward compatibility)
-    # ==========================================================================
-
-    # Marketing agencies (DROPPED - DIY mentality)
-    "marketing": "marketing-agencies",
-    "marketing_agency": "marketing-agencies",
-    "marketing-agency": "marketing-agencies",
-    "marketing-agencies": "marketing-agencies",
-    "creative_agency": "marketing-agencies",
-    "creative agency": "marketing-agencies",
-    "advertising": "marketing-agencies",
-    "digital_marketing": "marketing-agencies",
-
-    # Retail (DROPPED - not passion-driven service)
-    "retail": "retail",
-    "brick_and_mortar": "retail",
-    "store": "retail",
-    "shops": "retail",
-
-    # Tech companies (DROPPED - DIY mentality)
-    "tech": "tech-companies",
-    "tech-companies": "tech-companies",
-    "technology": "tech-companies",
-    "saas": "tech-companies",
-    "software": "tech-companies",
-    "startup": "tech-companies",
-
-    # Music studios (DROPPED - budget constraints)
-    "music": "music-studios",
-    "music-studios": "music-studios",
-    "music_studio": "music-studios",
-    "recording_studio": "music-studios",
-    "audio": "music-studios",
-    "production": "music-studios",
 }
 
-# Primary target industries with full knowledge bases
-PRIMARY_INDUSTRIES = [
+SUPPORTED_INDUSTRIES = [
     "professional-services",
     "dental",
     "ecommerce",
     "b2b-platforms",
 ]
-
-# Secondary industries (Phase 2) - knowledge bases to be built
-SECONDARY_INDUSTRIES = [
-    "home-services",
-    "recruiting",
-    "coaching",
-    "veterinary",
-]
-
-# Expansion industries (Phase 3) - knowledge bases to be built
-EXPANSION_INDUSTRIES = [
-    "physical-therapy",
-    "medspa",
-]
-
-# Legacy industries (still supported but not target market)
-LEGACY_INDUSTRIES = [
-    "marketing-agencies",
-    "retail",
-    "tech-companies",
-    "music-studios",
-]
-
-# All supported industries (for backward compatibility)
-SUPPORTED_INDUSTRIES = PRIMARY_INDUSTRIES + SECONDARY_INDUSTRIES + EXPANSION_INDUSTRIES + LEGACY_INDUSTRIES
 
 
 # =============================================================================
@@ -238,9 +119,19 @@ SUPPORTED_INDUSTRIES = PRIMARY_INDUSTRIES + SECONDARY_INDUSTRIES + EXPANSION_IND
 # =============================================================================
 
 def normalize_industry(industry: str) -> str:
-    """Convert industry input to normalized folder name."""
+    """Convert industry input to normalized folder name.
+
+    Raises:
+        ValueError: If the industry is not in our supported set.
+    """
     normalized = industry.lower().strip().replace(" ", "_")
-    return INDUSTRY_MAPPING.get(normalized, "general")
+    result = INDUSTRY_MAPPING.get(normalized)
+    if result is None:
+        raise ValueError(
+            f"Unsupported industry: '{industry}'. "
+            f"Supported industries: {', '.join(SUPPORTED_INDUSTRIES)}"
+        )
+    return result
 
 
 def _load_json_file(file_path: Path) -> Optional[Dict[str, Any]]:
@@ -269,14 +160,6 @@ def load_industry_data(industry: str, data_type: str) -> Optional[Dict[str, Any]
         Loaded JSON data or None if not found
     """
     normalized = normalize_industry(industry)
-
-    if normalized == "general" or normalized not in SUPPORTED_INDUSTRIES:
-        # Phase 3 expansion industries (physical-therapy, medspa, etc.) may not have KB data yet
-        logger.warning(
-            f"Industry '{industry}' (normalized: '{normalized}') has no knowledge base data. "
-            f"Phase 3 expansion - using general benchmarks."
-        )
-        return None
 
     file_path = KNOWLEDGE_BASE_PATH / normalized / f"{data_type}.json"
     return _load_json_file(file_path)
@@ -764,43 +647,8 @@ def list_supported_industries() -> List[str]:
 
 
 def list_primary_industries() -> List[str]:
-    """List primary target industries (launch priority)."""
-    return PRIMARY_INDUSTRIES.copy()
-
-
-def list_secondary_industries() -> List[str]:
-    """List secondary target industries (Phase 2)."""
-    return SECONDARY_INDUSTRIES.copy()
-
-
-def list_expansion_industries() -> List[str]:
-    """List expansion industries (Phase 3)."""
-    return EXPANSION_INDUSTRIES.copy()
-
-
-def list_legacy_industries() -> List[str]:
-    """List legacy/dropped industries (still supported but not target)."""
-    return LEGACY_INDUSTRIES.copy()
-
-
-def get_industry_priority(industry: str) -> str:
-    """
-    Get the priority tier for an industry.
-
-    Returns: 'primary', 'secondary', 'expansion', 'legacy', or 'unknown'
-    """
-    normalized = normalize_industry(industry)
-
-    if normalized in PRIMARY_INDUSTRIES:
-        return "primary"
-    elif normalized in SECONDARY_INDUSTRIES:
-        return "secondary"
-    elif normalized in EXPANSION_INDUSTRIES:
-        return "expansion"
-    elif normalized in LEGACY_INDUSTRIES:
-        return "legacy"
-    else:
-        return "unknown"
+    """List supported industries."""
+    return SUPPORTED_INDUSTRIES.copy()
 
 
 def list_vendor_categories() -> List[str]:

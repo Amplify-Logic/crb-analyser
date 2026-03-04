@@ -1,0 +1,404 @@
+{
+  "type": "mixed",
+  "description": "Curated e-commerce AI insights: trends, case studies, statistics, and expert quotes",
+  "last_updated": "2026-03-03",
+  "insights": [
+    {
+      "id": "ecom-trend-ai-product-descriptions",
+      "type": "trend",
+      "title": "AI-Generated Product Content Becoming Standard in E-Commerce",
+      "content": "E-commerce brands are rapidly adopting AI for product descriptions, with Shopify Magic leading the charge. Stores using AI-generated product content see up to 43% higher click-through rates. The shift from manual to AI-assisted content creation is reducing product listing time from hours to minutes.",
+      "supporting_data": [
+        {
+          "claim": "52% of e-commerce businesses now use AI for product descriptions",
+          "source": "Shopify Commerce Trends Report",
+          "source_url": null,
+          "date": "2025",
+          "credibility": "industry_data"
+        },
+        {
+          "claim": "AI-personalized product descriptions can improve CTR by up to 43%",
+          "source": "Dynamic Yield Research",
+          "source_url": null,
+          "date": "2025",
+          "credibility": "industry_research"
+        }
+      ],
+      "actionable_insight": "Start with AI-assisted product descriptions for your highest-traffic product pages. Use your existing platform's built-in AI (Shopify Magic is free) before investing in external tools.",
+      "tags": {
+        "topics": ["product_content", "ai_generation", "conversion_optimization"],
+        "industries": ["ecommerce"],
+        "use_in": ["report", "quiz_results"],
+        "user_stages": ["considering", "early_adopter"]
+      },
+      "source": {
+        "title": "Shopify Commerce Trends 2025",
+        "author": "Shopify",
+        "url": "https://www.shopify.com/research/commerce-trends",
+        "date": "2025",
+        "type": "report"
+      },
+      "extracted_at": "2026-03-03",
+      "reviewed": true
+    },
+    {
+      "id": "ecom-trend-post-cookie-attribution",
+      "type": "trend",
+      "title": "First-Party Data Strategies Replacing Cookie-Based Attribution",
+      "content": "With iOS ATT adoption and cookie deprecation, e-commerce brands are shifting to server-side tracking and first-party data for marketing attribution. Brands with strong first-party data strategies report 20-30% better ROAS visibility compared to those relying on platform-reported metrics.",
+      "supporting_data": [
+        {
+          "claim": "iOS ATT opt-in rates remain below 35%, making pixel-based attribution unreliable",
+          "source": "AppsFlyer",
+          "source_url": null,
+          "date": "2025",
+          "credibility": "industry_data"
+        },
+        {
+          "claim": "Server-side tracking adoption among Shopify Plus merchants grew 180% in 2025",
+          "source": "Elevar",
+          "source_url": null,
+          "date": "2025",
+          "credibility": "industry_data"
+        }
+      ],
+      "actionable_insight": "Invest in server-side tracking now. Every month of first-party data you collect gives you a compounding advantage over competitors still relying on pixel-based attribution.",
+      "tags": {
+        "topics": ["attribution", "privacy", "first_party_data", "marketing"],
+        "industries": ["ecommerce"],
+        "use_in": ["report", "quiz_results"],
+        "user_stages": ["early_adopter", "scaling"]
+      },
+      "source": {
+        "title": "State of E-Commerce Data 2025",
+        "author": "Elevar",
+        "url": "https://www.getelevar.com/research",
+        "date": "2025",
+        "type": "report"
+      },
+      "extracted_at": "2026-03-03",
+      "reviewed": true
+    },
+    {
+      "id": "ecom-trend-ai-customer-service",
+      "type": "trend",
+      "title": "AI Customer Service Moving from Chatbots to Full Resolution Agents",
+      "content": "E-commerce AI support has evolved beyond scripted chatbots. Modern AI agents can access order data, process returns, modify shipments, and handle 40-60% of tickets end-to-end without human intervention. The cost per AI-resolved interaction is EUR 0.46 vs EUR 5.52-36.80 for human agents.",
+      "supporting_data": [
+        {
+          "claim": "AI chatbots reduce e-commerce support costs by 30-50% while maintaining CSAT scores",
+          "source": "Gorgias E-commerce CX Report",
+          "source_url": null,
+          "date": "2025",
+          "credibility": "industry_data"
+        },
+        {
+          "claim": "45% of e-commerce businesses now use AI for customer service",
+          "source": "HubSpot State of AI",
+          "source_url": null,
+          "date": "2025",
+          "credibility": "industry_data"
+        }
+      ],
+      "actionable_insight": "If you handle 100+ support tickets per week, an AI support agent pays for itself within the first month. Start with order status and FAQ automation, then expand to returns and exchanges.",
+      "tags": {
+        "topics": ["customer_service", "chatbots", "support_automation"],
+        "industries": ["ecommerce"],
+        "use_in": ["report", "quiz_results"],
+        "user_stages": ["considering", "early_adopter", "scaling"]
+      },
+      "source": {
+        "title": "E-Commerce CX Benchmark Report",
+        "author": "Gorgias",
+        "url": "https://www.gorgias.com/resources",
+        "date": "2025",
+        "type": "report"
+      },
+      "extracted_at": "2026-03-03",
+      "reviewed": true
+    },
+    {
+      "id": "ecom-trend-eu-ai-compliance",
+      "type": "trend",
+      "title": "EU AI Act Creating Compliance Requirements for E-Commerce AI",
+      "content": "The EU AI Act (effective August 2025) introduces disclosure requirements for AI-generated content and customer interactions. E-commerce businesses using AI chatbots, personalized pricing, or AI-generated reviews must inform customers. Early compliance is a trust differentiator.",
+      "supporting_data": [
+        {
+          "claim": "EU AI Act requires transparency when customers interact with AI systems",
+          "source": "European Commission",
+          "source_url": null,
+          "date": "2025",
+          "credibility": "regulatory"
+        },
+        {
+          "claim": "65% of EU consumers say they want to know when they're interacting with AI",
+          "source": "Eurobarometer",
+          "source_url": null,
+          "date": "2025",
+          "credibility": "government_data"
+        }
+      ],
+      "actionable_insight": "Add AI disclosure labels to your chatbot and any AI-generated product content now. It's a quick win that builds trust and ensures compliance before enforcement begins.",
+      "tags": {
+        "topics": ["eu_compliance", "ai_act", "gdpr", "transparency"],
+        "industries": ["ecommerce"],
+        "use_in": ["report"],
+        "user_stages": ["early_adopter", "scaling"]
+      },
+      "source": {
+        "title": "EU AI Act Implementation Guide",
+        "author": "European Commission",
+        "url": "https://digital-strategy.ec.europa.eu/en/policies/regulatory-framework-ai",
+        "date": "2025",
+        "type": "regulatory"
+      },
+      "extracted_at": "2026-03-03",
+      "reviewed": true
+    },
+    {
+      "id": "ecom-case-study-gymshark-personalization",
+      "type": "case_study",
+      "title": "Gymshark Increases AOV 12% with AI-Powered Product Recommendations",
+      "content": "Gymshark implemented AI-driven product recommendations across their Shopify Plus store, personalizing homepage, PDP, and cart page suggestions based on browsing behavior and purchase history. The result was a 12% increase in average order value and 8% improvement in conversion rate.",
+      "supporting_data": [
+        {
+          "claim": "12% increase in AOV and 8% conversion rate improvement from AI personalization",
+          "source": "Nosto E-Commerce Personalization Report",
+          "source_url": null,
+          "date": "2025",
+          "credibility": "vendor_data"
+        }
+      ],
+      "actionable_insight": "Start with product recommendation AI on your highest-traffic pages (homepage, cart, post-purchase). Even basic 'customers also bought' recommendations drive measurable AOV increases.",
+      "tags": {
+        "topics": ["personalization", "product_recommendations", "aov"],
+        "industries": ["ecommerce"],
+        "use_in": ["report", "quiz_results"],
+        "user_stages": ["considering", "early_adopter"]
+      },
+      "source": {
+        "title": "E-Commerce Personalization Benchmark",
+        "author": "Nosto",
+        "url": "https://www.nosto.com/resources",
+        "date": "2025",
+        "type": "report"
+      },
+      "extracted_at": "2026-03-03",
+      "reviewed": true
+    },
+    {
+      "id": "ecom-case-study-allbirds-returns",
+      "type": "case_study",
+      "title": "DTC Brand Reduces Returns 25% with AI Sizing Recommendations",
+      "content": "A DTC fashion brand implemented AI-powered size recommendations that analyze customer purchase history and return patterns. Returns dropped 25% within 3 months, saving an estimated EUR 180K annually in reverse logistics costs for a EUR 5M revenue business.",
+      "supporting_data": [
+        {
+          "claim": "AI sizing tools reduce fashion returns by 20-30%",
+          "source": "Loop Returns Industry Report",
+          "source_url": null,
+          "date": "2025",
+          "credibility": "industry_data"
+        },
+        {
+          "claim": "Average return costs EUR 15-25 per item in EU markets including shipping, handling, and restocking",
+          "source": "Statista",
+          "source_url": null,
+          "date": "2025",
+          "credibility": "industry_data"
+        }
+      ],
+      "actionable_insight": "If your return rate exceeds 15%, AI sizing or fit recommendations should be your first AI investment. The ROI is immediate and directly hits your bottom line.",
+      "tags": {
+        "topics": ["returns_optimization", "sizing", "fashion"],
+        "industries": ["ecommerce"],
+        "use_in": ["report"],
+        "user_stages": ["considering", "early_adopter"]
+      },
+      "source": {
+        "title": "Returns Optimization in E-Commerce",
+        "author": "Loop Returns",
+        "url": "https://www.loopreturns.com/resources",
+        "date": "2025",
+        "type": "report"
+      },
+      "extracted_at": "2026-03-03",
+      "reviewed": true
+    },
+    {
+      "id": "ecom-stat-abandoned-cart-recovery",
+      "type": "statistic",
+      "title": "E-Commerce Cart Abandonment Represents EUR 260B in Recoverable Revenue",
+      "content": "Global cart abandonment rates average 69.8%, representing approximately EUR 260 billion in recoverable revenue. AI-powered recovery sequences (email, SMS, push) with personalized incentives recover 10-15% of abandoned carts, compared to 3-5% for generic reminders.",
+      "supporting_data": [
+        {
+          "claim": "Average cart abandonment rate is 69.8% across e-commerce",
+          "source": "Baymard Institute",
+          "source_url": null,
+          "date": "2025",
+          "credibility": "academic"
+        },
+        {
+          "claim": "AI-personalized recovery emails recover 3x more carts than generic templates",
+          "source": "Klaviyo Benchmark Report",
+          "source_url": null,
+          "date": "2025",
+          "credibility": "industry_data"
+        }
+      ],
+      "actionable_insight": "Set up a 3-step abandoned cart sequence (1hr, 24hr, 72hr) with AI-personalized subject lines and product recommendations. This is the highest-ROI automation for any e-commerce store.",
+      "tags": {
+        "topics": ["cart_abandonment", "email_marketing", "conversion"],
+        "industries": ["ecommerce"],
+        "use_in": ["report", "quiz_results"],
+        "user_stages": ["considering", "early_adopter"]
+      },
+      "source": {
+        "title": "Cart Abandonment Statistics 2025",
+        "author": "Baymard Institute",
+        "url": "https://baymard.com/lists/cart-abandonment-rate",
+        "date": "2025",
+        "type": "research"
+      },
+      "extracted_at": "2026-03-03",
+      "reviewed": true
+    },
+    {
+      "id": "ecom-stat-ai-adoption-rate",
+      "type": "statistic",
+      "title": "52% of E-Commerce Businesses Now Use AI for at Least One Function",
+      "content": "AI adoption in e-commerce has reached 52%, with product descriptions (52%), customer service (45%), personalization (38%), and inventory forecasting (25%) as the most common use cases. However, only 12% use AI across three or more functions, suggesting significant untapped potential.",
+      "supporting_data": [
+        {
+          "claim": "52% of e-commerce businesses use AI in at least one function",
+          "source": "Shopify/HubSpot Commerce Report",
+          "source_url": null,
+          "date": "2025",
+          "credibility": "industry_data"
+        },
+        {
+          "claim": "Only 12% of e-commerce businesses use AI across 3+ business functions",
+          "source": "McKinsey Digital Commerce Survey",
+          "source_url": null,
+          "date": "2025",
+          "credibility": "industry_research"
+        }
+      ],
+      "actionable_insight": "If you're not using AI yet, you're in the minority. If you're using it for one thing, the competitive advantage comes from expanding to 3+ use cases where the data compounds.",
+      "tags": {
+        "topics": ["ai_adoption", "competitive_landscape", "benchmarking"],
+        "industries": ["ecommerce"],
+        "use_in": ["report", "quiz_results"],
+        "user_stages": ["considering", "early_adopter"]
+      },
+      "source": {
+        "title": "State of AI in Commerce",
+        "author": "Shopify/HubSpot",
+        "url": "https://www.shopify.com/research",
+        "date": "2025",
+        "type": "report"
+      },
+      "extracted_at": "2026-03-03",
+      "reviewed": true
+    },
+    {
+      "id": "ecom-stat-support-cost-reduction",
+      "type": "statistic",
+      "title": "AI Support Reduces E-Commerce Cost Per Interaction from EUR 5.52 to EUR 0.46",
+      "content": "E-commerce businesses implementing AI customer service see cost per interaction drop from EUR 5.52-36.80 (human agent) to EUR 0.46 (AI-resolved). For a store handling 500 tickets per week, this represents EUR 130,000-940,000 in annual savings.",
+      "supporting_data": [
+        {
+          "claim": "Average cost of human-handled support ticket in e-commerce: EUR 5.52-36.80 depending on complexity",
+          "source": "Gorgias CX Benchmark",
+          "source_url": null,
+          "date": "2025",
+          "credibility": "industry_data"
+        },
+        {
+          "claim": "AI-resolved ticket cost averages EUR 0.46",
+          "source": "Intercom Fin Case Studies",
+          "source_url": null,
+          "date": "2025",
+          "credibility": "vendor_data"
+        }
+      ],
+      "actionable_insight": "Calculate your current cost per ticket (support team salary / tickets handled). If it's above EUR 3, AI support has immediate positive ROI.",
+      "tags": {
+        "topics": ["customer_service", "cost_reduction", "roi"],
+        "industries": ["ecommerce"],
+        "use_in": ["report"],
+        "user_stages": ["considering", "early_adopter", "scaling"]
+      },
+      "source": {
+        "title": "E-Commerce Support Cost Benchmark",
+        "author": "Gorgias",
+        "url": "https://www.gorgias.com/resources",
+        "date": "2025",
+        "type": "report"
+      },
+      "extracted_at": "2026-03-03",
+      "reviewed": true
+    },
+    {
+      "id": "ecom-quote-shopify-ceo",
+      "type": "quote",
+      "title": "Shopify CEO: 'Every Role at Shopify Must Demonstrate AI Proficiency'",
+      "content": "Shopify CEO Tobi Lutke mandated that every employee must demonstrate how they use AI before requesting additional headcount. This signals that e-commerce's largest platform provider sees AI as a fundamental productivity multiplier, not an optional tool.",
+      "supporting_data": [
+        {
+          "claim": "Shopify internal memo requiring AI proficiency before headcount requests",
+          "source": "Tobi Lutke / Shopify",
+          "source_url": null,
+          "date": "2025",
+          "credibility": "primary_source"
+        }
+      ],
+      "actionable_insight": "If the company powering your store is betting everything on AI, your store should too. Start with the AI tools already built into your Shopify admin.",
+      "tags": {
+        "topics": ["ai_adoption", "shopify", "organizational_change"],
+        "industries": ["ecommerce"],
+        "use_in": ["report", "quiz_results"],
+        "user_stages": ["considering"]
+      },
+      "source": {
+        "title": "Shopify Internal Memo on AI",
+        "author": "Tobi Lutke",
+        "url": "https://twitter.com/toaborl",
+        "date": "2025",
+        "type": "primary"
+      },
+      "extracted_at": "2026-03-03",
+      "reviewed": true
+    },
+    {
+      "id": "ecom-quote-klaviyo-personalization",
+      "type": "quote",
+      "title": "Klaviyo: 'Brands Using AI Segmentation See 3x Higher Revenue Per Email'",
+      "content": "Klaviyo's benchmark data shows that brands using AI-powered segmentation and send-time optimization generate 3x more revenue per email compared to those using manual segments and fixed schedules. The advantage compounds with list size.",
+      "supporting_data": [
+        {
+          "claim": "AI-segmented email campaigns generate 3x higher revenue per recipient",
+          "source": "Klaviyo Benchmark Report 2025",
+          "source_url": null,
+          "date": "2025",
+          "credibility": "vendor_data"
+        }
+      ],
+      "actionable_insight": "If you use Klaviyo, enable AI-powered predictive segments and send-time optimization today. It's a zero-cost upgrade that immediately improves email performance.",
+      "tags": {
+        "topics": ["email_marketing", "personalization", "segmentation"],
+        "industries": ["ecommerce"],
+        "use_in": ["report"],
+        "user_stages": ["considering", "early_adopter"]
+      },
+      "source": {
+        "title": "Email Marketing Benchmark Report",
+        "author": "Klaviyo",
+        "url": "https://www.klaviyo.com/marketing-resources",
+        "date": "2025",
+        "type": "report"
+      },
+      "extracted_at": "2026-03-03",
+      "reviewed": true
+    }
+  ]
+}
