@@ -694,6 +694,7 @@ class ReportGenerator:
             }).execute()
 
             self.report_id = report_result.data[0]["id"]
+            self._generation_started_at: str = report_result.data[0].get("generation_started_at", "")
 
             # Initialize trace collector now that we have report_id
             self.trace_collector = TraceCollector(
@@ -1490,6 +1491,25 @@ class ReportGenerator:
                 }).eq("id", self.report_id).execute()
             except Exception:
                 logger.warning("generation_trace_save_skipped", report_id=self.report_id)
+
+            # Capture metadata for analytics (fire-and-forget)
+            try:
+                from src.models.report_metadata import ReportMetadataCreate, save_report_metadata
+                metadata = ReportMetadataCreate.from_report_context(
+                    report_id=self.report_id,
+                    quiz_session_id=self.quiz_session_id,
+                    tier=self.tier,
+                    context=self.context,
+                    executive_summary=executive_summary,
+                    findings=findings,
+                    recommendations=recommendations,
+                    token_tracker=self.token_tracker,
+                    generation_started_at=getattr(self, "_generation_started_at", None),
+                    generation_completed_at=datetime.utcnow(),
+                )
+                await save_report_metadata(metadata)
+            except Exception as e:
+                logger.warning("report_metadata_capture_failed", error=str(e), report_id=str(self.report_id))
 
             # Update quiz session - pending QA review
             logger.info(f"[FINALIZE] Updating quiz session status to qa_pending...")
