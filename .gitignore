@@ -5,6 +5,9 @@ venv/
 __pycache__/
 *.pyc
 
+# Worktrees
+.worktrees/
+
 # Environment
 .env
 .env.local
