@@ -89,6 +89,7 @@ from src.models.user_profile import UserProfile
 from src.services.architecture_generator import ArchitectureGenerator
 from src.services.insights_generator import InsightsGenerator
 from src.services.review_service import ReviewService
+from src.services.store_profile_service import StoreProfileService
 from src.services.retrieval_service import get_retrieval_service
 from src.models.generation_trace import TraceCollector
 from src.skills.analysis.roi_calculator import CONFIDENCE_FACTORS
@@ -96,6 +97,26 @@ from src.services.crb_calculation_service import get_effective_hourly_rate
 
 logger = structlog.get_logger(__name__)
 
+
+# =============================================================================
+# BANNED PHRASES — post-generation slop detection
+# =============================================================================
+BANNED_PHRASES = [
+    "streamline operations", "optimize workflow", "enhance efficiency",
+    "drive growth", "unlock potential", "accelerate transformation",
+    "seamless integration", "robust solution", "cutting-edge", "best-in-class",
+    "leverage AI", "harness the power", "revolutionize",
+    "well-positioned", "well-suited", "strong foundations", "significant opportunity",
+    "industry-leading", "best practice", "transform your business",
+    "consider migrating",
+]
+
+# Context-sensitive: ban these words standalone but allow specific compounds
+CONTEXT_BANNED: Dict[str, List[str]] = {
+    "optimize": ["seo-optimized", "search-optimized", "conversion-optimized"],
+    "accelerate": [],
+    "streamline": [],
+}
 
 TIER_ALIASES = {
     "ai": "quick",
@@ -431,12 +452,27 @@ class ReportGenerator:
 
         for attempt in range(self.MAX_RETRIES):
             try:
-                response = await self.async_client.messages.create(
-                    model=model,
-                    max_tokens=max_tokens,
-                    system=self.SYSTEM_PROMPT,
-                    messages=[{"role": "user", "content": prompt}],
-                )
+                if getattr(self, "dev_mode", False):
+                    # Route through Claude CLI (Max subscription) via thread executor
+                    import functools
+                    loop = asyncio.get_event_loop()
+                    response = await loop.run_in_executor(
+                        None,
+                        functools.partial(
+                            self.client.messages.create,
+                            model=model,
+                            max_tokens=max_tokens,
+                            system=self.SYSTEM_PROMPT,
+                            messages=[{"role": "user", "content": prompt}],
+                        ),
+                    )
+                else:
+                    response = await self.async_client.messages.create(
+                        model=model,
+                        max_tokens=max_tokens,
+                        system=self.SYSTEM_PROMPT,
+                        messages=[{"role": "user", "content": prompt}],
+                    )
 
                 # Calculate duration
                 duration_ms = (time_module.time() - start_time) * 1000
@@ -505,6 +541,156 @@ class ReportGenerator:
         if last_error:
             raise last_error
         raise APIError("Unknown error in _call_claude")
+
+    def _clean_banned_phrases(self, report_data: Dict[str, Any]) -> int:
+        """
+        Walk all string values and replace banned phrases in-place.
+        Returns the number of replacements made.
+        """
+        # Multi-word phrase replacements
+        _PHRASE_REPLACEMENTS: Dict[str, str] = {
+            "streamline operations": "simplify operations",
+            "optimize workflow": "improve workflow",
+            "enhance efficiency": "improve efficiency",
+            "drive growth": "support growth",
+            "unlock potential": "reach potential",
+            "accelerate transformation": "speed up the transition",
+            "seamless integration": "direct integration",
+            "robust solution": "reliable solution",
+            "cutting-edge": "modern",
+            "best-in-class": "top-performing",
+            "leverage ai": "use AI",
+            "harness the power": "use the capabilities",
+            "revolutionize": "change",
+            "well-positioned": "ready",
+            "well-suited": "a good fit",
+            "strong foundations": "solid groundwork",
+            "significant opportunity": "clear opportunity",
+            "industry-leading": "established",
+            "best practice": "proven approach",
+            "transform your business": "improve your operations",
+            "consider migrating": "consider switching",
+        }
+        # Single-word replacements (context-sensitive — skip allowed compounds)
+        _WORD_REPLACEMENTS: Dict[str, str] = {
+            "optimize": "improve",
+            "accelerate": "speed up",
+            "streamline": "simplify",
+        }
+        _WORD_EXCEPTIONS: Dict[str, List[str]] = {
+            "optimize": ["seo-optimized", "search-optimized", "conversion-optimized"],
+        }
+
+        count = 0
+
+        def _clean(obj: Any) -> Any:
+            nonlocal count
+            if isinstance(obj, str):
+                result = obj
+                for phrase, replacement in _PHRASE_REPLACEMENTS.items():
+                    import re
+                    pattern = re.compile(re.escape(phrase), re.IGNORECASE)
+                    new_result = pattern.sub(replacement, result)
+                    if new_result != result:
+                        count += 1
+                        result = new_result
+                for word, replacement in _WORD_REPLACEMENTS.items():
+                    lower = result.lower()
+                    exceptions = _WORD_EXCEPTIONS.get(word, [])
+                    if word in lower and not any(exc in lower for exc in exceptions):
+                        import re
+                        pattern = re.compile(r'\b' + re.escape(word) + r'(?:s|d)?\b', re.IGNORECASE)
+                        new_result = pattern.sub(replacement, result)
+                        if new_result != result:
+                            count += 1
+                            result = new_result
+                return result
+            elif isinstance(obj, dict):
+                return {k: _clean(v) for k, v in obj.items()}
+            elif isinstance(obj, list):
+                return [_clean(item) for item in obj]
+            return obj
+
+        # Clean in-place by replacing top-level keys
+        for key in list(report_data.keys()):
+            report_data[key] = _clean(report_data[key])
+
+        return count
+
+    def _scan_for_banned_phrases(self, report_data: Dict[str, Any]) -> Dict[str, Any]:
+        """
+        Walk all customer-facing string values in the report dict and
+        count banned phrase matches.
+
+        Returns a summary dict:
+        {
+            "total_matches": N,
+            "details": [{"phrase": ..., "count": N, "fields": [...]}]
+        }
+
+        Runs AFTER _clean_banned_phrases — catches anything the cleaner missed.
+        """
+        # Accumulate matches: phrase -> list of field paths
+        matches: Dict[str, List[str]] = {}
+
+        def _walk(obj: Any, path: str = "") -> None:
+            if isinstance(obj, str):
+                text_lower = obj.lower()
+
+                # Check multi-word banned phrases
+                for phrase in BANNED_PHRASES:
+                    if phrase.lower() in text_lower:
+                        matches.setdefault(phrase, []).append(path)
+
+                # Check context-sensitive single-word bans
+                for word, exceptions in CONTEXT_BANNED.items():
+                    if word.lower() in text_lower:
+                        # Check if any exception compound is present
+                        allowed = False
+                        for exc in exceptions:
+                            if exc.lower() in text_lower:
+                                allowed = True
+                                break
+                        if not allowed:
+                            matches.setdefault(word, []).append(path)
+
+            elif isinstance(obj, dict):
+                for key, value in obj.items():
+                    child_path = f"{path}.{key}" if path else key
+                    _walk(value, child_path)
+            elif isinstance(obj, list):
+                for idx, item in enumerate(obj):
+                    _walk(item, f"{path}[{idx}]")
+
+        _walk(report_data)
+
+        # Build summary
+        details = []
+        for phrase, fields in sorted(matches.items(), key=lambda x: -len(x[1])):
+            logger.warning(
+                "banned_phrase_detected",
+                phrase=phrase,
+                count=len(fields),
+                fields=fields[:5],  # Cap logged fields at 5
+                report_id=getattr(self, "report_id", None),
+            )
+            details.append({
+                "phrase": phrase,
+                "count": len(fields),
+                "fields": fields,
+            })
+
+        total = sum(d["count"] for d in details)
+
+        if total > 0:
+            logger.warning(
+                "slop_scan_summary",
+                total_matches=total,
+                unique_phrases=len(details),
+                report_id=getattr(self, "report_id", None),
+            )
+
+        return {"total_matches": total, "details": details}
 
     async def _save_partial_report(self, supabase, error_message: str) -> None:
         """
@@ -631,6 +817,19 @@ class ReportGenerator:
                         f"  - {tool.get('name', tool.get('slug', 'Unknown'))}: API score {api_score}/5"
                     )
 
+            # Load store profile if available
+            store_profile_service = StoreProfileService()
+            store_profile = await store_profile_service.load(self.quiz_session_id)
+            if store_profile:
+                self.context["store_profile"] = store_profile.to_prompt_context()
+                logger.info(
+                    "Report input - Store profile loaded",
+                    completeness=store_profile.completeness,
+                    source=store_profile.source.value,
+                )
+            else:
+                self.context["store_profile"] = None
+
             # Log input data for debugging
             logger.info(f"Report input - Company: {self.context['company_name']}")
             logger.info(f"Report input - Industry: {self.context['answers'].get('industry', 'unknown')}")
@@ -694,6 +893,7 @@ class ReportGenerator:
             }).execute()
 
             self.report_id = report_result.data[0]["id"]
+            self._generation_started_at: str = report_result.data[0].get("generation_started_at", "")
 
             # Initialize trace collector now that we have report_id
             self.trace_collector = TraceCollector(
@@ -887,6 +1087,14 @@ class ReportGenerator:
                 "executive_summary": executive_summary,
             }).eq("id", self.report_id).execute()
 
+            # Phase 3b: Generate AIOS vision
+            yield {"phase": "vision", "step": "Building your connected vision...", "progress": 36}
+            aios_vision = await self._generate_aios_vision(
+                self.context.get("existing_stack", [])
+            )
+            self._partial_data["aios_vision"] = aios_vision
+            yield {"phase": "vision", "step": "Vision complete", "progress": 38}
+
             # Phase 4: Generate findings
             self.trace_collector.start_phase("findings")
             yield {"phase": "findings", "step": "Generating findings...", "progress": 40}
@@ -953,8 +1161,9 @@ class ReportGenerator:
                         industry=self.context.get("industry", "ecommerce"),
                     )
 
-                    # Use refined findings
+                    # Use refined findings, then reapply deterministic path enrichment
                     findings = review_result.get("content", findings)
+                    findings = self._restore_finding_path_metadata(findings)
                     quality_scores = review_result.get("review_scores", {})
                     findings_added = review_result.get("findings_added", 0)
 
@@ -1218,7 +1427,7 @@ class ReportGenerator:
             # Phase 6c: Generate system architecture
             yield {"phase": "architecture", "step": "Building system architecture...", "progress": 88}
 
-            system_architecture = self._generate_system_architecture(recommendations)
+            system_architecture = await self._generate_system_architecture(recommendations)
             self._partial_data["system_architecture"] = system_architecture
 
             # Extract AIOS enrichment data from system architecture for report flow
@@ -1248,6 +1457,10 @@ class ReportGenerator:
             yield {"phase": "automation_summary", "step": "Building automation roadmap...", "progress": 93}
 
             automation_summary = await self._generate_automation_summary(findings)
+            automation_summary = self._reconcile_automation_summary_total(
+                automation_summary,
+                value_summary,
+            )
             self._partial_data["automation_summary"] = automation_summary
 
             yield {"phase": "automation_summary", "step": "Automation roadmap complete", "progress": 93}
@@ -1275,6 +1488,10 @@ class ReportGenerator:
                     "industry_insights": industry_insights,
                     "automation_summary": automation_summary,
                 }
+                # Include AIOS vision if generated
+                aios_vision = self._partial_data.get("aios_vision")
+                if aios_vision:
+                    update_data["aios_vision"] = aios_vision
                 # Include AIOS maturity if generated by the new skill
                 aios_maturity = self._partial_data.get("aios_maturity")
                 if aios_maturity:
@@ -1310,10 +1527,12 @@ class ReportGenerator:
             generation_trace = self.trace_collector.finalize()
             logger.info(f"[FINALIZE] Generation trace: {generation_trace.total_llm_calls} LLM calls, {len(generation_trace.phases)} phases")
 
-            # Update report status - goes to qa_pending for human review
-            # Status flow: generating → qa_pending → (QA review) → released
+            # Update report status
+            # Normal flow: generating → qa_pending → (QA review) → released
+            # With skip_review: generating → released (skip QA gate)
+            final_status = "released" if self.skip_review else "qa_pending"
             update_data = {
-                "status": "qa_pending",
+                "status": final_status,
                 "generation_completed_at": datetime.utcnow().isoformat(),
             }
 
@@ -1468,7 +1687,32 @@ class ReportGenerator:
                 logger.info("[FINALIZE] Quality validation passed")
             # ================================================================
 
-            logger.info(f"[FINALIZE] Updating report status to qa_pending...")
+            # ================================================================
+            # SLOP CLEAN + SCAN - replace then detect banned phrases
+            # ================================================================
+            cleaned_count = self._clean_banned_phrases(full_report)
+            if cleaned_count > 0:
+                logger.info(
+                    "slop_phrases_cleaned",
+                    replacements=cleaned_count,
+                    report_id=self.report_id,
+                )
+            slop_scan = self._scan_for_banned_phrases(full_report)
+            self._partial_data["slop_scan"] = slop_scan
+
+            if slop_scan["total_matches"] > 0:
+                logger.warning(
+                    "slop_scan_completed",
+                    total_matches=slop_scan["total_matches"],
+                    unique_phrases=len(slop_scan["details"]),
+                    report_id=self.report_id,
+                )
+                assumption_log["slop_scan"] = slop_scan
+            else:
+                logger.info("[FINALIZE] Slop scan passed — 0 banned phrases detected")
+            # ================================================================
+
+            logger.info(f"[FINALIZE] Updating report status to {final_status}...")
             # Save status + core metadata (these columns always exist)
             try:
                 await supabase.table("reports").update({
@@ -1491,10 +1735,29 @@ class ReportGenerator:
             except Exception:
                 logger.warning("generation_trace_save_skipped", report_id=self.report_id)
 
-            # Update quiz session - pending QA review
-            logger.info(f"[FINALIZE] Updating quiz session status to qa_pending...")
+            # Capture metadata for analytics (fire-and-forget)
+            try:
+                from src.models.report_metadata import ReportMetadataCreate, save_report_metadata
+                metadata = ReportMetadataCreate.from_report_context(
+                    report_id=self.report_id,
+                    quiz_session_id=self.quiz_session_id,
+                    tier=self.tier,
+                    context=self.context,
+                    executive_summary=executive_summary,
+                    findings=findings,
+                    recommendations=recommendations,
+                    token_tracker=self.token_tracker,
+                    generation_started_at=getattr(self, "_generation_started_at", None),
+                    generation_completed_at=datetime.utcnow(),
+                )
+                await save_report_metadata(metadata)
+            except Exception as e:
+                logger.warning("report_metadata_capture_failed", error=str(e), report_id=str(self.report_id))
+
+            # Update quiz session status to match report
+            logger.info(f"[FINALIZE] Updating quiz session status to {final_status}...")
             await supabase.table("quiz_sessions").update({
-                "status": "qa_pending",
+                "status": final_status,
                 "report_generated_at": datetime.utcnow().isoformat(),
             }).eq("id", self.quiz_session_id).execute()
             logger.info(f"[FINALIZE] Quiz session status updated successfully")
@@ -1803,6 +2066,97 @@ Return ONLY the JSON, no explanation."""
         # Fall back to legacy method
         return await self._generate_findings_legacy()
 
+    def _restore_finding_path_metadata(
+        self,
+        findings: List[Dict[str, Any]],
+    ) -> List[Dict[str, Any]]:
+        """Reapply deterministic path enrichment after review/refinement."""
+        skill = get_skill("finding-generation", client=self.client)
+        if not skill or not findings:
+            return findings
+
+        findings = skill._add_automation_paths(
+            findings,
+            self.context.get("existing_stack", []),
+        )
+        return skill._validate_findings(
+            findings,
+            default_hourly_rate=self._get_effective_hourly_rate(),
+        )
+
+    @staticmethod
+    def _get_connect_path_setup_hours(connect_path: Dict[str, Any]) -> float:
+        """Resolve setup effort from normalized or nested CRB fields."""
+        top_level = connect_path.get("setup_effort_hours", 0) or 0
+        if top_level:
+            return float(top_level)
+        nested = (
+            connect_path.get("cost", {})
+            .get("implementation_diy", {})
+            .get("hours", 0)
+            or 0
+        )
+        return float(nested)
+
+    @staticmethod
+    def _get_connect_path_monthly_cost(connect_path: Dict[str, Any]) -> float:
+        """Resolve monthly running cost from normalized or nested CRB fields."""
+        top_level = connect_path.get("monthly_cost_estimate", 0) or 0
+        if top_level:
+            return float(top_level)
+        nested = (
+            connect_path.get("cost", {})
+            .get("monthly_ongoing", {})
+            .get("total", 0)
+            or 0
+        )
+        return float(nested)
+
+    @staticmethod
+    def _reconcile_automation_summary_total(
+        automation_summary: Dict[str, Any],
+        value_summary: Dict[str, Any],
+    ) -> Dict[str, Any]:
+        """Align automation summary impact with the adjusted report-wide value summary."""
+        total = value_summary.get("total", {})
+        projection_years = value_summary.get("projection_years", 3) or 3
+        total_min = float(total.get("min", 0) or 0)
+        total_max = float(total.get("max", 0) or 0)
+        if total_min <= 0 and total_max <= 0:
+            return automation_summary
+
+        midpoint_total = (total_min + total_max) / 2
+        automation_summary["total_monthly_impact"] = round(
+            midpoint_total / (projection_years * 12),
+            2,
+        )
+        automation_summary["impact_reconciled"] = True
+        return automation_summary
+
+    @classmethod
+    def _sanitize_customer_facing_text(cls, value: Any) -> Any:
+        """Recursively normalize known invalid customer-facing labels."""
+        replacements = {
+            r"\bClaude Haiku 3\.5\b": "Claude Haiku 4.5",
+            r"\bHaiku 3\.5\b": "Haiku 4.5",
+            r"\bClaude Opus 4\.5\b": "Claude Opus 4",
+            r"\bOpus 4\.5\b": "Opus 4",
+        }
+
+        if isinstance(value, str):
+            sanitized = value
+            for pattern, replacement in replacements.items():
+                sanitized = re.sub(pattern, replacement, sanitized)
+            return sanitized
+        if isinstance(value, list):
+            return [cls._sanitize_customer_facing_text(item) for item in value]
+        if isinstance(value, dict):
+            return {
+                key: cls._sanitize_customer_facing_text(item)
+                for key, item in value.items()
+            }
+        return value
+
     async def _generate_findings_legacy(self) -> List[Dict[str, Any]]:
         """Generate findings using Claude (legacy method)."""
         answers = self.context.get("answers", {})
@@ -1811,9 +2165,9 @@ Return ONLY the JSON, no explanation."""
         semantic_prompt = self.context.get("semantic_prompt", "")
         semantic_retrieval = self.context.get("semantic_retrieval", {})
 
-        # Request fewer findings for more reliable JSON output
-        max_findings = 7 if self.tier == "quick" else 15
-        min_not_recommended = 2 if self.tier == "quick" else 3
+        # Full breadth of findings for every report
+        max_findings = 15
+        min_not_recommended = 3
 
         # Build list of valid sources from retrieval
         valid_sources = []
@@ -2156,7 +2510,7 @@ IMPORTANT:
                 ]
 
                 # Top findings for individual recommendations
-                max_recs = 5 if self.tier == "quick" else 10
+                max_recs = 10
                 priority_findings = (high_priority + other)[:max_recs]
 
                 recommendations = []
@@ -2505,6 +2859,17 @@ IMPORTANT:
 
                                     if four_result.success:
                                         rec["four_options"] = four_result.data
+                                        # Populate vendor_match from four_options.buy
+                                        four_buy = four_result.data.get("buy", {})
+                                        buy_vendor = four_buy.get("vendor_name", "")
+                                        if buy_vendor and buy_vendor != "No matching vendor":
+                                            rec["vendor_match"] = {
+                                                "vendor": buy_vendor,
+                                                "slug": four_buy.get("vendor_slug", ""),
+                                                "category": finding.get("category", ""),
+                                                "confidence": "high" if four_buy.get("vendor_verified") else "medium",
+                                                "match_type": four_buy.get("vendor_match_type", ""),
+                                            }
                                         # Align four_options with AIOS recommendation
                                         rec = self._align_four_options(rec)
                                 except (ValueError, KeyError, TypeError, RuntimeError, Exception) as four_e:
@@ -2513,14 +2878,16 @@ IMPORTANT:
                             # Add automation insight from finding's connect_path
                             connect_path = finding.get("connect_path")
                             if connect_path:
+                                connect_hours = self._get_connect_path_setup_hours(connect_path)
+                                connect_monthly_cost = self._get_connect_path_monthly_cost(connect_path)
                                 rec["automation_insight"] = {
                                     "approach": "CONNECT (Use Existing Tools)",
                                     "integration_flow": connect_path.get("integration_flow", ""),
                                     "flow_steps": connect_path.get("flow_steps", []),
                                     "what_it_does": connect_path.get("what_it_does", ""),
                                     "tools_used": connect_path.get("tools_used", []),
-                                    "estimated_hours": connect_path.get("setup_effort_hours", 0),
-                                    "monthly_cost": connect_path.get("monthly_cost_estimate", 0),
+                                    "estimated_hours": connect_hours,
+                                    "monthly_cost": connect_monthly_cost,
                                     "why_this_works": connect_path.get("why_this_works", ""),
                                     "verdict": finding.get("verdict", "EITHER"),
                                     "verdict_reasoning": finding.get("verdict_reasoning", ""),
@@ -2537,7 +2904,7 @@ IMPORTANT:
                                     "verdict_reasoning": "Your existing stack has good API support for automation",
                                 }
 
-                            return rec
+                            return self._sanitize_customer_facing_text(rec)
                         except Exception as e:
                             logger.warning("three_options_skill_failed", finding_id=finding.get("id"), error=str(e), error_type=type(e).__name__)
                             return None
@@ -3276,12 +3643,19 @@ Return ONLY the JSON."""
         logger.info(f"[VALUE_CALC] Starting value_summary calculation with {len(findings)} findings and {len(recommendations)} recommendations")
 
         # Calculate confidence-adjusted hours saved
+        # Findings use value.saves (annual EUR) — convert to hours/week via hourly rate
+        preliminary_hourly_rate = self._get_effective_hourly_rate()
         total_hours_saved_raw = 0
         total_hours_saved_adjusted = 0
         for f in findings:
-            hours = f.get("value_saved", {}).get("hours_per_week", 0) or 0
+            # Try new schema first (value.saves), fall back to legacy (value_saved.hours_per_week)
+            annual_saves = f.get("value", {}).get("saves", 0) or 0
+            if annual_saves > 0 and preliminary_hourly_rate > 0:
+                hours = annual_saves / preliminary_hourly_rate / 52
+            else:
+                hours = f.get("value_saved", {}).get("hours_per_week", 0) or 0
             if hours > 0:
-                logger.info(f"[VALUE_CALC] Finding '{f.get('title', 'N/A')}' has {hours} hours/week saved")
+                logger.info(f"[VALUE_CALC] Finding '{f.get('title', 'N/A')}' has {hours:.1f} hours/week saved (from €{annual_saves} annual)")
             confidence = f.get("confidence", "medium").lower()
             factor = CONFIDENCE_FACTORS.get(confidence, 0.85)
             total_hours_saved_raw += hours
@@ -3310,7 +3684,7 @@ Return ONLY the JSON."""
             cap_ratio = total_hours_saved_adjusted / original_hours if original_hours > 0 else 1.0
             total_hours_saved_raw = total_hours_saved_raw * cap_ratio
 
-        hourly_rate = self._get_effective_hourly_rate()
+        hourly_rate = preliminary_hourly_rate
         time_savings_raw = total_hours_saved_raw * hourly_rate * 52  # Annual
         time_savings_adjusted = total_hours_saved_adjusted * hourly_rate * 52
 
@@ -3318,7 +3692,10 @@ Return ONLY the JSON."""
         value_created_raw = 0
         value_created_adjusted = 0
         for f in findings:
-            revenue = f.get("value_created", {}).get("potential_revenue", 0) or 0
+            # Try new schema first (value.creates), fall back to legacy (value_created.potential_revenue)
+            revenue = f.get("value", {}).get("creates", 0) or 0
+            if revenue <= 0:
+                revenue = f.get("value_created", {}).get("potential_revenue", 0) or 0
             confidence = f.get("confidence", "medium").lower()
             factor = CONFIDENCE_FACTORS.get(confidence, 0.85)
             value_created_raw += revenue
@@ -3483,29 +3860,11 @@ Return ONLY the JSON."""
 
     # Industry-specific verdict adjustments
     INDUSTRY_VERDICT_ADJUSTMENTS = {
-        "professional-services": {
-            "ai_readiness_boost": 3,
-            "risk_tolerance": "medium",
-            "quick_win_emphasis": True,
-            "context_note": "Professional services benefit from document automation and client management AI"
-        },
-        "dental": {
-            "ai_readiness_boost": 0,
-            "risk_tolerance": "low",
-            "quick_win_emphasis": True,
-            "context_note": "Dental practices should focus on proven AI tools for scheduling and patient communication"
-        },
         "ecommerce": {
             "ai_readiness_boost": 5,
             "risk_tolerance": "medium-high",
             "quick_win_emphasis": True,
             "context_note": "E-commerce stacks are API-rich — prioritize Connect-first strategies (Shopify Flow, Klaviyo webhooks, Gorgias automations) before building custom AI"
-        },
-        "b2b-platforms": {
-            "ai_readiness_boost": 5,
-            "risk_tolerance": "medium",
-            "quick_win_emphasis": False,
-            "context_note": "B2B platforms can leverage AI for data analysis and customer insights"
         },
     }
 
@@ -3755,7 +4114,11 @@ Return ONLY the JSON."""
                     quiz_answers=self.context.get("answers", {}),
                     industry_context=self.context.get("industry_knowledge", {}),
                 )
-                playbooks.append(playbook.model_dump(mode='json'))
+                playbooks.append(
+                    self._sanitize_customer_facing_text(
+                        playbook.model_dump(mode='json')
+                    )
+                )
             except (ValueError, KeyError, TypeError, RuntimeError, Exception) as e:
                 logger.warning("playbook_generation_failed", recommendation_id=rec.get("id"), error=str(e), error_type=type(e).__name__)
 
@@ -3955,7 +4318,7 @@ Return ONLY the JSON."""
             "quick_wins_found": len(quick_wins),
         }
 
-    def _generate_system_architecture(self, recommendations: List[Dict]) -> Dict[str, Any]:
+    async def _generate_system_architecture(self, recommendations: List[Dict]) -> Dict[str, Any]:
         """Generate system architecture diagram data (7-layer AIOS blueprint)."""
         # Try new AIOS 7-layer skill first
         skill = get_skill("system-architecture")
@@ -3967,8 +4330,7 @@ Return ONLY the JSON."""
                     context.report_data = {}
                 context.report_data["recommendations"] = recommendations
 
-                import asyncio
-                result = asyncio.get_event_loop().run_until_complete(skill.run(context))
+                result = await skill.run(context)
                 if result.success:
                     arch_data = result.data
                     # Extract and store aios_maturity separately for the report
@@ -3994,6 +4356,29 @@ Return ONLY the JSON."""
             existing_stack=self.context.get("existing_stack", []),
         )
         return architecture.model_dump()
+
+    async def _generate_aios_vision(self, existing_stack: list) -> Dict[str, Any]:
+        """Generate AIOS vision ('What's Possible' narrative) using the client's tools."""
+        from src.skills import get_skill
+
+        skill = get_skill("aios-vision", client=self.client)
+        if skill:
+            try:
+                context = self._get_skill_context()
+                result = await skill.run(context)
+                if result.success:
+                    logger.info(
+                        "aios_vision_generated",
+                        examples=len(result.data.get("specific_examples", [])),
+                    )
+                    return result.data
+                else:
+                    logger.warning("aios_vision_skill_failed", warnings=result.warnings)
+            except Exception as e:
+                logger.warning("aios_vision_skill_error", error=str(e))
+
+        # Return empty dict — frontend handles missing vision gracefully
+        return {}
 
     async def _generate_industry_insights(self) -> Dict[str, Any]:
         """Generate industry insights, benchmarks, and competitor analysis."""

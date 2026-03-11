@@ -44,7 +44,7 @@ QUESTIONNAIRE_SECTIONS = [
                 "question": "Briefly describe what your company does and your main products/services.",
                 "type": QuestionType.TEXTAREA,
                 "required": True,
-                "placeholder": "We are a commercial law firm specializing in M&A and corporate advisory...",
+                "placeholder": "We are an online store selling sustainable fashion to eco-conscious consumers...",
             },
             {
                 "id": "employee_count",
@@ -100,21 +100,21 @@ QUESTIONNAIRE_SECTIONS = [
                 "question": "Describe your main business processes that take the most time or resources.",
                 "type": QuestionType.TEXTAREA,
                 "required": True,
-                "placeholder": "Our main processes include client intake, document drafting, billing, research...",
+                "placeholder": "Our main processes include order processing, inventory management, customer support, marketing campaigns...",
             },
             {
                 "id": "repetitive_tasks",
                 "question": "What repetitive tasks do you or your team perform regularly?",
                 "type": QuestionType.TEXTAREA,
                 "required": True,
-                "placeholder": "We spend hours each week on time entry, document formatting, client updates, invoice follow-ups...",
+                "placeholder": "We spend hours each week on order confirmations, shipping updates, return processing, product listing updates, inventory reconciliation...",
             },
             {
                 "id": "biggest_bottlenecks",
                 "question": "What are your biggest operational bottlenecks?",
                 "type": QuestionType.TEXTAREA,
                 "required": True,
-                "placeholder": "We often get delayed by partner reviews, document turnaround, client intake...",
+                "placeholder": "We often get delayed by cart abandonment recovery, returns processing, inventory forecasting, multi-channel sync...",
             },
             {
                 "id": "time_on_admin",
@@ -150,15 +150,17 @@ QUESTIONNAIRE_SECTIONS = [
                 "type": QuestionType.MULTI_SELECT,
                 "required": True,
                 "options": [
-                    {"value": "crm", "label": "CRM (Salesforce, HubSpot, etc.)"},
-                    {"value": "project_management", "label": "Project Management (Asana, Monday, Trello)"},
-                    {"value": "accounting", "label": "Accounting (QuickBooks, Xero, etc.)"},
-                    {"value": "email_marketing", "label": "Email Marketing (Mailchimp, etc.)"},
-                    {"value": "social_media", "label": "Social Media Management"},
-                    {"value": "ecommerce", "label": "E-commerce Platform (Shopify, WooCommerce)"},
+                    {"value": "ecommerce_platform", "label": "Ecommerce Platform (Shopify, WooCommerce, Magento)"},
+                    {"value": "email_marketing", "label": "Email/SMS Marketing (Klaviyo, Omnisend, Mailchimp)"},
+                    {"value": "helpdesk", "label": "Helpdesk (Gorgias, Zendesk, Freshdesk)"},
+                    {"value": "reviews_ugc", "label": "Reviews & UGC (Yotpo, Okendo, Loox)"},
+                    {"value": "analytics", "label": "Analytics (GA4, Triple Whale, Polar)"},
+                    {"value": "ads_platform", "label": "Ads Platform (Meta, Google, TikTok)"},
+                    {"value": "inventory_management", "label": "Inventory Management"},
+                    {"value": "shipping_fulfillment", "label": "Shipping & Fulfillment (ShipStation, ShipBob)"},
+                    {"value": "returns_management", "label": "Returns Management (Loop, Returnly)"},
+                    {"value": "subscriptions", "label": "Subscriptions (Recharge, Bold, Skio)"},
                     {"value": "spreadsheets", "label": "Spreadsheets (Excel, Google Sheets)"},
-                    {"value": "communication", "label": "Team Communication (Slack, Teams)"},
-                    {"value": "analytics", "label": "Analytics (Google Analytics, etc.)"},
                     {"value": "other", "label": "Other"},
                 ],
             },
@@ -269,21 +271,21 @@ QUESTIONNAIRE_SECTIONS = [
                 "question": "What is the single biggest challenge in your business right now?",
                 "type": QuestionType.TEXTAREA,
                 "required": True,
-                "placeholder": "Partner time on admin, capturing billable hours, winning new clients, staff retention...",
+                "placeholder": "Cart abandonment is our biggest revenue leak — customers add items but don't complete checkout...",
             },
             {
                 "id": "time_wasters",
                 "question": "What tasks feel like a waste of time but you have to do them anyway?",
                 "type": QuestionType.TEXTAREA,
                 "required": True,
-                "placeholder": "Time entry, conflict checks, document formatting, chasing payments, scheduling...",
+                "placeholder": "Manual order tracking updates, returns processing, inventory counting, product description writing, support ticket triage...",
             },
             {
                 "id": "missed_opportunities",
                 "question": "What opportunities do you feel you're missing due to lack of time or resources?",
                 "type": QuestionType.TEXTAREA,
                 "required": False,
-                "placeholder": "Business development, responding to RFPs faster, client relationship building, thought leadership...",
+                "placeholder": "Personalised product recommendations, abandoned cart recovery, repeat purchase campaigns, upsell/cross-sell at checkout...",
             },
             {
                 "id": "cost_concerns",
@@ -291,13 +293,14 @@ QUESTIONNAIRE_SECTIONS = [
                 "type": QuestionType.MULTI_SELECT,
                 "required": True,
                 "options": [
-                    {"value": "labor", "label": "Labor costs"},
-                    {"value": "software", "label": "Software subscriptions"},
-                    {"value": "marketing", "label": "Marketing spend"},
-                    {"value": "overhead", "label": "Overhead / facilities"},
-                    {"value": "inventory", "label": "Inventory / supplies"},
-                    {"value": "outsourcing", "label": "Outsourcing / contractors"},
-                    {"value": "other", "label": "Other"},
+                    {"value": "shipping_logistics", "label": "Shipping & logistics"},
+                    {"value": "returns_processing", "label": "Returns processing"},
+                    {"value": "customer_acquisition", "label": "Customer acquisition (CAC)"},
+                    {"value": "software_subscriptions", "label": "Software subscriptions"},
+                    {"value": "inventory_waste", "label": "Inventory waste / dead stock"},
+                    {"value": "marketing_spend", "label": "Marketing spend / ROAS"},
+                    {"value": "manual_labor", "label": "Manual labor"},
+                    {"value": "marketplace_fees", "label": "Marketplace fees (Amazon, eBay)"},
                 ],
             },
             {
@@ -389,30 +392,22 @@ QUESTIONNAIRE_SECTIONS = [
 
 # Industry-specific additional questions
 INDUSTRY_SPECIFIC_QUESTIONS: Dict[str, List[Dict[str, Any]]] = {
-    "marketing_agency": [
+    "ecommerce": [
         {
-            "id": "client_count",
-            "question": "How many active clients do you typically manage?",
-            "type": QuestionType.NUMBER,
-            "required": True,
-        },
-        {
-            "id": "services_offered",
-            "question": "What services do you offer?",
-            "type": QuestionType.MULTI_SELECT,
+            "id": "ecommerce_sub_type",
+            "question": "What best describes your e-commerce business model?",
+            "type": QuestionType.SELECT,
             "required": True,
             "options": [
-                {"value": "social_media", "label": "Social media management"},
-                {"value": "content", "label": "Content creation"},
-                {"value": "paid_ads", "label": "Paid advertising"},
-                {"value": "seo", "label": "SEO"},
-                {"value": "branding", "label": "Branding & design"},
-                {"value": "web_dev", "label": "Web development"},
-                {"value": "pr", "label": "PR"},
+                {"value": "dtc_brand", "label": "DTC brand (own products, own store)"},
+                {"value": "multi_channel", "label": "Multi-channel retailer (own store + marketplaces)"},
+                {"value": "subscription", "label": "Subscription / recurring revenue"},
+                {"value": "fashion_apparel", "label": "Fashion & apparel"},
+                {"value": "marketplace_seller", "label": "Primarily marketplace seller"},
+                {"value": "b2b_wholesale", "label": "B2B / wholesale"},
+                {"value": "other", "label": "Other"},
             ],
         },
-    ],
-    "ecommerce": [
         {
             "id": "monthly_orders",
             "question": "How many orders do you process per month?",
@@ -434,168 +429,55 @@ INDUSTRY_SPECIFIC_QUESTIONS: Dict[str, List[Dict[str, Any]]] = {
                 {"value": "retail", "label": "Physical retail"},
             ],
         },
-    ],
-    "retail": [
         {
-            "id": "locations",
-            "question": "How many physical locations do you have?",
-            "type": QuestionType.NUMBER,
-            "required": True,
-        },
-        {
-            "id": "pos_system",
-            "question": "What POS system do you use?",
-            "type": QuestionType.TEXT,
-            "required": False,
-        },
-    ],
-    "tech_company": [
-        {
-            "id": "product_type",
-            "question": "What type of product/service do you offer?",
+            "id": "store_data_source",
+            "question": "Would you like to share your store numbers for a more personalised analysis?",
             "type": QuestionType.SELECT,
             "required": True,
             "options": [
-                {"value": "saas", "label": "SaaS product"},
-                {"value": "consulting", "label": "Tech consulting"},
-                {"value": "development", "label": "Custom development"},
-                {"value": "hardware", "label": "Hardware"},
-                {"value": "other", "label": "Other"},
-            ],
-        },
-    ],
-    "music_company": [
-        {
-            "id": "business_type",
-            "question": "What type of music business are you?",
-            "type": QuestionType.SELECT,
-            "required": True,
-            "options": [
-                {"value": "label", "label": "Record label"},
-                {"value": "studio", "label": "Recording studio"},
-                {"value": "artist_mgmt", "label": "Artist management"},
-                {"value": "publishing", "label": "Music publishing"},
-                {"value": "distribution", "label": "Distribution"},
-                {"value": "production", "label": "Production company"},
-            ],
-        },
-        {
-            "id": "catalog_size",
-            "question": "How many releases/tracks do you manage?",
-            "type": QuestionType.NUMBER,
-            "required": False,
-        },
-    ],
-    "professional_services": [
-        {
-            "id": "firm_type",
-            "question": "What type of professional services firm are you?",
-            "type": QuestionType.SELECT,
-            "required": True,
-            "options": [
-                {"value": "law_firm", "label": "Law firm"},
-                {"value": "accounting", "label": "Accounting / Tax advisory"},
-                {"value": "consulting", "label": "Management consulting"},
-                {"value": "architecture", "label": "Architecture / Engineering"},
-                {"value": "financial_advisory", "label": "Financial advisory"},
-                {"value": "other", "label": "Other professional services"},
-            ],
-        },
-        {
-            "id": "fee_earner_count",
-            "question": "How many fee earners (partners + associates/consultants) does your firm have?",
-            "type": QuestionType.SELECT,
-            "required": True,
-            "options": [
-                {"value": "1-5", "label": "1-5 fee earners"},
-                {"value": "6-15", "label": "6-15 fee earners"},
-                {"value": "16-50", "label": "16-50 fee earners"},
-                {"value": "50+", "label": "50+ fee earners"},
-            ],
-        },
-        {
-            "id": "billing_model",
-            "question": "How do you primarily charge clients?",
-            "type": QuestionType.SELECT,
-            "required": True,
-            "options": [
-                {"value": "hourly", "label": "Hourly billing"},
-                {"value": "fixed_fee", "label": "Fixed fee / project-based"},
-                {"value": "retainer", "label": "Monthly retainers"},
-                {"value": "mixed", "label": "Mix of the above"},
-            ],
-        },
-        {
-            "id": "time_tracking_challenge",
-            "question": "How much of a challenge is accurate time tracking in your firm?",
-            "type": QuestionType.SCALE,
-            "required": True,
-            "scale_min": 1,
-            "scale_max": 10,
-            "scale_labels": {"1": "Not a problem", "5": "Moderate issue", "10": "Major revenue leak"},
-        },
-        {
-            "id": "practice_management_tool",
-            "question": "What practice management software do you use?",
-            "type": QuestionType.SELECT,
-            "required": True,
-            "options": [
-                {"value": "clio", "label": "Clio"},
-                {"value": "practice_panther", "label": "PracticePanther"},
-                {"value": "smokeball", "label": "Smokeball"},
-                {"value": "karbon", "label": "Karbon"},
-                {"value": "mycase", "label": "MyCase"},
-                {"value": "spreadsheets", "label": "Spreadsheets / manual tracking"},
-                {"value": "other", "label": "Other"},
-                {"value": "none", "label": "None - looking for one"},
-            ],
-        },
-        {
-            "id": "document_volume",
-            "question": "Roughly how many client documents does your firm create or review per week?",
-            "type": QuestionType.SELECT,
-            "required": True,
-            "options": [
-                {"value": "low", "label": "Under 20 documents"},
-                {"value": "medium", "label": "20-100 documents"},
-                {"value": "high", "label": "100-500 documents"},
-                {"value": "very_high", "label": "500+ documents"},
-            ],
-        },
-        {
-            "id": "compliance_concerns",
-            "question": "Which compliance or risk areas concern you most?",
-            "type": QuestionType.MULTI_SELECT,
-            "required": False,
-            "options": [
-                {"value": "data_privacy", "label": "Data privacy (GDPR, client confidentiality)"},
-                {"value": "aml_kyc", "label": "AML / KYC requirements"},
-                {"value": "conflict_checks", "label": "Conflict of interest checks"},
-                {"value": "regulatory", "label": "Regulatory compliance (SRA, bar association, etc.)"},
-                {"value": "trust_accounting", "label": "Trust accounting / escrow compliance"},
-                {"value": "none", "label": "None specifically"},
+                {"value": "manual_entry", "label": "Yes, I'll enter a few numbers (2 min)"},
+                {"value": "skip", "label": "Skip — use industry benchmarks"},
             ],
         },
     ],
 }
 
 
+def _apply_industry_overrides(
+    sections: List[Dict[str, Any]], industry: str
+) -> List[Dict[str, Any]]:
+    """Apply industry-specific placeholder and option overrides to questionnaire sections."""
+    override_key_placeholder = f"{industry}_placeholder"
+    override_key_options = f"{industry}_options"
+
+    for section in sections:
+        for question in section["questions"]:
+            # Swap placeholder if industry-specific one exists
+            if override_key_placeholder in question:
+                question["placeholder"] = question.pop(override_key_placeholder)
+            # Swap options if industry-specific ones exist
+            if override_key_options in question:
+                question["options"] = question.pop(override_key_options)
+    return sections
+
+
 def get_questionnaire(industry: Optional[str] = None) -> List[Dict[str, Any]]:
     """
-    Get the full questionnaire, optionally including industry-specific questions.
+    Get the full questionnaire, including ecommerce-specific questions.
     """
-    sections = QUESTIONNAIRE_SECTIONS.copy()
-
-    if industry and industry in INDUSTRY_SPECIFIC_QUESTIONS:
-        # Add industry-specific section
+    import copy
+    sections = copy.deepcopy(QUESTIONNAIRE_SECTIONS)
+    # Always apply ecommerce overrides
+    effective_industry = industry or "ecommerce"
+    _apply_industry_overrides(sections, effective_industry)
+    if effective_industry in INDUSTRY_SPECIFIC_QUESTIONS:
         industry_section = {
             "id": len(sections) + 1,
-            "title": "Industry-Specific Questions",
-            "description": f"A few questions specific to your industry",
-            "questions": INDUSTRY_SPECIFIC_QUESTIONS[industry],
+            "title": "Your E-Commerce Store",
+            "description": "A few questions specific to your online store",
+            "questions": INDUSTRY_SPECIFIC_QUESTIONS[effective_industry],
         }
         sections.append(industry_section)
-
     return sections
 
 

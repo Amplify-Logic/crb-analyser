@@ -1,10 +1,10 @@
 import React, { useState, useEffect, useRef, useCallback, Suspense } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
-import { ShimmerButton } from '../components/magicui'
 import { formatCompanyName } from '../lib/formatCompanyName'
 import { logger } from '../utils/logger'
 import { API_BASE } from '../services/apiClient'
+import StoreDataStep from '../components/quiz/StoreDataStep'
 
 const DevModeTestGenerator = React.lazy(() => import('./quiz/DevModeTestGenerator'))
 
@@ -234,6 +234,10 @@ export default function Quiz() {
   const [otherSoftware, setOtherSoftware] = useState('')
   const [existingStackSaved, setExistingStackSaved] = useState(false)
 
+  // Store data collection state
+  const [showStoreDataStep, setShowStoreDataStep] = useState(false)
+  const [storeDataCompleted, setStoreDataCompleted] = useState(false)
+
   // Teaser report state (TODO: implement teaser API when backend is ready)
   // Using void to suppress unused setter warning - will be used when teaser API is implemented
   const [teaserReport, setTeaserReport] = useState<TeaserReport | null>(null)
@@ -444,6 +448,53 @@ export default function Quiz() {
       missingFields.push('Technology stack')
     }
 
+    // Ecommerce-specific signals
+    const detectedIndustry = profile.industry?.primary_industry?.value?.toLowerCase() || ''
+    if (detectedIndustry === 'ecommerce' || detectedIndustry === 'e-commerce') {
+      // Extract ecommerce platform from tech stack
+      const allTech = [
+        ...(profile.tech_stack?.technologies_detected || []).map(t => t.value),
+        ...(profile.tech_stack?.platforms_used || []).map(p => p.value),
+      ]
+      const ecommercePlatforms = ['Shopify', 'WooCommerce', 'Magento', 'BigCommerce', 'Squarespace', 'Wix']
+      const detectedPlatform = allTech.find(t =>
+        ecommercePlatforms.some(p => t.toLowerCase().includes(p.toLowerCase()))
+      )
+      if (detectedPlatform) {
+        extracted.push({
+          field: 'Ecommerce Platform',
+          value: detectedPlatform,
+          confidence: 'high',
+        })
+      }
+
+      // Detect payment providers
+      const paymentProviders = ['Stripe', 'Klarna', 'PayPal', 'Adyen', 'Mollie']
+      const detectedPayments = allTech.filter(t =>
+        paymentProviders.some(p => t.toLowerCase().includes(p.toLowerCase()))
+      )
+      if (detectedPayments.length > 0) {
+        extracted.push({
+          field: 'Payment Providers',
+          value: detectedPayments.join(', '),
+          confidence: 'medium',
+        })
+      }
+
+      // Detect sales channels from tech
+      const channelIndicators = ['Amazon', 'eBay', 'Etsy', 'Instagram', 'TikTok', 'Facebook']
+      const detectedChannels = allTech.filter(t =>
+        channelIndicators.some(c => t.toLowerCase().includes(c.toLowerCase()))
+      )
+      if (detectedChannels.length > 0) {
+        extracted.push({
+          field: 'Sales Channels Detected',
+          value: detectedChannels.join(', '),
+          confidence: 'medium',
+        })
+      }
+    }
+
     // Always need these for a good report
     missingFields.push('Current pain points and challenges')
     missingFields.push('AI/automation experience')
@@ -551,8 +602,7 @@ export default function Quiz() {
   useEffect(() => {
     const fetchSoftwareOptions = async () => {
       // Prefer URL industry param (user came from industry page) over research-detected industry
-      const industry = urlIndustry || researchResult?.company_profile?.industry?.primary_industry?.value
-      if (!industry) return
+      const industry = urlIndustry || researchResult?.company_profile?.industry?.primary_industry?.value || 'ecommerce'
 
       try {
         const response = await fetch(
@@ -775,7 +825,46 @@ export default function Quiz() {
     return current !== ''
   }
 
+  const handleStoreDataComplete = async (data: {
+    source: 'manual_entry' | 'skip'
+    store_metrics: { monthly_revenue: string; average_order_value: string; cart_abandonment_rate: string; repeat_customer_rate: string; email_list_size: string }
+  }) => {
+    try {
+      const platform = answers.sales_channels
+        ? (Array.isArray(answers.sales_channels) ? answers.sales_channels : []).find(
+            (c: string) => ['shopify', 'woocommerce', 'bigcommerce'].includes(c.toLowerCase())
+          ) || 'unknown'
+        : 'unknown'
+
+      await fetch(`${API_BASE}/api/quiz/sessions/${sessionId}/store-profile`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          source: data.source,
+          store_metrics: data.store_metrics,
+          platform,
+          currency: 'EUR',
+          ecommerce_sub_type: (answers.ecommerce_sub_type as string) || '',
+          sales_channels: (answers.sales_channels as string[]) || [],
+          monthly_orders: answers.monthly_orders ? parseInt(answers.monthly_orders as string) : undefined,
+        }),
+      })
+    } catch (err) {
+      logger.warn('Failed to save store profile', { error: err })
+      // Non-blocking — continue quiz even if save fails
+    }
+
+    setStoreDataCompleted(true)
+    setShowStoreDataStep(false)
+  }
+
   const handleNextQuestion = () => {
+    // After answering sales_channels, show store data step
+    if (currentQuestion?.id === 'sales_channels' && !storeDataCompleted) {
+      setShowStoreDataStep(true)
+      return
+    }
+
     if (currentQuestionIndex < questions.length - 1) {
       setCurrentQuestionIndex(prev => prev + 1)
     } else {
@@ -819,11 +908,8 @@ export default function Quiz() {
       <div className="min-h-screen bg-white selection:bg-primary-100 selection:text-primary-900">
         {/* Background elements */}
         <div className="fixed inset-0 bg-mesh-light opacity-60 pointer-events-none" />
-        <div className="fixed top-20 right-0 w-96 h-96 bg-primary-200/30 rounded-full blur-3xl animate-float opacity-50 pointer-events-none" />
-        <div className="fixed bottom-0 left-10 w-72 h-72 bg-blue-200/30 rounded-full blur-3xl animate-float pointer-events-none" style={{ animationDelay: '1s' }} />
-
-        {/* Navigation - Glass effect */}
-        <nav className="fixed top-0 left-0 right-0 z-50 bg-white/70 backdrop-blur-md border-b border-white/20">
+        {/* Navigation */}
+        <nav className="fixed top-0 left-0 right-0 z-50 bg-white border-b border-gray-200">
           <div className="max-w-6xl mx-auto px-4 py-4 flex justify-between items-center">
             <Link to="/" className="flex items-center gap-2">
               <div className="w-8 h-8 bg-gradient-to-br from-primary-500 to-primary-700 rounded-lg flex items-center justify-center text-white shadow-lg shadow-primary-500/30">
@@ -853,27 +939,23 @@ export default function Quiz() {
                 </svg>
               </div>
               <h1 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-3 tracking-tight">
-                {urlIndustry && INDUSTRY_COPY[urlIndustry]
-                  ? INDUSTRY_COPY[urlIndustry].heading
-                  : "Let's research your business"}
+                {INDUSTRY_COPY['ecommerce'].heading}
               </h1>
               <p className="text-gray-600 text-lg">
-                {urlIndustry && INDUSTRY_COPY[urlIndustry]
-                  ? INDUSTRY_COPY[urlIndustry].subheading
-                  : "We'll analyze publicly available information about your company to provide personalized insights."}
+                {INDUSTRY_COPY['ecommerce'].subheading}
               </p>
             </div>
 
             <div className="rounded-2xl border border-gray-200 bg-white p-8">
               <label htmlFor="company-website" className="block text-sm font-medium text-gray-700 mb-2">
-                Your company website
+                Your store website
               </label>
               <input
                 id="company-website"
                 type="text"
                 value={websiteUrl}
                 onChange={(e) => setWebsiteUrl(e.target.value)}
-                placeholder="www.yourcompany.com"
+                placeholder="www.yourstore.com"
                 className="w-full px-4 py-4 text-lg border border-gray-200 rounded-xl focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all bg-white"
                 onKeyDown={(e) => e.key === 'Enter' && isValidUrl(websiteUrl) && startResearch()}
               />
@@ -910,20 +992,18 @@ export default function Quiz() {
                       setSessionError(null)
                       window.location.reload()
                     }}
-                    className="w-full py-4 font-semibold rounded-xl text-lg bg-gradient-to-r from-purple-600 to-indigo-600 text-white hover:shadow-lg transition-all"
+                    className="w-full py-4 font-semibold rounded-xl text-lg bg-accent-500 hover:bg-accent-600 text-white hover:shadow-lg transition-all"
                   >
                     Retry Connection
                   </button>
                 </div>
               ) : isValidUrl(websiteUrl) && sessionId ? (
-                <ShimmerButton
+                <button
                   onClick={startResearch}
-                  className="w-full mt-6 text-lg"
-                  shimmerColor="#ffffff"
-                  background="linear-gradient(135deg, #7c3aed 0%, #6366f1 50%, #8b5cf6 100%)"
+                  className="w-full mt-6 py-4 font-semibold rounded-xl text-lg bg-accent-500 hover:bg-accent-600 text-white hover:shadow-lg transition-all"
                 >
                   Start Research →
-                </ShimmerButton>
+                </button>
               ) : (
                 <button
                   disabled
@@ -976,16 +1056,13 @@ export default function Quiz() {
       <div className="min-h-screen bg-white flex items-center justify-center px-4 selection:bg-primary-100 selection:text-primary-900">
         {/* Background elements - consistent with landing */}
         <div className="fixed inset-0 bg-mesh-light opacity-60 pointer-events-none" />
-        <div className="fixed top-20 right-0 w-96 h-96 bg-primary-200/30 rounded-full blur-3xl animate-float opacity-50 pointer-events-none" />
-        <div className="fixed bottom-0 left-10 w-72 h-72 bg-blue-200/30 rounded-full blur-3xl animate-float pointer-events-none" style={{ animationDelay: '1s' }} />
-
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
           className="max-w-md w-full relative"
         >
-          <div className="bg-white/80 backdrop-blur-xl rounded-3xl p-8 shadow-2xl shadow-purple-500/10 border border-white/50">
+          <div className="bg-white rounded-3xl p-8 shadow-depth border border-gray-200">
             {researchError ? (
               <motion.div
                 initial={{ scale: 0.9, opacity: 0 }}
@@ -1001,7 +1078,7 @@ export default function Quiz() {
                 <p className="text-gray-500 mb-6">{researchError}</p>
                 <button
                   onClick={() => { setPhase('website'); setResearchError(null); }}
-                  className="px-8 py-3 bg-gradient-to-r from-purple-600 to-indigo-600 text-white font-semibold rounded-xl hover:shadow-lg hover:shadow-purple-500/25 transition-all duration-300"
+                  className="px-8 py-3 bg-accent-500 hover:bg-accent-600 text-white font-semibold rounded-xl hover:shadow-lg transition-all duration-300"
                 >
                   Try Again
                 </button>
@@ -1017,7 +1094,7 @@ export default function Quiz() {
                       opacity: [0.3, 0.1, 0.3],
                     }}
                     transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
-                    className="absolute inset-0 bg-gradient-to-r from-purple-400 to-indigo-400 rounded-full blur-xl"
+                    className="absolute inset-0 bg-gradient-to-r from-primary-400 to-primary-500 rounded-full blur-xl"
                   />
                   {/* Middle ring */}
                   <motion.div
@@ -1026,17 +1103,17 @@ export default function Quiz() {
                       opacity: [0.5, 0.2, 0.5],
                     }}
                     transition={{ duration: 2.5, repeat: Infinity, ease: "easeInOut", delay: 0.2 }}
-                    className="absolute inset-2 bg-gradient-to-br from-purple-300 to-indigo-300 rounded-full"
+                    className="absolute inset-2 bg-gradient-to-br from-primary-300 to-primary-400 rounded-full"
                   />
                   {/* Inner circle with icon */}
                   <motion.div
                     animate={{ rotate: 360 }}
                     transition={{ duration: 8, repeat: Infinity, ease: "linear" }}
-                    className="absolute inset-4 bg-gradient-to-br from-purple-500 to-indigo-600 rounded-full shadow-lg"
+                    className="absolute inset-4 bg-gradient-to-br from-primary-700 to-primary-900 rounded-full shadow-lg"
                   />
                   <div className="absolute inset-5 bg-white rounded-full flex items-center justify-center shadow-inner">
                     <motion.svg
-                      className="w-10 h-10 text-purple-600"
+                      className="w-10 h-10 text-primary-700"
                       viewBox="0 0 24 24"
                       fill="none"
                       stroke="currentColor"
@@ -1059,7 +1136,7 @@ export default function Quiz() {
                 <div className="text-center mb-8">
                   <h2 className="text-2xl font-bold text-gray-900 mb-1">
                     {companyName ? (
-                      <>Analyzing <span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-600 to-indigo-600">{formatCompanyName(companyName)}</span></>
+                      <>Analyzing <span className="text-accent-600 font-bold">{formatCompanyName(companyName)}</span></>
                     ) : (
                       'Analyzing your company'
                     )}
@@ -1079,7 +1156,7 @@ export default function Quiz() {
                   {/* Progress bar */}
                   <div className="relative h-2 bg-gray-100 rounded-full overflow-hidden mb-3">
                     <motion.div
-                      className="absolute inset-y-0 left-0 bg-gradient-to-r from-purple-500 via-indigo-500 to-purple-600 rounded-full"
+                      className="absolute inset-y-0 left-0 bg-gradient-to-r from-accent-400 via-accent-500 to-accent-600 rounded-full"
                       initial={{ width: 0 }}
                       animate={{ width: `${researchProgress}%` }}
                       transition={{ duration: 0.5, ease: "easeOut" }}
@@ -1093,7 +1170,7 @@ export default function Quiz() {
                   </div>
                   <div className="flex justify-between items-center">
                     <span className="text-xs text-gray-400 uppercase tracking-wider font-medium">Progress</span>
-                    <span className="text-sm font-semibold text-purple-600">{researchProgress}%</span>
+                    <span className="text-sm font-semibold text-accent-600">{researchProgress}%</span>
                   </div>
                 </div>
 
@@ -1109,7 +1186,7 @@ export default function Quiz() {
                         step.done
                           ? 'bg-green-50/80'
                           : step.active
-                            ? 'bg-purple-50/80 ring-1 ring-purple-200'
+                            ? 'bg-accent-50 ring-1 ring-accent-200'
                             : 'bg-gray-50/50'
                       }`}
                     >
@@ -1118,7 +1195,7 @@ export default function Quiz() {
                         step.done
                           ? 'bg-gradient-to-br from-green-400 to-emerald-500 shadow-md shadow-green-500/20'
                           : step.active
-                            ? 'bg-gradient-to-br from-purple-400 to-indigo-500 shadow-md shadow-purple-500/20'
+                            ? 'bg-gradient-to-br from-accent-400 to-accent-500 shadow-md shadow-accent-500/20'
                             : 'bg-gray-200'
                       }`}>
                         {step.done ? (
@@ -1148,7 +1225,7 @@ export default function Quiz() {
                         step.done
                           ? 'text-green-700'
                           : step.active
-                            ? 'text-purple-700'
+                            ? 'text-accent-700'
                             : 'text-gray-400'
                       }`}>
                         {step.label}
@@ -1168,7 +1245,7 @@ export default function Quiz() {
                         <motion.span
                           animate={{ opacity: [1, 0.5, 1] }}
                           transition={{ duration: 1.5, repeat: Infinity }}
-                          className="text-xs text-purple-600 font-medium"
+                          className="text-xs text-accent-600 font-medium"
                         >
                           In progress...
                         </motion.span>
@@ -1262,11 +1339,8 @@ export default function Quiz() {
       <div className="min-h-screen bg-white selection:bg-primary-100 selection:text-primary-900">
         {/* Background elements - consistent with landing */}
         <div className="fixed inset-0 bg-mesh-light opacity-60 pointer-events-none" />
-        <div className="fixed top-20 right-0 w-96 h-96 bg-emerald-200/30 rounded-full blur-3xl animate-float opacity-50 pointer-events-none" />
-        <div className="fixed bottom-0 left-10 w-72 h-72 bg-teal-200/30 rounded-full blur-3xl animate-float pointer-events-none" style={{ animationDelay: '1s' }} />
-
-        {/* Navigation - Glass effect with logo */}
-        <nav className="fixed top-0 left-0 right-0 z-50 bg-white/70 backdrop-blur-md border-b border-white/20">
+        {/* Navigation */}
+        <nav className="fixed top-0 left-0 right-0 z-50 bg-white border-b border-gray-200">
           <div className="max-w-6xl mx-auto px-4 py-4 flex justify-between items-center">
             <Link to="/" className="flex items-center gap-2">
               <div className="w-8 h-8 bg-gradient-to-br from-primary-500 to-primary-700 rounded-lg flex items-center justify-center text-white shadow-lg shadow-primary-500/30">
@@ -1402,9 +1476,9 @@ export default function Quiz() {
                   initial={{ opacity: 0, scale: 0.95 }}
                   animate={{ opacity: 1, scale: 1 }}
                   transition={{ delay: industryHook ? 0.55 : 0.45 }}
-                  className="bg-gradient-to-r from-blue-50 to-indigo-50 border border-blue-200/50 rounded-2xl p-4 flex items-center gap-4"
+                  className="bg-blue-50 border border-blue-200/50 rounded-2xl p-4 flex items-center gap-4"
                 >
-                  <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-xl flex items-center justify-center flex-shrink-0 shadow-lg shadow-blue-500/20">
+                  <div className="w-12 h-12 bg-blue-600 rounded-xl flex items-center justify-center flex-shrink-0 shadow-lg shadow-blue-500/20">
                     <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
                     </svg>
@@ -1433,12 +1507,12 @@ export default function Quiz() {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.5 }}
-                className="bg-white/80 backdrop-blur-xl rounded-3xl p-6 shadow-xl shadow-gray-900/5 border border-white/50 mb-6"
+                className="bg-white rounded-3xl p-6 shadow-card border border-gray-200 mb-6"
               >
                 {/* Header */}
                 <div className="flex items-center justify-between mb-6">
                   <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 bg-gradient-to-br from-purple-500 to-indigo-600 rounded-xl flex items-center justify-center shadow-md shadow-purple-500/20">
+                    <div className="w-10 h-10 bg-primary-800 rounded-xl flex items-center justify-center shadow-md">
                       <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4" />
                       </svg>
@@ -1506,10 +1580,10 @@ export default function Quiz() {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.6 }}
-                className="bg-gradient-to-br from-purple-500/5 via-indigo-500/5 to-purple-500/5 backdrop-blur-xl rounded-3xl p-6 border border-purple-200/50 mb-8"
+                className="bg-primary-50 rounded-3xl p-6 border border-primary-200 mb-8"
               >
                 <h3 className="font-bold text-gray-900 mb-5 flex items-center gap-3">
-                  <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-purple-500 to-indigo-600 flex items-center justify-center shadow-md shadow-purple-500/20">
+                  <div className="w-8 h-8 rounded-lg bg-primary-800 flex items-center justify-center shadow-md">
                     <svg className="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
                     </svg>
@@ -1526,13 +1600,13 @@ export default function Quiz() {
                       transition={{ delay: 0.7 + i * 0.1 }}
                       className={`flex gap-4 p-4 rounded-2xl transition-all duration-300 ${
                         step.active
-                          ? 'bg-white shadow-lg shadow-purple-500/10 ring-1 ring-purple-200'
+                          ? 'bg-white shadow-lg ring-1 ring-primary-200'
                           : 'bg-white/50'
                       }`}
                     >
                       <div className={`flex-shrink-0 w-10 h-10 rounded-xl flex items-center justify-center font-bold text-sm transition-all ${
                         step.active
-                          ? 'bg-gradient-to-br from-purple-500 to-indigo-600 text-white shadow-md shadow-purple-500/30'
+                          ? 'bg-primary-800 text-white shadow-md'
                           : 'bg-gray-100 text-gray-400'
                       }`}>
                         {step.num}
@@ -1549,7 +1623,7 @@ export default function Quiz() {
                         <motion.div
                           animate={{ scale: [1, 1.1, 1] }}
                           transition={{ duration: 2, repeat: Infinity }}
-                          className="flex-shrink-0 w-8 h-8 rounded-lg bg-purple-100 flex items-center justify-center"
+                          className="flex-shrink-0 w-8 h-8 rounded-lg bg-accent-100 flex items-center justify-center"
                         >
                           <span className="text-lg">{step.icon}</span>
                         </motion.div>
@@ -1565,7 +1639,7 @@ export default function Quiz() {
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.7 }}
-                  className="bg-white/80 backdrop-blur-xl rounded-3xl p-6 shadow-xl shadow-gray-900/5 border border-white/50 mb-6"
+                  className="bg-white rounded-3xl p-6 shadow-card border border-gray-200 mb-6"
                 >
                   <div className="flex items-center gap-3 mb-4">
                     <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-cyan-600 rounded-xl flex items-center justify-center shadow-md shadow-blue-500/20">
@@ -1668,7 +1742,7 @@ export default function Quiz() {
                 transition={{ delay: 0.9 }}
                 className="text-center mb-6"
               >
-                <div className="inline-flex items-center gap-2 text-sm text-gray-500 bg-white/80 backdrop-blur px-4 py-2.5 rounded-full border border-gray-200/50 shadow-sm">
+                <div className="inline-flex items-center gap-2 text-sm text-gray-500 bg-white px-4 py-2.5 rounded-full border border-gray-200 shadow-sm">
                   <svg className="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
                   </svg>
@@ -1700,7 +1774,7 @@ export default function Quiz() {
                     // Navigate to AI interview
                     navigate(`/quiz/interview?session_id=${sessionId}`)
                   }}
-                  className="group w-full sm:w-auto px-10 py-4 bg-gradient-to-r from-purple-600 to-indigo-600 text-white font-semibold rounded-2xl hover:shadow-xl hover:shadow-purple-500/30 transition-all duration-300 text-lg flex items-center justify-center gap-3 mx-auto"
+                  className="group w-full sm:w-auto px-10 py-4 bg-accent-500 hover:bg-accent-600 text-white font-semibold rounded-2xl hover:shadow-xl transition-all duration-300 text-lg flex items-center justify-center gap-3 mx-auto"
                 >
                   Start AI Interview
                   <motion.svg
@@ -1750,7 +1824,7 @@ export default function Quiz() {
 
     return (
       <div className="min-h-screen bg-gradient-to-br from-gray-50 to-primary-50">
-        <nav className="fixed top-0 left-0 right-0 z-50 bg-white/80 backdrop-blur-md border-b border-gray-100">
+        <nav className="fixed top-0 left-0 right-0 z-50 bg-white border-b border-gray-200">
           <div className="max-w-6xl mx-auto px-4 py-4">
             <Link to="/" className="flex flex-col">
               <span className="text-xl font-bold text-gray-900 leading-tight">Ready<span className="text-primary-600">Path</span></span>
@@ -1881,7 +1955,7 @@ export default function Quiz() {
                 </p>
                 <button
                   onClick={() => setPhase('pricing')}
-                  className="px-8 py-4 bg-primary-600 text-white font-semibold rounded-xl hover:bg-primary-700 transition shadow-lg shadow-primary-600/25 text-lg"
+                  className="px-8 py-4 bg-accent-500 text-white font-semibold rounded-xl hover:bg-accent-600 transition shadow-lg text-lg"
                 >
                   Get Full Report →
                 </button>
@@ -1910,7 +1984,7 @@ export default function Quiz() {
 
     return (
       <div className="min-h-screen bg-gradient-to-br from-gray-50 to-primary-50">
-        <nav className="fixed top-0 left-0 right-0 z-50 bg-white/80 backdrop-blur-md border-b border-gray-100">
+        <nav className="fixed top-0 left-0 right-0 z-50 bg-white border-b border-gray-200">
           <div className="max-w-6xl mx-auto px-4 py-4">
             <Link to="/" className="flex flex-col">
               <span className="text-xl font-bold text-gray-900 leading-tight">Ready<span className="text-primary-600">Path</span></span>
@@ -2027,7 +2101,7 @@ export default function Quiz() {
 
                   <button
                     onClick={() => handleTierSelect('report_plus_call')}
-                    className="w-full py-3 bg-primary-600 text-white font-semibold rounded-xl hover:bg-primary-700 transition shadow-lg shadow-primary-600/25 text-lg"
+                    className="w-full py-3 bg-accent-500 text-white font-semibold rounded-xl hover:bg-accent-600 transition shadow-lg text-lg"
                   >
                     Get Report + Strategy Call
                   </button>
@@ -2100,7 +2174,7 @@ export default function Quiz() {
 
     return (
       <div className="min-h-screen bg-gradient-to-br from-gray-50 to-primary-50">
-        <nav className="fixed top-0 left-0 right-0 z-50 bg-white/80 backdrop-blur-md border-b border-gray-100">
+        <nav className="fixed top-0 left-0 right-0 z-50 bg-white border-b border-gray-200">
           <div className="max-w-6xl mx-auto px-4 py-4">
             <Link to="/" className="flex flex-col">
               <span className="text-xl font-bold text-gray-900 leading-tight">Ready<span className="text-primary-600">Path</span></span>
@@ -2156,7 +2230,7 @@ export default function Quiz() {
                 disabled={!userEmail || emailSubmitting}
                 className={`w-full py-4 font-semibold rounded-xl transition text-lg flex items-center justify-center gap-2 ${
                   userEmail && !emailSubmitting
-                    ? 'bg-primary-600 text-white hover:bg-primary-700 shadow-lg shadow-primary-600/25'
+                    ? 'bg-accent-500 text-white hover:bg-accent-600 shadow-lg'
                     : 'bg-gray-200 text-gray-400 cursor-not-allowed'
                 }`}
               >
@@ -2198,7 +2272,7 @@ export default function Quiz() {
 
     return (
       <div className="min-h-screen bg-gray-50">
-        <nav className="fixed top-0 left-0 right-0 z-50 bg-white/80 backdrop-blur-md border-b border-gray-100">
+        <nav className="fixed top-0 left-0 right-0 z-50 bg-white border-b border-gray-200">
           <div className="max-w-6xl mx-auto px-4 py-4 flex justify-between items-center">
             <Link to="/" className="flex flex-col">
               <span className="text-xl font-bold text-gray-900 leading-tight">Ready<span className="text-primary-600">Path</span></span>
@@ -2222,6 +2296,14 @@ export default function Quiz() {
 
         <div className="pt-24 pb-20 px-4">
           <div className="max-w-2xl mx-auto">
+            {/* Store data collection step — shows after ecommerce questions answered */}
+            {showStoreDataStep && !storeDataCompleted ? (
+              <StoreDataStep
+                currency="EUR"
+                onComplete={handleStoreDataComplete}
+                onBack={() => setShowStoreDataStep(false)}
+              />
+            ) : (
             <AnimatePresence mode="wait">
               <motion.div
                 key={currentQuestion.id}
@@ -2235,7 +2317,7 @@ export default function Quiz() {
                   <span className={`inline-block px-3 py-1 rounded-full text-xs font-medium ${
                     currentQuestion.purpose === 'confirm' ? 'bg-yellow-100 text-yellow-800' :
                     currentQuestion.purpose === 'clarify' ? 'bg-blue-100 text-blue-800' :
-                    currentQuestion.purpose === 'discover' ? 'bg-purple-100 text-purple-800' :
+                    currentQuestion.purpose === 'discover' ? 'bg-primary-100 text-primary-800' :
                     'bg-gray-100 text-gray-800'
                   }`}>
                     {currentQuestion.purpose === 'confirm' ? 'Confirming our research' :
@@ -2391,7 +2473,7 @@ export default function Quiz() {
                     disabled={!canProceed()}
                     className={`px-8 py-3 font-semibold rounded-xl transition ${
                       canProceed()
-                        ? 'bg-primary-600 text-white hover:bg-primary-700'
+                        ? 'bg-accent-500 text-white hover:bg-accent-600'
                         : 'bg-gray-200 text-gray-400 cursor-not-allowed'
                     }`}
                   >
@@ -2400,6 +2482,7 @@ export default function Quiz() {
                 </div>
               </motion.div>
             </AnimatePresence>
+            )}
           </div>
         </div>
       </div>
@@ -2413,7 +2496,7 @@ export default function Quiz() {
   if (phase === 'complete') {
     return (
       <div className="min-h-screen bg-gray-50">
-        <nav className="fixed top-0 left-0 right-0 z-50 bg-white/80 backdrop-blur-md border-b border-gray-100">
+        <nav className="fixed top-0 left-0 right-0 z-50 bg-white border-b border-gray-200">
           <div className="max-w-6xl mx-auto px-4 py-4">
             <Link to="/" className="flex flex-col">
               <span className="text-xl font-bold text-gray-900 leading-tight">Ready<span className="text-primary-600">Path</span></span>
@@ -2465,7 +2548,7 @@ export default function Quiz() {
                 <h3 className="font-semibold text-gray-900 mb-4">Your report will include:</h3>
                 <div className="grid md:grid-cols-2 gap-4">
                   {[
-                    { icon: '🎯', title: 'AI Opportunities', desc: 'Specific use cases for your business' },
+                    { icon: '🎯', title: 'AI Opportunities', desc: 'Specific use cases for your store' },
                     { icon: '💰', title: 'ROI Projections', desc: 'Cost savings and efficiency gains' },
                     { icon: '🛠️', title: 'Tool Recommendations', desc: 'Real vendors with pricing' },
                     { icon: '📋', title: 'Implementation Roadmap', desc: 'Step-by-step action plan' },
@@ -2490,7 +2573,7 @@ export default function Quiz() {
 
                 <button
                   onClick={() => navigate('/checkout?tier=ai')}
-                  className="w-full py-4 bg-primary-600 text-white font-semibold rounded-xl hover:bg-primary-700 transition shadow-lg shadow-primary-600/25 text-lg"
+                  className="w-full py-4 bg-accent-500 text-white font-semibold rounded-xl hover:bg-accent-600 transition shadow-lg text-lg"
                 >
                   Get Your Report →
                 </button>
@@ -2509,7 +2592,7 @@ export default function Quiz() {
   // Fallback
   return (
     <div className="min-h-screen flex items-center justify-center">
-      <div className="animate-spin w-8 h-8 border-4 border-primary-600 border-t-transparent rounded-full" />
+      <div className="animate-spin w-8 h-8 border-4 border-accent-500 border-t-transparent rounded-full" />
     </div>
   )
 }

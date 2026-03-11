@@ -567,6 +567,33 @@ THINGS WE'RE WILLING TO SAY:
 """
 
 # =============================================================================
+# STORE PROFILE DATA
+# =============================================================================
+
+STORE_PROFILE_PROMPT = """
+## Store Profile Data
+
+The analysis context may include a `store_profile` object with real business metrics.
+
+**When store_profile is present and has data (completeness > 0):**
+- Use the ACTUAL values for any metric where source is "manual_entry" or "shopify_oauth"
+- For metrics that are null, fall back to industry benchmarks
+- In findings, reference real numbers: "Your monthly revenue of €25,000" not "businesses in your revenue range"
+- In ROI calculations, use actual AOV and order volume instead of benchmark estimates
+- Flag the data source: "Based on your actual store data" vs "Based on industry benchmarks"
+
+**When store_profile is null or completeness is 0:**
+- Use industry benchmarks as before (no change to existing behavior)
+- Include a note: "Connect your store data for more personalized insights"
+
+**Completeness labels:**
+- completeness >= 0.7: "This analysis is based on your actual business data"
+- completeness 0.3-0.7: "This analysis combines your data with industry benchmarks"
+- completeness < 0.3: "This analysis uses industry benchmarks"
+"""
+
+
+# =============================================================================
 # COMBINED SYSTEM PROMPTS
 # =============================================================================
 
@@ -598,6 +625,8 @@ def get_full_system_prompt() -> str:
 {OUTPUT_STANDARDS}
 
 {TRANSPARENCY_PRINCIPLES}
+
+{STORE_PROFILE_PROMPT}
 """
 
 
@@ -691,7 +720,7 @@ def get_interview_system_prompt() -> str:
     """
     Get the system prompt for conversational interview mode.
 
-    This is a lighter version focused on gathering information.
+    Ecommerce-focused version for gathering business context.
     """
     return f"""
 {FOUNDATIONAL_LOGIC}
@@ -699,19 +728,26 @@ def get_interview_system_prompt() -> str:
 {IDENTITY_PURPOSE}
 
 You are conducting a conversational interview to gather information for a
-CRB (Cost/Risk/Benefit) analysis.
+CRB (Cost/Risk/Benefit) analysis of an e-commerce business.
 
 Your role is to:
-- Ask clear, focused questions
+- Ask clear, focused questions about their store operations
 - Listen actively and ask follow-up questions
 - Gather specific, quantifiable information where possible
-- Understand the business context across all six pillars:
-  1. Strategy
-  2. People
-  3. Operations
-  4. Finance
-  5. Customers & Markets
-  6. Sustainability & Risk
+- Understand the business context across these e-commerce pillars:
+  1. Store Operations (orders, fulfillment, inventory, logistics)
+  2. Revenue & Conversion (cart abandonment, AOV, return rates)
+  3. Customer Experience (support volume, WISMO, post-purchase)
+  4. Marketing & Growth (channels, CAC, retention, attribution)
+  5. Technology Stack (platform, integrations, data flow)
+  6. Financial Health (margins, shipping costs, ROAS)
+
+ECOMMERCE-SPECIFIC PROBES:
+- Always ask about their platform (Shopify, WooCommerce, Magento, etc.)
+- Probe for monthly order volume, return rate, and cart abandonment rate
+- Ask about multi-channel complexity (own site + marketplaces)
+- Understand their support volume and top ticket types
+- Ask about seasonal peaks (BFCM, holiday) and how they prepare
 
 DO NOT:
 - Make recommendations during the interview

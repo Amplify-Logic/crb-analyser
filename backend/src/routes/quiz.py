@@ -30,6 +30,7 @@ from src.config.questionnaire import (
 from src.agents.pre_research_agent import PreResearchAgent, start_company_research
 from src.skills.base import LOCATION_OPTIONS
 from src.models.research import StartResearchRequest, DynamicQuestionnaire
+from src.services.store_profile_service import StoreProfileService
 from src.services.teaser_service import generate_teaser_report
 from src.services.email import send_teaser_report_email
 from src.services.brevo_service import (
@@ -190,6 +191,16 @@ class QuestionnaireResponse(BaseModel):
     sections: List[Dict[str, Any]]
     total_questions: int
     total_sections: int
+
+
+class StoreProfileRequest(BaseModel):
+    source: str  # "manual_entry" or "skip"
+    store_metrics: Dict[str, str] = {}
+    platform: str = "unknown"
+    currency: str = "EUR"
+    ecommerce_sub_type: str = ""
+    sales_channels: List[str] = []
+    monthly_orders: Optional[int] = None
 
 
 # ============================================================================
@@ -404,6 +415,16 @@ async def save_quiz_progress(session_id: str, progress: QuizProgressUpdate):
             existing_answers["_detected_industry"] = progress.industry
             update_data["answers"] = existing_answers
 
+        # Store detected segment for downstream use (workshop, report)
+        if "ecommerce_business_model" in existing_answers:
+            metadata = session.get("metadata") or {}
+            metadata["detected_segment"] = existing_answers["ecommerce_business_model"]
+            update_data["metadata"] = metadata
+        elif "ecommerce_sub_type" in existing_answers:
+            metadata = session.get("metadata") or {}
+            metadata["detected_segment"] = existing_answers["ecommerce_sub_type"]
+            update_data["metadata"] = metadata
+
         # Update existing_stack if provided (for Connect vs Replace)
         if progress.existing_stack is not None:
             update_data["existing_stack"] = [
@@ -445,6 +466,45 @@ async def save_quiz_progress(session_id: str, progress: QuizProgressUpdate):
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail="Failed to save quiz progress"
         )
+
+
+@router.post("/sessions/{session_id}/store-profile")
+async def save_store_profile(
+    session_id: str,
+    body: StoreProfileRequest,
+) -> Dict[str, Any]:
+    """Save store profile data from manual entry or skip."""
+    supabase = await get_async_supabase()
+
+    # Verify session exists
+    session_result = await (
+        supabase.table("quiz_sessions")
+        .select("id")
+        .eq("id", session_id)
+        .maybe_single()
+        .execute()
+    )
+    if not session_result.data:
+        raise HTTPException(status_code=404, detail="Session not found")
+
+    service = StoreProfileService()
+    profile = service.build_profile(
+        source=body.source,
+        raw_answers=body.store_metrics,
+        platform=body.platform,
+        currency=body.currency,
+        ecommerce_sub_type=body.ecommerce_sub_type,
+        sales_channels=body.sales_channels,
+        monthly_orders=body.monthly_orders,
+    )
+    await service.save(session_id=session_id, profile=profile)
+
+    return {
+        "success": True,
+        "completeness": profile.completeness,
+        "source": profile.source.value,
+        "completeness_label": profile.completeness_label,
+    }
 
 
 @router.post("/sessions/{session_id}/complete")
@@ -677,8 +737,8 @@ async def get_software_options(industry: Optional[str] = Query(None, description
     industry-specific recommendations (T1 vendors shown first).
     Falls back to hardcoded list if Supabase unavailable.
 
-    Accepts either industry slug (e.g., "professional-services") or full name
-    (e.g., "Accounting Firm").
+    Accepts either industry slug (e.g., "ecommerce") or full name
+    (e.g., "Online Store").
     """
     from src.services.vendor_service import vendor_service
 
@@ -698,24 +758,9 @@ async def get_software_options(industry: Optional[str] = Query(None, description
         }
 
     # Map industry names to slugs (handles both slug and full name inputs)
-    # Only 4 supported industries: professional-services, dental, ecommerce, b2b-platforms
+    # Only supported industry: ecommerce
     industry_name_to_slug = {
-        # Professional Services
-        "professional services": "professional-services",
-        "professional-services": "professional-services",
-        "accounting": "professional-services",
-        "accounting firm": "professional-services",
-        "legal": "professional-services",
-        "law firm": "professional-services",
-        "consulting": "professional-services",
-        "business consulting": "professional-services",
-        # Dental
-        "dental": "dental",
-        "dentistry": "dental",
-        "dental practice": "dental",
-        "dental services": "dental",
-        "orthodontics": "dental",
-        # E-Commerce
+        # E-Commerce (primary supported industry)
         "ecommerce": "ecommerce",
         "e-commerce": "ecommerce",
         "e-commerce & retail": "ecommerce",
@@ -725,14 +770,27 @@ async def get_software_options(industry: Optional[str] = Query(None, description
         "shopify": "ecommerce",
         "online store": "ecommerce",
         "retail": "ecommerce",
-        # B2B Platforms
-        "b2b-platforms": "b2b-platforms",
-        "b2b platforms": "b2b-platforms",
-        "b2b": "b2b-platforms",
-        "b2b platform": "b2b-platforms",
-        "b2b saas": "b2b-platforms",
-        "saas": "b2b-platforms",
-        "platform": "b2b-platforms",
+        # Legacy mappings — all route to ecommerce
+        "professional services": "ecommerce",
+        "professional-services": "ecommerce",
+        "accounting": "ecommerce",
+        "accounting firm": "ecommerce",
+        "legal": "ecommerce",
+        "law firm": "ecommerce",
+        "consulting": "ecommerce",
+        "business consulting": "ecommerce",
+        "dental": "ecommerce",
+        "dentistry": "ecommerce",
+        "dental practice": "ecommerce",
+        "dental services": "ecommerce",
+        "orthodontics": "ecommerce",
+        "b2b-platforms": "ecommerce",
+        "b2b platforms": "ecommerce",
+        "b2b": "ecommerce",
+        "b2b platform": "ecommerce",
+        "b2b saas": "ecommerce",
+        "saas": "ecommerce",
+        "platform": "ecommerce",
     }
 
     # Normalize the industry input
@@ -741,7 +799,7 @@ async def get_software_options(industry: Optional[str] = Query(None, description
 
     # Also try partial matching for longer names
     if industry_slug == industry_lower and industry_slug not in [
-        "professional-services", "dental", "ecommerce", "b2b-platforms"
+        "ecommerce",
     ]:
         # Try partial match
         for name, slug in industry_name_to_slug.items():
@@ -881,6 +939,148 @@ async def research_session_existing_stack(session_id: str):
 # Helper Functions
 # ============================================================================
 
+# Critical ecommerce questions that must always be asked (from ecommerce.json)
+_ECOMMERCE_REQUIRED_QUESTION_IDS = [
+    "ecommerce_platform",
+    "monthly_order_volume",
+    "cart_abandonment_rate",
+    "sales_channels",
+    "customer_service_volume",
+    "fulfillment_method",
+    "return_rate",
+]
+
+# Inline definitions so we don't depend on loading JSON at import time
+_ECOMMERCE_REQUIRED_QUESTIONS: List[Dict[str, Any]] = [
+    {
+        "id": "ecommerce_platform",
+        "question": "What e-commerce platform do you use?",
+        "type": "select",
+        "purpose": "clarify",
+        "rationale": "Platform determines integration options and vendor recommendations",
+        "options": [
+            {"value": "shopify", "label": "Shopify"},
+            {"value": "woocommerce", "label": "WooCommerce"},
+            {"value": "bigcommerce", "label": "BigCommerce"},
+            {"value": "magento", "label": "Magento / Adobe Commerce"},
+            {"value": "squarespace", "label": "Squarespace"},
+            {"value": "wix", "label": "Wix"},
+            {"value": "custom", "label": "Custom built"},
+            {"value": "other", "label": "Other"},
+        ],
+        "section": "Ecommerce Operations",
+        "priority": 1,
+    },
+    {
+        "id": "monthly_order_volume",
+        "question": "How many orders does your store process per month?",
+        "type": "number",
+        "purpose": "quantify",
+        "rationale": "Order volume determines automation ROI and tool recommendations",
+        "placeholder": "e.g., 500",
+        "section": "Ecommerce Operations",
+        "priority": 1,
+    },
+    {
+        "id": "cart_abandonment_rate",
+        "question": "What's your approximate cart abandonment rate?",
+        "type": "select",
+        "purpose": "quantify",
+        "rationale": "Cart abandonment is the #1 revenue leak in ecommerce",
+        "options": [
+            {"value": "under_50", "label": "Under 50%"},
+            {"value": "50_60", "label": "50-60%"},
+            {"value": "60_70", "label": "60-70%"},
+            {"value": "70_80", "label": "70-80%"},
+            {"value": "over_80", "label": "Over 80%"},
+            {"value": "not_tracked", "label": "We don't track this"},
+        ],
+        "section": "Ecommerce Operations",
+        "priority": 2,
+    },
+    {
+        "id": "sales_channels",
+        "question": "Which sales channels do you currently sell on?",
+        "type": "multi_select",
+        "purpose": "clarify",
+        "rationale": "Multi-channel complexity drives automation needs",
+        "options": [
+            {"value": "own_website", "label": "Own website/store"},
+            {"value": "amazon", "label": "Amazon"},
+            {"value": "ebay", "label": "eBay"},
+            {"value": "etsy", "label": "Etsy"},
+            {"value": "social_commerce", "label": "Instagram/Facebook Shop"},
+            {"value": "tiktok_shop", "label": "TikTok Shop"},
+            {"value": "wholesale_b2b", "label": "Wholesale/B2B"},
+        ],
+        "section": "Ecommerce Operations",
+        "priority": 2,
+    },
+    {
+        "id": "customer_service_volume",
+        "question": "How many customer support tickets do you handle per week?",
+        "type": "select",
+        "purpose": "quantify",
+        "rationale": "Support volume determines automation potential",
+        "options": [
+            {"value": "under_20", "label": "Under 20"},
+            {"value": "20_50", "label": "20-50"},
+            {"value": "50_100", "label": "50-100"},
+            {"value": "100_300", "label": "100-300"},
+            {"value": "over_300", "label": "Over 300"},
+        ],
+        "section": "Ecommerce Operations",
+        "priority": 2,
+    },
+    {
+        "id": "fulfillment_method",
+        "question": "How do you handle order fulfillment?",
+        "type": "select",
+        "purpose": "clarify",
+        "rationale": "Fulfillment method shapes operational automation opportunities",
+        "options": [
+            {"value": "in_house", "label": "In-house (we ship ourselves)"},
+            {"value": "3pl", "label": "Third-party logistics (3PL)"},
+            {"value": "dropship", "label": "Dropshipping"},
+            {"value": "amazon_fba", "label": "Amazon FBA"},
+            {"value": "hybrid", "label": "Mix of methods"},
+            {"value": "digital", "label": "Digital products only"},
+        ],
+        "section": "Ecommerce Operations",
+        "priority": 1,
+    },
+    {
+        "id": "return_rate",
+        "question": "What is your approximate return rate?",
+        "type": "select",
+        "purpose": "quantify",
+        "rationale": "Returns are a major margin cost in ecommerce",
+        "options": [
+            {"value": "under_5", "label": "Under 5%"},
+            {"value": "5_10", "label": "5-10%"},
+            {"value": "10_20", "label": "10-20%"},
+            {"value": "20_30", "label": "20-30%"},
+            {"value": "over_30", "label": "Over 30%"},
+            {"value": "not_applicable", "label": "Not applicable (digital products)"},
+        ],
+        "section": "Ecommerce Operations",
+        "priority": 2,
+    },
+]
+
+
+def _inject_ecommerce_questions(questions: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
+    """Inject critical ecommerce questions if not already present in dynamic questions."""
+    existing_ids = {q.get("id") for q in questions}
+    injected = list(questions)
+
+    for eq in _ECOMMERCE_REQUIRED_QUESTIONS:
+        if eq["id"] not in existing_ids:
+            injected.append(eq)
+
+    return injected
+
+
 def _calculate_preliminary_results(answers: Dict[str, Any], industry: Optional[str] = None) -> Dict[str, Any]:
     """
     Calculate preliminary results from quiz answers.
@@ -931,15 +1131,37 @@ def _calculate_preliminary_results(answers: Dict[str, Any], industry: Optional[s
     opportunity_count = max(3, len(pain_points) + 2)
 
     # Estimate value potential based on company size and pain points
-    base_values = {
-        "1-10": 15000,
-        "11-50": 35000,
-        "51-200": 75000,
-        "201-1000": 150000,
-        "1000+": 300000,
-    }
+    # Ecommerce stores have higher automation surface area (revenue + operational)
+    if industry == "ecommerce":
+        base_values = {
+            "1-10": 25000,
+            "11-50": 55000,
+            "51-200": 120000,
+            "201-1000": 250000,
+            "1000+": 500000,
+        }
+    else:
+        base_values = {
+            "1-10": 15000,
+            "11-50": 35000,
+            "51-200": 75000,
+            "201-1000": 150000,
+            "1000+": 300000,
+        }
     base_value = base_values.get(company_size, 25000)
     value_multiplier = 1 + (len(pain_points) * 0.15)
+
+    # Ecommerce-specific multipliers based on answers
+    if industry == "ecommerce":
+        cart_rate = answers.get("cart_abandonment_rate", "")
+        if cart_rate in ("70_80", "over_80"):
+            value_multiplier *= 1.3  # High abandonment = high recovery potential
+        order_vol = answers.get("monthly_order_volume")
+        if order_vol and isinstance(order_vol, (int, float)) and order_vol > 500:
+            value_multiplier *= 1.15  # More orders = more automation value per unit
+        return_rate = answers.get("return_rate", "")
+        if return_rate in ("20_30", "over_30"):
+            value_multiplier *= 1.2  # High returns = high recovery potential
 
     return {
         "ai_readiness_score": ai_readiness_score,
@@ -948,7 +1170,7 @@ def _calculate_preliminary_results(answers: Dict[str, Any], industry: Optional[s
             "min": int(base_value * value_multiplier * 0.7),
             "max": int(base_value * value_multiplier * 1.3),
         },
-        "industry": industry or answers.get("industry", "professional-services"),
+        "industry": industry or answers.get("industry", "ecommerce"),
         "calculated_at": datetime.utcnow().isoformat(),
     }
 
@@ -1247,6 +1469,14 @@ async def get_dynamic_questions(session_id: str):
         if research_status == "complete" and dynamic_questionnaire:
             questions = dynamic_questionnaire.get("questions", [])
 
+            # Inject critical ecommerce questions if not already present
+            industry = session.get("answers", {}).get("industry", "")
+            if not industry:
+                profile = session.get("company_profile", {})
+                industry = profile.get("industry", {}).get("primary_industry", {}).get("value", "")
+            if industry == "ecommerce":
+                questions = _inject_ecommerce_questions(questions)
+
             # Inject company_location question if not already present
             has_location = any(q.get("id") == "company_location" for q in questions)
             if not has_location:
@@ -1283,7 +1513,7 @@ async def get_dynamic_questions(session_id: str):
             }
 
         # Fall back to standard questions
-        industry = session.get("answers", {}).get("industry", "professional-services")
+        industry = session.get("answers", {}).get("industry", "ecommerce")
         standard_sections = get_questionnaire(industry)
 
         return {
@@ -1582,7 +1812,7 @@ async def generate_session_teaser(
                         email=real_email,
                         first_name=company_profile.get("basics", {}).get("name", {}).get("value", "").split()[0] if company_profile.get("basics", {}).get("name", {}).get("value") else "there",
                         company_name=teaser.get("company_name", "Your Company"),
-                        industry=teaser.get("industry", answers.get("industry", "professional-services")),
+                        industry=teaser.get("industry", answers.get("industry", "ecommerce")),
                         quiz_score=score,
                         ai_readiness_level=readiness_level,
                         report_id=session_id,
@@ -1655,7 +1885,7 @@ async def generate_test_report(
 
         company_name = basics.get("name", {}).get("value", "Test Company")
         website = basics.get("website", {}).get("value", "test-company.com")
-        industry = industry_data.get("primary_industry", {}).get("value", "professional-services")
+        industry = industry_data.get("primary_industry", {}).get("value", "ecommerce")
 
         # Create a test session - only use columns that exist in the schema
         session_id = str(uuid.uuid4())
@@ -1796,7 +2026,7 @@ async def generate_test_report_stream(
 
             company_name = basics.get("name", {}).get("value", "Test Company")
             website = basics.get("website", {}).get("value", "test-company.com")
-            industry = industry_data.get("primary_industry", {}).get("value", "professional-services")
+            industry = industry_data.get("primary_industry", {}).get("value", "ecommerce")
 
             # Yield initial event
             yield f"data: {json.dumps({'phase': 'init', 'step': 'Creating session...', 'progress': 5, 'company_name': company_name})}\n\n"
@@ -1924,7 +2154,7 @@ async def get_session_debug_data(session_id: str):
 
         session = result.data
         answers = session.get("answers", {})
-        industry = answers.get("industry", "professional-services")
+        industry = answers.get("industry", "ecommerce")
 
         # Load knowledge base data for this industry
         kb_context = get_industry_context(industry)
@@ -2104,7 +2334,7 @@ async def start_adaptive_quiz(request: AdaptiveStartRequest):
         session = result.data
         company_profile_data = session.get("company_profile", {})
         answers = session.get("answers", {})
-        industry = answers.get("industry", "professional-services")
+        industry = answers.get("industry", "ecommerce")
 
         # Convert to CompanyProfile model
         try:
@@ -2196,7 +2426,7 @@ async def submit_adaptive_answer(request: AdaptiveAnswerRequest):
         session = result.data
         company_profile_data = session.get("company_profile", {})
         answers = session.get("answers", {})
-        industry = answers.get("industry", "professional-services")
+        industry = answers.get("industry", "ecommerce")
 
         # Load or create confidence state
         confidence_data = session.get("confidence_state", {})
@@ -2412,19 +2642,35 @@ async def list_available_industries():
 
 
 @router.get("/adaptive/questions/{industry}")
-async def get_industry_question_bank(industry: str):
+async def get_industry_question_bank(
+    industry: str, segment: Optional[str] = None
+):
     """
     Get the question bank for an industry.
 
     Returns all predefined questions, deep dives, and woven confirmations.
+    Optionally filters segment-specific questions based on the user's
+    ecommerce_business_model answer.
     """
     bank = IndustryQuestionBank.load(industry)
+
+    questions = bank.questions
+
+    # Filter by segment if provided
+    if segment:
+        questions = [
+            q for q in questions
+            if not q.get("segment_filter") or segment in q.get("segment_filter", [])
+        ]
+    else:
+        # No segment selected yet — only show non-filtered questions
+        questions = [q for q in questions if not q.get("segment_filter")]
 
     return {
         "industry": bank.industry,
         "display_name": bank.display_name,
-        "questions": bank.questions,
-        "questions_count": len(bank.questions),
+        "questions": questions,
+        "questions_count": len(questions),
         "deep_dive_templates": bank.deep_dive_templates,
         "woven_confirmation_templates": bank.woven_confirmation_templates,
     }
