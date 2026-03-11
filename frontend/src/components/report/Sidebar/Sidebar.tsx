@@ -1,8 +1,9 @@
 import { useState } from 'react'
-import { ChevronDown, ChevronRight, Cable } from 'lucide-react'
+import { ChevronDown, ChevronRight, Cable, Lightbulb } from 'lucide-react'
+import DataQualityBadge from '../DataQualityBadge'
 
 export interface SidebarItem {
-  type: 'overview' | 'finding' | 'action' | 'blueprint' | 'playbook' | 'tool'
+  type: 'overview' | 'vision' | 'finding' | 'action' | 'blueprint' | 'playbook' | 'tool'
   id: string | null
 }
 
@@ -35,11 +36,14 @@ export interface SidebarProps {
   activeItem: SidebarItem
   onItemClick: (item: SidebarItem) => void
   hasBlueprint?: boolean
+  hasVision?: boolean
+  storeProfile?: { completeness: number; completeness_label: string } | null
   className?: string
 }
 
 interface SectionState {
   overview: boolean
+  vision: boolean
   findings: boolean
   blueprint: boolean
   actions: boolean
@@ -74,10 +78,13 @@ export function Sidebar({
   activeItem,
   onItemClick,
   hasBlueprint = false,
+  hasVision = false,
+  storeProfile = null,
   className = '',
 }: SidebarProps) {
   const [expanded, setExpanded] = useState<SectionState>({
     overview: true,
+    vision: true,
     findings: true,
     blueprint: true,
     actions: true,
@@ -118,6 +125,14 @@ export function Sidebar({
         </div>
       </div>
 
+      {/* Data quality indicator */}
+      {storeProfile && storeProfile.completeness > 0 && (
+        <DataQualityBadge
+          completeness={storeProfile.completeness}
+          completenessLabel={storeProfile.completeness_label}
+        />
+      )}
+
       {/* Navigation */}
       <nav className="flex-1 overflow-y-auto p-2">
         {/* Overview Section */}
@@ -145,6 +160,21 @@ export function Sidebar({
             </div>
           )}
         </div>
+
+        {/* Vision Section */}
+        {hasVision && (
+          <div className="mb-2">
+            <button
+              onClick={() => onItemClick({ type: 'vision', id: null })}
+              className={itemClasses('vision', null)}
+            >
+              <span className="flex items-center gap-1">
+                <Lightbulb className="w-4 h-4" />
+                What's Possible
+              </span>
+            </button>
+          </div>
+        )}
 
         {/* Findings Section */}
         <div className="mb-2">
